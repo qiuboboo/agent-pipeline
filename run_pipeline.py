@@ -23,7 +23,7 @@ SCORING_PROMPT_PATH = PROJECT_ROOT / "prompts" / "preliminary_value_scoring.md"
 class ModelConfig:
     base_url: str
     api_key: str
-    model: str = "gpt-5.4"
+    model: str = "gpt-5.2"
 
 
 @dataclass
