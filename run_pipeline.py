@@ -5,6 +5,7 @@ import base64
 import json
 import mimetypes
 import os
+import re
 from pathlib import Path
 
 from openai import OpenAI
@@ -162,6 +163,39 @@ def make_problem_id(prefix: str, record: dict, index: int) -> str:
     return f"{prefix}_{str(source_id).replace('/', '_')}"
 
 
+def normalize_choice_text(text: str) -> str:
+    value = (text or "").strip()
+    value = re.sub(r"^\(?[A-Za-z0-9]\)?[\s.、:_-]+", "", value)
+    return value.strip()
+
+
+def resolve_multiple_choice_answer(record: dict, extracted_answer: str) -> str:
+    answer = (extracted_answer or "").strip()
+    choices = record.get("choices")
+    if not choices or not isinstance(choices, list):
+        return normalize_choice_text(answer)
+
+    normalized_choices = [str(choice).strip() for choice in choices]
+    answer_upper = answer.upper().strip()
+
+    letter_match = re.fullmatch(r"\(?([A-Z])\)?", answer_upper)
+    if letter_match:
+        idx = ord(letter_match.group(1)) - ord("A")
+        if 0 <= idx < len(normalized_choices):
+            return normalized_choices[idx]
+
+    mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.I)
+    if mixed_match:
+        answer = mixed_match.group(2).strip()
+
+    normalized_answer = normalize_choice_text(answer)
+    for choice in normalized_choices:
+        if normalized_answer == normalize_choice_text(choice):
+            return choice
+
+    return normalized_answer
+
+
 # 默认假设：record 中的图片路径相对于输入 JSON/JSONL 文件所在目录
 # 输出阶段先保留为相对路径，不转成绝对路径
 # 支持：
@@ -219,10 +253,12 @@ def build_sample(
     response_text = call_model(system_prompt, user_prompt)
     extracted = parse_json_response(response_text)
 
+    answer_text = resolve_multiple_choice_answer(record, (extracted.get("answer_text") or "").strip())
+
     sample = {
         "problem_id": make_problem_id(prefix, record, index),
         "question_text": (extracted.get("question_text") or "").strip(),
-        "answer_text": (extracted.get("answer_text") or "").strip(),
+        "answer_text": answer_text,
         "image_paths": resolve_image_paths({"images": extracted.get("image_paths", [])}),
     }
 
