@@ -456,14 +456,7 @@ def build_alignment_record(unified: dict, problem_main_record: dict, pipeline_ru
 def fallback_rewrite(question_text: str, normalized_answer: str, answer_type: str, choices: dict[str, str]) -> dict:
     question_only = question_text.strip()
     lower_q = question_only.lower()
-    pure_image_index = bool(choices) and bool(re.search(r"\b(figure|diagram|graph|waveform|image)\s*[a-h0-9]\b", lower_q))
-    if pure_image_index:
-        return {
-            "strategy": "drop_image_index",
-            "rationale": "Pure image-index style multiple-choice question should be dropped.",
-            "variants": [],
-            "discard_reason_codes": ["pure_image_index_choice"],
-        }
+
     if not choices:
         return {
             "strategy": "keep_open",
@@ -480,6 +473,38 @@ def fallback_rewrite(question_text: str, normalized_answer: str, answer_type: st
             ],
             "discard_reason_codes": [],
         }
+
+    choice_values = [str(v).strip() for _, v in sorted(choices.items()) if str(v).strip()]
+    figure_index_pattern = re.compile(r"^(figure|diagram|graph|waveform|image)\s*[a-z0-9]+$", flags=re.I)
+    all_index_choices = bool(choice_values) and all(figure_index_pattern.fullmatch(value) for value in choice_values)
+    select_option_question = bool(re.search(r"\b(select|choose|which option|option|figure)\b", lower_q))
+    if all_index_choices and select_option_question:
+        return {
+            "strategy": "drop_image_index",
+            "rationale": "Pure image-index multiple-choice question should be dropped.",
+            "variants": [],
+            "discard_reason_codes": ["pure_image_index_choice"],
+        }
+
+    split_pieces = [piece.strip() for piece in re.split(r"[;；]", normalized_answer) if piece.strip()]
+    if len(split_pieces) > 1:
+        return {
+            "strategy": "split_open",
+            "rationale": "Compound answer was split into multiple open-ended targets.",
+            "variants": [
+                {
+                    "variant_id": f"open_{idx}",
+                    "title": f"开放题 {idx}",
+                    "rewritten_question_text": f"{question_only}\n请只回答第 {idx} 个目标。",
+                    "expected_answer_type": "short_text",
+                    "expected_answer": piece,
+                    "split_role": f"part_{idx}",
+                }
+                for idx, piece in enumerate(split_pieces, start=1)
+            ],
+            "discard_reason_codes": [],
+        }
+
     return {
         "strategy": "blank_open",
         "rationale": "Converted multiple-choice question into blank-style open-ended question.",
