@@ -18,6 +18,12 @@ from typing import Any, Optional
 
 from openai import OpenAI
 
+try:
+    from datasets import Dataset, DatasetDict, IterableDatasetDict, load_dataset
+except Exception:
+    Dataset = DatasetDict = IterableDatasetDict = None
+    load_dataset = None
+
 PROJECT_ROOT = Path(__file__).resolve().parent
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "outputs" / "multidataset_cleaning"
 UNIFIED_PROMPT_PATH = PROJECT_ROOT / "prompts" / "extract_unified_sample.md"
@@ -526,6 +532,66 @@ class GitHubConnector(BaseConnector):
             rng = random.Random(self.config.shuffle_seed)
             rng.shuffle(samples)
         return "available", samples[: self.config.sample_per_dataset], detail, repo_dir
+
+
+class HuggingFaceConnector(BaseConnector):
+    def candidate_splits(self) -> list[str]:
+        raw = [self.spec.split, "test", "validation", "val", "train"]
+        return [item for item in raw if item]
+
+    def sample(self) -> tuple[str, list[dict[str, Any]], Optional[str], Optional[Path]]:
+        if load_dataset is None:
+            return "source_unavailable", [], "datasets package unavailable", None
+        last_error = None
+        dataset = None
+        used_split = None
+        for split in self.candidate_splits():
+            try:
+                dataset = load_dataset(self.spec.source_locator, split=split)
+                used_split = split
+                break
+            except Exception as exc:
+                last_error = str(exc)
+        if dataset is None:
+            try:
+                dataset_obj = load_dataset(self.spec.source_locator)
+                if DatasetDict is not None and isinstance(dataset_obj, DatasetDict):
+                    for split_name in dataset_obj.keys():
+                        dataset = dataset_obj[split_name]
+                        used_split = split_name
+                        break
+                elif IterableDatasetDict is not None and isinstance(dataset_obj, IterableDatasetDict):
+                    for split_name in dataset_obj.keys():
+                        dataset = list(dataset_obj[split_name].take(self.config.sample_per_dataset))
+                        used_split = split_name
+                        break
+            except Exception as exc:
+                last_error = str(exc)
+        if dataset is None:
+            return "source_unavailable", [], last_error or "load_dataset failed", None
+        if hasattr(dataset, "shuffle") and self.config.sample_strategy == "random":
+            try:
+                dataset = dataset.shuffle(seed=self.config.shuffle_seed)
+            except Exception:
+                pass
+        rows: list[dict[str, Any]] = []
+        try:
+            total = len(dataset)
+            upper = min(self.config.sample_per_dataset, total)
+            subset = dataset.select(range(upper)) if hasattr(dataset, "select") else dataset[:upper]
+            for row in subset:
+                rows.append(dict(row))
+        except Exception:
+            try:
+                for idx, row in enumerate(dataset):
+                    rows.append(dict(row))
+                    if idx + 1 >= self.config.sample_per_dataset:
+                        break
+            except Exception as exc:
+                return "source_unavailable", [], str(exc), None
+        if used_split and not self.spec.split:
+            self.spec.split = used_split
+        return "available", rows, last_error, None
 
 
 class SourceUnavailableConnector(BaseConnector):
