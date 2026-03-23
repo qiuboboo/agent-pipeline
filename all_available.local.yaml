@@ -1,0 +1,91 @@
+runtime:
+  sample_per_dataset: 5
+  sample_strategy: head
+  shuffle_seed: 42
+  output_root: outputs/all_available_smoke
+  cleaning_version: v2.1.0-intake-mainline
+  batch_id_prefix: multidataset-clean
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://synai996.space/v1
+  api_key: ${OPENAI_API_KEY}
+  model: gpt-5.4
+  reasoning_effort: xhigh
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+thresholds:
+  min_width: 256
+  min_height: 256
+  min_sharpness_score: 0.22
+  min_readability_score: 0.35
+  min_contrast_score: 18.0
+  reject_clean_score_below: 0.45
+  review_clean_score_below: 0.62
+  min_text_completeness_score: 0.60
+  min_alignment_consistency: 0.55
+
+datasets:
+  - key: m3cot_mini
+    display_name: M3CoT-mini
+    subject: multimodal
+    note: Local mini test
+    source_kind: local_file
+    source_locator: /root/.openclaw/workspace/agent-pipeline/m3cot/mini_test/test.json
+    split: test
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [image, images, image_path, img_path, figure]
+    choice_fields: [choices, options]
+    force_requires_image: true
+  - key: geometry3k_local
+    display_name: Geometry3K-local
+    subject: geometry
+    note: Local parquet with inline images
+    source_kind: local_file
+    source_locator: /root/.openclaw/workspace/benchmark_samples/HF_candidates/Geometry3K/data/validation-00000-of-00001.parquet
+    split: validation
+    question_fields: [problem, question, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [images, image]
+    choice_fields: [choices, options]
+    force_requires_image: true
+  - key: eee_bench_local
+    display_name: EEE-Bench-local
+    subject: engineering
+    note: Local parquet with inline image bytes
+    source_kind: local_file
+    source_locator: /root/.openclaw/workspace/benchmark_samples/HF_candidates/EEE-Bench/data/testmini.parquet
+    split: test
+    question_fields: [problem, question, query, text]
+    answer_fields: [solution, answer, label]
+    image_fields: [image, images]
+    choice_fields: [choices, options]
+    force_requires_image: true
+  - key: cmm_math_local
+    display_name: CMM-Math-local
+    subject: math
+    note: Local parquet; image field often empty, useful for text-only robustness
+    source_kind: local_file
+    source_locator: /root/.openclaw/workspace/benchmark_samples/HF_candidates/CMM-Math/test_data.parquet
+    split: test
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [image, images]
+    choice_fields: [options, choices]
+    force_requires_image: false
+  - key: scemqa_local
+    display_name: SCEMQA-local
+    subject: science
+    note: Local parquet; current snapshot lacks inline image payloads
+    source_kind: local_file
+    source_locator: /root/.openclaw/workspace/benchmark_samples/HF_candidates/SCEMQA/data/train-00000-of-00001.parquet
+    split: train
+    question_fields: [Question, question, problem, query, text]
+    answer_fields: [Answer (final answer highlighted), answer, solution, label]
+    image_fields: [image, ImagePath, image_path]
+    choice_fields: [choices, options]
+    force_requires_image: true
