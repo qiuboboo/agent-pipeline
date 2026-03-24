@@ -29,6 +29,7 @@ import time
 import unicodedata
 import urllib.error
 import urllib.request
+import zipfile
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -37,6 +38,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 import numpy as np
 import yaml
 from datasets import Dataset, DatasetDict, IterableDataset, IterableDatasetDict, load_dataset
+from huggingface_hub import hf_hub_download
 from PIL import Image
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -1225,17 +1227,6 @@ class HuggingFaceConnector(BaseConnector):
             last_error = str(exc)
         return None, last_error
 
-    def choose_field(self, row: Dict[str, Any], candidates: List[str], fallback_regex: str) -> Optional[str]:
-        for key in candidates:
-            if key in row and not is_missing_value(row[key]):
-                return key
-        for key, value in row.items():
-            if is_missing_value(value):
-                continue
-            if re.search(fallback_regex, key, flags=re.IGNORECASE):
-                return key
-        return None
-
     def load_image(self, value: Any) -> Tuple[Optional[Image.Image], Optional[str]]:
         if is_missing_value(value):
             return None, None
@@ -1259,9 +1250,171 @@ class HuggingFaceConnector(BaseConnector):
             return Image.open(value).convert("RGB"), value
         return None, None
 
+    def resolve_answer_text(self, raw_answer: Any) -> str:
+        if isinstance(raw_answer, list):
+            joined = [normalize_whitespace(to_plain_text(item)) for item in raw_answer if normalize_whitespace(to_plain_text(item))]
+            return "\n".join(joined)
+        return to_plain_text(raw_answer)
+
+    def sample_from_mm_math_raw_files(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
+        try:
+            jsonl_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.jsonl"))
+            zip_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.zip"))
+        except Exception as exc:
+            return "source_unavailable", [], str(exc)
+
+        extract_root = Path(self.config.git_cache_root) / "hf_raw" / "mm_math"
+        image_root = extract_root / "MM_Math"
+        if not image_root.exists():
+            ensure_dir(extract_root)
+            with zipfile.ZipFile(zip_path) as zf:
+                zf.extractall(extract_root)
+
+        samples: List[UnifiedSample] = []
+        prompt_client = OpenAICompatibleClient(self.config.model)
+        with jsonl_path.open("r", encoding="utf-8") as file:
+            for index, line in enumerate(file):
+                line = line.strip()
+                if not line:
+                    continue
+                row = json.loads(line)
+                if not isinstance(row, dict):
+                    continue
+                extracted = prompt_extract_record_content(row, self.spec, prompt_client)
+                raw_question = extracted["raw_question_text"]
+                raw_answer = self.resolve_answer_text(row.get("solution") or extracted["raw_answer_text"])
+                image = None
+                image_source = None
+                file_name = to_plain_text(row.get("file_name"))
+                if file_name:
+                    candidate = image_root / file_name
+                    if candidate.exists():
+                        try:
+                            image = Image.open(candidate).convert("RGB")
+                            image_source = str(candidate)
+                        except Exception:
+                            image = None
+                            image_source = None
+                if not raw_question and not image:
+                    continue
+                samples.append(
+                    UnifiedSample(
+                        dataset_key=self.spec.key,
+                        dataset_display_name=self.spec.display_name,
+                        subject=self.spec.subject,
+                        source_dataset=self.spec.display_name,
+                        source_split=self.spec.split or "hf_raw_files",
+                        source_problem_id=str(row.get("id", row.get("problem_id", file_name or index))),
+                        raw_question_text=raw_question,
+                        raw_answer_text=raw_answer,
+                        image=image,
+                        image_source=image_source,
+                        raw_record=row,
+                        metadata={
+                            "row_index": index,
+                            "image_paths": [file_name] if file_name else [],
+                            "extraction_notes": extracted.get("extraction_notes", []) + ["hf_raw_mm_math_fallback"],
+                            "image_field": extracted.get("image_field"),
+                        },
+                        choice_map=extracted["choice_map"],
+                        force_requires_image=extracted["force_requires_image"],
+                    )
+                )
+                if len(samples) >= self.config.sample_per_dataset:
+                    break
+        return "available", samples, None
+
+    def sample_from_physreason_zip(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
+        zip_name = "PhysReason-mini.zip"
+        if self.spec.split and self.spec.split.lower() in {"train", "full"}:
+            zip_name = "PhysReason-full.zip"
+        try:
+            zip_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename=zip_name))
+        except Exception as exc:
+            return "source_unavailable", [], str(exc)
+
+        extract_root = Path(self.config.git_cache_root) / "hf_raw" / "physreason"
+        marker_dir = extract_root / Path(zip_name).stem
+        if not marker_dir.exists():
+            ensure_dir(extract_root)
+            with zipfile.ZipFile(zip_path) as zf:
+                zf.extractall(extract_root)
+
+        problem_files = sorted(marker_dir.rglob("problem.json"))
+        if not problem_files:
+            return "source_unavailable", [], "No problem.json extracted from PhysReason zip"
+
+        samples: List[UnifiedSample] = []
+        for index, problem_path in enumerate(problem_files):
+            try:
+                data = json.loads(problem_path.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            if not isinstance(data, dict):
+                continue
+            qs = data.get("question_structure") if isinstance(data.get("question_structure"), dict) else {}
+            context = to_plain_text(qs.get("context"))
+            sub_questions = []
+            for key in sorted(qs.keys()):
+                if key.startswith("sub_question"):
+                    sub_questions.append(to_plain_text(qs.get(key)))
+            question_text = context
+            if sub_questions:
+                question_text = (question_text + "\n\n" if question_text else "") + "\n".join(
+                    f"{i+1}. {item}" for i, item in enumerate(sub_questions) if item
+                )
+            raw_answer = self.resolve_answer_text(data.get("answer"))
+            image = None
+            image_source = None
+            image_list = data.get("question_image_list") or []
+            if isinstance(image_list, list):
+                for rel in image_list:
+                    candidate = problem_path.parent / to_plain_text(rel)
+                    if candidate.exists():
+                        try:
+                            image = Image.open(candidate).convert("RGB")
+                            image_source = str(candidate)
+                            break
+                        except Exception:
+                            continue
+            if not question_text and image is None:
+                continue
+            samples.append(
+                UnifiedSample(
+                    dataset_key=self.spec.key,
+                    dataset_display_name=self.spec.display_name,
+                    subject=self.spec.subject,
+                    source_dataset=self.spec.display_name,
+                    source_split=self.spec.split or Path(zip_name).stem,
+                    source_problem_id=problem_path.parent.name,
+                    raw_question_text=question_text,
+                    raw_answer_text=raw_answer,
+                    image=image,
+                    image_source=image_source,
+                    raw_record=data,
+                    metadata={
+                        "row_index": index,
+                        "image_paths": image_list,
+                        "extraction_notes": ["hf_raw_physreason_fallback"],
+                        "difficulty": data.get("difficulty"),
+                    },
+                    choice_map={},
+                    force_requires_image=bool(image_list),
+                )
+            )
+            if len(samples) >= self.config.sample_per_dataset:
+                break
+        if not samples:
+            return "source_unavailable", [], "No usable samples extracted from PhysReason zip"
+        return "available", samples, None
+
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         dataset, detail = self.load_dataset_any()
         if dataset is None:
+            if self.spec.key == "mm_math":
+                return self.sample_from_mm_math_raw_files()
+            if self.spec.key == "physreason":
+                return self.sample_from_physreason_zip()
             return "source_unavailable", [], detail or "load_dataset failed"
         if self.config.sample_strategy == "random":
             dataset = dataset.shuffle(seed=self.config.shuffle_seed)
@@ -1271,7 +1424,32 @@ class HuggingFaceConnector(BaseConnector):
             row = dict(row)
             extracted = prompt_extract_record_content(row, self.spec, OpenAICompatibleClient(self.config.model))
             image_source_hint = extracted["image_paths"][0] if extracted["image_paths"] else None
-            image, image_source = self.load_image(row.get("image"))
+
+            image = None
+            image_source = None
+            image_field_candidates: List[str] = []
+            explicit_image_field = extracted.get("image_field")
+            if explicit_image_field:
+                image_field_candidates.append(str(explicit_image_field))
+            image_field_candidates.extend(self.spec.image_fields or [])
+            if "image" in row:
+                image_field_candidates.append("image")
+            if "decoded_image" in row:
+                image_field_candidates.append("decoded_image")
+
+            seen_fields: set[str] = set()
+            for field_name in image_field_candidates:
+                if not field_name or field_name in seen_fields:
+                    continue
+                seen_fields.add(field_name)
+                if field_name not in row:
+                    continue
+                image, image_source = self.load_image(row.get(field_name))
+                if image is not None:
+                    if image_source is None:
+                        image_source = f"inline://hf_field/{field_name}"
+                    break
+
             if image is None:
                 for path_str in extracted["image_paths"]:
                     image, image_source = self.load_image(path_str)
@@ -1300,6 +1478,7 @@ class HuggingFaceConnector(BaseConnector):
                         "row_index": index,
                         "image_paths": extracted["image_paths"],
                         "extraction_notes": extracted.get("extraction_notes", []),
+                        "image_field": extracted.get("image_field"),
                     },
                     choice_map=extracted["choice_map"],
                     force_requires_image=extracted["force_requires_image"],
@@ -1359,10 +1538,19 @@ class GitHubConnector(BaseConnector):
         if isinstance(data, list):
             return [item for item in data if isinstance(item, dict)]
         if isinstance(data, dict):
-            for key in ["data", "dataset", "datasets", "records", "items", "problems", "questions", "annotations"]:
+            for key in ["data", "dataset", "datasets", "records", "items", "problems", "questions", "annotations", "example"]:
                 value = data.get(key)
                 if isinstance(value, list) and value and isinstance(value[0], dict):
-                    return value
+                    records = []
+                    for item in value:
+                        if not isinstance(item, dict):
+                            continue
+                        merged = dict(item)
+                        if "keywords" in data and "keywords" not in merged:
+                            merged["keywords"] = data.get("keywords")
+                        records.append(merged)
+                    if records:
+                        return records
             if any(
                 key in data
                 for key in [

@@ -1,145 +1,151 @@
-# agent-pipeline 仓库说明
+# agent-pipeline
 
-本仓库用于多模态题目样本的抽取、清洗与候选集构建。核心目标是把不同来源的数据统一为结构化记录，并输出可用于后续标注与评测的数据。
+Remote-first pipeline for downloading multimodal datasets online, extracting unified samples, and producing cleaning / rewrite / review records.
 
-## 目录结构（简要）
+## Current status (2026-03-24)
 
-```text
-agent-pipeline/
-├─ run_pipeline.py                     # 主脚本（本地文件输入 -> 统一抽取/评分 -> 输出）
-├─ configs/                            # 运行配置（不同场景的 YAML）
-│  ├─ all_available.local.yaml
-│  ├─ intake_relaxed_smoke.local.yaml
-│  ├─ m3cot_mini.local.yaml
-│  ├─ multi_dataset_benchmark.local.yaml
-│  └─ multi_dataset_iter.local.yaml
-├─ prompts/                            # LLM 提示词模板
-│  ├─ extract_unified_sample.md
-│  ├─ preliminary_value_scoring.md
-│  ├─ extract_question_answer_image.md
-│  └─ collection/
-├─ m3cot/                              # 样例数据（json/jsonl + images）
-├─ outputs/                            # 当前输出目录
-│  └─ samples.jsonl
-├─ benchmark/                          # benchmark 版本流水线与输出
-│  ├─ src/
-│  └─ outputs/
-├─ docs/                               # 设计与说明文档
-└─ logs/                               # 日志
-```
+This repo has now moved beyond basic remote-only setup and into a more complete **all-candidate remote intake** stage.
 
-## 当前 Python 结果（重点）
+### What is now working
 
-目前仓库中可直接看到的输出是 [outputs/samples.jsonl](outputs/samples.jsonl)：
+- Default workflow is remote-first
+- Hugging Face access works through the local proxy on this machine
+- GitHub source ingestion works
+- The following previously broken candidate connectors have now been fixed:
+  - `MathVision` image materialization (`decoded_image` now becomes a real image asset)
+  - `Multi-Physics` GitHub JSON layout (`example[]` support)
+  - `MM-Math` raw-file fallback (`MM_Math.jsonl + MM_Math.zip`)
+  - `PhysReason` raw-zip fallback (`PhysReason-mini.zip` / `PhysReason-full.zip` + `problem.json` extraction)
 
-1. 总记录数：5 条。
-2. 每条包含字段：problem_id、question_text、answer_text、image_paths。
-3. 样例特征：当前 answer_text 仍是选项字母（如 A/B/C），属于轻量抽取结果。
+### Full candidate smoke status
 
-示例（节选）：
+The all-candidate remote smoke config is:
 
-```json
-{"problem_id":"m3cot_physical-commonsense-1398","question_text":"What is the likely purpose of the troll statue under the bridge?","answer_text":"B","image_paths":[".../m3cot/images/000000.png"]}
-```
+- `configs/all_candidates_remote.yaml`
 
-## run_pipeline.py 讲解
+A full smoke run was completed after the connector fixes.
 
-文件位置：[run_pipeline.py](run_pipeline.py)
+Latest archived run summary:
+- `tmp/agent-pipeline_run_archive_2026-03-24_1023/outputs/all_candidates_remote_smoke/run_34f55dd2baab488b/summary.json`
 
-### 1) 配置与数据结构
+Current small-sample outcome snapshot:
 
-在 [run_pipeline.py](run_pipeline.py#L30) 到 [run_pipeline.py](run_pipeline.py#L91) 定义：
+- `SCEMQA` → available, but current samples reject
+- `Geometry3K` → available, mixed review / reject
+- `CMM-Math` → available, review-heavy, often `split_open`
+- `MathVision` → available, mixed review / reject, connector fixed
+- `MM-Math` → available, current small samples pass
+- `SeePhys` → available, mixed pass / reject
+- `Multi-Physics` → available, mixed pass / reject
+- `PhysReason` → available, mixed pass / reject
+- `EEE-Bench` → available, current small samples pass
+- `EMMA-Math` → available, current small samples pass
+- `EMMA-Physics` → available, current small samples pass
 
-1. ModelConfig：模型地址、模型名、温度、超时。
-2. ThresholdConfig：pass/review/reject 相关阈值。
-3. DatasetSpec：数据集来源、字段映射、是否强制依赖图片。
-4. PipelineConfig：全局运行参数（输出目录、采样策略等）。
-5. UnifiedSample：统一样本结构。
+### 200-sample cross-subject benchmark
 
-### 2) 工具函数层
+A larger cross-subject benchmark was also completed.
 
-在 [run_pipeline.py](run_pipeline.py#L94) 到 [run_pipeline.py](run_pipeline.py#L301)：
+- Config: `configs/candidate_200_remote.yaml`
+- Report: `docs/candidate_200_benchmark_report.md`
+- Output summary: `outputs/candidate_200_remote/run_6be16173d2403a7e/summary.json`
 
-1. 文本标准化与缺失值判断。
-2. JSON/JSONL 写入。
-3. 哈希与稳定 ID 生成。
-4. 图片转 data URL（供多模态模型输入）。
+Headline numbers:
+- 200 / 200 processed
+- wall-clock time: **195s**
+- average throughput: **0.975 s/sample**
+- strict usable (`pass`): **90 / 200 = 45.0%**
+- lenient usable (`pass + review`): **116 / 200 = 58.0%**
 
-### 3) 抽取与评分
+Best current performers in this setup:
+- `EEE-Bench`
+- `PhysReason`
+- `CMM-Math`
 
-在 [run_pipeline.py](run_pipeline.py#L316) 到 [run_pipeline.py](run_pipeline.py#L700)：
+Most likely to need source-specific threshold tuning next:
+- `Geometry3K`
+- `SCEMQA`
+- `SeePhys`
+- parts of `MathVision`
 
-1. 有 API Key：调用 LLM，根据 prompts 进行统一字段抽取与初评分。
-2. 无 API Key：走启发式抽取和启发式评分，保证可离线跑通。
-3. 多选题会尝试把字母答案映射回选项文本。
+### High-level rewrite pattern snapshot
 
-### 4) 数据源连接器
+Observed from current smoke samples:
 
-在 [run_pipeline.py](run_pipeline.py#L396) 到 [run_pipeline.py](run_pipeline.py#L624)：
+- `blank_open`
+  - common in `EEE-Bench`, `EMMA-*`, `Geometry3K`, parts of `MathVision`, `SCEMQA`
+- `keep_open`
+  - common in `MM-Math`, `PhysReason`, `SeePhys`, `Multi-Physics`, parts of `MathVision`
+- `split_open`
+  - common in `CMM-Math`
 
-1. LocalFileConnector：本地 json/jsonl 输入。
-2. GitHubConnector：自动 clone 仓库并发现候选数据文件。
-3. HuggingFaceConnector：通过 datasets 加载公开数据集。
+This means the current bottleneck is no longer connector availability for most candidate datasets. The focus has shifted to:
+- source-specific quality thresholds
+- rewrite-policy alignment by question type
+- better handling of mixed open-ended vs option-style multimodal questions
 
-### 5) 清洗决策与记录构建
+## Current default mode
 
-在 [run_pipeline.py](run_pipeline.py#L667) 到 [run_pipeline.py](run_pipeline.py#L1100)：
+This repo now uses a **remote-only default workflow**.
 
-1. 根据评分、图文一致性、改写策略做 pass/review/reject。
-2. 生成 problem_main_record、asset_records、alignment_record、rewrite_record 等结构化记录。
+The shipped multi-dataset config is:
 
-### 6) 主流程与命令行入口
+- `configs/multi_dataset_iter.yaml`
 
-在 [run_pipeline.py](run_pipeline.py#L1117) 到 [run_pipeline.py](run_pipeline.py#L1299)：
+It pulls datasets online from:
+- GitHub
+- Hugging Face
 
-1. PromptExtractionPipeline 负责按数据集执行、落盘、汇总。
-2. main() 解析参数并运行，支持 input、dataset-key、dataset-name、subject、limit、reset-output。
+## Proxy requirement on this machine
 
-最小示例：
+GitHub is reachable directly, but Hugging Face currently needs the local proxy:
 
 ```bash
-python run_pipeline.py m3cot/mini_test/test.json --dataset-key m3cot_mini --dataset-name M3CoT-mini --subject multimodal --limit 5
+export http_proxy=http://127.0.0.1:20171
+export https_proxy=http://127.0.0.1:20171
 ```
 
-如果需要使用 YAML 场景化配置，请使用 benchmark 版本入口 [benchmark/src/multidataset_cleaning_pipeline.py](benchmark/src/multidataset_cleaning_pipeline.py)，该脚本支持 --config。
+Then run:
 
-## 多数据集测试运行命令
-
-推荐使用 benchmark 入口配合 YAML，一次性跑多个数据集。
-
-### 1) 环境准备（PowerShell）
-
-```powershell
-conda activate agent
-$env:OPENAI_API_KEY="你的key"
+```bash
+python3 benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_iter.yaml
 ```
 
-### 2) 多数据集快速测试（小样本）
+## Main entrypoints
 
-```powershell
-python benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_benchmark.local.yaml
+### Default remote iteration config
+
+```bash
+python3 benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_iter.yaml
 ```
 
-### 3) 多数据集迭代测试（样本更多）
+### All-candidate remote smoke config
 
-```powershell
-python benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_iter.local.yaml
+```bash
+python3 benchmark/src/multidataset_cleaning_pipeline.py --config configs/all_candidates_remote.yaml
 ```
 
-### 4) 全量可用源冒烟测试
+## Current default dataset set
 
-```powershell
-python benchmark/src/multidataset_cleaning_pipeline.py --config configs/all_available.local.yaml
-```
+The default remote iteration config currently includes:
 
-### 5) 放宽策略冒烟测试
+- `EEE-Bench`
+- `CMM-Math`
+- `Geometry3K`
+- `MathVision`
 
-```powershell
-python benchmark/src/multidataset_cleaning_pipeline.py --config configs/intake_relaxed_smoke.local.yaml
-```
+## Outputs
 
-说明：
+Representative summaries are retained under:
 
-1. 要跑哪些数据集，修改对应 YAML 中 datasets 列表。
-2. 输出目录由 runtime.output_root 控制。
-3. [run_pipeline.py](run_pipeline.py) 主要用于单数据集参数模式，不是多数据集 YAML 入口。
+- `docs/run_summaries/`
+
+Larger experimental outputs are written under `outputs/` during runs, and temporary/archived runs may be moved under:
+
+- `tmp/agent-pipeline_run_archive_*`
+
+## Notes
+
+- The code still contains local-file support internally, but the repo’s default workflow and retained configs are now remote-first.
+- If Hugging Face requests start failing, first check whether the local proxy at `127.0.0.1:20171` is still available.
+- Cache directories under `outputs/repo_cache/` are not part of the intended committed source-of-truth.
