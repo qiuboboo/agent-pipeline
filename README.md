@@ -84,6 +84,36 @@
 - 按题型做 rewrite-policy 对齐
 - 更细粒度地区分“本质开放题”和“标准视觉选择题”
 
+### 当前 prompt 文档替代 / 增强了哪些原 Python 功能
+
+现在仓库里已经引入了一组 prompt 文档，用来替代或增强部分原本更偏硬编码的 Python 流程判断。当前主要对应关系如下：
+
+- `prompts/extract_unified_sample.md`
+  - 用于统一抽取样本里的核心字段
+  - 主要替代 / 增强原来“从原始 record 里硬编码猜测 question / answer / image / choices”的逻辑
+- `prompts/extract_question_answer_image.md`
+  - 作为更旧的抽取 prompt fallback
+  - 当统一抽取 prompt 不可用时，退回到较早版本的问答图像抽取逻辑
+- `prompts/collection/asset_registry.md`
+  - 用于判断一个样本的资产注册与完整性
+  - 替代 / 增强原来纯 heuristic 的 asset registry 判定
+- `prompts/collection/potential_scorer.md`
+  - 用于做样本的初步潜力评分
+  - 替代 / 增强原来纯 heuristic 的 preliminary value / potential scoring
+- `prompts/collection/candidate_registrar.md`
+  - 用于做 candidate intake / keep / low_priority / reject 判断
+  - 替代 / 增强原来纯 heuristic 的 candidate registrar 决策
+
+也就是说，当前 pipeline 并不是完全依赖固定的 Python 硬编码流程，而是已经逐步把：
+- 字段抽取
+- 资产完整性判断
+- 初步价值评分
+- candidate intake 决策
+
+这些环节迁移成“prompt + Python 框架”的混合模式。
+
+如果要继续往 reference-style pipeline 靠，这一层 prompt 文档和 Python 主流程之间的职责边界，后面还需要继续整理清楚。
+
 ## 当前默认模式
 
 仓库默认采用 **remote-only** 工作流。
