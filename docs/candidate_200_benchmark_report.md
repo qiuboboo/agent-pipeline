@@ -1,36 +1,36 @@
-# Candidate 200 Remote Benchmark Report
+# 200 样本候选数据集远程基准测试报告
 
-_Date: 2026-03-24_
+_日期：2026-03-24_
 
-## Run
+## 运行信息
 
-- Config: `configs/candidate_200_remote.yaml`
-- Output: `outputs/candidate_200_remote/run_6be16173d2403a7e/summary.json`
-- Scope: 10 datasets × 20 samples each = 200 requested samples
+- 配置：`configs/candidate_200_remote.yaml`
+- 输出：`outputs/candidate_200_remote/run_6be16173d2403a7e/summary.json`
+- 规模：10 个数据集 × 每个 20 个样本 = 200 个请求样本
 
-## Timing
+## 耗时
 
-- Wall-clock time: **195 seconds**
-- Requested samples: **200**
-- Processed samples: **200**
-- Average wall-clock per processed sample: **0.975 s/sample**
+- 总耗时：**195 秒**
+- Requested samples：**200**
+- Processed samples：**200**
+- 平均每个 processed sample 的 wall-clock 时间：**0.975 秒 / 样本**
 
-## Overall outcome
+## 总体结果
 
-- Pass: **90**
-- Review: **26**
-- Reject: **84**
+- Pass：**90**
+- Review：**26**
+- Reject：**84**
 
-### Availability views
+### 可用性口径
 
-- **Strict usable (pass only):** 90 / 200 = **45.0%**
-- **Lenient usable (pass + review):** 116 / 200 = **58.0%**
+- **严格可用（只算 pass）**：90 / 200 = **45.0%**
+- **宽松可用（pass + review）**：116 / 200 = **58.0%**
 
 ---
 
-## Per-dataset results
+## 按数据集统计
 
-| Dataset | Subject | Requested | Processed | Pass | Review | Reject | Strict usable | Lenient usable | Main rewrite mix |
+| 数据集 | 学科 | Requested | Processed | Pass | Review | Reject | 严格可用 | 宽松可用 | 主要 rewrite 分布 |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---|
 | SCEMQA | science | 20 | 20 | 3 | 0 | 17 | 15.0% | 15.0% | `blank_open:11`, `split_open:9` |
 | Geometry3K | math | 20 | 20 | 0 | 4 | 16 | 0.0% | 20.0% | `blank_open:10`, `candidate_reject:10` |
@@ -45,9 +45,9 @@ _Date: 2026-03-24_
 
 ---
 
-## Per-subject aggregate
+## 按学科聚合
 
-| Subject | Datasets | Processed | Pass | Review | Reject | Strict usable | Lenient usable |
+| 学科 | 数据集数 | Processed | Pass | Review | Reject | 严格可用 | 宽松可用 |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | science | 1 | 20 | 3 | 0 | 17 | 15.0% | 15.0% |
 | math | 4 | 80 | 34 | 13 | 33 | 42.5% | 58.75% |
@@ -56,173 +56,172 @@ _Date: 2026-03-24_
 
 ---
 
-## Quick takeaways
+## 快速结论
 
-### Strongest current datasets under this setup
-By strict pass rate on this 200-sample run:
-- **PhysReason**: 75.0%
-- **EEE-Bench**: 75.0%
-- **CMM-Math**: 65.0%
-- **MathVision**: 55.0%
-- **Multi-Physics**: 55.0%
-- **MM-Math**: 50.0%
+### 当前表现最强的数据集（按严格可用率）
+- **PhysReason**：75.0%
+- **EEE-Bench**：75.0%
+- **CMM-Math**：65.0%
+- **MathVision**：55.0%
+- **Multi-Physics**：55.0%
+- **MM-Math**：50.0%
 
-### Most promising by lenient usable rate (pass + review)
-- **EEE-Bench**: 95.0%
-- **CMM-Math**: 95.0%
-- **EMMA-Physics**: 85.0%
-- **PhysReason**: 75.0%
-- **MathVision**: 70.0%
+### 当前最有潜力的数据集（按宽松可用率）
+- **EEE-Bench**：95.0%
+- **CMM-Math**：95.0%
+- **EMMA-Physics**：85.0%
+- **PhysReason**：75.0%
+- **MathVision**：70.0%
 
-### Currently weakest under default thresholds
-- **SCEMQA**: 15.0% strict / 15.0% lenient
-- **Geometry3K**: 0.0% strict / 20.0% lenient
-- **SeePhys**: 20.0% strict / 20.0% lenient
+### 当前默认阈值下最弱的几个数据集
+- **SCEMQA**：15.0% strict / 15.0% lenient
+- **Geometry3K**：0.0% strict / 20.0% lenient
+- **SeePhys**：20.0% strict / 20.0% lenient
 
 ---
 
-## Rewrite-pattern observations from this run
+## 本轮运行中的 rewrite 分布观察
 
-### Predominantly `keep_open`
+### 以 `keep_open` 为主
 - `MM-Math`
 - `SeePhys`
 - `Multi-Physics`
 - `PhysReason`
-- much of `MathVision`
+- `MathVision` 的大部分样本
 
-These datasets behave more like naturally open or multi-step problems than standard single-target visual MCQ.
+这类数据集更像天然开放题、多步推理题，而不是标准单目标视觉选择题。
 
-### Predominantly `blank_open`
-- `EEE-Bench` (though not exclusively)
-- much of `SCEMQA`
-- part of `Geometry3K`
-- part of `MathVision`
+### 以 `blank_open` 为主
+- `EEE-Bench`（但不是完全单一）
+- `SCEMQA` 的一部分
+- `Geometry3K` 的一部分
+- `MathVision` 的一部分
 
-These are closer to standard visual-choice to open-question rewriting.
+这类题更接近“标准视觉选择题 -> 开放题”的改写路径。
 
-### Predominantly `split_open`
-- `CMM-Math` (partial but important)
-- `EMMA-Physics` (substantial share)
-- part of `SCEMQA`
+### 以 `split_open` 为主或占比较高
+- `CMM-Math`
+- `EMMA-Physics`
+- `SCEMQA` 的一部分
 
-These often reflect structured targets or decomposable question forms.
+这类题通常更像结构化目标、可拆分目标，或者本身就包含复合子目标。
 
 ---
 
-## What this means right now
+## 当前阶段意味着什么
 
-1. **Connector coverage is no longer the main blocker** for the currently reachable candidate set.
-2. The next bottleneck is clearly **source-specific quality / thresholding** plus **rewrite-policy branching**.
-3. A single rewrite path is not adequate across datasets.
-4. The best current positive-control sources for continued iteration are:
+1. **连接器覆盖已经不是当前最主要的问题**，至少对当前可达的候选集来说是这样。
+2. 现在更明显的瓶颈已经变成：**source-specific 质量阈值** 与 **rewrite-policy 分流**。
+3. 单一 rewrite 路径不足以覆盖所有数据集。
+4. 当前最适合作为正对照继续迭代的数据集是：
    - `EEE-Bench`
    - `PhysReason`
    - `CMM-Math`
-5. The datasets that most likely need threshold or source-specific handling next are:
+5. 当前最可能需要做 source-specific 处理的数据集是：
    - `Geometry3K`
    - `SCEMQA`
    - `SeePhys`
-   - parts of `MathVision`
+   - `MathVision` 的部分样本
 
 ---
 
-## Suggested next step
+## 建议的下一步
 
-Run a source-specific quality analysis focused on:
+优先做一轮 source-specific 的质量分析，重点看：
 - `low_resolution`
 - `low_text_completeness`
-- candidate-intake reject patterns
-- whether `Geometry3K`, `SCEMQA`, and `SeePhys` need threshold overrides
+- candidate-intake reject 模式
+- `Geometry3K`、`SCEMQA`、`SeePhys` 是否需要 threshold override
 
 ---
 
-## Comparison with earlier benchmarks
+## 与之前 benchmark 的对比
 
-This 200-sample benchmark should be compared with two earlier references from the same work stream:
+这轮 200 样本 benchmark 最值得对比的两个历史参考是：
 
-1. the earlier **4-dataset remote benchmark** (`geometry3k`, `cmm_math`, `mathvision`, `eee_bench`, 10 samples each)
-2. the earlier **all-candidate remote smoke** (2 samples per dataset)
+1. 更早的 **4 数据集 remote benchmark**（`geometry3k`、`cmm_math`、`mathvision`、`eee_bench`，每个 10 条）
+2. 更早的 **all-candidate remote smoke**（每个数据集 2 条）
 
-### A. Comparison with the earlier 4-dataset remote benchmark
+### A. 与更早的 4 数据集 remote benchmark 对比
 
-Earlier 4-dataset benchmark totals:
-- processed: 40
-- pass: 12
-- review: 12
-- reject: 16
-- strict usable: **30.0%**
-- lenient usable: **60.0%**
+更早的 4 数据集 benchmark 总计：
+- processed：40
+- pass：12
+- review：12
+- reject：16
+- strict usable：**30.0%**
+- lenient usable：**60.0%**
 
-Current 200-sample benchmark totals:
-- processed: 200
-- pass: 90
-- review: 26
-- reject: 84
-- strict usable: **45.0%**
-- lenient usable: **58.0%**
+当前 200 样本 benchmark 总计：
+- processed：200
+- pass：90
+- review：26
+- reject：84
+- strict usable：**45.0%**
+- lenient usable：**58.0%**
 
-#### Main change
-- strict usable improved from **30.0% -> 45.0%**
-- lenient usable stayed roughly similar: **60.0% -> 58.0%**
+#### 主要变化
+- strict usable 从 **30.0% -> 45.0%**
+- lenient usable 基本持平：**60.0% -> 58.0%**
 
-#### Interpretation
-This is not a regression. The current benchmark is larger, includes more datasets, and reflects the connector fixes. The newer result appears more realistic: fewer borderline reviews as a proportion, but more true passes and true rejects.
+#### 解读
+这不应被看作退步。新的 benchmark 更大、覆盖更多数据集，而且包含连接器修复后的状态。它更接近真实分布：review 比例相对下降，但真正的 pass 和真正的 reject 更清晰了。
 
-#### Dataset-by-dataset comparison for the shared 4 datasets
+#### 对共享的 4 个数据集逐个看
 
 - **Geometry3K**
-  - earlier: `0 / 4 / 6`
-  - now: `0 / 4 / 16`
-  - conclusion: weakness is confirmed, not a small-sample fluke
+  - 之前：`0 / 4 / 6`
+  - 现在：`0 / 4 / 16`
+  - 结论：偏弱不是小样本偶然，而是当前阈值下的稳定问题
 
 - **CMM-Math**
-  - earlier: `5 / 5 / 0`
-  - now: `13 / 6 / 1`
-  - conclusion: still very strong; now looks even more like a stable math benchmark source
+  - 之前：`5 / 5 / 0`
+  - 现在：`13 / 6 / 1`
+  - 结论：依然非常强，而且比之前更像一个稳定的数学 benchmark 源
 
 - **MathVision**
-  - earlier: `0 / 0 / 10`
-  - now: `11 / 3 / 6`
-  - conclusion: biggest improvement after image-materialization fix; moved from effectively unusable to genuinely workable
+  - 之前：`0 / 0 / 10`
+  - 现在：`11 / 3 / 6`
+  - 结论：这是改进最大的一个；图像 materialization 修复后，它已经从“几乎不可用”变成“真实可用”
 
 - **EEE-Bench**
-  - earlier: `7 / 3 / 0`
-  - now: `15 / 4 / 1`
-  - conclusion: remains a strong positive-control dataset; behavior is stable under larger sample size
+  - 之前：`7 / 3 / 0`
+  - 现在：`15 / 4 / 1`
+  - 结论：依然是非常稳的正对照，样本放大后表现仍然稳定
 
-### B. Comparison with the earlier all-candidate smoke
+### B. 与更早的 all-candidate smoke 对比
 
-Earlier all-candidate smoke totals:
-- processed: 22
-- pass: 8
-- review: 4
-- reject: 10
-- strict usable: **36.4%**
-- lenient usable: **54.5%**
+更早的 all-candidate smoke 总计：
+- processed：22
+- pass：8
+- review：4
+- reject：10
+- strict usable：**36.4%**
+- lenient usable：**54.5%**
 
-Current 200-sample benchmark totals:
-- processed: 200
-- pass: 90
-- review: 26
-- reject: 84
-- strict usable: **45.0%**
-- lenient usable: **58.0%**
+当前 200 样本 benchmark 总计：
+- processed：200
+- pass：90
+- review：26
+- reject：84
+- strict usable：**45.0%**
+- lenient usable：**58.0%**
 
-#### Main change
-- strict usable improved from **36.4% -> 45.0%**
-- lenient usable improved from **54.5% -> 58.0%**
+#### 主要变化
+- strict usable 从 **36.4% -> 45.0%**
+- lenient usable 从 **54.5% -> 58.0%**
 
-#### Interpretation
-The earlier smoke was mainly a connector/integration confidence check. The 200-sample run is much more representative and should now be treated as the stronger reference for planning rewrite strategy and source-specific thresholding.
+#### 解读
+更早的 smoke 更偏“连通性测试”；当前这轮 200 样本结果明显更能代表真实情况，因此更适合作为后续 rewrite 策略和 threshold 调整的参考基线。
 
-### C. What became more certain after the 200-sample run
+### C. 经过 200 样本之后，哪些判断变得更确定了
 
-The larger benchmark made several earlier impressions more reliable:
+这轮更大规模的 benchmark 强化了以下判断：
 
-- `EEE-Bench` is still a strong engineering positive-control source
-- `CMM-Math` is a strong math source and not just a lucky small-sample result
-- `MathVision` has genuinely moved into the usable set after connector fixes
-- `PhysReason` is stronger than its tiny smoke result alone suggested
-- `Geometry3K` really is underperforming under current thresholds
-- `SeePhys` is weaker than the 2-sample smoke may have suggested
-- `MM-Math` is useful, but less uniformly strong than the earliest tiny smoke implied
+- `EEE-Bench` 仍然是很强的 engineering 正对照源
+- `CMM-Math` 不是小样本偶然好，而是真的较强
+- `MathVision` 在连接器修复后，已经真正进入“可用数据集”行列
+- `PhysReason` 比最早的小样本 smoke 暗示的还要强
+- `Geometry3K` 在当前阈值下确实偏弱
+- `SeePhys` 比最早 2 样本 smoke 暗示的更弱
+- `MM-Math` 虽然可用，但没有最早小样本看起来那么稳定

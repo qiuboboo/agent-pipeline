@@ -1,358 +1,344 @@
-# Rewrite Policy Table (working draft)
+# Rewrite 策略表（工作草案）
 
-_Last updated: 2026-03-24_
+_最后更新：2026-03-24_
 
-This is a practical, current-state summary derived from the all-candidate remote smoke run after connector fixes. It is not the final policy, but it is strong enough to guide the next round of rewrite alignment.
+这份文档是基于全候选 remote smoke 与后续 benchmark 总结出的**当前工作版本**，还不是最终定稿，但已经足够指导下一轮 rewrite-policy 对齐。
 
-## Core principle
+## 核心原则
 
-Do **not** route all multiple-choice-looking questions through one rewrite path.
+**不要**把所有“看起来像选择题”的题都送进同一条 rewrite 路径。
 
-Instead, prefer:
-- `blank_open` for standard visual choice questions with a single clear target
-- `keep_open` for naturally open-ended, multi-step, or already-open problem forms
-- `split_open` for structured mathematical targets that naturally decompose
+当前更合理的方向是：
+- `blank_open`：适合标准视觉选择题、单一目标问题
+- `keep_open`：适合天然开放题、多步题、已经本质开放的题
+- `split_open`：适合结构化数学目标、可拆分目标
 
 ---
 
-## Dataset-level table
+## 数据集级别的当前判断
 
-| Dataset | Typical current form | Image dependence | Common answer form | Current dominant rewrite | Current outcome snapshot | Suggested policy |
+| 数据集 | 当前常见形态 | 图像依赖 | 常见答案形态 | 当前主导 rewrite | 当前结果快照 | 当前建议 |
 |---|---|---:|---|---|---|---|
-| SCEMQA | visual science/math question, short prompt | high | numeric | `blank_open` | reject-heavy in current small smoke | keep `blank_open`, but inspect threshold/quality and whether some samples are already open-style |
-| Geometry3K | short geometry prompt like “Find x” | high | numeric | `blank_open` | mixed review/reject | keep `blank_open`, but likely needs source-specific quality relaxation |
-| CMM-Math | text math, set/range/structured targets | low | set / range | `split_open` | review-heavy | keep `split_open`; this is currently the clearest split-open dataset |
-| MathVision | mixed visual numeric + visual option questions | high | numeric / option | mixed `keep_open` + `blank_open` | mixed review/reject | branch by answer form and question style; do not force one rewrite path |
-| MM-Math | diagram-grounded math solution problems | high | open solution / set | `keep_open` | pass-heavy in current small smoke | keep `keep_open`; avoid forcing into blank-open style |
-| SeePhys | physics open questions with figures | high | short_text / numeric | `keep_open` | mixed pass/reject | keep `keep_open`; quality threshold still matters |
-| Multi-Physics | physics questions with options but reasoning-heavy text | high | option | `keep_open` | mixed pass/reject | currently safer as `keep_open`; revisit after more examples |
-| PhysReason | long context + multi-subquestion physics reasoning | high | short_text / set | `keep_open` | mixed pass/reject | keep `keep_open`; this is structurally multi-subquestion |
-| EEE-Bench | standard engineering MCQ with figure | high | option | `blank_open` | pass-heavy | keep `blank_open`; strong positive-control dataset |
-| EMMA-Math | visual choice / spatial/math figure tasks | high | option | `blank_open` | pass-heavy | keep `blank_open` |
-| EMMA-Physics | visual physics choice / ray/path tasks | high | short_text / option-like answer target | `blank_open` | pass-heavy | keep `blank_open` |
+| SCEMQA | 视觉科学/数学题，题干较短 | 高 | numeric | `blank_open` | 小样本里 reject 偏多 | 先保留 `blank_open`，但要检查阈值与是否存在天然开放型题 |
+| Geometry3K | 短几何题，例如 “Find x” | 高 | numeric | `blank_open` | review / reject 混合 | 先保留 `blank_open`，更优先考虑 source-specific 质量放宽 |
+| CMM-Math | 文本数学题，集合/范围/结构化目标较多 | 低 | set / range | `split_open` | review 较多 | 保持 `split_open`；当前它是最清晰的 split-open 数据集 |
+| MathVision | 视觉 numeric 与视觉 option 混合 | 高 | numeric / option | `keep_open` + `blank_open` 混合 | review / reject 混合 | 必须按题型与答案形态分流，不能强行统一 |
+| MM-Math | 带图数学求解题 | 高 | open solution / set | `keep_open` | 小样本里通过率较高 | 保持 `keep_open`；不要强推成 blank-open |
+| SeePhys | 带图物理开放题 | 高 | short_text / numeric | `keep_open` | pass / reject 混合 | 保持 `keep_open`；当前质量阈值影响较大 |
+| Multi-Physics | 带选项但文字推理较重的物理题 | 高 | option | `keep_open` | pass / reject 混合 | 当前先按 `keep_open` 更稳，后面再根据样本细分 |
+| PhysReason | 长 context + 多子问物理推理题 | 高 | short_text / set | `keep_open` | pass / reject 混合 | 保持 `keep_open`；结构上就是 multi-subquestion |
+| EEE-Bench | 标准工程视觉选择题 | 高 | option | `blank_open` | pass 较强 | 保持 `blank_open`；它是当前很强的正对照数据集 |
+| EMMA-Math | 视觉选择 / 空间图形类数学题 | 高 | option | `blank_open` | pass 较强 | 保持 `blank_open` |
+| EMMA-Physics | 视觉物理选择 / 光路图类题 | 高 | short_text / option-like target | `blank_open` | pass 较强 | 保持 `blank_open` |
 
 ---
 
-## Current rule sketch by question type
+## 按题型理解的当前规则草案
 
-### 1. Standard visual choice question
-**Use:** `blank_open`
+### 1. 标准视觉选择题
+**建议策略：** `blank_open`
 
-Typical signs:
-- one image or one figure
-- one target quantity / one choice target
-- classic MCQ wording
-- options are distractors, not true subproblems
+典型特征：
+- 单图或单主图
+- 只有一个核心目标
+- 题面是典型 MCQ 形式
+- 选项是 distractor，而不是多个真实子目标
 
-Examples:
+典型数据集：
 - EEE-Bench
 - EMMA-Math
 - EMMA-Physics
-- some Geometry3K / MathVision samples
+- Geometry3K / MathVision 的一部分
 
 ---
 
-### 2. Naturally open numeric or derivation problem
-**Use:** `keep_open`
+### 2. 天然开放的 numeric / derivation 问题
+**建议策略：** `keep_open`
 
-Typical signs:
-- already asks for a numeric result or derivation
-- option letters are absent or not semantically central
-- forcing a blank-open transform adds little value
+典型特征：
+- 本来就在问一个值、一个推导结果、一个结论
+- 即使源数据里有选项，本质目标还是开放式的
+- 强行改成 blank-open 收益不大，反而容易丢语义
 
-Examples:
+典型数据集：
 - MM-Math
-- some MathVision numeric items
-- some SeePhys items
+- MathVision 的一部分 numeric 题
+- SeePhys 的一部分题
 
 ---
 
-### 3. Multi-subquestion structured reasoning
-**Use:** `keep_open`
+### 3. 多子问结构推理题
+**建议策略：** `keep_open`
 
-Typical signs:
-- explicit sub-question list
-- one context with multiple targets
-- answer is a list/tuple/set of results
-- strong multi-step dependency across subparts
+典型特征：
+- 明确存在子问列表
+- 一个共享 context 对应多个目标
+- 答案天然是列表 / 元组 / 多行结构
+- 子部分之间有强依赖
 
-Examples:
+典型数据集：
 - PhysReason
 
 ---
 
-### 4. Structured mathematical target decomposition
-**Use:** `split_open`
+### 4. 结构化数学目标题
+**建议策略：** `split_open`
 
-Typical signs:
-- range / set / interval answers
-- composite algebraic target
-- one multiple-choice shell but multiple internal target components
-- splitting makes annotation and verification easier
+典型特征：
+- 解集 / 区间 / 范围 / 分类讨论
+- 外层是一个题，但内部有多个结构化目标
+- 拆分后更利于标注和验证
 
-Examples:
+典型数据集：
 - CMM-Math
 
 ---
 
-## Current operational cautions
+## 当前需要特别警惕的点
 
-### Do not blindly trust “looks like MCQ”
-Some datasets contain question bodies that look like MCQ, but semantically behave like open problems.
+### 不要只看“表面像 MCQ”
+有些题虽然外观上有选项，但本质上已经更像开放题或结构化推理题。
 
-### Do not treat image presence as enough reason for `blank_open`
-Some image-grounded problems are still better preserved as open-ended questions.
+### 不要因为有图就默认 `blank_open`
+有些图像依赖题并不是标准视觉选择题，而是更适合保留开放结构。
 
-### Quality gate is still a confounder
-Some datasets are underperforming not because the rewrite strategy is wrong, but because samples are being rejected due to:
+### 当前质量门槛仍然是混杂因素
+有些数据集当前表现差，不一定是 rewrite 策略本身错了，而可能是被以下问题主导：
 - `low_resolution`
 - `low_text_completeness`
 
-Most affected right now:
+目前受影响最明显的包括：
 - SCEMQA
 - Geometry3K
 - MathVision
-- parts of PhysReason / SeePhys / Multi-Physics
+- PhysReason / SeePhys / Multi-Physics 的一部分样本
 
 ---
 
-## Immediate next policy tasks
+## 已记录但暂未实现的 rewrite 改进建议
 
-1. Add source-specific threshold overrides for low-resolution-heavy sources.
-2. Build a small answer-type + question-form classifier before rewrite.
-3. Separate these classes explicitly before rewrite:
-   - option-style visual MCQ
-   - open numeric visual question
-   - multi-subquestion reasoning problem
-   - structured set/range math problem
-4. Re-run all-candidate smoke after threshold tuning and compare rewrite distribution shifts.
+这一部分是当前推荐的修改方向，**先记入文档，暂不直接改代码实现**。
 
----
+### 为什么当前策略需要改
 
-## Proposed rewrite-policy changes (documented, not yet implemented)
+核心问题**不是** rewrite prompt 太弱，
+而是当前 rewrite 分流太粗。
 
-This section records the current recommended rewrite-policy adjustments before code changes are made.
-
-### Why change the current policy
-
-The main issue is **not** that the rewrite prompt is too weak.
-The bigger issue is that the current routing is too coarse.
-
-At the moment, the fallback logic is still roughly:
-- no choices -> `keep_open`
-- pure image-index choice -> `drop_image_index`
+目前 fallback 逻辑大致还是：
+- 没 choices -> `keep_open`
+- 纯图片索引题 -> `drop_image_index`
 - compound answer -> `split_open`
-- otherwise with choices -> default to `blank_open`
+- 其他有 choices 的题 -> 默认 `blank_open`
 
-That last default is too aggressive. It pushes many questions that only *look* like MCQ into the same `blank_open` path, even when they are semantically closer to naturally open-ended, multi-step, or structured-target problems.
+最后这一条太激进，会把很多“只是表面像选择题”的题，粗暴送进 `blank_open`，而它们本质上更接近开放题、多步题或结构化目标题。
 
 ---
 
-## Proposed rewrite classes
+## 建议的 rewrite 类型分层
 
-### 1. Standard visual choice question
-**Recommended strategy:** `blank_open`
+### 1. 标准视觉选择题
+**建议策略：** `blank_open`
 
-Typical signs:
-- one image or one figure
-- one target quantity or one target concept
-- classic MCQ wording
-- options act as distractors rather than true subproblems
+典型特征：
+- 单图 / 单主图
+- 单一目标
+- 典型 MCQ wording
+- 选项是 distractor，而非真实子问题
 
-Typical datasets:
+典型数据集：
 - `EEE-Bench`
 - `EMMA-Math`
 - `EMMA-Physics`
-- part of `Geometry3K`
-- part of `MathVision`
+- `Geometry3K` 的一部分
+- `MathVision` 的一部分
 
 ---
 
-### 2. Naturally open numeric / derivation problem
-**Recommended strategy:** `keep_open`
+### 2. 天然开放 numeric / derivation 题
+**建议策略：** `keep_open`
 
-Typical signs:
-- already asks for a value, derivation, or conclusion directly
-- even if choices exist in the source, the real semantic target is still open-ended
-- converting to blank-open adds little value compared with preserving the original structure
+典型特征：
+- 本来就在问结果、推导、结论
+- 就算有选项，语义核心仍然是开放目标
+- 改成 blank-open 收益不大
 
-Typical datasets:
+典型数据集：
 - `MM-Math`
-- part of `MathVision`
-- part of `SeePhys`
-- part of `Multi-Physics`
+- `MathVision` 的一部分
+- `SeePhys` 的一部分
+- `Multi-Physics` 的一部分
 
 ---
 
-### 3. Multi-subquestion structured reasoning problem
-**Recommended strategy:** `keep_open`
+### 3. 多子问结构推理题
+**建议策略：** `keep_open`
 
-Typical signs:
-- explicit sub-question list
-- one shared context with multiple targets
-- answer is naturally a list / tuple / multi-line result
-- strong dependency between subparts
+典型特征：
+- 明确的子问题结构
+- 共享 context + 多目标
+- 答案天然是多行 / 多段
+- 子部分之间相互依赖
 
-Typical datasets:
+典型数据集：
 - `PhysReason`
 
-Notes:
-- do not force these into `blank_open`
-- do not split into separate problems by default unless later workflow explicitly wants subproblem extraction
+备注：
+- 不要把这类题强行改成 `blank_open`
+- 也不要默认拆成多个独立题，除非后续 workflow 明确需要子题抽取
 
 ---
 
-### 4. Structured mathematical target decomposition
-**Recommended strategy:** `split_open`
+### 4. 结构化数学目标拆分题
+**建议策略：** `split_open`
 
-Typical signs:
-- set / interval / range answers
-- one shell question but multiple target components internally
-- splitting improves annotation and verification
+典型特征：
+- set / interval / range 结果
+- 一个壳里包含多个内部目标
+- 拆开更方便标注与验证
 
-Typical datasets:
+典型数据集：
 - `CMM-Math`
-- part of `SCEMQA`
+- `SCEMQA` 的一部分
 
 ---
 
-### 5. Pure image-index choice
-**Recommended strategy:** `drop_image_index`
+### 5. 纯图片索引题
+**建议策略：** `drop_image_index`
 
-Typical signs:
-- question depends on picking one image / figure index
-- option semantics are not meaningfully textualized
-- rewrite would be brittle or degenerate
+典型特征：
+- 问题本质是在选某个图 / 某个 figure index
+- 选项语义无法稳定文本化
+- rewrite 后很容易退化
 
 ---
 
-## Proposed dataset priors
+## 建议的 dataset prior
 
-These priors are meant to be **weak routing preferences**, not hard-coded irreversible rules.
+这些 prior 应该被理解成**弱偏好**，而不是硬编码死规则。
 
-### Prefer `blank_open`
+### 偏向 `blank_open`
 - `EEE-Bench`
 - `EMMA-Math`
 - `EMMA-Physics`
-- `Geometry3K` (default preference, but allow exceptions)
+- `Geometry3K`（默认如此，但允许例外）
 
-### Prefer `keep_open`
+### 偏向 `keep_open`
 - `MM-Math`
 - `SeePhys`
 - `Multi-Physics`
 - `PhysReason`
 
-### Prefer `split_open`
+### 偏向 `split_open`
 - `CMM-Math`
 
-### Must branch by question form
+### 必须按题型分流
 - `MathVision`
 - `SCEMQA`
 
 ---
 
-## Proposed high-priority dataset-specific changes
+## 重点数据集的具体建议
 
 ### MathVision
-Current observation:
-- visual numeric questions often behave better as `keep_open`
-- standard visual option questions often behave better as `blank_open`
+当前观察：
+- 视觉 numeric 问题更适合 `keep_open`
+- 标准视觉 option 问题更适合 `blank_open`
 
-Suggested branch:
-- if the question looks like "how many", "which number", "what value", "calculate", "determine" and the answer is numeric / expression -> `keep_open`
-- if the question is a standard object / figure discrimination question -> `blank_open`
+建议：
+- 如果题面像 `how many` / `which number` / `what value` / `calculate` / `determine`，并且答案是 numeric / expression -> `keep_open`
+- 如果题面是标准对象 / 图形 / figure discrimination -> `blank_open`
 
 ### SCEMQA
-Current observation:
-- current smoke shows a mix of `blank_open` and `split_open`
-- many current samples still reject, so rewrite and quality remain confounded
+当前观察：
+- 当前 smoke 里 `blank_open` 和 `split_open` 混合出现
+- 但很多样本仍然 reject，因此 rewrite 与 quality 还在互相干扰
 
-Suggested branch:
-- numeric single-target items -> `blank_open`
-- set / range / structured-target items -> `split_open`
-- do not default all SCEMQA items to the same path
+建议：
+- numeric 单目标题 -> `blank_open`
+- set / range / structured target 题 -> `split_open`
+- 不要把所有 SCEMQA 题都强行走同一条 rewrite 路径
 
 ### Geometry3K
-Current observation:
-- many items still look like short visual numeric targets such as "Find x"
-- current weakness seems more related to thresholding / quality than rewrite itself
+当前观察：
+- 很多题还是标准的短视觉 numeric 目标，比如 “Find x”
+- 当前更像是 quality / threshold 问题，而不是 rewrite 本身的问题
 
-Suggested policy:
-- keep `blank_open` as the main default
-- do **not** make large rewrite-policy changes yet
-- prioritize threshold / quality analysis first
+建议：
+- 继续把 `blank_open` 作为主默认策略
+- 暂时不要在 rewrite 上做大改动
+- 先优先处理 threshold / quality 分析
 
 ---
 
-## Proposed lightweight classifier functions
+## 建议新增的轻量分类函数
 
-Before rewrite, the pipeline should ideally classify a sample using a few explicit checks.
+理想状态下，rewrite 前应该先做一个很轻量的题型分类。
 
 ### `is_multi_subquestion(question_text)`
-Detects:
-- `1. 2. 3.` style subparts
-- `sub-question` wording
-- `(1)(2)(3)` style decomposition
+识别：
+- `1. 2. 3.` 样式子题
+- `sub-question` 关键词
+- `(1)(2)(3)` 这类分解结构
 
-Suggested action:
-- route to `keep_open`
+建议动作：
+- 路由到 `keep_open`
 
 ### `is_set_or_range_target(answer_text, answer_type)`
-Detects:
-- intervals / ranges / unions / set-style outputs
-- common mathematical solution-set patterns
+识别：
+- 区间 / 范围 / union / set 这类输出
+- 典型数学解集模式
 
-Suggested action:
-- route to `split_open`
+建议动作：
+- 路由到 `split_open`
 
 ### `is_visual_numeric_open(question_text, answer_type, choices)`
-Detects:
+识别：
 - `how many`
 - `which number`
 - `what value`
 - `calculate`
 - `determine`
-- numeric or expression-style target
+- 答案像 numeric 或 expression
 
-Suggested action:
-- route to `keep_open`
+建议动作：
+- 路由到 `keep_open`
 
 ### `is_standard_visual_mcq(question_text, choices, answer_type)`
-Detects:
-- standard single-target visual MCQ form
-- options are textual distractors rather than multiple internal objectives
+识别：
+- 标准单目标视觉 MCQ
+- 选项更像 distractor，而不是多个内部目标
 
-Suggested action:
-- route to `blank_open`
+建议动作：
+- 路由到 `blank_open`
 
 ### `dataset_prior(dataset_name)`
-Provides a weak prior preference by dataset family.
+提供一个弱 dataset prior。
 
-Suggested action:
-- use only as a tie-breaker, not as a hard override against obvious question-form evidence
+建议动作：
+- 只作为 tie-breaker，不要硬覆盖明显的题型证据
 
 ---
 
-## Proposed rewrite decision order
+## 建议的 rewrite 决策顺序
 
-1. pure image-index choice -> `drop_image_index`
-2. multi-subquestion structure -> `keep_open`
+1. 纯图片索引题 -> `drop_image_index`
+2. 多子问结构 -> `keep_open`
 3. set / range / structured target -> `split_open`
-4. visual numeric open-style question -> `keep_open`
-5. strong dataset prior toward `keep_open` and no clear standard-MCQ evidence -> `keep_open`
-6. standard visual MCQ -> `blank_open`
-7. fallback default -> `blank_open`
+4. 视觉 numeric 开放题 -> `keep_open`
+5. 数据集 prior 明显偏 `keep_open` 且没有标准 MCQ 证据 -> `keep_open`
+6. 标准视觉 MCQ -> `blank_open`
+7. 默认兜底 -> `blank_open`
 
 ---
 
-## Proposed first implementation targets
+## 建议优先实现的第一批改动
 
-If only a few changes are made first, the highest-value ones appear to be:
+如果后续只先改几处，当前最值得优先做的是：
 
-1. remove the overly broad rule that effectively means "has choices -> default `blank_open`"
-2. add explicit handling for:
+1. 去掉“有 choices 就默认 `blank_open`”这一条过粗规则
+2. 显式给：
    - `PhysReason` -> `keep_open`
    - `CMM-Math` -> `split_open`
-3. add mixed-form routing for `MathVision`
+3. 给 `MathVision` 增加混合型分流逻辑
 
-These changes are **recommended next**, but are intentionally only documented here for now.
+这些改动目前**只记录在文档中，暂未实现到代码里**。
