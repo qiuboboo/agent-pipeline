@@ -42,6 +42,32 @@ Current small-sample outcome snapshot:
 - `EMMA-Math` → available, current small samples pass
 - `EMMA-Physics` → available, current small samples pass
 
+### 200-sample cross-subject benchmark
+
+A larger cross-subject benchmark was also completed.
+
+- Config: `configs/candidate_200_remote.yaml`
+- Report: `docs/candidate_200_benchmark_report.md`
+- Output summary: `outputs/candidate_200_remote/run_6be16173d2403a7e/summary.json`
+
+Headline numbers:
+- 200 / 200 processed
+- wall-clock time: **195s**
+- average throughput: **0.975 s/sample**
+- strict usable (`pass`): **90 / 200 = 45.0%**
+- lenient usable (`pass + review`): **116 / 200 = 58.0%**
+
+Best current performers in this setup:
+- `EEE-Bench`
+- `PhysReason`
+- `CMM-Math`
+
+Most likely to need source-specific threshold tuning next:
+- `Geometry3K`
+- `SCEMQA`
+- `SeePhys`
+- parts of `MathVision`
+
 ### High-level rewrite pattern snapshot
 
 Observed from current smoke samples:
