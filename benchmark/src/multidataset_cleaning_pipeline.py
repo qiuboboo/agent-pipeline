@@ -1271,7 +1271,32 @@ class HuggingFaceConnector(BaseConnector):
             row = dict(row)
             extracted = prompt_extract_record_content(row, self.spec, OpenAICompatibleClient(self.config.model))
             image_source_hint = extracted["image_paths"][0] if extracted["image_paths"] else None
-            image, image_source = self.load_image(row.get("image"))
+
+            image = None
+            image_source = None
+            image_field_candidates: List[str] = []
+            explicit_image_field = extracted.get("image_field")
+            if explicit_image_field:
+                image_field_candidates.append(str(explicit_image_field))
+            image_field_candidates.extend(self.spec.image_fields or [])
+            if "image" in row:
+                image_field_candidates.append("image")
+            if "decoded_image" in row:
+                image_field_candidates.append("decoded_image")
+
+            seen_fields: set[str] = set()
+            for field_name in image_field_candidates:
+                if not field_name or field_name in seen_fields:
+                    continue
+                seen_fields.add(field_name)
+                if field_name not in row:
+                    continue
+                image, image_source = self.load_image(row.get(field_name))
+                if image is not None:
+                    if image_source is None:
+                        image_source = f"inline://hf_field/{field_name}"
+                    break
+
             if image is None:
                 for path_str in extracted["image_paths"]:
                     image, image_source = self.load_image(path_str)
@@ -1300,6 +1325,7 @@ class HuggingFaceConnector(BaseConnector):
                         "row_index": index,
                         "image_paths": extracted["image_paths"],
                         "extraction_notes": extracted.get("extraction_notes", []),
+                        "image_field": extracted.get("image_field"),
                     },
                     choice_map=extracted["choice_map"],
                     force_requires_image=extracted["force_requires_image"],
