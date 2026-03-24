@@ -1385,10 +1385,19 @@ class GitHubConnector(BaseConnector):
         if isinstance(data, list):
             return [item for item in data if isinstance(item, dict)]
         if isinstance(data, dict):
-            for key in ["data", "dataset", "datasets", "records", "items", "problems", "questions", "annotations"]:
+            for key in ["data", "dataset", "datasets", "records", "items", "problems", "questions", "annotations", "example"]:
                 value = data.get(key)
                 if isinstance(value, list) and value and isinstance(value[0], dict):
-                    return value
+                    records = []
+                    for item in value:
+                        if not isinstance(item, dict):
+                            continue
+                        merged = dict(item)
+                        if "keywords" in data and "keywords" not in merged:
+                            merged["keywords"] = data.get("keywords")
+                        records.append(merged)
+                    if records:
+                        return records
             if any(
                 key in data
                 for key in [
