@@ -133,3 +133,96 @@ Run a source-specific quality analysis focused on:
 - `low_text_completeness`
 - candidate-intake reject patterns
 - whether `Geometry3K`, `SCEMQA`, and `SeePhys` need threshold overrides
+
+---
+
+## Comparison with earlier benchmarks
+
+This 200-sample benchmark should be compared with two earlier references from the same work stream:
+
+1. the earlier **4-dataset remote benchmark** (`geometry3k`, `cmm_math`, `mathvision`, `eee_bench`, 10 samples each)
+2. the earlier **all-candidate remote smoke** (2 samples per dataset)
+
+### A. Comparison with the earlier 4-dataset remote benchmark
+
+Earlier 4-dataset benchmark totals:
+- processed: 40
+- pass: 12
+- review: 12
+- reject: 16
+- strict usable: **30.0%**
+- lenient usable: **60.0%**
+
+Current 200-sample benchmark totals:
+- processed: 200
+- pass: 90
+- review: 26
+- reject: 84
+- strict usable: **45.0%**
+- lenient usable: **58.0%**
+
+#### Main change
+- strict usable improved from **30.0% -> 45.0%**
+- lenient usable stayed roughly similar: **60.0% -> 58.0%**
+
+#### Interpretation
+This is not a regression. The current benchmark is larger, includes more datasets, and reflects the connector fixes. The newer result appears more realistic: fewer borderline reviews as a proportion, but more true passes and true rejects.
+
+#### Dataset-by-dataset comparison for the shared 4 datasets
+
+- **Geometry3K**
+  - earlier: `0 / 4 / 6`
+  - now: `0 / 4 / 16`
+  - conclusion: weakness is confirmed, not a small-sample fluke
+
+- **CMM-Math**
+  - earlier: `5 / 5 / 0`
+  - now: `13 / 6 / 1`
+  - conclusion: still very strong; now looks even more like a stable math benchmark source
+
+- **MathVision**
+  - earlier: `0 / 0 / 10`
+  - now: `11 / 3 / 6`
+  - conclusion: biggest improvement after image-materialization fix; moved from effectively unusable to genuinely workable
+
+- **EEE-Bench**
+  - earlier: `7 / 3 / 0`
+  - now: `15 / 4 / 1`
+  - conclusion: remains a strong positive-control dataset; behavior is stable under larger sample size
+
+### B. Comparison with the earlier all-candidate smoke
+
+Earlier all-candidate smoke totals:
+- processed: 22
+- pass: 8
+- review: 4
+- reject: 10
+- strict usable: **36.4%**
+- lenient usable: **54.5%**
+
+Current 200-sample benchmark totals:
+- processed: 200
+- pass: 90
+- review: 26
+- reject: 84
+- strict usable: **45.0%**
+- lenient usable: **58.0%**
+
+#### Main change
+- strict usable improved from **36.4% -> 45.0%**
+- lenient usable improved from **54.5% -> 58.0%**
+
+#### Interpretation
+The earlier smoke was mainly a connector/integration confidence check. The 200-sample run is much more representative and should now be treated as the stronger reference for planning rewrite strategy and source-specific thresholding.
+
+### C. What became more certain after the 200-sample run
+
+The larger benchmark made several earlier impressions more reliable:
+
+- `EEE-Bench` is still a strong engineering positive-control source
+- `CMM-Math` is a strong math source and not just a lucky small-sample result
+- `MathVision` has genuinely moved into the usable set after connector fixes
+- `PhysReason` is stronger than its tiny smoke result alone suggested
+- `Geometry3K` really is underperforming under current thresholds
+- `SeePhys` is weaker than the 2-sample smoke may have suggested
+- `MM-Math` is useful, but less uniformly strong than the earliest tiny smoke implied
