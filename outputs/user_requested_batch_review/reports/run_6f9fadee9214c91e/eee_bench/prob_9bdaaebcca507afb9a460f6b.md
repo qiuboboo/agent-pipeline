@@ -1,0 +1,2855 @@
+# EEE-Bench / prob_9bdaaebcca507afb9a460f6b
+
+- source_problem_id: `13`
+- source_split: `test`
+- clean_decision: `pass`
+- rewrite_strategy: `blank_open`
+- full sample bundle JSON: `outputs/user_requested_batch_review/pipeline_runs/run_6f9fadee9214c91e/datasets/eee_bench/samples/prob_9bdaaebcca507afb9a460f6b.json`
+
+## 1. 原始内容（处理前）
+
+### 1.1 原始快照
+
+```json
+{
+  "dataset_key": "eee_bench",
+  "source_problem_id": "13",
+  "source_split": "test",
+  "raw_question_text": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+  "raw_answer_text": "C",
+  "choice_map": {},
+  "image_sources": [
+    "inline://pil_image"
+  ],
+  "metadata": {
+    "row_index": 13,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null
+  },
+  "raw_record": {
+    "image": {
+      "__image__": true,
+      "mode": "RGB",
+      "width": 384,
+      "height": 384
+    },
+    "problem": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+    "solution": "C"
+  }
+}
+```
+
+## 2. 处理前后对照
+
+### 2.1 关键字段对照
+
+| 字段 | 处理前 | 处理后 |
+| --- | --- | --- |
+| question_text | Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end. Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specifi... | Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendi... |
+| answer_text | C | C |
+| answer_type | - | option |
+| image_count | 1 | 1 |
+| text_dominant | - | False |
+| cleaning_path | - | multimodal_full |
+| clean_decision | - | pass |
+| alignment_status | - | good |
+| solvability_decision_hint | - | pass |
+
+### 2.2 结构化处理后结果
+
+#### problem_main_record
+
+```json
+{
+  "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+  "source_dataset": "EEE-Bench",
+  "source_split": "test",
+  "source_problem_id": "13",
+  "ingest_batch_id": "multidataset-clean_20260324T063656Z",
+  "problem_type": "multimodal_reasoning",
+  "domain_tags": [
+    "电气电子工程领域"
+  ],
+  "language": "en",
+  "raw_question_text": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+  "normalized_question_text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices: \nA. The maximum voltage of this alternating current is 220V \nB. The frequency of this alternating current is 100Hz \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1 \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb",
+  "raw_answer_text": "C",
+  "normalized_answer_text": "C",
+  "answer_type": "option",
+  "image_count": 1,
+  "has_multiple_images": false,
+  "requires_image": true,
+  "multimodal_strength_score": 0.9876,
+  "multi_step_score": 0.5087,
+  "verifiability_score": 1.0,
+  "quality_risk_flags": [],
+  "current_status": "clean_passed",
+  "clean_decision": "pass",
+  "clean_decision_reason_codes": [
+    "meets_cleaning_requirements"
+  ],
+  "review_priority": "normal",
+  "annotation_ready": true,
+  "qa_precheck_ready": true,
+  "release_reserved": {},
+  "rewrite_strategy": "blank_open",
+  "open_variant_count": 1,
+  "candidate_id": "cand_9bdaaebcca507afb9a460f6b",
+  "text_dominant": false,
+  "cleaning_path": "multimodal_full",
+  "alignment_status": "good",
+  "solvability_score": 1.0,
+  "solvability_decision_hint": "pass",
+  "created_at": "2026-03-24T06:37:14Z",
+  "updated_at": "2026-03-24T06:37:14Z",
+  "initial_image_dependency_score": 0.9,
+  "initial_multi_solution_score": 0.52,
+  "initial_verifiability_score": 0.8887,
+  "multi_solution_mining_policy": "aggressive"
+}
+```
+
+#### clean_problem_record
+
+```json
+{
+  "clean_problem_record_id": "cleanprob_ac6c992195fa841d1191df74",
+  "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+  "source_dataset": "EEE-Bench",
+  "source_problem_id": "13",
+  "normalized_question_text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices: \nA. The maximum voltage of this alternating current is 220V \nB. The frequency of this alternating current is 100Hz \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1 \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb",
+  "normalized_answer_text": "C",
+  "image_count": 1,
+  "has_multiple_images": false,
+  "requires_image": true,
+  "text_dominant": false,
+  "cleaning_path": "multimodal_full",
+  "question_type": "multiple_choice",
+  "open_variant_count": 1,
+  "alignment_status": "good",
+  "solvability_score": 1.0,
+  "solvability_path_mode": "multimodal",
+  "clean_decision": "pass",
+  "decision_reason_codes": [
+    "meets_cleaning_requirements"
+  ],
+  "created_at": "2026-03-24T06:37:14Z"
+}
+```
+
+#### normalized_assets
+
+```json
+{
+  "normalized_assets_id": "nassets_ac6c992195fa841d1191df74",
+  "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+  "normalized_question_text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices: \nA. The maximum voltage of this alternating current is 220V \nB. The frequency of this alternating current is 100Hz \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1 \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb",
+  "normalized_answer_text": "C",
+  "question_unit_normalization_map": [],
+  "answer_unit_normalization_map": [],
+  "variable_aliases": [
+    {
+      "original": "A",
+      "canonical": "A",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "coil",
+      "canonical": "coil",
+      "variable_type": "label"
+    },
+    {
+      "original": "with",
+      "canonical": "with",
+      "variable_type": "label"
+    },
+    {
+      "original": "and",
+      "canonical": "and",
+      "variable_type": "label"
+    },
+    {
+      "original": "a",
+      "canonical": "a",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "area",
+      "canonical": "area",
+      "variable_type": "label"
+    },
+    {
+      "original": "is",
+      "canonical": "is",
+      "variable_type": "label"
+    },
+    {
+      "original": "in",
+      "canonical": "in",
+      "variable_type": "label"
+    },
+    {
+      "original": "The",
+      "canonical": "The",
+      "variable_type": "label"
+    },
+    {
+      "original": "at",
+      "canonical": "at",
+      "variable_type": "label"
+    },
+    {
+      "original": "an",
+      "canonical": "an",
+      "variable_type": "label"
+    },
+    {
+      "original": "axis",
+      "canonical": "axis",
+      "variable_type": "label"
+    },
+    {
+      "original": "to",
+      "canonical": "to",
+      "variable_type": "label"
+    },
+    {
+      "original": "the",
+      "canonical": "the",
+      "variable_type": "label"
+    },
+    {
+      "original": "As",
+      "canonical": "As",
+      "variable_type": "label"
+    },
+    {
+      "original": "this",
+      "canonical": "this",
+      "variable_type": "label"
+    },
+    {
+      "original": "of",
+      "canonical": "of",
+      "variable_type": "label"
+    },
+    {
+      "original": "bulb",
+      "canonical": "bulb",
+      "variable_type": "label"
+    },
+    {
+      "original": "L",
+      "canonical": "L",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "up",
+      "canonical": "up",
+      "variable_type": "label"
+    },
+    {
+      "original": "B",
+      "canonical": "B",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "C",
+      "canonical": "C",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "D",
+      "canonical": "D",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "d",
+      "canonical": "d",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "end",
+      "canonical": "end",
+      "variable_type": "label"
+    },
+    {
+      "original": "will",
+      "canonical": "will",
+      "variable_type": "label"
+    },
+    {
+      "original": "dim",
+      "canonical": "dim",
+      "variable_type": "label"
+    }
+  ],
+  "sentence_segments": [
+    {
+      "segment_index": 1,
+      "text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength."
+    },
+    {
+      "segment_index": 2,
+      "text": "The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current."
+    },
+    {
+      "segment_index": 3,
+      "text": "As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally."
+    },
+    {
+      "segment_index": 4,
+      "text": "The resistance of the coil and wires is negligible."
+    },
+    {
+      "segment_index": 5,
+      "text": "Which of the following statements is correct?"
+    },
+    {
+      "segment_index": 6,
+      "text": "Choices:"
+    },
+    {
+      "segment_index": 7,
+      "text": "A."
+    },
+    {
+      "segment_index": 8,
+      "text": "The maximum voltage of this alternating current is 220V"
+    },
+    {
+      "segment_index": 9,
+      "text": "B."
+    },
+    {
+      "segment_index": 10,
+      "text": "The frequency of this alternating current is 100Hz"
+    },
+    {
+      "segment_index": 11,
+      "text": "C."
+    },
+    {
+      "segment_index": 12,
+      "text": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1"
+    },
+    {
+      "segment_index": 13,
+      "text": "D."
+    },
+    {
+      "segment_index": 14,
+      "text": "Moving the sliding contact of the rheostat towards the d-end will dim the light bulb"
+    }
+  ],
+  "image_regions": [
+    {
+      "image_index": 1,
+      "source_uri": "inline://pil_image",
+      "roi_bbox": {
+        "x": 11,
+        "y": 35,
+        "width": 364,
+        "height": 332
+      },
+      "readability_score": 0.9059,
+      "contrast_score": 52.8045
+    }
+  ],
+  "text_dominant": false,
+  "cleaning_path": "multimodal_full",
+  "created_at": "2026-03-24T06:37:14Z"
+}
+```
+
+#### text_structure_record
+
+```json
+{
+  "text_structure_id": "text_prob_9bdaaebcca507afb9a460f6b",
+  "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+  "question_type": "multiple_choice",
+  "conditions": [
+    {
+      "text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength.",
+      "segment_index": 1,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "110"
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    {
+      "text": "As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally.",
+      "segment_index": 3,
+      "mentions_visual": true,
+      "numeric_tokens": [
+        "10"
+      ],
+      "unit_mentions": [
+        "A",
+        "V",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    {
+      "text": "The maximum voltage of this alternating current is 220V",
+      "segment_index": 8,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "220"
+      ],
+      "unit_mentions": [
+        "V",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    {
+      "text": "The frequency of this alternating current is 100Hz",
+      "segment_index": 10,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "100"
+      ],
+      "unit_mentions": [
+        "Hz",
+        "g",
+        "h",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    {
+      "text": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+      "segment_index": 12,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "22",
+        "1"
+      ],
+      "unit_mentions": [
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    }
+  ],
+  "targets": [
+    {
+      "text": "Which of the following statements is correct?",
+      "segment_index": 5,
+      "mentions_visual": false,
+      "numeric_tokens": [],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "target_role": "primary"
+    }
+  ],
+  "answer_slots": [
+    {
+      "slot_id": "slot_prob_9bdaaebcca507afb9a460f6b_1",
+      "variant_index": 1,
+      "split_role": "single",
+      "slot_type": "numeric",
+      "target_text": "Which of the following statements is correct?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+      "requires_visual_grounding": true
+    }
+  ],
+  "entity_mentions": [
+    {
+      "mention": "figure",
+      "entity_category": "figure",
+      "requires_visual_grounding": true
+    },
+    {
+      "mention": "axis",
+      "entity_category": "axis",
+      "requires_visual_grounding": true
+    },
+    {
+      "mention": "A",
+      "entity_category": "label",
+      "requires_visual_grounding": true
+    },
+    {
+      "mention": "L",
+      "entity_category": "label",
+      "requires_visual_grounding": true
+    },
+    {
+      "mention": "B",
+      "entity_category": "label",
+      "requires_visual_grounding": true
+    },
+    {
+      "mention": "C",
+      "entity_category": "label",
+      "requires_visual_grounding": true
+    },
+    {
+      "mention": "D",
+      "entity_category": "label",
+      "requires_visual_grounding": true
+    }
+  ],
+  "variable_aliases": [
+    {
+      "original": "A",
+      "canonical": "A",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "coil",
+      "canonical": "coil",
+      "variable_type": "label"
+    },
+    {
+      "original": "with",
+      "canonical": "with",
+      "variable_type": "label"
+    },
+    {
+      "original": "and",
+      "canonical": "and",
+      "variable_type": "label"
+    },
+    {
+      "original": "a",
+      "canonical": "a",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "area",
+      "canonical": "area",
+      "variable_type": "label"
+    },
+    {
+      "original": "is",
+      "canonical": "is",
+      "variable_type": "label"
+    },
+    {
+      "original": "in",
+      "canonical": "in",
+      "variable_type": "label"
+    },
+    {
+      "original": "The",
+      "canonical": "The",
+      "variable_type": "label"
+    },
+    {
+      "original": "at",
+      "canonical": "at",
+      "variable_type": "label"
+    },
+    {
+      "original": "an",
+      "canonical": "an",
+      "variable_type": "label"
+    },
+    {
+      "original": "axis",
+      "canonical": "axis",
+      "variable_type": "label"
+    },
+    {
+      "original": "to",
+      "canonical": "to",
+      "variable_type": "label"
+    },
+    {
+      "original": "the",
+      "canonical": "the",
+      "variable_type": "label"
+    },
+    {
+      "original": "As",
+      "canonical": "As",
+      "variable_type": "label"
+    },
+    {
+      "original": "this",
+      "canonical": "this",
+      "variable_type": "label"
+    },
+    {
+      "original": "of",
+      "canonical": "of",
+      "variable_type": "label"
+    },
+    {
+      "original": "bulb",
+      "canonical": "bulb",
+      "variable_type": "label"
+    },
+    {
+      "original": "L",
+      "canonical": "L",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "up",
+      "canonical": "up",
+      "variable_type": "label"
+    },
+    {
+      "original": "B",
+      "canonical": "B",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "C",
+      "canonical": "C",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "D",
+      "canonical": "D",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "d",
+      "canonical": "d",
+      "variable_type": "symbol"
+    },
+    {
+      "original": "end",
+      "canonical": "end",
+      "variable_type": "label"
+    },
+    {
+      "original": "will",
+      "canonical": "will",
+      "variable_type": "label"
+    },
+    {
+      "original": "dim",
+      "canonical": "dim",
+      "variable_type": "label"
+    }
+  ],
+  "unit_mentions": [
+    "A",
+    "Hz",
+    "V",
+    "W",
+    "g",
+    "h",
+    "m",
+    "s"
+  ],
+  "sentence_segments": [
+    {
+      "segment_index": 1,
+      "text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength."
+    },
+    {
+      "segment_index": 2,
+      "text": "The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current."
+    },
+    {
+      "segment_index": 3,
+      "text": "As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally."
+    },
+    {
+      "segment_index": 4,
+      "text": "The resistance of the coil and wires is negligible."
+    },
+    {
+      "segment_index": 5,
+      "text": "Which of the following statements is correct?"
+    },
+    {
+      "segment_index": 6,
+      "text": "Choices:"
+    },
+    {
+      "segment_index": 7,
+      "text": "A."
+    },
+    {
+      "segment_index": 8,
+      "text": "The maximum voltage of this alternating current is 220V"
+    },
+    {
+      "segment_index": 9,
+      "text": "B."
+    },
+    {
+      "segment_index": 10,
+      "text": "The frequency of this alternating current is 100Hz"
+    },
+    {
+      "segment_index": 11,
+      "text": "C."
+    },
+    {
+      "segment_index": 12,
+      "text": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1"
+    },
+    {
+      "segment_index": 13,
+      "text": "D."
+    },
+    {
+      "segment_index": 14,
+      "text": "Moving the sliding contact of the rheostat towards the d-end will dim the light bulb"
+    }
+  ],
+  "requires_visual_grounding": true,
+  "text_structure_status": "complete",
+  "parser_confidence": 0.92,
+  "created_at": "2026-03-24T06:37:14Z"
+}
+```
+
+#### visual_structure_records
+
+```json
+[
+  {
+    "visual_structure_id": "visual_prob_9bdaaebcca507afb9a460f6b_1",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "image_index": 1,
+    "image_asset_role": "primary_image",
+    "global_attributes": {
+      "visual_kind": "circuit_diagram",
+      "aspect_ratio": 1.0,
+      "dark_pixel_ratio": 0.0835,
+      "readability_score": 0.9059,
+      "has_roi": true
+    },
+    "visual_entities": [
+      {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 384,
+          "height": 384
+        },
+        "salience": 1.0
+      },
+      {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 11,
+          "y": 35,
+          "width": 364,
+          "height": 332
+        },
+        "salience": 0.95
+      },
+      {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 11,
+          "y": 35,
+          "width": 182,
+          "height": 166
+        },
+        "salience": 0.447
+      },
+      {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 193,
+          "y": 35,
+          "width": 182,
+          "height": 166
+        },
+        "salience": 0.4491
+      },
+      {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 11,
+          "y": 201,
+          "width": 182,
+          "height": 166
+        },
+        "salience": 0.4519
+      },
+      {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 193,
+          "y": 201,
+          "width": 182,
+          "height": 166
+        },
+        "salience": 0.4595
+      }
+    ],
+    "visual_relations": [
+      {
+        "source_entity_id": "roi",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi_top_left",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi_top_right",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi_bottom_left",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi_bottom_right",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi",
+        "target_entity_id": "roi_top_left",
+        "relation": "left_of"
+      },
+      {
+        "source_entity_id": "roi_top_left",
+        "target_entity_id": "roi_top_right",
+        "relation": "left_of"
+      },
+      {
+        "source_entity_id": "roi_top_right",
+        "target_entity_id": "roi_bottom_left",
+        "relation": "right_of"
+      },
+      {
+        "source_entity_id": "roi_bottom_left",
+        "target_entity_id": "roi_bottom_right",
+        "relation": "left_of"
+      }
+    ],
+    "parser_confidence": 0.9624,
+    "created_at": "2026-03-24T06:37:14Z"
+  }
+]
+```
+
+#### alignment_record
+
+```json
+{
+  "alignment_id": "align_ac6c992195fa841d1191df74",
+  "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+  "image_entity_refs": [
+    "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+    "visual_prob_9bdaaebcca507afb9a460f6b_1::roi_top_left",
+    "visual_prob_9bdaaebcca507afb9a460f6b_1::roi_top_right",
+    "visual_prob_9bdaaebcca507afb9a460f6b_1::roi_bottom_left",
+    "visual_prob_9bdaaebcca507afb9a460f6b_1::roi_bottom_right"
+  ],
+  "text_span_refs": [
+    "asset_prob_9bdaaebcca507afb9a460f6b_question_text_normalized"
+  ],
+  "alignment_pairs": [
+    {
+      "text_ref": "figure",
+      "image_ref": "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+      "relation": "grounds_figure",
+      "confidence": 0.7906
+    },
+    {
+      "text_ref": "axis",
+      "image_ref": "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+      "relation": "grounds_axis",
+      "confidence": 0.7906
+    },
+    {
+      "text_ref": "A",
+      "image_ref": "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+      "relation": "grounds_label",
+      "confidence": 0.7906
+    },
+    {
+      "text_ref": "L",
+      "image_ref": "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+      "relation": "grounds_label",
+      "confidence": 0.7906
+    },
+    {
+      "text_ref": "B",
+      "image_ref": "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+      "relation": "grounds_label",
+      "confidence": 0.7906
+    },
+    {
+      "text_ref": "C",
+      "image_ref": "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+      "relation": "grounds_label",
+      "confidence": 0.7906
+    },
+    {
+      "text_ref": "D",
+      "image_ref": "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+      "relation": "grounds_label",
+      "confidence": 0.7906
+    },
+    {
+      "text_ref": "slot_prob_9bdaaebcca507afb9a460f6b_1",
+      "image_ref": "visual_prob_9bdaaebcca507afb9a460f6b_1::roi",
+      "relation": "slot_grounding",
+      "confidence": 0.7917
+    }
+  ],
+  "conflict_pairs": [],
+  "coverage_score": 0.9,
+  "consistency_score": 0.98,
+  "alignment_status": "good",
+  "created_at": "2026-03-24T06:37:14Z",
+  "cleaning_path": "multimodal_full",
+  "text_dominant": false
+}
+```
+
+#### solvability_report
+
+```json
+{
+  "solvability_id": "solv_prob_9bdaaebcca507afb9a460f6b",
+  "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+  "answer_verifiable": true,
+  "target_clear": true,
+  "rewrite_complete": true,
+  "text_sufficient": true,
+  "visual_grounding_available": true,
+  "reasoning_path_exists": true,
+  "path_mode": "multimodal",
+  "failure_codes": [],
+  "score_breakdown": {
+    "answer_verifiable": 1.0,
+    "target_clear": 1.0,
+    "rewrite_complete": 1.0,
+    "text_sufficient": 1.0,
+    "visual_grounding": 1.0
+  },
+  "solvability_score": 1.0,
+  "decision_hint": "pass",
+  "created_at": "2026-03-24T06:37:14Z"
+}
+```
+
+#### cleaning_record
+
+```json
+{
+  "cleaning_id": "clean_ac6c992195fa841d1191df74",
+  "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+  "cleaning_version": "v3.0.0",
+  "pipeline_run_id": "run_6f9fadee9214c91e",
+  "dataset_name": "EEE-Bench",
+  "input_asset_ids": [
+    "asset_878c3542209eef78603c8309",
+    "asset_accd8c7be12e095ecc458bc3",
+    "asset_6d4edf08d3d295fbee7f0dfc",
+    "asset_e0f19b2b43bffdc1285b186a",
+    "asset_4876301ed8f7c9547830c710",
+    "asset_b337c062a4bd3721c63a2762",
+    "asset_9ba724777c0337556cabdf3c"
+  ],
+  "normalization_actions": [
+    {
+      "action_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "confidence": 1.0,
+      "human_confirmed": false
+    },
+    {
+      "action_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "confidence": 0.98,
+      "human_confirmed": false
+    },
+    {
+      "action_type": "unit_normalized",
+      "trigger": "NormalizationAgent",
+      "confidence": 0.92,
+      "human_confirmed": false,
+      "question_unit_count": 0,
+      "answer_unit_count": 0
+    },
+    {
+      "action_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "confidence": 0.88,
+      "human_confirmed": false,
+      "variable_alias_count": 27
+    },
+    {
+      "action_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "confidence": 0.85,
+      "human_confirmed": false
+    }
+  ],
+  "quality_checks": [
+    {
+      "check": "image_quality_1",
+      "result": {
+        "width": 384,
+        "height": 384,
+        "blur_score": 2955.6636,
+        "contrast_score": 52.8045,
+        "noise_score": 35.3956,
+        "readability_score": 0.9059,
+        "crop_integrity_score": 1.0,
+        "roi_bbox": {
+          "x": 11,
+          "y": 35,
+          "width": 364,
+          "height": 332
+        },
+        "perceptual_hash": "a5d7ded4c4dcdf01"
+      },
+      "passed": true
+    }
+  ],
+  "alignment_summary": {
+    "alignment_id": "align_ac6c992195fa841d1191df74",
+    "coverage_score": 0.9,
+    "consistency_score": 0.98,
+    "alignment_status": "good",
+    "conflict_count": 0
+  },
+  "text_structure_summary": {
+    "text_structure_id": "text_prob_9bdaaebcca507afb9a460f6b",
+    "question_type": "multiple_choice",
+    "condition_count": 5,
+    "target_count": 1,
+    "answer_slot_count": 1,
+    "status": "complete"
+  },
+  "solvability_summary": {
+    "solvability_id": "solv_prob_9bdaaebcca507afb9a460f6b",
+    "solvability_score": 1.0,
+    "reasoning_path_exists": true,
+    "decision_hint": "pass",
+    "failure_codes": []
+  },
+  "rewrite_summary": {
+    "strategy": "blank_open",
+    "variant_count": 1,
+    "discard_reason_codes": []
+  },
+  "missing_field_summary": {
+    "missing_question_text": false,
+    "missing_answer_text": false,
+    "missing_image_count": 0
+  },
+  "risk_flags": [],
+  "clean_score": 0.9479,
+  "decision": "pass",
+  "decision_reason_codes": [
+    "meets_cleaning_requirements"
+  ],
+  "review_ticket_id": null,
+  "operator_type": "system",
+  "started_at": "2026-03-24T06:37:14Z",
+  "finished_at": "2026-03-24T06:37:14Z",
+  "candidate_id": "cand_9bdaaebcca507afb9a460f6b",
+  "cleaning_path": "multimodal_full",
+  "text_dominant": false
+}
+```
+
+## 3. 开放化改写前后
+
+### 3.1 改写前
+
+```json
+{
+  "question_text_before_rewrite": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices: \nA. The maximum voltage of this alternating current is 220V \nB. The frequency of this alternating current is 100Hz \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1 \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb",
+  "answer_text_before_rewrite": "C",
+  "raw_question_text": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+  "raw_answer_text": "C"
+}
+```
+
+### 3.2 改写后
+
+```json
+{
+  "rewrite_report": {
+    "rewrite_id": "rewrite_ac6c992195fa841d1191df74",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "source_problem_id": "13",
+    "strategy": "blank_open",
+    "rationale": "Converted multiple choice into blank-style open-ended question.",
+    "discard_reason_codes": [],
+    "variant_count": 1,
+    "variants": [
+      {
+        "open_variant_id": "open_27f78e3c3287e2643d40072f",
+        "parent_problem_id": "prob_9bdaaebcca507afb9a460f6b",
+        "variant_index": 1,
+        "title": "EEE-Bench 开放题",
+        "rewritten_question_text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+        "split_role": "single"
+      }
+    ],
+    "created_at": "2026-03-24T06:37:14Z"
+  },
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_27f78e3c3287e2643d40072f",
+      "parent_problem_id": "prob_9bdaaebcca507afb9a460f6b",
+      "variant_index": 1,
+      "title": "EEE-Bench 开放题",
+      "rewritten_question_text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+      "split_role": "single"
+    }
+  ]
+}
+```
+
+## 4. 完整 collection + cleaning 输出对象
+
+#### candidate_problem_record
+
+```json
+{
+  "candidate_id": "cand_9bdaaebcca507afb9a460f6b",
+  "source_dataset": "EEE-Bench",
+  "source_split": "test",
+  "source_problem_id": "13",
+  "subject": "电气电子工程领域",
+  "raw_question_text": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+  "raw_answer_text": "C",
+  "has_image": true,
+  "image_count": 1,
+  "requires_image": true,
+  "text_dominant": false,
+  "recommended_cleaning_path": "multimodal_full",
+  "initial_image_dependency_score": 0.9,
+  "initial_multi_solution_score": 0.52,
+  "initial_verifiability_score": 0.8887,
+  "multi_solution_mining_policy": "aggressive",
+  "should_push_multi_solution_agent": true,
+  "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+  "metadata": {
+    "row_index": 13,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null
+  },
+  "created_at": "2026-03-24T06:37:14Z"
+}
+```
+
+#### raw_asset_bundle
+
+```json
+{
+  "raw_asset_bundle_id": "bundle_18cf4a314d79092b09413834",
+  "candidate_id": "cand_9bdaaebcca507afb9a460f6b",
+  "source_dataset": "EEE-Bench",
+  "source_problem_id": "13",
+  "assets": [
+    {
+      "asset_role": "question_text_raw",
+      "storage_uri": "inline://prob_9bdaaebcca507afb9a460f6b/question_source",
+      "is_present": true
+    },
+    {
+      "asset_role": "answer_text_raw",
+      "storage_uri": "inline://prob_9bdaaebcca507afb9a460f6b/answer_source",
+      "is_present": true
+    },
+    {
+      "asset_role": "image_raw",
+      "storage_uri": "inline://pil_image",
+      "is_present": true,
+      "width": 384,
+      "height": 384
+    }
+  ],
+  "core_asset_completeness": {
+    "has_question_text": true,
+    "has_answer_text": true,
+    "image_count": 1,
+    "has_multiple_images": false
+  },
+  "initial_scores": {
+    "initial_image_dependency_score": 0.9,
+    "initial_multi_solution_score": 0.52,
+    "initial_verifiability_score": 0.8887
+  },
+  "created_at": "2026-03-24T06:37:14Z"
+}
+```
+
+#### candidate_pool_entry
+
+```json
+{
+  "candidate_pool_entry_id": "cpool_5ade23b863e0801326a0f690",
+  "candidate_id": "cand_9bdaaebcca507afb9a460f6b",
+  "source_dataset": "EEE-Bench",
+  "source_problem_id": "13",
+  "candidate_status": "ready_for_cleaning",
+  "priority_score": 0.7826,
+  "priority_tier": "high",
+  "recommended_cleaning_path": "multimodal_full",
+  "multi_solution_mining_policy": "aggressive",
+  "initial_scores": {
+    "initial_image_dependency_score": 0.9,
+    "initial_multi_solution_score": 0.52,
+    "initial_verifiability_score": 0.8887
+  },
+  "created_at": "2026-03-24T06:37:14Z"
+}
+```
+
+#### clean_pool_entries
+
+```json
+[
+  {
+    "clean_pool_entry_id": "cleanpool_ac6c992195fa841d1191df74",
+    "candidate_id": "cand_9bdaaebcca507afb9a460f6b",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "dataset_name": "EEE-Bench",
+    "pool_status": "ready_for_annotation",
+    "clean_decision": "pass",
+    "review_required": false,
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-03-24T06:37:14Z"
+  }
+]
+```
+
+#### rewrite_reports
+
+```json
+[
+  {
+    "rewrite_id": "rewrite_ac6c992195fa841d1191df74",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "source_problem_id": "13",
+    "strategy": "blank_open",
+    "rationale": "Converted multiple choice into blank-style open-ended question.",
+    "discard_reason_codes": [],
+    "variant_count": 1,
+    "variants": [
+      {
+        "open_variant_id": "open_27f78e3c3287e2643d40072f",
+        "parent_problem_id": "prob_9bdaaebcca507afb9a460f6b",
+        "variant_index": 1,
+        "title": "EEE-Bench 开放题",
+        "rewritten_question_text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+        "split_role": "single"
+      }
+    ],
+    "created_at": "2026-03-24T06:37:14Z"
+  }
+]
+```
+
+#### open_ended_problem_variants
+
+```json
+[
+  {
+    "open_variant_id": "open_27f78e3c3287e2643d40072f",
+    "parent_problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "variant_index": 1,
+    "title": "EEE-Bench 开放题",
+    "rewritten_question_text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?",
+    "expected_answer_type": "numeric",
+    "expected_answer": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+    "split_role": "single"
+  }
+]
+```
+
+#### asset_records
+
+```json
+[
+  {
+    "asset_id": "asset_878c3542209eef78603c8309",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "asset_type": "text",
+    "asset_role": "question_text_source",
+    "source_uri": "source://eee_bench/test/13/question",
+    "storage_uri": "inline://prob_9bdaaebcca507afb9a460f6b/question_source",
+    "file_format": "txt",
+    "file_size_bytes": 978,
+    "width": null,
+    "height": null,
+    "sha256": "a661b70aa95b7776a442b008d2d46a4fb25c7c33a601c0d61a6ba5ab9a48164e",
+    "perceptual_hash": null,
+    "source_text_snapshot": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+    "normalized_text_snapshot": null,
+    "text_completeness_score": 0.9,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "coil",
+        "canonical": "coil",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "area",
+        "canonical": "area",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "an",
+        "canonical": "an",
+        "variable_type": "label"
+      },
+      {
+        "original": "axis",
+        "canonical": "axis",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "bulb",
+        "canonical": "bulb",
+        "variable_type": "label"
+      },
+      {
+        "original": "L",
+        "canonical": "L",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "up",
+        "canonical": "up",
+        "variable_type": "label"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "D",
+        "canonical": "D",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "d",
+        "canonical": "d",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "end",
+        "canonical": "end",
+        "variable_type": "label"
+      },
+      {
+        "original": "will",
+        "canonical": "will",
+        "variable_type": "label"
+      },
+      {
+        "original": "dim",
+        "canonical": "dim",
+        "variable_type": "label"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "asset_id": "asset_accd8c7be12e095ecc458bc3",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "asset_type": "text",
+    "asset_role": "question_text_normalized",
+    "source_uri": null,
+    "storage_uri": "inline://prob_9bdaaebcca507afb9a460f6b/question_normalized",
+    "file_format": "txt",
+    "file_size_bytes": 871,
+    "width": null,
+    "height": null,
+    "sha256": "1caa002c3be7b0fbc5123c890b1abc7a446abc9cab002a633244a6e48d5a8694",
+    "perceptual_hash": null,
+    "source_text_snapshot": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+    "normalized_text_snapshot": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices: \nA. The maximum voltage of this alternating current is 220V \nB. The frequency of this alternating current is 100Hz \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1 \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb",
+    "text_completeness_score": 0.9,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "coil",
+        "canonical": "coil",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "area",
+        "canonical": "area",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "an",
+        "canonical": "an",
+        "variable_type": "label"
+      },
+      {
+        "original": "axis",
+        "canonical": "axis",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "bulb",
+        "canonical": "bulb",
+        "variable_type": "label"
+      },
+      {
+        "original": "L",
+        "canonical": "L",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "up",
+        "canonical": "up",
+        "variable_type": "label"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "D",
+        "canonical": "D",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "d",
+        "canonical": "d",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "end",
+        "canonical": "end",
+        "variable_type": "label"
+      },
+      {
+        "original": "will",
+        "canonical": "will",
+        "variable_type": "label"
+      },
+      {
+        "original": "dim",
+        "canonical": "dim",
+        "variable_type": "label"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "asset_id": "asset_6d4edf08d3d295fbee7f0dfc",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "asset_type": "answer",
+    "asset_role": "answer_raw",
+    "source_uri": "source://eee_bench/test/13/answer",
+    "storage_uri": "inline://prob_9bdaaebcca507afb9a460f6b/answer_raw",
+    "file_format": "txt",
+    "file_size_bytes": 1,
+    "width": null,
+    "height": null,
+    "sha256": "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d",
+    "perceptual_hash": null,
+    "source_text_snapshot": "C",
+    "normalized_text_snapshot": null,
+    "text_completeness_score": 1.0,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "asset_id": "asset_e0f19b2b43bffdc1285b186a",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "asset_type": "answer",
+    "asset_role": "answer_normalized",
+    "source_uri": null,
+    "storage_uri": "inline://prob_9bdaaebcca507afb9a460f6b/answer_normalized",
+    "file_format": "txt",
+    "file_size_bytes": 1,
+    "width": null,
+    "height": null,
+    "sha256": "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d",
+    "perceptual_hash": null,
+    "source_text_snapshot": "C",
+    "normalized_text_snapshot": "C",
+    "text_completeness_score": 1.0,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "asset_id": "asset_4876301ed8f7c9547830c710",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "asset_type": "image",
+    "asset_role": "primary_image",
+    "source_uri": "inline://pil_image",
+    "storage_uri": "outputs/user_requested_batch_review/pipeline_runs/run_6f9fadee9214c91e/datasets/eee_bench/artifacts/images/prob_9bdaaebcca507afb9a460f6b_primary.png",
+    "file_format": "png",
+    "file_size_bytes": 29594,
+    "width": 384,
+    "height": 384,
+    "sha256": "cfff45341d2fa21addc1d594a5bbc32ef119c9a4bea79590820a8e5d48683a6f",
+    "perceptual_hash": "a5d7ded4c4dcdf01",
+    "source_text_snapshot": null,
+    "normalized_text_snapshot": null,
+    "text_completeness_score": null,
+    "blur_score": 2955.6636,
+    "readability_score": 0.9059,
+    "noise_score": 35.3956,
+    "cropped_from_asset_id": null,
+    "roi_bbox": {
+      "x": 11,
+      "y": 35,
+      "width": 364,
+      "height": 332
+    },
+    "unit_normalization_map": [],
+    "variable_aliases": [],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "asset_id": "asset_b337c062a4bd3721c63a2762",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "asset_type": "crop",
+    "asset_role": "region_crop",
+    "source_uri": null,
+    "storage_uri": "outputs/user_requested_batch_review/pipeline_runs/run_6f9fadee9214c91e/datasets/eee_bench/artifacts/crops/prob_9bdaaebcca507afb9a460f6b_primary_roi.png",
+    "file_format": "png",
+    "file_size_bytes": 28873,
+    "width": 364,
+    "height": 332,
+    "sha256": "c1261a92685ae396245fd9734553aed24a0efde5cdcffd7d02e82a9c7ac7a89a",
+    "perceptual_hash": "01deded6d4dede01",
+    "source_text_snapshot": null,
+    "normalized_text_snapshot": null,
+    "text_completeness_score": null,
+    "blur_score": 2955.6636,
+    "readability_score": 0.9059,
+    "noise_score": 35.3956,
+    "cropped_from_asset_id": "asset_4876301ed8f7c9547830c710",
+    "roi_bbox": {
+      "x": 11,
+      "y": 35,
+      "width": 364,
+      "height": 332
+    },
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "asset_id": "asset_9ba724777c0337556cabdf3c",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "asset_type": "text",
+    "asset_role": "question_text_open_variant",
+    "source_uri": null,
+    "storage_uri": "inline://open_27f78e3c3287e2643d40072f",
+    "file_format": "txt",
+    "file_size_bytes": 567,
+    "width": null,
+    "height": null,
+    "sha256": "48cd7ecf3d9cfe755d6c9a9b45dfaf27794651063045451e2cafe929c63762fa",
+    "perceptual_hash": null,
+    "source_text_snapshot": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+    "normalized_text_snapshot": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?",
+    "text_completeness_score": 0.9,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "coil",
+        "canonical": "coil",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "area",
+        "canonical": "area",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "an",
+        "canonical": "an",
+        "variable_type": "label"
+      },
+      {
+        "original": "axis",
+        "canonical": "axis",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "bulb",
+        "canonical": "bulb",
+        "variable_type": "label"
+      },
+      {
+        "original": "L",
+        "canonical": "L",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "up",
+        "canonical": "up",
+        "variable_type": "label"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "D",
+        "canonical": "D",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "d",
+        "canonical": "d",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "end",
+        "canonical": "end",
+        "variable_type": "label"
+      },
+      {
+        "original": "will",
+        "canonical": "will",
+        "variable_type": "label"
+      },
+      {
+        "original": "dim",
+        "canonical": "dim",
+        "variable_type": "label"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  }
+]
+```
+
+#### node_records
+
+```json
+[
+  {
+    "node_id": "node_77ae7947b211813febe32e8c",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "text_fact",
+    "canonical_value": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength.",
+    "surface_forms": [
+      "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength."
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "evidence_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength.",
+      "segment_index": 1,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "110"
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "A,g,h,m,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_da8c6eca1d3a6e4ed637fc41",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "text_fact",
+    "canonical_value": "As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally.",
+    "surface_forms": [
+      "As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally."
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "evidence_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally.",
+      "segment_index": 3,
+      "mentions_visual": true,
+      "numeric_tokens": [
+        "10"
+      ],
+      "unit_mentions": [
+        "A",
+        "V",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "A,V,g,h,m,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_3680726c65e64d51cf7417fb",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "text_fact",
+    "canonical_value": "The maximum voltage of this alternating current is 220V",
+    "surface_forms": [
+      "The maximum voltage of this alternating current is 220V"
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "evidence_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "The maximum voltage of this alternating current is 220V",
+      "segment_index": 8,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "220"
+      ],
+      "unit_mentions": [
+        "V",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "V,g,h,m,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_72c6ad96600887d19f2c30bd",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "text_fact",
+    "canonical_value": "The frequency of this alternating current is 100Hz",
+    "surface_forms": [
+      "The frequency of this alternating current is 100Hz"
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "evidence_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "The frequency of this alternating current is 100Hz",
+      "segment_index": 10,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "100"
+      ],
+      "unit_mentions": [
+        "Hz",
+        "g",
+        "h",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "Hz,g,h,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_a406900a138fd2a8d9c47dad",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "text_fact",
+    "canonical_value": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+    "surface_forms": [
+      "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1"
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "evidence_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+      "segment_index": 12,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "22",
+        "1"
+      ],
+      "unit_mentions": [
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "h,m,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_b5648479a5dcced02754a325",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "target_slot",
+    "canonical_value": "Which of the following statements is correct?",
+    "surface_forms": [
+      "Which of the following statements is correct?"
+    ],
+    "origin_kind": "text_structure",
+    "cognitive_level": "computed",
+    "source_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "evidence_refs": [
+      "asset_accd8c7be12e095ecc458bc3"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "numeric",
+    "normalized_value": {
+      "slot_id": "slot_prob_9bdaaebcca507afb9a460f6b_1",
+      "variant_index": 1,
+      "split_role": "single",
+      "slot_type": "numeric",
+      "target_text": "Which of the following statements is correct?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+      "requires_visual_grounding": true
+    },
+    "unit": null,
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_7021e042c4643d243cb277f1",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "answer_claim",
+    "canonical_value": "C",
+    "surface_forms": [
+      "C"
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_e0f19b2b43bffdc1285b186a"
+    ],
+    "evidence_refs": [
+      "asset_e0f19b2b43bffdc1285b186a"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "option",
+    "normalized_value": {
+      "answer": "C"
+    },
+    "unit": null,
+    "confidence": 0.98,
+    "verifiability": "high",
+    "ambiguity_level": "none",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_99104c9b50c046f94bb9e8f9",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::full_canvas::canvas",
+    "surface_forms": [
+      "canvas"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "full_canvas",
+    "normalized_value": {
+      "entity_id": "canvas",
+      "entity_type": "full_canvas",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 384,
+        "height": 384
+      },
+      "salience": 1.0
+    },
+    "unit": null,
+    "confidence": 0.9624,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_f064711bdb793cee844af185",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::content_region::roi",
+    "surface_forms": [
+      "roi"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "content_region",
+    "normalized_value": {
+      "entity_id": "roi",
+      "entity_type": "content_region",
+      "bbox": {
+        "x": 11,
+        "y": 35,
+        "width": 364,
+        "height": 332
+      },
+      "salience": 0.95
+    },
+    "unit": null,
+    "confidence": 0.9624,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_ac315ed0906c9f6849484b9d",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::subregion::roi_top_left",
+    "surface_forms": [
+      "roi_top_left"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "subregion",
+    "normalized_value": {
+      "entity_id": "roi_top_left",
+      "entity_type": "subregion",
+      "bbox": {
+        "x": 11,
+        "y": 35,
+        "width": 182,
+        "height": 166
+      },
+      "salience": 0.447
+    },
+    "unit": null,
+    "confidence": 0.9624,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_86f7b5e645c2a7adfe7e942a",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::subregion::roi_top_right",
+    "surface_forms": [
+      "roi_top_right"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "subregion",
+    "normalized_value": {
+      "entity_id": "roi_top_right",
+      "entity_type": "subregion",
+      "bbox": {
+        "x": 193,
+        "y": 35,
+        "width": 182,
+        "height": 166
+      },
+      "salience": 0.4491
+    },
+    "unit": null,
+    "confidence": 0.9624,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_ef1300f8d4bdf8f3ef51938e",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::subregion::roi_bottom_left",
+    "surface_forms": [
+      "roi_bottom_left"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "subregion",
+    "normalized_value": {
+      "entity_id": "roi_bottom_left",
+      "entity_type": "subregion",
+      "bbox": {
+        "x": 11,
+        "y": 201,
+        "width": 182,
+        "height": 166
+      },
+      "salience": 0.4519
+    },
+    "unit": null,
+    "confidence": 0.9624,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_e49cae80b7eb2161d0a73a97",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::subregion::roi_bottom_right",
+    "surface_forms": [
+      "roi_bottom_right"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_9bdaaebcca507afb9a460f6b_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "subregion",
+    "normalized_value": {
+      "entity_id": "roi_bottom_right",
+      "entity_type": "subregion",
+      "bbox": {
+        "x": 193,
+        "y": 201,
+        "width": 182,
+        "height": 166
+      },
+      "salience": 0.4595
+    },
+    "unit": null,
+    "confidence": 0.9624,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_22c8bbc9132cda77f57ef32d",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "text_fact",
+    "canonical_value": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?",
+    "surface_forms": [
+      "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?"
+    ],
+    "origin_kind": "reasoning",
+    "cognitive_level": "computed",
+    "source_refs": [
+      "asset_9ba724777c0337556cabdf3c"
+    ],
+    "evidence_refs": [
+      "asset_9ba724777c0337556cabdf3c"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "text",
+    "normalized_value": {
+      "open_variant_id": "open_27f78e3c3287e2643d40072f",
+      "parent_problem_id": "prob_9bdaaebcca507afb9a460f6b",
+      "variant_index": 1,
+      "title": "EEE-Bench 开放题",
+      "rewritten_question_text": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1",
+      "split_role": "single"
+    },
+    "unit": null,
+    "confidence": 0.88,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_814d8af2cdef683bc41dc97f",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "quality_signal",
+    "canonical_value": "solvability=pass",
+    "surface_forms": [
+      "pass"
+    ],
+    "origin_kind": "system_quality",
+    "cognitive_level": "computed",
+    "source_refs": [],
+    "evidence_refs": [],
+    "upstream_node_ids": [],
+    "value_type": "text",
+    "normalized_value": {
+      "solvability_id": "solv_prob_9bdaaebcca507afb9a460f6b",
+      "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-03-24T06:37:14Z"
+    },
+    "unit": null,
+    "confidence": 1.0,
+    "verifiability": "high",
+    "ambiguity_level": "none",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "node_id": "node_0693cd99e46746dd05423a7a",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "node_type": "quality_signal",
+    "canonical_value": "clean_decision=pass",
+    "surface_forms": [
+      "pass"
+    ],
+    "origin_kind": "system_quality",
+    "cognitive_level": "computed",
+    "source_refs": [],
+    "evidence_refs": [],
+    "upstream_node_ids": [],
+    "value_type": "text",
+    "normalized_value": {
+      "decision": "pass",
+      "reasons": [
+        "meets_cleaning_requirements"
+      ]
+    },
+    "unit": null,
+    "confidence": 1.0,
+    "verifiability": "high",
+    "ambiguity_level": "none",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T06:37:14Z",
+    "updated_at": "2026-03-24T06:37:14Z"
+  }
+]
+```
+
+#### field_audit_records
+
+```json
+[
+  {
+    "audit_id": "audit_35fcc1c6062cb75b952d3151",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "record_type": "problem_main_record",
+    "field_name": "normalized_question_text",
+    "before_value": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices:  \nA. The maximum voltage of this alternating current is 220V  \nB. The frequency of this alternating current is 100Hz  \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1  \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb\n",
+    "after_value": "Question: A rectangular coil with 110 turns and a certain area is placed in a uniform magnetic field with a specific magnetic induction strength. The coil rotates at a constant angular velocity around an axis perpendicular to the magnetic field, generating a sinusoidal alternating current. As shown in the figure, this alternating current is applied to the input of an ideal transformer, and a small light bulb \\( L \\), with a rated voltage of 10V, lights up normally. The resistance of the coil and wires is negligible. Which of the following statements is correct?\n\nChoices: \nA. The maximum voltage of this alternating current is 220V \nB. The frequency of this alternating current is 100Hz \nC. The turns ratio of the primary to the secondary coil of the ideal transformer is 22:1 \nD. Moving the sliding contact of the rheostat towards the d-end will dim the light bulb",
+    "change_type": "text_normalized",
+    "trigger": "NormalizationAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "audit_id": "audit_5a8111acc466d2c75c79ad78",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "record_type": "problem_main_record",
+    "field_name": "normalized_answer_text",
+    "before_value": "C",
+    "after_value": "C",
+    "change_type": "answer_canonicalized",
+    "trigger": "NormalizationAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "audit_id": "audit_6433907e07ea4e1e0cb34fba",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "record_type": "rewrite_report",
+    "field_name": "rewrite_strategy",
+    "before_value": null,
+    "after_value": "blank_open",
+    "change_type": "question_rewritten",
+    "trigger": "QuestionRewriteAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "audit_id": "audit_0693cd99e46746dd05423a7a",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "record_type": "cleaning_record",
+    "field_name": "decision",
+    "before_value": null,
+    "after_value": "pass",
+    "change_type": "gate_decision",
+    "trigger": "CleanGateAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T06:37:14Z"
+  },
+  {
+    "audit_id": "audit_ec36487a905fcbd24179ee64",
+    "problem_id": "prob_9bdaaebcca507afb9a460f6b",
+    "record_type": "normalized_assets",
+    "field_name": "variable_aliases",
+    "before_value": null,
+    "after_value": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "coil",
+        "canonical": "coil",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "area",
+        "canonical": "area",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "an",
+        "canonical": "an",
+        "variable_type": "label"
+      },
+      {
+        "original": "axis",
+        "canonical": "axis",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "bulb",
+        "canonical": "bulb",
+        "variable_type": "label"
+      },
+      {
+        "original": "L",
+        "canonical": "L",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "up",
+        "canonical": "up",
+        "variable_type": "label"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "D",
+        "canonical": "D",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "d",
+        "canonical": "d",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "end",
+        "canonical": "end",
+        "variable_type": "label"
+      },
+      {
+        "original": "will",
+        "canonical": "will",
+        "variable_type": "label"
+      },
+      {
+        "original": "dim",
+        "canonical": "dim",
+        "variable_type": "label"
+      }
+    ],
+    "change_type": "variable_canonicalized",
+    "trigger": "NormalizationAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T06:37:14Z"
+  }
+]
+```
+
+#### reject_records
+
+```json
+[]
+```
+
+### 4.1 完整 sample bundle 原文件
+
+- `outputs/user_requested_batch_review/pipeline_runs/run_6f9fadee9214c91e/datasets/eee_bench/samples/prob_9bdaaebcca507afb9a460f6b.json`

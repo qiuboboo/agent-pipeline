@@ -1,0 +1,2079 @@
+# EEE-Bench / prob_1d998e1e8654cb1cdc2ec3d6
+
+- source_problem_id: `18`
+- source_split: `test`
+- clean_decision: `pass`
+- rewrite_strategy: `keep_open`
+- full sample bundle JSON: `outputs/user_requested_batch_review/pipeline_runs/run_637ca3432da6ddfb/datasets/eee_bench/samples/prob_1d998e1e8654cb1cdc2ec3d6.json`
+
+## 1. 原始内容（处理前）
+
+### 1.1 原始快照
+
+```json
+{
+  "dataset_key": "eee_bench",
+  "source_problem_id": "18",
+  "source_split": "test",
+  "raw_question_text": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+  "raw_answer_text": "B",
+  "choice_map": {},
+  "image_sources": [
+    "inline://pil_image"
+  ],
+  "metadata": {
+    "row_index": 18,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null
+  },
+  "raw_record": {
+    "image": "<PngImageFile size=(384, 384) mode=RGB>",
+    "problem": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+    "solution": "B"
+  }
+}
+```
+
+### 1.2 原始图片
+
+- （无）
+
+## 2. 处理前后对照
+
+### 2.1 关键字段对照
+
+| 字段 | 处理前 | 处理后 |
+| --- | --- | --- |
+| question_text | Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end. Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \( (\quad) \).  System (1)   System (2)   System (3)   All are unstable  | Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \( (\quad) \).  System (1)  System (2)  System (3)  All are unstable |
+| answer_text | B | B |
+| answer_type | - | option |
+| image_count | 1 | 1 |
+| text_dominant | - | False |
+| cleaning_path | - | multimodal_full |
+| clean_decision | - | pass |
+| alignment_status | - | good |
+| solvability_decision_hint | - | pass |
+| rewrite_strategy | - | keep_open |
+
+### 2.2 结构化处理后结果
+
+#### problem_main_record
+
+```json
+{
+  "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+  "source_dataset": "EEE-Bench",
+  "source_split": "test",
+  "source_problem_id": "18",
+  "ingest_batch_id": "multidataset-clean_20260324T074830Z",
+  "problem_type": "multimodal_reasoning",
+  "domain_tags": [
+    "电气电子工程领域"
+  ],
+  "language": "en",
+  "raw_question_text": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+  "normalized_question_text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+  "raw_answer_text": "B",
+  "normalized_answer_text": "B",
+  "answer_type": "option",
+  "image_count": 1,
+  "has_multiple_images": false,
+  "requires_image": true,
+  "multimodal_strength_score": 0.9772,
+  "multi_step_score": 0.5447,
+  "verifiability_score": 1.0,
+  "quality_risk_flags": [],
+  "current_status": "clean_passed",
+  "clean_decision": "pass",
+  "clean_decision_reason_codes": [
+    "meets_cleaning_requirements"
+  ],
+  "review_priority": "normal",
+  "annotation_ready": true,
+  "qa_precheck_ready": true,
+  "release_reserved": {},
+  "rewrite_strategy": "keep_open",
+  "open_variant_count": 1,
+  "candidate_id": "cand_1d998e1e8654cb1cdc2ec3d6",
+  "text_dominant": false,
+  "cleaning_path": "multimodal_full",
+  "alignment_status": "good",
+  "solvability_score": 1.0,
+  "solvability_decision_hint": "pass",
+  "created_at": "2026-03-24T07:48:44Z",
+  "updated_at": "2026-03-24T07:48:45Z",
+  "initial_image_dependency_score": 0.9,
+  "initial_multi_solution_score": 0.46,
+  "initial_verifiability_score": 0.8763,
+  "multi_solution_mining_policy": "aggressive"
+}
+```
+
+#### clean_problem_record
+
+```json
+{
+  "clean_problem_record_id": "cleanprob_1715ece35b159740e259d0cb",
+  "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+  "source_dataset": "EEE-Bench",
+  "source_problem_id": "18",
+  "normalized_question_text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+  "normalized_answer_text": "B",
+  "image_count": 1,
+  "has_multiple_images": false,
+  "requires_image": true,
+  "text_dominant": false,
+  "cleaning_path": "multimodal_full",
+  "question_type": "open",
+  "open_variant_count": 1,
+  "alignment_status": "good",
+  "solvability_score": 1.0,
+  "solvability_path_mode": "multimodal",
+  "clean_decision": "pass",
+  "decision_reason_codes": [
+    "meets_cleaning_requirements"
+  ],
+  "created_at": "2026-03-24T07:48:44Z"
+}
+```
+
+#### normalized_assets
+
+```json
+{
+  "normalized_assets_id": "nassets_1715ece35b159740e259d0cb",
+  "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+  "normalized_question_text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+  "normalized_answer_text": "B",
+  "question_unit_normalization_map": [],
+  "answer_unit_normalization_map": [],
+  "variable_aliases": [
+    {
+      "original": "the",
+      "canonical": "the",
+      "variable_type": "label"
+    },
+    {
+      "original": "open",
+      "canonical": "open",
+      "variable_type": "label"
+    },
+    {
+      "original": "loop",
+      "canonical": "loop",
+      "variable_type": "label"
+    },
+    {
+      "original": "in",
+      "canonical": "in",
+      "variable_type": "label"
+    },
+    {
+      "original": "is",
+      "canonical": "is",
+      "variable_type": "label"
+    },
+    {
+      "original": "quad",
+      "canonical": "quad",
+      "variable_type": "label"
+    },
+    {
+      "original": "All",
+      "canonical": "All",
+      "variable_type": "label"
+    },
+    {
+      "original": "are",
+      "canonical": "are",
+      "variable_type": "label"
+    }
+  ],
+  "sentence_segments": [
+    {
+      "segment_index": 1,
+      "text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\)."
+    },
+    {
+      "segment_index": 2,
+      "text": "System (1)"
+    },
+    {
+      "segment_index": 3,
+      "text": "System (2)"
+    },
+    {
+      "segment_index": 4,
+      "text": "System (3)"
+    },
+    {
+      "segment_index": 5,
+      "text": "All are unstable"
+    }
+  ],
+  "image_regions": [
+    {
+      "image_index": 1,
+      "source_uri": "inline://pil_image",
+      "roi_bbox": {
+        "x": 23,
+        "y": 27,
+        "width": 345,
+        "height": 307
+      },
+      "readability_score": 0.8022,
+      "contrast_score": 33.5903
+    }
+  ],
+  "text_dominant": false,
+  "cleaning_path": "multimodal_full",
+  "created_at": "2026-03-24T07:48:44Z"
+}
+```
+
+#### text_structure_record
+
+```json
+{
+  "text_structure_id": "text_prob_1d998e1e8654cb1cdc2ec3d6",
+  "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+  "question_type": "open",
+  "conditions": [
+    {
+      "text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).",
+      "segment_index": 1,
+      "mentions_visual": true,
+      "numeric_tokens": [
+        "2"
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    {
+      "text": "System (1)",
+      "segment_index": 2,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "1"
+      ],
+      "unit_mentions": [
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    {
+      "text": "System (2)",
+      "segment_index": 3,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "2"
+      ],
+      "unit_mentions": [
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    {
+      "text": "System (3)",
+      "segment_index": 4,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "3"
+      ],
+      "unit_mentions": [
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    }
+  ],
+  "targets": [
+    {
+      "text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+      "segment_index": 5,
+      "mentions_visual": true,
+      "numeric_tokens": [
+        "2",
+        "1",
+        "2",
+        "3"
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "target_role": "fallback"
+    }
+  ],
+  "answer_slots": [
+    {
+      "slot_id": "slot_prob_1d998e1e8654cb1cdc2ec3d6_1",
+      "variant_index": 1,
+      "split_role": "single",
+      "slot_type": "option",
+      "target_text": "All are unstable",
+      "expected_answer_type": "option",
+      "expected_answer": "B",
+      "requires_visual_grounding": true
+    }
+  ],
+  "entity_mentions": [
+    {
+      "mention": "figure",
+      "entity_category": "figure",
+      "requires_visual_grounding": true
+    },
+    {
+      "mention": "table",
+      "entity_category": "table",
+      "requires_visual_grounding": true
+    }
+  ],
+  "variable_aliases": [
+    {
+      "original": "the",
+      "canonical": "the",
+      "variable_type": "label"
+    },
+    {
+      "original": "open",
+      "canonical": "open",
+      "variable_type": "label"
+    },
+    {
+      "original": "loop",
+      "canonical": "loop",
+      "variable_type": "label"
+    },
+    {
+      "original": "in",
+      "canonical": "in",
+      "variable_type": "label"
+    },
+    {
+      "original": "is",
+      "canonical": "is",
+      "variable_type": "label"
+    },
+    {
+      "original": "quad",
+      "canonical": "quad",
+      "variable_type": "label"
+    },
+    {
+      "original": "All",
+      "canonical": "All",
+      "variable_type": "label"
+    },
+    {
+      "original": "are",
+      "canonical": "are",
+      "variable_type": "label"
+    }
+  ],
+  "unit_mentions": [
+    "A",
+    "g",
+    "h",
+    "m",
+    "s"
+  ],
+  "sentence_segments": [
+    {
+      "segment_index": 1,
+      "text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\)."
+    },
+    {
+      "segment_index": 2,
+      "text": "System (1)"
+    },
+    {
+      "segment_index": 3,
+      "text": "System (2)"
+    },
+    {
+      "segment_index": 4,
+      "text": "System (3)"
+    },
+    {
+      "segment_index": 5,
+      "text": "All are unstable"
+    }
+  ],
+  "requires_visual_grounding": true,
+  "text_structure_status": "complete",
+  "parser_confidence": 0.92,
+  "created_at": "2026-03-24T07:48:44Z"
+}
+```
+
+#### visual_structure_records
+
+```json
+[
+  {
+    "visual_structure_id": "visual_prob_1d998e1e8654cb1cdc2ec3d6_1",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "image_index": 1,
+    "image_asset_role": "primary_image",
+    "global_attributes": {
+      "visual_kind": "generic_visual",
+      "aspect_ratio": 1.0,
+      "dark_pixel_ratio": 0.0592,
+      "readability_score": 0.8022,
+      "has_roi": true
+    },
+    "visual_entities": [
+      {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 384,
+          "height": 384
+        },
+        "salience": 1.0
+      },
+      {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 23,
+          "y": 27,
+          "width": 345,
+          "height": 307
+        },
+        "salience": 0.95
+      },
+      {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 23,
+          "y": 27,
+          "width": 172,
+          "height": 153
+        },
+        "salience": 0.4387
+      },
+      {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 195,
+          "y": 27,
+          "width": 173,
+          "height": 153
+        },
+        "salience": 0.4667
+      },
+      {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 23,
+          "y": 180,
+          "width": 172,
+          "height": 154
+        },
+        "salience": 0.4092
+      },
+      {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 195,
+          "y": 180,
+          "width": 173,
+          "height": 154
+        },
+        "salience": 0.4155
+      }
+    ],
+    "visual_relations": [
+      {
+        "source_entity_id": "roi",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi_top_left",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi_top_right",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi_bottom_left",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi_bottom_right",
+        "target_entity_id": "canvas",
+        "relation": "inside"
+      },
+      {
+        "source_entity_id": "roi",
+        "target_entity_id": "roi_top_left",
+        "relation": "left_of"
+      },
+      {
+        "source_entity_id": "roi_top_left",
+        "target_entity_id": "roi_top_right",
+        "relation": "left_of"
+      },
+      {
+        "source_entity_id": "roi_top_right",
+        "target_entity_id": "roi_bottom_left",
+        "relation": "right_of"
+      },
+      {
+        "source_entity_id": "roi_bottom_left",
+        "target_entity_id": "roi_bottom_right",
+        "relation": "left_of"
+      }
+    ],
+    "parser_confidence": 0.9209,
+    "created_at": "2026-03-24T07:48:44Z"
+  }
+]
+```
+
+#### alignment_record
+
+```json
+{
+  "alignment_id": "align_1715ece35b159740e259d0cb",
+  "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+  "image_entity_refs": [
+    "visual_prob_1d998e1e8654cb1cdc2ec3d6_1::roi",
+    "visual_prob_1d998e1e8654cb1cdc2ec3d6_1::roi_top_left",
+    "visual_prob_1d998e1e8654cb1cdc2ec3d6_1::roi_top_right",
+    "visual_prob_1d998e1e8654cb1cdc2ec3d6_1::roi_bottom_left",
+    "visual_prob_1d998e1e8654cb1cdc2ec3d6_1::roi_bottom_right"
+  ],
+  "text_span_refs": [
+    "asset_prob_1d998e1e8654cb1cdc2ec3d6_question_text_normalized"
+  ],
+  "alignment_pairs": [
+    {
+      "text_ref": "figure",
+      "image_ref": "visual_prob_1d998e1e8654cb1cdc2ec3d6_1::roi",
+      "relation": "grounds_figure",
+      "confidence": 0.7802
+    },
+    {
+      "text_ref": "table",
+      "image_ref": "visual_prob_1d998e1e8654cb1cdc2ec3d6_1::roi",
+      "relation": "grounds_table",
+      "confidence": 0.7802
+    },
+    {
+      "text_ref": "slot_prob_1d998e1e8654cb1cdc2ec3d6_1",
+      "image_ref": "visual_prob_1d998e1e8654cb1cdc2ec3d6_1::roi",
+      "relation": "slot_grounding",
+      "confidence": 0.7826
+    }
+  ],
+  "conflict_pairs": [],
+  "coverage_score": 0.9,
+  "consistency_score": 0.98,
+  "alignment_status": "good",
+  "created_at": "2026-03-24T07:48:44Z",
+  "cleaning_path": "multimodal_full",
+  "text_dominant": false
+}
+```
+
+#### solvability_report
+
+```json
+{
+  "solvability_id": "solv_prob_1d998e1e8654cb1cdc2ec3d6",
+  "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+  "answer_verifiable": true,
+  "target_clear": true,
+  "rewrite_complete": true,
+  "text_sufficient": true,
+  "visual_grounding_available": true,
+  "reasoning_path_exists": true,
+  "path_mode": "multimodal",
+  "failure_codes": [],
+  "score_breakdown": {
+    "answer_verifiable": 1.0,
+    "target_clear": 1.0,
+    "rewrite_complete": 1.0,
+    "text_sufficient": 1.0,
+    "visual_grounding": 1.0
+  },
+  "solvability_score": 1.0,
+  "decision_hint": "pass",
+  "created_at": "2026-03-24T07:48:44Z"
+}
+```
+
+#### cleaning_record
+
+```json
+{
+  "cleaning_id": "clean_1715ece35b159740e259d0cb",
+  "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+  "cleaning_version": "v3.0.0",
+  "pipeline_run_id": "run_637ca3432da6ddfb",
+  "dataset_name": "EEE-Bench",
+  "input_asset_ids": [
+    "asset_e5182f6d34f95a3a4fff1872",
+    "asset_39e662cea9798e4d8cacb327",
+    "asset_dba5da54bab73c5885e27a8b",
+    "asset_e5020e02b7968a55f816a85d",
+    "asset_4c951488218d677f55d5ae95",
+    "asset_5b9947254fbf08bae675a321",
+    "asset_588773f8f347bb184dd31fc5"
+  ],
+  "normalization_actions": [
+    {
+      "action_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "confidence": 1.0,
+      "human_confirmed": false
+    },
+    {
+      "action_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "confidence": 0.98,
+      "human_confirmed": false
+    },
+    {
+      "action_type": "unit_normalized",
+      "trigger": "NormalizationAgent",
+      "confidence": 0.92,
+      "human_confirmed": false,
+      "question_unit_count": 0,
+      "answer_unit_count": 0
+    },
+    {
+      "action_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "confidence": 0.88,
+      "human_confirmed": false,
+      "variable_alias_count": 8
+    },
+    {
+      "action_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "confidence": 0.85,
+      "human_confirmed": false
+    }
+  ],
+  "quality_checks": [
+    {
+      "check": "image_quality_1",
+      "result": {
+        "width": 384,
+        "height": 384,
+        "blur_score": 1668.3853,
+        "contrast_score": 33.5903,
+        "noise_score": 22.0627,
+        "readability_score": 0.8022,
+        "crop_integrity_score": 1.0,
+        "roi_bbox": {
+          "x": 23,
+          "y": 27,
+          "width": 345,
+          "height": 307
+        },
+        "perceptual_hash": "f7e5880035bdf7ff"
+      },
+      "passed": true
+    }
+  ],
+  "alignment_summary": {
+    "alignment_id": "align_1715ece35b159740e259d0cb",
+    "coverage_score": 0.9,
+    "consistency_score": 0.98,
+    "alignment_status": "good",
+    "conflict_count": 0
+  },
+  "text_structure_summary": {
+    "text_structure_id": "text_prob_1d998e1e8654cb1cdc2ec3d6",
+    "question_type": "open",
+    "condition_count": 4,
+    "target_count": 1,
+    "answer_slot_count": 1,
+    "status": "complete"
+  },
+  "solvability_summary": {
+    "solvability_id": "solv_prob_1d998e1e8654cb1cdc2ec3d6",
+    "solvability_score": 1.0,
+    "reasoning_path_exists": true,
+    "decision_hint": "pass",
+    "failure_codes": []
+  },
+  "rewrite_summary": {
+    "strategy": "keep_open",
+    "variant_count": 1,
+    "discard_reason_codes": []
+  },
+  "missing_field_summary": {
+    "missing_question_text": false,
+    "missing_answer_text": false,
+    "missing_image_count": 0
+  },
+  "risk_flags": [],
+  "clean_score": 0.9232,
+  "decision": "pass",
+  "decision_reason_codes": [
+    "meets_cleaning_requirements"
+  ],
+  "review_ticket_id": null,
+  "operator_type": "system",
+  "started_at": "2026-03-24T07:48:45Z",
+  "finished_at": "2026-03-24T07:48:45Z",
+  "candidate_id": "cand_1d998e1e8654cb1cdc2ec3d6",
+  "cleaning_path": "multimodal_full",
+  "text_dominant": false
+}
+```
+
+## 3. 开放化改写前后
+
+### 3.1 改写前
+
+```json
+{
+  "question_text_before_rewrite": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+  "answer_text_before_rewrite": "B",
+  "raw_question_text": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+  "raw_answer_text": "B"
+}
+```
+
+### 3.2 改写后
+
+```json
+{
+  "rewrite_report": {
+    "rewrite_id": "rewrite_1715ece35b159740e259d0cb",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "source_problem_id": "18",
+    "strategy": "keep_open",
+    "rationale": "Question is already open-ended.",
+    "discard_reason_codes": [],
+    "variant_count": 1,
+    "variants": [
+      {
+        "open_variant_id": "open_a19e96bb0e058a9ffb8678db",
+        "parent_problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+        "variant_index": 1,
+        "title": "EEE-Bench 开放题",
+        "rewritten_question_text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+        "expected_answer_type": "option",
+        "expected_answer": "B",
+        "split_role": "single"
+      }
+    ],
+    "created_at": "2026-03-24T07:48:45Z"
+  },
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_a19e96bb0e058a9ffb8678db",
+      "parent_problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+      "variant_index": 1,
+      "title": "EEE-Bench 开放题",
+      "rewritten_question_text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+      "expected_answer_type": "option",
+      "expected_answer": "B",
+      "split_role": "single"
+    }
+  ]
+}
+```
+
+## 4. 完整 collection + cleaning 输出对象
+
+#### candidate_problem_record
+
+```json
+{
+  "candidate_id": "cand_1d998e1e8654cb1cdc2ec3d6",
+  "source_dataset": "EEE-Bench",
+  "source_split": "test",
+  "source_problem_id": "18",
+  "subject": "电气电子工程领域",
+  "raw_question_text": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+  "raw_answer_text": "B",
+  "has_image": true,
+  "image_count": 1,
+  "requires_image": true,
+  "text_dominant": false,
+  "recommended_cleaning_path": "multimodal_full",
+  "initial_image_dependency_score": 0.9,
+  "initial_multi_solution_score": 0.46,
+  "initial_verifiability_score": 0.8763,
+  "multi_solution_mining_policy": "aggressive",
+  "should_push_multi_solution_agent": true,
+  "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+  "metadata": {
+    "row_index": 18,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null
+  },
+  "created_at": "2026-03-24T07:48:45Z"
+}
+```
+
+#### raw_asset_bundle
+
+```json
+{
+  "raw_asset_bundle_id": "bundle_fde092c7329d2587baaf7af0",
+  "candidate_id": "cand_1d998e1e8654cb1cdc2ec3d6",
+  "source_dataset": "EEE-Bench",
+  "source_problem_id": "18",
+  "assets": [
+    {
+      "asset_role": "question_text_raw",
+      "storage_uri": "inline://prob_1d998e1e8654cb1cdc2ec3d6/question_source",
+      "is_present": true
+    },
+    {
+      "asset_role": "answer_text_raw",
+      "storage_uri": "inline://prob_1d998e1e8654cb1cdc2ec3d6/answer_source",
+      "is_present": true
+    },
+    {
+      "asset_role": "image_raw",
+      "storage_uri": "inline://pil_image",
+      "is_present": true,
+      "width": 384,
+      "height": 384
+    }
+  ],
+  "core_asset_completeness": {
+    "has_question_text": true,
+    "has_answer_text": true,
+    "image_count": 1,
+    "has_multiple_images": false
+  },
+  "initial_scores": {
+    "initial_image_dependency_score": 0.9,
+    "initial_multi_solution_score": 0.46,
+    "initial_verifiability_score": 0.8763
+  },
+  "created_at": "2026-03-24T07:48:45Z"
+}
+```
+
+#### candidate_pool_entry
+
+```json
+{
+  "candidate_pool_entry_id": "cpool_f700a1785615f21f230a93a2",
+  "candidate_id": "cand_1d998e1e8654cb1cdc2ec3d6",
+  "source_dataset": "EEE-Bench",
+  "source_problem_id": "18",
+  "candidate_status": "ready_for_cleaning",
+  "priority_score": 0.7609,
+  "priority_tier": "high",
+  "recommended_cleaning_path": "multimodal_full",
+  "multi_solution_mining_policy": "aggressive",
+  "initial_scores": {
+    "initial_image_dependency_score": 0.9,
+    "initial_multi_solution_score": 0.46,
+    "initial_verifiability_score": 0.8763
+  },
+  "created_at": "2026-03-24T07:48:45Z"
+}
+```
+
+#### clean_pool_entries
+
+```json
+[
+  {
+    "clean_pool_entry_id": "cleanpool_1715ece35b159740e259d0cb",
+    "candidate_id": "cand_1d998e1e8654cb1cdc2ec3d6",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "dataset_name": "EEE-Bench",
+    "pool_status": "ready_for_annotation",
+    "clean_decision": "pass",
+    "review_required": false,
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-03-24T07:48:45Z"
+  }
+]
+```
+
+#### rewrite_reports
+
+```json
+[
+  {
+    "rewrite_id": "rewrite_1715ece35b159740e259d0cb",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "source_problem_id": "18",
+    "strategy": "keep_open",
+    "rationale": "Question is already open-ended.",
+    "discard_reason_codes": [],
+    "variant_count": 1,
+    "variants": [
+      {
+        "open_variant_id": "open_a19e96bb0e058a9ffb8678db",
+        "parent_problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+        "variant_index": 1,
+        "title": "EEE-Bench 开放题",
+        "rewritten_question_text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+        "expected_answer_type": "option",
+        "expected_answer": "B",
+        "split_role": "single"
+      }
+    ],
+    "created_at": "2026-03-24T07:48:45Z"
+  }
+]
+```
+
+#### open_ended_problem_variants
+
+```json
+[
+  {
+    "open_variant_id": "open_a19e96bb0e058a9ffb8678db",
+    "parent_problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "variant_index": 1,
+    "title": "EEE-Bench 开放题",
+    "rewritten_question_text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+    "expected_answer_type": "option",
+    "expected_answer": "B",
+    "split_role": "single"
+  }
+]
+```
+
+#### asset_records
+
+```json
+[
+  {
+    "asset_id": "asset_e5182f6d34f95a3a4fff1872",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "asset_type": "text",
+    "asset_role": "question_text_source",
+    "source_uri": "source://eee_bench/test/18/question",
+    "storage_uri": "inline://prob_1d998e1e8654cb1cdc2ec3d6/question_source",
+    "file_format": "txt",
+    "file_size_bytes": 282,
+    "width": null,
+    "height": null,
+    "sha256": "3494c8e2dae25886308d30da70319a3416fbe163b8915eb857bb3755861ab063",
+    "perceptual_hash": null,
+    "source_text_snapshot": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+    "normalized_text_snapshot": null,
+    "text_completeness_score": 0.8571,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "open",
+        "canonical": "open",
+        "variable_type": "label"
+      },
+      {
+        "original": "loop",
+        "canonical": "loop",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "quad",
+        "canonical": "quad",
+        "variable_type": "label"
+      },
+      {
+        "original": "All",
+        "canonical": "All",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "asset_id": "asset_39e662cea9798e4d8cacb327",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "asset_type": "text",
+    "asset_role": "question_text_normalized",
+    "source_uri": null,
+    "storage_uri": "inline://prob_1d998e1e8654cb1cdc2ec3d6/question_normalized",
+    "file_format": "txt",
+    "file_size_bytes": 176,
+    "width": null,
+    "height": null,
+    "sha256": "5da6ac834397c0c995b6c0029e4ec92b64d4043bc876508700f76377477a0ce6",
+    "perceptual_hash": null,
+    "source_text_snapshot": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+    "normalized_text_snapshot": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+    "text_completeness_score": 0.8571,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "open",
+        "canonical": "open",
+        "variable_type": "label"
+      },
+      {
+        "original": "loop",
+        "canonical": "loop",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "quad",
+        "canonical": "quad",
+        "variable_type": "label"
+      },
+      {
+        "original": "All",
+        "canonical": "All",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "asset_id": "asset_dba5da54bab73c5885e27a8b",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "asset_type": "answer",
+    "asset_role": "answer_raw",
+    "source_uri": "source://eee_bench/test/18/answer",
+    "storage_uri": "inline://prob_1d998e1e8654cb1cdc2ec3d6/answer_raw",
+    "file_format": "txt",
+    "file_size_bytes": 1,
+    "width": null,
+    "height": null,
+    "sha256": "df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+    "perceptual_hash": null,
+    "source_text_snapshot": "B",
+    "normalized_text_snapshot": null,
+    "text_completeness_score": 1.0,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "asset_id": "asset_e5020e02b7968a55f816a85d",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "asset_type": "answer",
+    "asset_role": "answer_normalized",
+    "source_uri": null,
+    "storage_uri": "inline://prob_1d998e1e8654cb1cdc2ec3d6/answer_normalized",
+    "file_format": "txt",
+    "file_size_bytes": 1,
+    "width": null,
+    "height": null,
+    "sha256": "df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+    "perceptual_hash": null,
+    "source_text_snapshot": "B",
+    "normalized_text_snapshot": "B",
+    "text_completeness_score": 1.0,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "asset_id": "asset_4c951488218d677f55d5ae95",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "asset_type": "image",
+    "asset_role": "primary_image",
+    "source_uri": "inline://pil_image",
+    "storage_uri": "outputs/user_requested_batch_review/pipeline_runs/run_637ca3432da6ddfb/datasets/eee_bench/artifacts/images/prob_1d998e1e8654cb1cdc2ec3d6_primary.png",
+    "file_format": "png",
+    "file_size_bytes": 33030,
+    "width": 384,
+    "height": 384,
+    "sha256": "273fa4cca1237a420649e089e2c13f91a22db93daf62d0e27be09504d759f43a",
+    "perceptual_hash": "f7e5880035bdf7ff",
+    "source_text_snapshot": null,
+    "normalized_text_snapshot": null,
+    "text_completeness_score": null,
+    "blur_score": 1668.3853,
+    "readability_score": 0.8022,
+    "noise_score": 22.0627,
+    "cropped_from_asset_id": null,
+    "roi_bbox": {
+      "x": 23,
+      "y": 27,
+      "width": 345,
+      "height": 307
+    },
+    "unit_normalization_map": [],
+    "variable_aliases": [],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "asset_id": "asset_5b9947254fbf08bae675a321",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "asset_type": "crop",
+    "asset_role": "region_crop",
+    "source_uri": null,
+    "storage_uri": "outputs/user_requested_batch_review/pipeline_runs/run_637ca3432da6ddfb/datasets/eee_bench/artifacts/crops/prob_1d998e1e8654cb1cdc2ec3d6_primary_roi.png",
+    "file_format": "png",
+    "file_size_bytes": 31891,
+    "width": 345,
+    "height": 307,
+    "sha256": "d039e835d805f0610a55873e85682feb3243c04e684c2b969b048378bdff7a2b",
+    "perceptual_hash": "e7a7ec00273dfff6",
+    "source_text_snapshot": null,
+    "normalized_text_snapshot": null,
+    "text_completeness_score": null,
+    "blur_score": 1668.3853,
+    "readability_score": 0.8022,
+    "noise_score": 22.0627,
+    "cropped_from_asset_id": "asset_4c951488218d677f55d5ae95",
+    "roi_bbox": {
+      "x": 23,
+      "y": 27,
+      "width": 345,
+      "height": 307
+    },
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "asset_id": "asset_588773f8f347bb184dd31fc5",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "asset_type": "text",
+    "asset_role": "question_text_open_variant",
+    "source_uri": null,
+    "storage_uri": "inline://open_a19e96bb0e058a9ffb8678db",
+    "file_format": "txt",
+    "file_size_bytes": 176,
+    "width": null,
+    "height": null,
+    "sha256": "5da6ac834397c0c995b6c0029e4ec92b64d4043bc876508700f76377477a0ce6",
+    "perceptual_hash": null,
+    "source_text_snapshot": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+    "normalized_text_snapshot": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+    "text_completeness_score": 0.8571,
+    "blur_score": null,
+    "readability_score": null,
+    "noise_score": null,
+    "cropped_from_asset_id": null,
+    "roi_bbox": null,
+    "unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "open",
+        "canonical": "open",
+        "variable_type": "label"
+      },
+      {
+        "original": "loop",
+        "canonical": "loop",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "quad",
+        "canonical": "quad",
+        "variable_type": "label"
+      },
+      {
+        "original": "All",
+        "canonical": "All",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      }
+    ],
+    "asset_quality_flags": [],
+    "is_usable": true,
+    "discard_reason_codes": [],
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  }
+]
+```
+
+#### node_records
+
+```json
+[
+  {
+    "node_id": "node_566bca467ed4927d4cb49ef9",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "text_fact",
+    "canonical_value": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).",
+    "surface_forms": [
+      "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\)."
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "evidence_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).",
+      "segment_index": 1,
+      "mentions_visual": true,
+      "numeric_tokens": [
+        "2"
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "g,h,m,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_6f03b2af93adbd4802a91a84",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "text_fact",
+    "canonical_value": "System (1)",
+    "surface_forms": [
+      "System (1)"
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "evidence_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "System (1)",
+      "segment_index": 2,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "1"
+      ],
+      "unit_mentions": [
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "m,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_fa93202e94ad76537f08fa5c",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "text_fact",
+    "canonical_value": "System (2)",
+    "surface_forms": [
+      "System (2)"
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "evidence_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "System (2)",
+      "segment_index": 3,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "2"
+      ],
+      "unit_mentions": [
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "m,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_825829150b07d1f03d852b86",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "text_fact",
+    "canonical_value": "System (3)",
+    "surface_forms": [
+      "System (3)"
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "evidence_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "condition",
+    "normalized_value": {
+      "text": "System (3)",
+      "segment_index": 4,
+      "mentions_visual": false,
+      "numeric_tokens": [
+        "3"
+      ],
+      "unit_mentions": [
+        "m",
+        "s"
+      ],
+      "condition_role": "explicit"
+    },
+    "unit": "m,s",
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_95bb9c968ea755ec39e38a8d",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "target_slot",
+    "canonical_value": "All are unstable",
+    "surface_forms": [
+      "All are unstable"
+    ],
+    "origin_kind": "text_structure",
+    "cognitive_level": "computed",
+    "source_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "evidence_refs": [
+      "asset_39e662cea9798e4d8cacb327"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "option",
+    "normalized_value": {
+      "slot_id": "slot_prob_1d998e1e8654cb1cdc2ec3d6_1",
+      "variant_index": 1,
+      "split_role": "single",
+      "slot_type": "option",
+      "target_text": "All are unstable",
+      "expected_answer_type": "option",
+      "expected_answer": "B",
+      "requires_visual_grounding": true
+    },
+    "unit": null,
+    "confidence": 0.92,
+    "verifiability": "high",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_3abcbdf39e471fc55707e69f",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "answer_claim",
+    "canonical_value": "B",
+    "surface_forms": [
+      "B"
+    ],
+    "origin_kind": "text",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "asset_e5020e02b7968a55f816a85d"
+    ],
+    "evidence_refs": [
+      "asset_e5020e02b7968a55f816a85d"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "option",
+    "normalized_value": {
+      "answer": "B"
+    },
+    "unit": null,
+    "confidence": 0.98,
+    "verifiability": "high",
+    "ambiguity_level": "none",
+    "is_direct_from_source": true,
+    "is_generated_by_system": false,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_92c2e9ebf7771180d00b7795",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::full_canvas::canvas",
+    "surface_forms": [
+      "canvas"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "full_canvas",
+    "normalized_value": {
+      "entity_id": "canvas",
+      "entity_type": "full_canvas",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 384,
+        "height": 384
+      },
+      "salience": 1.0
+    },
+    "unit": null,
+    "confidence": 0.9209,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_deadc0b792e3c2b219d430bc",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::content_region::roi",
+    "surface_forms": [
+      "roi"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "content_region",
+    "normalized_value": {
+      "entity_id": "roi",
+      "entity_type": "content_region",
+      "bbox": {
+        "x": 23,
+        "y": 27,
+        "width": 345,
+        "height": 307
+      },
+      "salience": 0.95
+    },
+    "unit": null,
+    "confidence": 0.9209,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_abc8a52eae8aae104728ce99",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::subregion::roi_top_left",
+    "surface_forms": [
+      "roi_top_left"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "subregion",
+    "normalized_value": {
+      "entity_id": "roi_top_left",
+      "entity_type": "subregion",
+      "bbox": {
+        "x": 23,
+        "y": 27,
+        "width": 172,
+        "height": 153
+      },
+      "salience": 0.4387
+    },
+    "unit": null,
+    "confidence": 0.9209,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_0fbf0ac8242dcc53309e6258",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::subregion::roi_top_right",
+    "surface_forms": [
+      "roi_top_right"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "subregion",
+    "normalized_value": {
+      "entity_id": "roi_top_right",
+      "entity_type": "subregion",
+      "bbox": {
+        "x": 195,
+        "y": 27,
+        "width": 173,
+        "height": 153
+      },
+      "salience": 0.4667
+    },
+    "unit": null,
+    "confidence": 0.9209,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_51cf285c6b0851e560707d25",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::subregion::roi_bottom_left",
+    "surface_forms": [
+      "roi_bottom_left"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "subregion",
+    "normalized_value": {
+      "entity_id": "roi_bottom_left",
+      "entity_type": "subregion",
+      "bbox": {
+        "x": 23,
+        "y": 180,
+        "width": 172,
+        "height": 154
+      },
+      "salience": 0.4092
+    },
+    "unit": null,
+    "confidence": 0.9209,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_23149f25db00c6add0affe46",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "perception_fact",
+    "canonical_value": "primary_image::subregion::roi_bottom_right",
+    "surface_forms": [
+      "roi_bottom_right"
+    ],
+    "origin_kind": "vision",
+    "cognitive_level": "objective",
+    "source_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "evidence_refs": [
+      "visual_prob_1d998e1e8654cb1cdc2ec3d6_1"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "subregion",
+    "normalized_value": {
+      "entity_id": "roi_bottom_right",
+      "entity_type": "subregion",
+      "bbox": {
+        "x": 195,
+        "y": 180,
+        "width": 173,
+        "height": 154
+      },
+      "salience": 0.4155
+    },
+    "unit": null,
+    "confidence": 0.9209,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_e1e4e283f2975b660d28e5d0",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "text_fact",
+    "canonical_value": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+    "surface_forms": [
+      "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable"
+    ],
+    "origin_kind": "reasoning",
+    "cognitive_level": "computed",
+    "source_refs": [
+      "asset_588773f8f347bb184dd31fc5"
+    ],
+    "evidence_refs": [
+      "asset_588773f8f347bb184dd31fc5"
+    ],
+    "upstream_node_ids": [],
+    "value_type": "text",
+    "normalized_value": {
+      "open_variant_id": "open_a19e96bb0e058a9ffb8678db",
+      "parent_problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+      "variant_index": 1,
+      "title": "EEE-Bench 开放题",
+      "rewritten_question_text": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+      "expected_answer_type": "option",
+      "expected_answer": "B",
+      "split_role": "single"
+    },
+    "unit": null,
+    "confidence": 0.88,
+    "verifiability": "medium",
+    "ambiguity_level": "low",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_65e74981b8afd25485336e35",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "quality_signal",
+    "canonical_value": "solvability=pass",
+    "surface_forms": [
+      "pass"
+    ],
+    "origin_kind": "system_quality",
+    "cognitive_level": "computed",
+    "source_refs": [],
+    "evidence_refs": [],
+    "upstream_node_ids": [],
+    "value_type": "text",
+    "normalized_value": {
+      "solvability_id": "solv_prob_1d998e1e8654cb1cdc2ec3d6",
+      "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-03-24T07:48:44Z"
+    },
+    "unit": null,
+    "confidence": 1.0,
+    "verifiability": "high",
+    "ambiguity_level": "none",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "node_id": "node_5ddac09b2815dd180235b72f",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "node_type": "quality_signal",
+    "canonical_value": "clean_decision=pass",
+    "surface_forms": [
+      "pass"
+    ],
+    "origin_kind": "system_quality",
+    "cognitive_level": "computed",
+    "source_refs": [],
+    "evidence_refs": [],
+    "upstream_node_ids": [],
+    "value_type": "text",
+    "normalized_value": {
+      "decision": "pass",
+      "reasons": [
+        "meets_cleaning_requirements"
+      ]
+    },
+    "unit": null,
+    "confidence": 1.0,
+    "verifiability": "high",
+    "ambiguity_level": "none",
+    "is_direct_from_source": false,
+    "is_generated_by_system": true,
+    "is_reviewed_by_human": false,
+    "stage_created": "cleaning",
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-03-24T07:48:45Z",
+    "updated_at": "2026-03-24T07:48:45Z"
+  }
+]
+```
+
+#### field_audit_records
+
+```json
+[
+  {
+    "audit_id": "audit_827167eef1b09ac105aaae0b",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "record_type": "problem_main_record",
+    "field_name": "normalized_question_text",
+    "before_value": "Hint: Please answer the question and provide the correct option letter, e.g., A, B, C, D, at the end.\nQuestion: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1)  \nSystem (2)  \nSystem (3)  \nAll are unstable\n",
+    "after_value": "Question: Given the open-loop amplitude-frequency characteristics shown in Figure 2, the unstable system is \\( (\\quad) \\).\n\nSystem (1) \nSystem (2) \nSystem (3) \nAll are unstable",
+    "change_type": "text_normalized",
+    "trigger": "NormalizationAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "audit_id": "audit_0d4cfb2215c39df2b3f57e39",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "record_type": "problem_main_record",
+    "field_name": "normalized_answer_text",
+    "before_value": "B",
+    "after_value": "B",
+    "change_type": "answer_canonicalized",
+    "trigger": "NormalizationAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "audit_id": "audit_3ece06df37f85de785b3ed89",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "record_type": "rewrite_report",
+    "field_name": "rewrite_strategy",
+    "before_value": null,
+    "after_value": "keep_open",
+    "change_type": "question_rewritten",
+    "trigger": "QuestionRewriteAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "audit_id": "audit_5ddac09b2815dd180235b72f",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "record_type": "cleaning_record",
+    "field_name": "decision",
+    "before_value": null,
+    "after_value": "pass",
+    "change_type": "gate_decision",
+    "trigger": "CleanGateAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T07:48:45Z"
+  },
+  {
+    "audit_id": "audit_05efc65fa71fb4b8b8c0e506",
+    "problem_id": "prob_1d998e1e8654cb1cdc2ec3d6",
+    "record_type": "normalized_assets",
+    "field_name": "variable_aliases",
+    "before_value": null,
+    "after_value": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "open",
+        "canonical": "open",
+        "variable_type": "label"
+      },
+      {
+        "original": "loop",
+        "canonical": "loop",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "quad",
+        "canonical": "quad",
+        "variable_type": "label"
+      },
+      {
+        "original": "All",
+        "canonical": "All",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      }
+    ],
+    "change_type": "variable_canonicalized",
+    "trigger": "NormalizationAgent",
+    "operator_type": "system",
+    "created_at": "2026-03-24T07:48:45Z"
+  }
+]
+```
+
+#### reject_records
+
+```json
+[]
+```
+
+### 4.1 完整 sample bundle 原文件
+
+- `outputs/user_requested_batch_review/pipeline_runs/run_637ca3432da6ddfb/datasets/eee_bench/samples/prob_1d998e1e8654cb1cdc2ec3d6.json`

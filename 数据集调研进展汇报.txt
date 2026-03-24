@@ -1,0 +1,326 @@
+多模态推理数据集调研进展汇报
+一、调研背景与目标
+本阶段工作的主要目标，是对现有多模态推理相关数据集与 benchmark 进行系统调研，重点考察其任务形式、学科覆盖、图文绑定方式以及推理特征，从而为后续数据集设计与题源选择提供依据。
+已初步调研的数据集包括：
+ReactBench、EEE-Bench、CIRCUIT、M3CoT、USNCO-V、EMMA以及 MM-THEBench。
+
+二、已调研数据集概况
+2.1 ReactBench
+2.1.1简介
+ReactBench 是一个化学方向的多模态 benchmark，其核心任务是 reaction diagram reasoning，即要求模型对化学反应路线图进行理解与推理。
+其题目类型主要包括三类：
+一是结构分析，例如判断反应路线是单链、树状还是图状结构；
+二是信息抽取，例如读取某一步反应的温度、时间、收率等条件；
+三是路径追踪，例如从起始物到目标产物的完整路径识别。
+从例子来看，ReactBench 中常见的问题包括：
+给定一张化学反应图，询问某个中间体是否处于主路径上，某一步对应的条件是什么，或者从起始物到产物经过了哪些节点。
+整体上看，这类题对图结构理解要求较强，尤其适合考察模型是否能够正确读取反应图中的节点、边及局部标注信息。
+目前判断 ReactBench 的主要价值，在于其能够作为化学图结构推理 benchmark。它在路径级推理和结构化表示方面有一定参考意义，但整体上仍偏向图示结构理解和信息抽取，不太像真实化学考试题，也不完全等同于我们后续理想中的真实学科推理数据。
+
+
+2.1.2 基本信息
+论文：Benchmarking MLLMs on Topological Reasoning of Chemical Reaction Diagrams
+OpenReview：https://openreview.net/forum?id=N5YcOxEcV8
+PDF：https://openreview.net/pdf/96ab93e346cd90d0848bcb2df62e7eedcc904e49.pdf
+代码/数据：当前未在公开页面直接找到明确的项目页或数据页链接。
+
+2.1.3 如何改编
+没有找到数据集，可以借助它们的pipeline来改编化学高考题，可能可以把三类题目合并，类似高考有机合成的大题。
+
+2.2 EEE-Bench
+2.2.1 简介
+EEE-Bench 面向电气电子工程领域，整体更偏工程题风格。根据现有材料，它覆盖多个 EEE 子领域，题目通常结合图示与文本背景，要求模型对工程场景中的装置、模块、系统或图表进行理解和判断。
+从任务特征看，EEE-Bench 更接近真实工程问题。例如，一道题可能给出系统框图、电路图或信号图，并结合文字描述，询问某个模块的作用、某种连接方式是否合理，或在给定条件下系统输出将如何变化。这类任务比一般“看图答题”更接近工程分析场景。
+目前判断 EEE-Bench 的意义在于，它较好地代表了“真实工程题”这一路线。相较于一些更偏 benchmark 设计的数据集，它的工程问题感更强，因此值得保留，作为工科方向的重要候选 benchmark。
+选择题：
+
+开放题：
+
+
+2.2.2 基本信息
+论文标题
+EEE-Bench: A Comprehensive Multimodal Electrical And Electronics Engineering Benchmark
+论文链接
+arXiv：https://arxiv.org/abs/2411.01492
+CVPR 2025 OpenAccess PDF：
+https://openaccess.thecvf.com/content/CVPR2025/papers/Li_EEE-Bench_A_Comprehensive_Multimodal_Electrical_And_Electronics_Engineering_Benchmark_CVPR_2025_paper.pdf
+
+Supplemental：
+https://openaccess.thecvf.com/content/CVPR2025/supplemental/Li_EEE-Bench_A_Comprehensive_CVPR_2025_supplemental.pdf
+数据页Hugging Face：
+https://huggingface.co/datasets/afdsafas/EEE-Bench
+数据规模
+论文里给出的核心规模是：
+2860 道题，10 个子领域
+补充材料里还提到：
+多选题约 2059
+free-form 题约 801
+unique images 约 2813
+典型题型
+EEE-Bench 的题通常不是纯文本题，而是会结合：
+电路图，波形图，系统框图，装置图，工程示意图等，然后要求模型去做：	结构理解，工程判断，功能推断，条件分析，多步 reasoning
+从当前掌握的信息看，EEE-Bench 比较像这类题：
+A. 电路 / 系统理解
+某个模块的作用是什么
+某种连接方式对输出有什么影响
+B. 波形 / 信号分析
+根据图示判断信号变化
+判断系统响应或频域特征
+C. 工程场景推理
+给图和背景，判断某种设计/操作/结构是否合理
+推测某个结果最可能由什么引起
+D.开放式问题：短答数值题（如计算电压），结构化答案题
+
+2.2.3 如何改编
+感觉它的开放式问题（计算电流大小等）和MM-THEBench给出的计算三角形角度的问题很类似，答案比较短，可以补充中间的推理过程。
+选择题中，参数变化 / 系统分析 / 方案判断类等“以定性结论为输出、但常常依赖定量关系支撑”的题目可以改成开放问题。
+
+
+
+2.3 CIRCUIT
+2.3.1简介
+CIRCUIT 是电路图推理方向的 benchmark，重点集中在电路结构理解、电学规则运用与图文联合推理。其主要特征是电路结构清晰、图形本体信息密集，且题目通常围绕电路元件功能、连接关系、信号流向或电学结果展开。
+举例来说，这类题可能会给出一张电路图，并询问某个元件在电路中的功能、某一部分连接是否正确、信号经过该模块后会发生何种变化等。其优势在于问题结构明确，图示推理成分很强，非常适合用于考察模型在工程结构图场景中的理解能力。
+当前判断 CIRCUIT 适合作为工科/电路方向的重要对照 benchmark。它尤其适合代表“结构化图示推理”这一类任务。
+例题：
+
+Netlist:
+
+2.3.2 基本信息
+论文标题：A Benchmark for Circuit Interpretation and Reasoning Capabilities of LLMs
+论文链接：https://arxiv.org/html/2502.07980v1
+完整文档：
+https://dspace.mit.edu/bitstream/handle/1721.1/159084/skelic-lejla-meng-eecs-2025-thesis.pdf?sequence=1&isAllowed=y
+项目页 / GitHub：当前未确认
+数据页：当前未确认独立标准化公开数据页
+规模：510 QA pairs，102 templates，每个 template 有5 个 numerical setups
+特点：以 analog circuit topology understanding 为核心，含 diagram 和 netlist（电		路图写成结构化文本清单），偏结构化电路推理与数值分析
+
+2.3.3 如何改编
+论文只给出了电路图数据集来源。论文中的template 是电路图的元件都是未知参数的形式，setup是给template的部分元件附上值后得到的电路图。所以可以只考虑template进行形式化推理。然后电路图还有两种形式，一种是图像（电路图），用来完成P类任务；一种是文本描述（netlist），这个可以当做中间层的推理，判断大模型是非理解链接关系，并且能够判断推理错误。
+
+2.4 M3CoT
+2.4.1 简介
+M3CoT 是一个强调 multi-domain、multi-step、multi-modal chain-of-thought 的 benchmark。其覆盖 science、math 和 commonsense 等多个领域。与前述数据集相比，M3CoT 的价值更多体现在 benchmark 设计理念，而不完全在于其具体题源。
+M3CoT 最重要的贡献，在于它明确区分了“伪多模态题”和“真正的多步多模态题”。例如，有些题虽然带图，但实际上仅凭文字就可以答对，这种题不应被视为真正的多模态推理题；还有一些题虽然需要看图，但只需要一个简单视觉线索即可完成作答，这类题也不算真正的“多步推理”。M3CoT 试图筛选保留的，是那些必须至少经过两步以上图文联合推理才能完成的样本。
+因此，M3CoT 当前最值得借鉴的，不是它的单条题目，而是它对于“好题”的定义方式。它在筛除伪多模态、定义多步性方面，对我们后续样本筛选标准的建立很有参考价值。
+标注过程：
+
+例子，地理题：
+
+
+2.4.2 基本信息
+论文标题
+M3CoT: A Novel Benchmark for Multi-Domain Multi-step Multi-modal Chain-of-Thought
+
+论文链接
+ACL Anthology：https://aclanthology.org/2024.acl-long.446/
+PDF：https://aclanthology.org/2024.acl-long.446.pdf
+
+项目页
+项目主页：https://lightchen233.github.io/m3cot.github.io/
+
+数据规模
+目前确认到的数据规模是：
+train：7,973
+val：1,127
+test：2,359
+合计：
+11,459 个样本
+另外官方页也提到：
+11,293 images
+数据来源：
+Science → ScienceQA
+Mathematics → MATH
+Commonsense → Sherlock
+另外还有 TabMWP、KiloGram 和部分手工合成数据 作为补充
+
+2.4.3 如何改编
+可借鉴benchmark 设计理念。
+可以在题源上二次筛选（步骤可拆性，P/K/R类型是否合适等）。
+按学科学科分类大概是
+Mathematics：Algebra，Geometry，Theory。
+Science：Biology，Physics，Chemistry，Geography。
+Commonsense ：
+Social Commonsense,
+Temporal Commonsense,
+Physical Commonsense,
+Language Science,
+Natural Science,
+Social Science等，
+目前看来Science类的一部分可能合适提取。
+
+2.5 USNCO-V
+2.5.1 简介
+USNCO-V 来源于真实的美国化学奥赛（USNCO）试题，是目前调研中较为重要的化学方向 benchmark 之一。它基于历年 USNCO 题目整理出多模态化学题，题目本身具有较强的学科性和真实题源感。
+目前确认到，USNCO-V 中的题目类型包括相图题、晶胞题、热化学表格题、分子结构题和实验装置题等。例如，有的题要求基于 S8 同素异形体的相图判断哪一种说法正确；有的题围绕 CaF2 的晶胞结构，询问晶格类型、离子位置和最近邻配位关系；还有的题给出称量或热化学数据表格，要求根据数据判断质量稳定性或焓变。
+USNCO-V 的优点在于，它更像真实化学学科题，而不是人为构造的小型图示任务。与 ReactBench 相比，它的“真实考试题”属性更强。因此，当前判断 USNCO-V 是化学方向最值得保留的核心候选之一，适合代表“真实化学图文题”这一条主线。
+需要注意的是，该 benchmark 由于版权限制，公开部分主要是 metadata，而不是完整题面与原始图像，因此若后续继续使用，可能需要自行从原始 PDF 中恢复题面和图像。
+
+图像类型：
+
+
+2.5.2 基本信息	
+论文标题
+Evaluating Large Language Models on Multimodal Chemistry Olympiad Exams
+
+论文链接
+Nature / Communications Chemistry 页面：		
+	https://www.nature.com/articles/s42004-025-01782-x
+PDF：
+https://www.nature.com/articles/s42004-025-01782-x.pdf
+
+数据页
+DOI：https://doi.org/10.5281/zenodo.17139984
+Zenodo 页面：https://zenodo.org/records/17139984
+
+数据来源
+local exams：2000–2025
+national exams：1999–2025
+他们从这些历年试题中筛选出：
+带图,属于 multimodal multiple-choice 的化学题
+
+数据规模
+最终整理出的数据规模是：
+473 道 multimodal chemistry questions
+204 local
+269 national
+因为版权原因，图像和原题全文未公开，每道题提供pdf链接可以下载。
+
+图像类型
+论文中将题目图像分成五类：
+Table,chart,molecular structure,apparatus,other
+
+2.5.3 如何改编	
+这包含了国外真是化学考题，作为高考题的补充。
+
+2.6 EMMA
+2.6.1 简介
+EMMA 是一个综合型高阶 multimodal reasoning benchmark，覆盖数学、物理、化学和代码四个领域。它的特点在于，题型设计较强，任务不是简单的视觉问答，而更强调图文或代码与图像之间的联合推理。
+从目前抓取到的真实样本看，EMMA 的题目风格较为鲜明。例如，数学部分包括图形变换、折叠和面积计算类题目；物理部分包括光路图与路径追踪类题目；化学部分包括 reaction simulation，即给出箭头推动机理图，要求判断下一步结构；代码部分则	包括 code-to-visualization 类型题，即给一段绘图代码，让模型判断会生成哪张图。
+整体来看，EMMA 更像一个“高阶 multimodal task suite”，其强项在于任务类型组织和 	benchmark 设计本身，而不是作为真实题源的代表。因此，当前判断 EMMA 更适合作	为高阶 benchmark 设计参考，而不一定是后续直接收集题源的首选对象。
+
+题目类型：
+
+2.6.2 基本信息	
+论文标题
+Can MLLMs Reason in Multimodality? EMMA: An Enhanced MultiModal ReAsoning Benchmark
+
+论文链接
+项目主页：https://emma-benchmark.github.io/
+OpenReview：https://openreview.net/forum?id=v26vwjxOEz
+arXiv：https://arxiv.org/abs/2501.05444
+PDF：https://openreview.net/pdf?id=v26vwjxOEz
+GitHub：https://github.com/EMMA-Bench/EMMA
+数据页EMMA：https://huggingface.co/datasets/luckychao/EMMA
+EMMA-mini：https://huggingface.co/datasets/luckychao/EMMA-mini
+
+覆盖领域
+EMMA 覆盖四个主要学科：
+Math,Physics,Chemistry,Coding
+
+数据规模
+从官网和公开信息看：
+
+2788 problems
+其中 1796 newly constructed
+另有一个平衡子集：
+EMMA-mini = 400 题
+每个学科 100 题
+
+典型任务风格
+从目前抓到的样本来看，四个学科各有代表性任务：
+Math
+2D transformation
+geometry folding面积/关系推理
+Physics
+path tracing光路图推理
+Chemistry
+reaction simulation箭头推动机理图理解
+Coding
+code-to-visualization根据代码判断会生成哪张图
+
+2.6.3 如何改编
+Math，Physics,Chemistry作为补充。Coding的话，我感觉可以构建computer science，coding做一个子类。
+
+
+2.7 算法与数据结构题
+2.7.1 简介
+Computer science中的算法与数据结构题，尤其是无向图，具有类似电路图的形式，上面关于对电路图的处理同样也可以适用于算法题,可以考虑加入并构成数据集的一部分。例子是给出一个不平衡的平衡树，如何让它平衡；求有向图的强联通分类。但是相关的bench缺乏,并没有可以直接用的数据集，需要手动制作。
+旋转的图片:
+
+
+2.7.2 如何改编
+算法内容多样，比如图论中树等的图相对容易画，也有几何题，排序题，动态规划题，字符串题等状态图，相关内容可以看https://oi-wiki.org/。题目来源丰富，可以参考Codeforces / AtCoder / OI 里“可图示化”的算法题。
+
+
+2.8 MM-THEBench
+2.8.1 简介
+MM-THEBench 是今天调研中最值得重点关注的一篇工作。它的核心并不在于提供全新的题源，而在于提出了一种更接近我们当前目标的数据组织和评测方式。
+MM-THEBench 主要面向 reasoning MLLM 的中间推理过程评测。它的工作重点不是只看最终答案是否正确，而是进一步将解题过程拆分为多个必要步骤，并从多个维度进行评估。其顶层采用三个能力维度：Perception、Knowledge 和 Reasoning；同时，它还为每道题补充“必要原子步骤”和 rubric，用来评估模型在中间过程中的表现与偏差。
+换言之，MM-THEBench 更像是一种“过程型 benchmark 框架”。它给我们的启发，不是某一类题型，而是：如何把已有题目改造成一个不仅能看 final answer，还能看中间过程、步骤质量和推理偏差的 benchmark。
+因此，目前判断 MM-THEBench 在我们整个调研中具有特殊地位。它并不是普通意义上的候选 benchmark，而更像是后续数据集框架设计的重要参考模板。
+
+三、当前调研结果
+基于现有调研，可以将这些数据集大致划分为三类。
+题源输入层
+USNCO-V、EEE-Bench、CIRCUIT、ReactBench
+筛题标准参考层
+M3CoT、EMMA
+过程评测框架层
+MM-THEBench
+
+当前调研结果中，可提取的内容主要包括四个层面：
+（1）从 USNCO-V、EEE-Bench以及部分 CIRCUIT、ReactBench 中提取真实题面、图像类型、任务形式和图文绑定模式，作为后续数据集的题源基础；
+（2）从 CIRCUIT 与 ReactBench 中提取结构化表示方式、图结构推理模板和错误分析思路，用于支持过程拆解与中间表示设计；
+（3）从 M3CoT 与 EMMA 中提取多模态必要性、多步性和 benchmark 组织原则，用于指导候选样本筛选；
+（4）从 MM-THEBench 中提取 P/K/R、atomic steps、rubric 和多层评测方法，用于构建过程标注与评测框架。
+
+四、Pipeline
+还没想好，目前来看是六步
+1.Source Collection
+从不同类型的数据集中收集候选样本，建立原始题源池。
+2. Candidate Filtering
+从候选池里筛题，保留真正适合目标数据集的样本。
+筛选标准主要看四点：
+
+多模态必要性：图是不是必须的
+多步推理性：是不是至少两步以上推理
+图文绑定强度：图和文本是不是强关联
+
+过程评测可行性：能不能拆步骤、做 rubric
+多解：先保留低解样本，多解看起来要人工做。
+如果要自动化，目前想法是考虑构建学科知识库图，每道题的推理链都应该是这个大图的子图，然后在这个大图上找到推理DAG子图，如果没有，并且DAG验证通过了，可以考虑是否能加入。不过感觉不好实现，大图的规模不知道是什么数量级，并且是个复杂图存在环，也许可以进一步考虑缩点。
+
+3. Question Reformulation
+把不同来源、不同格式的原题统一改写成适合过程评测的题目形式。
+这一层主要做：
+保留原题信息
+生成统一的改写版本
+统一答案格式
+明确关键图像证据和文本条件
+
+4. Process Annotation
+给每道题补上中间过程结构。
+主要标：
+atomic steps
+P/K/R 标签
+evidence binding
+这一步的目标是把“只有 final answer 的题”变成“可以评过程的题”。
+
+5. Rubric Construction
+为每题构建多层级评测规则。
+评测分成：
+answer-level
+Step-level
+rubric-level
+hallucination-level
+也就是不只看答对没答对，还看过程是否合理、有没有编造。
+
+6. Quality Control
+对最终样本做质检。
+主要检查：
+是不是真多模态
+步骤是不是必要
+过程能不能推出答案
+数据分布是否合理
