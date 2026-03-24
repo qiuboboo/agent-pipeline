@@ -1,3 +1,9 @@
+# Remote-only default multi-dataset iteration config.
+#
+# On this machine, Hugging Face access requires:
+#   export http_proxy=http://127.0.0.1:20171
+#   export https_proxy=http://127.0.0.1:20171
+
 runtime:
   sample_per_dataset: 10
   sample_strategy: head
@@ -29,23 +35,23 @@ thresholds:
   min_alignment_consistency: 0.55
 
 datasets:
-  - key: geometry3k
-    display_name: Geometry3K
-    subject: math
-    note: GitHub source, auto discover json files
-    source_kind: github
-    source_locator: https://github.com/lupantech/InterGPS
+  - key: eee_bench
+    display_name: EEE-Bench
+    subject: engineering
+    note: Hugging Face dataset; currently the strongest remote positive-control source
+    source_kind: huggingface
+    source_locator: afdsafas/EEE-Bench
     split: test
-    question_fields: [problem_text, compact_text, annotat_text, problem, question, text]
-    answer_fields: [answer, solution, label]
-    image_fields: [img_diagram, img_problem, diagram, image, img_path, image_path]
-    choice_fields: [choices, compact_choices, options]
+    question_fields: [problem]
+    answer_fields: [solution]
+    image_fields: [image]
+    choice_fields: [choices, options]
     force_requires_image: true
 
   - key: cmm_math
     display_name: CMM-Math
     subject: math
-    note: Hugging Face dataset
+    note: Hugging Face dataset; stable enough for remote iteration, mostly text-first
     source_kind: huggingface
     source_locator: ecnu-icalk/cmm-math
     split: train
@@ -55,28 +61,15 @@ datasets:
     choice_fields: [options, choices]
     force_requires_image: false
 
-  - key: mathvision
-    display_name: MathVision
+  - key: geometry3k
+    display_name: Geometry3K
     subject: math
-    note: Hugging Face dataset
-    source_kind: huggingface
-    source_locator: MathLLMs/MathVision
+    note: GitHub source; usable, but current quality gate often rejects low-resolution examples
+    source_kind: github
+    source_locator: https://github.com/lupantech/InterGPS
     split: test
-    question_fields: [question]
-    answer_fields: [answer, solution]
-    image_fields: [decoded_image, image]
-    choice_fields: [options, choices]
-    force_requires_image: true
-
-  - key: eee_bench
-    display_name: EEE-Bench
-    subject: engineering
-    note: Hugging Face dataset
-    source_kind: huggingface
-    source_locator: afdsafas/EEE-Bench
-    split: test
-    question_fields: [problem]
-    answer_fields: [solution]
-    image_fields: [image]
-    choice_fields: [choices, options]
+    question_fields: [problem_text, compact_text, annotat_text, problem, question, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [img_diagram, img_problem, diagram, image, img_path, image_path]
+    choice_fields: [choices, compact_choices, options]
     force_requires_image: true

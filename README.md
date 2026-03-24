@@ -1,145 +1,72 @@
-# agent-pipeline 仓库说明
+# agent-pipeline
 
-本仓库用于多模态题目样本的抽取、清洗与候选集构建。核心目标是把不同来源的数据统一为结构化记录，并输出可用于后续标注与评测的数据。
+Remote-first pipeline for downloading multimodal datasets online, extracting unified samples, and producing cleaning / rewrite / review records.
 
-## 目录结构（简要）
+## Current default mode
 
-```text
-agent-pipeline/
-├─ run_pipeline.py                     # 主脚本（本地文件输入 -> 统一抽取/评分 -> 输出）
-├─ configs/                            # 运行配置（不同场景的 YAML）
-│  ├─ all_available.local.yaml
-│  ├─ intake_relaxed_smoke.local.yaml
-│  ├─ m3cot_mini.local.yaml
-│  ├─ multi_dataset_benchmark.local.yaml
-│  └─ multi_dataset_iter.local.yaml
-├─ prompts/                            # LLM 提示词模板
-│  ├─ extract_unified_sample.md
-│  ├─ preliminary_value_scoring.md
-│  ├─ extract_question_answer_image.md
-│  └─ collection/
-├─ m3cot/                              # 样例数据（json/jsonl + images）
-├─ outputs/                            # 当前输出目录
-│  └─ samples.jsonl
-├─ benchmark/                          # benchmark 版本流水线与输出
-│  ├─ src/
-│  └─ outputs/
-├─ docs/                               # 设计与说明文档
-└─ logs/                               # 日志
-```
+This repo now uses a **remote-only default workflow**.
 
-## 当前 Python 结果（重点）
+The shipped multi-dataset config is:
 
-目前仓库中可直接看到的输出是 [outputs/samples.jsonl](outputs/samples.jsonl)：
+- `configs/multi_dataset_iter.yaml`
 
-1. 总记录数：5 条。
-2. 每条包含字段：problem_id、question_text、answer_text、image_paths。
-3. 样例特征：当前 answer_text 仍是选项字母（如 A/B/C），属于轻量抽取结果。
+It pulls datasets online from:
+- GitHub
+- Hugging Face
 
-示例（节选）：
+## Proxy requirement on this machine
 
-```json
-{"problem_id":"m3cot_physical-commonsense-1398","question_text":"What is the likely purpose of the troll statue under the bridge?","answer_text":"B","image_paths":[".../m3cot/images/000000.png"]}
-```
-
-## run_pipeline.py 讲解
-
-文件位置：[run_pipeline.py](run_pipeline.py)
-
-### 1) 配置与数据结构
-
-在 [run_pipeline.py](run_pipeline.py#L30) 到 [run_pipeline.py](run_pipeline.py#L91) 定义：
-
-1. ModelConfig：模型地址、模型名、温度、超时。
-2. ThresholdConfig：pass/review/reject 相关阈值。
-3. DatasetSpec：数据集来源、字段映射、是否强制依赖图片。
-4. PipelineConfig：全局运行参数（输出目录、采样策略等）。
-5. UnifiedSample：统一样本结构。
-
-### 2) 工具函数层
-
-在 [run_pipeline.py](run_pipeline.py#L94) 到 [run_pipeline.py](run_pipeline.py#L301)：
-
-1. 文本标准化与缺失值判断。
-2. JSON/JSONL 写入。
-3. 哈希与稳定 ID 生成。
-4. 图片转 data URL（供多模态模型输入）。
-
-### 3) 抽取与评分
-
-在 [run_pipeline.py](run_pipeline.py#L316) 到 [run_pipeline.py](run_pipeline.py#L700)：
-
-1. 有 API Key：调用 LLM，根据 prompts 进行统一字段抽取与初评分。
-2. 无 API Key：走启发式抽取和启发式评分，保证可离线跑通。
-3. 多选题会尝试把字母答案映射回选项文本。
-
-### 4) 数据源连接器
-
-在 [run_pipeline.py](run_pipeline.py#L396) 到 [run_pipeline.py](run_pipeline.py#L624)：
-
-1. LocalFileConnector：本地 json/jsonl 输入。
-2. GitHubConnector：自动 clone 仓库并发现候选数据文件。
-3. HuggingFaceConnector：通过 datasets 加载公开数据集。
-
-### 5) 清洗决策与记录构建
-
-在 [run_pipeline.py](run_pipeline.py#L667) 到 [run_pipeline.py](run_pipeline.py#L1100)：
-
-1. 根据评分、图文一致性、改写策略做 pass/review/reject。
-2. 生成 problem_main_record、asset_records、alignment_record、rewrite_record 等结构化记录。
-
-### 6) 主流程与命令行入口
-
-在 [run_pipeline.py](run_pipeline.py#L1117) 到 [run_pipeline.py](run_pipeline.py#L1299)：
-
-1. PromptExtractionPipeline 负责按数据集执行、落盘、汇总。
-2. main() 解析参数并运行，支持 input、dataset-key、dataset-name、subject、limit、reset-output。
-
-最小示例：
+GitHub is reachable directly, but Hugging Face currently needs the local proxy:
 
 ```bash
-python run_pipeline.py m3cot/mini_test/test.json --dataset-key m3cot_mini --dataset-name M3CoT-mini --subject multimodal --limit 5
+export http_proxy=http://127.0.0.1:20171
+export https_proxy=http://127.0.0.1:20171
 ```
 
-如果需要使用 YAML 场景化配置，请使用 benchmark 版本入口 [benchmark/src/multidataset_cleaning_pipeline.py](benchmark/src/multidataset_cleaning_pipeline.py)，该脚本支持 --config。
+Then run:
 
-## 多数据集测试运行命令
-
-推荐使用 benchmark 入口配合 YAML，一次性跑多个数据集。
-
-### 1) 环境准备（PowerShell）
-
-```powershell
-conda activate agent
-$env:OPENAI_API_KEY="你的key"
+```bash
+python3 benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_iter.yaml
 ```
 
-### 2) 多数据集快速测试（小样本）
+## Current default dataset set
 
-```powershell
-python benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_benchmark.local.yaml
+The default remote iteration config currently includes:
+
+- `EEE-Bench` — strongest remote positive-control dataset right now
+- `CMM-Math` — stable enough for remote iteration
+- `Geometry3K` — downloadable and usable, but often quality-gated by `low_resolution`
+
+## Why MathVision is not in the default config
+
+MathVision was tested online and the source data **does include image fields**:
+- `image`
+- `decoded_image`
+
+But in the current pipeline path, those images are **not being materialized into output image assets** reliably, which leads to:
+- `image_count = 0`
+- `missing_core_image`
+- cleaning-stage reject
+
+So MathVision is currently treated as a connector / asset-materialization issue, not a source-availability issue.
+
+## Main entrypoint
+
+Use the benchmark YAML runner for multi-dataset execution:
+
+```bash
+python3 benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_iter.yaml
 ```
 
-### 3) 多数据集迭代测试（样本更多）
+## Outputs
 
-```powershell
-python benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_iter.local.yaml
-```
+Representative summaries are retained under:
 
-### 4) 全量可用源冒烟测试
+- `docs/run_summaries/`
 
-```powershell
-python benchmark/src/multidataset_cleaning_pipeline.py --config configs/all_available.local.yaml
-```
+Larger experimental outputs are written under `outputs/` during runs.
 
-### 5) 放宽策略冒烟测试
+## Notes
 
-```powershell
-python benchmark/src/multidataset_cleaning_pipeline.py --config configs/intake_relaxed_smoke.local.yaml
-```
-
-说明：
-
-1. 要跑哪些数据集，修改对应 YAML 中 datasets 列表。
-2. 输出目录由 runtime.output_root 控制。
-3. [run_pipeline.py](run_pipeline.py) 主要用于单数据集参数模式，不是多数据集 YAML 入口。
+- The code still contains local-file support internally, but the repo’s default workflow and retained configs are now remote-first.
+- If Hugging Face requests start failing, first check whether the local proxy at `127.0.0.1:20171` is still available.
