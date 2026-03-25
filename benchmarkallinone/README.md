@@ -64,6 +64,22 @@ benchmarkallinone/
     └── semantics.py
 ```
 
+其中 `outputs/` 是运行时生成目录，不属于后续合并到 `main` 的源码主体；为降低 merge 噪音，当前分支不再保留该目录，并通过 `benchmarkallinone/.gitignore` 忽略。
+
+## 合并到 `main` 的建议方式
+
+当前 `ler` 分支采用“独立子工程”布局：
+- 把新实现完整保留在 `benchmarkallinone/` 内，避免直接覆盖 `main` 里已有的根目录入口与历史结构。
+- `plans/` 继续保留设计文档，作为后续 merge / review 时的对照依据。
+- `outputs/`、`__pycache__/`、临时报告产物不再纳入版本控制，减少无关文件对 merge 的干扰。
+
+如果后续要合并到 `main`，建议按以下顺序进行：
+1. 第一阶段先整体合入 `benchmarkallinone/` 与 `plans/`，不要立即改写 `main` 现有根目录 `run_pipeline.py`、`configs/`、`prompts/`、`benchmark/src/`。
+2. 第二阶段再按模块比较，把 `benchmarkallinone/src/benchmarkallinone/pipeline.py` 中需要保留的能力逐步迁移或替换到 `main` 的正式入口。
+3. 所有运行产物继续放在本地生成，不作为 merge 的一部分提交。
+
+这样可以把“代码合并”与“结构替换”拆成两个动作，显著降低冲突面。
+
 ## 运行方式
 
 ### 1. 安装依赖
