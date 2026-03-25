@@ -2,34 +2,93 @@
 
 这是一个 **remote-first** 的多模态数据处理流水线：优先在线下载数据集，统一抽取样本，并产出 cleaning / rewrite / review 等记录。
 
-## 当前状态（2026-03-24）
+## 接下来的计划
 
-当前仓库已经从最初的 remote-only 基础打通，进入了更完整的 **全候选数据集 remote intake** 阶段。
+下一阶段主要做三件事：
 
-### 已经打通的能力
+### 1) 尝试合并两个分支的工作
 
-- 默认工作流已经切到 remote-first
+优先梳理 `feat/multi-dataset-iter` 与 `ler` 当前各自推进的内容，评估是否可以在不破坏现有主流程的前提下逐步合并，并整理需要保留、对齐或舍弃的部分。
+
+### 2) 小规模样本质量检测
+
+针对当前已经接入成功的数据集，按学科和题型抽取更小规模样本做人工检查，重点看：
+
+- `pass / review / reject` 的真实质量分布
+- 不同数据源上的误判模式
+- 哪些数据集需要单独调 threshold 或 rewrite policy
+
+### 3) 脚本模块拆分
+
+继续把当前较集中的流水线逻辑拆成更清晰的模块，目标是：
+
+- 把数据摄取、样本标准化、rewrite、review、输出落盘分开
+- 降低后续维护成本
+- 让新数据集接入和调参更容易
+
+## 分支说明
+
+当前主要关注三个分支：
+
+- `main`
+  - 当前主要存放 qiuboboo 这边的阶段性进度、仓库说明、稳定运行入口和对外展示内容。
+- `feat/multi-dataset-iter`（qiuboboo）
+  - 当前共同开发的主分支，由当前 GitHub 账号负责上传和同步，主要承载多数据集 remote-first intake、连接器修复、rewrite / review 流程迭代，以及 benchmark / smoke 配置更新。
+- `ler`（LERFOE）
+  - LERFOE 侧的进度分支，主要用于记录对应方向的阶段性进展；当前不是主开发入口。
+
+目前主仓库的实际开发重心在 `feat/multi-dataset-iter`，`main` 主要汇总 qiuboboo 当前阶段的进度与说明，`ler` 主要用于记录 LERFOE 侧分支的阶段性进度。
+
+## 当前主仓库结构
+
+```text
+agent-pipeline/
+├─ benchmark/
+│  ├─ src/                              # 多数据集流水线主入口与核心逻辑
+│  └─ outputs/                          # benchmark 相关输出
+├─ configs/                             # 不同运行场景的 YAML 配置
+├─ docs/                                # 报告、设计说明、阶段性总结
+├─ m3cot/                               # 当前保留的样例数据（json/jsonl + images）
+├─ outputs/                             # 当前保留的运行输出
+├─ prompts/                             # 抽取、评分、改写等提示词模板
+├─ run_pipeline.py                      # 单数据集/本地模式主脚本
+└─ logs/                                # 日志
+```
+
+结构上可以分成四层：
+
+1. **运行入口层**：`run_pipeline.py` 与 `benchmark/src/`
+2. **配置层**：`configs/`
+3. **数据与输出层**：`m3cot/`、`outputs/`
+4. **文档与提示词层**：`docs/`、`prompts/`
+
+## 当前进度（2026-03-25）
+
+项目已经从最初的本地/单数据集实验，推进到更稳定的 **multi-dataset remote-first** 阶段。
+
+### 已完成的环境与能力
+
+- 已跑通多数据集 remote-first 工作流
 - 当前机器上 Hugging Face 可以通过本地代理访问
 - GitHub 源的数据摄取可用
-- 之前卡住的几个关键连接器问题已经修好：
+- benchmark 版本流水线可用，支持通过 YAML 统一调度多数据集
+- 多个关键连接器问题已完成修复：
   - `MathVision` 图像 materialization 已修好（`decoded_image` 现在会变成真实 image asset）
   - `Multi-Physics` 已支持 GitHub JSON 顶层 `example[]` 结构
   - `MM-Math` 已支持 `MM_Math.jsonl + MM_Math.zip` 的 raw-file fallback
   - `PhysReason` 已支持 `PhysReason-mini.zip` / `PhysReason-full.zip` + `problem.json` 的 raw-zip fallback
 
-### 全候选 smoke 状态
+### 当前已经得到的结果
 
-当前全候选 remote smoke 配置：
+#### 1) 全候选 remote smoke 已完成一轮
 
-- `configs/all_candidates_remote.yaml`
+配置：
+- [configs/all_candidates_remote.yaml](configs/all_candidates_remote.yaml)
 
-在连接器修复后，已经完成过一轮全候选 smoke。
-
-最新归档结果：
+归档结果：
 - `tmp/agent-pipeline_run_archive_2026-03-24_1023/outputs/all_candidates_remote_smoke/run_34f55dd2baab488b/summary.json`
 
-小样本快照如下：
-
+当前小样本结论：
 - `SCEMQA`：可接入，但当前样本以 reject 为主
 - `Geometry3K`：可接入，当前是 review / reject 混合
 - `CMM-Math`：可接入，review 较多，常见 `split_open`
@@ -42,27 +101,25 @@
 - `EMMA-Math`：可接入，小样本表现较强
 - `EMMA-Physics`：可接入，小样本表现较强
 
-### 200 样本跨学科 benchmark
+#### 2) 已完成 200 样本跨学科 benchmark
 
-已经完成一轮更大的跨学科 benchmark：
-
-- 配置：`configs/candidate_200_remote.yaml`
-- 报告：`docs/candidate_200_benchmark_report.md`
+- 配置：[configs/candidate_200_remote.yaml](configs/candidate_200_remote.yaml)
+- 报告：[docs/candidate_200_benchmark_report.md](docs/candidate_200_benchmark_report.md)
 - 结果：`outputs/candidate_200_remote/run_6be16173d2403a7e/summary.json`
 
-核心数字：
+核心结果：
 - 200 / 200 processed
 - 总耗时：**195 秒**
 - 平均吞吐：**0.975 秒 / 样本**
 - 严格可用（`pass`）：**90 / 200 = 45.0%**
 - 宽松可用（`pass + review`）：**116 / 200 = 58.0%**
 
-当前这套设置下表现最强的几个数据集：
+当前表现较强的数据集：
 - `EEE-Bench`
 - `PhysReason`
 - `CMM-Math`
 
-下一步最可能需要做 source-specific threshold 调整的几个数据集：
+当前更需要继续调优的数据集：
 - `Geometry3K`
 - `SCEMQA`
 - `SeePhys`
@@ -79,10 +136,13 @@
 - `split_open`
   - 常见于 `CMM-Math`
 
-这说明当前主要瓶颈已经不再是“能不能接上数据集”，而是：
-- source-specific 的质量阈值
-- 按题型做 rewrite-policy 对齐
-- 更细粒度地区分“本质开放题”和“标准视觉选择题”
+### 当前阶段判断
+
+目前的主要瓶颈已经不再是“能不能接上数据集”，而是：
+
+- source-specific 的质量阈值是否合理
+- 不同题型的 rewrite-policy 是否对齐
+- 怎样更细粒度地区分开放题与标准视觉题
 
 ### 当前 prompt 文档替代 / 增强了哪些原 Python 功能
 
@@ -119,8 +179,7 @@
 仓库默认采用 **remote-only** 工作流。
 
 默认多数据集配置：
-
-- `configs/multi_dataset_iter.yaml`
+- [configs/multi_dataset_iter.yaml](configs/multi_dataset_iter.yaml)
 
 它会在线拉取数据，来源包括：
 - GitHub
@@ -135,7 +194,7 @@ export http_proxy=http://127.0.0.1:20171
 export https_proxy=http://127.0.0.1:20171
 ```
 
-然后运行：
+运行命令：
 
 ```bash
 python3 benchmark/src/multidataset_cleaning_pipeline.py --config configs/multi_dataset_iter.yaml
@@ -166,10 +225,10 @@ python3 benchmark/src/multidataset_cleaning_pipeline.py --config configs/all_can
 ## 输出说明
 
 保留下来的代表性摘要在：
-- `docs/run_summaries/`
+- [docs/run_summaries/](docs/run_summaries/)
 
 运行时产生的大输出在：
-- `outputs/`
+- [outputs/](outputs/)
 
 一些临时或归档输出可能被移动到：
 - `tmp/agent-pipeline_run_archive_*`
