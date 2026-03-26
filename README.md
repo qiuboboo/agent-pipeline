@@ -1,224 +1,182 @@
 # agent-pipeline
 
-这是一个 **remote-first** 的多模态数据处理流水线：优先在线下载数据集，统一抽取样本，并产出 cleaning / rewrite / review 等记录。
+多数据集、多模态题目采集与清洗流水线。
 
-## 接下来的计划
+当前主线采用四段结构：**Setup → Collection → Cleaning → Report**。统一入口是 [`run_pipeline.py`](run_pipeline.py)，核心实现位于 [`benchmark/src/`](benchmark/src/)。
 
-下一阶段主要做三件事：
+## 当前结构与功能
 
-### 1) 检查高 reject 数据集
+```text
+run_pipeline.py
+    ↓
+multidataset_cleaning_pipeline.py
+    ├─ Setup       -> pipeline_setup.py
+    ├─ Collection  -> pipeline_collection.py + cleaning_semantics.py
+    ├─ Cleaning    -> pipeline_cleaning.py
+    └─ Report      -> pipeline_reporting.py
+```
 
-优先抽查以下数据集的 `reject_records` / `problem_main_records`：
+- **Setup**
+  - 负责参数解析、配置覆盖、run 目录和上下文初始化。
+- **Collection**
+  - 负责数据集接入、样本预处理、文本/视觉结构抽取、图文对齐与可解性分析。
+- **Cleaning**
+  - 负责 rewrite、质量 gate、最终 `pass / review / reject` 判定。
+- **Report**
+  - 负责写出 `records/*.jsonl`、dataset summary、run summary。
 
-- `SCEMQA`
-- `Geometry3K`
-- `SeePhys`
-- `MM-Math`
+## 最新运行结果
 
-重点看：
+最新一次 200 样本 benchmark：
 
-- 是否存在明显误杀
-- 是图像质量、文本完整性、图文对齐还是 rewrite / gate 导致 reject
-- 哪些 reject 模式是 source-specific 的稳定问题
+- 配置：[`configs/candidate_200_remote.yaml`](configs/candidate_200_remote.yaml)
+- 输出：[`outputs/candidate_200_remote/run_6cd93f19b5ab1d93/summary.json`](outputs/candidate_200_remote/run_6cd93f19b5ab1d93/summary.json)
+- 对比记录：[`docs/candidate_200_benchmark_comparison_2026-03-26_run_6cd93f19b5ab1d93.md`](docs/candidate_200_benchmark_comparison_2026-03-26_run_6cd93f19b5ab1d93.md)
 
-### 2) 修改 prompt
+### 运行时间（这是非agent提取内容版的）
 
-优先检查和调整：
+- 总耗时：**约 602.1 秒**（约 **10.0 分钟**）
+- 平均每个 processed sample：**约 3.01 秒 / 样本**
+- 说明：这里按本次实际启动与 summary 写出时间近似计算
 
-- `prompts/extract_unified_sample.md`
-- `prompts/collection/asset_registry.md`
-- `prompts/collection/potential_scorer.md`
-- `prompts/collection/candidate_registrar.md`
+### 总体结果
 
-重点目标：
+- Requested：**200**
+- Processed：**200**
+- Pass：**61**
+- Review：**48**
+- Reject：**91**
+- **严格可用率**：**30.5%**
+- **宽松可用率**：**54.5%**
 
-- 减少本应 `pass` 的样本被推到 `review`
-- 降低高 reject 数据集上的保守偏差
-- 让 source-specific 的题型判断与 rewrite-policy 更贴合真实分布
+### 与上一轮复跑结果对比
 
-### 3) 小规模样本质量检测
+上一轮基线见 [`docs/candidate_200_benchmark_report_rerun_2026-03-26.md`](docs/candidate_200_benchmark_report_rerun_2026-03-26.md)：
 
-针对当前已经接入成功的数据集，按学科和题型抽取更小规模样本做人工检查，重点看：
+| 指标 | 上一轮 | 本轮 | 变化 |
+|---|---:|---:|---:|
+| Pass | 63 | 61 | **-2** |
+| Review | 49 | 48 | **-1** |
+| Reject | 88 | 91 | **+3** |
+| 严格可用率 | 31.5% | 30.5% | **-1.0pt** |
+| 宽松可用率 | 56.0% | 54.5% | **-1.5pt** |
 
-- `pass / review / reject` 的真实质量分布
-- 不同数据源上的误判模式
-- 哪些数据集需要单独调 threshold 或 rewrite policy
+### 本轮数据集表现
 
-## 分支说明
+表现较强：
+- `CMM-Math`：13 / 6 / 1，宽松 **95.0%**
+- `EEE-Bench`：12 / 6 / 2，宽松 **90.0%**
+- `MathVision`：11 / 3 / 6，宽松 **70.0%**
+- `Multi-Physics`：10 / 0 / 10，严格 **50.0%**
 
-当前主要关注三个分支：
+需要继续调优：
+- `Geometry3K`：0 / 0 / 20，严格/宽松都 **0.0%**
+- `SCEMQA`：2 / 0 / 18，宽松 **10.0%**
+- `SeePhys`：3 / 1 / 16，宽松 **20.0%**
+- `MM-Math`：0 / 10 / 10，严格 **0.0%**，宽松 **50.0%**
+- `PhysReason`：4 / 11 / 5，review 偏多
+- `EMMA-Physics`：6 / 11 / 3，review 偏多
 
-- `main`
-  - 当前主要存放 qiuboboo 这边的阶段性进度、仓库说明、稳定运行入口和对外展示内容。
-- `feat/multi-dataset-iter`（qiuboboo）
-  - 当前共同开发的主分支，由当前 GitHub 账号负责上传和同步，主要承载多数据集 remote-first intake、连接器修复、rewrite / review 流程迭代，以及 benchmark / smoke 配置更新。
-- `ler`（LERFOE）
-  - LERFOE 侧的进度分支，主要用于记录对应方向的阶段性进展；当前不是主开发入口。
-
-目前主仓库的实际开发重心在 `main`，并已将 `ler` 中的 `benchmarkallinone` 实现吸收到当前主线。
-
-## 当前主仓库结构
+## 项目结构
 
 ```text
 agent-pipeline/
+├─ run_pipeline.py
 ├─ benchmark/
-│  ├─ src/                              # 多数据集流水线主入口与核心逻辑
-│  └─ outputs/                          # benchmark 相关输出
-├─ benchmarkallinone/                   # 从 ler 导入的整合实现，当前作为对照保留
-├─ configs/                             # 不同运行场景的 YAML 配置
-├─ docs/                                # 报告、设计说明、阶段性总结
-├─ plans/                               # 下一步计划与设计草案
-├─ outputs/                             # 当前保留的运行输出
-├─ prompts/                             # 抽取、评分、改写等提示词模板
-├─ run_pipeline.py                      # 当前正式入口
-└─ archive/                             # 历史主线归档
+│  └─ src/
+│     ├─ multidataset_cleaning_pipeline.py
+│     ├─ pipeline_setup.py
+│     ├─ pipeline_collection.py
+│     ├─ cleaning_semantics.py
+│     ├─ pipeline_cleaning.py
+│     └─ pipeline_reporting.py
+├─ configs/
+├─ prompts/
+├─ docs/
+├─ outputs/
+├─ benchmarkallinone/
+└─ archive/
 ```
 
-结构上可以分成五层：
+## 目录与文件说明
 
-1. **运行入口层**：`run_pipeline.py` 与 `benchmark/src/`
-2. **配置层**：`configs/`
-3. **文档层**：`docs/` 与 `plans/`
-4. **提示词层**：`prompts/`
-5. **历史与过渡层**：`archive/`、`benchmarkallinone/`
+### 入口与主线
+- [`run_pipeline.py`](run_pipeline.py)
+  - 统一运行入口。
+- [`benchmark/src/multidataset_cleaning_pipeline.py`](benchmark/src/multidataset_cleaning_pipeline.py)
+  - 顶层 orchestrator，串联整条流水线。
 
-## 当前进度（2026-03-26）
+### 四个阶段模块
+- [`benchmark/src/pipeline_setup.py`](benchmark/src/pipeline_setup.py)
+  - Setup：参数解析、配置覆盖、run 目录与上下文初始化。
+- [`benchmark/src/pipeline_collection.py`](benchmark/src/pipeline_collection.py)
+  - Collection：数据集接入、样本预处理、结构化中间结果生成。
+- [`benchmark/src/cleaning_semantics.py`](benchmark/src/cleaning_semantics.py)
+  - Collection/Cleaning 支撑：文本结构、视觉结构、对齐、可解性分析。
+- [`benchmark/src/pipeline_cleaning.py`](benchmark/src/pipeline_cleaning.py)
+  - Cleaning：rewrite、质量 gate、`pass/review/reject` 判定。
+- [`benchmark/src/pipeline_reporting.py`](benchmark/src/pipeline_reporting.py)
+  - Report：写出 records、dataset summary、run summary。
 
-项目已经完成从旧主线到 `benchmarkallinone` 主线实现的切换，并在新主线上复跑了一轮 200 样本 benchmark。
+### 其他目录
+- [`configs/`](configs/)
+  - 不同运行场景的 YAML 配置。
+- [`prompts/`](prompts/)
+  - 抽取、评分、改写相关提示词。
+- [`docs/`](docs/)
+  - 模块说明、benchmark 报告、运行摘要文档。
+- [`outputs/`](outputs/)
+  - 运行产物输出目录。
+- [`benchmarkallinone/`](benchmarkallinone/)
+  - 旧整合实现，当前作为对照保留。
+- [`archive/`](archive/)
+  - 历史主线归档。
 
-### 已完成的环境与能力
+## 常用命令
 
-- 已完成 `ler` 中 `benchmarkallinone` 实现导入
-- 已归档旧主线 Python / prompt / 核心配置到：
-  - `archive/pre-ler-main-python-2026-03-25/`
-- 已将当前正式主线切到：
-  - `run_pipeline.py`
-  - `benchmark/src/multidataset_cleaning_pipeline.py`
-  - `benchmark/src/cleaning_semantics.py`
-- 已验证新主线：
-  - Python 语法编译通过
-  - `--help` 正常
-  - 本地 1-sample 验证通过
-  - 200 样本 remote benchmark 可完整跑通
-- 当前机器上 Hugging Face 需要本地代理访问
-
-### 当前已经得到的结果
-
-#### 1) 已完成新主线最小运行验证
-
-- 本地示例配置在 `--disable-llm` 下已成功处理 1 个样本
-- 说明当前新主线在入口、配置读取、本地样本处理链路上已经可运行
-
-#### 2) 已完成新主线 200 样本跨学科 benchmark 复跑
-
-- 配置：[configs/candidate_200_remote.yaml](configs/candidate_200_remote.yaml)
-- 报告：[docs/candidate_200_benchmark_report_rerun_2026-03-26.md](docs/candidate_200_benchmark_report_rerun_2026-03-26.md)
-- 结果：`outputs/candidate_200_remote/run_1dbbbab6d8b51fd6/summary.json`
-
-核心结果：
-- 200 / 200 processed
-- 严格可用（`pass`）：**63 / 200 = 31.5%**
-- 宽松可用（`pass + review`）：**112 / 200 = 56.0%**
-
-### 与旧 200 样本 benchmark 的差异
-
-旧结果（README 中记录的 `run_6be16173d2403a7e`）：
-- pass：90
-- review：26
-- reject：84
-- strict usable：45.0%
-- lenient usable：58.0%
-
-新主线复跑结果（`run_1dbbbab6d8b51fd6`）：
-- pass：63
-- review：49
-- reject：88
-- strict usable：31.5%
-- lenient usable：56.0%
-
-### 当前阶段判断
-
-目前的主要瓶颈已经不是“主线能不能跑通”，而是：
-
-- 高 reject 数据集为什么持续偏弱
-- 新主线为什么把更多样本打到 `review`
-- source-specific 的 prompt / threshold / rewrite-policy 是否仍需调整
-
-### 当前表现较强的数据集
-
-- `CMM-Math`
-- `EEE-Bench`
-- `MathVision`
-- `Multi-Physics`
-
-### 当前更需要继续调优的数据集
-
-- `SCEMQA`
-- `Geometry3K`
-- `SeePhys`
-- `MM-Math`
-- `PhysReason`（review 偏多）
-- `EMMA-Physics`（review 偏多）
-
-## 当前默认模式
-
-仓库默认采用 **remote-only** 工作流。
-
-默认多数据集配置：
-- [configs/multi_dataset_iter.yaml](configs/multi_dataset_iter.yaml)
-
-它会在线拉取数据，来源包括：
-- GitHub
-- Hugging Face
-
-## 当前机器上的代理要求
-
-当前机器上 GitHub 可直连，但 Hugging Face 需要本地代理：
+### 默认运行
 
 ```bash
-export http_proxy=http://127.0.0.1:20171
-export https_proxy=http://127.0.0.1:20171
+python run_pipeline.py --config configs/multi_dataset_iter.yaml
 ```
 
-运行命令：
+### 200 样本 benchmark
 
 ```bash
-python3 run_pipeline.py --config configs/multi_dataset_iter.yaml
+python run_pipeline.py --config configs/candidate_200_remote.yaml
 ```
 
-## 主要入口
-
-### 默认 remote 迭代配置
+### 关闭 LLM / agent
 
 ```bash
-python3 run_pipeline.py --config configs/multi_dataset_iter.yaml
+python run_pipeline.py --config configs/multi_dataset_iter.yaml --disable-llm
 ```
 
-### 200 样本 benchmark 配置
+## 常看文档
 
-```bash
-python3 run_pipeline.py --config configs/candidate_200_remote.yaml
+- [`docs/pipeline_python_modules_reference.md`](docs/pipeline_python_modules_reference.md)
+  - Python 模块、函数职责、阶段映射说明。
+- [`docs/run_summaries/README.md`](docs/run_summaries/README.md)
+  - 运行摘要保留规范。
+- [`docs/candidate_200_benchmark_report_rerun_2026-03-26.md`](docs/candidate_200_benchmark_report_rerun_2026-03-26.md)
+  - 200 样本 benchmark 复跑报告。
+- [`docs/candidate_200_benchmark_comparison_2026-03-26_run_6cd93f19b5ab1d93.md`](docs/candidate_200_benchmark_comparison_2026-03-26_run_6cd93f19b5ab1d93.md)
+  - 本次最新复跑与上一轮结果对比。
+
+## 输出位置
+
+典型输出结构：
+
+```text
+outputs/<run-group>/<run_id>/
+├─ summary.json
+├─ datasets/<dataset>/summary.json
+├─ datasets/<dataset>/records/*.jsonl
+└─ datasets/<dataset>/samples/*.json
 ```
-
-### 全候选 remote smoke 配置
-
-```bash
-python3 run_pipeline.py --config configs/all_candidates_remote.yaml
-```
-
-## 输出说明
-
-保留下来的代表性摘要在：
-- [docs/run_summaries/](docs/run_summaries/)
-
-阶段性 benchmark / 分析报告在：
-- [docs/](docs/)
-
-运行时产生的大输出在：
-- [outputs/](outputs/)
 
 ## 备注
 
-- 如果 Hugging Face 请求失败，优先检查本地代理 `127.0.0.1:20171` 是否仍然可用。
-- `outputs/repo_cache/` 下的缓存目录不属于建议提交进 Git 的源码内容。
-- `benchmarkallinone/` 当前仍作为迁移对照保留，后续可继续收敛进正式主线结构。
+- 当前以 [`benchmark/src/`](benchmark/src/) 为主线实现。
+- [`benchmarkallinone/`](benchmarkallinone/) 和 [`archive/`](archive/) 不是当前首页重点，只作历史对照保留。
+- 若 Hugging Face 拉取失败，优先检查本地网络/代理环境。
