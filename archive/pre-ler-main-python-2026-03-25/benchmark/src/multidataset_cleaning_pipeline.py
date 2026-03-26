@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""多数据集数据采集与清洗智能体流水线。"""
+"""多数据集数据采集与清洗智能体流水线。
+
+本脚本面向清洗阶段的全自动实现，覆盖：
+1. 多数据集公开源接入（Hugging Face / GitHub / source_unavailable）
+2. 样本抽样（每个数据集最多抽样固定数量）
+3. 文本规范化、图像质量检测、图文对齐、可解性门控
+4. 选择题开放化改写、依赖干扰项题目挖空改写、纯图编号题剔除
+5. 基于 OpenAI 兼容接口的 Rewrite Agent / Decision Agent
+6. 统一产出 problem_main_record / asset_record / cleaning_record / reject_record /
+   alignment_record / field_audit_record / rewrite_report / open_ended_problem_variants
+7. 多数据集汇总评测报告
+"""
 
 from __future__ import annotations
 
@@ -13,9 +24,12 @@ import os
 import re
 import shutil
 import subprocess
+import tempfile
+import time
 import unicodedata
 import urllib.error
 import urllib.request
+import zipfile
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,25 +37,17 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 import numpy as np
 import yaml
-from datasets import Dataset, DatasetDict, IterableDatasetDict, load_dataset
+from datasets import Dataset, DatasetDict, IterableDataset, IterableDatasetDict, load_dataset
+from huggingface_hub import hf_hub_download
 from PIL import Image
 
-try:
-    from .cleaning_semantics import (
-        AlignmentEngine,
-        SolvabilityChecker,
-        TextContextParser,
-        VisualParser,
-        normalize_structured_text,
-    )
-except ImportError:
-    from cleaning_semantics import (
-        AlignmentEngine,
-        SolvabilityChecker,
-        TextContextParser,
-        VisualParser,
-        normalize_structured_text,
-    )
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROMPT_ROOT = PROJECT_ROOT / "prompts"
+UNIFIED_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_unified_sample.md"
+LEGACY_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_question_answer_image.md"
+ASSET_REGISTRY_PROMPT_PATH = PROMPT_ROOT / "collection" / "asset_registry.md"
+POTENTIAL_SCORER_PROMPT_PATH = PROMPT_ROOT / "collection" / "potential_scorer.md"
+CANDIDATE_REGISTRAR_PROMPT_PATH = PROMPT_ROOT / "collection" / "candidate_registrar.md"
 
 
 def utc_now() -> str:
@@ -61,7 +67,9 @@ def json_default(value: Any) -> Any:
         return str(value)
     if isinstance(value, np.generic):
         return value.item()
-    if isinstance(value, bytes):
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, (bytes, bytearray)):
         return f"<bytes:{len(value)}>"
     if isinstance(value, Image.Image):
         return f"<PIL.Image mode={value.mode} size={value.size}>"
@@ -193,6 +201,344 @@ def extract_json_object(text: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+def read_prompt(path: Path) -> str:
+    return path.read_text(encoding="utf-8").strip()
+
+
+def build_unified_extraction_user_prompt(record: Dict[str, Any]) -> str:
+    record_json = json.dumps(record, ensure_ascii=False, indent=2, default=json_default)
+    return f"""下面是一条原始 JSON 记录。
+请按照 system prompt 的规则提取 UnifiedSample 所需的关键字段。
+只返回 JSON 对象。
+
+原始 JSON:
+{record_json}
+"""
+
+
+def build_asset_registry_user_prompt(problem_id: str, question_text: str, answer_text: str, image_paths: List[str], metadata: Dict[str, Any], asset_integrity: Dict[str, Any]) -> str:
+    payload = {
+        "problem_id": problem_id,
+        "question_text": question_text,
+        "answer_text": answer_text,
+        "image_paths": image_paths,
+        "metadata": metadata,
+        "asset_integrity": asset_integrity,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2, default=json_default)
+
+
+def build_potential_scorer_user_prompt(problem_id: str, question_text: str, answer_text: str, metadata: Dict[str, Any], asset_registry_record: Dict[str, Any]) -> str:
+    payload = {
+        "problem_id": problem_id,
+        "question_text": question_text,
+        "answer_text": answer_text,
+        "metadata": metadata,
+        "asset_registry_record": asset_registry_record,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2, default=json_default)
+
+
+def build_candidate_registrar_user_prompt(problem_id: str, asset_registry_record: Dict[str, Any], initial_scoring_record: Dict[str, Any]) -> str:
+    payload = {
+        "problem_id": problem_id,
+        "asset_registry_record": asset_registry_record,
+        "initial_scoring_record": initial_scoring_record,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2, default=json_default)
+
+
+def infer_language_hint(text: str) -> str:
+    has_zh = bool(re.search(r"[\u4e00-\u9fff]", text))
+    has_en = bool(re.search(r"[A-Za-z]", text))
+    if has_zh and has_en:
+        return "mixed"
+    if has_zh:
+        return "zh"
+    if has_en:
+        return "en"
+    return "unknown"
+
+
+def infer_answer_manifest_type(answer_text: str) -> str:
+    answer = normalize_whitespace(answer_text)
+    if not answer:
+        return "unknown"
+    if re.fullmatch(r"[A-Z]", answer):
+        return "choice"
+    if re.fullmatch(r"[+-]?(?:\d+(?:\.\d+)?|\.\d+)", answer):
+        return "number"
+    if len(answer.split()) <= 8:
+        return "short_text"
+    return "long_text"
+
+
+def heuristic_asset_registry_record(problem_id: str, question_text: str, answer_text: str, image_paths: List[str], metadata: Dict[str, Any], image_quality: Dict[str, Any]) -> Dict[str, Any]:
+    image_manifest = []
+    source_file = metadata.get("source_file")
+    base_dir = Path(source_file).parent if source_file else PROJECT_ROOT
+    for raw_path in image_paths:
+        candidate = resolve_image_candidate_path(raw_path, base_dir)
+        exists = candidate is not None
+        path_obj = candidate if candidate is not None else Path(raw_path)
+        suffix = path_obj.suffix.lower().lstrip(".") or None
+        width = image_quality.get("width") if exists else 0
+        height = image_quality.get("height") if exists else 0
+        file_size = path_obj.stat().st_size if exists and path_obj.exists() else 0
+        image_manifest.append(
+            {
+                "path": str(path_obj),
+                "exists": exists,
+                "format": suffix,
+                "width": width,
+                "height": height,
+                "file_size": file_size,
+            }
+        )
+    question_present = bool(normalize_whitespace(question_text))
+    answer_present = bool(normalize_whitespace(answer_text))
+    image_required = bool(metadata.get("force_requires_image", False))
+    issues: List[str] = []
+    if not question_present:
+        issues.append("missing_question_text")
+    if not answer_present:
+        issues.append("missing_answer_text")
+    if image_required:
+        if not image_manifest:
+            issues.append("missing_image_path")
+        elif not any(item["exists"] for item in image_manifest):
+            issues.append("image_not_found")
+    else:
+        if image_manifest and not any(item["exists"] for item in image_manifest):
+            issues.append("image_optional_not_found")
+    registry_passed = question_present and answer_present and (not image_required or any(item["exists"] for item in image_manifest))
+    return {
+        "problem_id": problem_id,
+        "image_manifest": image_manifest,
+        "text_manifest": {
+            "question_present": question_present,
+            "question_char_length": len(question_text or ""),
+            "language_hint": infer_language_hint(question_text or ""),
+        },
+        "answer_manifest": {
+            "answer_present": answer_present,
+            "answer_type": infer_answer_manifest_type(answer_text),
+            "answer_char_length": len(answer_text or ""),
+        },
+        "issues": issues,
+        "registry_passed": registry_passed,
+    }
+
+
+def heuristic_initial_scoring_record(problem_id: str, question_text: str, answer_text: str, metadata: Dict[str, Any], asset_registry_record: Dict[str, Any], potential_scores: Dict[str, Any], quality_flags: List[str]) -> Dict[str, Any]:
+    return {
+        "problem_id": problem_id,
+        "image_dependency_score": round(clamp(potential_scores.get("multimodal_strength_score", 0.0)), 4),
+        "multi_step_score": round(clamp(potential_scores.get("multi_step_score", 0.0)), 4),
+        "verifiability_score": round(clamp(potential_scores.get("verifiability_score", 0.0)), 4),
+        "score_evidence": {
+            "image_dependency": ["requires_image=true" if potential_scores.get("requires_image") else "requires_image=false"],
+            "multi_step": [f"question_length={len(question_text or '')}", f"metadata_keys={len(metadata or {})}"],
+            "verifiability": [f"answer_present={bool(normalize_whitespace(answer_text))}", f"registry_passed={asset_registry_record.get('registry_passed', False)}"],
+        },
+        "risk_flags": sorted(set(list(asset_registry_record.get("issues", [])) + list(quality_flags))),
+        "scoring_version": "v1-heuristic",
+    }
+
+
+def heuristic_candidate_registrar_record(problem_id: str, asset_registry_record: Dict[str, Any], initial_scoring_record: Dict[str, Any]) -> Dict[str, Any]:
+    registry_passed = bool(asset_registry_record.get("registry_passed", False))
+    issues = list(asset_registry_record.get("issues", []))
+    risk_flags = list(initial_scoring_record.get("risk_flags", []))
+    image_dep = float(initial_scoring_record.get("image_dependency_score", 0.0))
+    avg_score = (
+        float(initial_scoring_record.get("image_dependency_score", 0.0))
+        + float(initial_scoring_record.get("multi_step_score", 0.0))
+        + float(initial_scoring_record.get("verifiability_score", 0.0))
+    ) / 3.0
+    if not registry_passed:
+        text_ready = asset_registry_record.get("text_manifest", {}).get("question_present") and asset_registry_record.get("answer_manifest", {}).get("answer_present")
+        image_missing = any(flag in issues for flag in ["missing_image_path", "image_not_found", "image_optional_not_found"])
+        if text_ready and image_missing and image_dep < 0.75:
+            return {
+                "problem_id": problem_id,
+                "priority": round(max(avg_score, 0.35), 4),
+                "decision": "low_priority",
+                "decision_reasons": ["text_complete_but_image_missing_or_optional"],
+            }
+        return {
+            "problem_id": problem_id,
+            "priority": 0.0,
+            "decision": "reject",
+            "decision_reasons": ["asset_registry_failed"],
+        }
+    if avg_score >= 0.72 and not risk_flags:
+        return {
+            "problem_id": problem_id,
+            "priority": round(avg_score, 4),
+            "decision": "keep",
+            "decision_reasons": ["high_preliminary_value"],
+        }
+    return {
+        "problem_id": problem_id,
+        "priority": round(max(avg_score, 0.3), 4),
+        "decision": "low_priority",
+        "decision_reasons": ["borderline_preliminary_value"],
+    }
+
+
+def llm_asset_registry_record(problem_id: str, question_text: str, answer_text: str, image_paths: List[str], metadata: Dict[str, Any], asset_integrity: Dict[str, Any], client: "OpenAICompatibleClient") -> Optional[Dict[str, Any]]:
+    if not client.config.enabled or not ASSET_REGISTRY_PROMPT_PATH.exists():
+        return None
+    result = client.chat_json(
+        read_prompt(ASSET_REGISTRY_PROMPT_PATH),
+        build_asset_registry_user_prompt(problem_id, question_text, answer_text, image_paths, metadata, asset_integrity),
+    )
+    return result if isinstance(result, dict) else None
+
+
+def llm_initial_scoring_record(problem_id: str, question_text: str, answer_text: str, metadata: Dict[str, Any], asset_registry_record: Dict[str, Any], client: "OpenAICompatibleClient") -> Optional[Dict[str, Any]]:
+    if not client.config.enabled or not POTENTIAL_SCORER_PROMPT_PATH.exists():
+        return None
+    result = client.chat_json(
+        read_prompt(POTENTIAL_SCORER_PROMPT_PATH),
+        build_potential_scorer_user_prompt(problem_id, question_text, answer_text, metadata, asset_registry_record),
+    )
+    return result if isinstance(result, dict) else None
+
+
+def llm_candidate_registrar_record(problem_id: str, asset_registry_record: Dict[str, Any], initial_scoring_record: Dict[str, Any], client: "OpenAICompatibleClient") -> Optional[Dict[str, Any]]:
+    if not client.config.enabled or not CANDIDATE_REGISTRAR_PROMPT_PATH.exists():
+        return None
+    result = client.chat_json(
+        read_prompt(CANDIDATE_REGISTRAR_PROMPT_PATH),
+        build_candidate_registrar_user_prompt(problem_id, asset_registry_record, initial_scoring_record),
+    )
+    return result if isinstance(result, dict) else None
+
+
+def normalize_image_path_list(value: Any) -> List[str]:
+    if is_missing_value(value):
+        return []
+    if isinstance(value, (list, tuple)):
+        return [str(item).strip() for item in value if str(item).strip()]
+    if isinstance(value, str):
+        stripped = value.strip()
+        return [stripped] if stripped else []
+    return []
+
+
+def resolve_image_candidate_path(path_str: str, base_dir: Path) -> Optional[Path]:
+    candidate = Path(path_str)
+    candidate_paths: List[Path] = []
+    if candidate.is_absolute():
+        candidate_paths.append(candidate)
+    else:
+        candidate_paths.append(base_dir / candidate)
+        workspace_root = Path(__file__).resolve().parents[2]
+        candidate_paths.append(workspace_root / candidate)
+    seen: set[str] = set()
+    for item in candidate_paths:
+        key = str(item)
+        if key in seen:
+            continue
+        seen.add(key)
+        if item.exists() and item.suffix.lower() in {".png", ".jpg", ".jpeg", ".bmp", ".webp"}:
+            return item
+    return None
+
+
+def choose_candidate_field(row: Dict[str, Any], candidates: List[str], fallback_regex: str) -> Optional[str]:
+    for key in candidates:
+        if key in row and not is_missing_value(row[key]):
+            return key
+    for key, value in row.items():
+        if is_missing_value(value):
+            continue
+        if re.search(fallback_regex, key, flags=re.IGNORECASE):
+            return key
+    return None
+
+
+def heuristic_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec") -> Dict[str, Any]:
+    question_field = choose_candidate_field(row, spec.question_fields or ["problem", "question"], r"question|problem|query|prompt|text")
+    answer_field = choose_candidate_field(row, spec.answer_fields or ["solution", "answer"], r"answer|solution|label|target")
+    image_field = choose_candidate_field(row, spec.image_fields or ["image", "image_path"], r"image|img|diagram|figure|picture|decoded_image")
+    choice_field = choose_candidate_field(row, spec.choice_fields or ["options", "choices"], r"options|choices")
+    raw_question = to_plain_text(row.get(question_field)) if question_field else ""
+    raw_answer = to_plain_text(row.get(answer_field)) if answer_field else ""
+    if is_null_like_text(raw_answer):
+        raw_answer = ""
+    choice_map = parse_choice_map(row.get(choice_field) if choice_field else None)
+    raw_images = row.get(image_field) if image_field else row.get("images")
+    image_paths = normalize_image_path_list(raw_images)
+    if not image_paths and isinstance(raw_images, dict):
+        image_paths = normalize_image_path_list(raw_images.get("path") or raw_images.get("image") or raw_images.get("url"))
+    force_requires_image = bool(spec.force_requires_image)
+    if raw_question:
+        force_requires_image = force_requires_image or bool(re.search(r"\b(figure|diagram|graph|chart|image|shown|below|sample|下图|图中|示意图)\b", raw_question, flags=re.I))
+    return {
+        "raw_question_text": raw_question,
+        "raw_answer_text": raw_answer,
+        "choice_map": choice_map,
+        "image_paths": image_paths,
+        "force_requires_image": force_requires_image,
+        "extraction_notes": ["heuristic_field_extraction"],
+        "question_field": question_field,
+        "answer_field": answer_field,
+        "image_field": image_field,
+        "choice_field": choice_field,
+    }
+
+
+def prompt_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec", client: "OpenAICompatibleClient") -> Dict[str, Any]:
+    fallback = heuristic_extract_record_content(row, spec)
+    prompt_path = UNIFIED_EXTRACTION_PROMPT_PATH if UNIFIED_EXTRACTION_PROMPT_PATH.exists() else LEGACY_EXTRACTION_PROMPT_PATH
+    if not client.config.enabled or not prompt_path.exists():
+        return fallback
+    system_prompt = read_prompt(prompt_path)
+    result = client.chat_json(system_prompt, build_unified_extraction_user_prompt(row))
+    if not result:
+        return fallback
+    raw_question_text = normalize_whitespace(to_plain_text(result.get("raw_question_text") or result.get("question_text") or fallback["raw_question_text"]))
+    raw_answer_text = normalize_whitespace(to_plain_text(result.get("raw_answer_text") or result.get("answer_text") or fallback["raw_answer_text"]))
+    choice_map = parse_choice_map(result.get("choice_map")) or fallback["choice_map"]
+    image_paths = normalize_image_path_list(result.get("image_paths")) or fallback["image_paths"]
+    force_requires_image = result.get("force_requires_image")
+    if not isinstance(force_requires_image, bool):
+        force_requires_image = fallback["force_requires_image"]
+    extraction_notes = result.get("extraction_notes")
+    if not isinstance(extraction_notes, list):
+        extraction_notes = []
+    extraction_notes = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)]
+    extraction_notes.append("prompt_extraction")
+    return {
+        **fallback,
+        "raw_question_text": raw_question_text or fallback["raw_question_text"],
+        "raw_answer_text": raw_answer_text or fallback["raw_answer_text"],
+        "choice_map": choice_map,
+        "image_paths": image_paths,
+        "force_requires_image": force_requires_image,
+        "extraction_notes": extraction_notes,
+    }
+
+
+def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str]) -> str:
+    answer = normalize_whitespace(answer_text)
+    if not answer:
+        return ""
+    upper = answer.upper().strip()
+    letter_match = re.fullmatch(r"\(?([A-Z])\)?", upper)
+    if letter_match:
+        key = letter_match.group(1)
+        if key in choice_map:
+            return normalize_whitespace(choice_map[key])
+    mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.I)
+    if mixed_match:
+        answer = mixed_match.group(2).strip()
+    return normalize_whitespace(answer)
+
+
 @dataclass
 class ModelConfig:
     base_url: str = "https://synai996.space/v1"
@@ -233,7 +579,6 @@ class DatasetSpec:
     choice_fields: List[str] = field(default_factory=list)
     metadata_fields: List[str] = field(default_factory=list)
     force_requires_image: bool = False
-    multi_solution_mode: str = "auto"
 
 
 @dataclass
@@ -241,11 +586,11 @@ class PipelineConfig:
     sample_per_dataset: int = 30
     sample_strategy: str = "head"
     shuffle_seed: int = 42
-    output_root: str = "benchmarkallinone/outputs/multidataset_cleaning"
-    cleaning_version: str = "v3.1.0"
-    batch_id_prefix: str = "benchmarkallinone-clean"
+    output_root: str = "outputs/multidataset_cleaning"
+    cleaning_version: str = "v2.0.0"
+    batch_id_prefix: str = "multidataset-clean"
     save_sample_bundle: bool = True
-    git_cache_root: str = "benchmarkallinone/outputs/repo_cache"
+    git_cache_root: str = "outputs/repo_cache"
     model: ModelConfig = field(default_factory=ModelConfig)
     thresholds: ThresholdConfig = field(default_factory=ThresholdConfig)
     datasets: List[DatasetSpec] = field(default_factory=list)
@@ -337,7 +682,7 @@ class PipelineConfig:
                 source_locator="https://github.com/luozhongze/Multi-Physics",
                 question_fields=["question", "problem", "query", "text"],
                 answer_fields=["answer", "solution", "label"],
-                image_fields=["picture", "image", "image_path", "img_path", "figure"],
+                image_fields=["image", "image_path", "img_path", "figure"],
             ),
             DatasetSpec(
                 key="physreason",
@@ -382,13 +727,18 @@ class PipelineConfig:
         model_raw = raw.get("model", {})
         threshold_raw = raw.get("thresholds", {})
         datasets_raw = raw.get("datasets", [])
-        datasets = [DatasetSpec(**item) for item in datasets_raw] if datasets_raw else cls.default_dataset_specs()
+        datasets = []
+        if datasets_raw:
+            for item in datasets_raw:
+                datasets.append(DatasetSpec(**item))
+        else:
+            datasets = cls.default_dataset_specs()
         return cls(
             sample_per_dataset=runtime.get("sample_per_dataset", 30),
             sample_strategy=runtime.get("sample_strategy", "head"),
             shuffle_seed=runtime.get("shuffle_seed", 42),
             output_root=runtime.get("output_root", "outputs/multidataset_cleaning"),
-            cleaning_version=runtime.get("cleaning_version", "v3.0.0"),
+            cleaning_version=runtime.get("cleaning_version", "v2.0.0"),
             batch_id_prefix=runtime.get("batch_id_prefix", "multidataset-clean"),
             save_sample_bundle=runtime.get("save_sample_bundle", True),
             git_cache_root=runtime.get("git_cache_root", "outputs/repo_cache"),
@@ -408,20 +758,12 @@ class UnifiedSample:
     source_problem_id: str
     raw_question_text: str
     raw_answer_text: str
-    images: List[Image.Image] = field(default_factory=list)
-    image_sources: List[str] = field(default_factory=list)
-    raw_record: Dict[str, Any] = field(default_factory=dict)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    image: Optional[Image.Image]
+    image_source: Optional[str]
+    raw_record: Dict[str, Any]
+    metadata: Dict[str, Any]
     choice_map: Dict[str, str] = field(default_factory=dict)
     force_requires_image: bool = False
-
-    @property
-    def image(self) -> Optional[Image.Image]:
-        return self.images[0] if self.images else None
-
-    @property
-    def image_source(self) -> Optional[str]:
-        return self.image_sources[0] if self.image_sources else None
 
 
 class OpenAICompatibleClient:
@@ -429,7 +771,7 @@ class OpenAICompatibleClient:
         self.config = config
 
     def chat_json(self, system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:
-        if not self.config.enabled or not self.config.api_key:
+        if not self.config.enabled:
             return None
         url = self.config.base_url.rstrip("/") + "/chat/completions"
         payload = {
@@ -472,7 +814,10 @@ class TextNormalizer:
         re.IGNORECASE,
     )
     NUMERIC_PATTERN = re.compile(r"^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$")
-    PURE_IMAGE_INDEX_PATTERN = re.compile(r"^(diagram|graph|figure|waveform|plot|curve|option|image)\s*[A-H0-9]+$", re.IGNORECASE)
+    PURE_IMAGE_INDEX_PATTERN = re.compile(
+        r"^(diagram|graph|figure|waveform|plot|curve|option|image)\s*[A-H0-9]+$",
+        re.IGNORECASE,
+    )
     EXAM_HEADER_PATTERNS = [
         re.compile(r"^【[^】]*(?:试题|试卷|考试|模拟|联考|月考|期中|期末|诊断|测验|练习|专题)[^】]*】\s*"),
         re.compile(r"^[\(（][^\)）]*(?:年|届|高考|中考|模拟|联考|月考|期中|期末|诊断|测试|试题|试卷|理|文)[^\)）]*[\)）]\s*"),
@@ -504,7 +849,8 @@ class TextNormalizer:
         value = re.sub(r"<\s*image\s*>", " ", value, flags=re.IGNORECASE)
         value = re.sub(r"\*\*Choices:\*\*", "Choices:", value, flags=re.IGNORECASE)
         value = self.strip_exam_boilerplate(value)
-        return normalize_whitespace(value)
+        value = normalize_whitespace(value)
+        return value
 
     def strip_hint(self, text: str) -> str:
         text = re.sub(r"^Hint\s*:\s.*?(?=Question\s*:)", "", text, flags=re.IGNORECASE | re.DOTALL)
@@ -543,6 +889,12 @@ class TextNormalizer:
         if len(answer.split()) <= 8:
             return "short_text"
         return "text"
+
+    def extract_question_body(self, text: str) -> str:
+        match = re.search(r"Question\s*:\s*(.*)", text, flags=re.IGNORECASE | re.DOTALL)
+        if match:
+            return normalize_whitespace(match.group(1))
+        return text
 
     def split_question_and_choices(self, text: str) -> Tuple[str, str]:
         match = re.search(r"\bChoices?\b\s*:?", text, flags=re.IGNORECASE)
@@ -620,7 +972,13 @@ class ImageQualityAnalyzer:
     def laplacian_variance(self, gray: np.ndarray) -> float:
         padded = np.pad(gray, ((1, 1), (1, 1)), mode="edge")
         center = padded[1:-1, 1:-1]
-        lap = padded[:-2, 1:-1] + padded[2:, 1:-1] + padded[1:-1, :-2] + padded[1:-1, 2:] - 4.0 * center
+        lap = (
+            padded[:-2, 1:-1]
+            + padded[2:, 1:-1]
+            + padded[1:-1, :-2]
+            + padded[1:-1, 2:]
+            - 4.0 * center
+        )
         return float(np.var(lap))
 
     def contrast_score(self, gray: np.ndarray) -> float:
@@ -628,9 +986,10 @@ class ImageQualityAnalyzer:
 
     def noise_score(self, gray: np.ndarray) -> float:
         coarse = np.asarray(
-            Image.fromarray(gray.clip(0, 255).astype(np.uint8))
-            .resize((max(1, gray.shape[1] // 4), max(1, gray.shape[0] // 4)), Image.Resampling.BILINEAR)
-            .resize((gray.shape[1], gray.shape[0]), Image.Resampling.BILINEAR),
+            Image.fromarray(gray.clip(0, 255).astype(np.uint8)).resize(
+                (max(1, gray.shape[1] // 4), max(1, gray.shape[0] // 4)),
+                Image.Resampling.BILINEAR,
+            ).resize((gray.shape[1], gray.shape[0]), Image.Resampling.BILINEAR),
             dtype=np.float32,
         )
         return float(np.std(gray - coarse))
@@ -647,11 +1006,23 @@ class ImageQualityAnalyzer:
     def crop_integrity_score(self, bbox: Optional[Dict[str, int]], width: int, height: int) -> float:
         if bbox is None:
             return 0.0
-        margins = [bbox["x"], bbox["y"], width - (bbox["x"] + bbox["width"]), height - (bbox["y"] + bbox["height"])]
+        margins = [
+            bbox["x"],
+            bbox["y"],
+            width - (bbox["x"] + bbox["width"]),
+            height - (bbox["y"] + bbox["height"]),
+        ]
         clipped_edges = sum(margin <= 1 for margin in margins)
         return round(clamp(1.0 - 0.22 * clipped_edges), 4)
 
-    def readability_score(self, blur_score: float, contrast_score: float, width: int, height: int, crop_integrity: float) -> float:
+    def readability_score(
+        self,
+        blur_score: float,
+        contrast_score: float,
+        width: int,
+        height: int,
+        crop_integrity: float,
+    ) -> float:
         sharpness = clamp(math.log1p(max(blur_score, 0.0)) / 8.0)
         contrast = clamp(contrast_score / 64.0)
         resolution = clamp(min(width / 512.0, height / 512.0))
@@ -694,153 +1065,6 @@ class SourceUnavailableConnector(BaseConnector):
         return "source_unavailable", [], "No stable programmatic public source configured"
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-WORKSPACE_ROOT = PROJECT_ROOT.parent
-PROMPT_ROOT = PROJECT_ROOT / "prompts"
-UNIFIED_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_unified_sample.md"
-LEGACY_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_question_answer_image.md"
-
-
-def read_prompt(path: Path) -> str:
-    return path.read_text(encoding="utf-8").strip()
-
-
-def normalize_image_path_list(value: Any) -> List[str]:
-    if is_missing_value(value):
-        return []
-    if isinstance(value, (list, tuple)):
-        return [str(item).strip() for item in value if str(item).strip()]
-    if isinstance(value, dict):
-        return normalize_image_path_list(value.get("path") or value.get("paths") or value.get("image") or value.get("url"))
-    if isinstance(value, str):
-        stripped = value.strip()
-        return [stripped] if stripped else []
-    return []
-
-
-def resolve_image_candidate_path(path_str: str, base_dir: Path) -> Optional[Path]:
-    candidate = Path(path_str)
-    candidate_paths: List[Path] = []
-    if candidate.is_absolute():
-        candidate_paths.append(candidate)
-    else:
-        candidate_paths.append(base_dir / candidate)
-        candidate_paths.append(PROJECT_ROOT / candidate)
-        candidate_paths.append(WORKSPACE_ROOT / candidate)
-    seen: set[str] = set()
-    for item in candidate_paths:
-        key = str(item)
-        if key in seen:
-            continue
-        seen.add(key)
-        if item.exists() and item.suffix.lower() in {".png", ".jpg", ".jpeg", ".bmp", ".webp"}:
-            return item
-    return None
-
-
-def choose_candidate_field(row: Dict[str, Any], candidates: List[str], fallback_regex: str) -> Optional[str]:
-    for key in candidates:
-        if key in row and not is_missing_value(row[key]):
-            return key
-    for key, value in row.items():
-        if is_missing_value(value):
-            continue
-        if re.search(fallback_regex, key, flags=re.IGNORECASE):
-            return key
-    return None
-
-
-def heuristic_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec") -> Dict[str, Any]:
-    question_field = choose_candidate_field(row, spec.question_fields or ["problem", "question"], r"question|problem|query|prompt|text")
-    answer_field = choose_candidate_field(row, spec.answer_fields or ["solution", "answer"], r"answer|solution|label|target")
-    image_field = choose_candidate_field(row, spec.image_fields or ["image", "image_path"], r"image|img|diagram|figure|picture|decoded_image")
-    choice_field = choose_candidate_field(row, spec.choice_fields or ["options", "choices"], r"options|choices")
-    raw_question = to_plain_text(row.get(question_field)) if question_field else ""
-    raw_answer = to_plain_text(row.get(answer_field)) if answer_field else ""
-    if is_null_like_text(raw_answer):
-        raw_answer = ""
-    choice_map = parse_choice_map(row.get(choice_field) if choice_field else None)
-    raw_images = row.get(image_field) if image_field else row.get("images")
-    image_paths = normalize_image_path_list(raw_images)
-    if not image_paths and isinstance(raw_images, dict):
-        image_paths = normalize_image_path_list(raw_images.get("path") or raw_images.get("image") or raw_images.get("url"))
-    force_requires_image = bool(spec.force_requires_image)
-    if raw_question:
-        force_requires_image = force_requires_image or bool(
-            re.search(r"\b(figure|diagram|graph|chart|image|shown|below|sample|下图|图中|示意图)\b", raw_question, flags=re.IGNORECASE)
-        )
-    return {
-        "raw_question_text": raw_question,
-        "raw_answer_text": raw_answer,
-        "choice_map": choice_map,
-        "image_paths": image_paths,
-        "force_requires_image": force_requires_image,
-        "extraction_notes": ["heuristic_field_extraction"],
-        "question_field": question_field,
-        "answer_field": answer_field,
-        "image_field": image_field,
-        "choice_field": choice_field,
-    }
-
-
-def prompt_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec", client: "OpenAICompatibleClient") -> Dict[str, Any]:
-    fallback = heuristic_extract_record_content(row, spec)
-    prompt_path = UNIFIED_EXTRACTION_PROMPT_PATH if UNIFIED_EXTRACTION_PROMPT_PATH.exists() else LEGACY_EXTRACTION_PROMPT_PATH
-    if not client.config.enabled or not client.config.api_key or not prompt_path.exists():
-        return fallback
-    user_prompt = json.dumps(
-        {
-            "dataset_name": spec.display_name,
-            "source_kind": spec.source_kind,
-            "raw_record": row,
-            "fallback": fallback,
-        },
-        ensure_ascii=False,
-        indent=2,
-        default=json_default,
-    )
-    result = client.chat_json(read_prompt(prompt_path), user_prompt)
-    if not result:
-        return fallback
-    raw_question_text = normalize_whitespace(to_plain_text(result.get("raw_question_text") or result.get("question_text") or fallback["raw_question_text"]))
-    raw_answer_text = normalize_whitespace(to_plain_text(result.get("raw_answer_text") or result.get("answer_text") or fallback["raw_answer_text"]))
-    choice_map = parse_choice_map(result.get("choice_map")) or fallback["choice_map"]
-    image_paths = normalize_image_path_list(result.get("image_paths")) or fallback["image_paths"]
-    force_requires_image = result.get("force_requires_image")
-    if not isinstance(force_requires_image, bool):
-        force_requires_image = fallback["force_requires_image"]
-    extraction_notes = result.get("extraction_notes")
-    if not isinstance(extraction_notes, list):
-        extraction_notes = []
-    extraction_notes = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)]
-    extraction_notes.append("prompt_extraction")
-    return {
-        **fallback,
-        "raw_question_text": raw_question_text or fallback["raw_question_text"],
-        "raw_answer_text": raw_answer_text or fallback["raw_answer_text"],
-        "choice_map": choice_map,
-        "image_paths": image_paths,
-        "force_requires_image": force_requires_image,
-        "extraction_notes": extraction_notes,
-    }
-
-
-def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str]) -> str:
-    answer = normalize_whitespace(answer_text)
-    if not answer:
-        return ""
-    upper = answer.upper().strip()
-    letter_match = re.fullmatch(r"\(?([A-Z])\)?", upper)
-    if letter_match:
-        key = letter_match.group(1)
-        if key in choice_map:
-            return normalize_whitespace(choice_map[key])
-    mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.IGNORECASE)
-    if mixed_match:
-        answer = mixed_match.group(2).strip()
-    return normalize_whitespace(answer)
-
-
 class LocalFileConnector(BaseConnector):
     def iter_records(self, path: Path) -> Iterable[Dict[str, Any]]:
         suffix = path.suffix.lower()
@@ -875,23 +1099,8 @@ class LocalFileConnector(BaseConnector):
                         return
                 yield data
             return
-        if suffix == ".csv":
-            with path.open("r", encoding="utf-8", errors="ignore") as file:
-                reader = csv.DictReader(file)
-                for row in reader:
-                    yield dict(row)
-            return
-        if suffix == ".tsv":
-            with path.open("r", encoding="utf-8", errors="ignore") as file:
-                reader = csv.DictReader(file, delimiter="\t")
-                for row in reader:
-                    yield dict(row)
-            return
         if suffix == ".parquet":
-            try:
-                import pandas as pd
-            except Exception as exc:  # pragma: no cover
-                raise RuntimeError("Parquet input requires pandas and pyarrow.") from exc
+            import pandas as pd
             df = pd.read_parquet(path)
             for row in df.to_dict(orient="records"):
                 if isinstance(row, dict):
@@ -899,44 +1108,41 @@ class LocalFileConnector(BaseConnector):
             return
         raise ValueError(f"Unsupported input format: {path.suffix}")
 
-    def load_inline_images(self, value: Any, base_dir: Path) -> Tuple[List[Image.Image], List[str]]:
-        images: List[Image.Image] = []
-        sources: List[str] = []
+    def resolve_image(self, path_str: str, base_dir: Path) -> Tuple[Optional[Image.Image], Optional[str]]:
+        candidate = resolve_image_candidate_path(path_str, base_dir)
+        if candidate is None:
+            return None, None
+        try:
+            return Image.open(candidate).convert("RGB"), str(candidate)
+        except Exception:
+            return None, None
+
+    def load_inline_image(self, value: Any, base_dir: Path) -> Tuple[Optional[Image.Image], Optional[str]]:
         if is_missing_value(value):
-            return images, sources
+            return None, None
         if isinstance(value, np.ndarray):
             value = value.tolist()
         if isinstance(value, list):
             for item in value:
-                child_images, child_sources = self.load_inline_images(item, base_dir)
-                images.extend(child_images)
-                sources.extend(child_sources)
-            return images, sources
+                image, source = self.load_inline_image(item, base_dir)
+                if image is not None:
+                    return image, source
+            return None, None
         if isinstance(value, Image.Image):
-            return [value.convert("RGB")], ["inline://pil_image"]
+            return value.convert("RGB"), "inline://pil_image"
         if isinstance(value, dict):
             bytes_data = value.get("bytes")
             path = value.get("path")
             if bytes_data is not None:
                 try:
-                    return [Image.open(io.BytesIO(bytes(bytes_data))).convert("RGB")], [path or "inline://image_bytes"]
+                    return Image.open(io.BytesIO(bytes(bytes_data))).convert("RGB"), path or "inline://image_bytes"
                 except Exception:
-                    return images, sources
+                    pass
             if path:
-                return self.load_inline_images(path, base_dir)
-            nested_value = value.get("image") or value.get("images") or value.get("decoded_image")
-            if nested_value is not None and nested_value is not value:
-                return self.load_inline_images(nested_value, base_dir)
-            return images, sources
+                return self.resolve_image(str(path), base_dir)
         if isinstance(value, str):
-            candidate = resolve_image_candidate_path(value, base_dir)
-            if candidate is None:
-                return images, sources
-            try:
-                return [Image.open(candidate).convert("RGB")], [str(candidate)]
-            except Exception:
-                return images, sources
-        return images, sources
+            return self.resolve_image(value, base_dir)
+        return None, None
 
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         path = Path(self.spec.source_locator)
@@ -948,29 +1154,13 @@ class LocalFileConnector(BaseConnector):
             extracted = prompt_extract_record_content(row, self.spec, prompt_client)
             raw_question = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"])
-            images: List[Image.Image] = []
-            image_sources: List[str] = []
+            image = None
+            image_source = None
             for path_str in extracted["image_paths"]:
-                child_images, child_sources = self.load_inline_images(path_str, path.parent)
-                images.extend(child_images)
-                image_sources.extend(child_sources)
-            if not images:
-                image_field_candidates: List[str] = []
-                explicit_image_field = extracted.get("image_field")
-                if explicit_image_field:
-                    image_field_candidates.append(str(explicit_image_field))
-                for field_name in list(self.spec.image_fields or []) + ["image", "images", "decoded_image", "diagram"]:
-                    if field_name and field_name not in image_field_candidates:
-                        image_field_candidates.append(field_name)
-                for field_name in image_field_candidates:
-                    if field_name not in row:
-                        continue
-                    child_images, child_sources = self.load_inline_images(row.get(field_name), path.parent)
-                    if child_images:
-                        images.extend(child_images)
-                        image_sources.extend(child_sources)
-                        break
-            if not raw_question and not images:
+                image, image_source = self.resolve_image(path_str, path.parent)
+                if image is not None:
+                    break
+            if not raw_question and not image:
                 continue
             samples.append(
                 UnifiedSample(
@@ -982,23 +1172,21 @@ class LocalFileConnector(BaseConnector):
                     source_problem_id=str(row.get("id", row.get("problem_id", index))),
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
-                    images=images,
-                    image_sources=image_sources or extracted["image_paths"],
+                    image=image,
+                    image_source=image_source or (extracted["image_paths"][0] if extracted["image_paths"] else None),
                     raw_record=row,
                     metadata={
                         "row_index": index,
                         "source_file": str(path),
-                        "image_paths": extracted.get("image_paths", []),
+                        "image_paths": extracted["image_paths"],
                         "extraction_notes": extracted.get("extraction_notes", []),
-                        "question_field": extracted.get("question_field"),
-                        "answer_field": extracted.get("answer_field"),
-                        "image_field": extracted.get("image_field"),
-                        "choice_field": extracted.get("choice_field"),
                     },
                     choice_map=extracted["choice_map"],
-                    force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
+                    force_requires_image=extracted["force_requires_image"],
                 )
             )
+            if len(samples) >= self.config.sample_per_dataset:
+                break
         if self.config.sample_strategy == "random" and samples:
             rng = np.random.default_rng(self.config.shuffle_seed)
             indices = rng.permutation(len(samples)).tolist()[: self.config.sample_per_dataset]
@@ -1017,7 +1205,11 @@ class HuggingFaceConnector(BaseConnector):
         last_error = None
         for split in self.candidate_splits():
             try:
-                dataset = load_dataset(self.spec.source_locator, self.spec.hf_config_name, split=split)
+                dataset = load_dataset(
+                    self.spec.source_locator,
+                    self.spec.hf_config_name,
+                    split=split,
+                )
                 if isinstance(dataset, Dataset):
                     return dataset, split
             except Exception as exc:
@@ -1035,43 +1227,28 @@ class HuggingFaceConnector(BaseConnector):
             last_error = str(exc)
         return None, last_error
 
-    def load_images(self, value: Any) -> Tuple[List[Image.Image], List[str]]:
-        images: List[Image.Image] = []
-        sources: List[str] = []
+    def load_image(self, value: Any) -> Tuple[Optional[Image.Image], Optional[str]]:
         if is_missing_value(value):
-            return images, sources
+            return None, None
         if isinstance(value, list):
             for item in value:
-                child_images, child_sources = self.load_images(item)
-                images.extend(child_images)
-                sources.extend(child_sources)
-            return images, sources
+                image, source = self.load_image(item)
+                if image is not None:
+                    return image, source
+            return None, None
         if isinstance(value, Image.Image):
-            return [value.convert("RGB")], ["inline://pil_image"]
+            return value.convert("RGB"), "inline://pil_image"
         if isinstance(value, dict):
             path = value.get("path")
             bytes_data = value.get("bytes")
             if bytes_data:
-                try:
-                    image = Image.open(io.BytesIO(bytes_data)).convert("RGB")
-                    return [image], [path or "inline://hf_image_bytes"]
-                except Exception:
-                    return images, sources
+                image = Image.open(io.BytesIO(bytes_data)).convert("RGB")
+                return image, path or "inline://hf_image_bytes"
             if path and Path(path).exists():
-                try:
-                    return [Image.open(path).convert("RGB")], [str(path)]
-                except Exception:
-                    return images, sources
-            nested_value = value.get("image") or value.get("images") or value.get("decoded_image")
-            if nested_value is not None and nested_value is not value:
-                return self.load_images(nested_value)
-            return images, sources
+                return Image.open(path).convert("RGB"), path
         if isinstance(value, str) and not is_null_like_text(value) and Path(value).exists():
-            try:
-                return [Image.open(value).convert("RGB")], [value]
-            except Exception:
-                return images, sources
-        return images, sources
+            return Image.open(value).convert("RGB"), value
+        return None, None
 
     def resolve_answer_text(self, raw_answer: Any) -> str:
         if isinstance(raw_answer, list):
@@ -1080,9 +1257,6 @@ class HuggingFaceConnector(BaseConnector):
         return to_plain_text(raw_answer)
 
     def sample_from_mm_math_raw_files(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
-        from huggingface_hub import hf_hub_download
-        import zipfile
-
         try:
             jsonl_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.jsonl"))
             zip_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.zip"))
@@ -1108,23 +1282,20 @@ class HuggingFaceConnector(BaseConnector):
                     continue
                 extracted = prompt_extract_record_content(row, self.spec, prompt_client)
                 raw_question = extracted["raw_question_text"]
-                raw_answer = resolve_multiple_choice_answer_text(
-                    self.resolve_answer_text(row.get("solution") or extracted["raw_answer_text"]),
-                    extracted["choice_map"],
-                )
-                images: List[Image.Image] = []
-                image_sources: List[str] = []
+                raw_answer = self.resolve_answer_text(row.get("solution") or extracted["raw_answer_text"])
+                image = None
+                image_source = None
                 file_name = to_plain_text(row.get("file_name"))
                 if file_name:
                     candidate = image_root / file_name
                     if candidate.exists():
                         try:
-                            images.append(Image.open(candidate).convert("RGB"))
-                            image_sources.append(str(candidate))
+                            image = Image.open(candidate).convert("RGB")
+                            image_source = str(candidate)
                         except Exception:
-                            images = []
-                            image_sources = []
-                if not raw_question and not images:
+                            image = None
+                            image_source = None
+                if not raw_question and not image:
                     continue
                 samples.append(
                     UnifiedSample(
@@ -1136,8 +1307,8 @@ class HuggingFaceConnector(BaseConnector):
                         source_problem_id=str(row.get("id", row.get("problem_id", file_name or index))),
                         raw_question_text=raw_question,
                         raw_answer_text=raw_answer,
-                        images=images,
-                        image_sources=image_sources,
+                        image=image,
+                        image_source=image_source,
                         raw_record=row,
                         metadata={
                             "row_index": index,
@@ -1146,7 +1317,7 @@ class HuggingFaceConnector(BaseConnector):
                             "image_field": extracted.get("image_field"),
                         },
                         choice_map=extracted["choice_map"],
-                        force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
+                        force_requires_image=extracted["force_requires_image"],
                     )
                 )
                 if len(samples) >= self.config.sample_per_dataset:
@@ -1154,9 +1325,6 @@ class HuggingFaceConnector(BaseConnector):
         return "available", samples, None
 
     def sample_from_physreason_zip(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
-        from huggingface_hub import hf_hub_download
-        import zipfile
-
         zip_name = "PhysReason-mini.zip"
         if self.spec.split and self.spec.split.lower() in {"train", "full"}:
             zip_name = "PhysReason-full.zip"
@@ -1186,27 +1354,30 @@ class HuggingFaceConnector(BaseConnector):
                 continue
             qs = data.get("question_structure") if isinstance(data.get("question_structure"), dict) else {}
             context = to_plain_text(qs.get("context"))
-            sub_questions = [to_plain_text(qs.get(key)) for key in sorted(qs.keys()) if key.startswith("sub_question")]
+            sub_questions = []
+            for key in sorted(qs.keys()):
+                if key.startswith("sub_question"):
+                    sub_questions.append(to_plain_text(qs.get(key)))
             question_text = context
             if sub_questions:
                 question_text = (question_text + "\n\n" if question_text else "") + "\n".join(
-                    f"{idx + 1}. {item}" for idx, item in enumerate(sub_questions) if item
+                    f"{i+1}. {item}" for i, item in enumerate(sub_questions) if item
                 )
-            raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(data.get("answer")), {})
-            images: List[Image.Image] = []
-            image_sources: List[str] = []
+            raw_answer = self.resolve_answer_text(data.get("answer"))
+            image = None
+            image_source = None
             image_list = data.get("question_image_list") or []
             if isinstance(image_list, list):
                 for rel in image_list:
                     candidate = problem_path.parent / to_plain_text(rel)
-                    if not candidate.exists():
-                        continue
-                    try:
-                        images.append(Image.open(candidate).convert("RGB"))
-                        image_sources.append(str(candidate))
-                    except Exception:
-                        continue
-            if not question_text and not images:
+                    if candidate.exists():
+                        try:
+                            image = Image.open(candidate).convert("RGB")
+                            image_source = str(candidate)
+                            break
+                        except Exception:
+                            continue
+            if not question_text and image is None:
                 continue
             samples.append(
                 UnifiedSample(
@@ -1218,8 +1389,8 @@ class HuggingFaceConnector(BaseConnector):
                     source_problem_id=problem_path.parent.name,
                     raw_question_text=question_text,
                     raw_answer_text=raw_answer,
-                    images=images,
-                    image_sources=image_sources,
+                    image=image,
+                    image_source=image_source,
                     raw_record=data,
                     metadata={
                         "row_index": index,
@@ -1228,7 +1399,7 @@ class HuggingFaceConnector(BaseConnector):
                         "difficulty": data.get("difficulty"),
                     },
                     choice_map={},
-                    force_requires_image=bool(image_sources),
+                    force_requires_image=bool(image_list),
                 )
             )
             if len(samples) >= self.config.sample_per_dataset:
@@ -1249,39 +1420,46 @@ class HuggingFaceConnector(BaseConnector):
             dataset = dataset.shuffle(seed=self.config.shuffle_seed)
         rows = dataset.select(range(min(self.config.sample_per_dataset, len(dataset))))
         samples: List[UnifiedSample] = []
-        prompt_client = OpenAICompatibleClient(self.config.model)
         for index, row in enumerate(rows):
             row = dict(row)
-            extracted = prompt_extract_record_content(row, self.spec, prompt_client)
-            raw_question = extracted["raw_question_text"]
-            raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(extracted["raw_answer_text"]), extracted["choice_map"])
+            extracted = prompt_extract_record_content(row, self.spec, OpenAICompatibleClient(self.config.model))
+            image_source_hint = extracted["image_paths"][0] if extracted["image_paths"] else None
+
+            image = None
+            image_source = None
             image_field_candidates: List[str] = []
             explicit_image_field = extracted.get("image_field")
             if explicit_image_field:
                 image_field_candidates.append(str(explicit_image_field))
-            for field_name in list(self.spec.image_fields or []) + ["image", "images", "decoded_image", "diagram"]:
-                if field_name and field_name not in image_field_candidates:
-                    image_field_candidates.append(field_name)
-            images: List[Image.Image] = []
-            image_sources: List[str] = []
+            image_field_candidates.extend(self.spec.image_fields or [])
+            if "image" in row:
+                image_field_candidates.append("image")
+            if "decoded_image" in row:
+                image_field_candidates.append("decoded_image")
+
             seen_fields: set[str] = set()
             for field_name in image_field_candidates:
-                if not field_name or field_name in seen_fields or field_name not in row:
+                if not field_name or field_name in seen_fields:
                     continue
                 seen_fields.add(field_name)
-                child_images, child_sources = self.load_images(row.get(field_name))
-                if child_images:
-                    images.extend(child_images)
-                    image_sources.extend(child_sources)
+                if field_name not in row:
+                    continue
+                image, image_source = self.load_image(row.get(field_name))
+                if image is not None:
+                    if image_source is None:
+                        image_source = f"inline://hf_field/{field_name}"
                     break
-            if not images:
+
+            if image is None:
                 for path_str in extracted["image_paths"]:
-                    child_images, child_sources = self.load_images(path_str)
-                    if child_images:
-                        images.extend(child_images)
-                        image_sources.extend(child_sources)
+                    image, image_source = self.load_image(path_str)
+                    if image is not None:
                         break
-            if not raw_question and not images:
+            if image_source is None:
+                image_source = image_source_hint
+            raw_question = extracted["raw_question_text"]
+            raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"])
+            if not raw_question and not image:
                 continue
             samples.append(
                 UnifiedSample(
@@ -1293,20 +1471,17 @@ class HuggingFaceConnector(BaseConnector):
                     source_problem_id=str(row.get("id", row.get("problem_id", index))),
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
-                    images=images,
-                    image_sources=image_sources or extracted["image_paths"],
+                    image=image,
+                    image_source=image_source,
                     raw_record=row,
                     metadata={
                         "row_index": index,
-                        "image_paths": extracted.get("image_paths", []),
+                        "image_paths": extracted["image_paths"],
                         "extraction_notes": extracted.get("extraction_notes", []),
-                        "question_field": extracted.get("question_field"),
-                        "answer_field": extracted.get("answer_field"),
                         "image_field": extracted.get("image_field"),
-                        "choice_field": extracted.get("choice_field"),
                     },
                     choice_map=extracted["choice_map"],
-                    force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
+                    force_requires_image=extracted["force_requires_image"],
                 )
             )
         return "available", samples, None
@@ -1318,8 +1493,6 @@ class GitHubConnector(BaseConnector):
         ensure_dir(cache_root)
         target = cache_root / self.spec.key
         if target.exists() and (target / ".git").exists():
-            return target, None
-        if target.exists() and any(target.iterdir()):
             return target, None
         if target.exists():
             shutil.rmtree(target)
@@ -1365,25 +1538,37 @@ class GitHubConnector(BaseConnector):
         if isinstance(data, list):
             return [item for item in data if isinstance(item, dict)]
         if isinstance(data, dict):
-            for key in ["data", "dataset", "datasets", "records", "items", "problems", "questions", "annotations"]:
+            for key in ["data", "dataset", "datasets", "records", "items", "problems", "questions", "annotations", "example"]:
                 value = data.get(key)
                 if isinstance(value, list) and value and isinstance(value[0], dict):
-                    return value
-            if any(key in data for key in ["question", "problem", "problem_text", "compact_text", "annotat_text", "answer", "solution", "label", "choices", "options", "image", "diagram"]):
+                    records = []
+                    for item in value:
+                        if not isinstance(item, dict):
+                            continue
+                        merged = dict(item)
+                        if "keywords" in data and "keywords" not in merged:
+                            merged["keywords"] = data.get("keywords")
+                        records.append(merged)
+                    if records:
+                        return records
+            if any(
+                key in data
+                for key in [
+                    "question",
+                    "problem",
+                    "problem_text",
+                    "compact_text",
+                    "annotat_text",
+                    "answer",
+                    "solution",
+                    "label",
+                    "choices",
+                    "options",
+                    "image",
+                    "diagram",
+                ]
+            ):
                 return [data]
-            flattened_rows: List[Dict[str, Any]] = []
-            for bucket_name, value in data.items():
-                if not isinstance(value, list):
-                    continue
-                dict_rows = [item for item in value if isinstance(item, dict)]
-                if not dict_rows:
-                    continue
-                for item in dict_rows:
-                    row = dict(item)
-                    row.setdefault("category", bucket_name)
-                    flattened_rows.append(row)
-            if flattened_rows:
-                return flattened_rows
         return []
 
     def parse_records_from_jsonl(self, path: Path) -> List[Dict[str, Any]]:
@@ -1417,47 +1602,40 @@ class GitHubConnector(BaseConnector):
             return self.parse_records_from_csv(path, "\t")
         return []
 
-    def resolve_images(self, value: Any, base_dir: Path) -> Tuple[List[Image.Image], List[str]]:
-        images: List[Image.Image] = []
-        sources: List[str] = []
-        if is_missing_value(value):
-            return images, sources
+    def choose_field(self, row: Dict[str, Any], candidates: List[str], fallback_regex: str) -> Optional[str]:
+        for key in candidates:
+            if key in row and not is_missing_value(row[key]):
+                return key
+        for key, value in row.items():
+            if is_missing_value(value):
+                continue
+            if re.search(fallback_regex, key, flags=re.IGNORECASE):
+                return key
+        return None
+
+    def resolve_image(self, value: Any, base_dir: Path) -> Tuple[Optional[Image.Image], Optional[str]]:
+        if value is None:
+            return None, None
         if isinstance(value, list):
             for item in value:
-                child_images, child_sources = self.resolve_images(item, base_dir)
-                images.extend(child_images)
-                sources.extend(child_sources)
-            return images, sources
-        if isinstance(value, Image.Image):
-            return [value.convert("RGB")], ["inline://pil_image"]
+                image, source = self.resolve_image(item, base_dir)
+                if image is not None:
+                    return image, source
+            return None, None
         if isinstance(value, dict):
-            bytes_data = value.get("bytes")
-            if bytes_data:
-                try:
-                    return [Image.open(io.BytesIO(bytes(bytes_data))).convert("RGB")], [value.get("path") or "inline://image_bytes"]
-                except Exception:
-                    return images, sources
             if "path" in value:
-                return self.resolve_images(value["path"], base_dir)
-            if "image" in value:
-                return self.resolve_images(value["image"], base_dir)
-            if "url" in value:
-                return self.resolve_images(value["url"], base_dir)
-            return images, sources
+                return self.resolve_image(value["path"], base_dir)
+            return None, None
         if isinstance(value, str):
-            candidate = resolve_image_candidate_path(value, base_dir)
-            if candidate is None and not Path(value).suffix:
-                for suffix in [".png", ".jpg", ".jpeg", ".bmp", ".webp"]:
-                    candidate = resolve_image_candidate_path(str(Path(value).with_suffix(suffix)), base_dir)
-                    if candidate is not None:
-                        break
-            if candidate is None:
-                return images, sources
-            try:
-                return [Image.open(candidate).convert("RGB")], [str(candidate)]
-            except Exception:
-                return images, sources
-        return images, sources
+            candidate = Path(value)
+            if not candidate.is_absolute():
+                candidate = base_dir / candidate
+            if candidate.exists() and candidate.suffix.lower() in {".png", ".jpg", ".jpeg", ".bmp", ".webp"}:
+                try:
+                    return Image.open(candidate).convert("RGB"), str(candidate)
+                except Exception:
+                    return None, None
+        return None, None
 
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         repo_dir, error = self.ensure_repo()
@@ -1469,7 +1647,6 @@ class GitHubConnector(BaseConnector):
         samples: List[UnifiedSample] = []
         detail_errors: List[str] = []
         prompt_client = OpenAICompatibleClient(self.config.model)
-        limit = self.config.sample_per_dataset
         for file_path in files[:40]:
             try:
                 records = self.load_records(file_path)
@@ -1479,47 +1656,26 @@ class GitHubConnector(BaseConnector):
             if not records:
                 continue
             for index, row in enumerate(records):
-                row = dict(row)
                 extracted = prompt_extract_record_content(row, self.spec, prompt_client)
                 raw_question = extracted["raw_question_text"]
                 raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"])
-                images: List[Image.Image] = []
-                image_sources: List[str] = []
-                image_field_candidates: List[str] = []
-                explicit_image_field = extracted.get("image_field")
-                if explicit_image_field:
-                    image_field_candidates.append(str(explicit_image_field))
-                for field_name in list(self.spec.image_fields or []) + ["image", "images", "image_path", "img_path", "diagram", "figure", "picture"]:
-                    if field_name and field_name not in image_field_candidates:
-                        image_field_candidates.append(field_name)
-                seen_fields: set[str] = set()
-                for field_name in image_field_candidates:
-                    if not field_name or field_name in seen_fields or field_name not in row:
-                        continue
-                    seen_fields.add(field_name)
-                    child_images, child_sources = self.resolve_images(row.get(field_name), file_path.parent)
-                    if child_images:
-                        images.extend(child_images)
-                        image_sources.extend(child_sources)
+                image = None
+                image_source = None
+                for path_str in extracted["image_paths"]:
+                    image, image_source = self.resolve_image(path_str, file_path.parent)
+                    if image is not None:
                         break
-                if not images:
-                    for path_str in extracted["image_paths"]:
-                        child_images, child_sources = self.resolve_images(path_str, file_path.parent)
-                        if child_images:
-                            images.extend(child_images)
-                            image_sources.extend(child_sources)
-                            break
-                if not images and self.spec.key == "geometry3k":
+                if image is None and self.spec.key == "geometry3k":
                     for candidate_name in ["img_diagram.png", "img_problem.png", "img_diagram_point.png"]:
                         candidate = file_path.parent / candidate_name
-                        if not candidate.exists():
-                            continue
-                        try:
-                            images.append(Image.open(candidate).convert("RGB"))
-                            image_sources.append(str(candidate))
-                        except Exception:
-                            continue
-                if not raw_question and not images:
+                        if candidate.exists():
+                            try:
+                                image = Image.open(candidate).convert("RGB")
+                                image_source = str(candidate)
+                                break
+                            except Exception:
+                                continue
+                if not raw_question and not image:
                     continue
                 samples.append(
                     UnifiedSample(
@@ -1531,47 +1687,54 @@ class GitHubConnector(BaseConnector):
                         source_problem_id=str(row.get("id", row.get("problem_id", len(samples)))),
                         raw_question_text=raw_question,
                         raw_answer_text=raw_answer,
-                        images=images,
-                        image_sources=image_sources or extracted["image_paths"],
+                        image=image,
+                        image_source=image_source or (extracted["image_paths"][0] if extracted["image_paths"] else None),
                         raw_record=row,
                         metadata={
                             "data_file": str(file_path),
-                            "image_paths": extracted.get("image_paths", []),
+                            "image_paths": extracted["image_paths"],
                             "extraction_notes": extracted.get("extraction_notes", []),
-                            "question_field": extracted.get("question_field"),
-                            "answer_field": extracted.get("answer_field"),
-                            "image_field": extracted.get("image_field"),
-                            "choice_field": extracted.get("choice_field"),
                         },
                         choice_map=extracted["choice_map"],
-                        force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
+                        force_requires_image=extracted["force_requires_image"],
                     )
                 )
-                if self.config.sample_strategy != "random" and len(samples) >= limit:
+                if len(samples) >= self.config.sample_per_dataset:
                     break
-            if self.config.sample_strategy != "random" and len(samples) >= limit:
+            if len(samples) >= self.config.sample_per_dataset:
                 break
         if not samples:
             reason = "; ".join(detail_errors[:3]) if detail_errors else "No usable records extracted"
             return "source_unavailable", [], reason
         if self.config.sample_strategy == "random":
             rng = np.random.default_rng(self.config.shuffle_seed)
-            indices = rng.permutation(len(samples)).tolist()[:limit]
+            indices = rng.permutation(len(samples)).tolist()[: self.config.sample_per_dataset]
             samples = [samples[i] for i in indices]
         else:
-            samples = samples[:limit]
+            samples = samples[: self.config.sample_per_dataset]
         return "available", samples, None
+
 
 class RewriteAgent:
     def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer):
         self.client = client
         self.normalizer = normalizer
 
-    def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+    def fallback_rewrite(
+        self,
+        dataset_name: str,
+        question_text: str,
+        normalized_answer: str,
+        answer_type: str,
+        choices: Dict[str, str],
+    ) -> Dict[str, Any]:
         question_only, _ = self.normalizer.split_question_and_choices(question_text)
         question_only = self.normalizer.strip_hint(question_only)
         if not choices:
-            if answer_type == "option" and any(token in question_only.lower() for token in ["which picture", "in which picture", "which figure", "which diagram", "which graph", "shown below", "illustrated"]):
+            if answer_type == "option" and any(
+                token in question_only.lower()
+                for token in ["which picture", "in which picture", "which figure", "which diagram", "which graph", "shown below", "illustrated"]
+            ):
                 return {
                     "strategy": "drop_image_index",
                     "rationale": "Visual selection question without textual choices should be dropped.",
@@ -1639,17 +1802,31 @@ class RewriteAgent:
             "discard_reason_codes": [],
         }
 
-    def rewrite(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
-        fallback = self.fallback_rewrite(dataset_name, normalized_question_text, normalized_answer_text, answer_type, choices)
+    def rewrite(
+        self,
+        dataset_name: str,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        answer_type: str,
+        choices: Dict[str, str],
+    ) -> Dict[str, Any]:
+        fallback = self.fallback_rewrite(
+            dataset_name=dataset_name,
+            question_text=normalized_question_text,
+            normalized_answer=normalized_answer_text,
+            answer_type=answer_type,
+            choices=choices,
+        )
         if not self.client.config.enabled or not choices:
             return fallback
         system_prompt = (
             "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. "
-            "Convert multiple-choice questions into open-ended variants under strict rules. "
-            "If the question is already open-ended, keep it. "
-            "If it is a pure graph/diagram/waveform label selection question, drop it. "
-            "If it is concept discrimination whose target is carried by options, rewrite it as a blank-style open question without options. "
-            "If one option contains multiple atomic answers, split into multiple subquestions. Output strict JSON only."
+            "Your task is to convert multiple-choice questions into open-ended variants under strict rules. "
+            "Rules: 1) If the question is already open-ended, keep it. "
+            "2) If it is a pure graph/diagram/waveform/figure label selection question such as graph A/B/C/D or diagram A/B/C/D, drop it. "
+            "3) If it is a concept-discrimination question whose target was originally carried by the options, rewrite it as a blank-style open question without showing the options. "
+            "4) If one option contains multiple atomic answers, split into multiple subquestions. "
+            "5) Output strict JSON only."
         )
         user_prompt = json.dumps(
             {
@@ -1688,12 +1865,18 @@ class DecisionAgent:
     def __init__(self, client: OpenAICompatibleClient):
         self.client = client
 
-    def review_override(self, quality_components: Dict[str, Any], rewrite_report: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any], quality_flags: List[str]) -> Optional[Dict[str, Any]]:
+    def review_override(
+        self,
+        quality_components: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        alignment_record: Dict[str, Any],
+        quality_flags: List[str],
+    ) -> Optional[Dict[str, Any]]:
         if not self.client.config.enabled:
             return None
         system_prompt = (
             "You are the Cleaning Decision Agent. Read the structured signals and decide one of pass/review/reject. "
-            "Be conservative. If rewrite strategy is drop_image_index, reject. If alignment is risky, solvability is weak, or quality is borderline, review or reject. "
+            "Be conservative. If rewrite strategy is drop_image_index, reject. If quality is borderline or alignment risky, review. "
             "Return strict JSON with keys: decision, reason_codes, rationale."
         )
         user_prompt = json.dumps(
@@ -1701,7 +1884,6 @@ class DecisionAgent:
                 "quality_components": quality_components,
                 "rewrite_report": rewrite_report,
                 "alignment_record": alignment_record,
-                "solvability_report": solvability_report,
                 "quality_flags": quality_flags,
             },
             ensure_ascii=False,
@@ -1731,10 +1913,6 @@ class MultiDatasetCleaningPipeline:
         self.client = OpenAICompatibleClient(config.model)
         self.rewrite_agent = RewriteAgent(self.client, self.text_normalizer)
         self.decision_agent = DecisionAgent(self.client)
-        self.text_parser = TextContextParser()
-        self.visual_parser = VisualParser()
-        self.alignment_engine = AlignmentEngine()
-        self.solvability_checker = SolvabilityChecker()
         self.pipeline_run_id = f"run_{stable_digest([utc_now(), 'multidataset-clean'], 16)}"
         self.ingest_batch_id = f"{config.batch_id_prefix}_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
         self.output_root = Path(config.output_root)
@@ -1743,19 +1921,10 @@ class MultiDatasetCleaningPipeline:
         self.dataset_root = self.run_dir / "datasets"
         ensure_dir(self.records_dir)
         ensure_dir(self.dataset_root)
-        self.aggregate_summary: Dict[str, Any] = {"pipeline_run_id": self.pipeline_run_id, "created_at": utc_now(), "datasets": []}
-
-    def default_image_quality(self) -> Dict[str, Any]:
-        return {
-            "width": None,
-            "height": None,
-            "blur_score": 0.0,
-            "contrast_score": 0.0,
-            "noise_score": 0.0,
-            "readability_score": 0.0,
-            "crop_integrity_score": 0.0,
-            "roi_bbox": None,
-            "perceptual_hash": None,
+        self.aggregate_summary: Dict[str, Any] = {
+            "pipeline_run_id": self.pipeline_run_id,
+            "created_at": utc_now(),
+            "datasets": [],
         }
 
     def connector_for(self, spec: DatasetSpec) -> BaseConnector:
@@ -1770,7 +1939,8 @@ class MultiDatasetCleaningPipeline:
     def run(self) -> Dict[str, Any]:
         dataset_summaries = []
         for spec in self.config.datasets:
-            dataset_summaries.append(self.run_single_dataset(spec))
+            dataset_summary = self.run_single_dataset(spec)
+            dataset_summaries.append(dataset_summary)
         self.aggregate_summary["datasets"] = dataset_summaries
         write_json(self.run_dir / "summary.json", self.aggregate_summary)
         return self.aggregate_summary
@@ -1795,17 +1965,8 @@ class MultiDatasetCleaningPipeline:
             write_json(dataset_dir / "summary.json", summary)
             return summary
         bundle = {
-            "candidate_problem_records": [],
-            "raw_asset_bundles": [],
-            "candidate_pool_entries": [],
-            "clean_pool_entries": [],
-            "clean_problem_records": [],
-            "normalized_assets": [],
             "problem_main_records": [],
             "asset_records": [],
-            "text_structure_records": [],
-            "visual_structure_records": [],
-            "solvability_reports": [],
             "node_records": [],
             "cleaning_records": [],
             "reject_records": [],
@@ -1813,19 +1974,13 @@ class MultiDatasetCleaningPipeline:
             "field_audit_records": [],
             "rewrite_reports": [],
             "open_ended_problem_variants": [],
+            "asset_registry_records": [],
+            "initial_scoring_records": [],
+            "candidate_registrar_records": [],
         }
         result_mapping = {
-            "candidate_problem_record": "candidate_problem_records",
-            "raw_asset_bundle": "raw_asset_bundles",
-            "candidate_pool_entry": "candidate_pool_entries",
-            "clean_pool_entries": "clean_pool_entries",
-            "clean_problem_record": "clean_problem_records",
-            "normalized_assets": "normalized_assets",
             "problem_main_record": "problem_main_records",
             "asset_records": "asset_records",
-            "text_structure_records": "text_structure_records",
-            "visual_structure_records": "visual_structure_records",
-            "solvability_reports": "solvability_reports",
             "node_records": "node_records",
             "cleaning_records": "cleaning_records",
             "reject_records": "reject_records",
@@ -1833,6 +1988,9 @@ class MultiDatasetCleaningPipeline:
             "field_audit_records": "field_audit_records",
             "rewrite_reports": "rewrite_reports",
             "open_ended_problem_variants": "open_ended_problem_variants",
+            "asset_registry_record": "asset_registry_records",
+            "initial_scoring_record": "initial_scoring_records",
+            "candidate_registrar_record": "candidate_registrar_records",
         }
         sample_dir = dataset_dir / "samples"
         artifact_dir = dataset_dir / "artifacts"
@@ -1841,7 +1999,7 @@ class MultiDatasetCleaningPipeline:
         ensure_dir(sample_dir)
         ensure_dir(image_dir)
         ensure_dir(crop_dir)
-        for sample in samples:
+        for index, sample in enumerate(samples):
             result = self.process_sample(spec, sample, image_dir, crop_dir)
             for result_key, bundle_key in result_mapping.items():
                 value = result.get(result_key)
@@ -1858,10 +2016,15 @@ class MultiDatasetCleaningPipeline:
             write_jsonl(records_dir / f"{key}.jsonl", rows)
         decision_counts = {"pass": 0, "review": 0, "reject": 0}
         rewrite_strategy_counts: Dict[str, int] = {}
+        candidate_intake_counts: Dict[str, int] = {"keep": 0, "low_priority": 0, "reject": 0}
         for record in bundle["problem_main_records"]:
             decision_counts[record["clean_decision"]] += 1
             strategy = record.get("rewrite_strategy", "unknown")
             rewrite_strategy_counts[strategy] = rewrite_strategy_counts.get(strategy, 0) + 1
+        for record in bundle["candidate_registrar_records"]:
+            decision = to_plain_text(record.get("decision")).strip().lower()
+            if decision in candidate_intake_counts:
+                candidate_intake_counts[decision] += 1
         summary = {
             "dataset_key": spec.key,
             "dataset_name": spec.display_name,
@@ -1870,6 +2033,7 @@ class MultiDatasetCleaningPipeline:
             "detail": detail,
             "requested_samples": self.config.sample_per_dataset,
             "processed_samples": len(bundle["problem_main_records"]),
+            "candidate_intake_counts": candidate_intake_counts,
             "decision_counts": decision_counts,
             "rewrite_strategy_counts": rewrite_strategy_counts,
             "records_dir": str(records_dir.relative_to(self.run_dir)),
@@ -1877,137 +2041,252 @@ class MultiDatasetCleaningPipeline:
         write_json(dataset_dir / "summary.json", summary)
         return summary
 
-    def persist_images(self, problem_id: str, images: Sequence[Image.Image], image_dir: Path) -> Tuple[List[Path], List[bytes], List[Dict[str, Any]]]:
-        ensure_dir(image_dir)
-        image_paths: List[Path] = []
-        image_bytes_list: List[bytes] = []
-        image_qualities: List[Dict[str, Any]] = []
-        for index, image in enumerate(images, start=1):
-            image_bytes = self.image_analyzer.pil_to_png_bytes(image)
-            suffix = "primary" if index == 1 else f"aux_{index}"
-            path = image_dir / f"{problem_id}_{suffix}.png"
-            with path.open("wb") as file:
+    def process_sample(
+        self,
+        spec: DatasetSpec,
+        sample: UnifiedSample,
+        image_dir: Path,
+        crop_dir: Path,
+    ) -> Dict[str, Any]:
+        created_at = utc_now()
+        raw_question_text = sample.raw_question_text
+        raw_answer_text = "" if is_null_like_text(sample.raw_answer_text) else sample.raw_answer_text
+        normalized_question_text = self.text_normalizer.normalize_text(raw_question_text)
+        normalized_question_text = self.text_normalizer.strip_hint(normalized_question_text)
+        normalized_answer_text = self.text_normalizer.normalize_answer(raw_answer_text)
+        language = self.text_normalizer.detect_language(normalized_question_text)
+        original_answer_type = self.text_normalizer.infer_answer_type(normalized_answer_text)
+        choices = dict(sample.choice_map)
+        if not choices:
+            choices = self.text_normalizer.extract_choice_map(normalized_question_text)
+        image = sample.image
+        image_count = 1 if image is not None else 0
+        requires_image = sample.force_requires_image or self.text_normalizer.infer_requires_image(normalized_question_text, image_count)
+        text_completeness = self.text_normalizer.text_completeness_score(raw_question_text, normalized_question_text)
+        image_quality = self.image_analyzer.analyze(image) if image is not None else {
+            "width": None,
+            "height": None,
+            "blur_score": 0.0,
+            "contrast_score": 0.0,
+            "noise_score": 0.0,
+            "readability_score": 0.0,
+            "crop_integrity_score": 0.0,
+            "roi_bbox": None,
+            "perceptual_hash": None,
+        }
+        image_bytes = self.image_analyzer.pil_to_png_bytes(image) if image is not None else b""
+        problem_id = f"prob_{stable_digest([spec.key, sample.source_split, sample.source_problem_id, sha256_bytes(image_bytes) if image_bytes else raw_question_text])}"
+        image_path: Optional[Path] = None
+        if image is not None:
+            image_path = image_dir / f"{problem_id}_primary.png"
+            with image_path.open("wb") as file:
                 file.write(image_bytes)
-            image_paths.append(path)
-            image_bytes_list.append(image_bytes)
-            image_qualities.append(self.image_analyzer.analyze(image))
-        return image_paths, image_bytes_list, image_qualities
-
-    def determine_multi_solution_policy(self, spec: DatasetSpec) -> Dict[str, Any]:
-        mode = (spec.multi_solution_mode or "auto").strip().lower()
-        if mode == "auto":
-            if spec.key in {"scemqa", "seephy", "multi_physics", "emma"}:
-                mode = "conservative"
-            elif spec.key in {"geometry3k", "cmm_math", "mathvision", "mm_math", "eee_bench", "physreason", "geosqa"}:
-                mode = "aggressive"
-            elif any(token in spec.subject for token in ["生物", "化学"]):
-                mode = "conservative"
-            elif any(token in spec.subject for token in ["数学", "电气", "物理"]):
-                mode = "balanced"
-            else:
-                mode = "balanced"
-        rationale_map = {
-            "aggressive": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
-            "balanced": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
-            "conservative": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
-        }
-        return {"mode": mode, "should_push_multi_solution_agent": mode == "aggressive", "rationale": rationale_map.get(mode, rationale_map["balanced"])}
-
-    def compute_initial_collection_scores(self, normalized_question_text: str, normalized_answer_text: str, answer_type: str, requires_image: bool, text_dominant: bool, image_qualities: Sequence[Dict[str, Any]], choices: Dict[str, str], multi_solution_policy: Dict[str, Any]) -> Dict[str, Any]:
-        best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=0.0)
-        image_dependency = 0.9 if requires_image else 0.2 + 0.08 * int(bool(choices))
-        multi_solution = 0.18
-        if multi_solution_policy["mode"] == "aggressive":
-            multi_solution += 0.28
-        elif multi_solution_policy["mode"] == "balanced":
-            multi_solution += 0.14
-        if any(token in normalized_question_text.lower() for token in ["prove", "different", "all possible", "另一种", "不同", "证明"]):
-            multi_solution += 0.18
-        if len(choices) >= 4 and not text_dominant:
-            multi_solution += 0.06
-        verifiability = 0.2 + 0.42 * int(bool(normalized_answer_text))
-        if answer_type in {"numeric", "option", "short_text"}:
-            verifiability += 0.16
-        if requires_image:
-            verifiability += 0.12 * clamp(best_readability)
-        return {
-            "initial_image_dependency_score": round(clamp(image_dependency), 4),
-            "initial_multi_solution_score": round(clamp(multi_solution), 4),
-            "initial_verifiability_score": round(clamp(verifiability), 4),
-        }
-
-    def build_candidate_problem_record(self, candidate_id: str, sample: UnifiedSample, initial_scores: Dict[str, Any], requires_image: bool, text_dominant: bool, cleaning_path: str, multi_solution_policy: Dict[str, Any]) -> Dict[str, Any]:
-        return {
-            "candidate_id": candidate_id,
-            "source_dataset": sample.dataset_display_name,
-            "source_split": sample.source_split,
-            "source_problem_id": sample.source_problem_id,
-            "subject": sample.subject,
-            "raw_question_text": sample.raw_question_text,
-            "raw_answer_text": sample.raw_answer_text,
-            "has_image": bool(sample.images),
-            "image_count": len(sample.images),
+        rewrite_report = self.rewrite_agent.rewrite(
+            dataset_name=spec.display_name,
+            normalized_question_text=normalized_question_text,
+            normalized_answer_text=normalized_answer_text,
+            answer_type=original_answer_type,
+            choices=choices,
+        )
+        open_variants = self.build_open_variants(problem_id, rewrite_report)
+        alignment_record = self.build_alignment_record(problem_id, normalized_question_text, image_quality, requires_image)
+        potential_scores = self.compute_potential_scores(
+            normalized_question_text,
+            normalized_answer_text,
+            original_answer_type,
+            requires_image,
+            image_quality,
+            choices,
+            len(open_variants),
+        )
+        quality_flags = self.build_quality_flags(raw_question_text, raw_answer_text, text_completeness, image_quality, requires_image)
+        asset_integrity = {
+            "image_exists": image is not None,
+            "image_width": image_quality.get("width"),
+            "image_height": image_quality.get("height"),
+            "text_completeness_score": text_completeness,
             "requires_image": requires_image,
-            "text_dominant": text_dominant,
-            "recommended_cleaning_path": cleaning_path,
-            "initial_image_dependency_score": initial_scores["initial_image_dependency_score"],
-            "initial_multi_solution_score": initial_scores["initial_multi_solution_score"],
-            "initial_verifiability_score": initial_scores["initial_verifiability_score"],
-            "multi_solution_mining_policy": multi_solution_policy["mode"],
-            "should_push_multi_solution_agent": multi_solution_policy["should_push_multi_solution_agent"],
-            "multi_solution_policy_rationale": multi_solution_policy["rationale"],
-            "metadata": sample.metadata,
-            "created_at": utc_now(),
         }
-
-    def build_raw_asset_bundle(self, candidate_id: str, problem_id: str, sample: UnifiedSample, image_qualities: Sequence[Dict[str, Any]], initial_scores: Dict[str, Any]) -> Dict[str, Any]:
-        assets = [
-            {"asset_role": "question_text_raw", "storage_uri": f"inline://{problem_id}/question_source", "is_present": bool(sample.raw_question_text)},
-            {"asset_role": "answer_text_raw", "storage_uri": f"inline://{problem_id}/answer_source", "is_present": bool(sample.raw_answer_text)},
-        ]
-        image_total = max(len(sample.images), len(sample.image_sources), len(image_qualities))
-        for index in range(image_total):
-            quality = image_qualities[index] if index < len(image_qualities) else self.default_image_quality()
-            source = sample.image_sources[index] if index < len(sample.image_sources) else f"inline://{problem_id}/image_{index + 1}"
-            assets.append(
-                {
-                    "asset_role": "image_raw" if index == 0 else f"aux_image_raw_{index + 1}",
-                    "storage_uri": source,
-                    "is_present": index < len(sample.images),
-                    "width": quality.get("width"),
-                    "height": quality.get("height"),
-                }
+        asset_registry_record = llm_asset_registry_record(
+            problem_id,
+            normalized_question_text,
+            normalized_answer_text,
+            list(sample.metadata.get("image_paths", [])),
+            dict(sample.metadata),
+            asset_integrity,
+            self.client,
+        ) or heuristic_asset_registry_record(
+            problem_id,
+            normalized_question_text,
+            normalized_answer_text,
+            list(sample.metadata.get("image_paths", [])),
+            dict(sample.metadata),
+            image_quality,
+        )
+        initial_scoring_record = llm_initial_scoring_record(
+            problem_id,
+            normalized_question_text,
+            normalized_answer_text,
+            dict(sample.metadata),
+            asset_registry_record,
+            self.client,
+        ) or heuristic_initial_scoring_record(
+            problem_id,
+            normalized_question_text,
+            normalized_answer_text,
+            dict(sample.metadata),
+            asset_registry_record,
+            potential_scores,
+            quality_flags,
+        )
+        candidate_registrar_record = llm_candidate_registrar_record(
+            problem_id,
+            asset_registry_record,
+            initial_scoring_record,
+            self.client,
+        ) or heuristic_candidate_registrar_record(problem_id, asset_registry_record, initial_scoring_record)
+        candidate_decision = to_plain_text(candidate_registrar_record.get("decision")).strip().lower()
+        if candidate_decision == "reject":
+            gate = {
+                "decision": "reject",
+                "decision_reason_codes": ["candidate_intake_reject"],
+                "clean_score": 0.0,
+                "score_breakdown": {},
+            }
+            problem_main_record = self.build_problem_main_record(
+                problem_id=problem_id,
+                sample=sample,
+                language=language,
+                normalized_question_text=normalized_question_text,
+                normalized_answer_text=normalized_answer_text,
+                answer_type=original_answer_type,
+                image_count=image_count,
+                requires_image=requires_image,
+                potential_scores=potential_scores,
+                quality_flags=quality_flags,
+                gate=gate,
+                rewrite_report={"strategy": "candidate_reject", "rationale": "Rejected during candidate intake.", "discard_reason_codes": ["candidate_intake_reject"]},
+                open_variants=[],
+                created_at=created_at,
             )
+            reject_record = {
+                "reject_id": f"reject_{stable_digest([problem_id, self.pipeline_run_id, 'candidate_intake'])}",
+                "problem_id": problem_id,
+                "stage": "candidate_intake",
+                "reject_level": "problem",
+                "reject_reason_codes": candidate_registrar_record.get("decision_reasons", ["candidate_intake_reject"]),
+                "reject_reason_detail": "Rejected by candidate registrar before cleaning.",
+                "blocking_fields": list(asset_registry_record.get("issues", [])),
+                "evidence_refs": [],
+                "recoverable": True,
+                "recommended_action": "drop_or_revisit_assets",
+                "reviewed_by": None,
+                "created_at": utc_now(),
+            }
+            return {
+                "problem_main_record": problem_main_record,
+                "asset_records": [],
+                "node_records": [],
+                "cleaning_records": [],
+                "reject_records": [reject_record],
+                "alignment_records": [],
+                "field_audit_records": [],
+                "rewrite_reports": [],
+                "open_ended_problem_variants": [],
+                "asset_registry_record": asset_registry_record,
+                "initial_scoring_record": initial_scoring_record,
+                "candidate_registrar_record": candidate_registrar_record,
+            }
+        gate = self.clean_gate(
+            raw_question_text=raw_question_text,
+            raw_answer_text=raw_answer_text,
+            normalized_question_text=normalized_question_text,
+            normalized_answer_text=normalized_answer_text,
+            text_completeness=text_completeness,
+            requires_image=requires_image,
+            image_quality=image_quality,
+            alignment_record=alignment_record,
+            potential_scores=potential_scores,
+            quality_flags=quality_flags,
+            rewrite_report=rewrite_report,
+            open_variants=open_variants,
+        )
+        roi_asset = self.create_roi_asset(problem_id, image, image_quality, crop_dir) if image is not None else None
+        asset_records = self.build_asset_records(
+            spec=spec,
+            problem_id=problem_id,
+            sample=sample,
+            image_path=image_path,
+            image_bytes=image_bytes,
+            normalized_question_text=normalized_question_text,
+            normalized_answer_text=normalized_answer_text,
+            text_completeness=text_completeness,
+            image_quality=image_quality,
+            quality_flags=quality_flags,
+            roi_asset=roi_asset,
+            open_variants=open_variants,
+        )
+        node_records = self.build_node_records(
+            problem_id=problem_id,
+            normalized_question_text=normalized_question_text,
+            normalized_answer_text=normalized_answer_text,
+            original_answer_type=original_answer_type,
+            quality_flags=quality_flags,
+            image_quality=image_quality,
+            open_variants=open_variants,
+            gate=gate,
+        )
+        field_audits = self.build_field_audit_records(
+            problem_id=problem_id,
+            raw_question_text=raw_question_text,
+            normalized_question_text=normalized_question_text,
+            raw_answer_text=raw_answer_text,
+            normalized_answer_text=normalized_answer_text,
+            rewrite_report=rewrite_report,
+            gate=gate,
+        )
+        cleaning_record = self.build_cleaning_record(
+            problem_id=problem_id,
+            spec=spec,
+            asset_records=asset_records,
+            alignment_record=alignment_record,
+            quality_flags=quality_flags,
+            gate=gate,
+            rewrite_report=rewrite_report,
+            open_variants=open_variants,
+            text_completeness=text_completeness,
+            image_quality=image_quality,
+        )
+        reject_record = self.build_reject_record(problem_id, gate, quality_flags, rewrite_report, alignment_record)
+        problem_main_record = self.build_problem_main_record(
+            problem_id=problem_id,
+            sample=sample,
+            language=language,
+            normalized_question_text=normalized_question_text,
+            normalized_answer_text=normalized_answer_text,
+            answer_type=original_answer_type,
+            image_count=image_count,
+            requires_image=requires_image,
+            potential_scores=potential_scores,
+            quality_flags=quality_flags,
+            gate=gate,
+            rewrite_report=rewrite_report,
+            open_variants=open_variants,
+            created_at=created_at,
+        )
         return {
-            "raw_asset_bundle_id": f"bundle_{stable_digest([candidate_id, 'raw_assets'])}",
-            "candidate_id": candidate_id,
-            "source_dataset": sample.dataset_display_name,
-            "source_problem_id": sample.source_problem_id,
-            "assets": assets,
-            "core_asset_completeness": {
-                "has_question_text": bool(sample.raw_question_text),
-                "has_answer_text": bool(sample.raw_answer_text),
-                "image_count": len(sample.images),
-                "has_multiple_images": len(sample.images) > 1,
-            },
-            "initial_scores": initial_scores,
-            "created_at": utc_now(),
-        }
-
-    def build_candidate_pool_entry(self, candidate_id: str, sample: UnifiedSample, initial_scores: Dict[str, Any], cleaning_path: str, multi_solution_policy: Dict[str, Any]) -> Dict[str, Any]:
-        priority_score = round(clamp(0.4 * initial_scores["initial_image_dependency_score"] + 0.3 * initial_scores["initial_multi_solution_score"] + 0.3 * initial_scores["initial_verifiability_score"]), 4)
-        return {
-            "candidate_pool_entry_id": f"cpool_{stable_digest([candidate_id, self.pipeline_run_id])}",
-            "candidate_id": candidate_id,
-            "source_dataset": sample.dataset_display_name,
-            "source_problem_id": sample.source_problem_id,
-            "candidate_status": "ready_for_cleaning",
-            "priority_score": priority_score,
-            "priority_tier": "high" if priority_score >= 0.72 else "normal",
-            "recommended_cleaning_path": cleaning_path,
-            "multi_solution_mining_policy": multi_solution_policy["mode"],
-            "initial_scores": initial_scores,
-            "created_at": utc_now(),
+            "problem_main_record": problem_main_record,
+            "asset_records": asset_records,
+            "node_records": node_records,
+            "cleaning_records": [cleaning_record],
+            "reject_records": [reject_record] if reject_record else [],
+            "alignment_records": [alignment_record],
+            "field_audit_records": field_audits,
+            "rewrite_reports": [self.build_rewrite_record(problem_id, sample, rewrite_report, open_variants)],
+            "open_ended_problem_variants": open_variants,
+            "asset_registry_record": asset_registry_record,
+            "initial_scoring_record": initial_scoring_record,
+            "candidate_registrar_record": candidate_registrar_record,
         }
 
     def build_open_variants(self, problem_id: str, rewrite_report: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -2027,158 +2306,177 @@ class MultiDatasetCleaningPipeline:
             )
         return variants
 
-    def create_roi_assets(self, problem_id: str, images: Sequence[Image.Image], image_qualities: Sequence[Dict[str, Any]], crop_dir: Path) -> List[Dict[str, Any]]:
-        ensure_dir(crop_dir)
-        roi_assets: List[Dict[str, Any]] = []
-        for index, image in enumerate(images, start=1):
-            quality = image_qualities[index - 1]
-            bbox = quality.get("roi_bbox")
-            if image is None or not bbox:
-                continue
-            width, height = quality["width"], quality["height"]
-            if bbox["width"] * bbox["height"] >= 0.98 * width * height:
-                continue
-            x1, y1 = bbox["x"], bbox["y"]
-            x2, y2 = x1 + bbox["width"], y1 + bbox["height"]
-            crop = image.convert("RGB").crop((x1, y1, x2, y2))
-            suffix = "primary" if index == 1 else f"aux_{index}"
-            crop_path = crop_dir / f"{problem_id}_{suffix}_roi.png"
-            crop.save(crop_path, format="PNG")
-            crop_bytes = crop_path.read_bytes()
-            roi_assets.append(
-                {
-                    "asset_id": f"asset_{stable_digest([problem_id, f'region_crop_{index}'])}",
-                    "problem_id": problem_id,
-                    "asset_type": "crop",
-                    "asset_role": "region_crop" if index == 1 else f"aux_region_crop_{index}",
-                    "source_uri": None,
-                    "storage_uri": str(crop_path),
-                    "file_format": "png",
-                    "file_size_bytes": crop_path.stat().st_size,
-                    "width": crop.width,
-                    "height": crop.height,
-                    "sha256": sha256_bytes(crop_bytes),
-                    "perceptual_hash": self.image_analyzer.perceptual_hash(crop),
-                    "source_text_snapshot": None,
-                    "normalized_text_snapshot": None,
-                    "text_completeness_score": None,
-                    "blur_score": quality["blur_score"],
-                    "readability_score": quality["readability_score"],
-                    "noise_score": quality["noise_score"],
-                    "cropped_from_asset_id": f"asset_{stable_digest([problem_id, f'primary_image_{index}'])}",
-                    "roi_bbox": bbox,
-                    "asset_quality_flags": [],
-                    "is_usable": True,
-                    "discard_reason_codes": [],
-                    "created_at": utc_now(),
-                    "updated_at": utc_now(),
-                }
-            )
-        return roi_assets
+    def create_roi_asset(
+        self,
+        problem_id: str,
+        image: Optional[Image.Image],
+        image_quality: Dict[str, Any],
+        crop_dir: Path,
+    ) -> Optional[Dict[str, Any]]:
+        if image is None or not image_quality.get("roi_bbox"):
+            return None
+        bbox = image_quality["roi_bbox"]
+        width, height = image_quality["width"], image_quality["height"]
+        if bbox["width"] * bbox["height"] >= 0.98 * width * height:
+            return None
+        x1, y1 = bbox["x"], bbox["y"]
+        x2, y2 = x1 + bbox["width"], y1 + bbox["height"]
+        crop = image.convert("RGB").crop((x1, y1, x2, y2))
+        crop_path = crop_dir / f"{problem_id}_roi.png"
+        crop.save(crop_path, format="PNG")
+        crop_bytes = crop_path.read_bytes()
+        return {
+            "asset_id": f"asset_{stable_digest([problem_id, 'region_crop'])}",
+            "problem_id": problem_id,
+            "asset_type": "crop",
+            "asset_role": "region_crop",
+            "source_uri": None,
+            "storage_uri": str(crop_path),
+            "file_format": "png",
+            "file_size_bytes": crop_path.stat().st_size,
+            "width": crop.width,
+            "height": crop.height,
+            "sha256": sha256_bytes(crop_bytes),
+            "perceptual_hash": self.image_analyzer.perceptual_hash(crop),
+            "source_text_snapshot": None,
+            "normalized_text_snapshot": None,
+            "text_completeness_score": None,
+            "blur_score": image_quality["blur_score"],
+            "readability_score": image_quality["readability_score"],
+            "noise_score": image_quality["noise_score"],
+            "cropped_from_asset_id": f"asset_{stable_digest([problem_id, 'primary_image'])}",
+            "roi_bbox": bbox,
+            "asset_quality_flags": [],
+            "is_usable": True,
+            "discard_reason_codes": [],
+            "created_at": utc_now(),
+            "updated_at": utc_now(),
+        }
 
-    def compute_potential_scores(self, normalized_question_text: str, normalized_answer_text: str, answer_type: str, requires_image: bool, image_qualities: Sequence[Dict[str, Any]], choices: Dict[str, str], variant_count: int, text_structure: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any]) -> Dict[str, Any]:
-        keyword_hits = len(re.findall(r"\b(calculate|determine|find|derive|prove|which|what|if|compute|write|求|计算|判断)\b", normalized_question_text, flags=re.IGNORECASE))
+    def compute_potential_scores(
+        self,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        answer_type: str,
+        requires_image: bool,
+        image_quality: Dict[str, Any],
+        choices: Dict[str, str],
+        variant_count: int,
+    ) -> Dict[str, Any]:
+        keyword_hits = len(re.findall(r"\b(calculate|determine|find|derive|prove|which|what|if|compute|write)\b", normalized_question_text, flags=re.IGNORECASE))
         math_hits = len(re.findall(r"[=+\-*/^()]", normalized_question_text))
-        best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=0.0)
-        multimodal_strength = 0.18 + 0.42 * int(requires_image) + 0.15 * bool(text_structure.get("requires_visual_grounding")) + 0.15 * alignment_record.get("consistency_score", 0.0) + 0.10 * clamp(best_readability)
-        multi_step = 0.18 + 0.18 * clamp(keyword_hits / 4.0) + 0.18 * clamp(math_hits / 20.0) + 0.18 * clamp(len(text_structure.get("conditions", [])) / 4.0) + 0.10 * clamp(len(text_structure.get("targets", [])) / 2.0) + 0.08 * clamp(variant_count / 3.0)
-        verifiability = 0.22 + 0.20 * solvability_report.get("score_breakdown", {}).get("answer_verifiable", 0.0) + 0.16 * solvability_report.get("score_breakdown", {}).get("target_clear", 0.0) + 0.14 * solvability_report.get("score_breakdown", {}).get("rewrite_complete", 0.0) + 0.14 * alignment_record.get("consistency_score", 0.0) + 0.14 * int(bool(normalized_answer_text))
+        multimodal_strength = 0.25 + 0.45 * int(requires_image) + 0.08 * int(bool(choices)) + 0.15 * clamp(image_quality["readability_score"])
+        multi_step = 0.2 + 0.2 * clamp(keyword_hits / 4.0) + 0.25 * clamp(math_hits / 20.0) + 0.1 * clamp(variant_count / 3.0)
+        if len(normalized_question_text) > 120:
+            multi_step += 0.15
+        verifiability = 0.25
         if answer_type == "numeric":
-            verifiability += 0.08
+            verifiability += 0.35
         elif answer_type == "option":
-            verifiability += 0.06
-        review_priority = "high" if alignment_record.get("alignment_status") != "good" or solvability_report.get("decision_hint") != "pass" or len(image_qualities) > 1 or variant_count > 1 else "normal"
+            verifiability += 0.4
+        elif answer_type == "short_text":
+            verifiability += 0.2
+        verifiability += 0.15 * clamp(image_quality["readability_score"])
+        verifiability += 0.1 if normalized_answer_text else -0.2
         return {
             "requires_image": requires_image,
             "multimodal_strength_score": round(clamp(multimodal_strength), 4),
             "multi_step_score": round(clamp(multi_step), 4),
             "verifiability_score": round(clamp(verifiability), 4),
-            "review_priority": review_priority,
+            "review_priority": "high" if image_quality["readability_score"] < 0.45 or variant_count > 1 else "normal",
         }
 
-    def build_quality_flags(self, raw_question_text: str, raw_answer_text: str, text_completeness: float, image_qualities: Sequence[Dict[str, Any]], requires_image: bool) -> List[str]:
+    def build_quality_flags(
+        self,
+        raw_question_text: str,
+        raw_answer_text: str,
+        text_completeness: float,
+        image_quality: Dict[str, Any],
+        requires_image: bool,
+    ) -> List[str]:
         flags: List[str] = []
         th = self.config.thresholds
         if not raw_question_text:
             flags.append("missing_question_text")
         if not raw_answer_text:
             flags.append("missing_answer")
-        if requires_image and not image_qualities:
+        if requires_image and (image_quality["width"] is None or image_quality["height"] is None):
             flags.append("missing_core_image")
-        if requires_image and image_qualities:
-            if all(quality.get("width") is not None and quality["width"] < th.min_width for quality in image_qualities):
-                flags.append("low_resolution")
-            if all(quality.get("height") is not None and quality["height"] < th.min_height for quality in image_qualities):
-                flags.append("low_resolution")
-            if all(clamp(math.log1p(max(quality.get("blur_score", 0.0), 0.0)) / 8.0) < th.min_sharpness_score for quality in image_qualities):
-                flags.append("severe_global_blur")
-            if all(quality.get("readability_score", 0.0) < th.min_readability_score for quality in image_qualities):
-                flags.append("key_text_unreadable")
-            if all(quality.get("contrast_score", 0.0) < th.min_contrast_score for quality in image_qualities):
-                flags.append("contrast_too_low")
-            if any(quality.get("crop_integrity_score", 1.0) < 0.45 for quality in image_qualities):
-                flags.append("severe_crop_loss")
-            if len(image_qualities) > 1 and max(quality.get("readability_score", 0.0) for quality in image_qualities) - min(quality.get("readability_score", 0.0) for quality in image_qualities) > 0.35:
-                flags.append("multi_image_quality_variance")
+        if requires_image and image_quality["width"] is not None and image_quality["width"] < th.min_width:
+            flags.append("low_resolution")
+        if requires_image and image_quality["height"] is not None and image_quality["height"] < th.min_height:
+            flags.append("low_resolution")
+        sharpness_score = clamp(math.log1p(max(image_quality["blur_score"], 0.0)) / 8.0)
+        if requires_image and image_quality["width"] is not None and sharpness_score < th.min_sharpness_score:
+            flags.append("severe_global_blur")
+        if requires_image and image_quality["width"] is not None and image_quality["readability_score"] < th.min_readability_score:
+            flags.append("key_text_unreadable")
+        if requires_image and image_quality["width"] is not None and image_quality["contrast_score"] < th.min_contrast_score:
+            flags.append("contrast_too_low")
+        if requires_image and image_quality["width"] is not None and image_quality["crop_integrity_score"] < 0.45:
+            flags.append("severe_crop_loss")
         if text_completeness < th.min_text_completeness_score:
             flags.append("low_text_completeness")
         return sorted(set(flags))
 
-    def build_normalized_assets(self, problem_id: str, sample: UnifiedSample, question_norm: Dict[str, Any], answer_norm: Dict[str, Any], image_qualities: Sequence[Dict[str, Any]], text_dominant: bool, cleaning_path: str) -> Dict[str, Any]:
-        image_regions = [
-            {
-                "image_index": index + 1,
-                "source_uri": sample.image_sources[index] if index < len(sample.image_sources) else None,
-                "roi_bbox": quality.get("roi_bbox"),
-                "readability_score": quality.get("readability_score"),
-                "contrast_score": quality.get("contrast_score"),
-            }
-            for index, quality in enumerate(image_qualities)
-        ]
+    def build_alignment_record(
+        self,
+        problem_id: str,
+        normalized_question_text: str,
+        image_quality: Dict[str, Any],
+        requires_image: bool,
+    ) -> Dict[str, Any]:
+        coverage_score = 0.9 if requires_image else 1.0
+        consistency_score = 0.88 if requires_image else 1.0
+        conflict_pairs = []
+        if requires_image and image_quality["readability_score"] < 0.4:
+            coverage_score -= 0.18
+            consistency_score -= 0.2
+            conflict_pairs.append({"type": "visual_readability_risk", "detail": "image readability below threshold", "confidence": 0.85})
+        if requires_image and "figure" not in normalized_question_text.lower() and "image" not in normalized_question_text.lower():
+            consistency_score -= 0.08
+        coverage_score = round(clamp(coverage_score), 4)
+        consistency_score = round(clamp(consistency_score), 4)
+        status = "good"
+        if consistency_score < self.config.thresholds.min_alignment_consistency:
+            status = "bad"
+        elif consistency_score < self.config.thresholds.min_alignment_consistency + 0.15:
+            status = "risky"
         return {
-            "normalized_assets_id": f"nassets_{stable_digest([problem_id, self.pipeline_run_id])}",
+            "alignment_id": f"align_{stable_digest([problem_id, self.pipeline_run_id])}",
             "problem_id": problem_id,
-            "normalized_question_text": question_norm["normalized_text"],
-            "normalized_answer_text": answer_norm["normalized_text"],
-            "question_unit_normalization_map": question_norm.get("unit_normalization_map", []),
-            "answer_unit_normalization_map": answer_norm.get("unit_normalization_map", []),
-            "variable_aliases": question_norm.get("variable_aliases", []),
-            "sentence_segments": question_norm.get("sentence_segments", []),
-            "image_regions": image_regions,
-            "text_dominant": text_dominant,
-            "cleaning_path": cleaning_path,
+            "image_entity_refs": [f"asset_{stable_digest([problem_id, 'primary_image'])}"] if requires_image else [],
+            "text_span_refs": [f"asset_{stable_digest([problem_id, 'question_text_normalized'])}"],
+            "alignment_pairs": [
+                {
+                    "text_ref": f"asset_{stable_digest([problem_id, 'question_text_normalized'])}",
+                    "image_ref": f"asset_{stable_digest([problem_id, 'primary_image'])}",
+                    "relation": "global_figure_reference",
+                    "confidence": 0.88,
+                }
+            ] if requires_image else [],
+            "conflict_pairs": conflict_pairs,
+            "coverage_score": coverage_score,
+            "consistency_score": consistency_score,
+            "alignment_status": status,
             "created_at": utc_now(),
         }
 
-    def build_clean_problem_record(self, problem_id: str, sample: UnifiedSample, normalized_assets: Dict[str, Any], text_structure: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any], gate: Dict[str, Any], open_variants: Sequence[Dict[str, Any]], requires_image: bool, cleaning_path: str) -> Dict[str, Any]:
-        return {
-            "clean_problem_record_id": f"cleanprob_{stable_digest([problem_id, self.pipeline_run_id])}",
-            "problem_id": problem_id,
-            "source_dataset": sample.dataset_display_name,
-            "source_problem_id": sample.source_problem_id,
-            "normalized_question_text": normalized_assets["normalized_question_text"],
-            "normalized_answer_text": normalized_assets["normalized_answer_text"],
-            "image_count": len(sample.images),
-            "has_multiple_images": len(sample.images) > 1,
-            "requires_image": requires_image,
-            "text_dominant": normalized_assets["text_dominant"],
-            "cleaning_path": cleaning_path,
-            "question_type": text_structure.get("question_type"),
-            "open_variant_count": len(open_variants),
-            "alignment_status": alignment_record.get("alignment_status"),
-            "solvability_score": solvability_report.get("solvability_score"),
-            "solvability_path_mode": solvability_report.get("path_mode"),
-            "clean_decision": gate["decision"],
-            "decision_reason_codes": gate["decision_reason_codes"],
-            "created_at": utc_now(),
-        }
-
-    def build_alignment_record(self, problem_id: str, normalized_question_text: str, requires_image: bool, text_structure: Dict[str, Any], visual_structures: Sequence[Dict[str, Any]], image_qualities: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
-        record = self.alignment_engine.align(problem_id, requires_image, text_structure, visual_structures, image_qualities, normalized_question_text)
-        record["alignment_id"] = f"align_{stable_digest([problem_id, self.pipeline_run_id])}"
-        return record
-
-    def clean_gate(self, raw_question_text: str, raw_answer_text: str, text_completeness: float, requires_image: bool, image_qualities: Sequence[Dict[str, Any]], alignment_record: Dict[str, Any], potential_scores: Dict[str, Any], quality_flags: List[str], rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]], text_structure: Dict[str, Any], solvability_report: Dict[str, Any]) -> Dict[str, Any]:
+    def clean_gate(
+        self,
+        raw_question_text: str,
+        raw_answer_text: str,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        text_completeness: float,
+        requires_image: bool,
+        image_quality: Dict[str, Any],
+        alignment_record: Dict[str, Any],
+        potential_scores: Dict[str, Any],
+        quality_flags: List[str],
+        rewrite_report: Dict[str, Any],
+        open_variants: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
         th = self.config.thresholds
         hard_reject_codes: List[str] = []
         reason_codes: List[str] = []
@@ -2201,29 +2499,22 @@ class MultiDatasetCleaningPipeline:
             hard_reject_codes.append("text_image_misaligned")
         if strategy != "drop_image_index" and not open_variants:
             hard_reject_codes.append("rewrite_failed")
-        if not solvability_report.get("reasoning_path_exists") and solvability_report.get("decision_hint") == "reject":
-            hard_reject_codes.extend(solvability_report.get("failure_codes", []))
-        best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=1.0 if not requires_image else 0.0)
         quality_components = {
             "text_completeness": text_completeness,
-            "image_readability": best_readability if requires_image else 1.0,
+            "image_readability": image_quality["readability_score"] if requires_image else 1.0,
             "alignment_consistency": alignment_record["consistency_score"] if requires_image else 1.0,
             "multimodal_strength": potential_scores["multimodal_strength_score"],
             "verifiability": potential_scores["verifiability_score"],
-            "rewrite_quality": 0.0 if strategy == "drop_image_index" else 0.9 if open_variants else 0.2,
-            "solvability": solvability_report.get("solvability_score", 0.0),
-            "text_structure_quality": text_structure.get("parser_confidence", 0.0),
+            "rewrite_quality": 0.0 if strategy == "drop_image_index" else 0.85 if open_variants else 0.2,
         }
         clean_score = round(
             clamp(
-                0.16 * quality_components["text_completeness"]
-                + 0.16 * quality_components["image_readability"]
-                + 0.14 * quality_components["alignment_consistency"]
-                + 0.12 * quality_components["multimodal_strength"]
-                + 0.12 * quality_components["verifiability"]
+                0.2 * quality_components["text_completeness"]
+                + 0.22 * quality_components["image_readability"]
+                + 0.18 * quality_components["alignment_consistency"]
+                + 0.14 * quality_components["multimodal_strength"]
+                + 0.14 * quality_components["verifiability"]
                 + 0.12 * quality_components["rewrite_quality"]
-                + 0.12 * quality_components["solvability"]
-                + 0.06 * quality_components["text_structure_quality"]
             ),
             4,
         )
@@ -2238,10 +2529,7 @@ class MultiDatasetCleaningPipeline:
             or text_completeness < th.min_text_completeness_score
             or alignment_record["alignment_status"] == "risky"
             or "contrast_too_low" in quality_flags
-            or "multi_image_quality_variance" in quality_flags
             or rewrite_report.get("strategy") == "split_open"
-            or text_structure.get("text_structure_status") != "complete"
-            or solvability_report.get("decision_hint") != "pass"
         ):
             decision = "review"
             if clean_score < th.review_clean_score_below:
@@ -2252,18 +2540,12 @@ class MultiDatasetCleaningPipeline:
                 reason_codes.append("alignment_risky")
             if "contrast_too_low" in quality_flags:
                 reason_codes.append("contrast_too_low")
-            if "multi_image_quality_variance" in quality_flags:
-                reason_codes.append("multi_image_quality_variance")
             if rewrite_report.get("strategy") == "split_open":
                 reason_codes.append("split_variant_needs_review")
-            if text_structure.get("text_structure_status") != "complete":
-                reason_codes.append("text_structure_partial")
-            if solvability_report.get("decision_hint") != "pass":
-                reason_codes.extend(solvability_report.get("failure_codes", []))
         else:
             decision = "pass"
             reason_codes.append("meets_cleaning_requirements")
-        llm_override = self.decision_agent.review_override(quality_components, rewrite_report, alignment_record, solvability_report, quality_flags)
+        llm_override = self.decision_agent.review_override(quality_components, rewrite_report, alignment_record, quality_flags)
         if llm_override and decision == "review" and llm_override["decision"] in {"review", "reject"}:
             decision = llm_override["decision"]
             reason_codes.extend(llm_override["reason_codes"])
@@ -2276,7 +2558,21 @@ class MultiDatasetCleaningPipeline:
             "review_required": decision == "review",
         }
 
-    def build_asset_records(self, spec: DatasetSpec, problem_id: str, sample: UnifiedSample, image_paths: Sequence[Path], image_bytes_list: Sequence[bytes], normalized_question_text: str, normalized_answer_text: str, question_norm: Dict[str, Any], answer_norm: Dict[str, Any], text_completeness: float, image_qualities: Sequence[Dict[str, Any]], quality_flags: List[str], roi_assets: List[Dict[str, Any]], open_variants: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def build_asset_records(
+        self,
+        spec: DatasetSpec,
+        problem_id: str,
+        sample: UnifiedSample,
+        image_path: Optional[Path],
+        image_bytes: bytes,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        text_completeness: float,
+        image_quality: Dict[str, Any],
+        quality_flags: List[str],
+        roi_asset: Optional[Dict[str, Any]],
+        open_variants: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
         created_at = utc_now()
         assets = [
             {
@@ -2300,8 +2596,6 @@ class MultiDatasetCleaningPipeline:
                 "noise_score": None,
                 "cropped_from_asset_id": None,
                 "roi_bbox": None,
-                "unit_normalization_map": question_norm.get("unit_normalization_map", []),
-                "variable_aliases": question_norm.get("variable_aliases", []),
                 "asset_quality_flags": [],
                 "is_usable": bool(sample.raw_question_text),
                 "discard_reason_codes": [],
@@ -2329,8 +2623,6 @@ class MultiDatasetCleaningPipeline:
                 "noise_score": None,
                 "cropped_from_asset_id": None,
                 "roi_bbox": None,
-                "unit_normalization_map": question_norm.get("unit_normalization_map", []),
-                "variable_aliases": question_norm.get("variable_aliases", []),
                 "asset_quality_flags": [],
                 "is_usable": bool(normalized_question_text),
                 "discard_reason_codes": [],
@@ -2358,8 +2650,6 @@ class MultiDatasetCleaningPipeline:
                 "noise_score": None,
                 "cropped_from_asset_id": None,
                 "roi_bbox": None,
-                "unit_normalization_map": answer_norm.get("unit_normalization_map", []),
-                "variable_aliases": answer_norm.get("variable_aliases", []),
                 "asset_quality_flags": [],
                 "is_usable": bool(sample.raw_answer_text),
                 "discard_reason_codes": [],
@@ -2387,8 +2677,6 @@ class MultiDatasetCleaningPipeline:
                 "noise_score": None,
                 "cropped_from_asset_id": None,
                 "roi_bbox": None,
-                "unit_normalization_map": answer_norm.get("unit_normalization_map", []),
-                "variable_aliases": answer_norm.get("variable_aliases", []),
                 "asset_quality_flags": [],
                 "is_usable": bool(normalized_answer_text),
                 "discard_reason_codes": [],
@@ -2396,34 +2684,29 @@ class MultiDatasetCleaningPipeline:
                 "updated_at": created_at,
             },
         ]
-        for index, image_path in enumerate(image_paths, start=1):
-            quality = image_qualities[index - 1]
-            image_bytes = image_bytes_list[index - 1]
-            role = "primary_image" if index == 1 else f"aux_image_{index}"
+        if image_path is not None:
             assets.append(
                 {
-                    "asset_id": f"asset_{stable_digest([problem_id, f'primary_image_{index}'])}",
+                    "asset_id": f"asset_{stable_digest([problem_id, 'primary_image'])}",
                     "problem_id": problem_id,
                     "asset_type": "image",
-                    "asset_role": role,
-                    "source_uri": sample.image_sources[index - 1] if index - 1 < len(sample.image_sources) else None,
+                    "asset_role": "primary_image",
+                    "source_uri": sample.image_source,
                     "storage_uri": str(image_path),
                     "file_format": image_path.suffix.lstrip('.') or 'png',
                     "file_size_bytes": len(image_bytes),
-                    "width": quality["width"],
-                    "height": quality["height"],
+                    "width": image_quality["width"],
+                    "height": image_quality["height"],
                     "sha256": sha256_bytes(image_bytes),
-                    "perceptual_hash": quality["perceptual_hash"],
+                    "perceptual_hash": image_quality["perceptual_hash"],
                     "source_text_snapshot": None,
                     "normalized_text_snapshot": None,
                     "text_completeness_score": None,
-                    "blur_score": quality["blur_score"],
-                    "readability_score": quality["readability_score"],
-                    "noise_score": quality["noise_score"],
+                    "blur_score": image_quality["blur_score"],
+                    "readability_score": image_quality["readability_score"],
+                    "noise_score": image_quality["noise_score"],
                     "cropped_from_asset_id": None,
-                    "roi_bbox": quality["roi_bbox"],
-                    "unit_normalization_map": [],
-                    "variable_aliases": [],
+                    "roi_bbox": image_quality["roi_bbox"],
                     "asset_quality_flags": quality_flags,
                     "is_usable": True,
                     "discard_reason_codes": [],
@@ -2431,7 +2714,8 @@ class MultiDatasetCleaningPipeline:
                     "updated_at": created_at,
                 }
             )
-        assets.extend(roi_assets)
+        if roi_asset is not None:
+            assets.append(roi_asset)
         for variant in open_variants:
             assets.append(
                 {
@@ -2455,8 +2739,6 @@ class MultiDatasetCleaningPipeline:
                     "noise_score": None,
                     "cropped_from_asset_id": None,
                     "roi_bbox": None,
-                    "unit_normalization_map": question_norm.get("unit_normalization_map", []),
-                    "variable_aliases": question_norm.get("variable_aliases", []),
                     "asset_quality_flags": [],
                     "is_usable": True,
                     "discard_reason_codes": [],
@@ -2466,77 +2748,41 @@ class MultiDatasetCleaningPipeline:
             )
         return assets
 
-    def build_text_structure_record(self, problem_id: str, text_structure: Dict[str, Any], question_norm: Dict[str, Any]) -> Dict[str, Any]:
-        return {
-            "text_structure_id": text_structure["text_structure_id"],
-            "problem_id": problem_id,
-            "question_type": text_structure["question_type"],
-            "conditions": text_structure["conditions"],
-            "targets": text_structure["targets"],
-            "answer_slots": text_structure["answer_slots"],
-            "entity_mentions": text_structure["entity_mentions"],
-            "variable_aliases": text_structure["variable_aliases"],
-            "unit_mentions": text_structure["unit_mentions"],
-            "sentence_segments": question_norm.get("sentence_segments", []),
-            "requires_visual_grounding": text_structure["requires_visual_grounding"],
-            "text_structure_status": text_structure["text_structure_status"],
-            "parser_confidence": text_structure["parser_confidence"],
-            "created_at": text_structure["created_at"],
-        }
-
-    def build_node_records(self, problem_id: str, normalized_question_text: str, normalized_answer_text: str, original_answer_type: str, quality_flags: List[str], text_structure: Dict[str, Any], visual_structures: Sequence[Dict[str, Any]], open_variants: List[Dict[str, Any]], gate: Dict[str, Any], solvability_report: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def build_node_records(
+        self,
+        problem_id: str,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        original_answer_type: str,
+        quality_flags: List[str],
+        image_quality: Dict[str, Any],
+        open_variants: List[Dict[str, Any]],
+        gate: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
         created_at = utc_now()
         nodes: List[Dict[str, Any]] = []
-        for condition in text_structure.get("conditions", []):
+        snippets = [item.strip() for item in re.split(r"(?<=[.!?])\s+|\n+", normalized_question_text) if item.strip()]
+        for idx, snippet in enumerate(snippets[:5]):
             nodes.append(
                 {
-                    "node_id": f"node_{stable_digest([problem_id, 'condition', str(condition['segment_index'])])}",
+                    "node_id": f"node_{stable_digest([problem_id, 'text_fact', str(idx)])}",
                     "problem_id": problem_id,
                     "node_type": "text_fact",
-                    "canonical_value": condition["text"],
-                    "surface_forms": [condition["text"]],
+                    "canonical_value": snippet,
+                    "surface_forms": [snippet],
                     "origin_kind": "text",
                     "cognitive_level": "objective",
                     "source_refs": [f"asset_{stable_digest([problem_id, 'question_text_normalized'])}"],
                     "evidence_refs": [f"asset_{stable_digest([problem_id, 'question_text_normalized'])}"],
                     "upstream_node_ids": [],
-                    "value_type": "condition",
-                    "normalized_value": condition,
-                    "unit": ",".join(condition.get("unit_mentions", [])) or None,
+                    "value_type": "text",
+                    "normalized_value": {"text": snippet},
+                    "unit": None,
                     "confidence": 0.92,
                     "verifiability": "high",
                     "ambiguity_level": "low",
                     "is_direct_from_source": True,
                     "is_generated_by_system": False,
-                    "is_reviewed_by_human": False,
-                    "stage_created": "cleaning",
-                    "status": "active",
-                    "version": 1,
-                    "created_at": created_at,
-                    "updated_at": created_at,
-                }
-            )
-        for slot in text_structure.get("answer_slots", []):
-            nodes.append(
-                {
-                    "node_id": f"node_{stable_digest([problem_id, slot['slot_id'], 'target'])}",
-                    "problem_id": problem_id,
-                    "node_type": "target_slot",
-                    "canonical_value": slot["target_text"],
-                    "surface_forms": [slot["target_text"]],
-                    "origin_kind": "text_structure",
-                    "cognitive_level": "computed",
-                    "source_refs": [f"asset_{stable_digest([problem_id, 'question_text_normalized'])}"],
-                    "evidence_refs": [f"asset_{stable_digest([problem_id, 'question_text_normalized'])}"],
-                    "upstream_node_ids": [],
-                    "value_type": slot["slot_type"],
-                    "normalized_value": slot,
-                    "unit": None,
-                    "confidence": text_structure.get("parser_confidence", 0.8),
-                    "verifiability": "high" if slot.get("expected_answer") else "medium",
-                    "ambiguity_level": "low" if len(slot["target_text"]) >= 3 else "high",
-                    "is_direct_from_source": False,
-                    "is_generated_by_system": True,
                     "is_reviewed_by_human": False,
                     "stage_created": "cleaning",
                     "status": "active",
@@ -2573,36 +2819,35 @@ class MultiDatasetCleaningPipeline:
                 "updated_at": created_at,
             }
         )
-        for visual in visual_structures:
-            for entity in visual.get("visual_entities", [])[:8]:
-                nodes.append(
-                    {
-                        "node_id": f"node_{stable_digest([problem_id, visual['visual_structure_id'], entity['entity_id']])}",
-                        "problem_id": problem_id,
-                        "node_type": "perception_fact",
-                        "canonical_value": f"{visual['image_asset_role']}::{entity['entity_type']}::{entity['entity_id']}",
-                        "surface_forms": [entity['entity_id']],
-                        "origin_kind": "vision",
-                        "cognitive_level": "objective",
-                        "source_refs": [visual['visual_structure_id']],
-                        "evidence_refs": [visual['visual_structure_id']],
-                        "upstream_node_ids": [],
-                        "value_type": entity['entity_type'],
-                        "normalized_value": entity,
-                        "unit": None,
-                        "confidence": visual.get("parser_confidence", 0.7),
-                        "verifiability": "medium",
-                        "ambiguity_level": "low",
-                        "is_direct_from_source": False,
-                        "is_generated_by_system": True,
-                        "is_reviewed_by_human": False,
-                        "stage_created": "cleaning",
-                        "status": "active",
-                        "version": 1,
-                        "created_at": created_at,
-                        "updated_at": created_at,
-                    }
-                )
+        if image_quality["width"]:
+            nodes.append(
+                {
+                    "node_id": f"node_{stable_digest([problem_id, 'image_width'])}",
+                    "problem_id": problem_id,
+                    "node_type": "derived_value",
+                    "canonical_value": f"image_width={image_quality['width']} px",
+                    "surface_forms": [str(image_quality["width"])],
+                    "origin_kind": "calculation",
+                    "cognitive_level": "computed",
+                    "source_refs": [f"asset_{stable_digest([problem_id, 'primary_image'])}"],
+                    "evidence_refs": [f"asset_{stable_digest([problem_id, 'primary_image'])}"],
+                    "upstream_node_ids": [],
+                    "value_type": "number",
+                    "normalized_value": {"name": "image_width", "value": image_quality['width']},
+                    "unit": "px",
+                    "confidence": 1.0,
+                    "verifiability": "high",
+                    "ambiguity_level": "none",
+                    "is_direct_from_source": False,
+                    "is_generated_by_system": True,
+                    "is_reviewed_by_human": False,
+                    "stage_created": "cleaning",
+                    "status": "active",
+                    "version": 1,
+                    "created_at": created_at,
+                    "updated_at": created_at,
+                }
+            )
         for idx, variant in enumerate(open_variants):
             nodes.append(
                 {
@@ -2663,34 +2908,6 @@ class MultiDatasetCleaningPipeline:
             )
         nodes.append(
             {
-                "node_id": f"node_{stable_digest([problem_id, 'solvability'])}",
-                "problem_id": problem_id,
-                "node_type": "quality_signal",
-                "canonical_value": f"solvability={solvability_report['decision_hint']}",
-                "surface_forms": [solvability_report["decision_hint"]],
-                "origin_kind": "system_quality",
-                "cognitive_level": "computed",
-                "source_refs": [],
-                "evidence_refs": [],
-                "upstream_node_ids": [],
-                "value_type": "text",
-                "normalized_value": solvability_report,
-                "unit": None,
-                "confidence": 1.0,
-                "verifiability": "high",
-                "ambiguity_level": "none",
-                "is_direct_from_source": False,
-                "is_generated_by_system": True,
-                "is_reviewed_by_human": False,
-                "stage_created": "cleaning",
-                "status": "active",
-                "version": 1,
-                "created_at": created_at,
-                "updated_at": created_at,
-            }
-        )
-        nodes.append(
-            {
                 "node_id": f"node_{stable_digest([problem_id, 'clean_decision'])}",
                 "problem_id": problem_id,
                 "node_type": "quality_signal",
@@ -2719,9 +2936,18 @@ class MultiDatasetCleaningPipeline:
         )
         return nodes
 
-    def build_field_audit_records(self, problem_id: str, raw_question_text: str, normalized_question_text: str, raw_answer_text: str, normalized_answer_text: str, rewrite_report: Dict[str, Any], gate: Dict[str, Any], question_norm: Dict[str, Any], answer_norm: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def build_field_audit_records(
+        self,
+        problem_id: str,
+        raw_question_text: str,
+        normalized_question_text: str,
+        raw_answer_text: str,
+        normalized_answer_text: str,
+        rewrite_report: Dict[str, Any],
+        gate: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
         timestamp = utc_now()
-        records = [
+        return [
             {
                 "audit_id": f"audit_{stable_digest([problem_id, 'normalized_question_text'])}",
                 "problem_id": problem_id,
@@ -2771,54 +2997,14 @@ class MultiDatasetCleaningPipeline:
                 "created_at": timestamp,
             },
         ]
-        if question_norm.get("unit_normalization_map"):
-            records.append(
-                {
-                    "audit_id": f"audit_{stable_digest([problem_id, 'question_unit_map'])}",
-                    "problem_id": problem_id,
-                    "record_type": "normalized_assets",
-                    "field_name": "question_unit_normalization_map",
-                    "before_value": raw_question_text,
-                    "after_value": question_norm.get("unit_normalization_map"),
-                    "change_type": "unit_normalized",
-                    "trigger": "NormalizationAgent",
-                    "operator_type": "system",
-                    "created_at": timestamp,
-                }
-            )
-        if answer_norm.get("unit_normalization_map"):
-            records.append(
-                {
-                    "audit_id": f"audit_{stable_digest([problem_id, 'answer_unit_map'])}",
-                    "problem_id": problem_id,
-                    "record_type": "normalized_assets",
-                    "field_name": "answer_unit_normalization_map",
-                    "before_value": raw_answer_text,
-                    "after_value": answer_norm.get("unit_normalization_map"),
-                    "change_type": "unit_normalized",
-                    "trigger": "NormalizationAgent",
-                    "operator_type": "system",
-                    "created_at": timestamp,
-                }
-            )
-        if question_norm.get("variable_aliases"):
-            records.append(
-                {
-                    "audit_id": f"audit_{stable_digest([problem_id, 'variable_aliases'])}",
-                    "problem_id": problem_id,
-                    "record_type": "normalized_assets",
-                    "field_name": "variable_aliases",
-                    "before_value": None,
-                    "after_value": question_norm.get("variable_aliases"),
-                    "change_type": "variable_canonicalized",
-                    "trigger": "NormalizationAgent",
-                    "operator_type": "system",
-                    "created_at": timestamp,
-                }
-            )
-        return records
 
-    def build_rewrite_record(self, problem_id: str, sample: UnifiedSample, rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def build_rewrite_record(
+        self,
+        problem_id: str,
+        sample: UnifiedSample,
+        rewrite_report: Dict[str, Any],
+        open_variants: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
         return {
             "rewrite_id": f"rewrite_{stable_digest([problem_id, self.pipeline_run_id])}",
             "problem_id": problem_id,
@@ -2831,7 +3017,19 @@ class MultiDatasetCleaningPipeline:
             "created_at": utc_now(),
         }
 
-    def build_cleaning_record(self, problem_id: str, spec: DatasetSpec, asset_records: List[Dict[str, Any]], alignment_record: Dict[str, Any], quality_flags: List[str], gate: Dict[str, Any], rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]], question_norm: Dict[str, Any], answer_norm: Dict[str, Any], image_qualities: Sequence[Dict[str, Any]], text_structure: Dict[str, Any], solvability_report: Dict[str, Any]) -> Dict[str, Any]:
+    def build_cleaning_record(
+        self,
+        problem_id: str,
+        spec: DatasetSpec,
+        asset_records: List[Dict[str, Any]],
+        alignment_record: Dict[str, Any],
+        quality_flags: List[str],
+        gate: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        open_variants: List[Dict[str, Any]],
+        text_completeness: float,
+        image_quality: Dict[str, Any],
+    ) -> Dict[str, Any]:
         return {
             "cleaning_id": f"clean_{stable_digest([problem_id, self.pipeline_run_id])}",
             "problem_id": problem_id,
@@ -2840,40 +3038,27 @@ class MultiDatasetCleaningPipeline:
             "dataset_name": spec.display_name,
             "input_asset_ids": [asset["asset_id"] for asset in asset_records],
             "normalization_actions": [
-                {"action_type": "text_normalized", "trigger": "NormalizationAgent", "confidence": len(question_norm.get("sentence_segments", [])) / max(len(question_norm.get("sentence_segments", [])), 1), "human_confirmed": False},
+                {"action_type": "text_normalized", "trigger": "NormalizationAgent", "confidence": text_completeness, "human_confirmed": False},
                 {"action_type": "answer_canonicalized", "trigger": "NormalizationAgent", "confidence": 0.98, "human_confirmed": False},
-                {"action_type": "unit_normalized", "trigger": "NormalizationAgent", "confidence": 0.92, "human_confirmed": False, "question_unit_count": len(question_norm.get("unit_normalization_map", [])), "answer_unit_count": len(answer_norm.get("unit_normalization_map", []))},
-                {"action_type": "variable_canonicalized", "trigger": "NormalizationAgent", "confidence": 0.88, "human_confirmed": False, "variable_alias_count": len(question_norm.get("variable_aliases", []))},
                 {"action_type": "question_rewritten", "trigger": "QuestionRewriteAgent", "confidence": 0.85, "human_confirmed": False},
             ],
-            "quality_checks": [{"check": f"image_quality_{index + 1}", "result": quality, "passed": quality.get("readability_score", 0.0) >= self.config.thresholds.min_readability_score or gate["decision"] != "reject"} for index, quality in enumerate(image_qualities)] or [{"check": "image_quality", "result": None, "passed": True}],
+            "quality_checks": [
+                {
+                    "check": "image_quality",
+                    "result": image_quality,
+                    "passed": gate["decision"] != "reject",
+                }
+            ],
             "alignment_summary": {
                 "alignment_id": alignment_record["alignment_id"],
                 "coverage_score": alignment_record["coverage_score"],
                 "consistency_score": alignment_record["consistency_score"],
                 "alignment_status": alignment_record["alignment_status"],
-                "conflict_count": len(alignment_record.get("conflict_pairs", [])),
             },
-            "text_structure_summary": {
-                "text_structure_id": text_structure["text_structure_id"],
-                "question_type": text_structure["question_type"],
-                "condition_count": len(text_structure.get("conditions", [])),
-                "target_count": len(text_structure.get("targets", [])),
-                "answer_slot_count": len(text_structure.get("answer_slots", [])),
-                "status": text_structure.get("text_structure_status"),
-            },
-            "solvability_summary": {
-                "solvability_id": solvability_report["solvability_id"],
-                "solvability_score": solvability_report["solvability_score"],
-                "reasoning_path_exists": solvability_report["reasoning_path_exists"],
-                "decision_hint": solvability_report["decision_hint"],
-                "failure_codes": solvability_report.get("failure_codes", []),
-            },
-            "rewrite_summary": {"strategy": rewrite_report.get("strategy"), "variant_count": len(open_variants), "discard_reason_codes": rewrite_report.get("discard_reason_codes", [])},
-            "missing_field_summary": {
-                "missing_question_text": not bool(question_norm["normalized_text"]),
-                "missing_answer_text": not bool(answer_norm["normalized_text"]),
-                "missing_image_count": 0 if image_qualities else (1 if "missing_core_image" in quality_flags else 0),
+            "rewrite_summary": {
+                "strategy": rewrite_report.get("strategy"),
+                "variant_count": len(open_variants),
+                "discard_reason_codes": rewrite_report.get("discard_reason_codes", []),
             },
             "risk_flags": quality_flags,
             "clean_score": gate["clean_score"],
@@ -2885,7 +3070,14 @@ class MultiDatasetCleaningPipeline:
             "finished_at": utc_now(),
         }
 
-    def build_reject_record(self, problem_id: str, gate: Dict[str, Any], quality_flags: List[str], rewrite_report: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def build_reject_record(
+        self,
+        problem_id: str,
+        gate: Dict[str, Any],
+        quality_flags: List[str],
+        rewrite_report: Dict[str, Any],
+        alignment_record: Dict[str, Any],
+    ) -> Optional[Dict[str, Any]]:
         if gate["decision"] != "reject":
             return None
         return {
@@ -2896,14 +3088,30 @@ class MultiDatasetCleaningPipeline:
             "reject_reason_codes": gate["decision_reason_codes"],
             "reject_reason_detail": rewrite_report.get("rationale") or "Rejected by cleaning gate.",
             "blocking_fields": quality_flags,
-            "evidence_refs": [alignment_record["alignment_id"], solvability_report["solvability_id"]],
+            "evidence_refs": [alignment_record["alignment_id"]],
             "recoverable": False,
             "recommended_action": "drop",
             "reviewed_by": None,
             "created_at": utc_now(),
         }
 
-    def build_problem_main_record(self, problem_id: str, sample: UnifiedSample, language: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, image_count: int, requires_image: bool, potential_scores: Dict[str, Any], quality_flags: List[str], gate: Dict[str, Any], rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]], normalized_assets: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any], created_at: str) -> Dict[str, Any]:
+    def build_problem_main_record(
+        self,
+        problem_id: str,
+        sample: UnifiedSample,
+        language: str,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        answer_type: str,
+        image_count: int,
+        requires_image: bool,
+        potential_scores: Dict[str, Any],
+        quality_flags: List[str],
+        gate: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        open_variants: List[Dict[str, Any]],
+        created_at: str,
+    ) -> Dict[str, Any]:
         return {
             "problem_id": problem_id,
             "source_dataset": sample.dataset_display_name,
@@ -2919,7 +3127,7 @@ class MultiDatasetCleaningPipeline:
             "normalized_answer_text": normalized_answer_text,
             "answer_type": answer_type,
             "image_count": image_count,
-            "has_multiple_images": image_count > 1,
+            "has_multiple_images": False,
             "requires_image": requires_image,
             "multimodal_strength_score": potential_scores["multimodal_strength_score"],
             "multi_step_score": potential_scores["multi_step_score"],
@@ -2934,114 +3142,8 @@ class MultiDatasetCleaningPipeline:
             "release_reserved": {},
             "rewrite_strategy": rewrite_report.get("strategy"),
             "open_variant_count": len(open_variants),
-            "candidate_id": None,
-            "text_dominant": normalized_assets["text_dominant"],
-            "cleaning_path": normalized_assets["cleaning_path"],
-            "alignment_status": alignment_record["alignment_status"],
-            "solvability_score": solvability_report["solvability_score"],
-            "solvability_decision_hint": solvability_report["decision_hint"],
             "created_at": created_at,
             "updated_at": utc_now(),
-        }
-
-    def process_sample(self, spec: DatasetSpec, sample: UnifiedSample, image_dir: Path, crop_dir: Path) -> Dict[str, Any]:
-        created_at = utc_now()
-        raw_question_text = sample.raw_question_text
-        raw_answer_text = "" if is_null_like_text(sample.raw_answer_text) else sample.raw_answer_text
-        normalized_question_base = self.text_normalizer.strip_hint(self.text_normalizer.normalize_text(raw_question_text))
-        normalized_answer_base = self.text_normalizer.normalize_answer(raw_answer_text)
-        question_norm = normalize_structured_text(normalized_question_base)
-        answer_norm = normalize_structured_text(normalized_answer_base)
-        normalized_question_text = question_norm["normalized_text"]
-        normalized_answer_text = answer_norm["normalized_text"]
-        language = self.text_normalizer.detect_language(normalized_question_text)
-        original_answer_type = self.text_normalizer.infer_answer_type(normalized_answer_text)
-        choices = dict(sample.choice_map)
-        if not choices:
-            choices = self.text_normalizer.extract_choice_map(normalized_question_text)
-        digest_seed = [
-            spec.key,
-            sample.source_split or "unknown",
-            sample.source_problem_id or normalized_question_text or raw_question_text or "empty",
-            "||".join(sample.image_sources) if sample.image_sources else str(len(sample.images)),
-        ]
-        candidate_id = f"cand_{stable_digest(digest_seed)}"
-        problem_id = f"prob_{stable_digest(digest_seed)}"
-        image_paths, image_bytes_list, image_qualities = self.persist_images(problem_id=problem_id, images=sample.images, image_dir=image_dir)
-        image_count = len(sample.images)
-        requires_image = sample.force_requires_image or self.text_normalizer.infer_requires_image(normalized_question_text, image_count)
-        text_dominant = not requires_image
-        cleaning_path = "text_lightweight" if text_dominant else "multimodal_full"
-        text_completeness = self.text_normalizer.text_completeness_score(raw_question_text, normalized_question_text)
-        if not image_paths:
-            image_qualities = []
-        multi_solution_policy = self.determine_multi_solution_policy(spec)
-        initial_scores = self.compute_initial_collection_scores(normalized_question_text, normalized_answer_text, original_answer_type, requires_image, text_dominant, image_qualities, choices, multi_solution_policy)
-        rewrite_report = self.rewrite_agent.rewrite(spec.display_name, normalized_question_text, normalized_answer_text, original_answer_type, choices)
-        open_variants = self.build_open_variants(problem_id, rewrite_report)
-        text_structure = self.text_parser.parse(problem_id, normalized_question_text, open_variants, requires_image, question_norm, answer_norm, choices)
-        visual_structures = [] if text_dominant else self.visual_parser.parse_many(problem_id, sample.images, image_qualities, normalized_question_text)
-        alignment_record = self.build_alignment_record(problem_id, normalized_question_text, requires_image, text_structure, visual_structures, image_qualities)
-        quality_flags = self.build_quality_flags(raw_question_text, raw_answer_text, text_completeness, image_qualities, requires_image)
-        solvability_report = self.solvability_checker.evaluate(problem_id, normalized_answer_text, original_answer_type, requires_image, open_variants, text_structure, visual_structures, alignment_record, quality_flags)
-        potential_scores = self.compute_potential_scores(normalized_question_text, normalized_answer_text, original_answer_type, requires_image, image_qualities, choices, len(open_variants), text_structure, alignment_record, solvability_report)
-        gate = self.clean_gate(raw_question_text, raw_answer_text, text_completeness, requires_image, image_qualities, alignment_record, potential_scores, quality_flags, rewrite_report, open_variants, text_structure, solvability_report)
-        normalized_assets = self.build_normalized_assets(problem_id, sample, question_norm, answer_norm, image_qualities, text_dominant, cleaning_path)
-        clean_problem_record = self.build_clean_problem_record(problem_id, sample, normalized_assets, text_structure, alignment_record, solvability_report, gate, open_variants, requires_image, cleaning_path)
-        roi_assets = self.create_roi_assets(problem_id, sample.images, image_qualities, crop_dir)
-        asset_records = self.build_asset_records(spec, problem_id, sample, image_paths, image_bytes_list, normalized_question_text, normalized_answer_text, question_norm, answer_norm, text_completeness, image_qualities, quality_flags, roi_assets, open_variants)
-        node_records = self.build_node_records(problem_id, normalized_question_text, normalized_answer_text, original_answer_type, quality_flags, text_structure, visual_structures, open_variants, gate, solvability_report)
-        field_audits = self.build_field_audit_records(problem_id, raw_question_text, normalized_question_text, raw_answer_text, normalized_answer_text, rewrite_report, gate, question_norm, answer_norm)
-        cleaning_record = self.build_cleaning_record(problem_id, spec, asset_records, alignment_record, quality_flags, gate, rewrite_report, open_variants, question_norm, answer_norm, image_qualities, text_structure, solvability_report)
-        reject_record = self.build_reject_record(problem_id, gate, quality_flags, rewrite_report, alignment_record, solvability_report)
-        problem_main_record = self.build_problem_main_record(problem_id, sample, language, normalized_question_text, normalized_answer_text, original_answer_type, image_count, requires_image, potential_scores, quality_flags, gate, rewrite_report, open_variants, normalized_assets, alignment_record, solvability_report, created_at)
-        problem_main_record.update(
-            {
-                "candidate_id": candidate_id,
-                "initial_image_dependency_score": initial_scores["initial_image_dependency_score"],
-                "initial_multi_solution_score": initial_scores["initial_multi_solution_score"],
-                "initial_verifiability_score": initial_scores["initial_verifiability_score"],
-                "multi_solution_mining_policy": multi_solution_policy["mode"],
-            }
-        )
-        candidate_problem_record = self.build_candidate_problem_record(candidate_id, sample, initial_scores, requires_image, text_dominant, cleaning_path, multi_solution_policy)
-        raw_asset_bundle = self.build_raw_asset_bundle(candidate_id, problem_id, sample, image_qualities, initial_scores)
-        candidate_pool_entry = self.build_candidate_pool_entry(candidate_id, sample, initial_scores, cleaning_path, multi_solution_policy)
-        clean_pool_entry = None if gate["decision"] == "reject" else {
-            "clean_pool_entry_id": f"cleanpool_{stable_digest([problem_id, self.pipeline_run_id])}",
-            "candidate_id": candidate_id,
-            "problem_id": problem_id,
-            "dataset_name": spec.display_name,
-            "pool_status": "ready_for_annotation" if gate["decision"] == "pass" else "manual_review",
-            "clean_decision": gate["decision"],
-            "review_required": gate["review_required"],
-            "rewrite_strategy": rewrite_report.get("strategy"),
-            "open_variant_count": len(open_variants),
-            "text_dominant": text_dominant,
-            "cleaning_path": cleaning_path,
-            "created_at": utc_now(),
-        }
-        cleaning_record.update({"candidate_id": candidate_id, "cleaning_path": cleaning_path, "text_dominant": text_dominant})
-        alignment_record.update({"cleaning_path": cleaning_path, "text_dominant": text_dominant})
-        return {
-            "candidate_problem_record": candidate_problem_record,
-            "raw_asset_bundle": raw_asset_bundle,
-            "candidate_pool_entry": candidate_pool_entry,
-            "clean_pool_entries": [clean_pool_entry] if clean_pool_entry else [],
-            "clean_problem_record": clean_problem_record,
-            "normalized_assets": normalized_assets,
-            "problem_main_record": problem_main_record,
-            "asset_records": asset_records,
-            "text_structure_records": [self.build_text_structure_record(problem_id, text_structure, question_norm)],
-            "visual_structure_records": list(visual_structures),
-            "solvability_reports": [solvability_report],
-            "node_records": node_records,
-            "cleaning_records": [cleaning_record],
-            "reject_records": [reject_record] if reject_record else [],
-            "alignment_records": [alignment_record],
-            "field_audit_records": field_audits,
-            "rewrite_reports": [self.build_rewrite_record(problem_id, sample, rewrite_report, open_variants)],
-            "open_ended_problem_variants": open_variants,
         }
 
 
