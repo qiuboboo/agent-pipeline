@@ -17,6 +17,8 @@ When working here, prefer current repository files over prior chat memory or not
 
 External memory, including summaries stored in other projects such as `agent-memory`, is advisory only.
 
+Use `agent-memory` to sync only long-term, durable conclusions distilled from laptop chats so they can be reused as cross-environment context.
+
 Source-of-truth priority:
 1. Current explicit user instruction
 2. Current files in this repository
@@ -30,6 +32,7 @@ Only sync compact summaries of stable, verified information, such as:
 - stable workflow conventions
 - validated non-obvious debugging conclusions
 - concise milestone summaries
+- long-term durable conclusions from laptop chats that are useful across environments
 
 ### What must not be synced outward
 
