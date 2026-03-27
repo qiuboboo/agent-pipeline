@@ -1462,6 +1462,97 @@ class GitHubConnector(BaseConnector):
             return None, detail
         return target, None
 
+    def ensure_geometry3k_unpacked(self, repo_dir: Path) -> Tuple[Optional[Path], Optional[str]]:
+        import zipfile
+
+        geometry_root = repo_dir / "data" / "geometry3k"
+        if not geometry_root.exists():
+            return None, "Geometry3K data directory not found in repository"
+        split_names = [self.spec.split] if self.spec.split else ["test", "val", "train"]
+        split_names = [to_plain_text(name).strip().lower() for name in split_names if to_plain_text(name).strip()]
+        for split_name in split_names:
+            split_dir = geometry_root / split_name
+            if list(split_dir.glob("*/data.json")):
+                return split_dir, None
+            zip_path = geometry_root / f"{split_name}.zip"
+            if not zip_path.exists():
+                continue
+            ensure_dir(geometry_root)
+            with zipfile.ZipFile(zip_path) as zf:
+                zf.extractall(geometry_root)
+            if list(split_dir.glob("*/data.json")):
+                return split_dir, None
+        return None, f"No unpacked Geometry3K split found under {geometry_root}"
+
+    def sample_geometry3k_from_zip_repo(self, repo_dir: Path) -> Tuple[str, List[UnifiedSample], Optional[str]]:
+        split_dir, error = self.ensure_geometry3k_unpacked(repo_dir)
+        if split_dir is None:
+            return "source_unavailable", [], error or "Geometry3K unpack failed"
+        data_files = sorted(split_dir.glob("*/data.json"), key=lambda path: str(path))
+        if not data_files:
+            return "source_unavailable", [], f"No Geometry3K data.json found under {split_dir}"
+
+        samples: List[UnifiedSample] = []
+        prompt_client = OpenAICompatibleClient(self.config.model)
+        for index, file_path in enumerate(data_files):
+            try:
+                row = json.loads(file_path.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            if not isinstance(row, dict):
+                continue
+            extracted = prompt_extract_record_content(row, self.spec, prompt_client)
+            raw_question = extracted["raw_question_text"]
+            raw_answer = resolve_multiple_choice_answer_text(
+                row.get("answer") if row.get("answer") is not None else extracted["raw_answer_text"],
+                extracted["choice_map"],
+            )
+            images: List[Image.Image] = []
+            image_sources: List[str] = []
+            for candidate_name in ["img_diagram.png", "img_problem.png", "img_diagram_point.png"]:
+                candidate = file_path.parent / candidate_name
+                if not candidate.exists():
+                    continue
+                try:
+                    images.append(Image.open(candidate).convert("RGB"))
+                    image_sources.append(str(candidate))
+                    break
+                except Exception:
+                    continue
+            if not raw_question and not images:
+                continue
+            samples.append(
+                UnifiedSample(
+                    dataset_key=self.spec.key,
+                    dataset_display_name=self.spec.display_name,
+                    subject=self.spec.subject,
+                    source_dataset=self.spec.display_name,
+                    source_split=split_dir.name,
+                    source_problem_id=str(row.get("id", row.get("problem_id", file_path.parent.name))),
+                    raw_question_text=raw_question,
+                    raw_answer_text=raw_answer,
+                    images=images,
+                    image_sources=image_sources or extracted["image_paths"],
+                    raw_record=row,
+                    metadata={
+                        "data_file": str(file_path),
+                        "image_paths": extracted.get("image_paths", []),
+                        "extraction_notes": extracted.get("extraction_notes", []) + ["geometry3k_zip_repo"],
+                        "question_field": extracted.get("question_field"),
+                        "answer_field": extracted.get("answer_field"),
+                        "image_field": extracted.get("image_field"),
+                        "choice_field": extracted.get("choice_field"),
+                    },
+                    choice_map=extracted["choice_map"],
+                    force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image or images),
+                )
+            )
+            if len(samples) >= self.config.sample_per_dataset:
+                break
+        if not samples:
+            return "source_unavailable", [], f"No usable Geometry3K samples extracted from {split_dir}"
+        return "available", samples, None
+
     def discover_data_files(self, repo_dir: Path) -> List[Path]:
         scored: List[Tuple[int, Path]] = []
         for path in repo_dir.rglob("*"):
@@ -1595,6 +1686,10 @@ class GitHubConnector(BaseConnector):
         repo_dir, error = self.ensure_repo()
         if repo_dir is None:
             return "source_unavailable", [], error or "git clone failed"
+        if self.spec.key == "geometry3k":
+            status, samples, detail = self.sample_geometry3k_from_zip_repo(repo_dir)
+            if status == "available" and samples:
+                return status, samples, detail
         files = self.discover_data_files(repo_dir)
         if not files:
             return "source_unavailable", [], "No structured data files discovered in repository"
