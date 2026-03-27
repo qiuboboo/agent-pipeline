@@ -35,13 +35,13 @@ multidataset_cleaning_pipeline.py
 
 最新一次工作树改动摘要：
 
-- 今日变更记录：[`docs/run_summaries/geometry3k_ingest_ranking_fix_2026-03-27.md`](docs/run_summaries/geometry3k_ingest_ranking_fix_2026-03-27.md)
+- 今日变更记录：[`docs/run_summaries/rewrite_llm_recovery_and_runlog_2026-03-28.md`](docs/run_summaries/rewrite_llm_recovery_and_runlog_2026-03-28.md)
 - 重点包括：
-  - Geometry3K ingest 排序修复，避免 Collection 阶段误扫大型辅助 CSV
-  - Collection 末尾的 initial collection scoring 显式拆块
-  - Cleaning gate 从硬 reject 短路改为统一风险原因记录
-  - 远端模型 API key 改为优先走环境变量，且补充 chat_json 调试能力
-  - 后续 smoke 还记录了三个代表性案例：CMM-Math 的 `split_open` 误伤已修复；MM-Math 有一个应当保留为 `review` 的高视觉密度几何题样本；SCEMQA 的隐式函数图题通过弱视觉锚点补偿从 reject 提升到 pass
+  - 第一版纯文本运行日志 `run.log` 已接入，并用于 rewrite 路径排查
+  - `chat_json` 已补 caller/stage 维度调试，能区分 rewrite 阶段的请求失败
+  - 已确认 rewrite LLM 未生效的根因是 `${OPENAI_API_KEY}` 未展开 + 进程未继承真实环境变量，导致接口返回 `401 Unauthorized / 无效的令牌`
+  - 已补上 env 展开与 fail-fast 保护
+  - `cmm_math_rewrite_debug` 第二次验证已确认 rewrite LLM 恢复正常，并开始真实影响 rewrite strategy（例如 `split_open -> direct_open`）
 
 最新一次 200 样本长任务 benchmark：
 
