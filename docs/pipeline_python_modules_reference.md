@@ -13,7 +13,7 @@
 | 模块 | 主要阶段 | 角色 | 自动化类型 |
 | --- | --- | --- | --- |
 | `pipeline_setup.py` | Stage 0 Setup | 参数解析、配置覆盖、run 目录初始化 | 纯脚本 |
-| `pipeline_collection.py` | Stage 1 Collection | 样本接入、预处理、结构提取编排 | 纯脚本 |
+| `pipeline_collection.py` | Stage 1 Collection | 样本接入、预处理、初步评分、结构提取编排 | 纯脚本 |
 | `cleaning_semantics.py` | Stage 1/2 支撑 | 文本结构解析、视觉结构解析、对齐、可解性判断 | 纯脚本 |
 | `pipeline_cleaning.py` | Stage 2 Cleaning | 改写产物构建、质量 gate、清洗记录落盘对象生成 | 混合 fallback |
 | `pipeline_reporting.py` | Stage 3 Report | records 聚合、dataset/run summary 写出 | 纯脚本 |
@@ -40,8 +40,9 @@ multidataset_cleaning_pipeline.py
     │       ├── pipeline_collection.py
     │       │   - connector_for() / ingest_dataset_samples()
     │       │   - preprocess_sample()
+    │       │   - run_initial_collection_scoring()
     │       │   - extract_sample_structure()
-    │       │   => 输出 candidate / normalized / alignment / solvability 等中间结果
+    │       │   => 输出 candidate / normalized / initial scoring / alignment / solvability 等中间结果
     │       │
     │       └── cleaning_semantics.py
     │           - TextContextParser
@@ -73,6 +74,7 @@ multidataset_cleaning_pipeline.py
 
 2. **Collection** 把原始样本转成结构化中间结果
    - `pipeline_collection.py` 负责接入、预处理、提取编排
+   - Collection 末尾还有一小段显式的 **initial collection scoring**，先产出 `initial_scores`，再生成 `priority_score / priority_tier`
    - `cleaning_semantics.py` 提供文本结构解析、视觉结构解析、对齐和可解性判断
    - 这一步的结果主要还是“清洗前中间态”，还没有最终 `pass/review/reject`
 
@@ -197,11 +199,12 @@ multidataset_cleaning_pipeline.py
 
 负责显式的 Collection 阶段编排，把原始样本变成清洗前的结构化中间结果。
 
-可拆成三段理解：
+可拆成四段理解：
 
 1. **Ingestion**：选择 connector 并取样
-2. **Preprocess**：标准化文本、落图片、算初始分数
-3. **Extract**：抽取文本结构、视觉结构、对齐、可解性
+2. **Preprocess**：标准化文本、落图片、准备候选输入
+3. **Initial Collection Scoring**：计算 `initial_scores`、`priority_score`、`priority_tier`
+4. **Extract**：抽取文本结构、视觉结构、对齐、可解性
 
 **自动化类型**：纯脚本
 
@@ -223,7 +226,21 @@ multidataset_cleaning_pipeline.py
   - 作用：执行 connector 的 `sample()`，得到 `source_status / samples / detail`。
   - 类型：纯脚本
 
-#### Preprocess
+#### Preprocess / Initial Collection Scoring
+
+- `compute_collection_priority(pipeline, initial_scores)`
+  - 作用：根据 `initial_scores` 汇总 `priority_score` 与 `priority_tier`。
+  - 类型：纯脚本
+
+- `run_initial_collection_scoring(...)`
+  - 作用：把 Collection 结尾那一小段初步评分显式收拢起来。
+  - 做的事情包括：
+    - 生成 `multi_solution_policy`
+    - 计算 `initial_image_dependency_score`
+    - 计算 `initial_multi_solution_score`
+    - 计算 `initial_verifiability_score`
+    - 汇总 `priority_score` / `priority_tier`
+  - 类型：纯脚本
 
 - `build_candidate_problem_record(...)`
   - 作用：生成候选题目的基础记录，保存原始题目信息和初始评分。
@@ -234,7 +251,7 @@ multidataset_cleaning_pipeline.py
   - 类型：纯脚本
 
 - `build_candidate_pool_entry(...)`
-  - 作用：生成候选池条目，计算 `priority_score` 并标记推荐清洗路径。
+  - 作用：生成候选池条目，写入已经整理好的 `priority_score` / `priority_tier`，并标记推荐清洗路径。
   - 类型：纯脚本
 
 - `build_normalized_assets(...)`
@@ -252,7 +269,7 @@ multidataset_cleaning_pipeline.py
     - 持久化图片并计算质量分
     - 推断 `requires_image` / `text_dominant` / `cleaning_path`
     - 计算 `text_completeness`
-    - 计算初始 collection scores
+    - 调用 `run_initial_collection_scoring(...)`
     - 产出候选记录、原始资产、候选池、标准化资产
   - 类型：纯脚本
 

@@ -393,6 +393,11 @@ class PipelineConfig:
         threshold_raw = raw.get("thresholds", {})
         datasets_raw = raw.get("datasets", [])
         datasets = [DatasetSpec(**item) for item in datasets_raw] if datasets_raw else cls.default_dataset_specs()
+        model_defaults = asdict(ModelConfig())
+        model_data = {**model_defaults, **model_raw}
+        env_api_key = os.environ.get("OPENAI_API_KEY", "")
+        if env_api_key:
+            model_data["api_key"] = env_api_key
         return cls(
             sample_per_dataset=runtime.get("sample_per_dataset", 30),
             sample_strategy=runtime.get("sample_strategy", "head"),
@@ -402,7 +407,7 @@ class PipelineConfig:
             batch_id_prefix=runtime.get("batch_id_prefix", "multidataset-clean"),
             save_sample_bundle=runtime.get("save_sample_bundle", True),
             git_cache_root=runtime.get("git_cache_root", "outputs/repo_cache"),
-            model=ModelConfig(**{**asdict(ModelConfig()), **model_raw}),
+            model=ModelConfig(**model_data),
             thresholds=ThresholdConfig(**{**asdict(ThresholdConfig()), **threshold_raw}),
             datasets=datasets,
         )
@@ -441,6 +446,21 @@ class OpenAICompatibleClient:
     def chat_json(self, system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:
         if not self.config.enabled or not self.config.api_key:
             return None
+        debug = os.environ.get("PIPELINE_DEBUG_CHAT_JSON", "").strip().lower() in {"1", "true", "yes", "on"}
+        debug_log_path = os.environ.get("PIPELINE_DEBUG_CHAT_JSON_LOG", "").strip()
+
+        def emit_debug(message: str) -> None:
+            if not debug:
+                return
+            if debug_log_path:
+                path = Path(debug_log_path)
+                ensure_dir(path.parent)
+                with path.open("a", encoding="utf-8") as file:
+                    file.write(message)
+                    file.write("\n")
+                return
+            print(message, flush=True)
+
         url = self.config.base_url.rstrip("/") + "/chat/completions"
         payload = {
             "model": self.config.model,
@@ -457,23 +477,44 @@ class OpenAICompatibleClient:
             data=json.dumps(payload).encode("utf-8"),
             headers={
                 "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Connection": "close",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
                 "Authorization": f"Bearer {self.config.api_key}",
             },
             method="POST",
         )
         try:
             with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
-                body = json.loads(response.read().decode("utf-8"))
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, json.JSONDecodeError):
+                raw_body = response.read().decode("utf-8")
+                body = json.loads(raw_body)
+        except urllib.error.HTTPError as exc:
+            error_body = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else ""
+            emit_debug(
+                f"[chat_json debug] HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
+            )
+            return None
+        except urllib.error.URLError as exc:
+            emit_debug(f"[chat_json debug] URLError reason={exc}")
+            return None
+        except TimeoutError as exc:
+            emit_debug(f"[chat_json debug] TimeoutError reason={exc}")
+            return None
+        except json.JSONDecodeError as exc:
+            emit_debug(f"[chat_json debug] Response JSON decode failed error={exc}")
             return None
         choices = body.get("choices") or []
         if not choices:
+            emit_debug(f"[chat_json debug] Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
             return None
         message = choices[0].get("message") or {}
         content = message.get("content", "")
         if isinstance(content, list):
             content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
-        return extract_json_object(to_plain_text(content))
+        parsed = extract_json_object(to_plain_text(content))
+        if parsed is None:
+            emit_debug(f"[chat_json debug] Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
+        return parsed
 
 
 class TextNormalizer:
@@ -1405,9 +1446,13 @@ class GitHubConnector(BaseConnector):
                 score += 1
             if self.spec.key == "geometry3k":
                 if re.search(r"annotation_tool/data_collection/data_examples/\d+/data\.json$", rel):
-                    score += 30
+                    score += 50
                 if rel.endswith("logic_form.json"):
                     score -= 10
+                if re.search(r"(?:^|/)diagram_parser/detection/.*\.csv$", rel):
+                    score -= 30
+                if re.search(r"(?:^|/).*labels.*\.csv$", rel):
+                    score -= 20
             scored.append((score, path))
         scored.sort(key=lambda item: (-item[0], str(item[1])))
         return [path for _, path in scored]

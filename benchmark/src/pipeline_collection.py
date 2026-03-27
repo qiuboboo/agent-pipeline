@@ -33,6 +33,50 @@ def ingest_dataset_samples(pipeline: Any, spec: Any):
     return connector.sample()
 
 
+def compute_collection_priority(pipeline: Any, initial_scores: Dict[str, Any]) -> Dict[str, Any]:
+    priority_score = round(
+        pipeline.clamp(
+            0.4 * initial_scores["initial_image_dependency_score"]
+            + 0.3 * initial_scores["initial_multi_solution_score"]
+            + 0.3 * initial_scores["initial_verifiability_score"]
+        ),
+        4,
+    )
+    return {
+        "priority_score": priority_score,
+        "priority_tier": "high" if priority_score >= 0.72 else "normal",
+    }
+
+
+def run_initial_collection_scoring(
+    pipeline: Any,
+    spec: Any,
+    normalized_question_text: str,
+    normalized_answer_text: str,
+    original_answer_type: str,
+    requires_image: bool,
+    text_dominant: bool,
+    image_qualities: Any,
+    choices: Dict[str, str],
+) -> Dict[str, Any]:
+    multi_solution_policy = pipeline.determine_multi_solution_policy(spec)
+    initial_scores = pipeline.compute_initial_collection_scores(
+        normalized_question_text,
+        normalized_answer_text,
+        original_answer_type,
+        requires_image,
+        text_dominant,
+        image_qualities,
+        choices,
+        multi_solution_policy,
+    )
+    return {
+        "multi_solution_policy": multi_solution_policy,
+        "initial_scores": initial_scores,
+        "priority": compute_collection_priority(pipeline, initial_scores),
+    }
+
+
 def build_candidate_problem_record(pipeline: Any, candidate_id: str, sample: Any, initial_scores: Dict[str, Any], requires_image: bool, text_dominant: bool, cleaning_path: str, multi_solution_policy: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "candidate_id": candidate_id,
@@ -93,16 +137,15 @@ def build_raw_asset_bundle(pipeline: Any, candidate_id: str, problem_id: str, sa
     }
 
 
-def build_candidate_pool_entry(pipeline: Any, candidate_id: str, sample: Any, initial_scores: Dict[str, Any], cleaning_path: str, multi_solution_policy: Dict[str, Any]) -> Dict[str, Any]:
-    priority_score = round(pipeline.clamp(0.4 * initial_scores["initial_image_dependency_score"] + 0.3 * initial_scores["initial_multi_solution_score"] + 0.3 * initial_scores["initial_verifiability_score"]), 4)
+def build_candidate_pool_entry(pipeline: Any, candidate_id: str, sample: Any, initial_scores: Dict[str, Any], cleaning_path: str, multi_solution_policy: Dict[str, Any], priority: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "candidate_pool_entry_id": f"cpool_{pipeline.stable_digest([candidate_id, pipeline.pipeline_run_id])}",
         "candidate_id": candidate_id,
         "source_dataset": sample.dataset_display_name,
         "source_problem_id": sample.source_problem_id,
         "candidate_status": "ready_for_cleaning",
-        "priority_score": priority_score,
-        "priority_tier": "high" if priority_score >= 0.72 else "normal",
+        "priority_score": priority["priority_score"],
+        "priority_tier": priority["priority_tier"],
         "recommended_cleaning_path": cleaning_path,
         "multi_solution_mining_policy": multi_solution_policy["mode"],
         "initial_scores": initial_scores,
@@ -168,8 +211,9 @@ def preprocess_sample(pipeline: Any, spec: Any, sample: Any, image_dir: Path) ->
     text_completeness = pipeline.text_normalizer.text_completeness_score(raw_question_text, normalized_question_text)
     if not image_paths:
         image_qualities = []
-    multi_solution_policy = pipeline.determine_multi_solution_policy(spec)
-    initial_scores = pipeline.compute_initial_collection_scores(
+    scoring = run_initial_collection_scoring(
+        pipeline,
+        spec,
         normalized_question_text,
         normalized_answer_text,
         original_answer_type,
@@ -177,11 +221,12 @@ def preprocess_sample(pipeline: Any, spec: Any, sample: Any, image_dir: Path) ->
         text_dominant,
         image_qualities,
         choices,
-        multi_solution_policy,
     )
+    multi_solution_policy = scoring["multi_solution_policy"]
+    initial_scores = scoring["initial_scores"]
     candidate_problem_record = build_candidate_problem_record(pipeline, candidate_id, sample, initial_scores, requires_image, text_dominant, cleaning_path, multi_solution_policy)
     raw_asset_bundle = build_raw_asset_bundle(pipeline, candidate_id, problem_id, sample, image_qualities, initial_scores)
-    candidate_pool_entry = build_candidate_pool_entry(pipeline, candidate_id, sample, initial_scores, cleaning_path, multi_solution_policy)
+    candidate_pool_entry = build_candidate_pool_entry(pipeline, candidate_id, sample, initial_scores, cleaning_path, multi_solution_policy, scoring["priority"])
     normalized_assets = build_normalized_assets(pipeline, problem_id, sample, question_norm, answer_norm, image_qualities, text_dominant, cleaning_path)
     return {
         "created_at": created_at,

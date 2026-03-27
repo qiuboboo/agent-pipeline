@@ -594,29 +594,29 @@ def build_cleaning_record(pipeline: Any, problem_id: str, spec: Any, asset_recor
 
 def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text_completeness: float, requires_image: bool, image_qualities: List[Dict[str, Any]], alignment_record: Dict[str, Any], potential_scores: Dict[str, Any], quality_flags: List[str], rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]], text_structure: Dict[str, Any], solvability_report: Dict[str, Any]) -> Dict[str, Any]:
     th = pipeline.config.thresholds
-    hard_reject_codes: List[str] = []
+    risk_reason_codes: List[str] = []
     reason_codes: List[str] = []
     strategy = rewrite_report.get("strategy")
     if strategy == "drop_image_index":
-        hard_reject_codes.append("pure_image_index_choice")
+        risk_reason_codes.append("pure_image_index_choice")
     if not raw_answer_text:
-        hard_reject_codes.append("missing_answer")
+        risk_reason_codes.append("missing_answer")
     if not raw_question_text and not requires_image:
-        hard_reject_codes.append("missing_question_text")
+        risk_reason_codes.append("missing_question_text")
     if requires_image and "missing_core_image" in quality_flags:
-        hard_reject_codes.append("missing_core_image")
+        risk_reason_codes.append("missing_core_image")
     if requires_image and "low_resolution" in quality_flags:
-        hard_reject_codes.append("low_resolution")
+        risk_reason_codes.append("low_resolution")
     if requires_image and "severe_global_blur" in quality_flags:
-        hard_reject_codes.append("severe_blur")
+        risk_reason_codes.append("severe_blur")
     if requires_image and "key_text_unreadable" in quality_flags:
-        hard_reject_codes.append("image_unreadable")
+        risk_reason_codes.append("image_unreadable")
     if alignment_record["alignment_status"] == "bad":
-        hard_reject_codes.append("text_image_misaligned")
+        risk_reason_codes.append("text_image_misaligned")
     if strategy != "drop_image_index" and not open_variants:
-        hard_reject_codes.append("rewrite_failed")
+        risk_reason_codes.append("rewrite_failed")
     if not solvability_report.get("reasoning_path_exists") and solvability_report.get("decision_hint") == "reject":
-        hard_reject_codes.extend(solvability_report.get("failure_codes", []))
+        risk_reason_codes.extend(solvability_report.get("failure_codes", []))
     best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=1.0 if not requires_image else 0.0)
     quality_components = {
         "text_completeness": text_completeness,
@@ -641,10 +641,8 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
         ),
         4,
     )
-    if hard_reject_codes:
-        decision = "reject"
-        reason_codes.extend(sorted(set(hard_reject_codes)))
-    elif clean_score < th.reject_clean_score_below:
+    reason_codes.extend(sorted(set(risk_reason_codes)))
+    if clean_score < th.reject_clean_score_below:
         decision = "reject"
         reason_codes.append("low_clean_score")
     elif (

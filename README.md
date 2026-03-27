@@ -12,6 +12,9 @@ run_pipeline.py
 multidataset_cleaning_pipeline.py
     ├─ Setup       -> pipeline_setup.py
     ├─ Collection  -> pipeline_collection.py + cleaning_semantics.py
+    │                 ├─ ingestion / preprocess
+    │                 ├─ initial collection scoring
+    │                 └─ structure extract
     ├─ Cleaning    -> pipeline_cleaning.py
     └─ Report      -> pipeline_reporting.py
 ```
@@ -20,12 +23,22 @@ multidataset_cleaning_pipeline.py
   - 负责参数解析、配置覆盖、run 目录和上下文初始化。
 - **Collection**
   - 负责数据集接入、样本预处理、文本/视觉结构抽取、图文对齐与可解性分析。
+  - 其中结尾单独整理了一小段 **initial collection scoring**，用于计算 `initial_scores`、`priority_score`、`priority_tier`。
 - **Cleaning**
   - 负责 rewrite、质量 gate、最终 `pass / review / reject` 判定。
 - **Report**
   - 负责写出 `records/*.jsonl`、dataset summary、run summary。
 
 ## 最新运行结果
+
+最新一次工作树改动摘要：
+
+- 今日变更记录：[`docs/run_summaries/geometry3k_ingest_ranking_fix_2026-03-27.md`](docs/run_summaries/geometry3k_ingest_ranking_fix_2026-03-27.md)
+- 重点包括：
+  - Geometry3K ingest 排序修复，避免 Collection 阶段误扫大型辅助 CSV
+  - Collection 末尾的 initial collection scoring 显式拆块
+  - Cleaning gate 从硬 reject 短路改为统一风险原因记录
+  - 远端模型 API key 改为优先走环境变量，且补充 chat_json 调试能力
 
 最新一次 200 样本 benchmark：
 
@@ -111,6 +124,7 @@ agent-pipeline/
   - Setup：参数解析、配置覆盖、run 目录与上下文初始化。
 - [`benchmark/src/pipeline_collection.py`](benchmark/src/pipeline_collection.py)
   - Collection：数据集接入、样本预处理、结构化中间结果生成。
+  - 内部现在把 Collection 末尾的 **initial collection scoring** 单独整理成了一个小块：先产出 `initial_scores`，再生成 `priority_score` / `priority_tier`。
 - [`benchmark/src/cleaning_semantics.py`](benchmark/src/cleaning_semantics.py)
   - Collection/Cleaning 支撑：文本结构、视觉结构、对齐、可解性分析。
 - [`benchmark/src/pipeline_cleaning.py`](benchmark/src/pipeline_cleaning.py)

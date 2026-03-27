@@ -4,6 +4,7 @@
 
 ## 当前保留内容
 
+- `geometry3k_ingest_ranking_fix_2026-03-27.md` —— 记录 Geometry3K 在 Collection ingest 阶段因候选文件排序误判导致的 48.5 分钟瓶颈，以及 ranking 修复后的验证结果
 - `m3cot_single_before_image_path_fix.summary.json` —— 本地图片路径修复前的结果
 - `m3cot_single_after_image_path_fix.summary.json` —— 本地图片路径修复后的结果
 - `all_available_v2_candidate_reject_fastpath.summary.json` —— 验证 candidate-intake reject 快速路径
