@@ -43,55 +43,56 @@ multidataset_cleaning_pipeline.py
   - 远端模型 API key 改为优先走环境变量，且补充 chat_json 调试能力
   - 后续 smoke 还记录了三个代表性案例：CMM-Math 的 `split_open` 误伤已修复；MM-Math 有一个应当保留为 `review` 的高视觉密度几何题样本；SCEMQA 的隐式函数图题通过弱视觉锚点补偿从 reject 提升到 pass
 
-最新一次 200 样本 benchmark：
+最新一次 200 样本长任务 benchmark：
 
 - 配置：[`configs/candidate_200_remote.yaml`](configs/candidate_200_remote.yaml)
-- 输出：[`outputs/candidate_200_remote/run_6cd93f19b5ab1d93/summary.json`](outputs/candidate_200_remote/run_6cd93f19b5ab1d93/summary.json)
-- 对比记录：[`docs/candidate_200_benchmark_comparison_2026-03-26_run_6cd93f19b5ab1d93.md`](docs/candidate_200_benchmark_comparison_2026-03-26_run_6cd93f19b5ab1d93.md)
-
-### 运行时间（这是非agent提取内容版的）
-
-- 总耗时：**约 602.1 秒**（约 **10.0 分钟**）
-- 平均每个 processed sample：**约 3.01 秒 / 样本**
-- 说明：这里按本次实际启动与 summary 写出时间近似计算
+- 输出：[`outputs/candidate_200_remote_long/run_cf4370b4bf405a34/summary.json`](outputs/candidate_200_remote_long/run_cf4370b4bf405a34/summary.json)
+- 详细分析：[`docs/run_summaries/candidate_200_remote_long_analysis_2026-03-27.md`](docs/run_summaries/candidate_200_remote_long_analysis_2026-03-27.md)
 
 ### 总体结果
 
 - Requested：**200**
-- Processed：**200**
-- Pass：**61**
-- Review：**48**
-- Reject：**91**
-- **严格可用率**：**30.5%**
-- **宽松可用率**：**54.5%**
+- Processed：**190**
+- Pass：**123**
+- Review：**55**
+- Reject：**12**
 
-### 与上一轮复跑结果对比
+按本轮实际 processed=190 计算：
 
-上一轮基线见 [`docs/candidate_200_benchmark_report_rerun_2026-03-26.md`](docs/candidate_200_benchmark_report_rerun_2026-03-26.md)：
+- **Pass rate**：**64.7%**
+- **Review rate**：**28.9%**
+- **Reject rate**：**6.3%**
 
-| 指标 | 上一轮 | 本轮 | 变化 |
-|---|---:|---:|---:|
-| Pass | 63 | 61 | **-2** |
-| Review | 49 | 48 | **-1** |
-| Reject | 88 | 91 | **+3** |
-| 严格可用率 | 31.5% | 30.5% | **-1.0pt** |
-| 宽松可用率 | 56.0% | 54.5% | **-1.5pt** |
+### 简要结论
 
-### 本轮数据集表现
+- 这轮最重要的结论是：**主流程已经能稳定跑完整轮长任务**，exit code 0，远端模型调用没有再次把整轮打死。
+- 当前主要瓶颈已经从“跑不通”转成“**对高视觉依赖题偏保守**”，表现为 `review` 偏多，而不是 `reject` 大面积飙升。
+- 除 `Geometry3K` 外，其余数据集都跑满了 20 个样本。
+- `Geometry3K` 当时仍只 ingest 到 10 个 demo samples，因此本轮 `Geometry3K` 结果**不应作为正式评估结论**。
 
-表现较强：
-- `CMM-Math`：13 / 6 / 1，宽松 **95.0%**
-- `EEE-Bench`：12 / 6 / 2，宽松 **90.0%**
-- `MathVision`：11 / 3 / 6，宽松 **70.0%**
-- `Multi-Physics`：10 / 0 / 10，严格 **50.0%**
+### 本轮各数据集表现
 
-需要继续调优：
-- `Geometry3K`：0 / 0 / 20，严格/宽松都 **0.0%**
-- `SCEMQA`：2 / 0 / 18，宽松 **10.0%**
-- `SeePhys`：3 / 1 / 16，宽松 **20.0%**
-- `MM-Math`：0 / 10 / 10，严格 **0.0%**，宽松 **50.0%**
-- `PhysReason`：4 / 11 / 5，review 偏多
-- `EMMA-Physics`：6 / 11 / 3，review 偏多
+- 表现较健康：
+  - `SeePhys`：19 / 1 / 0
+  - `CMM-Math`：18 / 2 / 0
+  - `SCEMQA`：17 / 2 / 1
+  - `Multi-Physics`：17 / 2 / 1
+  - `MathVision`：16 / 4 / 0
+
+- 主要偏保守：
+  - `MM-Math`：2 / 18 / 0
+  - `PhysReason`：7 / 12 / 1
+  - `EMMA-Physics`：11 / 9 / 0
+
+- 本轮暂不采信正式结论：
+  - `Geometry3K`：2 / 1 / 7（仅处理到 10 个，受旧 ingest 入口影响）
+
+### 这轮能说明什么
+
+- **稳定性问题基本解决**：长任务可自然结束。
+- **`CMM-Math` 的 `split_open` 修复已在大样本里得到验证**。
+- **`MM-Math` / `PhysReason` / `EMMA-Physics` 是下一步最值得继续拆 review 的三块**。
+- **Geometry3K 需要使用修复后的官方 zip ingest 入口重新定点评估**。
 
 ## 项目结构
 
