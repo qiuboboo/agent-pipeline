@@ -790,6 +790,26 @@ def read_prompt(path: Path) -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
+class RunLogger:
+    def __init__(self, run_dir: Path, enabled: bool = True):
+        self.enabled = enabled
+        self.log_path = run_dir / "logs" / "run.log"
+        ensure_dir(self.log_path.parent)
+
+    def log(self, stage: str, message: str, dataset: Optional[str] = None, problem_id: Optional[str] = None) -> None:
+        if not self.enabled:
+            return
+        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+        parts = [f"[{timestamp}]", f"[{stage}]"]
+        if dataset:
+            parts.append(f"dataset={dataset}")
+        if problem_id:
+            parts.append(f"problem_id={problem_id}")
+        parts.append(message)
+        with self.log_path.open("a", encoding="utf-8") as fh:
+            fh.write(" ".join(parts) + "\n")
+
+
 def normalize_image_path_list(value: Any) -> List[str]:
     if is_missing_value(value):
         return []
@@ -1790,9 +1810,10 @@ class GitHubConnector(BaseConnector):
         return "available", samples, None
 
 class RewriteAgent:
-    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer):
+    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer, logger: Optional[RunLogger] = None):
         self.client = client
         self.normalizer = normalizer
+        self.logger = logger
 
     def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
         question_only, _ = self.normalizer.split_question_and_choices(question_text)
@@ -1866,9 +1887,26 @@ class RewriteAgent:
             "discard_reason_codes": [],
         }
 
-    def rewrite(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+    def rewrite(self, dataset_name: str, problem_id: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
         fallback = self.fallback_rewrite(dataset_name, normalized_question_text, normalized_answer_text, answer_type, choices)
-        if not self.client.config.enabled or not choices:
+        if self.logger:
+            self.logger.log(
+                "REWRITE",
+                f"entered client_enabled={self.client.config.enabled} answer_type={answer_type} choice_count={len(choices)} fallback_strategy={fallback.get('strategy')}",
+                dataset=dataset_name,
+                problem_id=problem_id,
+            )
+        if not self.client.config.enabled:
+            fallback["llm_used"] = False
+            fallback["fallback_reason"] = "rewrite client disabled"
+            if self.logger:
+                self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=rewrite client disabled", dataset=dataset_name, problem_id=problem_id)
+            return fallback
+        if not choices:
+            fallback["llm_used"] = False
+            fallback["fallback_reason"] = "choices empty"
+            if self.logger:
+                self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=choices empty", dataset=dataset_name, problem_id=problem_id)
             return fallback
         system_prompt = (
             "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. "
@@ -1893,6 +1931,10 @@ class RewriteAgent:
         )
         llm_result = self.client.chat_json(system_prompt, user_prompt)
         if not llm_result:
+            fallback["llm_used"] = False
+            fallback["fallback_reason"] = "chat_json returned empty"
+            if self.logger:
+                self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=chat_json returned empty", dataset=dataset_name, problem_id=problem_id)
             return fallback
         strategy = to_plain_text(llm_result.get("strategy")).strip() or fallback["strategy"]
         variants = llm_result.get("variants")
@@ -1901,14 +1943,21 @@ class RewriteAgent:
         if strategy == "drop_image_index":
             variants = []
         if not variants and strategy != "drop_image_index":
+            fallback["llm_used"] = False
+            fallback["fallback_reason"] = "invalid llm variants"
+            if self.logger:
+                self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=invalid llm variants", dataset=dataset_name, problem_id=problem_id)
             return fallback
-        return {
+        result = {
             "strategy": strategy,
             "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
             "variants": variants,
             "discard_reason_codes": llm_result.get("discard_reason_codes", fallback["discard_reason_codes"]),
             "llm_used": True,
         }
+        if self.logger:
+            self.logger.log("REWRITE", f"llm_result strategy={strategy} variant_count={len(variants)}", dataset=dataset_name, problem_id=problem_id)
+        return result
 
 
 class DecisionAgent:
@@ -1957,7 +2006,8 @@ class MultiDatasetCleaningPipeline:
         self.text_normalizer = TextNormalizer()
         self.image_analyzer = ImageQualityAnalyzer()
         self.client = OpenAICompatibleClient(self.config.model)
-        self.rewrite_agent = RewriteAgent(self.client, self.text_normalizer)
+        self.logger = RunLogger(setup.run_dir, enabled=True)
+        self.rewrite_agent = RewriteAgent(self.client, self.text_normalizer, logger=self.logger)
         self.decision_agent = DecisionAgent(self.client)
         self.text_parser = TextContextParser()
         self.visual_parser = VisualParser()
@@ -1984,19 +2034,29 @@ class MultiDatasetCleaningPipeline:
         self.math = math
 
     def run(self) -> Dict[str, Any]:
+        self.logger.log("RUN", f"start run_id={self.pipeline_run_id} output_root={self.output_root} sample_per_dataset={self.config.sample_per_dataset} sample_strategy={self.config.sample_strategy}")
+        self.logger.log("RUN", f"model enabled={self.config.model.enabled} model={self.config.model.model} base_url={self.config.model.base_url} api_key_present={bool(self.config.model.api_key)}")
         dataset_summaries = []
         for spec in self.config.datasets:
             dataset_summaries.append(self.run_single_dataset(spec))
         self.aggregate_summary["datasets"] = dataset_summaries
-        return write_run_summary(self.run_dir, self.aggregate_summary, write_json)
+        summary = write_run_summary(self.run_dir, self.aggregate_summary, write_json)
+        pass_count = sum(item.get("decision_counts", {}).get("pass", 0) for item in dataset_summaries)
+        review_count = sum(item.get("decision_counts", {}).get("review", 0) for item in dataset_summaries)
+        reject_count = sum(item.get("decision_counts", {}).get("reject", 0) for item in dataset_summaries)
+        processed = sum(item.get("processed_samples", 0) for item in dataset_summaries)
+        self.logger.log("RUN", f"finished run_id={self.pipeline_run_id} processed={processed} pass={pass_count} review={review_count} reject={reject_count}")
+        return summary
 
     def run_single_dataset(self, spec: DatasetSpec) -> Dict[str, Any]:
+        self.logger.log("DATASET", f"start source_kind={spec.source_kind} source_locator={spec.source_locator} split={spec.split} target_samples={self.config.sample_per_dataset}", dataset=spec.key)
         source_status, samples, detail = ingest_dataset_samples(self, spec)
         dataset_dir = self.dataset_root / spec.key
         ensure_dir(dataset_dir)
         if source_status != "available":
             summary = build_source_unavailable_summary(spec, self.config, detail)
             write_json(dataset_dir / "summary.json", summary)
+            self.logger.log("DATASET", f"finished status={source_status} detail={detail}", dataset=spec.key)
             return summary
         bundle = init_dataset_bundle()
         sample_dir = dataset_dir / "samples"
@@ -2010,7 +2070,9 @@ class MultiDatasetCleaningPipeline:
             result = self.process_sample(spec, sample, image_dir, crop_dir)
             append_sample_result(bundle, result)
             write_sample_bundle_if_needed(self.config, sample_dir, result, write_json)
-        return finalize_dataset_report(dataset_dir=dataset_dir, run_dir=self.run_dir, spec=spec, config=self.config, detail=detail, bundle=bundle, ensure_dir=ensure_dir, write_json=write_json, write_jsonl=write_jsonl)
+        summary = finalize_dataset_report(dataset_dir=dataset_dir, run_dir=self.run_dir, spec=spec, config=self.config, detail=detail, bundle=bundle, ensure_dir=ensure_dir, write_json=write_json, write_jsonl=write_jsonl)
+        self.logger.log("DATASET", f"finished processed={summary.get('processed_samples', 0)} pass={summary.get('decision_counts', {}).get('pass', 0)} review={summary.get('decision_counts', {}).get('review', 0)} reject={summary.get('decision_counts', {}).get('reject', 0)}", dataset=spec.key)
+        return summary
 
     def persist_images(self, problem_id: str, images: Sequence[Image.Image], image_dir: Path) -> Tuple[List[Path], List[bytes], List[Dict[str, Any]]]:
         ensure_dir(image_dir)

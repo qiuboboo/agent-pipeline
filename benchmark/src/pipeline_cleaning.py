@@ -853,6 +853,7 @@ def build_field_audit_records(pipeline: Any, problem_id: str, raw_question_text:
 def rewrite_sample(pipeline: Any, spec: Any, sample: Any, preprocessed: Dict[str, Any]) -> Dict[str, Any]:
     rewrite_report = pipeline.rewrite_agent.rewrite(
         spec.display_name,
+        preprocessed["problem_id"],
         preprocessed["normalized_question_text"],
         preprocessed["normalized_answer_text"],
         preprocessed["original_answer_type"],
@@ -908,6 +909,13 @@ def finalize_cleaning_sample(pipeline: Any, spec: Any, sample: Any, crop_dir: Pa
         preprocessed["requires_image"],
         preprocessed["cleaning_path"],
     )
+    if getattr(pipeline, "logger", None):
+        pipeline.logger.log(
+            "DECISION",
+            f"rewrite={rewritten['rewrite_report'].get('strategy')} alignment={extracted['alignment_record'].get('alignment_status')} final={gate.get('decision')} reasons={','.join(gate.get('decision_reason_codes', []))}",
+            dataset=spec.key,
+            problem_id=preprocessed["problem_id"],
+        )
     roi_assets = create_roi_assets(pipeline, preprocessed["problem_id"], sample.images, preprocessed["image_qualities"], crop_dir)
     asset_records = build_asset_records(
         pipeline,
