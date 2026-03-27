@@ -51,6 +51,8 @@ multidataset_cleaning_pipeline.py
 
 ### 总体结果
 
+- 总耗时：**约 9311 秒**（约 **155.2 分钟**，约 **2 小时 35 分**）
+- 平均每个 processed sample：**约 49.0 秒 / 样本**
 - Requested：**200**
 - Processed：**190**
 - Pass：**123**

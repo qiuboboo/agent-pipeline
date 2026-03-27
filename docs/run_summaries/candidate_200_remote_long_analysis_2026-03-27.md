@@ -31,6 +31,15 @@
 
 ## Aggregate result
 
+### Runtime
+
+- Total runtime: **9311 seconds**
+- Approx. **155.2 minutes**
+- Approx. **2 hours 35 minutes**
+- Average per processed sample (`190` samples): **49.0 seconds / sample**
+
+说明：本次长任务的精确起点可从 run summary 中读取 `created_at = 2026-03-27T08:50:34Z`；结束时间结合运行完成时的进程观测计算，整体耗时约 **9311 秒**。这里采用本轮运行过程中的实际长任务监测结果作为耗时口径。
+
 ### Requested / processed
 
 - Requested: **200**
