@@ -96,6 +96,36 @@ multidataset_cleaning_pipeline.py
   - review 边界可选走 agent override
 - **Report**：纯脚本
 
+### 哪部分最需要 Agent
+
+如果从资源投入角度看，**最值得放 Agent 的重点在 Stage 2: Cleaning**，而不是 Setup / Report：
+
+- **Stage 0 Setup**
+  - 纯脚本，不需要 Agent
+- **Stage 1 Collection**
+  - 以规则、解析、IO、预处理为主
+  - 主要依赖脚本，不是 Agent 消耗重点
+- **Stage 2 Cleaning**
+  - **Agent-heavy 核心区域**
+  - 重点包括：
+    - prompt extraction（当启用远端模型时）
+    - rewrite
+    - solvability / reasoning support
+    - review 边界上的可选 agent override
+  - 也是最可能消耗远端模型调用、最需要调 prompt/策略的一层
+- **Stage 3 Report**
+  - 纯汇总与落盘，不需要 Agent
+
+可把当前主线简化理解为：
+
+```text
+[Collection: mostly deterministic] 
+        ↓
+[Cleaning: most agent-heavy]
+        ↓
+[Report: deterministic serialization]
+```
+
 ### `multidataset_cleaning_pipeline.py` 在图里的位置
 
 它本身不是单独一个业务阶段，而是：
