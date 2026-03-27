@@ -447,6 +447,47 @@ class VisualParser:
 class AlignmentEngine:
     """对齐文本结构与视觉结构。"""
 
+    IMPLICIT_FUNCTION_GRAPH_PATTERNS = [
+        re.compile(pattern, flags=re.IGNORECASE)
+        for pattern in [
+            r"continuous but not differentiable",
+            r"not differentiable",
+            r"differentiable",
+            r"slope",
+            r"maximum|minimum",
+            r"graph of",
+            r"function",
+            r"value of x",
+        ]
+    ]
+
+    def infer_implicit_visual_mentions(self, normalized_question_text: str, text_structure: Dict[str, Any]) -> List[Dict[str, Any]]:
+        if VISUAL_REFERENCE_PATTERN.search(normalized_question_text):
+            return []
+        if not text_structure.get("requires_visual_grounding"):
+            return []
+        lowered = normalized_question_text.lower()
+        if not any(pattern.search(lowered) for pattern in self.IMPLICIT_FUNCTION_GRAPH_PATTERNS):
+            return []
+        hints = [
+            ("graph", "figure"),
+            ("curve", "curve"),
+            ("point", "point"),
+            ("x-value", "label"),
+            ("non-differentiable point", "point"),
+        ]
+        mentions: List[Dict[str, Any]] = []
+        for mention, category in hints:
+            mentions.append(
+                {
+                    "mention": mention,
+                    "entity_category": category,
+                    "requires_visual_grounding": True,
+                    "implicit_visual_hint": True,
+                }
+            )
+        return mentions
+
     def align(
         self,
         problem_id: str,
@@ -461,6 +502,10 @@ class AlignmentEngine:
         text_refs = [f"asset_{problem_id}_question_text_normalized"]
         image_entity_refs: List[str] = []
         referenced_visual_mentions = [item for item in text_structure.get("entity_mentions", []) if item.get("requires_visual_grounding")]
+        implicit_visual_mentions = self.infer_implicit_visual_mentions(normalized_question_text, text_structure)
+        if implicit_visual_mentions:
+            referenced_visual_mentions = referenced_visual_mentions + implicit_visual_mentions
+            text_refs.extend([f"implicit_visual_hint::{item['mention']}" for item in implicit_visual_mentions])
         slot_visual_mentions = [item for item in text_structure.get("answer_slots", []) if item.get("requires_visual_grounding")]
         expected_visual_anchors = len(referenced_visual_mentions) + len(slot_visual_mentions)
         available_entities = 0
@@ -549,6 +594,8 @@ class AlignmentEngine:
                     "confidence": 0.61,
                 }
             )
+        if implicit_visual_mentions and alignment_pairs:
+            conflict_pairs = [item for item in conflict_pairs if item.get("type") != "implicit_visual_dependency"]
         matched_anchor_count = len(alignment_pairs)
         expected_count = expected_visual_anchors if requires_image else 1
         coverage_score = 1.0
