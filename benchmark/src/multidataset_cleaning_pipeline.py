@@ -654,9 +654,36 @@ class TextNormalizer:
     def is_compound_answer_question(self, question_text: str, choices: Dict[str, str]) -> bool:
         if not choices:
             return False
-        if any(token in question_text.lower() for token in ["respectively", "each", "for (a)", "for a", "for output", "outputs"]):
+        text = question_text.lower()
+        explicit_multi_target_markers = [
+            "respectively",
+            "each",
+            "for (a)",
+            "for a",
+            "for output",
+            "outputs",
+            "分别",
+            "依次",
+            "两个问题",
+            "两个量",
+            "多个",
+            "求出",
+        ]
+        if any(token in text for token in explicit_multi_target_markers):
             return True
-        return any(value.count(",") >= 1 or value.count(";") >= 1 for value in choices.values())
+        # Do not treat a single mathematical object (interval / set / coordinate pair / ordered pair)
+        # as a compound answer just because it contains commas or semicolons.
+        interval_like = re.compile(r"^[\[\(\{⟨<].*[\]\)\}⟩>]$")
+        coordinate_like = re.compile(r"^\s*\(?\s*[^,;]+\s*,\s*[^,;]+\s*\)?\s*$")
+        for value in choices.values():
+            normalized = (value or "").strip()
+            if not normalized:
+                continue
+            if interval_like.match(normalized) or coordinate_like.match(normalized):
+                continue
+            if value.count(";") >= 1 or value.count("；") >= 1:
+                return True
+        return False
 
 
 class ImageQualityAnalyzer:
