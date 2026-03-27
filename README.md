@@ -27,6 +27,7 @@ multidataset_cleaning_pipeline.py
 - **Cleaning**
   - 负责 rewrite、质量 gate、最终 `pass / review / reject` 判定。
   - **这是当前最需要 Agent 的阶段**：prompt extraction、rewrite、solvability / reasoning support 都主要集中在这里。
+  - 对应 prompt 入口见：[`docs/pipeline_python_modules_reference.md`](docs/pipeline_python_modules_reference.md) 末尾的“Prompt 附录（与 Agent-heavy 阶段对应）”。
 - **Report**
   - 负责写出 `records/*.jsonl`、dataset summary、run summary。
 

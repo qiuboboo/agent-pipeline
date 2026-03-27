@@ -144,6 +144,68 @@ multidataset_cleaning_pipeline.py
 
 串成一条完整流水线。
 
+## Prompt 附录（与 Agent-heavy 阶段对应）
+
+下面列出当前主线里最相关的 prompt 入口，方便结合上面的结构图阅读。
+
+### 1. Extraction prompt（Collection / Cleaning 交界处）
+
+当前文件路径：
+- `prompts/extract_unified_sample.md`（优先）
+- `prompts/extract_question_answer_image.md`（legacy fallback）
+
+作用：
+- 从原始 JSON 记录中抽取：
+  - `raw_question_text`
+  - `raw_answer_text`
+  - `choice_map`
+  - `image_paths`
+  - `force_requires_image`
+  - `extraction_notes`
+
+当前统一版 prompt 开头如下：
+
+```text
+你是一个原始 JSON 记录信息抽取器，目标是把输入记录整理成接近 UnifiedSample 的结构化字段。
+
+你的任务是：从用户提供的一条 JSON 记录中，尽最大可能准确提取以下字段，并且只基于输入中真实存在的信息，不要猜测，不要编造。
+```
+
+### 2. Rewrite prompt（Cleaning 阶段，最典型 Agent 使用点）
+
+当前位置：
+- `benchmark/src/multidataset_cleaning_pipeline.py`
+- `RewriteAgent.rewrite()` 中内联 `system_prompt`
+
+当前 system prompt 为：
+
+```text
+You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. Convert multiple-choice questions into open-ended variants under strict rules. If the question is already open-ended, keep it. If it is a pure graph/diagram/waveform label selection question, drop it. If it is concept discrimination whose target is carried by options, rewrite it as a blank-style open question without options. If one option contains multiple atomic answers, split into multiple subquestions. Output strict JSON only.
+```
+
+### 3. Cleaning Decision prompt（Cleaning 阶段，可选 Agent override）
+
+当前位置：
+- `benchmark/src/multidataset_cleaning_pipeline.py`
+- `DecisionAgent.review_override()` 中内联 `system_prompt`
+
+当前 system prompt 为：
+
+```text
+You are the Cleaning Decision Agent. Read the structured signals and decide one of pass/review/reject. Be conservative. If rewrite strategy is drop_image_index, reject. If alignment is risky, solvability is weak, or quality is borderline, review or reject. Return strict JSON with keys: decision, reason_codes, rationale.
+```
+
+### Prompt 与阶段的对应关系（简表）
+
+```text
+Collection
+  └─ extract_unified_sample.md / extract_question_answer_image.md
+
+Cleaning
+  ├─ RewriteAgent.rewrite() system prompt
+  └─ DecisionAgent.review_override() system prompt
+```
+
 ---
 
 ## 1. `pipeline_setup.py`
