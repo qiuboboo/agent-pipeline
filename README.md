@@ -97,6 +97,7 @@ multidataset_cleaning_pipeline.py
 - **Geometry3K 需要使用修复后的官方 zip ingest 入口重新定点评估**。
 - **另外已确认一个重要运行限制**：这轮 190 条 processed 样本虽然都产出了 rewrite strategy，但 `rewrite_reports` 中没有任何一条 `llm_used = True`，说明本轮实际跑到的是 fallback-only rewrite，而不是 LLM rewrite fully active；详细说明见长文档。
 - **后续 `cmm_math_rewrite_debug` 定点验证已进一步钉死直接原因**：rewrite 阶段不是没进入、也不是没 choices，而是 `chat_json` 请求被接口按 `401 Unauthorized / 无效的令牌` 拒绝；高概率根因是当前 `from_yaml()` 不展开 `${OPENAI_API_KEY}`，而某些 `nohup` 进程没有带到真实环境变量，导致发出了占位符 token。
+- **在补上 env 展开和 fail-fast 后，第二次 `cmm_math_rewrite_debug` 已验证修复生效**：`run_43bac1c988f5f011` 得到 `18 / 1 / 1`，且 `run.log` 连续出现 `llm_result strategy=...`，说明 rewrite LLM 已恢复正常，并开始真实影响 rewrite strategy（例如 `split_open -> direct_open`）。
 
 ## 项目结构
 

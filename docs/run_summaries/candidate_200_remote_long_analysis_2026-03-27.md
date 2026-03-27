@@ -300,6 +300,43 @@
 
 > **在 `cmm_math_rewrite_debug` 验证中，rewrite 阶段并不是没有进入，也不是没有 choices，而是 `chat_json` 请求被接口以 `401 Unauthorized / 无效的令牌` 拒绝；其高概率根因是当前 `from_yaml()` 不展开 `${OPENAI_API_KEY}`，而 `nohup` 进程又没有拿到真实环境变量，导致发送了字面量占位符 token。**
 
+### Final follow-up verification after the API-key fix
+
+在补上 `${OPENAI_API_KEY}` 展开与占位符 fail-fast 之后，又追加跑了一轮带真实环境变量注入的 `CMM-Math` 定点验证：
+
+- 验证 run：`outputs/cmm_math_rewrite_debug/run_43bac1c988f5f011`
+- 总耗时：约 **1715 秒**（约 **28.6 分钟**）
+- 平均：约 **85.8 秒 / sample**
+- 结果：`processed=20 / pass=18 / review=1 / reject=1`
+- rewrite strategy counts：
+  - `blank_open = 18`
+  - `direct_open = 1`
+  - `split_open = 1`
+
+这轮验证最关键的变化是：
+
+1. **不再出现 `401 Unauthorized / 无效的令牌`**
+   - `chat_json_debug.log` 未再出现 rewrite 侧的 401 刷屏。
+
+2. **rewrite 不再全量 fallback**
+   - `run.log` 中已连续出现：
+     - `entered client_enabled=True ...`
+     - `llm_result strategy=... variant_count=...`
+   - 说明 rewrite LLM 已恢复正常工作，而不是继续走 `chat_json returned empty -> fallback`。
+
+3. **LLM rewrite 已开始真实影响策略结果**
+   - 例如样本 `prob_d74f71876f9e0f5717ba47af`：
+     - fallback 预判：`split_open`
+     - LLM 实际返回：`direct_open`
+     - 最终决策：`pass`
+   - 这说明当前链路已经不是“虽然能调通，但和 fallback 没区别”，而是 **LLM 真正在改变 rewrite 策略**。
+
+### Updated confidence level (final for this issue)
+
+到这一步为止，关于 `rewrite LLM 未生效` 的问题可以形成更完整的最终结论：
+
+> **在原始长任务与第一次 `cmm_math_rewrite_debug` 验证中，rewrite 未生效的根因是配置里的 `${OPENAI_API_KEY}` 没有被展开，而运行进程环境中又没有真实 `OPENAI_API_KEY`，导致请求携带了占位符 token 并被接口以 `401 Unauthorized / 无效的令牌` 拒绝。补上 env 展开和 fail-fast 后，第二次 `cmm_math_rewrite_debug` 已验证 rewrite LLM 恢复正常，且开始对 rewrite strategy 产生实际影响。**
+
 ## What this run proves
 
 ### 1. Long-run execution stability is now good enough
