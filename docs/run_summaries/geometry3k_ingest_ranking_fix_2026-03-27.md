@@ -102,3 +102,20 @@
 - 放宽了 Cleaning 对风险原因的“立即 reject”语义
 - 提高了远端模型调用的配置灵活性和可观测性
 - 同步更新了 README 与模块说明文档
+
+## Additional smoke findings (2026-03-27 afternoon)
+
+在后续 1-sample-per-dataset smoke 中，又得到两个有代表性的判定样本：
+
+1. **CMM-Math 从 review 修到 pass**
+   - 之前 `split_open` 的触发条件过宽，会把数学区间/集合式单答案误判成 compound answer。
+   - 收紧 `is_compound_answer_question(...)` 后，CMM-Math 从 `review` 变成 `pass`，说明这部分属于规则误伤而非样本本身有问题。
+
+2. **MM-Math 的 review 是合理保留的 review**
+   - 样本：`prob_c11f4ea0de15f097c71f67f5`
+   - 题面强依赖几何图，视觉锚点非常密集（`ABC / B / C / M / N / D / MN / AB / CD / BC / triangle ACD`）。
+   - 最终判定为 `review`，原因包括：
+     - `alignment_risky`
+     - `major_alignment_conflict`
+     - `visual_reference_density_mismatch`
+   - 这个例子很适合作为“应当保留的 review”样本：题目可解，但当前自动 alignment 虽然足以支撑可解性判断，仍不足以低风险地直接放行。
