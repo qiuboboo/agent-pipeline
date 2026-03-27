@@ -105,7 +105,7 @@
 
 ## Additional smoke findings (2026-03-27 afternoon)
 
-在后续 1-sample-per-dataset smoke 中，又得到两个有代表性的判定样本：
+在后续 1-sample-per-dataset smoke 中，又得到三个有代表性的判定样本：
 
 1. **CMM-Math 从 review 修到 pass**
    - 之前 `split_open` 的触发条件过宽，会把数学区间/集合式单答案误判成 compound answer。
@@ -119,3 +119,25 @@
      - `major_alignment_conflict`
      - `visual_reference_density_mismatch`
    - 这个例子很适合作为“应当保留的 review”样本：题目可解，但当前自动 alignment 虽然足以支撑可解性判断，仍不足以低风险地直接放行。
+
+3. **SCEMQA 的隐式函数图题通过弱视觉锚点补偿，从 reject 提升到 pass**
+   - 样本：`prob_80511fe3dbb76971a8d87952`
+   - 题面：`At which value of x is f continuous but not differentiable?`
+   - 修改前：
+     - `alignment_pairs = 0`
+     - `coverage_score = 0.18`
+     - `consistency_score = 0.10`
+     - `alignment_status = bad`
+     - `clean_decision = reject`
+   - 根因：题目明显依赖函数图，但题干没有显式视觉锚点词，导致 alignment 无法建立文本-图像配对，只能落到 `implicit_visual_dependency` / `bad_alignment`。
+   - 修改：在 `AlignmentEngine` 中新增对隐式函数图题的弱视觉锚点补偿（weak visual hints），当题干出现 `continuous / differentiable / slope / value of x / graph of` 等模式时，自动补入如 `graph / curve / point / x-value / non-differentiable point` 这类弱锚点供 alignment 使用。
+   - 修改后：
+     - `alignment_pairs = 5`
+     - `coverage_score = 0.90`
+     - `consistency_score = 0.98`
+     - `alignment_status = good`
+     - `clean_decision = pass`
+   - 对应提交：`1597c36` — `fix: add weak visual hints for implicit function-graph questions`
+   - 验证运行：`outputs/smoke_scemqa_weak_hints/run_3ab87b6af935c76b`
+   - 该轮 smoke 最终结果：**pass 8 / review 1 / reject 1**。
+   - 该轮从 run 创建到 summary 落盘耗时约 **731 秒（12.2 分钟）**。

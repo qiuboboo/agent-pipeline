@@ -39,7 +39,7 @@ multidataset_cleaning_pipeline.py
   - Collection 末尾的 initial collection scoring 显式拆块
   - Cleaning gate 从硬 reject 短路改为统一风险原因记录
   - 远端模型 API key 改为优先走环境变量，且补充 chat_json 调试能力
-  - 后续 smoke 还记录了两个代表性案例：CMM-Math 的 `split_open` 误伤已修复；MM-Math 有一个应当保留为 `review` 的高视觉密度几何题样本
+  - 后续 smoke 还记录了三个代表性案例：CMM-Math 的 `split_open` 误伤已修复；MM-Math 有一个应当保留为 `review` 的高视觉密度几何题样本；SCEMQA 的隐式函数图题通过弱视觉锚点补偿从 reject 提升到 pass
 
 最新一次 200 样本 benchmark：
 
