@@ -166,6 +166,140 @@
    - 且总体结果仍为 `18 pass / 2 review / 0 reject`
    - 说明之前的修复方向是正确的。
 
+## Rewrite strategy distribution
+
+从 summary 看，这轮 rewrite 行为有几个明显特征：
+
+1. **`keep_open` 在高视觉依赖数据集上占比高**
+   - `mm_math: keep_open = 20`
+   - `physreason: keep_open = 20`
+   - `seephys: keep_open = 20`
+   - 这说明 rewrite 并未强行改写这些题，而是多数保持 open-ended 形态。
+
+2. **`blank_open` 在若干文本主导或结构较规整数据集上较常见**
+   - `scemqa: blank_open = 16`
+   - `cmm_math: blank_open = 18`
+   - `eee_bench: blank_open = 9`
+   - `emma_physics: blank_open = 11`
+
+3. **`split_open` 已经不再在 `CMM-Math` 上大面积误伤**
+   - `cmm_math: split_open = 1`
+   - 且总体结果仍为 `18 pass / 2 review / 0 reject`
+   - 说明之前的修复方向是正确的。
+
+## Additional issue found during post-run inspection: Rewrite LLM was effectively inactive
+
+在这轮 run 的后续排查中，还确认了一个需要单独记录的问题：
+
+- 实际 processed 样本数为 **190**。
+- 对应的 `rewrite_reports.jsonl` 总数也是 **190**。
+- 但汇总所有 `datasets/*/records/rewrite_reports.jsonl` 后发现：
+  - `llm_used = True` 的样本数：**0**
+  - 这轮所有 rewrite report 的 `llm_used` 都是空值（落盘表现为 `null/None`）。
+
+也就是说：
+
+> **这轮 200 样本长任务中，rewrite 阶段虽然有产出 strategy（如 `keep_open` / `blank_open` / `split_open`），但这些结果全部来自 fallback / rule-based rewrite，而不是 LLM rewrite。**
+
+### Why this matters
+
+这意味着本轮 benchmark 的结果应被理解为：
+
+- extraction 正常运行
+- cleaning / decision 正常运行
+- 但 rewrite 增强没有真正发挥作用
+
+因此，本轮结果更接近：
+
+> **fallback-only rewrite baseline**
+
+而不是“rewrite LLM fully active”的最终上限表现。
+
+### What we verified
+
+后续排查已经确认两点：
+
+1. **并不是因为所有样本都没有 choices**
+   - 例如：
+     - `cmm_math` 的 `choice_field = "options"`（20/20）
+     - `emma_physics` 的 `choice_field = "options"`（20/20）
+     - `scemqa` 的 `choice_field = "choices"`（20/20）
+     - `geometry3k` 的 `choice_field = "choices"`（10/10）
+   - 所以不能简单归因为“没有选项，导致全都不走 rewrite LLM”。
+
+2. **当前最可疑的是 RewriteAgent 没有真正拿到 enabled 的 client，或其 LLM 返回从未成功写回**
+   - `benchmark/src/multidataset_cleaning_pipeline.py` 中 `RewriteAgent.rewrite(...)` 的逻辑是：
+     - 若 `not self.client.config.enabled or not choices`，则直接 `return fallback`
+     - 只有在 LLM rewrite 成功时，才会显式写入 `"llm_used": True`
+   - 但本轮 run 中没有任何一条 record 出现 `"llm_used": True`。
+
+### Current confidence level
+
+到目前为止，我们已经有足够证据确认：
+
+- **本轮 190 条 processed 样本全部没有走 LLM rewrite。**
+- **这不是因为所有数据集都没有 choices。**
+
+但“究竟是 RewriteAgent 全局 disabled、配置传递错误，还是 `chat_json(...)` 全部返回空”这一层，仍需要继续沿着以下路径深挖：
+
+- `run_pipeline.py`
+- `configs/candidate_200_remote.yaml`
+- `PipelineConfig.from_dict(...)`
+- `RewriteAgent` 的实例化位置
+- `OpenAICompatibleClient` 在 rewrite 阶段拿到的实际 `config.enabled`
+
+因此，本问题目前应在文档里作为：
+
+> **已确认存在的运行限制（confirmed issue），但根因还需进一步定位。**
+
+### Update from follow-up focused rerun (`cmm_math_rewrite_debug`)
+
+在后续为 `CMM-Math` 做的定点长任务验证中，我们已经把这个问题进一步钉死。
+
+- 验证 run：`outputs/cmm_math_rewrite_debug/run_ab67e5950c2f21c8`
+- 结果：`processed=20 / pass=17 / review=3 / reject=0`
+- 新增证据文件：
+  - `outputs/cmm_math_rewrite_debug/run_ab67e5950c2f21c8/logs/run.log`
+  - `outputs/cmm_math_rewrite_debug/launcher/chat_json_debug.log`
+
+这次验证加入了第一版纯文本运行日志 `run.log`，并对 `chat_json` 打开了调试日志。由此确认：
+
+1. **RewriteAgent 的入口条件本身没有问题**
+   - `run.log` 显示：
+     - `client_enabled=True`
+     - `choice_count=3/4`
+     - 已正常进入 `RewriteAgent.rewrite(...)`
+   - 因此可以排除：
+     - `client.config.enabled=False`
+     - `choices empty`
+
+2. **rewrite fallback 的直接原因是 `chat_json returned empty`**
+   - `run.log` 中每条样本都先记录 `entered ...`，随后记录：
+     - `fallback ... reason=chat_json returned empty`
+
+3. **`chat_json returned empty` 的底层真实原因已经被 debug log 钉成 `401 Unauthorized`**
+   - `chat_json_debug.log` 中出现多条：
+     - `caller=rewrite HTTPError status=401 reason=Unauthorized`
+     - body 中明确包含：`无效的令牌`
+   - 也就是说，rewrite 请求并不是“没发出”，也不是“返回缺少 JSON”，而是**被接口直接按无效令牌拒绝**。
+
+4. **进一步发现了配置/环境注入层面的具体风险点**
+   - 当前版本 `PipelineConfig.from_yaml(...)` 并不会展开 YAML 里的 `${OPENAI_API_KEY}` 字面量。
+   - 它只会在运行进程环境中存在真实 `OPENAI_API_KEY` 时，用环境值覆盖 `model.api_key`。
+   - 因此，在 `nohup` 场景里如果环境没有带上真实 `OPENAI_API_KEY`，配置里的：
+     - `api_key: ${OPENAI_API_KEY}`
+     会被当作普通非空字符串保留下来。
+   - 这会导致：
+     - `run.log` 里看到 `api_key_present=True`
+     - 但实际发送出去的 Authorization token 其实是无效的 `${OPENAI_API_KEY}` 字面量
+     - 最终触发 `401 Unauthorized / 无效的令牌`
+
+### Updated confidence level
+
+到这一轮定点验证为止，关于 rewrite LLM 未生效的问题，已经可以把结论更新为：
+
+> **在 `cmm_math_rewrite_debug` 验证中，rewrite 阶段并不是没有进入，也不是没有 choices，而是 `chat_json` 请求被接口以 `401 Unauthorized / 无效的令牌` 拒绝；其高概率根因是当前 `from_yaml()` 不展开 `${OPENAI_API_KEY}`，而 `nohup` 进程又没有拿到真实环境变量，导致发送了字面量占位符 token。**
+
 ## What this run proves
 
 ### 1. Long-run execution stability is now good enough
@@ -230,6 +364,11 @@
 
 4. **在上述定点修复后，再考虑重跑整轮 200 benchmark**
    - 否则新的 Geometry3K 结果与当前 run 不可直接横比
+
+5. **为后续长任务增加统一纯文本运行日志 `outputs/<run_id>/logs/run.log`**
+   - 第一版最小实现优先覆盖：run start/finish、dataset start/finish、sample 字段选取结果、rewrite 入口/分支/LLM 结果、final decision。
+   - 重点要把“这一步干了什么、用了什么参数、为什么 fallback / 为什么这样判”直接写成可顺序阅读的文字日志。
+   - 目标是下次遇到类似“190 条为什么全没走 rewrite LLM”时，不再依赖事后拼 records，而能直接从单个 run log 看出根因。
 
 ## Bottom line
 

@@ -95,6 +95,8 @@ multidataset_cleaning_pipeline.py
 - **`CMM-Math` 的 `split_open` 修复已在大样本里得到验证**。
 - **`MM-Math` / `PhysReason` / `EMMA-Physics` 是下一步最值得继续拆 review 的三块**。
 - **Geometry3K 需要使用修复后的官方 zip ingest 入口重新定点评估**。
+- **另外已确认一个重要运行限制**：这轮 190 条 processed 样本虽然都产出了 rewrite strategy，但 `rewrite_reports` 中没有任何一条 `llm_used = True`，说明本轮实际跑到的是 fallback-only rewrite，而不是 LLM rewrite fully active；详细说明见长文档。
+- **后续 `cmm_math_rewrite_debug` 定点验证已进一步钉死直接原因**：rewrite 阶段不是没进入、也不是没 choices，而是 `chat_json` 请求被接口按 `401 Unauthorized / 无效的令牌` 拒绝；高概率根因是当前 `from_yaml()` 不展开 `${OPENAI_API_KEY}`，而某些 `nohup` 进程没有带到真实环境变量，导致发出了占位符 token。
 
 ## 项目结构
 

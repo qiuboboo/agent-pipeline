@@ -203,6 +203,17 @@ def extract_json_object(text: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+def expand_env_placeholders(value: Any) -> Any:
+    if not isinstance(value, str):
+        return value
+    pattern = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
+    return pattern.sub(lambda match: os.environ.get(match.group(1), match.group(0)), value)
+
+
+def is_unresolved_env_placeholder(value: Any) -> bool:
+    return isinstance(value, str) and bool(re.fullmatch(r"\$\{[A-Za-z_][A-Za-z0-9_]*\}", value.strip()))
+
+
 @dataclass
 class ModelConfig:
     base_url: str = "https://synai996.space/v1"
@@ -396,9 +407,17 @@ class PipelineConfig:
         datasets = [DatasetSpec(**item) for item in datasets_raw] if datasets_raw else cls.default_dataset_specs()
         model_defaults = asdict(ModelConfig())
         model_data = {**model_defaults, **model_raw}
+        model_data = {key: expand_env_placeholders(value) for key, value in model_data.items()}
         env_api_key = os.environ.get("OPENAI_API_KEY", "")
         if env_api_key:
             model_data["api_key"] = env_api_key
+        if model_data.get("enabled", True):
+            api_key_value = model_data.get("api_key", "")
+            if not api_key_value or is_unresolved_env_placeholder(api_key_value):
+                raise ValueError(
+                    "Model is enabled but api_key is missing or unresolved. "
+                    "Set OPENAI_API_KEY in the environment or provide a concrete model.api_key in YAML."
+                )
         return cls(
             sample_per_dataset=runtime.get("sample_per_dataset", 30),
             sample_strategy=runtime.get("sample_strategy", "head"),
@@ -444,7 +463,7 @@ class OpenAICompatibleClient:
     def __init__(self, config: ModelConfig):
         self.config = config
 
-    def chat_json(self, system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:
+    def chat_json(self, system_prompt: str, user_prompt: str, caller: str = "") -> Optional[Dict[str, Any]]:
         if not self.config.enabled or not self.config.api_key:
             return None
         debug = os.environ.get("PIPELINE_DEBUG_CHAT_JSON", "").strip().lower() in {"1", "true", "yes", "on"}
@@ -492,27 +511,27 @@ class OpenAICompatibleClient:
         except urllib.error.HTTPError as exc:
             error_body = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else ""
             emit_debug(
-                f"[chat_json debug] HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
+                f"[chat_json debug] caller={caller or 'unknown'} HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
             )
             return None
         except urllib.error.URLError as exc:
-            emit_debug(f"[chat_json debug] URLError reason={exc}")
+            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} URLError reason={exc}")
             return None
         except http.client.RemoteDisconnected as exc:
-            emit_debug(f"[chat_json debug] RemoteDisconnected reason={exc}")
+            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} RemoteDisconnected reason={exc}")
             return None
         except ConnectionResetError as exc:
-            emit_debug(f"[chat_json debug] ConnectionResetError reason={exc}")
+            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} ConnectionResetError reason={exc}")
             return None
         except TimeoutError as exc:
-            emit_debug(f"[chat_json debug] TimeoutError reason={exc}")
+            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} TimeoutError reason={exc}")
             return None
         except json.JSONDecodeError as exc:
-            emit_debug(f"[chat_json debug] Response JSON decode failed error={exc}")
+            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Response JSON decode failed error={exc}")
             return None
         choices = body.get("choices") or []
         if not choices:
-            emit_debug(f"[chat_json debug] Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
+            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
             return None
         message = choices[0].get("message") or {}
         content = message.get("content", "")
@@ -520,7 +539,7 @@ class OpenAICompatibleClient:
             content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
         parsed = extract_json_object(to_plain_text(content))
         if parsed is None:
-            emit_debug(f"[chat_json debug] Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
+            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
         return parsed
 
 
@@ -1431,6 +1450,14 @@ class HuggingFaceConnector(BaseConnector):
                         break
             if not raw_question and not images:
                 continue
+            source_problem_id = str(row.get("id", row.get("problem_id", index)))
+            if getattr(self, "logger", None):
+                self.logger.log(
+                    "SAMPLE",
+                    f"selected question_field={extracted.get('question_field')} answer_field={extracted.get('answer_field')} image_field={extracted.get('image_field')} choice_field={extracted.get('choice_field')} image_count={len(images)} choice_count={len(extracted.get('choice_map', {}))} force_requires_image={bool(extracted['force_requires_image'] or self.spec.force_requires_image)}",
+                    dataset=self.spec.key,
+                    problem_id=source_problem_id,
+                )
             samples.append(
                 UnifiedSample(
                     dataset_key=self.spec.key,
@@ -1438,7 +1465,7 @@ class HuggingFaceConnector(BaseConnector):
                     subject=self.spec.subject,
                     source_dataset=self.spec.display_name,
                     source_split=detail or self.spec.split or "unknown",
-                    source_problem_id=str(row.get("id", row.get("problem_id", index))),
+                    source_problem_id=source_problem_id,
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
@@ -1929,7 +1956,7 @@ class RewriteAgent:
             ensure_ascii=False,
             indent=2,
         )
-        llm_result = self.client.chat_json(system_prompt, user_prompt)
+        llm_result = self.client.chat_json(system_prompt, user_prompt, caller="rewrite")
         if not llm_result:
             fallback["llm_used"] = False
             fallback["fallback_reason"] = "chat_json returned empty"
