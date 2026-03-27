@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import http.client
 import io
 import json
 import math
@@ -496,6 +497,12 @@ class OpenAICompatibleClient:
             return None
         except urllib.error.URLError as exc:
             emit_debug(f"[chat_json debug] URLError reason={exc}")
+            return None
+        except http.client.RemoteDisconnected as exc:
+            emit_debug(f"[chat_json debug] RemoteDisconnected reason={exc}")
+            return None
+        except ConnectionResetError as exc:
+            emit_debug(f"[chat_json debug] ConnectionResetError reason={exc}")
             return None
         except TimeoutError as exc:
             emit_debug(f"[chat_json debug] TimeoutError reason={exc}")
