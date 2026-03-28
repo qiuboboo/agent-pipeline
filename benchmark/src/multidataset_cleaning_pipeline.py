@@ -1181,6 +1181,11 @@ class LocalFileConnector(BaseConnector):
 
 
 class HuggingFaceConnector(BaseConnector):
+    def __init__(self, spec: DatasetSpec, config: PipelineConfig):
+        super().__init__(spec, config)
+        self._repo_files_cache: Optional[List[str]] = None
+        self._repo_file_index: Optional[Dict[str, List[str]]] = None
+
     def candidate_splits(self) -> List[str]:
         raw = [self.spec.split, "test", "validation", "val", "train"]
         return [item for item in raw if item]
@@ -1206,6 +1211,62 @@ class HuggingFaceConnector(BaseConnector):
         except Exception as exc:
             last_error = str(exc)
         return None, last_error
+
+    def _repo_files(self) -> List[str]:
+        if self._repo_files_cache is not None:
+            return self._repo_files_cache
+        try:
+            from huggingface_hub import list_repo_files
+
+            self._repo_files_cache = list_repo_files(self.spec.source_locator, repo_type="dataset")
+        except Exception:
+            self._repo_files_cache = []
+        return self._repo_files_cache
+
+    def _repo_file_candidates(self, value: str) -> List[str]:
+        text = to_plain_text(value).strip()
+        if not text:
+            return []
+        files = self._repo_files()
+        if not files:
+            return []
+        if self._repo_file_index is None:
+            index: Dict[str, List[str]] = {}
+            for item in files:
+                key = Path(item).name
+                index.setdefault(key, []).append(item)
+            self._repo_file_index = index
+        normalized = text.replace('\\', '/').lstrip('./')
+        if normalized in files:
+            return [normalized]
+        candidates: List[str] = []
+        basename = Path(normalized).name
+        basename_matches = self._repo_file_index.get(basename, []) if self._repo_file_index else []
+        suffix_matches = [item for item in files if item.endswith('/' + normalized) or item.endswith('/' + basename)]
+        seen: set[str] = set()
+        for item in basename_matches + suffix_matches:
+            if item not in seen:
+                seen.add(item)
+                candidates.append(item)
+        return candidates
+
+    def _load_image_from_repo_file(self, repo_file: str) -> Tuple[List[Image.Image], List[str]]:
+        try:
+            from huggingface_hub import hf_hub_download
+
+            local_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename=repo_file))
+            return [Image.open(local_path).convert("RGB")], [str(local_path)]
+        except Exception:
+            return [], []
+
+    def _load_remote_url_image(self, url: str) -> Tuple[List[Image.Image], List[str]]:
+        try:
+            with urllib.request.urlopen(url, timeout=30) as response:
+                data = response.read()
+            image = Image.open(io.BytesIO(data)).convert("RGB")
+            return [image], [url]
+        except Exception:
+            return [], []
 
     def load_images(self, value: Any) -> Tuple[List[Image.Image], List[str]]:
         images: List[Image.Image] = []
@@ -1234,15 +1295,31 @@ class HuggingFaceConnector(BaseConnector):
                     return [Image.open(path).convert("RGB")], [str(path)]
                 except Exception:
                     return images, sources
+            if path and isinstance(path, str):
+                repo_candidates = self._repo_file_candidates(path)
+                for repo_file in repo_candidates:
+                    child_images, child_sources = self._load_image_from_repo_file(repo_file)
+                    if child_images:
+                        return child_images, child_sources
             nested_value = value.get("image") or value.get("images") or value.get("decoded_image")
             if nested_value is not None and nested_value is not value:
                 return self.load_images(nested_value)
             return images, sources
-        if isinstance(value, str) and not is_null_like_text(value) and Path(value).exists():
-            try:
-                return [Image.open(value).convert("RGB")], [value]
-            except Exception:
-                return images, sources
+        if isinstance(value, str) and not is_null_like_text(value):
+            if re.match(r"^https?://", value, flags=re.IGNORECASE):
+                child_images, child_sources = self._load_remote_url_image(value)
+                if child_images:
+                    return child_images, child_sources
+            if Path(value).exists():
+                try:
+                    return [Image.open(value).convert("RGB")], [value]
+                except Exception:
+                    return images, sources
+            repo_candidates = self._repo_file_candidates(value)
+            for repo_file in repo_candidates:
+                child_images, child_sources = self._load_image_from_repo_file(repo_file)
+                if child_images:
+                    return child_images, child_sources
         return images, sources
 
     def resolve_answer_text(self, raw_answer: Any) -> str:
