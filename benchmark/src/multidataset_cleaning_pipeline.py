@@ -513,13 +513,15 @@ class OpenAICompatibleClient:
                 },
                 method="POST",
             )
+            if debug and attempts > 1 and attempt > 1:
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} retrying attempt={attempt}/{attempts}")
             try:
                 with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
                     raw_body = response.read().decode("utf-8")
                     body = json.loads(raw_body)
             except urllib.error.HTTPError as exc:
                 error_body = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else ""
-                self.last_error_reason = f"HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:200]}"
+                self.last_error_reason = f"HTTPError attempt={attempt}/{attempts} status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:200]}"
                 emit_debug(
                     f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
                 )
@@ -529,7 +531,7 @@ class OpenAICompatibleClient:
                     continue
                 return None
             except urllib.error.URLError as exc:
-                self.last_error_reason = f"URLError reason={exc}"
+                self.last_error_reason = f"URLError attempt={attempt}/{attempts} reason={exc}"
                 emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} URLError reason={exc}")
                 if attempt < attempts:
                     if backoff > 0:
@@ -537,7 +539,7 @@ class OpenAICompatibleClient:
                     continue
                 return None
             except http.client.RemoteDisconnected as exc:
-                self.last_error_reason = f"RemoteDisconnected reason={exc}"
+                self.last_error_reason = f"RemoteDisconnected attempt={attempt}/{attempts} reason={exc}"
                 emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} RemoteDisconnected reason={exc}")
                 if attempt < attempts:
                     if backoff > 0:
@@ -545,7 +547,7 @@ class OpenAICompatibleClient:
                     continue
                 return None
             except ConnectionResetError as exc:
-                self.last_error_reason = f"ConnectionResetError reason={exc}"
+                self.last_error_reason = f"ConnectionResetError attempt={attempt}/{attempts} reason={exc}"
                 emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} ConnectionResetError reason={exc}")
                 if attempt < attempts:
                     if backoff > 0:
@@ -553,7 +555,7 @@ class OpenAICompatibleClient:
                     continue
                 return None
             except TimeoutError as exc:
-                self.last_error_reason = f"TimeoutError reason={exc}"
+                self.last_error_reason = f"TimeoutError attempt={attempt}/{attempts} reason={exc}"
                 emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} TimeoutError reason={exc}")
                 if attempt < attempts:
                     if backoff > 0:
@@ -561,12 +563,12 @@ class OpenAICompatibleClient:
                     continue
                 return None
             except json.JSONDecodeError as exc:
-                self.last_error_reason = f"Response JSON decode failed error={exc}"
+                self.last_error_reason = f"Response JSON decode failed attempt={attempt}/{attempts} error={exc}"
                 emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Response JSON decode failed error={exc}")
                 return None
             choices = body.get("choices") or []
             if not choices:
-                self.last_error_reason = f"Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:200]}"
+                self.last_error_reason = f"Missing choices attempt={attempt}/{attempts} body_preview={json.dumps(body, ensure_ascii=False)[:200]}"
                 emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
                 return None
             message = choices[0].get("message") or {}
@@ -575,7 +577,7 @@ class OpenAICompatibleClient:
                 content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
             parsed = extract_json_object(to_plain_text(content))
             if parsed is None:
-                self.last_error_reason = f"Content JSON extraction failed content_preview={to_plain_text(content)[:200]}"
+                self.last_error_reason = f"Content JSON extraction failed attempt={attempt}/{attempts} content_preview={to_plain_text(content)[:200]}"
                 emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
             return parsed
         return None
