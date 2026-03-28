@@ -204,7 +204,7 @@ class ModelConfig:
     base_url: str = "https://synai996.space/v1"
     api_key: str = os.environ.get("OPENAI_API_KEY", "")
     model: str = "gpt-5.4"
-    reasoning_effort: str = "xhigh"
+    reasoning_effort: str = "high"
     temperature: float = 0.1
     timeout_seconds: int = 180
     enabled: bool = True
@@ -226,6 +226,7 @@ class DatasetSpec:
     choice_fields: List[str] = field(default_factory=list)
     metadata_fields: List[str] = field(default_factory=list)
     force_requires_image: bool = False
+    answer_index_base: Optional[int] = None
     multi_solution_mode: str = "auto"
 
 
@@ -264,6 +265,7 @@ class PipelineConfig:
                 question_fields=["question", "problem", "query", "text"],
                 answer_fields=["answer", "solution", "label"],
                 image_fields=["image", "image_path", "img_path", "diagram"],
+                answer_index_base=0,
             ),
             DatasetSpec(
                 key="geometry3k",
@@ -738,11 +740,19 @@ class TextNormalizer:
         return choices
 
     def infer_requires_image(self, question_text: str, image_count: int) -> bool:
-        if image_count > 0:
+        normalized = normalize_whitespace(question_text)
+        if self.IMAGE_HINT_PATTERN.search(normalized):
             return True
-        if self.IMAGE_HINT_PATTERN.search(question_text):
+        if re.search(r"<image\d*>|imagehere", normalized, flags=re.IGNORECASE):
             return True
-        return bool(re.search(r"<image\d*>|imagehere", question_text, flags=re.IGNORECASE))
+        if image_count <= 0:
+            return False
+        implicit_visual_patterns = [
+            r"\b(as shown|shown below|in the figure|according to the graph|based on the diagram)\b",
+            r"\b(waveform|circuit|triangle|angle|point|line|curve|coordinate|shape)\b",
+            r"(下图|如图|图中|示意图|曲线|电路图|几何图形|坐标系)",
+        ]
+        return any(re.search(pattern, normalized, flags=re.IGNORECASE) for pattern in implicit_visual_patterns)
 
     def text_completeness_score(self, raw_text: str, normalized_text: str) -> float:
         if not raw_text:
@@ -851,6 +861,12 @@ class BaseConnector:
         self.spec = spec
         self.config = config
         self.llm_client = llm_client or OpenAICompatibleClient(config.model)
+        self._source_intake_agent: Optional[SourceIntakeAgent] = None
+
+    def extract_record_content(self, row: Dict[str, Any]) -> Dict[str, Any]:
+        if self._source_intake_agent is None:
+            self._source_intake_agent = SourceIntakeAgent(self.llm_client)
+        return self._source_intake_agent.extract(row, self.spec)
 
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         raise NotImplementedError
@@ -864,10 +880,16 @@ class SourceUnavailableConnector(BaseConnector):
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WORKSPACE_ROOT = PROJECT_ROOT.parent
 PROMPT_ROOT = PROJECT_ROOT / "prompts"
+COLLECTION_PROMPT_ROOT = PROMPT_ROOT / "collection"
 CLEANING_PROMPT_ROOT = PROMPT_ROOT / "cleaning"
 UNIFIED_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_unified_sample.md"
 LEGACY_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_question_answer_image.md"
+SOURCE_INTAKE_PROMPT_PATH = UNIFIED_EXTRACTION_PROMPT_PATH
+ASSET_REGISTRY_PROMPT_PATH = COLLECTION_PROMPT_ROOT / "asset_registry.md"
+POTENTIAL_SCORER_PROMPT_PATH = COLLECTION_PROMPT_ROOT / "potential_scorer.md"
+CANDIDATE_REGISTRAR_PROMPT_PATH = COLLECTION_PROMPT_ROOT / "candidate_registrar.md"
 REWRITE_AGENT_PROMPT_PATH = CLEANING_PROMPT_ROOT / "rewrite_agent.md"
+NORMALIZATION_AGENT_PROMPT_PATH = CLEANING_PROMPT_ROOT / "normalization_agent.md"
 SAMPLE_UNDERSTANDING_PROMPT_PATH = CLEANING_PROMPT_ROOT / "sample_understanding_agent.md"
 GATE_DECISION_PROMPT_PATH = CLEANING_PROMPT_ROOT / "gate_decision_agent.md"
 
@@ -996,7 +1018,16 @@ def prompt_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec", clie
     }
 
 
-def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str]) -> str:
+
+def resolve_answer_source_text(row: Dict[str, Any], extracted: Dict[str, Any]) -> str:
+    answer_field = extracted.get("answer_field")
+    if isinstance(answer_field, str) and answer_field in row and not is_missing_value(row.get(answer_field)):
+        return to_plain_text(row.get(answer_field))
+    return to_plain_text(extracted.get("raw_answer_text"))
+
+
+
+def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str], answer_index_base: Optional[int] = None) -> str:
     answer = normalize_whitespace(answer_text)
     if not answer:
         return ""
@@ -1006,11 +1037,25 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
         key = letter_match.group(1)
         if key in choice_map:
             return normalize_whitespace(choice_map[key])
+    if choice_map and answer_index_base is not None:
+        numeric_match = re.fullmatch(r"[+-]?\d+", answer)
+        if numeric_match:
+            try:
+                raw_index = int(numeric_match.group(0))
+            except ValueError:
+                raw_index = None
+            if raw_index is not None:
+                choice_labels = [label for label in sorted(choice_map.keys()) if re.fullmatch(r"[A-H]", label)]
+                resolved_index = raw_index - int(answer_index_base)
+                if 0 <= resolved_index < len(choice_labels):
+                    mapped_label = choice_labels[resolved_index]
+                    mapped_answer = normalize_whitespace(choice_map.get(mapped_label, ""))
+                    if mapped_answer:
+                        return mapped_answer
     mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.IGNORECASE)
     if mixed_match:
         answer = mixed_match.group(2).strip()
     return normalize_whitespace(answer)
-
 
 class LocalFileConnector(BaseConnector):
     def iter_records(self, path: Path) -> Iterable[Dict[str, Any]]:
@@ -1115,9 +1160,13 @@ class LocalFileConnector(BaseConnector):
             return "source_unavailable", [], f"Input not found: {path}"
         samples: List[UnifiedSample] = []
         for index, row in enumerate(self.iter_records(path)):
-            extracted = heuristic_extract_record_content(row, self.spec)
+            extracted = self.extract_record_content(row)
             raw_question = extracted["raw_question_text"]
-            raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"])
+            raw_answer = resolve_multiple_choice_answer_text(
+                resolve_answer_source_text(row, extracted),
+                extracted["choice_map"],
+                self.spec.answer_index_base,
+            )
             images: List[Image.Image] = []
             image_sources: List[str] = []
             for path_str in extracted["image_paths"]:
@@ -1267,7 +1316,6 @@ class HuggingFaceConnector(BaseConnector):
                 zf.extractall(extract_root)
 
         samples: List[UnifiedSample] = []
-        prompt_client = self.llm_client
         with jsonl_path.open("r", encoding="utf-8") as file:
             for index, line in enumerate(file):
                 line = line.strip()
@@ -1276,11 +1324,12 @@ class HuggingFaceConnector(BaseConnector):
                 row = json.loads(line)
                 if not isinstance(row, dict):
                     continue
-                extracted = prompt_extract_record_content(row, self.spec, prompt_client)
+                extracted = self.extract_record_content(row)
                 raw_question = extracted["raw_question_text"]
                 raw_answer = resolve_multiple_choice_answer_text(
-                    self.resolve_answer_text(row.get("solution") or extracted["raw_answer_text"]),
+                    self.resolve_answer_text(row.get("solution") or resolve_answer_source_text(row, extracted)),
                     extracted["choice_map"],
+                    self.spec.answer_index_base,
                 )
                 images: List[Image.Image] = []
                 image_sources: List[str] = []
@@ -1421,9 +1470,13 @@ class HuggingFaceConnector(BaseConnector):
         samples: List[UnifiedSample] = []
         for index, row in enumerate(rows):
             row = dict(row)
-            extracted = heuristic_extract_record_content(row, self.spec)
+            extracted = self.extract_record_content(row)
             raw_question = extracted["raw_question_text"]
-            raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(extracted["raw_answer_text"]), extracted["choice_map"])
+            raw_answer = resolve_multiple_choice_answer_text(
+                self.resolve_answer_text(resolve_answer_source_text(row, extracted)),
+                extracted["choice_map"],
+                self.spec.answer_index_base,
+            )
             image_field_candidates: List[str] = []
             explicit_image_field = extracted.get("image_field")
             if explicit_image_field:
@@ -1648,9 +1701,13 @@ class GitHubConnector(BaseConnector):
                 continue
             for index, row in enumerate(records):
                 row = dict(row)
-                extracted = heuristic_extract_record_content(row, self.spec)
+                extracted = self.extract_record_content(row)
                 raw_question = extracted["raw_question_text"]
-                raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"])
+                raw_answer = resolve_multiple_choice_answer_text(
+                    resolve_answer_source_text(row, extracted),
+                    extracted["choice_map"],
+                    self.spec.answer_index_base,
+                )
                 images: List[Image.Image] = []
                 image_sources: List[str] = []
                 image_field_candidates: List[str] = []
@@ -1746,6 +1803,487 @@ class BaseStructuredAgent:
         if images:
             return self.client.chat_json_with_images(self.load_system_prompt(), user_prompt, images)
         return self.client.chat_json(self.load_system_prompt(), user_prompt)
+
+
+class SourceIntakeAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient):
+        super().__init__(
+            client,
+            SOURCE_INTAKE_PROMPT_PATH,
+            "You are the Source Intake Agent. Extract question text, answer text, choices, image paths, and image dependency from a raw sample. Return strict JSON only.",
+        )
+
+    def extract(self, row: Dict[str, Any], spec: DatasetSpec) -> Dict[str, Any]:
+        fallback = heuristic_extract_record_content(row, spec)
+        if not self.client.config.enabled or not self.client.config.api_key:
+            return fallback
+        llm_result = self.call_json(
+            {
+                "dataset_name": spec.display_name,
+                "source_kind": spec.source_kind,
+                "raw_record": row,
+                "fallback": fallback,
+            }
+        )
+        if not llm_result:
+            return fallback
+        raw_question_text = normalize_whitespace(
+            to_plain_text(llm_result.get("raw_question_text") or llm_result.get("question_text") or fallback["raw_question_text"])
+        )
+        raw_answer_text = normalize_whitespace(
+            to_plain_text(llm_result.get("raw_answer_text") or llm_result.get("answer_text") or fallback["raw_answer_text"])
+        )
+        choice_map = parse_choice_map(llm_result.get("choice_map")) or fallback["choice_map"]
+        image_paths = normalize_image_path_list(llm_result.get("image_paths")) or fallback["image_paths"]
+        force_requires_image = llm_result.get("force_requires_image")
+        if not isinstance(force_requires_image, bool):
+            force_requires_image = fallback["force_requires_image"]
+        extraction_notes = llm_result.get("extraction_notes")
+        if not isinstance(extraction_notes, list):
+            extraction_notes = []
+        extraction_notes = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)]
+        extraction_notes.append("source_intake_agent")
+        return {
+            **fallback,
+            "raw_question_text": raw_question_text or fallback["raw_question_text"],
+            "raw_answer_text": raw_answer_text or fallback["raw_answer_text"],
+            "choice_map": choice_map,
+            "image_paths": image_paths,
+            "force_requires_image": force_requires_image,
+            "extraction_notes": extraction_notes,
+        }
+
+
+class AssetRegistryAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer):
+        super().__init__(
+            client,
+            ASSET_REGISTRY_PROMPT_PATH,
+            "You are the Asset Registry Agent. Audit question, answer, image, and metadata completeness for a candidate sample. Return strict JSON only.",
+        )
+        self.normalizer = normalizer
+
+    def fallback_process(
+        self,
+        problem_id: str,
+        question_text: str,
+        answer_text: str,
+        image_sources: Sequence[str],
+        image_qualities: Sequence[Dict[str, Any]],
+        metadata: Dict[str, Any],
+        requires_image: bool,
+    ) -> Dict[str, Any]:
+        image_manifest: List[Dict[str, Any]] = []
+        image_total = max(len(image_sources), len(image_qualities))
+        for index in range(image_total):
+            source = image_sources[index] if index < len(image_sources) else f"inline://image_{index + 1}"
+            quality = image_qualities[index] if index < len(image_qualities) else {}
+            path = Path(source) if source and not str(source).startswith("inline://") else None
+            exists = bool(quality.get("width") and quality.get("height")) or bool(path and path.exists())
+            file_size = 0
+            fmt = None
+            if path and path.exists():
+                try:
+                    file_size = int(path.stat().st_size)
+                except OSError:
+                    file_size = 0
+                fmt = path.suffix.lstrip(".") or None
+            elif exists:
+                fmt = "png"
+            image_manifest.append(
+                {
+                    "path": to_plain_text(source),
+                    "exists": exists,
+                    "format": fmt,
+                    "width": int(quality.get("width") or 0),
+                    "height": int(quality.get("height") or 0),
+                    "file_size": file_size,
+                }
+            )
+        issues: List[str] = []
+        if not question_text:
+            issues.append("missing_question_text")
+        if not answer_text:
+            issues.append("missing_answer_text")
+        has_image = any(item.get("exists") for item in image_manifest)
+        if requires_image and not has_image:
+            issues.append("missing_required_image")
+        fallback = {
+            "problem_id": problem_id,
+            "image_manifest": image_manifest,
+            "text_manifest": {
+                "question_present": bool(question_text),
+                "question_char_length": len(question_text),
+                "language_hint": self.normalizer.detect_language(question_text),
+            },
+            "answer_manifest": {
+                "answer_present": bool(answer_text),
+                "answer_type": self.normalizer.infer_answer_type(answer_text),
+                "answer_char_length": len(answer_text),
+            },
+            "issues": sorted(set(issues)),
+            "registry_passed": bool(question_text) and bool(answer_text) and (has_image or not requires_image),
+            "llm_used": False,
+        }
+        return fallback
+
+    def process(
+        self,
+        problem_id: str,
+        question_text: str,
+        answer_text: str,
+        image_sources: Sequence[str],
+        image_qualities: Sequence[Dict[str, Any]],
+        metadata: Dict[str, Any],
+        requires_image: bool,
+    ) -> Dict[str, Any]:
+        fallback = self.fallback_process(problem_id, question_text, answer_text, image_sources, image_qualities, metadata, requires_image)
+        if not self.client.config.enabled or not self.client.config.api_key:
+            return fallback
+        llm_result = self.call_json(
+            {
+                "problem_id": problem_id,
+                "question_text": question_text,
+                "answer_text": answer_text,
+                "image_paths": list(image_sources),
+                "metadata": metadata,
+                "asset_integrity": {
+                    "requires_image": requires_image,
+                    "image_quality_summaries": [
+                        {
+                            "width": quality.get("width"),
+                            "height": quality.get("height"),
+                            "readability_score": quality.get("readability_score"),
+                            "contrast_score": quality.get("contrast_score"),
+                        }
+                        for quality in image_qualities
+                    ],
+                },
+                "fallback": fallback,
+            }
+        )
+        if not llm_result:
+            return fallback
+        image_manifest = llm_result.get("image_manifest")
+        if not isinstance(image_manifest, list):
+            image_manifest = fallback["image_manifest"]
+        issues = llm_result.get("issues")
+        if not isinstance(issues, list):
+            issues = fallback["issues"]
+        registry_passed = llm_result.get("registry_passed")
+        if not isinstance(registry_passed, bool):
+            registry_passed = fallback["registry_passed"]
+        text_manifest = llm_result.get("text_manifest") if isinstance(llm_result.get("text_manifest"), dict) else fallback["text_manifest"]
+        answer_manifest = llm_result.get("answer_manifest") if isinstance(llm_result.get("answer_manifest"), dict) else fallback["answer_manifest"]
+        return {
+            "problem_id": problem_id,
+            "image_manifest": image_manifest,
+            "text_manifest": text_manifest,
+            "answer_manifest": answer_manifest,
+            "issues": sorted(set(to_plain_text(item) for item in issues if to_plain_text(item))),
+            "registry_passed": registry_passed,
+            "llm_used": True,
+        }
+
+
+class PotentialScorerAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient):
+        super().__init__(
+            client,
+            POTENTIAL_SCORER_PROMPT_PATH,
+            "You are the Potential Scorer Agent. Score image dependency, multi-step potential, and verifiability for a candidate sample. Return strict JSON only.",
+        )
+
+    def fallback_process(
+        self,
+        problem_id: str,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        answer_type: str,
+        requires_image: bool,
+        text_dominant: bool,
+        image_qualities: Sequence[Dict[str, Any]],
+        choices: Dict[str, str],
+        multi_solution_policy: Dict[str, Any],
+        asset_registry_record: Dict[str, Any],
+        fallback_scores: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        risk_flags = list(asset_registry_record.get("issues", []))
+        if not asset_registry_record.get("registry_passed", True):
+            risk_flags.append("asset_registry_failed")
+        if requires_image and not image_qualities:
+            risk_flags.append("missing_required_image")
+        return {
+            "problem_id": problem_id,
+            "image_dependency_score": round(float(fallback_scores.get("initial_image_dependency_score", 0.0)), 4),
+            "multi_step_score": round(float(fallback_scores.get("initial_multi_solution_score", 0.0)), 4),
+            "verifiability_score": round(float(fallback_scores.get("initial_verifiability_score", 0.0)), 4),
+            "score_evidence": {
+                "image_dependency": [
+                    "requires_image=true" if requires_image else "requires_image=false",
+                    f"image_count={len(image_qualities)}",
+                    f"text_dominant={text_dominant}",
+                ],
+                "multi_step": [
+                    f"multi_solution_policy={multi_solution_policy.get('mode', 'balanced')}",
+                    f"choice_count={len(choices)}",
+                    f"question_length={len(normalized_question_text)}",
+                ],
+                "verifiability": [
+                    f"answer_type={answer_type}",
+                    f"answer_present={bool(normalized_answer_text)}",
+                    f"registry_passed={asset_registry_record.get('registry_passed', True)}",
+                ],
+            },
+            "risk_flags": sorted(set(to_plain_text(flag) for flag in risk_flags if to_plain_text(flag))),
+            "scoring_version": "fallback_v1",
+            "llm_used": False,
+        }
+
+    def process(
+        self,
+        problem_id: str,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        answer_type: str,
+        requires_image: bool,
+        text_dominant: bool,
+        image_qualities: Sequence[Dict[str, Any]],
+        choices: Dict[str, str],
+        multi_solution_policy: Dict[str, Any],
+        asset_registry_record: Dict[str, Any],
+        fallback_scores: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        fallback = self.fallback_process(
+            problem_id,
+            normalized_question_text,
+            normalized_answer_text,
+            answer_type,
+            requires_image,
+            text_dominant,
+            image_qualities,
+            choices,
+            multi_solution_policy,
+            asset_registry_record,
+            fallback_scores,
+        )
+        if not self.client.config.enabled or not self.client.config.api_key:
+            return fallback
+        llm_result = self.call_json(
+            {
+                "problem_id": problem_id,
+                "question_text": normalized_question_text,
+                "answer_text": normalized_answer_text,
+                "answer_type": answer_type,
+                "requires_image": requires_image,
+                "text_dominant": text_dominant,
+                "choices": choices,
+                "metadata": {
+                    "multi_solution_policy": multi_solution_policy,
+                    "image_quality_summaries": [
+                        {
+                            "width": quality.get("width"),
+                            "height": quality.get("height"),
+                            "readability_score": quality.get("readability_score"),
+                            "contrast_score": quality.get("contrast_score"),
+                        }
+                        for quality in image_qualities
+                    ],
+                },
+                "asset_registry_record": asset_registry_record,
+                "fallback": fallback,
+            }
+        )
+        if not llm_result:
+            return fallback
+        score_evidence = llm_result.get("score_evidence") if isinstance(llm_result.get("score_evidence"), dict) else fallback["score_evidence"]
+        risk_flags = llm_result.get("risk_flags")
+        if not isinstance(risk_flags, list):
+            risk_flags = fallback["risk_flags"]
+        def coerce_score(key: str) -> float:
+            try:
+                return round(clamp(float(llm_result.get(key))), 4)
+            except (TypeError, ValueError):
+                return fallback[key]
+        return {
+            "problem_id": problem_id,
+            "image_dependency_score": coerce_score("image_dependency_score"),
+            "multi_step_score": coerce_score("multi_step_score"),
+            "verifiability_score": coerce_score("verifiability_score"),
+            "score_evidence": score_evidence,
+            "risk_flags": sorted(set(to_plain_text(flag) for flag in risk_flags if to_plain_text(flag))),
+            "scoring_version": to_plain_text(llm_result.get("scoring_version") or "agent_v1"),
+            "llm_used": True,
+        }
+
+
+class CandidateRegistrarAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient):
+        super().__init__(
+            client,
+            CANDIDATE_REGISTRAR_PROMPT_PATH,
+            "You are the Candidate Registrar Agent. Decide whether a sample should stay in the candidate pool and assign a priority. Return strict JSON only.",
+        )
+
+    def fallback_process(self, problem_id: str, asset_registry_record: Dict[str, Any], initial_scoring_record: Dict[str, Any]) -> Dict[str, Any]:
+        priority = round(
+            clamp(
+                0.4 * float(initial_scoring_record.get("image_dependency_score", 0.0))
+                + 0.3 * float(initial_scoring_record.get("multi_step_score", 0.0))
+                + 0.3 * float(initial_scoring_record.get("verifiability_score", 0.0))
+            ),
+            4,
+        )
+        risk_flags = list(initial_scoring_record.get("risk_flags", []))
+        issues = list(asset_registry_record.get("issues", []))
+        if not asset_registry_record.get("registry_passed", True):
+            decision = "reject"
+            reasons = issues or ["asset_registry_failed"]
+        elif priority >= 0.62 and not risk_flags:
+            decision = "keep"
+            reasons = ["high_collection_value"]
+        elif priority >= 0.35:
+            decision = "low_priority"
+            reasons = sorted(set((risk_flags or []) + ["needs_ranked_follow_up"]))
+        else:
+            decision = "reject"
+            reasons = sorted(set((risk_flags or []) + ["low_collection_priority"]))
+        return {
+            "problem_id": problem_id,
+            "priority": priority,
+            "decision": decision,
+            "decision_reasons": [to_plain_text(item) for item in reasons if to_plain_text(item)],
+            "llm_used": False,
+        }
+
+    def process(self, problem_id: str, asset_registry_record: Dict[str, Any], initial_scoring_record: Dict[str, Any]) -> Dict[str, Any]:
+        fallback = self.fallback_process(problem_id, asset_registry_record, initial_scoring_record)
+        if not self.client.config.enabled or not self.client.config.api_key:
+            return fallback
+        llm_result = self.call_json(
+            {
+                "problem_id": problem_id,
+                "asset_registry_record": asset_registry_record,
+                "initial_scoring_record": initial_scoring_record,
+                "fallback": fallback,
+            }
+        )
+        if not llm_result:
+            return fallback
+        decision = to_plain_text(llm_result.get("decision")).strip().lower()
+        if decision not in {"keep", "low_priority", "reject"}:
+            decision = fallback["decision"]
+        reasons = llm_result.get("decision_reasons")
+        if not isinstance(reasons, list):
+            reasons = fallback["decision_reasons"]
+        try:
+            priority = round(clamp(float(llm_result.get("priority"))), 4)
+        except (TypeError, ValueError):
+            priority = fallback["priority"]
+        return {
+            "problem_id": problem_id,
+            "priority": priority,
+            "decision": decision,
+            "decision_reasons": [to_plain_text(item) for item in reasons if to_plain_text(item)] or fallback["decision_reasons"],
+            "llm_used": True,
+        }
+
+
+class NormalizationAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer):
+        super().__init__(
+            client,
+            NORMALIZATION_AGENT_PROMPT_PATH,
+            "You are the Normalization Agent. Normalize question text, answer text, choices, and cleaning-path judgments for a candidate sample. Return strict JSON only.",
+        )
+        self.normalizer = normalizer
+
+    def fallback_process(
+        self,
+        raw_question_text: str,
+        raw_answer_text: str,
+        choice_map: Dict[str, str],
+        force_requires_image: bool,
+        image_count: int,
+    ) -> Dict[str, Any]:
+        normalized_question_text = self.normalizer.strip_hint(self.normalizer.normalize_text(raw_question_text))
+        normalized_answer_text = self.normalizer.normalize_answer(raw_answer_text)
+        normalized_choice_map = parse_choice_map(choice_map) or dict(choice_map)
+        requires_image = bool(force_requires_image or self.normalizer.infer_requires_image(normalized_question_text, image_count))
+        text_dominant = not requires_image
+        return {
+            "normalized_question_text": normalized_question_text,
+            "normalized_answer_text": normalized_answer_text,
+            "normalized_choice_map": normalized_choice_map,
+            "requires_image": requires_image,
+            "text_dominant": text_dominant,
+            "cleaning_path": "text_lightweight" if text_dominant else "multimodal_full",
+            "normalization_notes": ["rule_based_normalization"],
+            "llm_used": False,
+        }
+
+    def process(
+        self,
+        dataset_name: str,
+        raw_question_text: str,
+        raw_answer_text: str,
+        choice_map: Dict[str, str],
+        force_requires_image: bool,
+        images: Sequence[Image.Image],
+        image_qualities: Sequence[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        fallback = self.fallback_process(raw_question_text, raw_answer_text, choice_map, force_requires_image, len(images))
+        if not self.client.config.enabled or not self.client.config.api_key:
+            return fallback
+        llm_result = self.call_json(
+            {
+                "dataset_name": dataset_name,
+                "raw_question_text": raw_question_text,
+                "raw_answer_text": raw_answer_text,
+                "choice_map": choice_map,
+                "force_requires_image": force_requires_image,
+                "image_count": len(images),
+                "image_quality_summaries": [
+                    {
+                        "width": quality.get("width"),
+                        "height": quality.get("height"),
+                        "readability_score": quality.get("readability_score"),
+                        "contrast_score": quality.get("contrast_score"),
+                        "crop_integrity_score": quality.get("crop_integrity_score"),
+                    }
+                    for quality in image_qualities
+                ],
+                "fallback": fallback,
+            },
+            images=images if images else None,
+        )
+        if not llm_result:
+            return fallback
+        normalized_question_text = normalize_whitespace(to_plain_text(llm_result.get("normalized_question_text") or fallback["normalized_question_text"])) or fallback["normalized_question_text"]
+        normalized_answer_text = normalize_whitespace(to_plain_text(llm_result.get("normalized_answer_text") or fallback["normalized_answer_text"]))
+        normalized_choice_map = parse_choice_map(llm_result.get("normalized_choice_map") or llm_result.get("choice_map")) or fallback["normalized_choice_map"]
+        requires_image = llm_result.get("requires_image")
+        if not isinstance(requires_image, bool):
+            requires_image = fallback["requires_image"]
+        text_dominant = llm_result.get("text_dominant")
+        if not isinstance(text_dominant, bool):
+            text_dominant = fallback["text_dominant"]
+        cleaning_path = to_plain_text(llm_result.get("cleaning_path") or fallback["cleaning_path"]).strip() or fallback["cleaning_path"]
+        if cleaning_path not in {"text_lightweight", "multimodal_full"}:
+            cleaning_path = fallback["cleaning_path"]
+        normalization_notes = llm_result.get("normalization_notes")
+        if not isinstance(normalization_notes, list):
+            normalization_notes = fallback["normalization_notes"]
+        return {
+            "normalized_question_text": normalized_question_text,
+            "normalized_answer_text": normalized_answer_text,
+            "normalized_choice_map": normalized_choice_map,
+            "requires_image": requires_image,
+            "text_dominant": text_dominant,
+            "cleaning_path": cleaning_path,
+            "normalization_notes": [to_plain_text(item) for item in normalization_notes if to_plain_text(item)] or fallback["normalization_notes"],
+            "llm_used": True,
+        }
 
 
 class SampleUnderstandingAgent(BaseStructuredAgent):
@@ -1961,6 +2499,10 @@ class RewriteAgent(BaseStructuredAgent):
                 "variants": variants,
                 "discard_reason_codes": [],
             }
+        resolved_answer = choices.get(normalized_answer, normalized_answer)
+        resolved_answer_type = self.normalizer.infer_answer_type(self.normalizer.normalize_answer(resolved_answer))
+        if resolved_answer_type == "option":
+            resolved_answer_type = "short_text"
         return {
             "strategy": "blank_open",
             "rationale": "Converted multiple choice into blank-style open-ended question.",
@@ -1969,8 +2511,8 @@ class RewriteAgent(BaseStructuredAgent):
                     "variant_id": "open_1",
                     "title": f"{dataset_name} 开放题",
                     "rewritten_question_text": question_only,
-                    "expected_answer_type": "numeric" if answer_type == "option" and choices.get(normalized_answer, "") else answer_type,
-                    "expected_answer": choices.get(normalized_answer, normalized_answer),
+                    "expected_answer_type": resolved_answer_type,
+                    "expected_answer": resolved_answer,
                     "split_role": "single",
                 }
             ],
@@ -2054,6 +2596,14 @@ class DecisionAgent(BaseStructuredAgent):
                 "decision": "reject",
                 "reason_codes": ["missing_question_text"],
                 "rationale": "The sample lacks a usable question signal.",
+                "review_required": False,
+                "llm_used": False,
+            }
+        if "text_only_without_visual_need" in quality_flags:
+            return {
+                "decision": "reject",
+                "reason_codes": ["text_only_without_visual_need"],
+                "rationale": "The sample can be solved from text alone and does not satisfy the required multimodal dependency.",
                 "review_required": False,
                 "llm_used": False,
             }
@@ -2242,6 +2792,11 @@ class MultiDatasetCleaningPipeline:
         self.text_normalizer = TextNormalizer()
         self.image_analyzer = ImageQualityAnalyzer()
         self.client = OpenAICompatibleClient(config.model)
+        self.source_intake_agent = SourceIntakeAgent(self.client)
+        self.asset_registry_agent = AssetRegistryAgent(self.client, self.text_normalizer)
+        self.potential_scorer_agent = PotentialScorerAgent(self.client)
+        self.candidate_registrar_agent = CandidateRegistrarAgent(self.client)
+        self.normalization_agent = NormalizationAgent(self.client, self.text_normalizer)
         self.rewrite_agent = RewriteAgent(self.client, self.text_normalizer)
         self.sample_understanding_agent = SampleUnderstandingAgent(self.client)
         self.decision_agent = DecisionAgent(self.client)
@@ -2325,6 +2880,11 @@ class MultiDatasetCleaningPipeline:
             write_json(dataset_dir / "summary.json", summary)
             return summary
         bundle = {
+            "source_intake_records": [],
+            "asset_registry_records": [],
+            "initial_scoring_records": [],
+            "candidate_registration_records": [],
+            "normalization_records": [],
             "candidate_problem_records": [],
             "raw_asset_bundles": [],
             "candidate_pool_entries": [],
@@ -2345,6 +2905,11 @@ class MultiDatasetCleaningPipeline:
             "open_ended_problem_variants": [],
         }
         result_mapping = {
+            "source_intake_record": "source_intake_records",
+            "asset_registry_record": "asset_registry_records",
+            "initial_scoring_record": "initial_scoring_records",
+            "candidate_registration_record": "candidate_registration_records",
+            "normalization_record": "normalization_records",
             "candidate_problem_record": "candidate_problem_records",
             "raw_asset_bundle": "raw_asset_bundles",
             "candidate_pool_entry": "candidate_pool_entries",
@@ -2660,6 +3225,8 @@ class MultiDatasetCleaningPipeline:
             flags.append("missing_core_image")
         if requires_image and len(image_qualities) > 1:
             flags.append("multi_image_sample")
+        if not requires_image:
+            flags.append("text_only_without_visual_need")
         return sorted(set(flags))
 
     def build_normalized_assets(self, problem_id: str, sample: UnifiedSample, question_norm: Dict[str, Any], answer_norm: Dict[str, Any], image_qualities: Sequence[Dict[str, Any]], text_dominant: bool, cleaning_path: str) -> Dict[str, Any]:
@@ -3476,41 +4043,171 @@ class MultiDatasetCleaningPipeline:
         created_at = utc_now()
         raw_question_text = sample.raw_question_text
         raw_answer_text = "" if is_null_like_text(sample.raw_answer_text) else sample.raw_answer_text
-        normalized_question_base = self.text_normalizer.strip_hint(self.text_normalizer.normalize_text(raw_question_text))
-        normalized_answer_base = self.text_normalizer.normalize_answer(raw_answer_text)
-        question_norm = normalize_structured_text(normalized_question_base)
-        answer_norm = normalize_structured_text(normalized_answer_base)
-        normalized_question_text = question_norm["normalized_text"]
-        normalized_answer_text = answer_norm["normalized_text"]
-        language = self.text_normalizer.detect_language(normalized_question_text)
-        original_answer_type = self.text_normalizer.infer_answer_type(normalized_answer_text)
-        choices = dict(sample.choice_map)
-        if not choices:
-            choices = self.text_normalizer.extract_choice_map(normalized_question_text)
         digest_seed = [
             spec.key,
             sample.source_split or "unknown",
-            sample.source_problem_id or normalized_question_text or raw_question_text or "empty",
+            sample.source_problem_id or raw_question_text or "empty",
             "||".join(sample.image_sources) if sample.image_sources else str(len(sample.images)),
         ]
         candidate_id = f"cand_{stable_digest(digest_seed)}"
         problem_id = f"prob_{stable_digest(digest_seed)}"
         image_paths, image_bytes_list, image_qualities = self.persist_images(problem_id=problem_id, images=sample.images, image_dir=image_dir)
         image_count = len(sample.images)
-        requires_image = sample.force_requires_image or self.text_normalizer.infer_requires_image(normalized_question_text, image_count)
-        text_dominant = not requires_image
-        cleaning_path = "text_lightweight" if text_dominant else "multimodal_full"
-        text_completeness = self.text_normalizer.text_completeness_score(raw_question_text, normalized_question_text)
         if not image_paths:
             image_qualities = []
+
+        normalization_result = self.normalization_agent.process(
+            dataset_name=spec.display_name,
+            raw_question_text=raw_question_text,
+            raw_answer_text=raw_answer_text,
+            choice_map=dict(sample.choice_map),
+            force_requires_image=sample.force_requires_image,
+            images=sample.images,
+            image_qualities=image_qualities,
+        )
+        normalized_question_text = normalization_result["normalized_question_text"]
+        normalized_answer_text = normalization_result["normalized_answer_text"]
+        choices = dict(normalization_result.get("normalized_choice_map") or {})
+        if not choices:
+            choices = dict(sample.choice_map)
+        if not choices:
+            choices = self.text_normalizer.extract_choice_map(normalized_question_text)
+        text_dominant = bool(normalization_result.get("text_dominant", False))
+        cleaning_path = to_plain_text(
+            normalization_result.get("cleaning_path") or ("text_lightweight" if text_dominant else "multimodal_full")
+        ).strip()
+        if cleaning_path not in {"text_lightweight", "multimodal_full"}:
+            cleaning_path = "text_lightweight" if text_dominant else "multimodal_full"
+        if cleaning_path == "text_lightweight":
+            text_dominant = True
+            requires_image = False
+        else:
+            text_dominant = False
+            requires_image = True
+
+        question_norm = normalize_structured_text(normalized_question_text)
+        answer_norm = normalize_structured_text(normalized_answer_text)
+        language = self.text_normalizer.detect_language(normalized_question_text)
+        original_answer_type = self.text_normalizer.infer_answer_type(normalized_answer_text)
+        text_completeness = self.text_normalizer.text_completeness_score(raw_question_text, normalized_question_text)
+
+        source_intake_record = {
+            "source_intake_id": f"sintake_{stable_digest([problem_id, self.pipeline_run_id])}",
+            "candidate_id": candidate_id,
+            "problem_id": problem_id,
+            "dataset_name": spec.display_name,
+            "source_problem_id": sample.source_problem_id,
+            "raw_question_text": raw_question_text,
+            "raw_answer_text": raw_answer_text,
+            "choice_map": dict(sample.choice_map),
+            "image_paths": list(sample.metadata.get("image_paths", [])),
+            "force_requires_image": sample.force_requires_image,
+            "question_field": sample.metadata.get("question_field"),
+            "answer_field": sample.metadata.get("answer_field"),
+            "image_field": sample.metadata.get("image_field"),
+            "choice_field": sample.metadata.get("choice_field"),
+            "extraction_notes": list(sample.metadata.get("extraction_notes", [])),
+            "created_at": created_at,
+        }
+        asset_registry_record = self.asset_registry_agent.process(
+            problem_id=problem_id,
+            question_text=raw_question_text,
+            answer_text=raw_answer_text,
+            image_sources=[str(path) for path in image_paths] if image_paths else list(sample.image_sources),
+            image_qualities=image_qualities,
+            metadata=sample.metadata,
+            requires_image=requires_image,
+        )
+        asset_registry_record.update(
+            {
+                "asset_registry_id": f"areg_{stable_digest([problem_id, self.pipeline_run_id])}",
+                "candidate_id": candidate_id,
+                "dataset_name": spec.display_name,
+                "source_problem_id": sample.source_problem_id,
+                "created_at": created_at,
+            }
+        )
+
         multi_solution_policy = self.determine_multi_solution_policy(spec)
-        initial_scores = self.compute_initial_collection_scores(normalized_question_text, normalized_answer_text, original_answer_type, requires_image, text_dominant, image_qualities, choices, multi_solution_policy)
+        fallback_initial_scores = self.compute_initial_collection_scores(
+            normalized_question_text,
+            normalized_answer_text,
+            original_answer_type,
+            requires_image,
+            text_dominant,
+            image_qualities,
+            choices,
+            multi_solution_policy,
+        )
+        initial_scoring_record = self.potential_scorer_agent.process(
+            problem_id=problem_id,
+            normalized_question_text=normalized_question_text,
+            normalized_answer_text=normalized_answer_text,
+            answer_type=original_answer_type,
+            requires_image=requires_image,
+            text_dominant=text_dominant,
+            image_qualities=image_qualities,
+            choices=choices,
+            multi_solution_policy=multi_solution_policy,
+            asset_registry_record=asset_registry_record,
+            fallback_scores=fallback_initial_scores,
+        )
+        initial_scoring_record.update(
+            {
+                "initial_scoring_id": f"iscore_{stable_digest([problem_id, self.pipeline_run_id])}",
+                "candidate_id": candidate_id,
+                "dataset_name": spec.display_name,
+                "source_problem_id": sample.source_problem_id,
+                "created_at": created_at,
+            }
+        )
+        initial_scores = {
+            "initial_image_dependency_score": initial_scoring_record["image_dependency_score"],
+            "initial_multi_solution_score": initial_scoring_record["multi_step_score"],
+            "initial_verifiability_score": initial_scoring_record["verifiability_score"],
+        }
+
+        candidate_registration_record = self.candidate_registrar_agent.process(
+            problem_id=problem_id,
+            asset_registry_record=asset_registry_record,
+            initial_scoring_record=initial_scoring_record,
+        )
+        candidate_registration_record.update(
+            {
+                "candidate_registration_id": f"creg_{stable_digest([problem_id, self.pipeline_run_id])}",
+                "candidate_id": candidate_id,
+                "dataset_name": spec.display_name,
+                "source_problem_id": sample.source_problem_id,
+                "created_at": created_at,
+            }
+        )
+        normalization_record = {
+            "normalization_id": f"norm_{stable_digest([problem_id, self.pipeline_run_id])}",
+            "candidate_id": candidate_id,
+            "problem_id": problem_id,
+            "dataset_name": spec.display_name,
+            "normalized_question_text": normalized_question_text,
+            "normalized_answer_text": normalized_answer_text,
+            "normalized_choice_map": choices,
+            "requires_image": requires_image,
+            "text_dominant": text_dominant,
+            "cleaning_path": cleaning_path,
+            "normalization_notes": list(normalization_result.get("normalization_notes", [])),
+            "llm_used": bool(normalization_result.get("llm_used")),
+            "created_at": created_at,
+        }
+
         rewrite_report = self.rewrite_agent.rewrite(spec.display_name, normalized_question_text, normalized_answer_text, original_answer_type, choices)
         open_variants = self.build_open_variants(problem_id, rewrite_report)
         text_structure = self.text_parser.parse(problem_id, normalized_question_text, open_variants, requires_image, question_norm, answer_norm, choices)
         visual_structures = [] if text_dominant else self.visual_parser.parse_many(problem_id, sample.images, image_qualities, normalized_question_text)
         alignment_record = self.build_alignment_record(problem_id, normalized_question_text, requires_image, text_structure, visual_structures, image_qualities)
-        quality_flags = self.build_quality_flags(raw_question_text, raw_answer_text, text_completeness, image_qualities, requires_image)
+        quality_flags = sorted(
+            set(
+                self.build_quality_flags(raw_question_text, raw_answer_text, text_completeness, image_qualities, requires_image)
+                + list(asset_registry_record.get("issues", []))
+            )
+        )
         sample_understanding = self.agentic_orchestrator.assess_sample(
             dataset_name=spec.display_name,
             normalized_question_text=normalized_question_text,
@@ -3527,6 +4224,12 @@ class MultiDatasetCleaningPipeline:
         potential_scores = self.compute_potential_scores(normalized_question_text, normalized_answer_text, original_answer_type, requires_image, image_qualities, choices, len(open_variants), text_structure, alignment_record, solvability_report)
         gate = self.clean_gate(spec.display_name, raw_question_text, raw_answer_text, text_completeness, requires_image, image_qualities, alignment_record, potential_scores, combined_quality_flags, rewrite_report, open_variants, text_structure, solvability_report, sample_understanding)
         normalized_assets = self.build_normalized_assets(problem_id, sample, question_norm, answer_norm, image_qualities, text_dominant, cleaning_path)
+        normalized_assets.update(
+            {
+                "normalization_notes": normalization_record["normalization_notes"],
+                "normalization_llm_used": normalization_record["llm_used"],
+            }
+        )
         clean_problem_record = self.build_clean_problem_record(problem_id, sample, normalized_assets, text_structure, alignment_record, solvability_report, gate, open_variants, requires_image, cleaning_path)
         roi_assets = self.create_roi_assets(problem_id, sample.images, image_qualities, crop_dir)
         asset_records = self.build_asset_records(spec, problem_id, sample, image_paths, image_bytes_list, normalized_question_text, normalized_answer_text, question_norm, answer_norm, text_completeness, image_qualities, combined_quality_flags, roi_assets, open_variants)
@@ -3542,11 +4245,38 @@ class MultiDatasetCleaningPipeline:
                 "initial_multi_solution_score": initial_scores["initial_multi_solution_score"],
                 "initial_verifiability_score": initial_scores["initial_verifiability_score"],
                 "multi_solution_mining_policy": multi_solution_policy["mode"],
+                "collection_priority_score": candidate_registration_record["priority"],
+                "collection_decision": candidate_registration_record["decision"],
+                "collection_decision_reasons": candidate_registration_record["decision_reasons"],
             }
         )
         candidate_problem_record = self.build_candidate_problem_record(candidate_id, sample, initial_scores, requires_image, text_dominant, cleaning_path, multi_solution_policy)
+        candidate_problem_record.update(
+            {
+                "asset_registry_passed": asset_registry_record.get("registry_passed", True),
+                "collection_priority_score": candidate_registration_record["priority"],
+                "collection_decision": candidate_registration_record["decision"],
+                "collection_decision_reasons": candidate_registration_record["decision_reasons"],
+                "collection_risk_flags": initial_scoring_record.get("risk_flags", []),
+            }
+        )
         raw_asset_bundle = self.build_raw_asset_bundle(candidate_id, problem_id, sample, image_qualities, initial_scores)
+        raw_asset_bundle.update(
+            {
+                "asset_registry_passed": asset_registry_record.get("registry_passed", True),
+                "asset_registry_issues": asset_registry_record.get("issues", []),
+            }
+        )
         candidate_pool_entry = self.build_candidate_pool_entry(candidate_id, sample, initial_scores, cleaning_path, multi_solution_policy)
+        candidate_pool_entry.update(
+            {
+                "candidate_status": "collection_rejected" if candidate_registration_record["decision"] == "reject" else "ready_for_cleaning",
+                "priority_score": candidate_registration_record["priority"],
+                "priority_tier": "high" if candidate_registration_record["priority"] >= 0.72 else "normal" if candidate_registration_record["priority"] >= 0.4 else "low",
+                "registration_decision": candidate_registration_record["decision"],
+                "registration_decision_reasons": candidate_registration_record["decision_reasons"],
+            }
+        )
         clean_pool_entry = None if gate["decision"] == "reject" else {
             "clean_pool_entry_id": f"cleanpool_{stable_digest([problem_id, self.pipeline_run_id])}",
             "candidate_id": candidate_id,
@@ -3564,6 +4294,11 @@ class MultiDatasetCleaningPipeline:
         cleaning_record.update({"candidate_id": candidate_id, "cleaning_path": cleaning_path, "text_dominant": text_dominant})
         alignment_record.update({"cleaning_path": cleaning_path, "text_dominant": text_dominant})
         return {
+            "source_intake_record": source_intake_record,
+            "asset_registry_record": asset_registry_record,
+            "initial_scoring_record": initial_scoring_record,
+            "candidate_registration_record": candidate_registration_record,
+            "normalization_record": normalization_record,
             "candidate_problem_record": candidate_problem_record,
             "raw_asset_bundle": raw_asset_bundle,
             "candidate_pool_entry": candidate_pool_entry,

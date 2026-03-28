@@ -1,0 +1,37 @@
+runtime:
+  sample_per_dataset: 10
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: benchmarkallinone/outputs/cmm_math_validation_10
+  cleaning_version: v3.1.0
+  batch_id_prefix: benchmarkallinone-cmm-math-validation-10
+  save_sample_bundle: true
+  git_cache_root: benchmark/outputs/repo_cache
+model:
+  base_url: https://synai996.space/v1
+  api_key: sk-GyNSVZY6ftL00eMQzoymgANJ8a809SLbREqb6IwI70NMGkW8
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+datasets:
+- key: cmm_math
+  display_name: CMM-Math
+  subject: 数学
+  note: 其他数据集 10 条验证，使用 Hugging Face 数据源
+  source_kind: huggingface
+  source_locator: ecnu-icalk/cmm-math
+  split: train
+  question_fields:
+  - question
+  answer_fields:
+  - answer
+  - solution
+  image_fields:
+  - decoded_image
+  - image
+  choice_fields:
+  - options
+  - choices

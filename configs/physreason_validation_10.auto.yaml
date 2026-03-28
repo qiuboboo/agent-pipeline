@@ -1,0 +1,44 @@
+runtime:
+  sample_per_dataset: 10
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: benchmarkallinone/outputs/physreason_validation_10
+  cleaning_version: v3.1.0
+  batch_id_prefix: benchmarkallinone-physreason-validation-10
+  save_sample_bundle: true
+  git_cache_root: benchmark/outputs/repo_cache
+model:
+  base_url: https://synai996.space/v1
+  api_key: sk-GyNSVZY6ftL00eMQzoymgANJ8a809SLbREqb6IwI70NMGkW8
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+datasets:
+- key: physreason
+  display_name: PhysReason
+  subject: 物理
+  note: 其他数据集 10 条验证，使用 Hugging Face 数据源以启用 raw zip fallback
+  source_kind: huggingface
+  source_locator: zhibei1204/PhysReason
+  split: mini
+  question_fields:
+  - question
+  - problem
+  - query
+  - text
+  answer_fields:
+  - answer
+  - solution
+  - label
+  image_fields:
+  - image
+  - decoded_image
+  - image_path
+  - img_path
+  - figure
+  choice_fields:
+  - choices
+  - options
