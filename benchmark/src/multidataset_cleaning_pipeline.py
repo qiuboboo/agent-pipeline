@@ -833,12 +833,24 @@ def normalize_image_path_list(value: Any) -> List[str]:
     if is_missing_value(value):
         return []
     if isinstance(value, (list, tuple)):
-        return [str(item).strip() for item in value if str(item).strip()]
+        normalized: List[str] = []
+        for item in value:
+            normalized.extend(normalize_image_path_list(item))
+        return normalized
     if isinstance(value, dict):
         return normalize_image_path_list(value.get("path") or value.get("paths") or value.get("image") or value.get("url"))
     if isinstance(value, str):
         stripped = value.strip()
-        return [stripped] if stripped else []
+        if not stripped:
+            return []
+        if stripped.startswith("[") and stripped.endswith("]"):
+            try:
+                parsed = json.loads(stripped)
+                if isinstance(parsed, list):
+                    return normalize_image_path_list(parsed)
+            except Exception:
+                pass
+        return [stripped]
     return []
 
 
