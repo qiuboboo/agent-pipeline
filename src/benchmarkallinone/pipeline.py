@@ -2136,9 +2136,22 @@ class CandidateRegistrarAgent(BaseStructuredAgent):
         )
         risk_flags = list(initial_scoring_record.get("risk_flags", []))
         issues = list(asset_registry_record.get("issues", []))
+        question_present = bool((asset_registry_record.get("text_manifest") or {}).get("question_present"))
+        answer_present = bool((asset_registry_record.get("answer_manifest") or {}).get("answer_present"))
+        image_manifest = asset_registry_record.get("image_manifest") or []
+        has_image = any(isinstance(item, dict) and item.get("exists") for item in image_manifest)
+        recoverable_asset_state = answer_present and (question_present or has_image)
         if not asset_registry_record.get("registry_passed", True):
-            decision = "reject"
-            reasons = issues or ["asset_registry_failed"]
+            if recoverable_asset_state:
+                decision = "low_priority"
+                reasons = sorted(
+                    set(
+                        [*issues, *risk_flags, "asset_incomplete_but_recoverable", "needs_ranked_follow_up"]
+                    )
+                )
+            else:
+                decision = "reject"
+                reasons = sorted(set(issues or ["asset_registry_failed", "missing_core_assets"]))
         elif priority >= 0.62 and not risk_flags:
             decision = "keep"
             reasons = ["high_collection_value"]
@@ -2180,6 +2193,10 @@ class CandidateRegistrarAgent(BaseStructuredAgent):
             priority = round(clamp(float(llm_result.get("priority"))), 4)
         except (TypeError, ValueError):
             priority = fallback["priority"]
+        if decision == "reject" and fallback["decision"] == "low_priority":
+            decision = fallback["decision"]
+            reasons = fallback["decision_reasons"]
+            priority = max(priority, fallback["priority"])
         return {
             "problem_id": problem_id,
             "priority": priority,
@@ -2449,10 +2466,19 @@ class RewriteAgent(BaseStructuredAgent):
         if not choices:
             if answer_type == "option" and any(token in question_only.lower() for token in ["which picture", "in which picture", "which figure", "which diagram", "which graph", "shown below", "illustrated"]):
                 return {
-                    "strategy": "drop_image_index",
-                    "rationale": "Visual selection question without textual choices should be dropped.",
-                    "variants": [],
-                    "discard_reason_codes": ["pure_image_index_choice"],
+                    "strategy": "blank_open",
+                    "rationale": "Pure-image label selection tasks are in scope, so keep the task and require the answer as the correct option label.",
+                    "variants": [
+                        {
+                            "variant_id": "open_1",
+                            "title": f"{dataset_name} 图像标签题",
+                            "rewritten_question_text": question_only,
+                            "expected_answer_type": "short_text",
+                            "expected_answer": normalized_answer,
+                            "split_role": "single",
+                        }
+                    ],
+                    "discard_reason_codes": [],
                 }
             return {
                 "strategy": "keep_open",
@@ -2470,11 +2496,21 @@ class RewriteAgent(BaseStructuredAgent):
                 "discard_reason_codes": [],
             }
         if self.normalizer.is_pure_image_index_question(question_only, choices):
+            resolved_answer = choices.get(normalized_answer, normalized_answer)
             return {
-                "strategy": "drop_image_index",
-                "rationale": "Pure image-index multiple choice question should be dropped.",
-                "variants": [],
-                "discard_reason_codes": ["pure_image_index_choice"],
+                "strategy": "blank_open",
+                "rationale": "Pure-image choice questions remain valid tasks for this pipeline, so convert them into answer-with-label open questions instead of dropping them.",
+                "variants": [
+                    {
+                        "variant_id": "open_1",
+                        "title": f"{dataset_name} 图像标签题",
+                        "rewritten_question_text": question_only,
+                        "expected_answer_type": "short_text",
+                        "expected_answer": resolved_answer,
+                        "split_role": "single",
+                    }
+                ],
+                "discard_reason_codes": [],
             }
         if self.normalizer.is_compound_answer_question(question_only, choices):
             correct_text = choices.get(normalized_answer, "")
@@ -2585,10 +2621,10 @@ class DecisionAgent(BaseStructuredAgent):
         image_support_status = sample_understanding.get("image_support_status", "uncertain_but_usable")
         if strategy == "drop_image_index":
             return {
-                "decision": "reject",
-                "reason_codes": ["pure_image_index_choice"],
-                "rationale": "Rewrite stage determined the sample is a pure image-index selection task without a meaningful open-ended target.",
-                "review_required": False,
+                "decision": "review",
+                "reason_codes": ["pure_image_choice_needs_review"],
+                "rationale": "Rewrite stage classified the sample as a pure image-choice task. Since pure-image tasks are in scope, keep it for review instead of rejecting it outright.",
+                "review_required": True,
                 "llm_used": False,
             }
         if not raw_question_text:
@@ -4078,6 +4114,12 @@ class MultiDatasetCleaningPipeline:
         created_at = utc_now()
         raw_question_text = sample.raw_question_text
         raw_answer_text = "" if is_null_like_text(sample.raw_answer_text) else sample.raw_answer_text
+        raw_answer_text = resolve_multiple_choice_answer_text(
+            raw_answer_text,
+            dict(sample.choice_map),
+            spec.answer_index_base,
+        )
+        sample.raw_answer_text = raw_answer_text
         digest_seed = [
             spec.key,
             sample.source_split or "unknown",
@@ -4107,6 +4149,11 @@ class MultiDatasetCleaningPipeline:
             choices = dict(sample.choice_map)
         if not choices:
             choices = self.text_normalizer.extract_choice_map(normalized_question_text)
+        normalized_answer_text = resolve_multiple_choice_answer_text(
+            normalized_answer_text,
+            choices,
+            spec.answer_index_base,
+        )
         text_dominant = bool(normalization_result.get("text_dominant", False))
         cleaning_path = to_plain_text(
             normalization_result.get("cleaning_path") or ("text_lightweight" if text_dominant else "multimodal_full")

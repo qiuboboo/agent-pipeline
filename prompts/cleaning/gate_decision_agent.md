@@ -34,8 +34,11 @@ Choose `reject` only when the sample is fundamentally broken, for example:
 - answer signal is missing,
 - question is materially incomplete,
 - required image is missing or jointly unintelligible,
-- rewrite explicitly says it should be dropped,
+- rewrite explicitly says it should be dropped and the task is not recoverable even as a pure-image label task,
 - text and image cannot support a meaningful annotation target.
+
+## NOTE ON PURE-IMAGE TASKS
+Pure-image tasks are in scope for this pipeline. If a task is mainly solved from the image and the answer can still be represented as a stable option label or short textual target, prefer `review` over `reject`.
 
 # Important Bias
 Prefer `review` over `reject` whenever the sample still has recoverable semantic value.
