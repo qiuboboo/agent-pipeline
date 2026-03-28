@@ -530,6 +530,7 @@ def build_rewrite_record(pipeline: Any, problem_id: str, sample: Any, rewrite_re
         "source_problem_id": sample.source_problem_id,
         "strategy": rewrite_report.get("strategy"),
         "rationale": rewrite_report.get("rationale"),
+        "llm_used": rewrite_report.get("llm_used"),
         "discard_reason_codes": rewrite_report.get("discard_reason_codes", []),
         "variant_count": len(open_variants),
         "variants": open_variants,
