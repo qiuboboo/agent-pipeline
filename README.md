@@ -175,6 +175,157 @@ python run_pipeline.py --config configs/candidate_200_remote.yaml
 python run_pipeline.py --config configs/multi_dataset_iter.yaml --disable-llm
 ```
 
+## 最新运行结果与问题总结（2026-03-28）
+
+### 今日 200 样本 rerun 结果
+
+本次完整 rerun 以 `outputs/candidate_200_remote/run_38bce3437874d962/summary.json` 为准。
+
+- run id：`run_38bce3437874d962`
+- Requested：`200`
+- Processed：`200`
+- Pass：`114`
+- Review：`64`
+- Reject：`22`
+- 总耗时：约 **3 小时 48 分 39 秒**
+
+各数据集结果：
+
+- `SCEMQA`：`17 / 3 / 0`
+- `Geometry3K`：`7 / 10 / 3`
+- `CMM-Math`：`18 / 1 / 1`
+- `MathVision`：`17 / 3 / 0`
+- `MM-Math`：`2 / 17 / 1`
+- `SeePhys`：`19 / 1 / 0`
+- `Multi-Physics`：`4 / 0 / 16`
+- `PhysReason`：`7 / 13 / 0`
+- `EEE-Bench`：`13 / 6 / 1`
+- `EMMA-Physics`：`10 / 10 / 0`
+
+详细分析见：
+- [`docs/run_summaries/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md`](docs/run_summaries/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md)
+
+### 这轮暴露出的主要问题
+
+#### 1. `MM-Math` review 过高，更像规则过保守，不像样本本身不可用
+
+这轮 `MM-Math` 结果是：
+- `2 / 17 / 1`
+
+代表性样本：
+- `prob_c11f4ea0de15f097c71f67f5`
+- `rewrite_3c69d9a80d4b280babf8cd3e`
+
+现象：
+- 改写后已经是开放题
+- `strategy = keep_open`
+- 答案也明确
+- 但仍会因为下列原因进入 `cleaning_review`：
+  - `ALIGNMENT_RISKY`
+  - `MAJOR_ALIGNMENT_CONFLICT`
+  - `VISUAL_REFERENCE_DENSITY_MISMATCH`
+  - `alignment_risky`
+
+说明：
+> 当前 `MM-Math` 的主要问题更像 **alignment 风险规则过保守**，而不是样本本身无法开放化。
+
+#### 2. `Multi-Physics` reject 很高，更像数据类型与当前清洗目标不兼容
+
+这轮 `Multi-Physics` 结果是：
+- `4 / 0 / 16`
+
+代表性样本：
+- `prob_eabb60f1cc3409186a5d4e2f`
+- `rewrite_0a78d16a7d1bb640621a7648`
+
+现象：
+- 原题强依赖图与选项语义
+- 改写后仍缺 grounded reasoning path
+- 最终直接 `clean_rejected`
+
+说明：
+> `Multi-Physics` 当前问题更像 **数据源与 open-ended 清洗目标不兼容**，不是简单调一条 rewrite prompt 就能解决。
+
+#### 3. `SCEMQA` 暴露出“伪开放化”问题
+
+在 200 样本 run 中，`SCEMQA` 的 `source_problem_id=1`：
+- `problem_id = prob_d2e18289d6790272f6e58c9b`
+- `rewrite_id = rewrite_387bf969e5416a40048d38e3`
+- `strategy = blank_open`
+
+实际 rewrite 结果是：
+- `rewritten_question_text` 仍保留：`which of the following intervals?`
+- `expected_answer_type = numeric`
+- `expected_answer = 1`
+
+这说明它虽然被标成 open rewrite，但实际上：
+- 题面没有真正脱离选择题语气
+- 答案没有从编号 `1` 还原成真实语义答案（如区间）
+
+说明：
+> 当前部分样本存在 **“看似开放化，实则仍保留选择题壳和编号答案”** 的问题。
+
+#### 4. 选择题 rewrite 的边界还没有完全系统化
+
+今天进一步确认了一条很重要的边界：
+
+- **纯图索引题**（答案只是图中编号/位置/字母）应该直接丢弃
+- **可脱离选项独立表达语义的选择题** 应改写为开放题
+
+已有正确丢弃例子：
+- `EEE-Bench`
+- `prob_576407d71953067c542b419e`
+- `rewrite_ab016b581953260cbe745c45`
+- `rewrite_strategy = drop_image_index`
+- `decision_reason_codes` 包含 `pure_image_index_choice`
+
+但这条边界当前还没有完全沉成统一 rewrite policy，所以不同数据集、不同样本间实现仍不一致。
+
+### 今日额外定位出的 `CMM-Math` 进展与问题
+
+虽然 200 样本 rerun 中 `CMM-Math` 表面结果不差（`18 / 1 / 1`），但今天顺着样本链继续查，确认了两件事：
+
+#### 已确认解决
+- `ecnu-icalk/cmm-math` 的图片资源在 Hugging Face repo 的 `images.zip` 中
+- 不是 repo 根目录下的裸 jpg 文件
+- 目前 `HuggingFaceConnector` 已补入 zip-member 读取逻辑
+- 10 样本验证 `outputs/cmm_math_fixrun_10_zipmember/run_5616b56e101d6ab8` 已证明：
+  - `has_image_paths=6`
+  - `with_loaded_images=6`
+  - `has_image_paths_but_image_count_0=0`
+
+#### 当前仍存在的问题
+在带 LLM 的 10 样本验证 `run_71927aaf0d637bc5` 中：
+- `processed=10`
+- `pass=5`
+- `reject=5`
+- `blank_open=10`
+- `llm_used=9/10`
+
+说明当前 `CMM-Math` 已经不是“图下不来”或“LLM 不调用”的问题，而是：
+- 带图题虽然能改写、能加载图
+- 但仍大量因为以下原因被 reject：
+  - `missing_grounded_visual_path`
+  - `text_image_misaligned`
+  - `implicit_visual_dependency`
+  - `no_reasoning_path`
+  - `bad_alignment`
+
+也就是说：
+> `CMM-Math` 当前主问题已经从 **资源加载失败** 转移到 **图文对齐 / grounded reasoning 不稳定**。
+
+### 当前阶段结论
+
+这轮 200 样本 rerun 说明：
+
+- 运行链路本身已经能稳定完成 200 样本
+- 当前主要问题已经从“程序能不能跑完”转成“不同数据集与当前清洗范式是否兼容”
+- 其中最典型的几类问题是：
+  - `MM-Math`：规则过保守，review 偏高
+  - `Multi-Physics`：数据类型与当前 open-ended 目标不兼容
+  - `SCEMQA`：存在伪开放化样本
+  - `CMM-Math`：图片加载已修通，但多模态 grounding 仍不稳
+
 ## 常看文档
 
 - [`docs/pipeline_python_modules_reference.md`](docs/pipeline_python_modules_reference.md)
