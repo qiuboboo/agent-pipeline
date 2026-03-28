@@ -13,6 +13,7 @@ import os
 import re
 import shutil
 import subprocess
+import time
 import unicodedata
 import urllib.error
 import urllib.request
@@ -222,6 +223,8 @@ class ModelConfig:
     reasoning_effort: str = "xhigh"
     temperature: float = 0.1
     timeout_seconds: int = 180
+    retry_attempts: int = 3
+    retry_backoff_seconds: float = 2.0
     enabled: bool = True
     agent_only_extraction: bool = False
 
@@ -495,63 +498,87 @@ class OpenAICompatibleClient:
             "response_format": {"type": "json_object"},
             "reasoning_effort": self.config.reasoning_effort,
         }
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Connection": "close",
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-                "Authorization": f"Bearer {self.config.api_key}",
-            },
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
-                raw_body = response.read().decode("utf-8")
-                body = json.loads(raw_body)
-        except urllib.error.HTTPError as exc:
-            error_body = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else ""
-            self.last_error_reason = f"HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:200]}"
-            emit_debug(
-                f"[chat_json debug] caller={caller or 'unknown'} HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
+        attempts = max(1, int(getattr(self.config, "retry_attempts", 1) or 1))
+        backoff = float(getattr(self.config, "retry_backoff_seconds", 0.0) or 0.0)
+        for attempt in range(1, attempts + 1):
+            req = urllib.request.Request(
+                url,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Connection": "close",
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+                    "Authorization": f"Bearer {self.config.api_key}",
+                },
+                method="POST",
             )
-            return None
-        except urllib.error.URLError as exc:
-            self.last_error_reason = f"URLError reason={exc}"
-            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} URLError reason={exc}")
-            return None
-        except http.client.RemoteDisconnected as exc:
-            self.last_error_reason = f"RemoteDisconnected reason={exc}"
-            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} RemoteDisconnected reason={exc}")
-            return None
-        except ConnectionResetError as exc:
-            self.last_error_reason = f"ConnectionResetError reason={exc}"
-            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} ConnectionResetError reason={exc}")
-            return None
-        except TimeoutError as exc:
-            self.last_error_reason = f"TimeoutError reason={exc}"
-            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} TimeoutError reason={exc}")
-            return None
-        except json.JSONDecodeError as exc:
-            self.last_error_reason = f"Response JSON decode failed error={exc}"
-            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Response JSON decode failed error={exc}")
-            return None
-        choices = body.get("choices") or []
-        if not choices:
-            self.last_error_reason = f"Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:200]}"
-            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
-            return None
-        message = choices[0].get("message") or {}
-        content = message.get("content", "")
-        if isinstance(content, list):
-            content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
-        parsed = extract_json_object(to_plain_text(content))
-        if parsed is None:
-            self.last_error_reason = f"Content JSON extraction failed content_preview={to_plain_text(content)[:200]}"
-            emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
-        return parsed
+            try:
+                with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
+                    raw_body = response.read().decode("utf-8")
+                    body = json.loads(raw_body)
+            except urllib.error.HTTPError as exc:
+                error_body = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else ""
+                self.last_error_reason = f"HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:200]}"
+                emit_debug(
+                    f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
+                )
+                if attempt < attempts and getattr(exc, "code", None) in {408, 409, 425, 429, 500, 502, 503, 504}:
+                    if backoff > 0:
+                        time.sleep(backoff * attempt)
+                    continue
+                return None
+            except urllib.error.URLError as exc:
+                self.last_error_reason = f"URLError reason={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} URLError reason={exc}")
+                if attempt < attempts:
+                    if backoff > 0:
+                        time.sleep(backoff * attempt)
+                    continue
+                return None
+            except http.client.RemoteDisconnected as exc:
+                self.last_error_reason = f"RemoteDisconnected reason={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} RemoteDisconnected reason={exc}")
+                if attempt < attempts:
+                    if backoff > 0:
+                        time.sleep(backoff * attempt)
+                    continue
+                return None
+            except ConnectionResetError as exc:
+                self.last_error_reason = f"ConnectionResetError reason={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} ConnectionResetError reason={exc}")
+                if attempt < attempts:
+                    if backoff > 0:
+                        time.sleep(backoff * attempt)
+                    continue
+                return None
+            except TimeoutError as exc:
+                self.last_error_reason = f"TimeoutError reason={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} TimeoutError reason={exc}")
+                if attempt < attempts:
+                    if backoff > 0:
+                        time.sleep(backoff * attempt)
+                    continue
+                return None
+            except json.JSONDecodeError as exc:
+                self.last_error_reason = f"Response JSON decode failed error={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Response JSON decode failed error={exc}")
+                return None
+            choices = body.get("choices") or []
+            if not choices:
+                self.last_error_reason = f"Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:200]}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
+                return None
+            message = choices[0].get("message") or {}
+            content = message.get("content", "")
+            if isinstance(content, list):
+                content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
+            parsed = extract_json_object(to_plain_text(content))
+            if parsed is None:
+                self.last_error_reason = f"Content JSON extraction failed content_preview={to_plain_text(content)[:200]}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
+            return parsed
+        return None
 
 
 class TextNormalizer:
