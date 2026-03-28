@@ -462,9 +462,12 @@ class UnifiedSample:
 class OpenAICompatibleClient:
     def __init__(self, config: ModelConfig):
         self.config = config
+        self.last_error_reason: str = ""
 
     def chat_json(self, system_prompt: str, user_prompt: str, caller: str = "") -> Optional[Dict[str, Any]]:
+        self.last_error_reason = ""
         if not self.config.enabled or not self.config.api_key:
+            self.last_error_reason = "client disabled or missing api_key"
             return None
         debug = os.environ.get("PIPELINE_DEBUG_CHAT_JSON", "").strip().lower() in {"1", "true", "yes", "on"}
         debug_log_path = os.environ.get("PIPELINE_DEBUG_CHAT_JSON_LOG", "").strip()
@@ -510,27 +513,34 @@ class OpenAICompatibleClient:
                 body = json.loads(raw_body)
         except urllib.error.HTTPError as exc:
             error_body = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else ""
+            self.last_error_reason = f"HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:200]}"
             emit_debug(
                 f"[chat_json debug] caller={caller or 'unknown'} HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
             )
             return None
         except urllib.error.URLError as exc:
+            self.last_error_reason = f"URLError reason={exc}"
             emit_debug(f"[chat_json debug] caller={caller or 'unknown'} URLError reason={exc}")
             return None
         except http.client.RemoteDisconnected as exc:
+            self.last_error_reason = f"RemoteDisconnected reason={exc}"
             emit_debug(f"[chat_json debug] caller={caller or 'unknown'} RemoteDisconnected reason={exc}")
             return None
         except ConnectionResetError as exc:
+            self.last_error_reason = f"ConnectionResetError reason={exc}"
             emit_debug(f"[chat_json debug] caller={caller or 'unknown'} ConnectionResetError reason={exc}")
             return None
         except TimeoutError as exc:
+            self.last_error_reason = f"TimeoutError reason={exc}"
             emit_debug(f"[chat_json debug] caller={caller or 'unknown'} TimeoutError reason={exc}")
             return None
         except json.JSONDecodeError as exc:
+            self.last_error_reason = f"Response JSON decode failed error={exc}"
             emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Response JSON decode failed error={exc}")
             return None
         choices = body.get("choices") or []
         if not choices:
+            self.last_error_reason = f"Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:200]}"
             emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
             return None
         message = choices[0].get("message") or {}
@@ -539,6 +549,7 @@ class OpenAICompatibleClient:
             content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
         parsed = extract_json_object(to_plain_text(content))
         if parsed is None:
+            self.last_error_reason = f"Content JSON extraction failed content_preview={to_plain_text(content)[:200]}"
             emit_debug(f"[chat_json debug] caller={caller or 'unknown'} Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
         return parsed
 
@@ -2049,8 +2060,15 @@ class RewriteAgent:
         if not llm_result:
             fallback["llm_used"] = False
             fallback["fallback_reason"] = "chat_json returned empty"
+            fallback["fallback_reason_detail"] = self.client.last_error_reason
             if self.logger:
-                self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=chat_json returned empty", dataset=dataset_name, problem_id=problem_id)
+                detail = self.client.last_error_reason or "unknown"
+                self.logger.log(
+                    "REWRITE",
+                    f"fallback strategy={fallback.get('strategy')} reason=chat_json returned empty detail={detail}",
+                    dataset=dataset_name,
+                    problem_id=problem_id,
+                )
             return fallback
         strategy = to_plain_text(llm_result.get("strategy")).strip() or fallback["strategy"]
         variants = llm_result.get("variants")
