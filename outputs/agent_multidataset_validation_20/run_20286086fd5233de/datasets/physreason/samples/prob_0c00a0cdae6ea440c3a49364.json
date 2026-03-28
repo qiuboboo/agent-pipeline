@@ -1,0 +1,4314 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_0c121d2c2041a8db53d15239",
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+    "dataset_name": "PhysReason",
+    "source_problem_id": "cal_problem_00122",
+    "raw_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2 (h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f=k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+    "raw_answer_text": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+    "choice_map": {},
+    "image_paths": [
+      "images/f423b6f518060b5698efee4188a1a5d1d9b23dd8972ee4f5af2fa4f6b1e8224e.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": null,
+    "answer_field": null,
+    "image_field": null,
+    "choice_field": null,
+    "extraction_notes": [
+      "hf_raw_physreason_fallback"
+    ],
+    "created_at": "2026-03-28T09:25:47Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+    "image_manifest": [
+      {
+        "path": "benchmarkallinone/outputs/agent_multidataset_validation_20/run_20286086fd5233de/datasets/physreason/artifacts/images/prob_0c00a0cdae6ea440c3a49364_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 453,
+        "height": 249,
+        "file_size": 16169
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 1713,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "long_text",
+      "answer_char_length": 412
+    },
+    "issues": [
+      "Top-level image_paths and metadata.image_paths are inconsistent."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_0c121d2c2041a8db53d15239",
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "dataset_name": "PhysReason",
+    "source_problem_id": "cal_problem_00122",
+    "created_at": "2026-03-28T09:25:47Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+    "image_dependency_score": 0.86,
+    "multi_step_score": 0.93,
+    "verifiability_score": 0.8,
+    "score_evidence": {
+      "image_dependency": [
+        "requires_image=true and text_dominant=false indicate the sample is labeled as image-reliant.",
+        "The question explicitly says 'The figure illustrates the principle of the Millikan oil-drop experiment'.",
+        "The setup involves spatial layout of two plates, a hole in the upper plate, and two droplets on the same vertical line, which are visual-configuration cues commonly supported by the figure.",
+        "An image asset exists in the registry and registry_passed=true, so the visual resource is available."
+      ],
+      "multi_step": [
+        "The problem has four explicit sub-questions, including finding k, determining charge/polarity, computing potential-energy change, and finding the final merged droplet velocity.",
+        "Solving requires combining multiple physical relations: terminal motion before and after voltage application, electric force direction, charge inference, energy change, and post-collision/merger dynamics.",
+        "The answer includes several symbolic expressions and a case split for the final velocity direction, which indicates nontrivial chained reasoning rather than a single lookup.",
+        "question_char_length is large (1713), consistent with a multi-condition, multi-stage physics problem."
+      ],
+      "verifiability": [
+        "The expected answer is a structured set of symbolic results rather than a subjective explanation.",
+        "Each subpart has a concrete target quantity (constant, charge/polarity, energy change, final speed/direction), which is amenable to rule-based or symbolic checking.",
+        "answer_present=true and registry_passed=true support downstream evaluation feasibility.",
+        "Verifiability is slightly reduced because the final answer text contains formatting ambiguity in the last expression (e.g. '\\sqrt{3}{2}t' in the denominator), which may complicate exact parsing."
+      ]
+    },
+    "risk_flags": [
+      "Final answer formatting appears ambiguous in the last velocity expression, which may hinder exact automatic parsing.",
+      "Top-level image_paths and metadata.image_paths are inconsistent."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_0c121d2c2041a8db53d15239",
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "dataset_name": "PhysReason",
+    "source_problem_id": "cal_problem_00122",
+    "created_at": "2026-03-28T09:25:47Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+    "priority": 0.68,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Asset registry passed and the core assets are present: image exists, question is present, and answer is present.",
+      "Initial scoring is strong on image dependency (0.86), multi-step reasoning (0.93), and verifiability (0.80).",
+      "However, the final answer has reported formatting ambiguity in the last velocity expression, which may hinder exact automatic parsing.",
+      "There is also a recorded asset inconsistency: top-level image_paths and metadata.image_paths are inconsistent.",
+      "Given the strong content quality but nontrivial evaluation and metadata risks, low_priority is more appropriate than keep."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_0c121d2c2041a8db53d15239",
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "dataset_name": "PhysReason",
+    "source_problem_id": "cal_problem_00122",
+    "created_at": "2026-03-28T09:25:47Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_0c121d2c2041a8db53d15239",
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+    "dataset_name": "PhysReason",
+    "normalized_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+    "normalized_answer_text": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Retained the original multi-part physics problem and answer with light formatting cleanup only.",
+      "Marked as image-required because the prompt explicitly refers to a figure and force_requires_image is true.",
+      "No choice options were provided, so normalized_choice_map is empty."
+    ],
+    "llm_used": true,
+    "created_at": "2026-03-28T09:25:47Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "source_dataset": "PhysReason",
+    "source_split": "mini",
+    "source_problem_id": "cal_problem_00122",
+    "subject": "物理",
+    "raw_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2 (h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f=k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+    "raw_answer_text": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.86,
+    "initial_multi_solution_score": 0.93,
+    "initial_verifiability_score": 0.8,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 8,
+      "image_paths": [
+        "images/f423b6f518060b5698efee4188a1a5d1d9b23dd8972ee4f5af2fa4f6b1e8224e.jpg"
+      ],
+      "extraction_notes": [
+        "hf_raw_physreason_fallback"
+      ],
+      "difficulty": "difficult"
+    },
+    "created_at": "2026-03-28T09:27:06Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.68,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Asset registry passed and the core assets are present: image exists, question is present, and answer is present.",
+      "Initial scoring is strong on image dependency (0.86), multi-step reasoning (0.93), and verifiability (0.80).",
+      "However, the final answer has reported formatting ambiguity in the last velocity expression, which may hinder exact automatic parsing.",
+      "There is also a recorded asset inconsistency: top-level image_paths and metadata.image_paths are inconsistent.",
+      "Given the strong content quality but nontrivial evaluation and metadata risks, low_priority is more appropriate than keep."
+    ],
+    "collection_risk_flags": [
+      "Final answer formatting appears ambiguous in the last velocity expression, which may hinder exact automatic parsing.",
+      "Top-level image_paths and metadata.image_paths are inconsistent."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_054a0bc369c41dbbf8cc7f10",
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "source_dataset": "PhysReason",
+    "source_problem_id": "cal_problem_00122",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_0c00a0cdae6ea440c3a49364/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_0c00a0cdae6ea440c3a49364/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "benchmarkallinone/outputs/repo_cache/hf_raw/physreason/PhysReason-mini/cal_problem_00122/images/f423b6f518060b5698efee4188a1a5d1d9b23dd8972ee4f5af2fa4f6b1e8224e.jpg",
+        "is_present": true,
+        "width": 453,
+        "height": 249
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.86,
+      "initial_multi_solution_score": 0.93,
+      "initial_verifiability_score": 0.8
+    },
+    "created_at": "2026-03-28T09:27:06Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Top-level image_paths and metadata.image_paths are inconsistent."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_614d65b1c3aef522f5ac39bb",
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "source_dataset": "PhysReason",
+    "source_problem_id": "cal_problem_00122",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.68,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.86,
+      "initial_multi_solution_score": 0.93,
+      "initial_verifiability_score": 0.8
+    },
+    "created_at": "2026-03-28T09:27:06Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Asset registry passed and the core assets are present: image exists, question is present, and answer is present.",
+      "Initial scoring is strong on image dependency (0.86), multi-step reasoning (0.93), and verifiability (0.80).",
+      "However, the final answer has reported formatting ambiguity in the last velocity expression, which may hinder exact automatic parsing.",
+      "There is also a recorded asset inconsistency: top-level image_paths and metadata.image_paths are inconsistent.",
+      "Given the strong content quality but nontrivial evaluation and metadata risks, low_priority is more appropriate than keep."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_0c121d2c2041a8db53d15239",
+      "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "dataset_name": "PhysReason",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-03-28T09:27:06Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_0c121d2c2041a8db53d15239",
+    "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+    "source_dataset": "PhysReason",
+    "source_problem_id": "cal_problem_00122",
+    "normalized_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+    "normalized_answer_text": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "proof",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "question_answer_complete",
+      "solvable"
+    ],
+    "created_at": "2026-03-28T09:27:06Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_0c121d2c2041a8db53d15239",
+    "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+    "normalized_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+    "normalized_answer_text": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "by",
+        "canonical": "by",
+        "variable_type": "label"
+      },
+      {
+        "original": "oil",
+        "canonical": "oil",
+        "variable_type": "label"
+      },
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "he",
+        "canonical": "he",
+        "variable_type": "label"
+      },
+      {
+        "original": "was",
+        "canonical": "was",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "drop",
+        "canonical": "drop",
+        "variable_type": "label"
+      },
+      {
+        "original": "two",
+        "canonical": "two",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "d",
+        "canonical": "d",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "has",
+        "canonical": "has",
+        "variable_type": "label"
+      },
+      {
+        "original": "hole",
+        "canonical": "hole",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "some",
+        "canonical": "some",
+        "variable_type": "label"
+      },
+      {
+        "original": "them",
+        "canonical": "them",
+        "variable_type": "label"
+      },
+      {
+        "original": "due",
+        "canonical": "due",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "or",
+        "canonical": "or",
+        "variable_type": "label"
+      },
+      {
+        "original": "Two",
+        "canonical": "Two",
+        "variable_type": "label"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "each",
+        "canonical": "each",
+        "variable_type": "label"
+      },
+      {
+        "original": "mass",
+        "canonical": "mass",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "same",
+        "canonical": "same",
+        "variable_type": "label"
+      },
+      {
+        "original": "line",
+        "canonical": "line",
+        "variable_type": "label"
+      },
+      {
+        "original": "They",
+        "canonical": "They",
+        "variable_type": "label"
+      },
+      {
+        "original": "both",
+        "canonical": "both",
+        "variable_type": "label"
+      },
+      {
+        "original": "fall",
+        "canonical": "fall",
+        "variable_type": "label"
+      },
+      {
+        "original": "time",
+        "canonical": "time",
+        "variable_type": "label"
+      },
+      {
+        "original": "t",
+        "canonical": "t",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "At",
+        "canonical": "At",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      },
+      {
+        "original": "U",
+        "canonical": "U",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "its",
+        "canonical": "its",
+        "variable_type": "label"
+      },
+      {
+        "original": "move",
+        "canonical": "move",
+        "variable_type": "label"
+      },
+      {
+        "original": "neq",
+        "canonical": "neq",
+        "variable_type": "label"
+      },
+      {
+        "original": "it",
+        "canonical": "it",
+        "variable_type": "label"
+      },
+      {
+        "original": "form",
+        "canonical": "form",
+        "variable_type": "label"
+      },
+      {
+        "original": "new",
+        "canonical": "new",
+        "variable_type": "label"
+      },
+      {
+        "original": "air",
+        "canonical": "air",
+        "variable_type": "label"
+      },
+      {
+        "original": "f",
+        "canonical": "f",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "k",
+        "canonical": "k",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "frac",
+        "canonical": "frac",
+        "variable_type": "label"
+      },
+      {
+        "original": "v",
+        "canonical": "v",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "s",
+        "canonical": "s",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "Air",
+        "canonical": "Air",
+        "variable_type": "label"
+      },
+      {
+        "original": "g",
+        "canonical": "g",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923."
+      },
+      {
+        "segment_index": 2,
+        "text": "The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$."
+      },
+      {
+        "segment_index": 3,
+        "text": "The upper plate has a small hole in the center."
+      },
+      {
+        "segment_index": 4,
+        "text": "Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction."
+      },
+      {
+        "segment_index": 5,
+        "text": "Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line."
+      },
+      {
+        "segment_index": 6,
+        "text": "They both fall with a uniform velocity through a distance of $h_1$ within time $t$."
+      },
+      {
+        "segment_index": 7,
+        "text": "At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time."
+      },
+      {
+        "segment_index": 8,
+        "text": "$B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity."
+      },
+      {
+        "segment_index": 9,
+        "text": "The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed."
+      },
+      {
+        "segment_index": 10,
+        "text": "Air buoyancy is negligible, and the acceleration due to gravity is $g$."
+      },
+      {
+        "segment_index": 11,
+        "text": "1."
+      },
+      {
+        "segment_index": 12,
+        "text": "Determine the proportionality constant $k$."
+      },
+      {
+        "segment_index": 13,
+        "text": "2."
+      },
+      {
+        "segment_index": 14,
+        "text": "Determine the charge and polarity of oil droplets $A$ and $B$."
+      },
+      {
+        "segment_index": 15,
+        "text": "3."
+      },
+      {
+        "segment_index": 16,
+        "text": "Calculate the change in potential energy of object $B$ as it rises a distance $h_2$."
+      },
+      {
+        "segment_index": 17,
+        "text": "4."
+      },
+      {
+        "segment_index": 18,
+        "text": "Determine the magnitude and direction of the uniform velocity of the new oil droplet."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "benchmarkallinone/outputs/repo_cache/hf_raw/physreason/PhysReason-mini/cal_problem_00122/images/f423b6f518060b5698efee4188a1a5d1d9b23dd8972ee4f5af2fa4f6b1e8224e.jpg",
+        "roi_bbox": {
+          "x": 1,
+          "y": 17,
+          "width": 444,
+          "height": 229
+        },
+        "readability_score": 0.7988,
+        "contrast_score": 57.3641
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-03-28T09:27:06Z",
+    "normalization_notes": [
+      "Retained the original multi-part physics problem and answer with light formatting cleanup only.",
+      "Marked as image-required because the prompt explicitly refers to a figure and force_requires_image is true.",
+      "No choice options were provided, so normalized_choice_map is empty."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+    "source_dataset": "PhysReason",
+    "source_split": "mini",
+    "source_problem_id": "cal_problem_00122",
+    "ingest_batch_id": "benchmarkallinone-agent-multidataset-validation-20_20260328T081650Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "en",
+    "raw_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2 (h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f=k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+    "normalized_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+    "raw_answer_text": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+    "normalized_answer_text": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+    "answer_type": "set",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9769,
+    "multi_step_score": 0.7297,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "Top-level image_paths and metadata.image_paths are inconsistent.",
+      "answer_expression_formatting_minor_issue"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "question_answer_complete",
+      "solvable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable, the diagram supports the text, the multi-part answer is materially present, and alignment/solvability signals are strong. There are only minor non-fatal formatting/metadata issues, which do not prevent meaningful downstream annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-03-28T09:25:47Z",
+    "updated_at": "2026-03-28T09:27:06Z",
+    "initial_image_dependency_score": 0.86,
+    "initial_multi_solution_score": 0.93,
+    "initial_verifiability_score": 0.8,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.68,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Asset registry passed and the core assets are present: image exists, question is present, and answer is present.",
+      "Initial scoring is strong on image dependency (0.86), multi-step reasoning (0.93), and verifiability (0.80).",
+      "However, the final answer has reported formatting ambiguity in the last velocity expression, which may hinder exact automatic parsing.",
+      "There is also a recorded asset inconsistency: top-level image_paths and metadata.image_paths are inconsistent.",
+      "Given the strong content quality but nontrivial evaluation and metadata risks, low_priority is more appropriate than keep."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_22360c7aedad9c3934bfe354",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://physreason/mini/cal_problem_00122/question",
+      "storage_uri": "inline://prob_0c00a0cdae6ea440c3a49364/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 1713,
+      "width": null,
+      "height": null,
+      "sha256": "7380f7f58097849cf2d9d3849813f9291756c7fd31eb7def062bfed122969c4f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2 (h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f=k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "oil",
+          "canonical": "oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "hole",
+          "canonical": "hole",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "them",
+          "canonical": "them",
+          "variable_type": "label"
+        },
+        {
+          "original": "due",
+          "canonical": "due",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "Two",
+          "canonical": "Two",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "They",
+          "canonical": "They",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "fall",
+          "canonical": "fall",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "U",
+          "canonical": "U",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "move",
+          "canonical": "move",
+          "variable_type": "label"
+        },
+        {
+          "original": "neq",
+          "canonical": "neq",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "new",
+          "canonical": "new",
+          "variable_type": "label"
+        },
+        {
+          "original": "air",
+          "canonical": "air",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Air",
+          "canonical": "Air",
+          "variable_type": "label"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "asset_id": "asset_86adc6bed154f9e7c15d4e70",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_0c00a0cdae6ea440c3a49364/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1716,
+      "width": null,
+      "height": null,
+      "sha256": "6adf55123f6e8e6ced6cef518def75bd6429541925ac91e9547b966ceec6e7ee",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2 (h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f=k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "normalized_text_snapshot": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "oil",
+          "canonical": "oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "hole",
+          "canonical": "hole",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "them",
+          "canonical": "them",
+          "variable_type": "label"
+        },
+        {
+          "original": "due",
+          "canonical": "due",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "Two",
+          "canonical": "Two",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "They",
+          "canonical": "They",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "fall",
+          "canonical": "fall",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "U",
+          "canonical": "U",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "move",
+          "canonical": "move",
+          "variable_type": "label"
+        },
+        {
+          "original": "neq",
+          "canonical": "neq",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "new",
+          "canonical": "new",
+          "variable_type": "label"
+        },
+        {
+          "original": "air",
+          "canonical": "air",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Air",
+          "canonical": "Air",
+          "variable_type": "label"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "asset_id": "asset_87261f05a3f84146466172a4",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://physreason/mini/cal_problem_00122/answer",
+      "storage_uri": "inline://prob_0c00a0cdae6ea440c3a49364/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 412,
+      "width": null,
+      "height": null,
+      "sha256": "92d7e8d9ed21baade70793b8bc5fb2c9cbb41f53791c43a7590020d0d9c0c216",
+      "perceptual_hash": null,
+      "source_text_snapshot": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Oil",
+          "canonical": "Oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "oil",
+          "canonical": "oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "And",
+          "canonical": "And",
+          "variable_type": "label"
+        },
+        {
+          "original": "q",
+          "canonical": "q",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "U",
+          "canonical": "U",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "p",
+          "canonical": "p",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "asset_id": "asset_44d6f3d7944e6f9e7e4e774d",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_0c00a0cdae6ea440c3a49364/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 412,
+      "width": null,
+      "height": null,
+      "sha256": "92d7e8d9ed21baade70793b8bc5fb2c9cbb41f53791c43a7590020d0d9c0c216",
+      "perceptual_hash": null,
+      "source_text_snapshot": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+      "normalized_text_snapshot": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Oil",
+          "canonical": "Oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "oil",
+          "canonical": "oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "And",
+          "canonical": "And",
+          "variable_type": "label"
+        },
+        {
+          "original": "q",
+          "canonical": "q",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "U",
+          "canonical": "U",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "p",
+          "canonical": "p",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "asset_id": "asset_5fe99f460f24e6b2e0318e3c",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "benchmarkallinone/outputs/repo_cache/hf_raw/physreason/PhysReason-mini/cal_problem_00122/images/f423b6f518060b5698efee4188a1a5d1d9b23dd8972ee4f5af2fa4f6b1e8224e.jpg",
+      "storage_uri": "benchmarkallinone/outputs/agent_multidataset_validation_20/run_20286086fd5233de/datasets/physreason/artifacts/images/prob_0c00a0cdae6ea440c3a49364_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 16169,
+      "width": 453,
+      "height": 249,
+      "sha256": "c8938cdedaecb36352e0bdb01aa10ba5121bbf3dbffcc7678c49085e0cf66c4a",
+      "perceptual_hash": "e70077f77f77ff00",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1350.3168,
+      "readability_score": 0.7988,
+      "noise_score": 25.8332,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 1,
+        "y": 17,
+        "width": 444,
+        "height": 229
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Top-level image_paths and metadata.image_paths are inconsistent.",
+        "answer_expression_formatting_minor_issue"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "asset_id": "asset_b29b5af76c7199c155b66a69",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "benchmarkallinone/outputs/agent_multidataset_validation_20/run_20286086fd5233de/datasets/physreason/artifacts/crops/prob_0c00a0cdae6ea440c3a49364_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 15742,
+      "width": 444,
+      "height": 229,
+      "sha256": "99afbf422434c1c8c38f45c297f9b9e427072924ceac08ebd94b9181d24931e7",
+      "perceptual_hash": "0008f7ff77f7ff00",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1350.3168,
+      "readability_score": 0.7988,
+      "noise_score": 25.8332,
+      "cropped_from_asset_id": "asset_5fe99f460f24e6b2e0318e3c",
+      "roi_bbox": {
+        "x": 1,
+        "y": 17,
+        "width": 444,
+        "height": 229
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "asset_id": "asset_4c3e37238ac436cf4eefc54f",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_770fa7284986156aa5234038",
+      "file_format": "txt",
+      "file_size_bytes": 1716,
+      "width": null,
+      "height": null,
+      "sha256": "6adf55123f6e8e6ced6cef518def75bd6429541925ac91e9547b966ceec6e7ee",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2 (h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f=k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "normalized_text_snapshot": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "oil",
+          "canonical": "oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "hole",
+          "canonical": "hole",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "them",
+          "canonical": "them",
+          "variable_type": "label"
+        },
+        {
+          "original": "due",
+          "canonical": "due",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "Two",
+          "canonical": "Two",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "They",
+          "canonical": "They",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "fall",
+          "canonical": "fall",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "U",
+          "canonical": "U",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "move",
+          "canonical": "move",
+          "variable_type": "label"
+        },
+        {
+          "original": "neq",
+          "canonical": "neq",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "new",
+          "canonical": "new",
+          "variable_type": "label"
+        },
+        {
+          "original": "air",
+          "canonical": "air",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Air",
+          "canonical": "Air",
+          "variable_type": "label"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_0c00a0cdae6ea440c3a49364",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "question_type": "proof",
+      "conditions": [
+        {
+          "text": "The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$.",
+          "segment_index": 2,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line.",
+          "segment_index": 5,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0"
+          ],
+          "unit_mentions": [
+            "A",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "They both fall with a uniform velocity through a distance of $h_1$ within time $t$.",
+          "segment_index": 6,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time.",
+          "segment_index": 7,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "min",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed.",
+          "segment_index": 9,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "3"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "1.",
+          "segment_index": 11,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1"
+          ],
+          "unit_mentions": [],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "2.",
+          "segment_index": 13,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2"
+          ],
+          "unit_mentions": [],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "3.",
+          "segment_index": 15,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3"
+          ],
+          "unit_mentions": [],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "4.",
+          "segment_index": 17,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "4"
+          ],
+          "unit_mentions": [],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1923"
+          ],
+          "unit_mentions": [
+            "N",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "$B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity.",
+          "segment_index": 8,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2",
+            "2",
+            "1"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Determine the proportionality constant $k$.",
+          "segment_index": 12,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "m",
+            "min",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Determine the charge and polarity of oil droplets $A$ and $B$.",
+          "segment_index": 14,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "min",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.",
+          "segment_index": 16,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+          "segment_index": 18,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "min"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_0c00a0cdae6ea440c3a49364_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "set",
+          "target_text": "Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+          "expected_answer_type": "set",
+          "expected_answer": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "line",
+          "entity_category": "line",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "B",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "U",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "oil",
+          "canonical": "oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "hole",
+          "canonical": "hole",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "them",
+          "canonical": "them",
+          "variable_type": "label"
+        },
+        {
+          "original": "due",
+          "canonical": "due",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "Two",
+          "canonical": "Two",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "They",
+          "canonical": "They",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "fall",
+          "canonical": "fall",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "U",
+          "canonical": "U",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "move",
+          "canonical": "move",
+          "variable_type": "label"
+        },
+        {
+          "original": "neq",
+          "canonical": "neq",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "new",
+          "canonical": "new",
+          "variable_type": "label"
+        },
+        {
+          "original": "air",
+          "canonical": "air",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Air",
+          "canonical": "Air",
+          "variable_type": "label"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "N",
+        "g",
+        "h",
+        "m",
+        "min",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923."
+        },
+        {
+          "segment_index": 2,
+          "text": "The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$."
+        },
+        {
+          "segment_index": 3,
+          "text": "The upper plate has a small hole in the center."
+        },
+        {
+          "segment_index": 4,
+          "text": "Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction."
+        },
+        {
+          "segment_index": 5,
+          "text": "Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line."
+        },
+        {
+          "segment_index": 6,
+          "text": "They both fall with a uniform velocity through a distance of $h_1$ within time $t$."
+        },
+        {
+          "segment_index": 7,
+          "text": "At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time."
+        },
+        {
+          "segment_index": 8,
+          "text": "$B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity."
+        },
+        {
+          "segment_index": 9,
+          "text": "The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed."
+        },
+        {
+          "segment_index": 10,
+          "text": "Air buoyancy is negligible, and the acceleration due to gravity is $g$."
+        },
+        {
+          "segment_index": 11,
+          "text": "1."
+        },
+        {
+          "segment_index": 12,
+          "text": "Determine the proportionality constant $k$."
+        },
+        {
+          "segment_index": 13,
+          "text": "2."
+        },
+        {
+          "segment_index": 14,
+          "text": "Determine the charge and polarity of oil droplets $A$ and $B$."
+        },
+        {
+          "segment_index": 15,
+          "text": "3."
+        },
+        {
+          "segment_index": 16,
+          "text": "Calculate the change in potential energy of object $B$ as it rises a distance $h_2$."
+        },
+        {
+          "segment_index": 17,
+          "text": "4."
+        },
+        {
+          "segment_index": 18,
+          "text": "Determine the magnitude and direction of the uniform velocity of the new oil droplet."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-03-28T09:26:44Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_0c00a0cdae6ea440c3a49364_1",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "circuit_diagram",
+        "aspect_ratio": 1.8193,
+        "dark_pixel_ratio": 0.0798,
+        "readability_score": 0.7988,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 453,
+            "height": 249
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 1,
+            "y": 17,
+            "width": 444,
+            "height": 229
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 1,
+            "y": 17,
+            "width": 222,
+            "height": 114
+          },
+          "salience": 0.4285
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 223,
+            "y": 17,
+            "width": 222,
+            "height": 114
+          },
+          "salience": 0.4441
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 1,
+            "y": 131,
+            "width": 222,
+            "height": 115
+          },
+          "salience": 0.4394
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 223,
+            "y": 131,
+            "width": 222,
+            "height": 115
+          },
+          "salience": 0.4421
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9195,
+      "created_at": "2026-03-28T09:26:44Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_0c00a0cdae6ea440c3a49364",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-03-28T09:26:56Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_5df727b61ce6ac6867ffc9a5",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$.",
+      "surface_forms": [
+        "The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$.",
+        "segment_index": 2,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_4493ce70d432339f63d7dfeb",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line.",
+      "surface_forms": [
+        "Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line.",
+        "segment_index": 5,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "0"
+        ],
+        "unit_mentions": [
+          "A",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_1d0e7697c3ee04cbd7009488",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "They both fall with a uniform velocity through a distance of $h_1$ within time $t$.",
+      "surface_forms": [
+        "They both fall with a uniform velocity through a distance of $h_1$ within time $t$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "They both fall with a uniform velocity through a distance of $h_1$ within time $t$.",
+        "segment_index": 6,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_44f4fdcc10b5dd28d6d9fd49",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time.",
+      "surface_forms": [
+        "At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time.",
+        "segment_index": 7,
+        "mentions_visual": false,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "min",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,min,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_9ffef8eea8705f93113b6dff",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed.",
+      "surface_forms": [
+        "The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed.",
+        "segment_index": 9,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "3"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_db40844c90006cca3482f4a8",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "1.",
+      "surface_forms": [
+        "1."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "1.",
+        "segment_index": 11,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1"
+        ],
+        "unit_mentions": [],
+        "condition_role": "explicit"
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_212d2a59ebc29dfbc1b0c7de",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "2.",
+      "surface_forms": [
+        "2."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "2.",
+        "segment_index": 13,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "2"
+        ],
+        "unit_mentions": [],
+        "condition_role": "explicit"
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_5c5392a2e1997c5f2b452e6a",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "3.",
+      "surface_forms": [
+        "3."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "3.",
+        "segment_index": 15,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "3"
+        ],
+        "unit_mentions": [],
+        "condition_role": "explicit"
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_01e0277f6f60de99ebc6093a",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "4.",
+      "surface_forms": [
+        "4."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "4.",
+        "segment_index": 17,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "4"
+        ],
+        "unit_mentions": [],
+        "condition_role": "explicit"
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_1903f62900384f10f6be9e84",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "target_slot",
+      "canonical_value": "Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "surface_forms": [
+        "Determine the magnitude and direction of the uniform velocity of the new oil droplet."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "evidence_refs": [
+        "asset_86adc6bed154f9e7c15d4e70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "slot_id": "slot_prob_0c00a0cdae6ea440c3a49364_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "set",
+        "target_text": "Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+        "expected_answer_type": "set",
+        "expected_answer": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_7f8a0ed9ace79694c4fd3d13",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "answer_claim",
+      "canonical_value": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+      "surface_forms": [
+        "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_44d6f3d7944e6f9e7e4e774d"
+      ],
+      "evidence_refs": [
+        "asset_44d6f3d7944e6f9e7e4e774d"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards."
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_b0bd2b988bd315f9c1d63a36",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 453,
+          "height": 249
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9195,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_226904bdb6d4fc3b257667ff",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 1,
+          "y": 17,
+          "width": 444,
+          "height": 229
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9195,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_17f64dc2f11102cdba8aae68",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 1,
+          "y": 17,
+          "width": 222,
+          "height": 114
+        },
+        "salience": 0.4285
+      },
+      "unit": null,
+      "confidence": 0.9195,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_b62474464960f5c2ddf3be9d",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 223,
+          "y": 17,
+          "width": 222,
+          "height": 114
+        },
+        "salience": 0.4441
+      },
+      "unit": null,
+      "confidence": 0.9195,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_2635f1b32e69eae84cd6994c",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 1,
+          "y": 131,
+          "width": 222,
+          "height": 115
+        },
+        "salience": 0.4394
+      },
+      "unit": null,
+      "confidence": 0.9195,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_ec43db7d61b636a0afb776a7",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 223,
+          "y": 131,
+          "width": 222,
+          "height": 115
+        },
+        "salience": 0.4421
+      },
+      "unit": null,
+      "confidence": 0.9195,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_8b9bdc083a0861446f2712d6",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "text_fact",
+      "canonical_value": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "surface_forms": [
+        "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_4c3e37238ac436cf4eefc54f"
+      ],
+      "evidence_refs": [
+        "asset_4c3e37238ac436cf4eefc54f"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_770fa7284986156aa5234038",
+        "parent_problem_id": "prob_0c00a0cdae6ea440c3a49364",
+        "variant_index": 1,
+        "title": "PhysReason 开放题",
+        "rewritten_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+        "expected_answer_type": "set",
+        "expected_answer": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_3d24c96084ae09b376943e29",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "quality_signal",
+      "canonical_value": "Top-level image_paths and metadata.image_paths are inconsistent.",
+      "surface_forms": [
+        "Top-level image_paths and metadata.image_paths are inconsistent."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Top-level image_paths and metadata.image_paths are inconsistent."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_080080bf36a6c8db73bec01e",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "quality_signal",
+      "canonical_value": "answer_expression_formatting_minor_issue",
+      "surface_forms": [
+        "answer_expression_formatting_minor_issue"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "answer_expression_formatting_minor_issue"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_938458f429787cec19f47e25",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_0c00a0cdae6ea440c3a49364",
+        "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-03-28T09:26:56Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "node_id": "node_42979672fe80952240aa6ff9",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "question_answer_complete",
+          "solvable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-28T09:27:06Z",
+      "updated_at": "2026-03-28T09:27:06Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_0c121d2c2041a8db53d15239",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_20286086fd5233de",
+      "dataset_name": "PhysReason",
+      "input_asset_ids": [
+        "asset_22360c7aedad9c3934bfe354",
+        "asset_86adc6bed154f9e7c15d4e70",
+        "asset_87261f05a3f84146466172a4",
+        "asset_44d6f3d7944e6f9e7e4e774d",
+        "asset_5fe99f460f24e6b2e0318e3c",
+        "asset_b29b5af76c7199c155b66a69",
+        "asset_4c3e37238ac436cf4eefc54f"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 57
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 453,
+            "height": 249,
+            "blur_score": 1350.3168,
+            "contrast_score": 57.3641,
+            "noise_score": 25.8332,
+            "readability_score": 0.7988,
+            "crop_integrity_score": 0.78,
+            "roi_bbox": {
+              "x": 1,
+              "y": 17,
+              "width": 444,
+              "height": 229
+            },
+            "perceptual_hash": "e70077f77f77ff00"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_0c121d2c2041a8db53d15239",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_0c00a0cdae6ea440c3a49364",
+        "question_type": "proof",
+        "condition_count": 9,
+        "target_count": 6,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_0c00a0cdae6ea440c3a49364",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "diagram_matches_text",
+          "jointly_understandable",
+          "multi_part_question_clear"
+        ],
+        "rationale": "The problem statement fully specifies the Millikan oil-drop setup, variables, and four requested quantities. The diagram is simple but semantically clear: two horizontal plates, spacing d, voltage U, top hole, and droplets A and B on the same vertical line. The provided answer text appears mostly complete, though one final expression has a minor formatting issue.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Top-level image_paths and metadata.image_paths are inconsistent.",
+        "answer_expression_formatting_minor_issue"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "question_answer_complete",
+        "solvable"
+      ],
+      "decision_rationale": "The sample is jointly understandable, the diagram supports the text, the multi-part answer is materially present, and alignment/solvability signals are strong. There are only minor non-fatal formatting/metadata issues, which do not prevent meaningful downstream annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-03-28T09:27:06Z",
+      "finished_at": "2026-03-28T09:27:06Z",
+      "candidate_id": "cand_0c00a0cdae6ea440c3a49364",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_0c121d2c2041a8db53d15239",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "image_entity_refs": [
+        "visual_prob_0c00a0cdae6ea440c3a49364_1::roi",
+        "visual_prob_0c00a0cdae6ea440c3a49364_1::roi_top_left",
+        "visual_prob_0c00a0cdae6ea440c3a49364_1::roi_top_right",
+        "visual_prob_0c00a0cdae6ea440c3a49364_1::roi_bottom_left",
+        "visual_prob_0c00a0cdae6ea440c3a49364_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_0c00a0cdae6ea440c3a49364_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_0c00a0cdae6ea440c3a49364_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7799
+        },
+        {
+          "text_ref": "line",
+          "image_ref": "visual_prob_0c00a0cdae6ea440c3a49364_1::roi",
+          "relation": "grounds_line",
+          "confidence": 0.7799
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_0c00a0cdae6ea440c3a49364_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7799
+        },
+        {
+          "text_ref": "B",
+          "image_ref": "visual_prob_0c00a0cdae6ea440c3a49364_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7799
+        },
+        {
+          "text_ref": "U",
+          "image_ref": "visual_prob_0c00a0cdae6ea440c3a49364_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7799
+        },
+        {
+          "text_ref": "slot_prob_0c00a0cdae6ea440c3a49364_1",
+          "image_ref": "visual_prob_0c00a0cdae6ea440c3a49364_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7823
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-03-28T09:26:44Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_d35a33de2e492ea0c44d819b",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2 (h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f=k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "after_value": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "audit_id": "audit_0e52443802203f5bdb686ff6",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+      "after_value": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "audit_id": "audit_6ee87433ed52dbd953b1dbd1",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "audit_id": "audit_42979672fe80952240aa6ff9",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-28T09:27:06Z"
+    },
+    {
+      "audit_id": "audit_3c1bb238308fda63b8521678",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "oil",
+          "canonical": "oil",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "hole",
+          "canonical": "hole",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "them",
+          "canonical": "them",
+          "variable_type": "label"
+        },
+        {
+          "original": "due",
+          "canonical": "due",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "Two",
+          "canonical": "Two",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "They",
+          "canonical": "They",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "fall",
+          "canonical": "fall",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "U",
+          "canonical": "U",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "move",
+          "canonical": "move",
+          "variable_type": "label"
+        },
+        {
+          "original": "neq",
+          "canonical": "neq",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "new",
+          "canonical": "new",
+          "variable_type": "label"
+        },
+        {
+          "original": "air",
+          "canonical": "air",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Air",
+          "canonical": "Air",
+          "variable_type": "label"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-28T09:27:06Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_0c121d2c2041a8db53d15239",
+      "problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "source_problem_id": "cal_problem_00122",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_770fa7284986156aa5234038",
+          "parent_problem_id": "prob_0c00a0cdae6ea440c3a49364",
+          "variant_index": 1,
+          "title": "PhysReason 开放题",
+          "rewritten_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+          "expected_answer_type": "set",
+          "expected_answer": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-03-28T09:27:06Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_770fa7284986156aa5234038",
+      "parent_problem_id": "prob_0c00a0cdae6ea440c3a49364",
+      "variant_index": 1,
+      "title": "PhysReason 开放题",
+      "rewritten_question_text": "Millikan proved the quantization of electric charge by observing the motion of oil droplets, for which he was awarded the Nobel Prize in Physics in 1923. The figure illustrates the principle of the Millikan oil-drop experiment, where two sufficiently large metal plates are placed horizontally with a separation of $d$. The upper plate has a small hole in the center. Small oil droplets are sprayed through the hole, and some of them acquire electric charges due to collisions or friction. Two spherical oil droplets, $A$ and $B$, each with a mass of $m_0$, are located on the same vertical line. They both fall with a uniform velocity through a distance of $h_1$ within time $t$. At this moment, a voltage $U$ is applied across the two plates (with the upper plate connected to the positive terminal), $A$ continues to fall at its original velocity, while $B$ begins to move upwards with a uniform velocity after a period of time. $B$ rises through a distance of $h_2\\,(h_2\\neq h_1)$ in time $t$, after which it merges with $A$ to form a new spherical oil droplet, which continues to move between the plates until it reaches uniform velocity. The magnitude of the air resistance on a spherical oil droplet is given by $f = k m^{\\frac{1}{3}}v$, where $k$ is a proportionality constant, $m$ is the mass of the oil droplet, and $v$ is the droplet's speed. Air buoyancy is negligible, and the acceleration due to gravity is $g$.\n\n1. Determine the proportionality constant $k$.\n2. Determine the charge and polarity of oil droplets $A$ and $B$.\n3. Calculate the change in potential energy of object $B$ as it rises a distance $h_2$.\n4. Determine the magnitude and direction of the uniform velocity of the new oil droplet.",
+      "expected_answer_type": "set",
+      "expected_answer": "k={\\frac{m_{0}^{\\frac{2}{3}}g t}{h_{1}}}\nOil droplet A is uncharged, and oil droplet B carries a negative charge. And q=\\frac{m_{0}g d(h_{1}+h_{2})}{h_{1}U}\n\\Delta E_{p}=-\\frac{m_{0}g h_{2}(h_{1}+h_{2})}{h_{1}}\nIf $F^{\\prime}>2m_{0}g$, $v_{2}=\\frac{h_{2}-h_{1}}{\\sqrt[3]{2}t}$, the velocity direction is upwards; if $F^{\\prime}<2m_{0}g$, $v_2=\\frac{h_1 - h_2}{\\sqrt{3}{2}t}$, the velocity direction is downwards.",
+      "split_role": "single"
+    }
+  ]
+}
