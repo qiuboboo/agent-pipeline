@@ -2815,6 +2815,9 @@ class MultiDatasetCleaningPipeline:
         ensure_dir(self.dataset_root)
         self.aggregate_summary: Dict[str, Any] = {"pipeline_run_id": self.pipeline_run_id, "created_at": utc_now(), "datasets": []}
 
+    def progress(self, message: str) -> None:
+        print(message, flush=True)
+
     def default_image_quality(self) -> Dict[str, Any]:
         return {
             "width": None,
@@ -2841,8 +2844,19 @@ class MultiDatasetCleaningPipeline:
         started_at = utc_now()
         started_perf = time.perf_counter()
         dataset_summaries = []
-        for spec in self.config.datasets:
-            dataset_summaries.append(self.run_single_dataset(spec))
+        total_datasets = len(self.config.datasets)
+        self.progress(
+            f"[Pipeline] run_id={self.pipeline_run_id} start datasets={total_datasets} output_dir={self.run_dir}"
+        )
+        for dataset_index, spec in enumerate(self.config.datasets, start=1):
+            self.progress(
+                f"[Pipeline] dataset {dataset_index}/{total_datasets} START key={spec.key} name={spec.display_name}"
+            )
+            dataset_summary = self.run_single_dataset(spec)
+            dataset_summaries.append(dataset_summary)
+            self.progress(
+                f"[Pipeline] dataset {dataset_index}/{total_datasets} END key={spec.key} processed={dataset_summary.get('processed_samples', 0)} decisions={dataset_summary.get('decision_counts', {})}"
+            )
         self.aggregate_summary["datasets"] = dataset_summaries
         self.aggregate_summary["sample_concurrency"] = self.config.sample_concurrency
         self.aggregate_summary["started_at"] = started_at
@@ -2850,6 +2864,9 @@ class MultiDatasetCleaningPipeline:
         self.aggregate_summary["elapsed_seconds"] = round(time.perf_counter() - started_perf, 3)
         self.aggregate_summary["llm_usage"] = self.client.get_usage_summary()
         write_json(self.run_dir / "summary.json", self.aggregate_summary)
+        self.progress(
+            f"[Pipeline] run_id={self.pipeline_run_id} finished elapsed={self.aggregate_summary['elapsed_seconds']}s"
+        )
         return self.aggregate_summary
 
     def run_single_dataset(self, spec: DatasetSpec) -> Dict[str, Any]:
@@ -2878,7 +2895,13 @@ class MultiDatasetCleaningPipeline:
                 "llm_usage": self.client.usage_delta(usage_before),
             }
             write_json(dataset_dir / "summary.json", summary)
+            self.progress(
+                f"[Dataset {spec.key}] source unavailable detail={detail}"
+            )
             return summary
+        self.progress(
+            f"[Dataset {spec.key}] source ready sampled={len(samples)}/{self.config.sample_per_dataset} concurrency={max(1, int(self.config.sample_concurrency or 1))}"
+        )
         bundle = {
             "source_intake_records": [],
             "asset_registry_records": [],
@@ -2937,6 +2960,17 @@ class MultiDatasetCleaningPipeline:
         ensure_dir(image_dir)
         ensure_dir(crop_dir)
 
+        completed_samples = 0
+        total_samples = len(samples)
+
+        def emit_sample_progress(result: Dict[str, Any]) -> None:
+            nonlocal completed_samples
+            completed_samples += 1
+            problem_main = result.get("problem_main_record", {})
+            self.progress(
+                f"[Dataset {spec.key}] sample {completed_samples}/{total_samples} source_problem_id={problem_main.get('source_problem_id', 'unknown')} problem_id={problem_main.get('problem_id', 'unknown')} decision={problem_main.get('clean_decision', 'unknown')} rewrite={problem_main.get('rewrite_strategy', 'unknown')}"
+            )
+
         def consume_result(result: Dict[str, Any]) -> None:
             for result_key, bundle_key in result_mapping.items():
                 value = result.get(result_key)
@@ -2947,6 +2981,7 @@ class MultiDatasetCleaningPipeline:
             if self.config.save_sample_bundle:
                 sample_file = sample_dir / f"{result['problem_main_record']['problem_id']}.json"
                 write_json(sample_file, result)
+            emit_sample_progress(result)
 
         sample_concurrency = max(1, int(self.config.sample_concurrency or 1))
         if sample_concurrency == 1 or len(samples) <= 1:

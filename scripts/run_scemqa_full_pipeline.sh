@@ -8,7 +8,7 @@ CONFIG_PATH="${SCEMQA_CONFIG_PATH:-./benchmarkallinone/configs/scemqa_parallel_2
 BASE_URL="${OPENAI_BASE_URL:-https://synai996.space/v1}"
 MODEL_NAME="${OPENAI_MODEL:-gpt-5.4}"
 REASONING_EFFORT="${OPENAI_REASONING_EFFORT:-high}"
-API_KEY="${OPENAI_API_KEY:-${SCEMQA_OPENAI_API_KEY:-}}"
+API_KEY="${OPENAI_API_KEY:-${SCEMQA_OPENAI_API_KEY:-sk-uCj6YwOFEkv0YGfJQwVMLUMgXIcWZRUJqHGmMiYlPeQZzFVi}}"
 
 if [[ $# -ge 1 && -n "$1" ]]; then
   CONFIG_PATH="$1"
