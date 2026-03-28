@@ -1237,6 +1237,9 @@ class HuggingFaceConnector(BaseConnector):
         super().__init__(spec, config)
         self._repo_files_cache: Optional[List[str]] = None
         self._repo_file_index: Optional[Dict[str, List[str]]] = None
+        self._zip_repo_file: Optional[str] = None
+        self._zip_local_path: Optional[Path] = None
+        self._zip_member_index: Optional[Dict[str, List[str]]] = None
 
     def candidate_splits(self) -> List[str]:
         raw = [self.spec.split, "test", "validation", "val", "train"]
@@ -1302,6 +1305,67 @@ class HuggingFaceConnector(BaseConnector):
                 candidates.append(item)
         return candidates
 
+    def _zip_repo_file_candidates(self) -> List[str]:
+        files = self._repo_files()
+        if not files:
+            return []
+        preferred = [item for item in files if Path(item).name.lower() in {'images.zip', 'image.zip'}]
+        any_zip = [item for item in files if item.lower().endswith('.zip')]
+        seen: set[str] = set()
+        ordered: List[str] = []
+        for item in preferred + any_zip:
+            if item not in seen:
+                seen.add(item)
+                ordered.append(item)
+        return ordered
+
+    def _ensure_zip_member_index(self) -> None:
+        if self._zip_member_index is not None:
+            return
+        self._zip_member_index = {}
+        try:
+            from huggingface_hub import hf_hub_download
+            import zipfile
+
+            repo_file = self._zip_repo_file
+            if repo_file is None:
+                candidates = self._zip_repo_file_candidates()
+                if not candidates:
+                    return
+                repo_file = candidates[0]
+                self._zip_repo_file = repo_file
+            local_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type='dataset', filename=repo_file))
+            self._zip_local_path = local_path
+            with zipfile.ZipFile(local_path, 'r') as zf:
+                index: Dict[str, List[str]] = {}
+                for member in zf.namelist():
+                    if member.endswith('/'):
+                        continue
+                    basename = Path(member).name
+                    index.setdefault(basename, []).append(member)
+                self._zip_member_index = index
+        except Exception:
+            self._zip_member_index = {}
+
+    def _load_image_from_repo_zip_member(self, member_name: str) -> Tuple[List[Image.Image], List[str]]:
+        self._ensure_zip_member_index()
+        if not self._zip_member_index or self._zip_local_path is None:
+            return [], []
+        import zipfile
+        candidates = self._zip_member_index.get(Path(member_name).name, [])
+        if not candidates:
+            return [], []
+        try:
+            with zipfile.ZipFile(self._zip_local_path, 'r') as zf:
+                for member in candidates:
+                    with zf.open(member) as f:
+                        data = f.read()
+                    image = Image.open(io.BytesIO(data)).convert('RGB')
+                    return [image], [f'zip://{self._zip_local_path}!{member}']
+        except Exception:
+            return [], []
+        return [], []
+
     def _load_image_from_repo_file(self, repo_file: str) -> Tuple[List[Image.Image], List[str]]:
         try:
             from huggingface_hub import hf_hub_download
@@ -1353,6 +1417,9 @@ class HuggingFaceConnector(BaseConnector):
                     child_images, child_sources = self._load_image_from_repo_file(repo_file)
                     if child_images:
                         return child_images, child_sources
+                child_images, child_sources = self._load_image_from_repo_zip_member(path)
+                if child_images:
+                    return child_images, child_sources
             nested_value = value.get("image") or value.get("images") or value.get("decoded_image")
             if nested_value is not None and nested_value is not value:
                 return self.load_images(nested_value)
@@ -1372,6 +1439,9 @@ class HuggingFaceConnector(BaseConnector):
                 child_images, child_sources = self._load_image_from_repo_file(repo_file)
                 if child_images:
                     return child_images, child_sources
+            child_images, child_sources = self._load_image_from_repo_zip_member(value)
+            if child_images:
+                return child_images, child_sources
         return images, sources
 
     def resolve_answer_text(self, raw_answer: Any) -> str:

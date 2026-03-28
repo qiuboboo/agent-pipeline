@@ -179,6 +179,8 @@ python run_pipeline.py --config configs/multi_dataset_iter.yaml --disable-llm
 
 - [`docs/pipeline_python_modules_reference.md`](docs/pipeline_python_modules_reference.md)
   - Python 模块、函数职责、阶段映射说明。
+- [`docs/loader_recommendations.md`](docs/loader_recommendations.md)
+  - 数据集 → 推荐 loader 类型映射，说明哪些集更适合继续走通用 HF connector，哪些应切换到 zip-member / raw-bundle / GitHub-local loader。
 - [`docs/run_summaries/README.md`](docs/run_summaries/README.md)
   - 运行摘要保留规范。
 - [`docs/candidate_200_benchmark_report_rerun_2026-03-26.md`](docs/candidate_200_benchmark_report_rerun_2026-03-26.md)
