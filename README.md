@@ -43,61 +43,61 @@ multidataset_cleaning_pipeline.py
   - 已补上 env 展开与 fail-fast 保护
   - `cmm_math_rewrite_debug` 第二次验证已确认 rewrite LLM 恢复正常，并开始真实影响 rewrite strategy（例如 `split_open -> direct_open`）
 
-最新一次 200 样本长任务 benchmark：
+最新一次完整 200 样本 rerun benchmark：
 
 - 配置：[`configs/candidate_200_remote.yaml`](configs/candidate_200_remote.yaml)
-- 输出：[`outputs/candidate_200_remote_long/run_cf4370b4bf405a34/summary.json`](outputs/candidate_200_remote_long/run_cf4370b4bf405a34/summary.json)
-- 详细分析：[`docs/run_summaries/candidate_200_remote_long_analysis_2026-03-27.md`](docs/run_summaries/candidate_200_remote_long_analysis_2026-03-27.md)
+- 输出：[`outputs/candidate_200_remote/run_38bce3437874d962/summary.json`](outputs/candidate_200_remote/run_38bce3437874d962/summary.json)
+- 详细分析：[`docs/run_summaries/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md`](docs/run_summaries/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md)
 
 ### 总体结果
 
-- 总耗时：**约 9311 秒**（约 **155.2 分钟**，约 **2 小时 35 分**）
-- 平均每个 processed sample：**约 49.0 秒 / 样本**
+- 总耗时：**约 13719 秒**（约 **228.7 分钟**，约 **3 小时 48 分 39 秒**）
+- 平均每个 processed sample：**约 68.6 秒 / 样本**
 - Requested：**200**
-- Processed：**190**
-- Pass：**123**
-- Review：**55**
-- Reject：**12**
+- Processed：**200**
+- Pass：**114**
+- Review：**64**
+- Reject：**22**
 
-按本轮实际 processed=190 计算：
+按本轮实际 processed=200 计算：
 
-- **Pass rate**：**64.7%**
-- **Review rate**：**28.9%**
-- **Reject rate**：**6.3%**
+- **Pass rate**：**57.0%**
+- **Review rate**：**32.0%**
+- **Reject rate**：**11.0%**
 
 ### 简要结论
 
-- 这轮最重要的结论是：**主流程已经能稳定跑完整轮长任务**，exit code 0，远端模型调用没有再次把整轮打死。
-- 当前主要瓶颈已经从“跑不通”转成“**对高视觉依赖题偏保守**”，表现为 `review` 偏多，而不是 `reject` 大面积飙升。
-- 除 `Geometry3K` 外，其余数据集都跑满了 20 个样本。
-- `Geometry3K` 当时仍只 ingest 到 10 个 demo samples，因此本轮 `Geometry3K` 结果**不应作为正式评估结论**。
+- 这轮最重要的结论是：**proxy-enabled 长任务已经能稳定完整跑完 200 样本 benchmark**。
+- 当前主要问题已经从“运行链路是否会中断”转成“**不同数据集与当前清洗范式的兼容性差异**”。
+- 表现最健康的数据集是：`SeePhys / CMM-Math / SCEMQA / MathVision`。
+- 最值得继续拆解的高 review 数据集是：`MM-Math / PhysReason / EMMA-Physics`。
+- 最明确应降权甚至剔除的，是：`Multi-Physics`。
 
 ### 本轮各数据集表现
 
 - 表现较健康：
   - `SeePhys`：19 / 1 / 0
-  - `CMM-Math`：18 / 2 / 0
-  - `SCEMQA`：17 / 2 / 1
-  - `Multi-Physics`：17 / 2 / 1
-  - `MathVision`：16 / 4 / 0
+  - `CMM-Math`：18 / 1 / 1
+  - `SCEMQA`：17 / 3 / 0
+  - `MathVision`：17 / 3 / 0
 
-- 主要偏保守：
-  - `MM-Math`：2 / 18 / 0
-  - `PhysReason`：7 / 12 / 1
-  - `EMMA-Physics`：11 / 9 / 0
+- 可保留但 review 成本较高：
+  - `EEE-Bench`：13 / 6 / 1
+  - `EMMA-Physics`：10 / 10 / 0
+  - `Geometry3K`：7 / 10 / 3
+  - `PhysReason`：7 / 13 / 0
 
-- 本轮暂不采信正式结论：
-  - `Geometry3K`：2 / 1 / 7（仅处理到 10 个，受旧 ingest 入口影响）
+- 最值得重点排查 / 降权：
+  - `MM-Math`：2 / 17 / 1
+  - `Multi-Physics`：4 / 0 / 16
 
 ### 这轮能说明什么
 
-- **稳定性问题基本解决**：长任务可自然结束。
-- **`CMM-Math` 的 `split_open` 修复已在大样本里得到验证**。
-- **`MM-Math` / `PhysReason` / `EMMA-Physics` 是下一步最值得继续拆 review 的三块**。
-- **Geometry3K 需要使用修复后的官方 zip ingest 入口重新定点评估**。
-- **另外已确认一个重要运行限制**：这轮 190 条 processed 样本虽然都产出了 rewrite strategy，但 `rewrite_reports` 中没有任何一条 `llm_used = True`，说明本轮实际跑到的是 fallback-only rewrite，而不是 LLM rewrite fully active；详细说明见长文档。
-- **后续 `cmm_math_rewrite_debug` 定点验证已进一步钉死直接原因**：rewrite 阶段不是没进入、也不是没 choices，而是 `chat_json` 请求被接口按 `401 Unauthorized / 无效的令牌` 拒绝；高概率根因是当前 `from_yaml()` 不展开 `${OPENAI_API_KEY}`，而某些 `nohup` 进程没有带到真实环境变量，导致发出了占位符 token。
-- **在补上 env 展开和 fail-fast 后，第二次 `cmm_math_rewrite_debug` 已验证修复生效**：`run_43bac1c988f5f011` 得到 `18 / 1 / 1`，且 `run.log` 连续出现 `llm_result strategy=...`，说明 rewrite LLM 已恢复正常，并开始真实影响 rewrite strategy（例如 `split_open -> direct_open`）。
+- **稳定性问题在运行层面已经基本解决**：长任务自然结束，run 有完整 finished 标记。
+- **`MM-Math` 的问题更像规则保守，而不是样本本身普遍不可解**：大量样本 `solvability_score=1.0`，但因 `alignment_risky / visual_reference_density_mismatch` 被压到 review。
+- **`Multi-Physics` 的问题则更像数据源与当前 open-ended 清洗目标不兼容**：大量样本存在 `missing_grounded_visual_path / text_image_misaligned / low_text_completeness`。
+- **这轮暴露的主要矛盾已经不是程序报错，而是策略层张力**：solvability 子系统倾向 pass，但 alignment 风险子系统在高图依赖题上更保守。
+
 
 ## 项目结构
 

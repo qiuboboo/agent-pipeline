@@ -4,7 +4,10 @@
 
 ## 当前保留内容
 
+- `candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md` —— 最新一轮完整 200 样本 rerun 分析，包含运行时长、各数据集 pass/review/reject 分布、`MM-Math`/`Multi-Physics` 深入分析，以及日志异常排查结论
+- `candidate_200_remote_long_analysis_2026-03-27.md` —— 上一轮长任务分析，记录 fallback-only rewrite、Geometry3K ingest 问题以及当时的长任务结果
 - `geometry3k_ingest_ranking_fix_2026-03-27.md` —— 记录 Geometry3K 在 Collection ingest 阶段因候选文件排序误判导致的 48.5 分钟瓶颈，以及 ranking 修复后的验证结果
+- `rewrite_llm_recovery_and_runlog_2026-03-28.md` —— 记录 rewrite LLM `401 Unauthorized` 根因定位、env 展开与 fail-fast 修复、以及 `run.log` 接入情况
 - `m3cot_single_before_image_path_fix.summary.json` —— 本地图片路径修复前的结果
 - `m3cot_single_after_image_path_fix.summary.json` —— 本地图片路径修复后的结果
 - `all_available_v2_candidate_reject_fastpath.summary.json` —— 验证 candidate-intake reject 快速路径
