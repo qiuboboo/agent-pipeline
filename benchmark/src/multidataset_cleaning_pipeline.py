@@ -2059,7 +2059,6 @@ class RewriteAgent:
     def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer, logger: Optional[RunLogger] = None):
         self.client = client
         self.normalizer = normalizer
-        self.logger = logger
         self.system_prompt = read_prompt(REWRITE_AGENT_PROMPT_PATH) if REWRITE_AGENT_PROMPT_PATH.exists() else (
             "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. "
             "Convert multiple-choice questions into open-ended variants under strict rules. "
