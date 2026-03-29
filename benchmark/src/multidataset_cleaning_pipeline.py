@@ -259,6 +259,7 @@ class DatasetSpec:
     metadata_fields: List[str] = field(default_factory=list)
     force_requires_image: bool = False
     multi_solution_mode: str = "auto"
+    answer_index_base: Optional[int] = None
 
 
 @dataclass
@@ -296,6 +297,7 @@ class PipelineConfig:
                 question_fields=["question", "problem", "query", "text"],
                 answer_fields=["answer", "solution", "label"],
                 image_fields=["image", "image_path", "img_path", "diagram"],
+                answer_index_base=0,
             ),
             DatasetSpec(
                 key="geometry3k",
@@ -843,6 +845,7 @@ WORKSPACE_ROOT = PROJECT_ROOT.parent
 PROMPT_ROOT = PROJECT_ROOT / "prompts"
 UNIFIED_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_unified_sample.md"
 LEGACY_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_question_answer_image.md"
+REWRITE_AGENT_PROMPT_PATH = PROMPT_ROOT / "cleaning" / "rewrite_agent.md"
 
 
 def read_prompt(path: Path) -> str:
@@ -1049,7 +1052,7 @@ def prompt_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec", clie
     }
 
 
-def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str]) -> str:
+def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str], answer_index_base: Optional[int] = None) -> str:
     answer = normalize_whitespace(answer_text)
     if not answer:
         return ""
@@ -1059,6 +1062,21 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
         key = letter_match.group(1)
         if key in choice_map:
             return normalize_whitespace(choice_map[key])
+    if choice_map and answer_index_base is not None:
+        numeric_match = re.fullmatch(r"[+-]?\d+", answer)
+        if numeric_match:
+            try:
+                raw_index = int(numeric_match.group(0))
+            except ValueError:
+                raw_index = None
+            if raw_index is not None:
+                choice_labels = [label for label in sorted(choice_map.keys()) if re.fullmatch(r"[A-H]", label)]
+                resolved_index = raw_index - int(answer_index_base)
+                if 0 <= resolved_index < len(choice_labels):
+                    mapped_label = choice_labels[resolved_index]
+                    mapped_answer = normalize_whitespace(choice_map.get(mapped_label, ""))
+                    if mapped_answer:
+                        return mapped_answer
     mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.IGNORECASE)
     if mixed_match:
         answer = mixed_match.group(2).strip()
@@ -1171,7 +1189,7 @@ class LocalFileConnector(BaseConnector):
         for index, row in enumerate(self.iter_records(path)):
             extracted = prompt_extract_record_content(row, self.spec, prompt_client)
             raw_question = extracted["raw_question_text"]
-            raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"])
+            raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"], self.spec.answer_index_base)
             images: List[Image.Image] = []
             image_sources: List[str] = []
             for path_str in extracted["image_paths"]:
@@ -1482,6 +1500,7 @@ class HuggingFaceConnector(BaseConnector):
                 raw_answer = resolve_multiple_choice_answer_text(
                     self.resolve_answer_text(row.get("solution") or extracted["raw_answer_text"]),
                     extracted["choice_map"],
+                    self.spec.answer_index_base,
                 )
                 images: List[Image.Image] = []
                 image_sources: List[str] = []
@@ -1558,7 +1577,7 @@ class HuggingFaceConnector(BaseConnector):
                 continue
             extracted = prompt_extract_record_content(data, self.spec, prompt_client)
             question_text = extracted["raw_question_text"]
-            raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(extracted["raw_answer_text"]), extracted["choice_map"])
+            raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(extracted["raw_answer_text"]), extracted["choice_map"], self.spec.answer_index_base)
             images: List[Image.Image] = []
             image_sources: List[str] = []
             image_list = data.get("question_image_list") or []
@@ -1620,7 +1639,7 @@ class HuggingFaceConnector(BaseConnector):
             row = dict(row)
             extracted = prompt_extract_record_content(row, self.spec, prompt_client)
             raw_question = extracted["raw_question_text"]
-            raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(extracted["raw_answer_text"]), extracted["choice_map"])
+            raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(extracted["raw_answer_text"]), extracted["choice_map"], self.spec.answer_index_base)
             image_field_candidates: List[str] = []
             explicit_image_field = extracted.get("image_field")
             if explicit_image_field:
@@ -1752,6 +1771,7 @@ class GitHubConnector(BaseConnector):
             raw_answer = resolve_multiple_choice_answer_text(
                 row.get("answer") if row.get("answer") is not None else extracted["raw_answer_text"],
                 extracted["choice_map"],
+                self.spec.answer_index_base,
             )
             images: List[Image.Image] = []
             image_sources: List[str] = []
@@ -1955,7 +1975,7 @@ class GitHubConnector(BaseConnector):
                 row = dict(row)
                 extracted = prompt_extract_record_content(row, self.spec, prompt_client)
                 raw_question = extracted["raw_question_text"]
-                raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"])
+                raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"], self.spec.answer_index_base)
                 images: List[Image.Image] = []
                 image_sources: List[str] = []
                 image_field_candidates: List[str] = []
@@ -2040,6 +2060,14 @@ class RewriteAgent:
         self.client = client
         self.normalizer = normalizer
         self.logger = logger
+        self.system_prompt = read_prompt(REWRITE_AGENT_PROMPT_PATH) if REWRITE_AGENT_PROMPT_PATH.exists() else (
+            "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. "
+            "Convert multiple-choice questions into open-ended variants under strict rules. "
+            "If the question is already open-ended, keep it. "
+            "If it is a pure graph/diagram/waveform label selection question, drop it. "
+            "If it is concept discrimination whose target is carried by options, rewrite it as a blank-style open question without options. "
+            "If one option contains multiple atomic answers, split into multiple subquestions. Output strict JSON only."
+        )
 
     def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
         question_only, _ = self.normalizer.split_question_and_choices(question_text)
@@ -2047,10 +2075,19 @@ class RewriteAgent:
         if not choices:
             if answer_type == "option" and any(token in question_only.lower() for token in ["which picture", "in which picture", "which figure", "which diagram", "which graph", "shown below", "illustrated"]):
                 return {
-                    "strategy": "drop_image_index",
-                    "rationale": "Visual selection question without textual choices should be dropped.",
-                    "variants": [],
-                    "discard_reason_codes": ["pure_image_index_choice"],
+                    "strategy": "blank_open",
+                    "rationale": "Pure-image label selection tasks are in scope, so keep the task and require the answer as the correct option label.",
+                    "variants": [
+                        {
+                            "variant_id": "open_1",
+                            "title": f"{dataset_name} 图像标签题",
+                            "rewritten_question_text": question_only,
+                            "expected_answer_type": "short_text",
+                            "expected_answer": normalized_answer,
+                            "split_role": "single",
+                        }
+                    ],
+                    "discard_reason_codes": [],
                 }
             return {
                 "strategy": "keep_open",
@@ -2068,11 +2105,21 @@ class RewriteAgent:
                 "discard_reason_codes": [],
             }
         if self.normalizer.is_pure_image_index_question(question_only, choices):
+            resolved_answer = choices.get(normalized_answer, normalized_answer)
             return {
-                "strategy": "drop_image_index",
-                "rationale": "Pure image-index multiple choice question should be dropped.",
-                "variants": [],
-                "discard_reason_codes": ["pure_image_index_choice"],
+                "strategy": "blank_open",
+                "rationale": "Pure-image choice questions remain valid tasks for this pipeline, so convert them into answer-with-label open questions instead of dropping them.",
+                "variants": [
+                    {
+                        "variant_id": "open_1",
+                        "title": f"{dataset_name} 图像标签题",
+                        "rewritten_question_text": question_only,
+                        "expected_answer_type": "short_text",
+                        "expected_answer": resolved_answer,
+                        "split_role": "single",
+                    }
+                ],
+                "discard_reason_codes": [],
             }
         if self.normalizer.is_compound_answer_question(question_only, choices):
             correct_text = choices.get(normalized_answer, "")
@@ -2097,6 +2144,10 @@ class RewriteAgent:
                 "variants": variants,
                 "discard_reason_codes": [],
             }
+        resolved_answer = choices.get(normalized_answer, normalized_answer)
+        resolved_answer_type = self.normalizer.infer_answer_type(self.normalizer.normalize_answer(resolved_answer))
+        if resolved_answer_type == "option":
+            resolved_answer_type = "short_text"
         return {
             "strategy": "blank_open",
             "rationale": "Converted multiple choice into blank-style open-ended question.",
@@ -2105,8 +2156,8 @@ class RewriteAgent:
                     "variant_id": "open_1",
                     "title": f"{dataset_name} 开放题",
                     "rewritten_question_text": question_only,
-                    "expected_answer_type": "numeric" if answer_type == "option" and choices.get(normalized_answer, "") else answer_type,
-                    "expected_answer": choices.get(normalized_answer, normalized_answer),
+                    "expected_answer_type": resolved_answer_type,
+                    "expected_answer": resolved_answer,
                     "split_role": "single",
                 }
             ],
@@ -2134,14 +2185,6 @@ class RewriteAgent:
             if self.logger:
                 self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=choices empty", dataset=dataset_name, problem_id=problem_id)
             return fallback
-        system_prompt = (
-            "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. "
-            "Convert multiple-choice questions into open-ended variants under strict rules. "
-            "If the question is already open-ended, keep it. "
-            "If it is a pure graph/diagram/waveform label selection question, drop it. "
-            "If it is concept discrimination whose target is carried by options, rewrite it as a blank-style open question without options. "
-            "If one option contains multiple atomic answers, split into multiple subquestions. Output strict JSON only."
-        )
         user_prompt = json.dumps(
             {
                 "dataset_name": dataset_name,
@@ -2150,12 +2193,15 @@ class RewriteAgent:
                 "correct_option_letter": normalized_answer_text if answer_type == "option" else None,
                 "correct_option_text": choices.get(normalized_answer_text, normalized_answer_text),
                 "answer_type": answer_type,
+                "dataset_rules": {
+                    "scemqa_answer_index_base": 0 if dataset_name.strip().lower() == "scemqa" else None
+                },
                 "fallback_result": fallback,
             },
             ensure_ascii=False,
             indent=2,
         )
-        llm_result = self.client.chat_json(system_prompt, user_prompt, caller="rewrite")
+        llm_result = self.client.chat_json(self.system_prompt, user_prompt, caller="rewrite")
         if not llm_result:
             fallback["llm_used"] = False
             fallback["fallback_reason"] = "chat_json returned empty"
@@ -2181,10 +2227,33 @@ class RewriteAgent:
             if self.logger:
                 self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=invalid llm variants", dataset=dataset_name, problem_id=problem_id)
             return fallback
+        normalized_variants = []
+        for idx, variant in enumerate(variants, start=1):
+            if not isinstance(variant, dict):
+                continue
+            expected_answer = normalize_whitespace(to_plain_text(variant.get("expected_answer")))
+            if expected_answer:
+                expected_answer = resolve_multiple_choice_answer_text(expected_answer, choices)
+            expected_answer_type = to_plain_text(variant.get("expected_answer_type")).strip() or answer_type
+            inferred_type = self.normalizer.infer_answer_type(self.normalizer.normalize_answer(expected_answer)) if expected_answer else expected_answer_type
+            if inferred_type == "option":
+                inferred_type = "short_text"
+            normalized_variants.append({
+                "variant_id": to_plain_text(variant.get("variant_id")) or f"open_{idx}",
+                "title": to_plain_text(variant.get("title")) or f"{dataset_name} 开放题",
+                "rewritten_question_text": to_plain_text(variant.get("rewritten_question_text")) or normalized_question_text,
+                "expected_answer_type": inferred_type or expected_answer_type,
+                "expected_answer": expected_answer or choices.get(normalized_answer_text, normalized_answer_text),
+                "split_role": to_plain_text(variant.get("split_role")) or "single",
+            })
+        if strategy != "drop_image_index" and not normalized_variants:
+            fallback["llm_used"] = False
+            fallback["fallback_reason"] = "invalid normalized variants"
+            return fallback
         result = {
             "strategy": strategy,
             "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
-            "variants": variants,
+            "variants": normalized_variants,
             "discard_reason_codes": llm_result.get("discard_reason_codes", fallback["discard_reason_codes"]),
             "llm_used": True,
         }
