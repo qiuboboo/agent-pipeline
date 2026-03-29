@@ -2069,6 +2069,19 @@ class RewriteAgent:
             "If one option contains multiple atomic answers, split into multiple subquestions. Output strict JSON only."
         )
 
+    def call_json(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        user_prompt = json.dumps(payload, ensure_ascii=False, indent=2)
+        result = self.client.chat_json(self.system_prompt, user_prompt, caller="rewrite")
+        if not isinstance(result, dict):
+            return None
+        variants = result.get("variants")
+        if variants is not None and not isinstance(variants, list):
+            result["variants"] = []
+        discard_reason_codes = result.get("discard_reason_codes")
+        if discard_reason_codes is not None and not isinstance(discard_reason_codes, list):
+            result["discard_reason_codes"] = []
+        return result
+
     def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
         question_only, _ = self.normalizer.split_question_and_choices(question_text)
         question_only = self.normalizer.strip_hint(question_only)
@@ -2185,7 +2198,7 @@ class RewriteAgent:
             if self.logger:
                 self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=choices empty", dataset=dataset_name, problem_id=problem_id)
             return fallback
-        user_prompt = json.dumps(
+        llm_result = self.call_json(
             {
                 "dataset_name": dataset_name,
                 "question_text": normalized_question_text,
@@ -2197,11 +2210,8 @@ class RewriteAgent:
                     "scemqa_answer_index_base": 0 if dataset_name.strip().lower() == "scemqa" else None
                 },
                 "fallback_result": fallback,
-            },
-            ensure_ascii=False,
-            indent=2,
+            }
         )
-        llm_result = self.client.chat_json(self.system_prompt, user_prompt, caller="rewrite")
         if not llm_result:
             fallback["llm_used"] = False
             fallback["fallback_reason"] = "chat_json returned empty"
