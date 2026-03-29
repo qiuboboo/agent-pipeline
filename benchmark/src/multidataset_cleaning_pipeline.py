@@ -2198,7 +2198,7 @@ class RewriteAgent:
             "discard_reason_codes": [],
         }
 
-    def rewrite(self, dataset_name: str, problem_id: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+    def rewrite(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
         fallback = self.fallback_rewrite(dataset_name, normalized_question_text, normalized_answer_text, answer_type, choices)
         if not self.client.config.enabled or not choices:
             fallback["llm_used"] = False

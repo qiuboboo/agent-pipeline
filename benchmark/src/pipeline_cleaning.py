@@ -854,7 +854,6 @@ def build_field_audit_records(pipeline: Any, problem_id: str, raw_question_text:
 def rewrite_sample(pipeline: Any, spec: Any, sample: Any, preprocessed: Dict[str, Any]) -> Dict[str, Any]:
     rewrite_report = pipeline.rewrite_agent.rewrite(
         spec.display_name,
-        preprocessed["problem_id"],
         preprocessed["normalized_question_text"],
         preprocessed["normalized_answer_text"],
         preprocessed["original_answer_type"],
