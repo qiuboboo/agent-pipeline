@@ -104,7 +104,7 @@ agent-pipeline/
 #### 2) 已完成 200 样本跨学科 benchmark
 
 - 配置：[configs/candidate_200_remote.yaml](configs/candidate_200_remote.yaml)
-- 报告：[docs/candidate_200_benchmark_report.md](docs/candidate_200_benchmark_report.md)
+- 报告：[docs/run_summaries/2026-03-24/candidate_200_benchmark_report.md](docs/run_summaries/2026-03-24/candidate_200_benchmark_report.md)
 - 结果：`outputs/candidate_200_remote/run_6be16173d2403a7e/summary.json`
 
 核心结果：

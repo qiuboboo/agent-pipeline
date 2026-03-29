@@ -29,7 +29,7 @@ from PIL import Image
 
 try:
     from .cleaning_semantics import AlignmentEngine, SolvabilityChecker, TextContextParser, VisualParser, normalize_structured_text
-    from .pipeline_cleaning import DecisionAgent, finalize_cleaning_sample, rewrite_sample
+    from .pipeline_cleaning import finalize_cleaning_sample, rewrite_sample
     from .pipeline_collection import default_image_quality, extract_sample_structure, ingest_dataset_samples, preprocess_sample
     from .pipeline_reporting import (
         append_sample_result,
@@ -44,7 +44,6 @@ try:
     from .pipeline_clients import OpenAICompatibleClient as SharedOpenAICompatibleClient
     from .pipeline_logging import RunLogger as SharedRunLogger
     from .pipeline_normalization import ImageQualityAnalyzer as SharedImageQualityAnalyzer, TextNormalizer as SharedTextNormalizer
-    from .pipeline_rewrite import RewriteAgent as SharedRewriteAgent, resolve_multiple_choice_answer_text as shared_resolve_multiple_choice_answer_text
     from .pipeline_extraction import (
         choose_candidate_field as shared_choose_candidate_field,
         heuristic_extract_record_content as shared_heuristic_extract_record_content,
@@ -55,7 +54,7 @@ try:
     )
 except ImportError:
     from cleaning_semantics import AlignmentEngine, SolvabilityChecker, TextContextParser, VisualParser, normalize_structured_text
-    from pipeline_cleaning import DecisionAgent, finalize_cleaning_sample, rewrite_sample
+    from pipeline_cleaning import finalize_cleaning_sample, rewrite_sample
     from pipeline_collection import default_image_quality, extract_sample_structure, ingest_dataset_samples, preprocess_sample
     from pipeline_reporting import (
         append_sample_result,
@@ -70,7 +69,6 @@ except ImportError:
     from pipeline_clients import OpenAICompatibleClient as SharedOpenAICompatibleClient
     from pipeline_logging import RunLogger as SharedRunLogger
     from pipeline_normalization import ImageQualityAnalyzer as SharedImageQualityAnalyzer, TextNormalizer as SharedTextNormalizer
-    from pipeline_rewrite import RewriteAgent as SharedRewriteAgent, resolve_multiple_choice_answer_text as shared_resolve_multiple_choice_answer_text
     from pipeline_extraction import (
         choose_candidate_field as shared_choose_candidate_field,
         heuristic_extract_record_content as shared_heuristic_extract_record_content,
@@ -90,7 +88,6 @@ OpenAICompatibleClient = SharedOpenAICompatibleClient
 TextNormalizer = SharedTextNormalizer
 ImageQualityAnalyzer = SharedImageQualityAnalyzer
 RunLogger = SharedRunLogger
-RewriteAgent = SharedRewriteAgent
 ensure_dir = shared_ensure_dir
 clamp = shared_clamp
 write_json = shared_write_json
@@ -891,6 +888,31 @@ WORKSPACE_ROOT = PROJECT_ROOT.parent
 PROMPT_ROOT = PROJECT_ROOT / "prompts"
 UNIFIED_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_unified_sample.md"
 LEGACY_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_question_answer_image.md"
+REWRITE_AGENT_PROMPT_PATH = PROMPT_ROOT / "cleaning" / "rewrite_agent.md"
+
+
+def read_prompt(path: Path) -> str:
+    return shared_read_prompt(path)
+
+
+class BaseStructuredAgent:
+    def __init__(self, client: OpenAICompatibleClient, prompt_path: Path, fallback_system_prompt: str):
+        self.client = client
+        self.prompt_path = prompt_path
+        self.system_prompt = read_prompt(prompt_path) if prompt_path.exists() else fallback_system_prompt
+
+    def call_json(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        user_prompt = json.dumps(payload, ensure_ascii=False, indent=2)
+        result = self.client.chat_json(self.system_prompt, user_prompt, caller=self.__class__.__name__.lower())
+        if not isinstance(result, dict):
+            return None
+        return result
+
+    def normalize_list_field(self, result: Dict[str, Any], field_name: str) -> Dict[str, Any]:
+        field_value = result.get(field_name)
+        if field_value is not None and not isinstance(field_value, list):
+            result[field_name] = []
+        return result
 
 
 class RunLogger:
@@ -934,7 +956,57 @@ def prompt_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec", clie
 
 
 def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str], answer_index_base: Optional[int] = None) -> str:
-    return shared_resolve_multiple_choice_answer_text(answer_text, choice_map, answer_index_base)
+    answer = normalize_whitespace(answer_text)
+    if not answer:
+        return ""
+    upper = answer.upper().strip()
+    letter_match = re.fullmatch(r"\(?([A-Z])\)?", upper)
+    if letter_match:
+        key = letter_match.group(1)
+        if key in choice_map:
+            return normalize_whitespace(choice_map[key])
+    if choice_map and answer_index_base is not None:
+        numeric_match = re.fullmatch(r"[+-]?\d+", answer)
+        if numeric_match:
+            try:
+                raw_index = int(numeric_match.group(0))
+            except ValueError:
+                raw_index = None
+            if raw_index is not None:
+                choice_labels = [label for label in sorted(choice_map.keys()) if re.fullmatch(r"[A-H]", label)]
+                resolved_index = raw_index - int(answer_index_base)
+                if 0 <= resolved_index < len(choice_labels):
+                    mapped_label = choice_labels[resolved_index]
+                    mapped_answer = normalize_whitespace(choice_map.get(mapped_label, ""))
+                    if mapped_answer:
+                        return mapped_answer
+    mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.IGNORECASE)
+    if mixed_match:
+        answer = mixed_match.group(2).strip()
+    return normalize_whitespace(answer)
+
+
+def normalize_rewrite_variants_temp(normalizer: "TextNormalizer", dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str], variants: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    normalized_variants: List[Dict[str, Any]] = []
+    for idx, variant in enumerate(variants, start=1):
+        if not isinstance(variant, dict):
+            continue
+        expected_answer = normalize_whitespace(to_plain_text(variant.get("expected_answer")))
+        if expected_answer:
+            expected_answer = resolve_multiple_choice_answer_text(expected_answer, choices)
+        expected_answer_type = to_plain_text(variant.get("expected_answer_type")).strip() or answer_type
+        inferred_type = normalizer.infer_answer_type(normalizer.normalize_answer(expected_answer)) if expected_answer else expected_answer_type
+        if inferred_type == "option":
+            inferred_type = "short_text"
+        normalized_variants.append({
+            "variant_id": to_plain_text(variant.get("variant_id")) or f"open_{idx}",
+            "title": to_plain_text(variant.get("title")) or f"{dataset_name} 开放题",
+            "rewritten_question_text": to_plain_text(variant.get("rewritten_question_text")) or normalized_question_text,
+            "expected_answer_type": inferred_type or expected_answer_type,
+            "expected_answer": expected_answer or choices.get(normalized_answer_text, normalized_answer_text),
+            "split_role": to_plain_text(variant.get("split_role")) or "single",
+        })
+    return normalized_variants
 
 
 class LocalFileConnector(BaseConnector):
@@ -1909,6 +1981,209 @@ class GitHubConnector(BaseConnector):
             samples = samples[:limit]
         return "available", samples, None
 
+class RewriteAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer):
+        super().__init__(
+            client,
+            REWRITE_AGENT_PROMPT_PATH,
+            "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. Convert multiple-choice questions into open-ended variants and return strict JSON only.",
+        )
+        self.normalizer = normalizer
+
+    def call_json(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        result = super().call_json(payload)
+        if not isinstance(result, dict):
+            return None
+        result = self.normalize_list_field(result, "variants")
+        result = self.normalize_list_field(result, "discard_reason_codes")
+        return result
+
+    def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+        question_only, _ = self.normalizer.split_question_and_choices(question_text)
+        question_only = self.normalizer.strip_hint(question_only)
+        if not choices:
+            if answer_type == "option" and any(token in question_only.lower() for token in ["which picture", "in which picture", "which figure", "which diagram", "which graph", "shown below", "illustrated"]):
+                return {
+                    "strategy": "blank_open",
+                    "rationale": "Pure-image label selection tasks are in scope, so keep the task and require the answer as the correct option label.",
+                    "variants": [
+                        {
+                            "variant_id": "open_1",
+                            "title": f"{dataset_name} 图像标签题",
+                            "rewritten_question_text": question_only,
+                            "expected_answer_type": "short_text",
+                            "expected_answer": normalized_answer,
+                            "split_role": "single",
+                        }
+                    ],
+                    "discard_reason_codes": [],
+                }
+            return {
+                "strategy": "keep_open",
+                "rationale": "Question is already open-ended.",
+                "variants": [
+                    {
+                        "variant_id": "open_1",
+                        "title": f"{dataset_name} 开放题",
+                        "rewritten_question_text": question_only,
+                        "expected_answer_type": answer_type,
+                        "expected_answer": normalized_answer,
+                        "split_role": "single",
+                    }
+                ],
+                "discard_reason_codes": [],
+            }
+        if self.normalizer.is_pure_image_index_question(question_only, choices):
+            resolved_answer = choices.get(normalized_answer, normalized_answer)
+            return {
+                "strategy": "blank_open",
+                "rationale": "Pure-image choice questions remain valid tasks for this pipeline, so convert them into answer-with-label open questions instead of dropping them.",
+                "variants": [
+                    {
+                        "variant_id": "open_1",
+                        "title": f"{dataset_name} 图像标签题",
+                        "rewritten_question_text": question_only,
+                        "expected_answer_type": "short_text",
+                        "expected_answer": resolved_answer,
+                        "split_role": "single",
+                    }
+                ],
+                "discard_reason_codes": [],
+            }
+        if self.normalizer.is_compound_answer_question(question_only, choices):
+            correct_text = choices.get(normalized_answer, "")
+            pieces = [piece.strip() for piece in re.split(r"[;；]", correct_text) if piece.strip()]
+            if not pieces:
+                pieces = [correct_text] if correct_text else []
+            variants = []
+            for idx, piece in enumerate(pieces or [normalized_answer], start=1):
+                variants.append(
+                    {
+                        "variant_id": f"open_{idx}",
+                        "title": f"{dataset_name} 子题 {idx}",
+                        "rewritten_question_text": f"{question_only}\n请只回答第 {idx} 个目标量。",
+                        "expected_answer_type": "short_text",
+                        "expected_answer": piece,
+                        "split_role": f"part_{idx}",
+                    }
+                )
+            return {
+                "strategy": "split_open",
+                "rationale": "Compound choice answer was split into multiple open-ended targets.",
+                "variants": variants,
+                "discard_reason_codes": [],
+            }
+        resolved_answer = choices.get(normalized_answer, normalized_answer)
+        resolved_answer_type = self.normalizer.infer_answer_type(self.normalizer.normalize_answer(resolved_answer))
+        if resolved_answer_type == "option":
+            resolved_answer_type = "short_text"
+        return {
+            "strategy": "blank_open",
+            "rationale": "Converted multiple choice into blank-style open-ended question.",
+            "variants": [
+                {
+                    "variant_id": "open_1",
+                    "title": f"{dataset_name} 开放题",
+                    "rewritten_question_text": question_only,
+                    "expected_answer_type": resolved_answer_type,
+                    "expected_answer": resolved_answer,
+                    "split_role": "single",
+                }
+            ],
+            "discard_reason_codes": [],
+        }
+
+    def rewrite(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+        fallback = self.fallback_rewrite(dataset_name, normalized_question_text, normalized_answer_text, answer_type, choices)
+        if not self.client.config.enabled or not choices:
+            fallback["llm_used"] = False
+            return fallback
+        llm_result = self.call_json(
+            {
+                "dataset_name": dataset_name,
+                "question_text": normalized_question_text,
+                "choices": choices,
+                "correct_option_letter": normalized_answer_text if answer_type == "option" else None,
+                "correct_option_text": choices.get(normalized_answer_text, normalized_answer_text),
+                "answer_type": answer_type,
+                "dataset_rules": {
+                    "scemqa_answer_index_base": 0 if dataset_name.strip().lower() == "scemqa" else None
+                },
+                "fallback_result": fallback,
+            }
+        )
+        if not llm_result:
+            fallback["llm_used"] = False
+            return fallback
+        strategy = to_plain_text(llm_result.get("strategy")).strip() or fallback["strategy"]
+        variants = llm_result.get("variants")
+        if not isinstance(variants, list):
+            variants = fallback["variants"]
+        if strategy == "drop_image_index":
+            variants = []
+        elif not variants:
+            return fallback
+        variants = normalize_rewrite_variants_temp(
+            self.normalizer,
+            dataset_name,
+            normalized_question_text,
+            normalized_answer_text,
+            answer_type,
+            choices,
+            variants,
+        )
+        if strategy != "drop_image_index" and not variants:
+            return fallback
+        discard_reason_codes = llm_result.get("discard_reason_codes")
+        if not isinstance(discard_reason_codes, list):
+            discard_reason_codes = fallback["discard_reason_codes"]
+        result = {
+            "strategy": strategy,
+            "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
+            "variants": variants,
+            "discard_reason_codes": [to_plain_text(code) for code in discard_reason_codes if to_plain_text(code)],
+            "llm_used": True,
+        }
+        return result
+
+
+class DecisionAgent:
+    def __init__(self, client: OpenAICompatibleClient):
+        self.client = client
+
+    def review_override(self, quality_components: Dict[str, Any], rewrite_report: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any], quality_flags: List[str]) -> Optional[Dict[str, Any]]:
+        if not self.client.config.enabled:
+            return None
+        system_prompt = (
+            "You are the Cleaning Decision Agent. Read the structured signals and decide one of pass/review/reject. "
+            "Be conservative. If rewrite strategy is drop_image_index, reject. If alignment is risky, solvability is weak, or quality is borderline, review or reject. "
+            "Return strict JSON with keys: decision, reason_codes, rationale."
+        )
+        user_prompt = json.dumps(
+            {
+                "quality_components": quality_components,
+                "rewrite_report": rewrite_report,
+                "alignment_record": alignment_record,
+                "solvability_report": solvability_report,
+                "quality_flags": quality_flags,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        result = self.client.chat_json(system_prompt, user_prompt)
+        if not result:
+            return None
+        decision = to_plain_text(result.get("decision")).strip().lower()
+        if decision not in {"pass", "review", "reject"}:
+            return None
+        reason_codes = result.get("reason_codes")
+        if not isinstance(reason_codes, list):
+            reason_codes = []
+        return {
+            "decision": decision,
+            "reason_codes": [to_plain_text(code) for code in reason_codes if to_plain_text(code)],
+            "rationale": to_plain_text(result.get("rationale")),
+        }
 
 
 class MultiDatasetCleaningPipeline:
@@ -1987,6 +2262,22 @@ class MultiDatasetCleaningPipeline:
         self.logger.log("DATASET", f"finished processed={summary.get('processed_samples', 0)} pass={summary.get('decision_counts', {}).get('pass', 0)} review={summary.get('decision_counts', {}).get('review', 0)} reject={summary.get('decision_counts', {}).get('reject', 0)}", dataset=spec.key)
         return summary
 
+    def persist_images(self, problem_id: str, images: Sequence[Image.Image], image_dir: Path) -> Tuple[List[Path], List[bytes], List[Dict[str, Any]]]:
+        ensure_dir(image_dir)
+        image_paths: List[Path] = []
+        image_bytes_list: List[bytes] = []
+        image_qualities: List[Dict[str, Any]] = []
+        for index, image in enumerate(images, start=1):
+            image_bytes = self.image_analyzer.pil_to_png_bytes(image)
+            suffix = "primary" if index == 1 else f"aux_{index}"
+            path = image_dir / f"{problem_id}_{suffix}.png"
+            with path.open("wb") as file:
+                file.write(image_bytes)
+            image_paths.append(path)
+            image_bytes_list.append(image_bytes)
+            image_qualities.append(self.image_analyzer.analyze(image))
+        return image_paths, image_bytes_list, image_qualities
+
     def determine_multi_solution_policy(self, spec: DatasetSpec) -> Dict[str, Any]:
         mode = (spec.multi_solution_mode or "auto").strip().lower()
         if mode == "auto":
@@ -2028,6 +2319,26 @@ class MultiDatasetCleaningPipeline:
             "initial_image_dependency_score": round(clamp(image_dependency), 4),
             "initial_multi_solution_score": round(clamp(multi_solution), 4),
             "initial_verifiability_score": round(clamp(verifiability), 4),
+        }
+
+    def compute_potential_scores(self, normalized_question_text: str, normalized_answer_text: str, answer_type: str, requires_image: bool, image_qualities: Sequence[Dict[str, Any]], choices: Dict[str, str], variant_count: int, text_structure: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any]) -> Dict[str, Any]:
+        keyword_hits = len(re.findall(r"\b(calculate|determine|find|derive|prove|which|what|if|compute|write|求|计算|判断)\b", normalized_question_text, flags=re.IGNORECASE))
+        math_hits = len(re.findall(r"[=+\-*/^()]", normalized_question_text))
+        best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=0.0)
+        multimodal_strength = 0.18 + 0.42 * int(requires_image) + 0.15 * bool(text_structure.get("requires_visual_grounding")) + 0.15 * alignment_record.get("consistency_score", 0.0) + 0.10 * clamp(best_readability)
+        multi_step = 0.18 + 0.18 * clamp(keyword_hits / 4.0) + 0.18 * clamp(math_hits / 20.0) + 0.18 * clamp(len(text_structure.get("conditions", [])) / 4.0) + 0.10 * clamp(len(text_structure.get("targets", [])) / 2.0) + 0.08 * clamp(variant_count / 3.0)
+        verifiability = 0.22 + 0.20 * solvability_report.get("score_breakdown", {}).get("answer_verifiable", 0.0) + 0.16 * solvability_report.get("score_breakdown", {}).get("target_clear", 0.0) + 0.14 * solvability_report.get("score_breakdown", {}).get("rewrite_complete", 0.0) + 0.14 * alignment_record.get("consistency_score", 0.0) + 0.14 * int(bool(normalized_answer_text))
+        if answer_type == "numeric":
+            verifiability += 0.08
+        elif answer_type == "option":
+            verifiability += 0.06
+        review_priority = "high" if alignment_record.get("alignment_status") != "good" or solvability_report.get("decision_hint") != "pass" or len(image_qualities) > 1 or variant_count > 1 else "normal"
+        return {
+            "requires_image": requires_image,
+            "multimodal_strength_score": round(clamp(multimodal_strength), 4),
+            "multi_step_score": round(clamp(multi_step), 4),
+            "verifiability_score": round(clamp(verifiability), 4),
+            "review_priority": review_priority,
         }
 
     def process_sample(self, spec: DatasetSpec, sample: UnifiedSample, image_dir: Path, crop_dir: Path) -> Dict[str, Any]:

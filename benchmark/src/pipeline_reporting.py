@@ -57,36 +57,50 @@ def build_source_unavailable_summary(spec: Any, config: Any, detail: Any) -> Dic
         "processed_samples": 0,
         "decision_counts": {"pass": 0, "review": 0, "reject": 0},
         "rewrite_strategy_counts": {},
+        "records_written": {},
+        "status": "source_unavailable",
     }
 
 
 def finalize_dataset_report(spec: Any, config: Any, detail: Any, dataset_dir: Path, run_dir: Path, bundle: Dict[str, List[Dict[str, Any]]], ensure_dir: Any, write_json: Any, write_jsonl: Any) -> Dict[str, Any]:
     records_dir = dataset_dir / "records"
     ensure_dir(records_dir)
+    records_written: Dict[str, int] = {}
     for key, rows in bundle.items():
         write_jsonl(records_dir / f"{key}.jsonl", rows)
+        records_written[key] = len(rows)
     decision_counts = {"pass": 0, "review": 0, "reject": 0}
     rewrite_strategy_counts: Dict[str, int] = {}
     for record in bundle["problem_main_records"]:
-        decision_counts[record["clean_decision"]] += 1
-        strategy = record.get("rewrite_strategy", "unknown")
+        decision = record.get("clean_decision", "reject")
+        if decision not in decision_counts:
+            decision_counts[decision] = 0
+        decision_counts[decision] += 1
+        strategy = record.get("rewrite_strategy") or "unknown"
         rewrite_strategy_counts[strategy] = rewrite_strategy_counts.get(strategy, 0) + 1
     summary = {
         "dataset_key": spec.key,
         "dataset_name": spec.display_name,
-        "subject": spec.subject,
-        "source_status": "available",
-        "detail": detail,
-        "requested_samples": config.sample_per_dataset,
         "processed_samples": len(bundle["problem_main_records"]),
         "decision_counts": decision_counts,
         "rewrite_strategy_counts": rewrite_strategy_counts,
-        "records_dir": str(records_dir.relative_to(run_dir)),
+        "records_written": records_written,
+        "status": "completed",
     }
     write_json(dataset_dir / "summary.json", summary)
     return summary
 
 
 def write_run_summary(run_dir: Path, aggregate_summary: Dict[str, Any], write_json: Any) -> Dict[str, Any]:
-    write_json(run_dir / "summary.json", aggregate_summary)
-    return aggregate_summary
+    dataset_summaries = aggregate_summary.get("dataset_summaries", [])
+    totals = {
+        "processed_samples": sum(item.get("processed_samples", 0) for item in dataset_summaries),
+        "pass": sum(item.get("decision_counts", {}).get("pass", 0) for item in dataset_summaries),
+        "review": sum(item.get("decision_counts", {}).get("review", 0) for item in dataset_summaries),
+        "reject": sum(item.get("decision_counts", {}).get("reject", 0) for item in dataset_summaries),
+    }
+    summary = dict(aggregate_summary)
+    summary["finished_at"] = summary.get("finished_at") or summary.get("started_at")
+    summary["totals"] = totals
+    write_json(run_dir / "summary.json", summary)
+    return summary

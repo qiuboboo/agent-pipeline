@@ -123,7 +123,7 @@ multidataset_cleaning_pipeline.py
 - `DECISION` final decision
 
 相关记录见：
-- [docs/run_summaries/rewrite_llm_recovery_and_runlog_2026-03-28.md](docs/run_summaries/rewrite_llm_recovery_and_runlog_2026-03-28.md)
+- [docs/run_summaries/2026-03-28/rewrite_llm_recovery_and_runlog_2026-03-28.md](docs/run_summaries/2026-03-28/rewrite_llm_recovery_and_runlog_2026-03-28.md)
 
 ### 3. 一轮关键 LLM 配置问题已经确认并修过
 已确认过一次真实根因：
@@ -235,7 +235,7 @@ multidataset_cleaning_pipeline.py
 - `EMMA-Physics`：`10 / 10 / 0`
 
 详细分析：
-- [docs/run_summaries/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md](docs/run_summaries/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md)
+- [docs/run_summaries/2026-03-28/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md](docs/run_summaries/2026-03-28/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md)
 
 ---
 
@@ -307,15 +307,21 @@ outputs/<run-group>/<run_id>/
 
 ## 建议先看哪些文档
 
-- [docs/pipeline_python_modules_reference.md](docs/pipeline_python_modules_reference.md)
+- [docs/architecture/pipeline-architecture.md](docs/architecture/pipeline-architecture.md)
+  - 当前主线总体架构与文档导航入口
+- [docs/cleaning/collection-cleaning-spec.md](docs/cleaning/collection-cleaning-spec.md)
+  - Collection / Cleaning 专项规格
+- [docs/cleaning/rewrite-policy.md](docs/cleaning/rewrite-policy.md)
+  - rewrite 策略与分流建议
+- [docs/architecture/pipeline-modules-reference.md](docs/architecture/pipeline-modules-reference.md)
   - 模块职责与阶段映射
 - [docs/loader_recommendations.md](docs/loader_recommendations.md)
   - 各数据集 loader 分流建议
 - [docs/run_summaries/README.md](docs/run_summaries/README.md)
   - run summary 保留规范
-- [docs/run_summaries/rewrite_llm_recovery_and_runlog_2026-03-28.md](docs/run_summaries/rewrite_llm_recovery_and_runlog_2026-03-28.md)
+- [docs/run_summaries/2026-03-28/rewrite_llm_recovery_and_runlog_2026-03-28.md](docs/run_summaries/2026-03-28/rewrite_llm_recovery_and_runlog_2026-03-28.md)
   - run log 接入与 rewrite LLM 恢复验证
-- [docs/run_summaries/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md](docs/run_summaries/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md)
+- [docs/run_summaries/2026-03-28/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md](docs/run_summaries/2026-03-28/candidate_200_remote_rerun_analysis_2026-03-28_run_38bce3437874d962.md)
   - 当前 200 样本 rerun 分析
 
 ---

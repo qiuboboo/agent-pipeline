@@ -29,7 +29,7 @@ from PIL import Image
 
 try:
     from .cleaning_semantics import AlignmentEngine, SolvabilityChecker, TextContextParser, VisualParser, normalize_structured_text
-    from .pipeline_cleaning import DecisionAgent, finalize_cleaning_sample, rewrite_sample
+    from .pipeline_cleaning import finalize_cleaning_sample, rewrite_sample
     from .pipeline_collection import default_image_quality, extract_sample_structure, ingest_dataset_samples, preprocess_sample
     from .pipeline_reporting import (
         append_sample_result,
@@ -40,22 +40,9 @@ try:
         write_sample_bundle_if_needed,
     )
     from .pipeline_setup import SetupContext, build_setup_context, merge_cli_overrides, parse_args
-    from .pipeline_types import DatasetSpec as SharedDatasetSpec, ModelConfig as SharedModelConfig, PipelineConfig as SharedPipelineConfig, ThresholdConfig as SharedThresholdConfig, UnifiedSample as SharedUnifiedSample
-    from .pipeline_clients import OpenAICompatibleClient as SharedOpenAICompatibleClient
-    from .pipeline_logging import RunLogger as SharedRunLogger
-    from .pipeline_normalization import ImageQualityAnalyzer as SharedImageQualityAnalyzer, TextNormalizer as SharedTextNormalizer
-    from .pipeline_rewrite import RewriteAgent as SharedRewriteAgent, resolve_multiple_choice_answer_text as shared_resolve_multiple_choice_answer_text
-    from .pipeline_extraction import (
-        choose_candidate_field as shared_choose_candidate_field,
-        heuristic_extract_record_content as shared_heuristic_extract_record_content,
-        normalize_image_path_list as shared_normalize_image_path_list,
-        prompt_extract_record_content as shared_prompt_extract_record_content,
-        read_prompt as shared_read_prompt,
-        resolve_image_candidate_path as shared_resolve_image_candidate_path,
-    )
 except ImportError:
     from cleaning_semantics import AlignmentEngine, SolvabilityChecker, TextContextParser, VisualParser, normalize_structured_text
-    from pipeline_cleaning import DecisionAgent, finalize_cleaning_sample, rewrite_sample
+    from pipeline_cleaning import finalize_cleaning_sample, rewrite_sample
     from pipeline_collection import default_image_quality, extract_sample_structure, ingest_dataset_samples, preprocess_sample
     from pipeline_reporting import (
         append_sample_result,
@@ -66,39 +53,6 @@ except ImportError:
         write_sample_bundle_if_needed,
     )
     from pipeline_setup import SetupContext, build_setup_context, merge_cli_overrides, parse_args
-    from pipeline_types import DatasetSpec as SharedDatasetSpec, ModelConfig as SharedModelConfig, PipelineConfig as SharedPipelineConfig, ThresholdConfig as SharedThresholdConfig, UnifiedSample as SharedUnifiedSample
-    from pipeline_clients import OpenAICompatibleClient as SharedOpenAICompatibleClient
-    from pipeline_logging import RunLogger as SharedRunLogger
-    from pipeline_normalization import ImageQualityAnalyzer as SharedImageQualityAnalyzer, TextNormalizer as SharedTextNormalizer
-    from pipeline_rewrite import RewriteAgent as SharedRewriteAgent, resolve_multiple_choice_answer_text as shared_resolve_multiple_choice_answer_text
-    from pipeline_extraction import (
-        choose_candidate_field as shared_choose_candidate_field,
-        heuristic_extract_record_content as shared_heuristic_extract_record_content,
-        normalize_image_path_list as shared_normalize_image_path_list,
-        prompt_extract_record_content as shared_prompt_extract_record_content,
-        read_prompt as shared_read_prompt,
-        resolve_image_candidate_path as shared_resolve_image_candidate_path,
-    )
-    from pipeline_utils import clamp as shared_clamp, ensure_dir as shared_ensure_dir, sha256_bytes as shared_sha256_bytes, stable_digest as shared_stable_digest, to_plain_text as shared_to_plain_text, write_json as shared_write_json, write_jsonl as shared_write_jsonl, is_null_like_text as shared_is_null_like_text
-
-ModelConfig = SharedModelConfig
-ThresholdConfig = SharedThresholdConfig
-DatasetSpec = SharedDatasetSpec
-PipelineConfig = SharedPipelineConfig
-UnifiedSample = SharedUnifiedSample
-OpenAICompatibleClient = SharedOpenAICompatibleClient
-TextNormalizer = SharedTextNormalizer
-ImageQualityAnalyzer = SharedImageQualityAnalyzer
-RunLogger = SharedRunLogger
-RewriteAgent = SharedRewriteAgent
-ensure_dir = shared_ensure_dir
-clamp = shared_clamp
-write_json = shared_write_json
-write_jsonl = shared_write_jsonl
-sha256_bytes = shared_sha256_bytes
-stable_digest = shared_stable_digest
-to_plain_text = shared_to_plain_text
-is_null_like_text = shared_is_null_like_text
 
 
 def utc_now() -> str:
@@ -891,6 +845,31 @@ WORKSPACE_ROOT = PROJECT_ROOT.parent
 PROMPT_ROOT = PROJECT_ROOT / "prompts"
 UNIFIED_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_unified_sample.md"
 LEGACY_EXTRACTION_PROMPT_PATH = PROMPT_ROOT / "extract_question_answer_image.md"
+REWRITE_AGENT_PROMPT_PATH = PROMPT_ROOT / "cleaning" / "rewrite_agent.md"
+
+
+def read_prompt(path: Path) -> str:
+    return path.read_text(encoding="utf-8").strip()
+
+
+class BaseStructuredAgent:
+    def __init__(self, client: OpenAICompatibleClient, prompt_path: Path, fallback_system_prompt: str):
+        self.client = client
+        self.prompt_path = prompt_path
+        self.system_prompt = read_prompt(prompt_path) if prompt_path.exists() else fallback_system_prompt
+
+    def call_json(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        user_prompt = json.dumps(payload, ensure_ascii=False, indent=2)
+        result = self.client.chat_json(self.system_prompt, user_prompt, caller=self.__class__.__name__.lower())
+        if not isinstance(result, dict):
+            return None
+        return result
+
+    def normalize_list_field(self, result: Dict[str, Any], field_name: str) -> Dict[str, Any]:
+        field_value = result.get(field_name)
+        if field_value is not None and not isinstance(field_value, list):
+            result[field_name] = []
+        return result
 
 
 class RunLogger:
@@ -914,27 +893,237 @@ class RunLogger:
 
 
 def normalize_image_path_list(value: Any) -> List[str]:
-    return shared_normalize_image_path_list(value)
+    if is_missing_value(value):
+        return []
+    if isinstance(value, (list, tuple)):
+        normalized: List[str] = []
+        for item in value:
+            normalized.extend(normalize_image_path_list(item))
+        return normalized
+    if isinstance(value, dict):
+        return normalize_image_path_list(value.get("path") or value.get("paths") or value.get("image") or value.get("url"))
+    if isinstance(value, str):
+        stripped = value.strip()
+        if not stripped:
+            return []
+        if stripped.startswith("[") and stripped.endswith("]"):
+            try:
+                parsed = json.loads(stripped)
+                if isinstance(parsed, list):
+                    return normalize_image_path_list(parsed)
+            except Exception:
+                pass
+        return [stripped]
+    return []
 
 
 def resolve_image_candidate_path(path_str: str, base_dir: Path) -> Optional[Path]:
-    return shared_resolve_image_candidate_path(path_str, base_dir)
+    candidate = Path(path_str)
+    candidate_paths: List[Path] = []
+    if candidate.is_absolute():
+        candidate_paths.append(candidate)
+    else:
+        candidate_paths.append(base_dir / candidate)
+        candidate_paths.append(PROJECT_ROOT / candidate)
+        candidate_paths.append(WORKSPACE_ROOT / candidate)
+    seen: set[str] = set()
+    for item in candidate_paths:
+        key = str(item)
+        if key in seen:
+            continue
+        seen.add(key)
+        if item.exists() and item.suffix.lower() in {".png", ".jpg", ".jpeg", ".bmp", ".webp"}:
+            return item
+    return None
 
 
 def choose_candidate_field(row: Dict[str, Any], candidates: List[str], fallback_regex: str) -> Optional[str]:
-    return shared_choose_candidate_field(row, candidates, fallback_regex)
+    for key in candidates:
+        if key in row and not is_missing_value(row[key]):
+            return key
+    for key, value in row.items():
+        if is_missing_value(value):
+            continue
+        if re.search(fallback_regex, key, flags=re.IGNORECASE):
+            return key
+    return None
 
 
 def heuristic_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec") -> Dict[str, Any]:
-    return shared_heuristic_extract_record_content(row, spec)
+    question_field = choose_candidate_field(row, spec.question_fields or ["problem", "question"], r"question|problem|query|prompt|text")
+    answer_field = choose_candidate_field(row, spec.answer_fields or ["solution", "answer"], r"answer|solution|label|target")
+    image_field = choose_candidate_field(row, spec.image_fields or ["image", "image_path"], r"image|img|diagram|figure|picture|decoded_image")
+    choice_field = choose_candidate_field(row, spec.choice_fields or ["options", "choices"], r"options|choices")
+    raw_question = to_plain_text(row.get(question_field)) if question_field else ""
+    raw_answer = to_plain_text(row.get(answer_field)) if answer_field else ""
+    if is_null_like_text(raw_answer):
+        raw_answer = ""
+    choice_map = parse_choice_map(row.get(choice_field) if choice_field else None)
+    raw_images = row.get(image_field) if image_field else row.get("images")
+    image_paths = normalize_image_path_list(raw_images)
+    if not image_paths and isinstance(raw_images, dict):
+        image_paths = normalize_image_path_list(raw_images.get("path") or raw_images.get("image") or raw_images.get("url"))
+    force_requires_image = bool(spec.force_requires_image)
+    if raw_question:
+        force_requires_image = force_requires_image or bool(
+            re.search(r"\b(figure|diagram|graph|chart|image|shown|below|sample|下图|图中|示意图)\b", raw_question, flags=re.IGNORECASE)
+        )
+    return {
+        "raw_question_text": raw_question,
+        "raw_answer_text": raw_answer,
+        "choice_map": choice_map,
+        "image_paths": image_paths,
+        "force_requires_image": force_requires_image,
+        "extraction_notes": ["heuristic_field_extraction"],
+        "question_field": question_field,
+        "answer_field": answer_field,
+        "image_field": image_field,
+        "choice_field": choice_field,
+    }
 
 
 def prompt_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec", client: "OpenAICompatibleClient") -> Dict[str, Any]:
-    return shared_prompt_extract_record_content(row, spec, client)
+    fallback = heuristic_extract_record_content(row, spec)
+    prompt_path = UNIFIED_EXTRACTION_PROMPT_PATH if UNIFIED_EXTRACTION_PROMPT_PATH.exists() else LEGACY_EXTRACTION_PROMPT_PATH
+    agent_only = bool(getattr(client.config, "agent_only_extraction", False))
+    if not client.config.enabled or not client.config.api_key or not prompt_path.exists():
+        if agent_only:
+            return {
+                "raw_question_text": "",
+                "raw_answer_text": "",
+                "choice_map": {},
+                "image_paths": [],
+                "force_requires_image": False,
+                "extraction_notes": ["agent_only_extraction", "agent_extraction_failed"],
+                "question_field": None,
+                "answer_field": None,
+                "image_field": None,
+                "choice_field": None,
+            }
+        return fallback
+    user_prompt = json.dumps(
+        {
+            "dataset_name": spec.display_name,
+            "source_kind": spec.source_kind,
+            "raw_record": row,
+            "fallback": fallback,
+        },
+        ensure_ascii=False,
+        indent=2,
+        default=json_default,
+    )
+    result = client.chat_json(read_prompt(prompt_path), user_prompt)
+    if not result:
+        if agent_only:
+            return {
+                "raw_question_text": "",
+                "raw_answer_text": "",
+                "choice_map": {},
+                "image_paths": [],
+                "force_requires_image": False,
+                "extraction_notes": ["agent_only_extraction", "agent_extraction_failed"],
+                "question_field": None,
+                "answer_field": None,
+                "image_field": None,
+                "choice_field": None,
+            }
+        return fallback
+    extraction_notes = result.get("extraction_notes")
+    if not isinstance(extraction_notes, list):
+        extraction_notes = []
+    extraction_notes = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)]
+    if agent_only:
+        raw_question_text = normalize_whitespace(to_plain_text(result.get("raw_question_text") or result.get("question_text")))
+        raw_answer_text = normalize_whitespace(to_plain_text(result.get("raw_answer_text") or result.get("answer_text")))
+        choice_map = parse_choice_map(result.get("choice_map")) or {}
+        image_paths = normalize_image_path_list(result.get("image_paths"))
+        force_requires_image = result.get("force_requires_image")
+        if not isinstance(force_requires_image, bool):
+            force_requires_image = False
+        extraction_notes.extend(["agent_only_extraction", "agent_extraction_success"])
+        return {
+            "raw_question_text": raw_question_text,
+            "raw_answer_text": raw_answer_text,
+            "choice_map": choice_map,
+            "image_paths": image_paths,
+            "force_requires_image": force_requires_image,
+            "extraction_notes": sorted(set(extraction_notes)),
+            "question_field": result.get("question_field"),
+            "answer_field": result.get("answer_field"),
+            "image_field": result.get("image_field"),
+            "choice_field": result.get("choice_field"),
+        }
+    raw_question_text = normalize_whitespace(to_plain_text(result.get("raw_question_text") or result.get("question_text") or fallback["raw_question_text"]))
+    raw_answer_text = normalize_whitespace(to_plain_text(result.get("raw_answer_text") or result.get("answer_text") or fallback["raw_answer_text"]))
+    choice_map = parse_choice_map(result.get("choice_map")) or fallback["choice_map"]
+    image_paths = normalize_image_path_list(result.get("image_paths")) or fallback["image_paths"]
+    force_requires_image = result.get("force_requires_image")
+    if not isinstance(force_requires_image, bool):
+        force_requires_image = fallback["force_requires_image"]
+    extraction_notes.append("prompt_extraction")
+    return {
+        **fallback,
+        "raw_question_text": raw_question_text or fallback["raw_question_text"],
+        "raw_answer_text": raw_answer_text or fallback["raw_answer_text"],
+        "choice_map": choice_map,
+        "image_paths": image_paths,
+        "force_requires_image": force_requires_image,
+        "extraction_notes": extraction_notes,
+    }
 
 
 def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str], answer_index_base: Optional[int] = None) -> str:
-    return shared_resolve_multiple_choice_answer_text(answer_text, choice_map, answer_index_base)
+    answer = normalize_whitespace(answer_text)
+    if not answer:
+        return ""
+    upper = answer.upper().strip()
+    letter_match = re.fullmatch(r"\(?([A-Z])\)?", upper)
+    if letter_match:
+        key = letter_match.group(1)
+        if key in choice_map:
+            return normalize_whitespace(choice_map[key])
+    if choice_map and answer_index_base is not None:
+        numeric_match = re.fullmatch(r"[+-]?\d+", answer)
+        if numeric_match:
+            try:
+                raw_index = int(numeric_match.group(0))
+            except ValueError:
+                raw_index = None
+            if raw_index is not None:
+                choice_labels = [label for label in sorted(choice_map.keys()) if re.fullmatch(r"[A-H]", label)]
+                resolved_index = raw_index - int(answer_index_base)
+                if 0 <= resolved_index < len(choice_labels):
+                    mapped_label = choice_labels[resolved_index]
+                    mapped_answer = normalize_whitespace(choice_map.get(mapped_label, ""))
+                    if mapped_answer:
+                        return mapped_answer
+    mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.IGNORECASE)
+    if mixed_match:
+        answer = mixed_match.group(2).strip()
+    return normalize_whitespace(answer)
+
+
+def normalize_rewrite_variants_temp(normalizer: "TextNormalizer", dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str], variants: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    normalized_variants: List[Dict[str, Any]] = []
+    for idx, variant in enumerate(variants, start=1):
+        if not isinstance(variant, dict):
+            continue
+        expected_answer = normalize_whitespace(to_plain_text(variant.get("expected_answer")))
+        if expected_answer:
+            expected_answer = resolve_multiple_choice_answer_text(expected_answer, choices)
+        expected_answer_type = to_plain_text(variant.get("expected_answer_type")).strip() or answer_type
+        inferred_type = normalizer.infer_answer_type(normalizer.normalize_answer(expected_answer)) if expected_answer else expected_answer_type
+        if inferred_type == "option":
+            inferred_type = "short_text"
+        normalized_variants.append({
+            "variant_id": to_plain_text(variant.get("variant_id")) or f"open_{idx}",
+            "title": to_plain_text(variant.get("title")) or f"{dataset_name} 开放题",
+            "rewritten_question_text": to_plain_text(variant.get("rewritten_question_text")) or normalized_question_text,
+            "expected_answer_type": inferred_type or expected_answer_type,
+            "expected_answer": expected_answer or choices.get(normalized_answer_text, normalized_answer_text),
+            "split_role": to_plain_text(variant.get("split_role")) or "single",
+        })
+    return normalized_variants
 
 
 class LocalFileConnector(BaseConnector):
@@ -1909,16 +2098,219 @@ class GitHubConnector(BaseConnector):
             samples = samples[:limit]
         return "available", samples, None
 
+class RewriteAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer):
+        super().__init__(
+            client,
+            REWRITE_AGENT_PROMPT_PATH,
+            "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. Convert multiple-choice questions into open-ended variants and return strict JSON only.",
+        )
+        self.normalizer = normalizer
+
+    def call_json(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        result = super().call_json(payload)
+        if not isinstance(result, dict):
+            return None
+        result = self.normalize_list_field(result, "variants")
+        result = self.normalize_list_field(result, "discard_reason_codes")
+        return result
+
+    def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+        question_only, _ = self.normalizer.split_question_and_choices(question_text)
+        question_only = self.normalizer.strip_hint(question_only)
+        if not choices:
+            if answer_type == "option" and any(token in question_only.lower() for token in ["which picture", "in which picture", "which figure", "which diagram", "which graph", "shown below", "illustrated"]):
+                return {
+                    "strategy": "blank_open",
+                    "rationale": "Pure-image label selection tasks are in scope, so keep the task and require the answer as the correct option label.",
+                    "variants": [
+                        {
+                            "variant_id": "open_1",
+                            "title": f"{dataset_name} 图像标签题",
+                            "rewritten_question_text": question_only,
+                            "expected_answer_type": "short_text",
+                            "expected_answer": normalized_answer,
+                            "split_role": "single",
+                        }
+                    ],
+                    "discard_reason_codes": [],
+                }
+            return {
+                "strategy": "keep_open",
+                "rationale": "Question is already open-ended.",
+                "variants": [
+                    {
+                        "variant_id": "open_1",
+                        "title": f"{dataset_name} 开放题",
+                        "rewritten_question_text": question_only,
+                        "expected_answer_type": answer_type,
+                        "expected_answer": normalized_answer,
+                        "split_role": "single",
+                    }
+                ],
+                "discard_reason_codes": [],
+            }
+        if self.normalizer.is_pure_image_index_question(question_only, choices):
+            resolved_answer = choices.get(normalized_answer, normalized_answer)
+            return {
+                "strategy": "blank_open",
+                "rationale": "Pure-image choice questions remain valid tasks for this pipeline, so convert them into answer-with-label open questions instead of dropping them.",
+                "variants": [
+                    {
+                        "variant_id": "open_1",
+                        "title": f"{dataset_name} 图像标签题",
+                        "rewritten_question_text": question_only,
+                        "expected_answer_type": "short_text",
+                        "expected_answer": resolved_answer,
+                        "split_role": "single",
+                    }
+                ],
+                "discard_reason_codes": [],
+            }
+        if self.normalizer.is_compound_answer_question(question_only, choices):
+            correct_text = choices.get(normalized_answer, "")
+            pieces = [piece.strip() for piece in re.split(r"[;；]", correct_text) if piece.strip()]
+            if not pieces:
+                pieces = [correct_text] if correct_text else []
+            variants = []
+            for idx, piece in enumerate(pieces or [normalized_answer], start=1):
+                variants.append(
+                    {
+                        "variant_id": f"open_{idx}",
+                        "title": f"{dataset_name} 子题 {idx}",
+                        "rewritten_question_text": f"{question_only}\n请只回答第 {idx} 个目标量。",
+                        "expected_answer_type": "short_text",
+                        "expected_answer": piece,
+                        "split_role": f"part_{idx}",
+                    }
+                )
+            return {
+                "strategy": "split_open",
+                "rationale": "Compound choice answer was split into multiple open-ended targets.",
+                "variants": variants,
+                "discard_reason_codes": [],
+            }
+        resolved_answer = choices.get(normalized_answer, normalized_answer)
+        resolved_answer_type = self.normalizer.infer_answer_type(self.normalizer.normalize_answer(resolved_answer))
+        if resolved_answer_type == "option":
+            resolved_answer_type = "short_text"
+        return {
+            "strategy": "blank_open",
+            "rationale": "Converted multiple choice into blank-style open-ended question.",
+            "variants": [
+                {
+                    "variant_id": "open_1",
+                    "title": f"{dataset_name} 开放题",
+                    "rewritten_question_text": question_only,
+                    "expected_answer_type": resolved_answer_type,
+                    "expected_answer": resolved_answer,
+                    "split_role": "single",
+                }
+            ],
+            "discard_reason_codes": [],
+        }
+
+    def rewrite(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+        fallback = self.fallback_rewrite(dataset_name, normalized_question_text, normalized_answer_text, answer_type, choices)
+        if not self.client.config.enabled or not choices:
+            fallback["llm_used"] = False
+            return fallback
+        llm_result = self.call_json(
+            {
+                "dataset_name": dataset_name,
+                "question_text": normalized_question_text,
+                "choices": choices,
+                "correct_option_letter": normalized_answer_text if answer_type == "option" else None,
+                "correct_option_text": choices.get(normalized_answer_text, normalized_answer_text),
+                "answer_type": answer_type,
+                "dataset_rules": {
+                    "scemqa_answer_index_base": 0 if dataset_name.strip().lower() == "scemqa" else None
+                },
+                "fallback_result": fallback,
+            }
+        )
+        if not llm_result:
+            fallback["llm_used"] = False
+            return fallback
+        strategy = to_plain_text(llm_result.get("strategy")).strip() or fallback["strategy"]
+        variants = llm_result.get("variants")
+        if not isinstance(variants, list):
+            variants = fallback["variants"]
+        if strategy == "drop_image_index":
+            variants = []
+        elif not variants:
+            return fallback
+        variants = normalize_rewrite_variants_temp(
+            self.normalizer,
+            dataset_name,
+            normalized_question_text,
+            normalized_answer_text,
+            answer_type,
+            choices,
+            variants,
+        )
+        if strategy != "drop_image_index" and not variants:
+            return fallback
+        discard_reason_codes = llm_result.get("discard_reason_codes")
+        if not isinstance(discard_reason_codes, list):
+            discard_reason_codes = fallback["discard_reason_codes"]
+        result = {
+            "strategy": strategy,
+            "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
+            "variants": variants,
+            "discard_reason_codes": [to_plain_text(code) for code in discard_reason_codes if to_plain_text(code)],
+            "llm_used": True,
+        }
+        return result
+
+
+class DecisionAgent:
+    def __init__(self, client: OpenAICompatibleClient):
+        self.client = client
+
+    def review_override(self, quality_components: Dict[str, Any], rewrite_report: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any], quality_flags: List[str]) -> Optional[Dict[str, Any]]:
+        if not self.client.config.enabled:
+            return None
+        system_prompt = (
+            "You are the Cleaning Decision Agent. Read the structured signals and decide one of pass/review/reject. "
+            "Be conservative. If rewrite strategy is drop_image_index, reject. If alignment is risky, solvability is weak, or quality is borderline, review or reject. "
+            "Return strict JSON with keys: decision, reason_codes, rationale."
+        )
+        user_prompt = json.dumps(
+            {
+                "quality_components": quality_components,
+                "rewrite_report": rewrite_report,
+                "alignment_record": alignment_record,
+                "solvability_report": solvability_report,
+                "quality_flags": quality_flags,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        result = self.client.chat_json(system_prompt, user_prompt)
+        if not result:
+            return None
+        decision = to_plain_text(result.get("decision")).strip().lower()
+        if decision not in {"pass", "review", "reject"}:
+            return None
+        reason_codes = result.get("reason_codes")
+        if not isinstance(reason_codes, list):
+            reason_codes = []
+        return {
+            "decision": decision,
+            "reason_codes": [to_plain_text(code) for code in reason_codes if to_plain_text(code)],
+            "rationale": to_plain_text(result.get("rationale")),
+        }
 
 
 class MultiDatasetCleaningPipeline:
     def __init__(self, setup: SetupContext):
         self.setup = setup
         self.config = setup.config
-        self.text_normalizer = SharedTextNormalizer()
-        self.image_analyzer = SharedImageQualityAnalyzer()
-        self.client = SharedOpenAICompatibleClient(self.config.model)
-        self.logger = SharedRunLogger(setup.run_dir, enabled=True)
+        self.text_normalizer = TextNormalizer()
+        self.image_analyzer = ImageQualityAnalyzer()
+        self.client = OpenAICompatibleClient(self.config.model)
+        self.logger = RunLogger(setup.run_dir, enabled=True)
         self.rewrite_agent = RewriteAgent(self.client, self.text_normalizer, logger=self.logger)
         self.decision_agent = DecisionAgent(self.client)
         self.text_parser = TextContextParser()
@@ -1936,13 +2328,13 @@ class MultiDatasetCleaningPipeline:
         self.github_connector_cls = GitHubConnector
         self.source_unavailable_connector_cls = SourceUnavailableConnector
         self.utc_now = utc_now
-        self.stable_digest = shared_stable_digest
-        self.is_null_like_text = shared_is_null_like_text
+        self.stable_digest = stable_digest
+        self.is_null_like_text = is_null_like_text
         self.normalize_structured_text = normalize_structured_text
-        self.to_plain_text = shared_to_plain_text
-        self.ensure_dir = shared_ensure_dir
-        self.sha256_bytes = shared_sha256_bytes
-        self.clamp = shared_clamp
+        self.to_plain_text = to_plain_text
+        self.ensure_dir = ensure_dir
+        self.sha256_bytes = sha256_bytes
+        self.clamp = clamp
         self.math = math
 
     def run(self) -> Dict[str, Any]:
@@ -1987,6 +2379,22 @@ class MultiDatasetCleaningPipeline:
         self.logger.log("DATASET", f"finished processed={summary.get('processed_samples', 0)} pass={summary.get('decision_counts', {}).get('pass', 0)} review={summary.get('decision_counts', {}).get('review', 0)} reject={summary.get('decision_counts', {}).get('reject', 0)}", dataset=spec.key)
         return summary
 
+    def persist_images(self, problem_id: str, images: Sequence[Image.Image], image_dir: Path) -> Tuple[List[Path], List[bytes], List[Dict[str, Any]]]:
+        ensure_dir(image_dir)
+        image_paths: List[Path] = []
+        image_bytes_list: List[bytes] = []
+        image_qualities: List[Dict[str, Any]] = []
+        for index, image in enumerate(images, start=1):
+            image_bytes = self.image_analyzer.pil_to_png_bytes(image)
+            suffix = "primary" if index == 1 else f"aux_{index}"
+            path = image_dir / f"{problem_id}_{suffix}.png"
+            with path.open("wb") as file:
+                file.write(image_bytes)
+            image_paths.append(path)
+            image_bytes_list.append(image_bytes)
+            image_qualities.append(self.image_analyzer.analyze(image))
+        return image_paths, image_bytes_list, image_qualities
+
     def determine_multi_solution_policy(self, spec: DatasetSpec) -> Dict[str, Any]:
         mode = (spec.multi_solution_mode or "auto").strip().lower()
         if mode == "auto":
@@ -2030,6 +2438,26 @@ class MultiDatasetCleaningPipeline:
             "initial_verifiability_score": round(clamp(verifiability), 4),
         }
 
+    def compute_potential_scores(self, normalized_question_text: str, normalized_answer_text: str, answer_type: str, requires_image: bool, image_qualities: Sequence[Dict[str, Any]], choices: Dict[str, str], variant_count: int, text_structure: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any]) -> Dict[str, Any]:
+        keyword_hits = len(re.findall(r"\b(calculate|determine|find|derive|prove|which|what|if|compute|write|求|计算|判断)\b", normalized_question_text, flags=re.IGNORECASE))
+        math_hits = len(re.findall(r"[=+\-*/^()]", normalized_question_text))
+        best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=0.0)
+        multimodal_strength = 0.18 + 0.42 * int(requires_image) + 0.15 * bool(text_structure.get("requires_visual_grounding")) + 0.15 * alignment_record.get("consistency_score", 0.0) + 0.10 * clamp(best_readability)
+        multi_step = 0.18 + 0.18 * clamp(keyword_hits / 4.0) + 0.18 * clamp(math_hits / 20.0) + 0.18 * clamp(len(text_structure.get("conditions", [])) / 4.0) + 0.10 * clamp(len(text_structure.get("targets", [])) / 2.0) + 0.08 * clamp(variant_count / 3.0)
+        verifiability = 0.22 + 0.20 * solvability_report.get("score_breakdown", {}).get("answer_verifiable", 0.0) + 0.16 * solvability_report.get("score_breakdown", {}).get("target_clear", 0.0) + 0.14 * solvability_report.get("score_breakdown", {}).get("rewrite_complete", 0.0) + 0.14 * alignment_record.get("consistency_score", 0.0) + 0.14 * int(bool(normalized_answer_text))
+        if answer_type == "numeric":
+            verifiability += 0.08
+        elif answer_type == "option":
+            verifiability += 0.06
+        review_priority = "high" if alignment_record.get("alignment_status") != "good" or solvability_report.get("decision_hint") != "pass" or len(image_qualities) > 1 or variant_count > 1 else "normal"
+        return {
+            "requires_image": requires_image,
+            "multimodal_strength_score": round(clamp(multimodal_strength), 4),
+            "multi_step_score": round(clamp(multi_step), 4),
+            "verifiability_score": round(clamp(verifiability), 4),
+            "review_priority": review_priority,
+        }
+
     def process_sample(self, spec: DatasetSpec, sample: UnifiedSample, image_dir: Path, crop_dir: Path) -> Dict[str, Any]:
         preprocessed = preprocess_sample(self, spec, sample, image_dir)
         rewritten = rewrite_sample(self, spec, sample, preprocessed)
@@ -2039,10 +2467,10 @@ class MultiDatasetCleaningPipeline:
 
 def main() -> None:
     args = parse_args()
-    config = SharedPipelineConfig.from_yaml(args.config)
+    config = PipelineConfig.from_yaml(args.config)
     config = merge_cli_overrides(config, args)
-    shared_ensure_dir(Path(config.output_root))
-    setup = build_setup_context(config, ensure_dir=shared_ensure_dir, stable_digest=shared_stable_digest, utc_now=utc_now)
+    ensure_dir(Path(config.output_root))
+    setup = build_setup_context(config, ensure_dir=ensure_dir, stable_digest=stable_digest, utc_now=utc_now)
     pipeline = MultiDatasetCleaningPipeline(setup)
     summary = pipeline.run()
     print(json.dumps(summary, ensure_ascii=False, indent=2))

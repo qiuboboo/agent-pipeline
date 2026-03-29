@@ -57,7 +57,8 @@ def merge_cli_overrides(config: Any, args: argparse.Namespace) -> Any:
 
 
 def build_setup_context(config: Any, ensure_dir: Any, stable_digest: Any, utc_now: Any) -> SetupContext:
-    pipeline_run_id = f"run_{stable_digest([utc_now(), 'multidataset-clean'], 16)}"
+    started_at = utc_now()
+    pipeline_run_id = f"run_{stable_digest([started_at, 'multidataset-clean'], 16)}"
     ingest_batch_id = f"{config.batch_id_prefix}_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
     output_root = Path(config.output_root)
     run_dir = output_root / pipeline_run_id
@@ -73,5 +74,9 @@ def build_setup_context(config: Any, ensure_dir: Any, stable_digest: Any, utc_no
         run_dir=run_dir,
         records_dir=records_dir,
         dataset_root=dataset_root,
-        aggregate_summary={"pipeline_run_id": pipeline_run_id, "created_at": utc_now(), "datasets": []},
+        aggregate_summary={
+            "pipeline_run_id": pipeline_run_id,
+            "started_at": started_at,
+            "dataset_summaries": [],
+        },
     )

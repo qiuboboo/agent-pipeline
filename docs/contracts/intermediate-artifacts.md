@@ -16,6 +16,10 @@ Expected fields:
 - `image_field: Optional[str]`
 - `choice_field: Optional[str]`
 
+Current producer alignment:
+- extraction helpers live in `benchmark/src/pipeline_extraction.py`
+- collection-stage orchestration lives in `benchmark/src/pipeline_collection.py`
+
 ## 2. Preprocessed Sample Contract
 
 Expected fields currently consumed downstream include:
@@ -36,6 +40,11 @@ Expected fields currently consumed downstream include:
 - `normalized_assets`
 - `cleaning_path`
 
+Current producer alignment:
+- normalization and image quality logic live in `benchmark/src/pipeline_normalization.py`
+- collection-stage preprocessing lives in `benchmark/src/pipeline_collection.py`
+- structure / alignment / solvability signals are supplemented by `benchmark/src/cleaning_semantics.py`
+
 ## 3. Rewrite Report Contract
 
 Required top-level fields:
@@ -54,6 +63,11 @@ Required fields:
 - `expected_answer: str`
 - `split_role: str`
 
+Current producer alignment:
+- rewrite runtime lives in `benchmark/src/pipeline_rewrite.py`
+- rewrite orchestration and downstream assembly live in `benchmark/src/pipeline_cleaning.py`
+- temporary compatibility normalization currently remains inside `pipeline_rewrite.py` via `normalize_rewrite_variants_temp(...)`
+
 ## 4. Decision / Gate Contract
 
 Expected fields:
@@ -62,6 +76,10 @@ Expected fields:
 - `rationale: str`
 - `review_required: bool`
 - `llm_used: bool`
+
+Current producer alignment:
+- gate decision is currently assembled in `benchmark/src/pipeline_cleaning.py`
+- parts of the broader runtime still remain in `benchmark/src/multidataset_cleaning_pipeline.py` during the refactor transition
 
 ## 5. Stability Rule
 

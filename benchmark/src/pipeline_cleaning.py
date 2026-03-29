@@ -1,12 +1,93 @@
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
+
+try:
+    from .pipeline_clients import OpenAICompatibleClient
+    from .pipeline_utils import to_plain_text
+except ImportError:
+    from pipeline_clients import OpenAICompatibleClient
+    from pipeline_utils import to_plain_text
+
+
+class DecisionOverrideProtocol:
+    def review_override(
+        self,
+        quality_components: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        alignment_record: Dict[str, Any],
+        solvability_report: Dict[str, Any],
+        quality_flags: List[str],
+    ) -> Optional[Dict[str, Any]]:
+        ...
+
+
+class DecisionAgent:
+    def __init__(self, client: OpenAICompatibleClient):
+        self.client = client
+
+    def review_override(
+        self,
+        quality_components: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        alignment_record: Dict[str, Any],
+        solvability_report: Dict[str, Any],
+        quality_flags: List[str],
+    ) -> Optional[Dict[str, Any]]:
+        if not self.client.config.enabled:
+            return None
+        system_prompt = (
+            "You are the Cleaning Decision Agent. Read the structured signals and decide one of pass/review/reject. "
+            "Be conservative. If rewrite strategy is drop_image_index, reject. If alignment is risky, solvability is weak, or quality is borderline, review or reject. "
+            "Return strict JSON with keys: decision, reason_codes, rationale."
+        )
+        user_prompt = json.dumps(
+            {
+                "quality_components": quality_components,
+                "rewrite_report": rewrite_report,
+                "alignment_record": alignment_record,
+                "solvability_report": solvability_report,
+                "quality_flags": quality_flags,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        result = self.client.chat_json(system_prompt, user_prompt)
+        if not result:
+            return None
+        decision = to_plain_text(result.get("decision")).strip().lower()
+        if decision not in {"pass", "review", "reject"}:
+            return None
+        reason_codes = result.get("reason_codes")
+        if not isinstance(reason_codes, list):
+            reason_codes = []
+        return {
+            "decision": decision,
+            "reason_codes": [to_plain_text(code) for code in reason_codes if to_plain_text(code)],
+            "rationale": to_plain_text(result.get("rationale")),
+        }
+
+
+    def review_override(
+        self,
+        quality_components: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        alignment_record: Dict[str, Any],
+        solvability_report: Dict[str, Any],
+        quality_flags: List[str],
+    ) -> Optional[Dict[str, Any]]:
+        ...
 
 
 def build_open_variants(pipeline: Any, problem_id: str, rewrite_report: Dict[str, Any]) -> List[Dict[str, Any]]:
     variants: List[Dict[str, Any]] = []
-    for idx, variant in enumerate(rewrite_report.get("variants", []), start=1):
+    rewrite_variants = rewrite_report.get("variants")
+    if not isinstance(rewrite_variants, list):
+        rewrite_variants = []
+    for idx, variant in enumerate(rewrite_variants, start=1):
         variants.append(
             {
                 "open_variant_id": f"open_{pipeline.stable_digest([problem_id, str(idx)])}",
@@ -531,6 +612,10 @@ def build_rewrite_record(pipeline: Any, problem_id: str, sample: Any, rewrite_re
         "strategy": rewrite_report.get("strategy"),
         "rationale": rewrite_report.get("rationale"),
         "llm_used": rewrite_report.get("llm_used"),
+        "fallback_used": rewrite_report.get("fallback_used"),
+        "fallback_reason": rewrite_report.get("fallback_reason"),
+        "schema_valid": rewrite_report.get("schema_valid"),
+        "normalization_warnings": rewrite_report.get("normalization_warnings", []),
         "discard_reason_codes": rewrite_report.get("discard_reason_codes", []),
         "variant_count": len(open_variants),
         "variants": open_variants,
@@ -676,7 +761,14 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
     else:
         decision = "pass"
         reason_codes.append("meets_cleaning_requirements")
-    llm_override = pipeline.decision_agent.review_override(quality_components, rewrite_report, alignment_record, solvability_report, quality_flags)
+    llm_override = apply_decision_override(
+        getattr(pipeline, "decision_agent", None),
+        quality_components,
+        rewrite_report,
+        alignment_record,
+        solvability_report,
+        quality_flags,
+    )
     if llm_override and decision == "review" and llm_override["decision"] in {"review", "reject"}:
         decision = llm_override["decision"]
         reason_codes.extend(llm_override["reason_codes"])
@@ -690,6 +782,23 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
     }
 
 
+def apply_decision_override(
+    decision_agent: Optional[DecisionOverrideProtocol],
+    quality_components: Dict[str, Any],
+    rewrite_report: Dict[str, Any],
+    alignment_record: Dict[str, Any],
+    solvability_report: Dict[str, Any],
+    quality_flags: List[str],
+) -> Optional[Dict[str, Any]]:
+    if decision_agent is None:
+        return None
+    return decision_agent.review_override(
+        quality_components,
+        rewrite_report,
+        alignment_record,
+        solvability_report,
+        quality_flags,
+    )
 def build_reject_record(pipeline: Any, problem_id: str, gate: Dict[str, Any], quality_flags: List[str], rewrite_report: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any]):
     if gate["decision"] != "reject":
         return None
@@ -868,14 +977,49 @@ def rewrite_sample(pipeline: Any, spec: Any, sample: Any, preprocessed: Dict[str
     }
 
 
+
+
+
+def build_potential_scores(
+    pipeline: Any,
+    normalized_question_text: str,
+    normalized_answer_text: str,
+    answer_type: str,
+    requires_image: bool,
+    image_qualities: List[Dict[str, Any]],
+    variant_count: int,
+    text_structure: Dict[str, Any],
+    alignment_record: Dict[str, Any],
+    solvability_report: Dict[str, Any],
+) -> Dict[str, Any]:
+    keyword_hits = len(re.findall(r"\b(calculate|determine|find|derive|prove|which|what|if|compute|write|求|计算|判断)\b", normalized_question_text, flags=re.IGNORECASE))
+    math_hits = len(re.findall(r"[=+\-*/^()]", normalized_question_text))
+    best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=0.0)
+    multimodal_strength = 0.18 + 0.42 * int(requires_image) + 0.15 * bool(text_structure.get("requires_visual_grounding")) + 0.15 * alignment_record.get("consistency_score", 0.0) + 0.10 * pipeline.clamp(best_readability)
+    multi_step = 0.18 + 0.18 * pipeline.clamp(keyword_hits / 4.0) + 0.18 * pipeline.clamp(math_hits / 20.0) + 0.18 * pipeline.clamp(len(text_structure.get("conditions", [])) / 4.0) + 0.10 * pipeline.clamp(len(text_structure.get("targets", [])) / 2.0) + 0.08 * pipeline.clamp(variant_count / 3.0)
+    verifiability = 0.22 + 0.20 * solvability_report.get("score_breakdown", {}).get("answer_verifiable", 0.0) + 0.16 * solvability_report.get("score_breakdown", {}).get("target_clear", 0.0) + 0.14 * solvability_report.get("score_breakdown", {}).get("rewrite_complete", 0.0) + 0.14 * alignment_record.get("consistency_score", 0.0) + 0.14 * int(bool(normalized_answer_text))
+    if answer_type == "numeric":
+        verifiability += 0.08
+    elif answer_type == "option":
+        verifiability += 0.06
+    review_priority = "high" if alignment_record.get("alignment_status") != "good" or solvability_report.get("decision_hint") != "pass" or len(image_qualities) > 1 or variant_count > 1 else "normal"
+    return {
+        "requires_image": requires_image,
+        "multimodal_strength_score": round(pipeline.clamp(multimodal_strength), 4),
+        "multi_step_score": round(pipeline.clamp(multi_step), 4),
+        "verifiability_score": round(pipeline.clamp(verifiability), 4),
+        "review_priority": review_priority,
+    }
+
+
 def finalize_cleaning_sample(pipeline: Any, spec: Any, sample: Any, crop_dir: Path, preprocessed: Dict[str, Any], extracted: Dict[str, Any], rewritten: Dict[str, Any]) -> Dict[str, Any]:
-    potential_scores = pipeline.compute_potential_scores(
+    potential_scores = build_potential_scores(
+        pipeline,
         preprocessed["normalized_question_text"],
         preprocessed["normalized_answer_text"],
         preprocessed["original_answer_type"],
         preprocessed["requires_image"],
         preprocessed["image_qualities"],
-        preprocessed["choices"],
         len(rewritten["open_variants"]),
         extracted["text_structure"],
         extracted["alignment_record"],

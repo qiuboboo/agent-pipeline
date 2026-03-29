@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 
 def default_image_quality() -> Dict[str, Any]:
@@ -75,6 +75,26 @@ def run_initial_collection_scoring(
         "initial_scores": initial_scores,
         "priority": compute_collection_priority(pipeline, initial_scores),
     }
+
+
+
+
+
+def persist_images(pipeline: Any, problem_id: str, images: Any, image_dir: Path) -> Tuple[List[Path], List[bytes], List[Dict[str, Any]]]:
+    pipeline.ensure_dir(image_dir)
+    image_paths: List[Path] = []
+    image_bytes_list: List[bytes] = []
+    image_qualities: List[Dict[str, Any]] = []
+    for index, image in enumerate(images, start=1):
+        image_bytes = pipeline.image_analyzer.pil_to_png_bytes(image)
+        suffix = "primary" if index == 1 else f"aux_{index}"
+        path = image_dir / f"{problem_id}_{suffix}.png"
+        with path.open("wb") as file:
+            file.write(image_bytes)
+        image_paths.append(path)
+        image_bytes_list.append(image_bytes)
+        image_qualities.append(pipeline.image_analyzer.analyze(image))
+    return image_paths, image_bytes_list, image_qualities
 
 
 def build_candidate_problem_record(pipeline: Any, candidate_id: str, sample: Any, initial_scores: Dict[str, Any], requires_image: bool, text_dominant: bool, cleaning_path: str, multi_solution_policy: Dict[str, Any]) -> Dict[str, Any]:
@@ -203,7 +223,7 @@ def preprocess_sample(pipeline: Any, spec: Any, sample: Any, image_dir: Path) ->
     ]
     candidate_id = f"cand_{pipeline.stable_digest(digest_seed)}"
     problem_id = f"prob_{pipeline.stable_digest(digest_seed)}"
-    image_paths, image_bytes_list, image_qualities = pipeline.persist_images(problem_id=problem_id, images=sample.images, image_dir=image_dir)
+    image_paths, image_bytes_list, image_qualities = persist_images(pipeline, problem_id=problem_id, images=sample.images, image_dir=image_dir)
     image_count = len(sample.images)
     requires_image = sample.force_requires_image or pipeline.text_normalizer.infer_requires_image(normalized_question_text, image_count)
     text_dominant = not requires_image
