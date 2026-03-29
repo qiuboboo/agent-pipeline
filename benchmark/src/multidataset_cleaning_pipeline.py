@@ -2201,24 +2201,8 @@ class RewriteAgent:
 
     def rewrite(self, dataset_name: str, problem_id: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
         fallback = self.fallback_rewrite(dataset_name, normalized_question_text, normalized_answer_text, answer_type, choices)
-        if self.logger:
-            self.logger.log(
-                "REWRITE",
-                f"entered client_enabled={self.client.config.enabled} answer_type={answer_type} choice_count={len(choices)} fallback_strategy={fallback.get('strategy')}",
-                dataset=dataset_name,
-                problem_id=problem_id,
-            )
-        if not self.client.config.enabled:
+        if not self.client.config.enabled or not choices:
             fallback["llm_used"] = False
-            fallback["fallback_reason"] = "rewrite client disabled"
-            if self.logger:
-                self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=rewrite client disabled", dataset=dataset_name, problem_id=problem_id)
-            return fallback
-        if not choices:
-            fallback["llm_used"] = False
-            fallback["fallback_reason"] = "choices empty"
-            if self.logger:
-                self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=choices empty", dataset=dataset_name, problem_id=problem_id)
             return fallback
         llm_result = self.call_json(
             {
@@ -2236,16 +2220,6 @@ class RewriteAgent:
         )
         if not llm_result:
             fallback["llm_used"] = False
-            fallback["fallback_reason"] = "chat_json returned empty"
-            fallback["fallback_reason_detail"] = self.client.last_error_reason
-            if self.logger:
-                detail = self.client.last_error_reason or "unknown"
-                self.logger.log(
-                    "REWRITE",
-                    f"fallback strategy={fallback.get('strategy')} reason=chat_json returned empty detail={detail}",
-                    dataset=dataset_name,
-                    problem_id=problem_id,
-                )
             return fallback
         strategy = to_plain_text(llm_result.get("strategy")).strip() or fallback["strategy"]
         variants = llm_result.get("variants")
@@ -2254,8 +2228,6 @@ class RewriteAgent:
         if strategy == "drop_image_index":
             variants = []
         elif not variants:
-            if self.logger:
-                self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=invalid llm variants", dataset=dataset_name, problem_id=problem_id)
             return fallback
         variants = self.normalize_variants(
             dataset_name,
@@ -2277,8 +2249,6 @@ class RewriteAgent:
             "discard_reason_codes": [to_plain_text(code) for code in discard_reason_codes if to_plain_text(code)],
             "llm_used": True,
         }
-        if self.logger:
-            self.logger.log("REWRITE", f"llm_result strategy={strategy} variant_count={len(variants)}", dataset=dataset_name, problem_id=problem_id)
         return result
 
 
