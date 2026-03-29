@@ -1097,6 +1097,29 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
     return normalize_whitespace(answer)
 
 
+def normalize_rewrite_variants_temp(normalizer: "TextNormalizer", dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str], variants: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    normalized_variants: List[Dict[str, Any]] = []
+    for idx, variant in enumerate(variants, start=1):
+        if not isinstance(variant, dict):
+            continue
+        expected_answer = normalize_whitespace(to_plain_text(variant.get("expected_answer")))
+        if expected_answer:
+            expected_answer = resolve_multiple_choice_answer_text(expected_answer, choices)
+        expected_answer_type = to_plain_text(variant.get("expected_answer_type")).strip() or answer_type
+        inferred_type = normalizer.infer_answer_type(normalizer.normalize_answer(expected_answer)) if expected_answer else expected_answer_type
+        if inferred_type == "option":
+            inferred_type = "short_text"
+        normalized_variants.append({
+            "variant_id": to_plain_text(variant.get("variant_id")) or f"open_{idx}",
+            "title": to_plain_text(variant.get("title")) or f"{dataset_name} 开放题",
+            "rewritten_question_text": to_plain_text(variant.get("rewritten_question_text")) or normalized_question_text,
+            "expected_answer_type": inferred_type or expected_answer_type,
+            "expected_answer": expected_answer or choices.get(normalized_answer_text, normalized_answer_text),
+            "split_role": to_plain_text(variant.get("split_role")) or "single",
+        })
+    return normalized_variants
+
+
 class LocalFileConnector(BaseConnector):
     def iter_records(self, path: Path) -> Iterable[Dict[str, Any]]:
         suffix = path.suffix.lower()
@@ -2090,28 +2113,6 @@ class RewriteAgent(BaseStructuredAgent):
             result["discard_reason_codes"] = []
         return result
 
-    def normalize_variants_temp(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str], variants: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        normalized_variants: List[Dict[str, Any]] = []
-        for idx, variant in enumerate(variants, start=1):
-            if not isinstance(variant, dict):
-                continue
-            expected_answer = normalize_whitespace(to_plain_text(variant.get("expected_answer")))
-            if expected_answer:
-                expected_answer = resolve_multiple_choice_answer_text(expected_answer, choices)
-            expected_answer_type = to_plain_text(variant.get("expected_answer_type")).strip() or answer_type
-            inferred_type = self.normalizer.infer_answer_type(self.normalizer.normalize_answer(expected_answer)) if expected_answer else expected_answer_type
-            if inferred_type == "option":
-                inferred_type = "short_text"
-            normalized_variants.append({
-                "variant_id": to_plain_text(variant.get("variant_id")) or f"open_{idx}",
-                "title": to_plain_text(variant.get("title")) or f"{dataset_name} 开放题",
-                "rewritten_question_text": to_plain_text(variant.get("rewritten_question_text")) or normalized_question_text,
-                "expected_answer_type": inferred_type or expected_answer_type,
-                "expected_answer": expected_answer or choices.get(normalized_answer_text, normalized_answer_text),
-                "split_role": to_plain_text(variant.get("split_role")) or "single",
-            })
-        return normalized_variants
-
     def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
         question_only, _ = self.normalizer.split_question_and_choices(question_text)
         question_only = self.normalizer.strip_hint(question_only)
@@ -2237,7 +2238,8 @@ class RewriteAgent(BaseStructuredAgent):
             variants = []
         elif not variants:
             return fallback
-        variants = self.normalize_variants_temp(
+        variants = normalize_rewrite_variants_temp(
+            self.normalizer,
             dataset_name,
             normalized_question_text,
             normalized_answer_text,
