@@ -2090,7 +2090,7 @@ class RewriteAgent(BaseStructuredAgent):
             result["discard_reason_codes"] = []
         return result
 
-    def normalize_variants(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str], variants: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def normalize_variants_temp(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str], variants: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         normalized_variants: List[Dict[str, Any]] = []
         for idx, variant in enumerate(variants, start=1):
             if not isinstance(variant, dict):
@@ -2237,7 +2237,7 @@ class RewriteAgent(BaseStructuredAgent):
             variants = []
         elif not variants:
             return fallback
-        variants = self.normalize_variants(
+        variants = self.normalize_variants_temp(
             dataset_name,
             normalized_question_text,
             normalized_answer_text,
