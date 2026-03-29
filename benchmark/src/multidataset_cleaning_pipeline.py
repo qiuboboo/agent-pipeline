@@ -2253,13 +2253,11 @@ class RewriteAgent:
             variants = fallback["variants"]
         if strategy == "drop_image_index":
             variants = []
-        if not variants and strategy != "drop_image_index":
-            fallback["llm_used"] = False
-            fallback["fallback_reason"] = "invalid llm variants"
+        elif not variants:
             if self.logger:
                 self.logger.log("REWRITE", f"fallback strategy={fallback.get('strategy')} reason=invalid llm variants", dataset=dataset_name, problem_id=problem_id)
             return fallback
-        normalized_variants = self.normalize_variants(
+        variants = self.normalize_variants(
             dataset_name,
             normalized_question_text,
             normalized_answer_text,
@@ -2267,15 +2265,16 @@ class RewriteAgent:
             choices,
             variants,
         )
-        if strategy != "drop_image_index" and not normalized_variants:
-            fallback["llm_used"] = False
-            fallback["fallback_reason"] = "invalid normalized variants"
+        if strategy != "drop_image_index" and not variants:
             return fallback
+        discard_reason_codes = llm_result.get("discard_reason_codes")
+        if not isinstance(discard_reason_codes, list):
+            discard_reason_codes = fallback["discard_reason_codes"]
         result = {
             "strategy": strategy,
             "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
-            "variants": normalized_variants,
-            "discard_reason_codes": llm_result.get("discard_reason_codes", fallback["discard_reason_codes"]),
+            "variants": variants,
+            "discard_reason_codes": [to_plain_text(code) for code in discard_reason_codes if to_plain_text(code)],
             "llm_used": True,
         }
         if self.logger:
