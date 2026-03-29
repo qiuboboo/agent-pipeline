@@ -1,8 +1,8 @@
 {
   "source_intake_record": {
-    "source_intake_id": "sintake_dd9494c51bfea2797182cc02",
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
-    "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+    "source_intake_id": "sintake_6c7abd1e18a9bf1d577315ca",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
+    "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
     "dataset_name": "SCEMQA",
     "source_problem_id": "3",
     "raw_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3) = 3$, then $f(1)=$?",
@@ -25,13 +25,13 @@
       "image field contains an in-memory PIL image representation, not a path or URL",
       "source_intake_agent"
     ],
-    "created_at": "2026-03-28T10:52:26Z"
+    "created_at": "2026-03-28T10:54:57Z"
   },
   "asset_registry_record": {
-    "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+    "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
     "image_manifest": [
       {
-        "path": "benchmarkallinone/outputs/scemqa_agent_validation_20/run_d7cb02b6b5b0be0a/datasets/scemqa/artifacts/images/prob_48f754e5dd17b6f07dfdd8b3_primary.png",
+        "path": "benchmarkallinone/outputs/scemqa_agent_validation_20/run_d7cb02b6b5b0be0a/datasets/scemqa/artifacts/images/prob_c9971c7fd41b26eeaae5e45b_primary.png",
         "exists": true,
         "format": "png",
         "width": 283,
@@ -52,69 +52,68 @@
     "issues": [],
     "registry_passed": true,
     "llm_used": true,
-    "asset_registry_id": "areg_dd9494c51bfea2797182cc02",
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
+    "asset_registry_id": "areg_6c7abd1e18a9bf1d577315ca",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
     "dataset_name": "SCEMQA",
     "source_problem_id": "3",
-    "created_at": "2026-03-28T10:52:26Z"
+    "created_at": "2026-03-28T10:54:57Z"
   },
   "initial_scoring_record": {
-    "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+    "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
     "image_dependency_score": 0.98,
-    "multi_step_score": 0.72,
-    "verifiability_score": 0.93,
+    "multi_step_score": 0.7,
+    "verifiability_score": 0.9,
     "score_evidence": {
       "image_dependency": [
         "question_text explicitly says 'Shown in the diagram is a graph of f''",
         "requires_image=true",
         "text_dominant=false",
-        "image_manifest contains 1 existing PNG and registry_passed=true"
+        "image_manifest shows an existing primary image"
       ],
       "multi_step": [
-        "question_text requires using a graph of f' together with the condition f(3)=3 to determine f(1)",
-        "this implies combining visual interpretation of the derivative graph with a relationship between f' and f, rather than reading off a single value",
-        "answer is not directly stated in text and likely requires at least a graphical area/sign reasoning step plus solving for the target value"
+        "the question combines a visual graph of f' with the condition f(3)=3 to infer f(1)",
+        "solving likely requires reading quantitative information from the graph and then applying the relationship between f and f'",
+        "the task is not pure lookup from the image; it requires at least one follow-up mathematical step after interpreting the graph"
       ],
       "verifiability": [
         "answer_present=true and answer_type=short_text",
-        "answer_text is a precise closed-form value: '\\frac{13}{3}'",
-        "multiple-choice options are provided, enabling exact answer matching",
-        "registry_passed=true with no listed issues"
+        "the expected answer is a specific exact value (also supported by 5 multiple-choice options)",
+        "registry_passed=true, so required assets are present",
+        "the result can be checked against the graph-derived quantity and the provided condition f(3)=3"
       ]
     },
     "risk_flags": [
-      "exact visual content of the graph is not available in the provided text fields, so scoring is based on stated diagram dependence rather than direct inspection"
+      "small_image_dimensions"
     ],
     "scoring_version": "v1",
     "llm_used": true,
-    "initial_scoring_id": "iscore_dd9494c51bfea2797182cc02",
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
+    "initial_scoring_id": "iscore_6c7abd1e18a9bf1d577315ca",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
     "dataset_name": "SCEMQA",
     "source_problem_id": "3",
-    "created_at": "2026-03-28T10:52:26Z"
+    "created_at": "2026-03-28T10:54:57Z"
   },
   "candidate_registration_record": {
-    "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
-    "priority": 0.94,
+    "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
+    "priority": 0.86,
     "decision": "keep",
     "decision_reasons": [
-      "Asset registry passed with no listed issues.",
-      "Core assets are present: question text, a primary image, and a short-text answer.",
-      "The problem is strongly image-dependent, and the required image asset exists in the registry.",
-      "Initial scoring is strong overall, with high image dependency, verifiability, and solid multi-step reasoning value.",
-      "Although the text fields do not encode the graph content directly, the image is available, so the core semantics remain recoverable."
+      "题干、答案和主图像资产均存在，registry_passed=true，核心语义支撑完整",
+      "image_dependency_score=0.98，且所依赖图像实际可用，满足该题的关键解题条件",
+      "verifiability_score=0.9，答案为可核验的短文本结果，整体可验证性强",
+      "虽有 small_image_dimensions 风险标记，但当前并非核心语义缺失，仍应进入候选池"
     ],
     "llm_used": true,
-    "candidate_registration_id": "creg_dd9494c51bfea2797182cc02",
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
+    "candidate_registration_id": "creg_6c7abd1e18a9bf1d577315ca",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
     "dataset_name": "SCEMQA",
     "source_problem_id": "3",
-    "created_at": "2026-03-28T10:52:26Z"
+    "created_at": "2026-03-28T10:54:57Z"
   },
   "normalization_record": {
-    "normalization_id": "norm_dd9494c51bfea2797182cc02",
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
-    "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+    "normalization_id": "norm_6c7abd1e18a9bf1d577315ca",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
+    "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
     "dataset_name": "SCEMQA",
     "normalized_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3) = 3$, then $f(1)=$?",
     "normalized_answer_text": "\\frac{13}{3}",
@@ -129,15 +128,15 @@
     "text_dominant": false,
     "cleaning_path": "multimodal_full",
     "normalization_notes": [
-      "Question explicitly depends on the diagram showing the graph of $f'$.",
-      "Answer and choices preserved as provided.",
-      "No textual normalization beyond retaining the original math wording."
+      "Question explicitly depends on the diagram of $f'$.",
+      "Kept question text and answer unchanged aside from schema normalization.",
+      "Preserved all provided multiple-choice options."
     ],
     "llm_used": true,
-    "created_at": "2026-03-28T10:52:26Z"
+    "created_at": "2026-03-28T10:54:57Z"
   },
   "candidate_problem_record": {
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
     "source_dataset": "SCEMQA",
     "source_split": "test",
     "source_problem_id": "3",
@@ -150,8 +149,8 @@
     "text_dominant": false,
     "recommended_cleaning_path": "multimodal_full",
     "initial_image_dependency_score": 0.98,
-    "initial_multi_solution_score": 0.72,
-    "initial_verifiability_score": 0.93,
+    "initial_multi_solution_score": 0.7,
+    "initial_verifiability_score": 0.9,
     "multi_solution_mining_policy": "conservative",
     "should_push_multi_solution_agent": false,
     "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
@@ -167,40 +166,39 @@
       "image_field": "image",
       "choice_field": "choices"
     },
-    "created_at": "2026-03-28T10:53:35Z",
+    "created_at": "2026-03-28T10:56:03Z",
     "asset_registry_passed": true,
-    "collection_priority_score": 0.94,
+    "collection_priority_score": 0.86,
     "collection_decision": "keep",
     "collection_decision_reasons": [
-      "Asset registry passed with no listed issues.",
-      "Core assets are present: question text, a primary image, and a short-text answer.",
-      "The problem is strongly image-dependent, and the required image asset exists in the registry.",
-      "Initial scoring is strong overall, with high image dependency, verifiability, and solid multi-step reasoning value.",
-      "Although the text fields do not encode the graph content directly, the image is available, so the core semantics remain recoverable."
+      "题干、答案和主图像资产均存在，registry_passed=true，核心语义支撑完整",
+      "image_dependency_score=0.98，且所依赖图像实际可用，满足该题的关键解题条件",
+      "verifiability_score=0.9，答案为可核验的短文本结果，整体可验证性强",
+      "虽有 small_image_dimensions 风险标记，但当前并非核心语义缺失，仍应进入候选池"
     ],
     "collection_risk_flags": [
-      "exact visual content of the graph is not available in the provided text fields, so scoring is based on stated diagram dependence rather than direct inspection"
+      "small_image_dimensions"
     ]
   },
   "raw_asset_bundle": {
-    "raw_asset_bundle_id": "bundle_467a43c2871ac816008e127c",
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
+    "raw_asset_bundle_id": "bundle_35fa5b1b67cd76f64bbe3042",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
     "source_dataset": "SCEMQA",
     "source_problem_id": "3",
     "assets": [
       {
         "asset_role": "question_text_raw",
-        "storage_uri": "inline://prob_48f754e5dd17b6f07dfdd8b3/question_source",
+        "storage_uri": "inline://prob_c9971c7fd41b26eeaae5e45b/question_source",
         "is_present": true
       },
       {
         "asset_role": "answer_text_raw",
-        "storage_uri": "inline://prob_48f754e5dd17b6f07dfdd8b3/answer_source",
+        "storage_uri": "inline://prob_c9971c7fd41b26eeaae5e45b/answer_source",
         "is_present": true
       },
       {
         "asset_role": "image_raw",
-        "storage_uri": "inline://prob_48f754e5dd17b6f07dfdd8b3/image_1",
+        "storage_uri": "inline://pil_image",
         "is_present": true,
         "width": 283,
         "height": 207
@@ -214,43 +212,42 @@
     },
     "initial_scores": {
       "initial_image_dependency_score": 0.98,
-      "initial_multi_solution_score": 0.72,
-      "initial_verifiability_score": 0.93
+      "initial_multi_solution_score": 0.7,
+      "initial_verifiability_score": 0.9
     },
-    "created_at": "2026-03-28T10:53:35Z",
+    "created_at": "2026-03-28T10:56:03Z",
     "asset_registry_passed": true,
     "asset_registry_issues": []
   },
   "candidate_pool_entry": {
-    "candidate_pool_entry_id": "cpool_1ac37b5664fce79a4b25a50c",
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
+    "candidate_pool_entry_id": "cpool_83075d4cded052f5ad2c5665",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
     "source_dataset": "SCEMQA",
     "source_problem_id": "3",
     "candidate_status": "ready_for_cleaning",
-    "priority_score": 0.94,
+    "priority_score": 0.86,
     "priority_tier": "high",
     "recommended_cleaning_path": "multimodal_full",
     "multi_solution_mining_policy": "conservative",
     "initial_scores": {
       "initial_image_dependency_score": 0.98,
-      "initial_multi_solution_score": 0.72,
-      "initial_verifiability_score": 0.93
+      "initial_multi_solution_score": 0.7,
+      "initial_verifiability_score": 0.9
     },
-    "created_at": "2026-03-28T10:53:35Z",
+    "created_at": "2026-03-28T10:56:03Z",
     "registration_decision": "keep",
     "registration_decision_reasons": [
-      "Asset registry passed with no listed issues.",
-      "Core assets are present: question text, a primary image, and a short-text answer.",
-      "The problem is strongly image-dependent, and the required image asset exists in the registry.",
-      "Initial scoring is strong overall, with high image dependency, verifiability, and solid multi-step reasoning value.",
-      "Although the text fields do not encode the graph content directly, the image is available, so the core semantics remain recoverable."
+      "题干、答案和主图像资产均存在，registry_passed=true，核心语义支撑完整",
+      "image_dependency_score=0.98，且所依赖图像实际可用，满足该题的关键解题条件",
+      "verifiability_score=0.9，答案为可核验的短文本结果，整体可验证性强",
+      "虽有 small_image_dimensions 风险标记，但当前并非核心语义缺失，仍应进入候选池"
     ]
   },
   "clean_pool_entries": [
     {
-      "clean_pool_entry_id": "cleanpool_dd9494c51bfea2797182cc02",
-      "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "clean_pool_entry_id": "cleanpool_6c7abd1e18a9bf1d577315ca",
+      "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "dataset_name": "SCEMQA",
       "pool_status": "ready_for_annotation",
       "clean_decision": "pass",
@@ -259,12 +256,12 @@
       "open_variant_count": 1,
       "text_dominant": false,
       "cleaning_path": "multimodal_full",
-      "created_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z"
     }
   ],
   "clean_problem_record": {
-    "clean_problem_record_id": "cleanprob_dd9494c51bfea2797182cc02",
-    "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+    "clean_problem_record_id": "cleanprob_6c7abd1e18a9bf1d577315ca",
+    "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
     "source_dataset": "SCEMQA",
     "source_problem_id": "3",
     "normalized_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3) = 3$, then $f(1)=$?",
@@ -282,15 +279,16 @@
     "clean_decision": "pass",
     "decision_reason_codes": [
       "alignment_good",
-      "image_support_clear",
-      "question_answer_complete",
+      "answer_target_clear",
+      "image_required_and_usable",
+      "question_clear",
       "solvable"
     ],
-    "created_at": "2026-03-28T10:53:35Z"
+    "created_at": "2026-03-28T10:56:03Z"
   },
   "normalized_assets": {
-    "normalized_assets_id": "nassets_dd9494c51bfea2797182cc02",
-    "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+    "normalized_assets_id": "nassets_6c7abd1e18a9bf1d577315ca",
+    "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
     "normalized_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3) = 3$, then $f(1)=$?",
     "normalized_answer_text": "\\frac{13}{3}",
     "question_unit_normalization_map": [],
@@ -350,7 +348,7 @@
     "image_regions": [
       {
         "image_index": 1,
-        "source_uri": null,
+        "source_uri": "inline://pil_image",
         "roi_bbox": {
           "x": 8,
           "y": 6,
@@ -363,20 +361,20 @@
     ],
     "text_dominant": false,
     "cleaning_path": "multimodal_full",
-    "created_at": "2026-03-28T10:53:35Z",
+    "created_at": "2026-03-28T10:56:03Z",
     "normalization_notes": [
-      "Question explicitly depends on the diagram showing the graph of $f'$.",
-      "Answer and choices preserved as provided.",
-      "No textual normalization beyond retaining the original math wording."
+      "Question explicitly depends on the diagram of $f'$.",
+      "Kept question text and answer unchanged aside from schema normalization.",
+      "Preserved all provided multiple-choice options."
     ],
     "normalization_llm_used": true
   },
   "problem_main_record": {
-    "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+    "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
     "source_dataset": "SCEMQA",
     "source_split": "test",
     "source_problem_id": "3",
-    "ingest_batch_id": "benchmarkallinone-scemqa-parallel-20_20260328T105226Z",
+    "ingest_batch_id": "benchmarkallinone-scemqa-parallel-20_20260328T105457Z",
     "problem_type": "multimodal_reasoning",
     "domain_tags": [
       "数学、物理、生物、化学"
@@ -398,18 +396,19 @@
     "clean_decision": "pass",
     "clean_decision_reason_codes": [
       "alignment_good",
-      "image_support_clear",
-      "question_answer_complete",
+      "answer_target_clear",
+      "image_required_and_usable",
+      "question_clear",
       "solvable"
     ],
-    "clean_decision_rationale": "The sample is semantically clear: the question and target are complete, the graph of f' is available and readable enough, the rewrite preserves the original task, and alignment/solvability reports show no meaningful conflicts or failure risk.",
+    "clean_decision_rationale": "The sample is complete and jointly understandable: the question asks for f(1) from a usable graph of f' with f(3)=3 given, the expected answer is present, the rewrite is clean, and alignment/solvability evidence shows no serious issues.",
     "review_priority": "normal",
     "annotation_ready": true,
     "qa_precheck_ready": true,
     "release_reserved": {},
     "rewrite_strategy": "keep_open",
     "open_variant_count": 1,
-    "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
+    "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
     "text_dominant": false,
     "cleaning_path": "multimodal_full",
     "alignment_status": "good",
@@ -419,30 +418,29 @@
     "agent_image_support_status": "clear_enough",
     "agent_joint_understanding_status": "understandable",
     "agent_decision_source": "llm",
-    "created_at": "2026-03-28T10:52:26Z",
-    "updated_at": "2026-03-28T10:53:35Z",
+    "created_at": "2026-03-28T10:54:57Z",
+    "updated_at": "2026-03-28T10:56:03Z",
     "initial_image_dependency_score": 0.98,
-    "initial_multi_solution_score": 0.72,
-    "initial_verifiability_score": 0.93,
+    "initial_multi_solution_score": 0.7,
+    "initial_verifiability_score": 0.9,
     "multi_solution_mining_policy": "conservative",
-    "collection_priority_score": 0.94,
+    "collection_priority_score": 0.86,
     "collection_decision": "keep",
     "collection_decision_reasons": [
-      "Asset registry passed with no listed issues.",
-      "Core assets are present: question text, a primary image, and a short-text answer.",
-      "The problem is strongly image-dependent, and the required image asset exists in the registry.",
-      "Initial scoring is strong overall, with high image dependency, verifiability, and solid multi-step reasoning value.",
-      "Although the text fields do not encode the graph content directly, the image is available, so the core semantics remain recoverable."
+      "题干、答案和主图像资产均存在，registry_passed=true，核心语义支撑完整",
+      "image_dependency_score=0.98，且所依赖图像实际可用，满足该题的关键解题条件",
+      "verifiability_score=0.9，答案为可核验的短文本结果，整体可验证性强",
+      "虽有 small_image_dimensions 风险标记，但当前并非核心语义缺失，仍应进入候选池"
     ]
   },
   "asset_records": [
     {
-      "asset_id": "asset_07f0a6d86e5a2183347938fa",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "asset_id": "asset_d449204f82844730a3f248ba",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "asset_type": "text",
       "asset_role": "question_text_source",
       "source_uri": "source://scemqa/test/3/question",
-      "storage_uri": "inline://prob_48f754e5dd17b6f07dfdd8b3/question_source",
+      "storage_uri": "inline://prob_c9971c7fd41b26eeaae5e45b/question_source",
       "file_format": "txt",
       "file_size_bytes": 101,
       "width": null,
@@ -503,16 +501,16 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "asset_id": "asset_91b066885b8a88fab389796e",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "asset_id": "asset_0b3d1bb018317bf027e22ccc",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "asset_type": "text",
       "asset_role": "question_text_normalized",
       "source_uri": null,
-      "storage_uri": "inline://prob_48f754e5dd17b6f07dfdd8b3/question_normalized",
+      "storage_uri": "inline://prob_c9971c7fd41b26eeaae5e45b/question_normalized",
       "file_format": "txt",
       "file_size_bytes": 101,
       "width": null,
@@ -573,16 +571,16 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "asset_id": "asset_9fe6077b45faf731351df1ee",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "asset_id": "asset_7ec9fe5e12383842256ca503",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "asset_type": "answer",
       "asset_role": "answer_raw",
       "source_uri": "source://scemqa/test/3/answer",
-      "storage_uri": "inline://prob_48f754e5dd17b6f07dfdd8b3/answer_raw",
+      "storage_uri": "inline://prob_c9971c7fd41b26eeaae5e45b/answer_raw",
       "file_format": "txt",
       "file_size_bytes": 12,
       "width": null,
@@ -608,16 +606,16 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "asset_id": "asset_6903a4fa4efb27b923ab17dd",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "asset_id": "asset_a8be157a119f7f637faeffb0",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "asset_type": "answer",
       "asset_role": "answer_normalized",
       "source_uri": null,
-      "storage_uri": "inline://prob_48f754e5dd17b6f07dfdd8b3/answer_normalized",
+      "storage_uri": "inline://prob_c9971c7fd41b26eeaae5e45b/answer_normalized",
       "file_format": "txt",
       "file_size_bytes": 12,
       "width": null,
@@ -643,16 +641,16 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "asset_id": "asset_8dc6fa6efddf97c92911d5c4",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "asset_id": "asset_af82c8507b4cf1f45aef5af6",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "asset_type": "image",
       "asset_role": "primary_image",
-      "source_uri": null,
-      "storage_uri": "benchmarkallinone/outputs/scemqa_agent_validation_20/run_d7cb02b6b5b0be0a/datasets/scemqa/artifacts/images/prob_48f754e5dd17b6f07dfdd8b3_primary.png",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "benchmarkallinone/outputs/scemqa_agent_validation_20/run_d7cb02b6b5b0be0a/datasets/scemqa/artifacts/images/prob_c9971c7fd41b26eeaae5e45b_primary.png",
       "file_format": "png",
       "file_size_bytes": 6452,
       "width": 283,
@@ -677,16 +675,16 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "asset_id": "asset_2e926838e8016cb13a4975a1",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "asset_id": "asset_5285757467ed245c3ff132eb",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "asset_type": "crop",
       "asset_role": "region_crop",
       "source_uri": null,
-      "storage_uri": "benchmarkallinone/outputs/scemqa_agent_validation_20/run_d7cb02b6b5b0be0a/datasets/scemqa/artifacts/crops/prob_48f754e5dd17b6f07dfdd8b3_primary_roi.png",
+      "storage_uri": "benchmarkallinone/outputs/scemqa_agent_validation_20/run_d7cb02b6b5b0be0a/datasets/scemqa/artifacts/crops/prob_c9971c7fd41b26eeaae5e45b_primary_roi.png",
       "file_format": "png",
       "file_size_bytes": 6357,
       "width": 270,
@@ -699,7 +697,7 @@
       "blur_score": 3366.2917,
       "readability_score": 0.7413,
       "noise_score": 22.914,
-      "cropped_from_asset_id": "asset_8dc6fa6efddf97c92911d5c4",
+      "cropped_from_asset_id": "asset_af82c8507b4cf1f45aef5af6",
       "roi_bbox": {
         "x": 8,
         "y": 6,
@@ -709,24 +707,24 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "asset_id": "asset_caea45b8a45638fbf52cce32",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "asset_id": "asset_ae0e292f05c720658d905af4",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "asset_type": "text",
       "asset_role": "question_text_open_variant",
       "source_uri": null,
-      "storage_uri": "inline://open_cd7e6e46d7ceb62a6cb2c3c2",
+      "storage_uri": "inline://open_e59aad042fe0fa81d594e029",
       "file_format": "txt",
-      "file_size_bytes": 99,
+      "file_size_bytes": 106,
       "width": null,
       "height": null,
-      "sha256": "76bd8a06a51806f5320ed3d62f8433975919565bdb56ca354ee51e6a55ad825e",
+      "sha256": "986c74a105ec8d71711933fe7afe2e38b110f2c6f7e1d79fff5b4af37e464258",
       "perceptual_hash": null,
       "source_text_snapshot": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3) = 3$, then $f(1)=$?",
-      "normalized_text_snapshot": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then $f(1)=$?",
+      "normalized_text_snapshot": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then what is $f(1)$?",
       "text_completeness_score": 0.6402,
       "blur_score": null,
       "readability_score": null,
@@ -779,14 +777,14 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     }
   ],
   "text_structure_records": [
     {
-      "text_structure_id": "text_prob_48f754e5dd17b6f07dfdd8b3",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "text_structure_id": "text_prob_c9971c7fd41b26eeaae5e45b",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "question_type": "multiple_choice",
       "conditions": [
         {
@@ -821,11 +819,11 @@
       ],
       "answer_slots": [
         {
-          "slot_id": "slot_prob_48f754e5dd17b6f07dfdd8b3_1",
+          "slot_id": "slot_prob_c9971c7fd41b26eeaae5e45b_1",
           "variant_index": 1,
           "split_role": "single",
           "slot_type": "short_text",
-          "target_text": "If $f(3)=3$, then $f(1)=$?",
+          "target_text": "If $f(3)=3$, then what is $f(1)$?",
           "expected_answer_type": "short_text",
           "expected_answer": "\\frac{13}{3}",
           "requires_visual_grounding": true
@@ -904,13 +902,13 @@
       "requires_visual_grounding": true,
       "text_structure_status": "complete",
       "parser_confidence": 0.92,
-      "created_at": "2026-03-28T10:53:19Z"
+      "created_at": "2026-03-28T10:55:51Z"
     }
   ],
   "visual_structure_records": [
     {
-      "visual_structure_id": "visual_prob_48f754e5dd17b6f07dfdd8b3_1",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "visual_structure_id": "visual_prob_c9971c7fd41b26eeaae5e45b_1",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "image_index": 1,
       "image_asset_role": "primary_image",
       "global_attributes": {
@@ -994,13 +992,13 @@
         }
       ],
       "parser_confidence": 0.8665,
-      "created_at": "2026-03-28T10:53:19Z"
+      "created_at": "2026-03-28T10:55:51Z"
     }
   ],
   "solvability_reports": [
     {
-      "solvability_id": "solv_prob_48f754e5dd17b6f07dfdd8b3",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "solvability_id": "solv_prob_c9971c7fd41b26eeaae5e45b",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "answer_verifiable": true,
       "target_clear": true,
       "rewrite_complete": true,
@@ -1018,13 +1016,13 @@
       },
       "solvability_score": 1.0,
       "decision_hint": "pass",
-      "created_at": "2026-03-28T10:53:30Z"
+      "created_at": "2026-03-28T10:55:57Z"
     }
   ],
   "node_records": [
     {
-      "node_id": "node_d9e8355a3b0111e71ec25c4e",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_1c70394aaaf71785709df28e",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "text_fact",
       "canonical_value": "Shown in the diagram is a graph of $f'$, the derivative of function $f$.",
       "surface_forms": [
@@ -1033,10 +1031,10 @@
       "origin_kind": "text",
       "cognitive_level": "objective",
       "source_refs": [
-        "asset_91b066885b8a88fab389796e"
+        "asset_0b3d1bb018317bf027e22ccc"
       ],
       "evidence_refs": [
-        "asset_91b066885b8a88fab389796e"
+        "asset_0b3d1bb018317bf027e22ccc"
       ],
       "upstream_node_ids": [],
       "value_type": "condition",
@@ -1063,33 +1061,33 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_b8bd3209373867f672dfd288",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_82e1eaff96af35a55bc09928",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "target_slot",
-      "canonical_value": "If $f(3)=3$, then $f(1)=$?",
+      "canonical_value": "If $f(3)=3$, then what is $f(1)$?",
       "surface_forms": [
-        "If $f(3)=3$, then $f(1)=$?"
+        "If $f(3)=3$, then what is $f(1)$?"
       ],
       "origin_kind": "text_structure",
       "cognitive_level": "computed",
       "source_refs": [
-        "asset_91b066885b8a88fab389796e"
+        "asset_0b3d1bb018317bf027e22ccc"
       ],
       "evidence_refs": [
-        "asset_91b066885b8a88fab389796e"
+        "asset_0b3d1bb018317bf027e22ccc"
       ],
       "upstream_node_ids": [],
       "value_type": "short_text",
       "normalized_value": {
-        "slot_id": "slot_prob_48f754e5dd17b6f07dfdd8b3_1",
+        "slot_id": "slot_prob_c9971c7fd41b26eeaae5e45b_1",
         "variant_index": 1,
         "split_role": "single",
         "slot_type": "short_text",
-        "target_text": "If $f(3)=3$, then $f(1)=$?",
+        "target_text": "If $f(3)=3$, then what is $f(1)$?",
         "expected_answer_type": "short_text",
         "expected_answer": "\\frac{13}{3}",
         "requires_visual_grounding": true
@@ -1104,12 +1102,12 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_5fb043d81e519277b504ae31",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_725e0c96e473478e3eadc6c8",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "answer_claim",
       "canonical_value": "\\frac{13}{3}",
       "surface_forms": [
@@ -1118,10 +1116,10 @@
       "origin_kind": "text",
       "cognitive_level": "objective",
       "source_refs": [
-        "asset_6903a4fa4efb27b923ab17dd"
+        "asset_a8be157a119f7f637faeffb0"
       ],
       "evidence_refs": [
-        "asset_6903a4fa4efb27b923ab17dd"
+        "asset_a8be157a119f7f637faeffb0"
       ],
       "upstream_node_ids": [],
       "value_type": "short_text",
@@ -1138,12 +1136,12 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_5b64ae97f10d159913ef16e9",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_cdc7087289b5c7073857d98c",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "perception_fact",
       "canonical_value": "primary_image::full_canvas::canvas",
       "surface_forms": [
@@ -1152,10 +1150,10 @@
       "origin_kind": "vision",
       "cognitive_level": "objective",
       "source_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1"
       ],
       "evidence_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1"
       ],
       "upstream_node_ids": [],
       "value_type": "full_canvas",
@@ -1180,12 +1178,12 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_8446699b53426d8ef29de643",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_7d94a8cab95b53619e92c572",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "perception_fact",
       "canonical_value": "primary_image::content_region::roi",
       "surface_forms": [
@@ -1194,10 +1192,10 @@
       "origin_kind": "vision",
       "cognitive_level": "objective",
       "source_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1"
       ],
       "evidence_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1"
       ],
       "upstream_node_ids": [],
       "value_type": "content_region",
@@ -1222,12 +1220,12 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_a1c25e5e76d37abdc211e505",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_8150ea6dc40c5b4b9b600473",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "perception_fact",
       "canonical_value": "primary_image::subregion::roi_top_left",
       "surface_forms": [
@@ -1236,10 +1234,10 @@
       "origin_kind": "vision",
       "cognitive_level": "objective",
       "source_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1"
       ],
       "evidence_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1"
       ],
       "upstream_node_ids": [],
       "value_type": "subregion",
@@ -1264,12 +1262,12 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_2cdc81291db7ba8c31268c32",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_ff2a71da16605ea05cb3a53d",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "perception_fact",
       "canonical_value": "primary_image::subregion::roi_top_right",
       "surface_forms": [
@@ -1278,10 +1276,10 @@
       "origin_kind": "vision",
       "cognitive_level": "objective",
       "source_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1"
       ],
       "evidence_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1"
       ],
       "upstream_node_ids": [],
       "value_type": "subregion",
@@ -1306,33 +1304,33 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_625a648f2c06a8390f61903b",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_f643f2d494b2812291e0c339",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "text_fact",
-      "canonical_value": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then $f(1)=$?",
+      "canonical_value": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then what is $f(1)$?",
       "surface_forms": [
-        "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then $f(1)=$?"
+        "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then what is $f(1)$?"
       ],
       "origin_kind": "reasoning",
       "cognitive_level": "computed",
       "source_refs": [
-        "asset_caea45b8a45638fbf52cce32"
+        "asset_ae0e292f05c720658d905af4"
       ],
       "evidence_refs": [
-        "asset_caea45b8a45638fbf52cce32"
+        "asset_ae0e292f05c720658d905af4"
       ],
       "upstream_node_ids": [],
       "value_type": "text",
       "normalized_value": {
-        "open_variant_id": "open_cd7e6e46d7ceb62a6cb2c3c2",
-        "parent_problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+        "open_variant_id": "open_e59aad042fe0fa81d594e029",
+        "parent_problem_id": "prob_c9971c7fd41b26eeaae5e45b",
         "variant_index": 1,
         "title": "SCEMQA 开放题",
-        "rewritten_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then $f(1)=$?",
+        "rewritten_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then what is $f(1)$?",
         "expected_answer_type": "short_text",
         "expected_answer": "\\frac{13}{3}",
         "split_role": "single"
@@ -1347,12 +1345,12 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_3096c89cb31e6cc3ab177714",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_fbac433e205fe42903de7d84",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "quality_signal",
       "canonical_value": "solvability=pass",
       "surface_forms": [
@@ -1365,8 +1363,8 @@
       "upstream_node_ids": [],
       "value_type": "text",
       "normalized_value": {
-        "solvability_id": "solv_prob_48f754e5dd17b6f07dfdd8b3",
-        "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+        "solvability_id": "solv_prob_c9971c7fd41b26eeaae5e45b",
+        "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
         "answer_verifiable": true,
         "target_clear": true,
         "rewrite_complete": true,
@@ -1384,7 +1382,7 @@
         },
         "solvability_score": 1.0,
         "decision_hint": "pass",
-        "created_at": "2026-03-28T10:53:30Z"
+        "created_at": "2026-03-28T10:55:57Z"
       },
       "unit": null,
       "confidence": 1.0,
@@ -1396,12 +1394,12 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     },
     {
-      "node_id": "node_ad67a5a592fa895747fd4a35",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "node_id": "node_45feb8f3f4b9b127dec6b076",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "node_type": "quality_signal",
       "canonical_value": "clean_decision=pass",
       "surface_forms": [
@@ -1417,8 +1415,9 @@
         "decision": "pass",
         "reasons": [
           "alignment_good",
-          "image_support_clear",
-          "question_answer_complete",
+          "answer_target_clear",
+          "image_required_and_usable",
+          "question_clear",
           "solvable"
         ]
       },
@@ -1432,25 +1431,25 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-28T10:53:35Z",
-      "updated_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z",
+      "updated_at": "2026-03-28T10:56:03Z"
     }
   ],
   "cleaning_records": [
     {
-      "cleaning_id": "clean_dd9494c51bfea2797182cc02",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "cleaning_id": "clean_6c7abd1e18a9bf1d577315ca",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "cleaning_version": "v3.1.0",
-      "pipeline_run_id": "run_ad9256d8549677b2",
+      "pipeline_run_id": "run_73733fc491590dae",
       "dataset_name": "SCEMQA",
       "input_asset_ids": [
-        "asset_07f0a6d86e5a2183347938fa",
-        "asset_91b066885b8a88fab389796e",
-        "asset_9fe6077b45faf731351df1ee",
-        "asset_6903a4fa4efb27b923ab17dd",
-        "asset_8dc6fa6efddf97c92911d5c4",
-        "asset_2e926838e8016cb13a4975a1",
-        "asset_caea45b8a45638fbf52cce32"
+        "asset_d449204f82844730a3f248ba",
+        "asset_0b3d1bb018317bf027e22ccc",
+        "asset_7ec9fe5e12383842256ca503",
+        "asset_a8be157a119f7f637faeffb0",
+        "asset_af82c8507b4cf1f45aef5af6",
+        "asset_5285757467ed245c3ff132eb",
+        "asset_ae0e292f05c720658d905af4"
       ],
       "normalization_actions": [
         {
@@ -1489,7 +1488,7 @@
         {
           "action_type": "sample_understood",
           "trigger": "SampleUnderstandingAgent",
-          "confidence": 0.97,
+          "confidence": 0.96,
           "human_confirmed": false
         },
         {
@@ -1523,14 +1522,14 @@
         }
       ],
       "alignment_summary": {
-        "alignment_id": "align_dd9494c51bfea2797182cc02",
+        "alignment_id": "align_6c7abd1e18a9bf1d577315ca",
         "coverage_score": 0.9,
         "consistency_score": 0.98,
         "alignment_status": "good",
         "conflict_count": 0
       },
       "text_structure_summary": {
-        "text_structure_id": "text_prob_48f754e5dd17b6f07dfdd8b3",
+        "text_structure_id": "text_prob_c9971c7fd41b26eeaae5e45b",
         "question_type": "multiple_choice",
         "condition_count": 1,
         "target_count": 1,
@@ -1538,7 +1537,7 @@
         "status": "complete"
       },
       "solvability_summary": {
-        "solvability_id": "solv_prob_48f754e5dd17b6f07dfdd8b3",
+        "solvability_id": "solv_prob_c9971c7fd41b26eeaae5e45b",
         "solvability_score": 1.0,
         "reasoning_path_exists": true,
         "decision_hint": "pass",
@@ -1554,12 +1553,12 @@
         "image_support_status": "clear_enough",
         "joint_understanding_status": "understandable",
         "reason_codes": [
-          "graph_semantics_clear",
-          "image_required_and_available",
+          "answer_target_clear",
+          "image_required_and_usable",
           "jointly_understandable",
-          "question_and_target_clear"
+          "question_clear"
         ],
-        "rationale": "The text clearly asks for f(1) from a provided graph of f' and the given value f(3)=3. The graph is legible enough to identify the relevant line and intercepts, so the image-text pair is semantically understandable.",
+        "rationale": "The question clearly asks for f(1) from a graph of f' with a given value f(3)=3. The image is necessary and semantically readable: the line and key axis/intercept labels are visible enough to interpret the derivative graph.",
         "llm_used": true
       },
       "missing_field_summary": {
@@ -1572,16 +1571,17 @@
       "decision": "pass",
       "decision_reason_codes": [
         "alignment_good",
-        "image_support_clear",
-        "question_answer_complete",
+        "answer_target_clear",
+        "image_required_and_usable",
+        "question_clear",
         "solvable"
       ],
-      "decision_rationale": "The sample is semantically clear: the question and target are complete, the graph of f' is available and readable enough, the rewrite preserves the original task, and alignment/solvability reports show no meaningful conflicts or failure risk.",
+      "decision_rationale": "The sample is complete and jointly understandable: the question asks for f(1) from a usable graph of f' with f(3)=3 given, the expected answer is present, the rewrite is clean, and alignment/solvability evidence shows no serious issues.",
       "review_ticket_id": null,
       "operator_type": "system",
-      "started_at": "2026-03-28T10:53:35Z",
-      "finished_at": "2026-03-28T10:53:35Z",
-      "candidate_id": "cand_48f754e5dd17b6f07dfdd8b3",
+      "started_at": "2026-03-28T10:56:03Z",
+      "finished_at": "2026-03-28T10:56:03Z",
+      "candidate_id": "cand_c9971c7fd41b26eeaae5e45b",
       "cleaning_path": "multimodal_full",
       "text_dominant": false
     }
@@ -1589,32 +1589,32 @@
   "reject_records": [],
   "alignment_records": [
     {
-      "alignment_id": "align_dd9494c51bfea2797182cc02",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "alignment_id": "align_6c7abd1e18a9bf1d577315ca",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "image_entity_refs": [
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1::roi",
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1::roi_top_left",
-        "visual_prob_48f754e5dd17b6f07dfdd8b3_1::roi_top_right"
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1::roi",
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1::roi_top_left",
+        "visual_prob_c9971c7fd41b26eeaae5e45b_1::roi_top_right"
       ],
       "text_span_refs": [
-        "asset_prob_48f754e5dd17b6f07dfdd8b3_question_text_normalized"
+        "asset_prob_c9971c7fd41b26eeaae5e45b_question_text_normalized"
       ],
       "alignment_pairs": [
         {
           "text_ref": "diagram",
-          "image_ref": "visual_prob_48f754e5dd17b6f07dfdd8b3_1::roi",
+          "image_ref": "visual_prob_c9971c7fd41b26eeaae5e45b_1::roi",
           "relation": "grounds_diagram",
           "confidence": 0.7666
         },
         {
           "text_ref": "graph",
-          "image_ref": "visual_prob_48f754e5dd17b6f07dfdd8b3_1::roi",
+          "image_ref": "visual_prob_c9971c7fd41b26eeaae5e45b_1::roi",
           "relation": "grounds_graph",
           "confidence": 0.7666
         },
         {
-          "text_ref": "slot_prob_48f754e5dd17b6f07dfdd8b3_1",
-          "image_ref": "visual_prob_48f754e5dd17b6f07dfdd8b3_1::roi",
+          "text_ref": "slot_prob_c9971c7fd41b26eeaae5e45b_1",
+          "image_ref": "visual_prob_c9971c7fd41b26eeaae5e45b_1::roi",
           "relation": "slot_grounding",
           "confidence": 0.7706
         }
@@ -1623,15 +1623,15 @@
       "coverage_score": 0.9,
       "consistency_score": 0.98,
       "alignment_status": "good",
-      "created_at": "2026-03-28T10:53:19Z",
+      "created_at": "2026-03-28T10:55:51Z",
       "cleaning_path": "multimodal_full",
       "text_dominant": false
     }
   ],
   "field_audit_records": [
     {
-      "audit_id": "audit_4874f99e2d83a3b5d1eb29ef",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "audit_id": "audit_4b35113636b03fcca1e43c32",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "record_type": "problem_main_record",
       "field_name": "normalized_question_text",
       "before_value": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3) = 3$, then $f(1)=$?",
@@ -1639,11 +1639,11 @@
       "change_type": "text_normalized",
       "trigger": "NormalizationAgent",
       "operator_type": "system",
-      "created_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z"
     },
     {
-      "audit_id": "audit_7de31eaf42045c38e9522c29",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "audit_id": "audit_262548a403b376cee1c727cb",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "record_type": "problem_main_record",
       "field_name": "normalized_answer_text",
       "before_value": "\\frac{13}{3}",
@@ -1651,11 +1651,11 @@
       "change_type": "answer_canonicalized",
       "trigger": "NormalizationAgent",
       "operator_type": "system",
-      "created_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z"
     },
     {
-      "audit_id": "audit_73bdb7db4954b75966991085",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "audit_id": "audit_8a2f89776db60271a9d3d741",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "record_type": "rewrite_report",
       "field_name": "rewrite_strategy",
       "before_value": null,
@@ -1663,11 +1663,11 @@
       "change_type": "question_rewritten",
       "trigger": "QuestionRewriteAgent",
       "operator_type": "system",
-      "created_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z"
     },
     {
-      "audit_id": "audit_ad67a5a592fa895747fd4a35",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "audit_id": "audit_45feb8f3f4b9b127dec6b076",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "record_type": "cleaning_record",
       "field_name": "decision",
       "before_value": null,
@@ -1675,11 +1675,11 @@
       "change_type": "gate_decision",
       "trigger": "CleanGateAgent",
       "operator_type": "system",
-      "created_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z"
     },
     {
-      "audit_id": "audit_936a08a3af5e9ce4bf8495c6",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "audit_id": "audit_6b63236982b0052def7c60c4",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "record_type": "normalized_assets",
       "field_name": "variable_aliases",
       "before_value": null,
@@ -1728,40 +1728,40 @@
       "change_type": "variable_canonicalized",
       "trigger": "NormalizationAgent",
       "operator_type": "system",
-      "created_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z"
     }
   ],
   "rewrite_reports": [
     {
-      "rewrite_id": "rewrite_dd9494c51bfea2797182cc02",
-      "problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "rewrite_id": "rewrite_6c7abd1e18a9bf1d577315ca",
+      "problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "source_problem_id": "3",
       "strategy": "keep_open",
-      "rationale": "The question is already in open-ended form; removing the options preserves the original semantics.",
+      "rationale": "The prompt is already phrased as an open-ended fill-in question; removing the options preserves the original task semantics.",
       "discard_reason_codes": [],
       "variant_count": 1,
       "variants": [
         {
-          "open_variant_id": "open_cd7e6e46d7ceb62a6cb2c3c2",
-          "parent_problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+          "open_variant_id": "open_e59aad042fe0fa81d594e029",
+          "parent_problem_id": "prob_c9971c7fd41b26eeaae5e45b",
           "variant_index": 1,
           "title": "SCEMQA 开放题",
-          "rewritten_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then $f(1)=$?",
+          "rewritten_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then what is $f(1)$?",
           "expected_answer_type": "short_text",
           "expected_answer": "\\frac{13}{3}",
           "split_role": "single"
         }
       ],
-      "created_at": "2026-03-28T10:53:35Z"
+      "created_at": "2026-03-28T10:56:03Z"
     }
   ],
   "open_ended_problem_variants": [
     {
-      "open_variant_id": "open_cd7e6e46d7ceb62a6cb2c3c2",
-      "parent_problem_id": "prob_48f754e5dd17b6f07dfdd8b3",
+      "open_variant_id": "open_e59aad042fe0fa81d594e029",
+      "parent_problem_id": "prob_c9971c7fd41b26eeaae5e45b",
       "variant_index": 1,
       "title": "SCEMQA 开放题",
-      "rewritten_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then $f(1)=$?",
+      "rewritten_question_text": "Shown in the diagram is a graph of $f'$, the derivative of function $f$. If $f(3)=3$, then what is $f(1)$?",
       "expected_answer_type": "short_text",
       "expected_answer": "\\frac{13}{3}",
       "split_role": "single"

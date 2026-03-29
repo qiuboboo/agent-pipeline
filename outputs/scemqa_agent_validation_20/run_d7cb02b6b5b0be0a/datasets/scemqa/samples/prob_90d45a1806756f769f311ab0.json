@@ -1,12 +1,12 @@
 {
   "source_intake_record": {
-    "source_intake_id": "sintake_c5ffc1f4c623f837d134b88b",
+    "source_intake_id": "sintake_f80b25f565d2ea78162bd807",
     "candidate_id": "cand_90d45a1806756f769f311ab0",
     "problem_id": "prob_90d45a1806756f769f311ab0",
     "dataset_name": "SCEMQA",
     "source_problem_id": "4",
     "raw_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Which of the following statements is true?",
-    "raw_answer_text": "3",
+    "raw_answer_text": "$f$ is increasing from $x = -3$ to $x = -1$.",
     "choice_map": {
       "A": "$f$ is not differentiable at $x = -2$.",
       "B": "$f$ has a local minimum at $x = -1$.",
@@ -25,7 +25,7 @@
       "image field contains a PIL image object description rather than a path or URL",
       "source_intake_agent"
     ],
-    "created_at": "2026-03-27T03:49:13Z"
+    "created_at": "2026-03-29T04:28:35Z"
   },
   "asset_registry_record": {
     "problem_id": "prob_90d45a1806756f769f311ab0",
@@ -46,76 +46,76 @@
     },
     "answer_manifest": {
       "answer_present": true,
-      "answer_type": "number",
-      "answer_char_length": 1
+      "answer_type": "short_text",
+      "answer_char_length": 44
     },
     "issues": [],
     "registry_passed": true,
     "llm_used": true,
-    "asset_registry_id": "areg_c5ffc1f4c623f837d134b88b",
+    "asset_registry_id": "areg_f80b25f565d2ea78162bd807",
     "candidate_id": "cand_90d45a1806756f769f311ab0",
     "dataset_name": "SCEMQA",
     "source_problem_id": "4",
-    "created_at": "2026-03-27T03:49:13Z"
+    "created_at": "2026-03-29T04:28:35Z"
   },
   "initial_scoring_record": {
     "problem_id": "prob_90d45a1806756f769f311ab0",
-    "image_dependency_score": 0.97,
-    "multi_step_score": 0.67,
-    "verifiability_score": 0.78,
+    "image_dependency_score": 0.98,
+    "multi_step_score": 0.58,
+    "verifiability_score": 0.89,
     "score_evidence": {
       "image_dependency": [
-        "The question explicitly says 'Shown is a graph of f'', so the graph is necessary to answer.",
-        "requires_image=true and text_dominant=false indicate the visual content carries the key information.",
-        "The truth of each option depends on reading signs/behavior from the derivative graph, which is not recoverable from text alone."
+        "Question explicitly says 'Shown is a graph of f''', so the needed information is in the image.",
+        "requires_image=true and text_dominant=false indicate the sample is primarily visual.",
+        "The prompt does not provide the graph's numeric or sign details in text, so the answer cannot be derived from text alone."
       ],
       "multi_step": [
-        "Solving requires interpreting a graph of f' rather than directly reading a labeled fact.",
-        "The respondent must translate properties of f' into properties of f (e.g., increasing/decreasing, local extrema, differentiability).",
-        "There are 5 candidate statements, so the task involves checking multiple conditions against the graph before selecting the true one."
+        "Solving requires interpreting the graph of f' and then translating that into statements about f (for example, increasing/decreasing or local extrema).",
+        "The choices involve multiple different derivative-to-function relationships, so the solver must compare graph behavior across intervals or points rather than read off a single fact.",
+        "This is more than one reasoning step, but it is still a relatively short math inference task rather than a long chain of calculations."
       ],
       "verifiability": [
-        "The problem is multiple-choice with a single short final answer, so the output is easy to compare against a key.",
-        "answer_present=true and registry_passed=true support basic data integrity.",
-        "However, answer_text='3' is stored as numeric while the options are labeled A-E, creating some representation ambiguity about whether '3' means the third choice."
+        "This is a multiple-choice style question with a single stated answer that matches one listed option, making outcome checking straightforward.",
+        "The truth of each option is objective given the graph of f', so a downstream verifier can check derivative sign and interval behavior.",
+        "asset_registry_record.registry_passed=true, image exists=true, and answer_present=true support basic evaluability.",
+        "Image size is only 318x197, so verification is strong but not perfect because graph reading could be slightly resolution-sensitive."
       ]
     },
     "risk_flags": [
-      "answer_format_ambiguity_numeric_vs_choice_labels"
+      "graph_reading_may_be_resolution_sensitive",
+      "small_image_resolution"
     ],
     "scoring_version": "v1",
     "llm_used": true,
-    "initial_scoring_id": "iscore_c5ffc1f4c623f837d134b88b",
+    "initial_scoring_id": "iscore_f80b25f565d2ea78162bd807",
     "candidate_id": "cand_90d45a1806756f769f311ab0",
     "dataset_name": "SCEMQA",
     "source_problem_id": "4",
-    "created_at": "2026-03-27T03:49:13Z"
+    "created_at": "2026-03-29T04:28:35Z"
   },
   "candidate_registration_record": {
     "problem_id": "prob_90d45a1806756f769f311ab0",
-    "priority": 0.64,
+    "priority": 0.48,
     "decision": "low_priority",
     "decision_reasons": [
-      "asset registry passed with image, question, and answer all present",
-      "image dependency is very high (0.97), indicating the sample is meaningfully visual",
-      "multi-step score (0.67) and verifiability score (0.78) are solid but not exceptional",
-      "there is an explicit risk flag: answer_format_ambiguity_numeric_vs_choice_labels",
-      "because the assets are complete but the answer representation may be ambiguous, this is better placed in low_priority rather than keep"
+      "Question, answer, and primary image are all present, so the sample retains recoverable core semantics and should stay in the candidate pool.",
+      "The task is highly image-dependent, and the graph image is small (318x197), creating a meaningful risk that graph details are resolution-sensitive.",
+      "Initial scoring shows good verifiability and moderate reasoning value, but the image-quality risk makes it better suited for lower-priority follow-up than immediate keep."
     ],
     "llm_used": true,
-    "candidate_registration_id": "creg_c5ffc1f4c623f837d134b88b",
+    "candidate_registration_id": "creg_f80b25f565d2ea78162bd807",
     "candidate_id": "cand_90d45a1806756f769f311ab0",
     "dataset_name": "SCEMQA",
     "source_problem_id": "4",
-    "created_at": "2026-03-27T03:49:13Z"
+    "created_at": "2026-03-29T04:28:35Z"
   },
   "normalization_record": {
-    "normalization_id": "norm_c5ffc1f4c623f837d134b88b",
+    "normalization_id": "norm_f80b25f565d2ea78162bd807",
     "candidate_id": "cand_90d45a1806756f769f311ab0",
     "problem_id": "prob_90d45a1806756f769f311ab0",
     "dataset_name": "SCEMQA",
     "normalized_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Which of the following statements is true?",
-    "normalized_answer_text": "3",
+    "normalized_answer_text": "$f$ is increasing from $x = -3$ to $x = -1$",
     "normalized_choice_map": {
       "A": "$f$ is not differentiable at $x = -2$.",
       "B": "$f$ has a local minimum at $x = -1$.",
@@ -127,12 +127,12 @@
     "text_dominant": false,
     "cleaning_path": "multimodal_full",
     "normalization_notes": [
-      "Question explicitly depends on the shown graph of $f'$.",
-      "Answer retained as provided; numeric answer text was not remapped to a letter choice.",
-      "Choice labels and text preserved with light formatting normalization only."
+      "Question explicitly depends on interpreting the graph of $f'$.",
+      "Applied forced image requirement.",
+      "Normalized answer formatting by removing trailing punctuation."
     ],
     "llm_used": true,
-    "created_at": "2026-03-27T03:49:13Z"
+    "created_at": "2026-03-29T04:28:35Z"
   },
   "candidate_problem_record": {
     "candidate_id": "cand_90d45a1806756f769f311ab0",
@@ -141,20 +141,19 @@
     "source_problem_id": "4",
     "subject": "数学、物理、生物、化学",
     "raw_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Which of the following statements is true?",
-    "raw_answer_text": "3",
+    "raw_answer_text": "$f$ is increasing from $x = -3$ to $x = -1$.",
     "has_image": true,
     "image_count": 1,
     "requires_image": true,
     "text_dominant": false,
     "recommended_cleaning_path": "multimodal_full",
-    "initial_image_dependency_score": 0.97,
-    "initial_multi_solution_score": 0.67,
-    "initial_verifiability_score": 0.78,
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.89,
     "multi_solution_mining_policy": "conservative",
     "should_push_multi_solution_agent": false,
     "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
     "metadata": {
-      "row_index": 4,
       "image_paths": [],
       "extraction_notes": [
         "answer field is numeric '3' and the record does not explicitly specify whether choice indexing is 0-based, 1-based, or letter-based, so the original answer value was preserved",
@@ -166,19 +165,18 @@
       "image_field": "image",
       "choice_field": "choices"
     },
-    "created_at": "2026-03-27T04:12:22Z",
+    "created_at": "2026-03-29T04:30:08Z",
     "asset_registry_passed": true,
-    "collection_priority_score": 0.64,
+    "collection_priority_score": 0.48,
     "collection_decision": "low_priority",
     "collection_decision_reasons": [
-      "asset registry passed with image, question, and answer all present",
-      "image dependency is very high (0.97), indicating the sample is meaningfully visual",
-      "multi-step score (0.67) and verifiability score (0.78) are solid but not exceptional",
-      "there is an explicit risk flag: answer_format_ambiguity_numeric_vs_choice_labels",
-      "because the assets are complete but the answer representation may be ambiguous, this is better placed in low_priority rather than keep"
+      "Question, answer, and primary image are all present, so the sample retains recoverable core semantics and should stay in the candidate pool.",
+      "The task is highly image-dependent, and the graph image is small (318x197), creating a meaningful risk that graph details are resolution-sensitive.",
+      "Initial scoring shows good verifiability and moderate reasoning value, but the image-quality risk makes it better suited for lower-priority follow-up than immediate keep."
     ],
     "collection_risk_flags": [
-      "answer_format_ambiguity_numeric_vs_choice_labels"
+      "graph_reading_may_be_resolution_sensitive",
+      "small_image_resolution"
     ]
   },
   "raw_asset_bundle": {
@@ -212,42 +210,40 @@
       "has_multiple_images": false
     },
     "initial_scores": {
-      "initial_image_dependency_score": 0.97,
-      "initial_multi_solution_score": 0.67,
-      "initial_verifiability_score": 0.78
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.89
     },
-    "created_at": "2026-03-27T04:12:22Z",
+    "created_at": "2026-03-29T04:30:08Z",
     "asset_registry_passed": true,
     "asset_registry_issues": []
   },
   "candidate_pool_entry": {
-    "candidate_pool_entry_id": "cpool_1018d0a879b70db9e1b138d1",
+    "candidate_pool_entry_id": "cpool_62235b76ecba31cbbf44df86",
     "candidate_id": "cand_90d45a1806756f769f311ab0",
     "source_dataset": "SCEMQA",
     "source_problem_id": "4",
     "candidate_status": "ready_for_cleaning",
-    "priority_score": 0.64,
+    "priority_score": 0.48,
     "priority_tier": "normal",
     "recommended_cleaning_path": "multimodal_full",
     "multi_solution_mining_policy": "conservative",
     "initial_scores": {
-      "initial_image_dependency_score": 0.97,
-      "initial_multi_solution_score": 0.67,
-      "initial_verifiability_score": 0.78
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.89
     },
-    "created_at": "2026-03-27T04:12:22Z",
+    "created_at": "2026-03-29T04:30:08Z",
     "registration_decision": "low_priority",
     "registration_decision_reasons": [
-      "asset registry passed with image, question, and answer all present",
-      "image dependency is very high (0.97), indicating the sample is meaningfully visual",
-      "multi-step score (0.67) and verifiability score (0.78) are solid but not exceptional",
-      "there is an explicit risk flag: answer_format_ambiguity_numeric_vs_choice_labels",
-      "because the assets are complete but the answer representation may be ambiguous, this is better placed in low_priority rather than keep"
+      "Question, answer, and primary image are all present, so the sample retains recoverable core semantics and should stay in the candidate pool.",
+      "The task is highly image-dependent, and the graph image is small (318x197), creating a meaningful risk that graph details are resolution-sensitive.",
+      "Initial scoring shows good verifiability and moderate reasoning value, but the image-quality risk makes it better suited for lower-priority follow-up than immediate keep."
     ]
   },
   "clean_pool_entries": [
     {
-      "clean_pool_entry_id": "cleanpool_c5ffc1f4c623f837d134b88b",
+      "clean_pool_entry_id": "cleanpool_f80b25f565d2ea78162bd807",
       "candidate_id": "cand_90d45a1806756f769f311ab0",
       "problem_id": "prob_90d45a1806756f769f311ab0",
       "dataset_name": "SCEMQA",
@@ -258,16 +254,16 @@
       "open_variant_count": 1,
       "text_dominant": false,
       "cleaning_path": "multimodal_full",
-      "created_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z"
     }
   ],
   "clean_problem_record": {
-    "clean_problem_record_id": "cleanprob_c5ffc1f4c623f837d134b88b",
+    "clean_problem_record_id": "cleanprob_f80b25f565d2ea78162bd807",
     "problem_id": "prob_90d45a1806756f769f311ab0",
     "source_dataset": "SCEMQA",
     "source_problem_id": "4",
     "normalized_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Which of the following statements is true?",
-    "normalized_answer_text": "3",
+    "normalized_answer_text": "$f$ is increasing from $x = -3$ to $x = -1$",
     "image_count": 1,
     "has_multiple_images": false,
     "requires_image": true,
@@ -281,17 +277,17 @@
     "clean_decision": "pass",
     "decision_reason_codes": [
       "alignment_good",
-      "jointly_understandable",
+      "answer_available",
       "rewrite_usable",
-      "solvable"
+      "semantically_usable"
     ],
-    "created_at": "2026-03-27T04:12:22Z"
+    "created_at": "2026-03-29T04:30:08Z"
   },
   "normalized_assets": {
-    "normalized_assets_id": "nassets_c5ffc1f4c623f837d134b88b",
+    "normalized_assets_id": "nassets_f80b25f565d2ea78162bd807",
     "problem_id": "prob_90d45a1806756f769f311ab0",
     "normalized_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Which of the following statements is true?",
-    "normalized_answer_text": "3",
+    "normalized_answer_text": "$f$ is increasing from $x = -3$ to $x = -1$",
     "question_unit_normalization_map": [],
     "answer_unit_normalization_map": [],
     "variable_aliases": [
@@ -352,11 +348,11 @@
     ],
     "text_dominant": false,
     "cleaning_path": "multimodal_full",
-    "created_at": "2026-03-27T04:12:22Z",
+    "created_at": "2026-03-29T04:30:08Z",
     "normalization_notes": [
-      "Question explicitly depends on the shown graph of $f'$.",
-      "Answer retained as provided; numeric answer text was not remapped to a letter choice.",
-      "Choice labels and text preserved with light formatting normalization only."
+      "Question explicitly depends on interpreting the graph of $f'$.",
+      "Applied forced image requirement.",
+      "Normalized answer formatting by removing trailing punctuation."
     ],
     "normalization_llm_used": true
   },
@@ -365,7 +361,7 @@
     "source_dataset": "SCEMQA",
     "source_split": "test",
     "source_problem_id": "4",
-    "ingest_batch_id": "benchmarkallinone-scemqa-parallel-20_20260327T033756Z",
+    "ingest_batch_id": "benchmarkallinone-scemqa-parallel-20_20260329T042510Z",
     "problem_type": "multimodal_reasoning",
     "domain_tags": [
       "数学、物理、生物、化学"
@@ -373,27 +369,25 @@
     "language": "en",
     "raw_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Which of the following statements is true?",
     "normalized_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Which of the following statements is true?",
-    "raw_answer_text": "3",
-    "normalized_answer_text": "3",
-    "answer_type": "numeric",
+    "raw_answer_text": "$f$ is increasing from $x = -3$ to $x = -1$.",
+    "normalized_answer_text": "$f$ is increasing from $x = -3$ to $x = -1$",
+    "answer_type": "text",
     "image_count": 1,
     "has_multiple_images": false,
     "requires_image": true,
     "multimodal_strength_score": 0.9707,
     "multi_step_score": 0.3467,
-    "verifiability_score": 1.0,
-    "quality_risk_flags": [
-      "answer_option_encoded_numerically"
-    ],
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [],
     "current_status": "clean_passed",
     "clean_decision": "pass",
     "clean_decision_reason_codes": [
       "alignment_good",
-      "jointly_understandable",
+      "answer_available",
       "rewrite_usable",
-      "solvable"
+      "semantically_usable"
     ],
-    "clean_decision_rationale": "The sample is semantically usable: the graph of f' is present and legible enough, the question is complete, the answer signal is recoverable through the rewrite, and alignment/solvability reports show no serious failure.",
+    "clean_decision_rationale": "The sample is complete and understandable, the graph-based answer is materially supported, the open-ended rewrite is usable, and alignment/solvability indicate no serious issues.",
     "review_priority": "normal",
     "annotation_ready": true,
     "qa_precheck_ready": true,
@@ -410,20 +404,18 @@
     "agent_image_support_status": "clear_enough",
     "agent_joint_understanding_status": "understandable",
     "agent_decision_source": "llm",
-    "created_at": "2026-03-27T03:49:13Z",
-    "updated_at": "2026-03-27T04:12:22Z",
-    "initial_image_dependency_score": 0.97,
-    "initial_multi_solution_score": 0.67,
-    "initial_verifiability_score": 0.78,
+    "created_at": "2026-03-29T04:28:35Z",
+    "updated_at": "2026-03-29T04:30:08Z",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.89,
     "multi_solution_mining_policy": "conservative",
-    "collection_priority_score": 0.64,
+    "collection_priority_score": 0.48,
     "collection_decision": "low_priority",
     "collection_decision_reasons": [
-      "asset registry passed with image, question, and answer all present",
-      "image dependency is very high (0.97), indicating the sample is meaningfully visual",
-      "multi-step score (0.67) and verifiability score (0.78) are solid but not exceptional",
-      "there is an explicit risk flag: answer_format_ambiguity_numeric_vs_choice_labels",
-      "because the assets are complete but the answer representation may be ambiguous, this is better placed in low_priority rather than keep"
+      "Question, answer, and primary image are all present, so the sample retains recoverable core semantics and should stay in the candidate pool.",
+      "The task is highly image-dependent, and the graph image is small (318x197), creating a meaningful risk that graph details are resolution-sensitive.",
+      "Initial scoring shows good verifiability and moderate reasoning value, but the image-quality risk makes it better suited for lower-priority follow-up than immediate keep."
     ]
   },
   "asset_records": [
@@ -484,8 +476,8 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "asset_id": "asset_4d96c0e32ed6be6a4d3a6baa",
@@ -544,8 +536,8 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "asset_id": "asset_57c1b77073f4d8e7138a3e54",
@@ -555,12 +547,12 @@
       "source_uri": "source://scemqa/test/4/answer",
       "storage_uri": "inline://prob_90d45a1806756f769f311ab0/answer_raw",
       "file_format": "txt",
-      "file_size_bytes": 1,
+      "file_size_bytes": 44,
       "width": null,
       "height": null,
-      "sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "sha256": "3c0e09b5482da58ff5efc357615ab4b6526332b9bd4eb064c40687925ff9f068",
       "perceptual_hash": null,
-      "source_text_snapshot": "3",
+      "source_text_snapshot": "$f$ is increasing from $x = -3$ to $x = -1$.",
       "normalized_text_snapshot": null,
       "text_completeness_score": 1.0,
       "blur_score": null,
@@ -569,12 +561,38 @@
       "cropped_from_asset_id": null,
       "roi_bbox": null,
       "unit_normalization_map": [],
-      "variable_aliases": [],
+      "variable_aliases": [
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        }
+      ],
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "asset_id": "asset_201bf19c5559c394321577f6",
@@ -584,13 +602,13 @@
       "source_uri": null,
       "storage_uri": "inline://prob_90d45a1806756f769f311ab0/answer_normalized",
       "file_format": "txt",
-      "file_size_bytes": 1,
+      "file_size_bytes": 43,
       "width": null,
       "height": null,
-      "sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "sha256": "47f1c04062745098a9df78ddb93d80b54857227d2f419ac2b38f04a7c9e3bb6e",
       "perceptual_hash": null,
-      "source_text_snapshot": "3",
-      "normalized_text_snapshot": "3",
+      "source_text_snapshot": "$f$ is increasing from $x = -3$ to $x = -1$.",
+      "normalized_text_snapshot": "$f$ is increasing from $x = -3$ to $x = -1$",
       "text_completeness_score": 1.0,
       "blur_score": null,
       "readability_score": null,
@@ -598,12 +616,38 @@
       "cropped_from_asset_id": null,
       "roi_bbox": null,
       "unit_normalization_map": [],
-      "variable_aliases": [],
+      "variable_aliases": [
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        }
+      ],
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "asset_id": "asset_5df47a6cf20fabfb17d788a0",
@@ -633,13 +677,11 @@
       },
       "unit_normalization_map": [],
       "variable_aliases": [],
-      "asset_quality_flags": [
-        "answer_option_encoded_numerically"
-      ],
+      "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "asset_id": "asset_a5173bdaf1eb0dbc70d0ce2a",
@@ -670,8 +712,8 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "asset_id": "asset_b23a2187968fbec60dc45c7d",
@@ -681,13 +723,13 @@
       "source_uri": null,
       "storage_uri": "inline://open_d998162c1fdd43dff6d28f27",
       "file_format": "txt",
-      "file_size_bytes": 120,
+      "file_size_bytes": 114,
       "width": null,
       "height": null,
-      "sha256": "7c50470a7489b02693da1266b8ac1c5528714b39214bbf1cb7ac7f14d1511c25",
+      "sha256": "37537153703b458314ff245f059dc4037c32fadb63bf3a84def35e8e10cf7778",
       "perceptual_hash": null,
       "source_text_snapshot": "Shown is a graph of $f'$, the derivative of function $f$. Which of the following statements is true?",
-      "normalized_text_snapshot": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, what true statement can be made about $f$?",
+      "normalized_text_snapshot": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, state the true conclusion about $f$.",
       "text_completeness_score": 0.6393,
       "blur_score": null,
       "readability_score": null,
@@ -730,8 +772,8 @@
       "asset_quality_flags": [],
       "is_usable": true,
       "discard_reason_codes": [],
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     }
   ],
   "text_structure_records": [
@@ -775,9 +817,9 @@
           "variant_index": 1,
           "split_role": "single",
           "slot_type": "text",
-          "target_text": "Based on the graph, what true statement can be made about $f$?",
+          "target_text": "Based on the graph, state the true conclusion about $f$.",
           "expected_answer_type": "text",
-          "expected_answer": "$f$ is increasing from $x = 1$ to $x = 3$.",
+          "expected_answer": "$f$ is increasing from $x = -3$ to $x = -1$",
           "requires_visual_grounding": true
         }
       ],
@@ -840,7 +882,7 @@
       "requires_visual_grounding": true,
       "text_structure_status": "complete",
       "parser_confidence": 0.92,
-      "created_at": "2026-03-27T03:50:19Z"
+      "created_at": "2026-03-29T04:29:53Z"
     }
   ],
   "visual_structure_records": [
@@ -930,7 +972,7 @@
         }
       ],
       "parser_confidence": 0.865,
-      "created_at": "2026-03-27T03:50:19Z"
+      "created_at": "2026-03-29T04:29:53Z"
     }
   ],
   "solvability_reports": [
@@ -954,7 +996,7 @@
       },
       "solvability_score": 1.0,
       "decision_hint": "pass",
-      "created_at": "2026-03-27T03:50:47Z"
+      "created_at": "2026-03-29T04:30:02Z"
     }
   ],
   "node_records": [
@@ -998,16 +1040,16 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_b1325923480ab31d2c0f41dc",
       "problem_id": "prob_90d45a1806756f769f311ab0",
       "node_type": "target_slot",
-      "canonical_value": "Based on the graph, what true statement can be made about $f$?",
+      "canonical_value": "Based on the graph, state the true conclusion about $f$.",
       "surface_forms": [
-        "Based on the graph, what true statement can be made about $f$?"
+        "Based on the graph, state the true conclusion about $f$."
       ],
       "origin_kind": "text_structure",
       "cognitive_level": "computed",
@@ -1024,9 +1066,9 @@
         "variant_index": 1,
         "split_role": "single",
         "slot_type": "text",
-        "target_text": "Based on the graph, what true statement can be made about $f$?",
+        "target_text": "Based on the graph, state the true conclusion about $f$.",
         "expected_answer_type": "text",
-        "expected_answer": "$f$ is increasing from $x = 1$ to $x = 3$.",
+        "expected_answer": "$f$ is increasing from $x = -3$ to $x = -1$",
         "requires_visual_grounding": true
       },
       "unit": null,
@@ -1039,16 +1081,16 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_28f213fea0ee20fde9ddf8c2",
       "problem_id": "prob_90d45a1806756f769f311ab0",
       "node_type": "answer_claim",
-      "canonical_value": "3",
+      "canonical_value": "$f$ is increasing from $x = -3$ to $x = -1$",
       "surface_forms": [
-        "3"
+        "$f$ is increasing from $x = -3$ to $x = -1$"
       ],
       "origin_kind": "text",
       "cognitive_level": "objective",
@@ -1059,9 +1101,9 @@
         "asset_201bf19c5559c394321577f6"
       ],
       "upstream_node_ids": [],
-      "value_type": "numeric",
+      "value_type": "text",
       "normalized_value": {
-        "answer": "3"
+        "answer": "$f$ is increasing from $x = -3$ to $x = -1$"
       },
       "unit": null,
       "confidence": 0.98,
@@ -1073,8 +1115,8 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_12f356e3087d27c194c6970c",
@@ -1115,8 +1157,8 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_b5cb91ee8f182c7eefd36679",
@@ -1157,8 +1199,8 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_c253ff935f16d991584d2e23",
@@ -1199,8 +1241,8 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_c871a591201907447c8bd8cc",
@@ -1241,16 +1283,16 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_8d4914844619f8d5230b91e7",
       "problem_id": "prob_90d45a1806756f769f311ab0",
       "node_type": "text_fact",
-      "canonical_value": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, what true statement can be made about $f$?",
+      "canonical_value": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, state the true conclusion about $f$.",
       "surface_forms": [
-        "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, what true statement can be made about $f$?"
+        "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, state the true conclusion about $f$."
       ],
       "origin_kind": "reasoning",
       "cognitive_level": "computed",
@@ -1267,9 +1309,9 @@
         "parent_problem_id": "prob_90d45a1806756f769f311ab0",
         "variant_index": 1,
         "title": "SCEMQA 开放题",
-        "rewritten_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, what true statement can be made about $f$?",
+        "rewritten_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, state the true conclusion about $f$.",
         "expected_answer_type": "text",
-        "expected_answer": "$f$ is increasing from $x = 1$ to $x = 3$.",
+        "expected_answer": "$f$ is increasing from $x = -3$ to $x = -1$",
         "split_role": "single"
       },
       "unit": null,
@@ -1282,38 +1324,8 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
-    },
-    {
-      "node_id": "node_9553f473e4f7e50911e4ac64",
-      "problem_id": "prob_90d45a1806756f769f311ab0",
-      "node_type": "quality_signal",
-      "canonical_value": "answer_option_encoded_numerically",
-      "surface_forms": [
-        "answer_option_encoded_numerically"
-      ],
-      "origin_kind": "system_quality",
-      "cognitive_level": "computed",
-      "source_refs": [],
-      "evidence_refs": [],
-      "upstream_node_ids": [],
-      "value_type": "text",
-      "normalized_value": {
-        "flag": "answer_option_encoded_numerically"
-      },
-      "unit": null,
-      "confidence": 1.0,
-      "verifiability": "high",
-      "ambiguity_level": "none",
-      "is_direct_from_source": false,
-      "is_generated_by_system": true,
-      "is_reviewed_by_human": false,
-      "stage_created": "cleaning",
-      "status": "active",
-      "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_020b0b04a28726a32d55deae",
@@ -1349,7 +1361,7 @@
         },
         "solvability_score": 1.0,
         "decision_hint": "pass",
-        "created_at": "2026-03-27T03:50:47Z"
+        "created_at": "2026-03-29T04:30:02Z"
       },
       "unit": null,
       "confidence": 1.0,
@@ -1361,8 +1373,8 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     },
     {
       "node_id": "node_afd7303be92f7780836c8d00",
@@ -1382,9 +1394,9 @@
         "decision": "pass",
         "reasons": [
           "alignment_good",
-          "jointly_understandable",
+          "answer_available",
           "rewrite_usable",
-          "solvable"
+          "semantically_usable"
         ]
       },
       "unit": null,
@@ -1397,16 +1409,16 @@
       "stage_created": "cleaning",
       "status": "active",
       "version": 1,
-      "created_at": "2026-03-27T04:12:22Z",
-      "updated_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z",
+      "updated_at": "2026-03-29T04:30:08Z"
     }
   ],
   "cleaning_records": [
     {
-      "cleaning_id": "clean_c5ffc1f4c623f837d134b88b",
+      "cleaning_id": "clean_f80b25f565d2ea78162bd807",
       "problem_id": "prob_90d45a1806756f769f311ab0",
       "cleaning_version": "v3.1.0",
-      "pipeline_run_id": "run_d7cb02b6b5b0be0a",
+      "pipeline_run_id": "run_13d28b53b95d21c5",
       "dataset_name": "SCEMQA",
       "input_asset_ids": [
         "asset_656367ada76250e12f7cf5f0",
@@ -1454,7 +1466,7 @@
         {
           "action_type": "sample_understood",
           "trigger": "SampleUnderstandingAgent",
-          "confidence": 0.91,
+          "confidence": 0.97,
           "human_confirmed": false
         },
         {
@@ -1488,7 +1500,7 @@
         }
       ],
       "alignment_summary": {
-        "alignment_id": "align_c5ffc1f4c623f837d134b88b",
+        "alignment_id": "align_f80b25f565d2ea78162bd807",
         "coverage_score": 0.9,
         "consistency_score": 0.98,
         "alignment_status": "good",
@@ -1519,12 +1531,11 @@
         "image_support_status": "clear_enough",
         "joint_understanding_status": "understandable",
         "reason_codes": [
-          "graph_semantics_legible",
-          "image_required_and_present",
-          "jointly_understandable",
-          "question_text_clear"
+          "answer_choice_supported",
+          "graph_semantics_clear",
+          "image_required_and_available"
         ],
-        "rationale": "The prompt clearly asks the reviewer to use the graph of f' to choose the true statement. The graph is legible enough to interpret sign changes and intervals, so the image provides usable evidence. Although the stored answer is numeric while the choices are lettered, the task itself is still understandable.",
+        "rationale": "The question and choices are complete, and the graph of f' is clear enough to determine where f' is positive or negative. This makes it understandable that the true statement is that f is increasing from x = -3 to x = -1.",
         "llm_used": true
       },
       "missing_field_summary": {
@@ -1532,22 +1543,20 @@
         "missing_answer_text": false,
         "missing_image_count": 0
       },
-      "risk_flags": [
-        "answer_option_encoded_numerically"
-      ],
+      "risk_flags": [],
       "clean_score": 1.0,
       "decision": "pass",
       "decision_reason_codes": [
         "alignment_good",
-        "jointly_understandable",
+        "answer_available",
         "rewrite_usable",
-        "solvable"
+        "semantically_usable"
       ],
-      "decision_rationale": "The sample is semantically usable: the graph of f' is present and legible enough, the question is complete, the answer signal is recoverable through the rewrite, and alignment/solvability reports show no serious failure.",
+      "decision_rationale": "The sample is complete and understandable, the graph-based answer is materially supported, the open-ended rewrite is usable, and alignment/solvability indicate no serious issues.",
       "review_ticket_id": null,
       "operator_type": "system",
-      "started_at": "2026-03-27T04:12:22Z",
-      "finished_at": "2026-03-27T04:12:22Z",
+      "started_at": "2026-03-29T04:30:08Z",
+      "finished_at": "2026-03-29T04:30:08Z",
       "candidate_id": "cand_90d45a1806756f769f311ab0",
       "cleaning_path": "multimodal_full",
       "text_dominant": false
@@ -1556,7 +1565,7 @@
   "reject_records": [],
   "alignment_records": [
     {
-      "alignment_id": "align_c5ffc1f4c623f837d134b88b",
+      "alignment_id": "align_f80b25f565d2ea78162bd807",
       "problem_id": "prob_90d45a1806756f769f311ab0",
       "image_entity_refs": [
         "visual_prob_90d45a1806756f769f311ab0_1::roi",
@@ -1584,7 +1593,7 @@
       "coverage_score": 0.9,
       "consistency_score": 0.98,
       "alignment_status": "good",
-      "created_at": "2026-03-27T03:50:19Z",
+      "created_at": "2026-03-29T04:29:53Z",
       "cleaning_path": "multimodal_full",
       "text_dominant": false
     }
@@ -1600,19 +1609,19 @@
       "change_type": "text_normalized",
       "trigger": "NormalizationAgent",
       "operator_type": "system",
-      "created_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z"
     },
     {
       "audit_id": "audit_d168247b9759e10ce4a65922",
       "problem_id": "prob_90d45a1806756f769f311ab0",
       "record_type": "problem_main_record",
       "field_name": "normalized_answer_text",
-      "before_value": "3",
-      "after_value": "3",
+      "before_value": "$f$ is increasing from $x = -3$ to $x = -1$.",
+      "after_value": "$f$ is increasing from $x = -3$ to $x = -1$",
       "change_type": "answer_canonicalized",
       "trigger": "NormalizationAgent",
       "operator_type": "system",
-      "created_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z"
     },
     {
       "audit_id": "audit_38d8af653c1b34cffb563ad8",
@@ -1624,7 +1633,7 @@
       "change_type": "question_rewritten",
       "trigger": "QuestionRewriteAgent",
       "operator_type": "system",
-      "created_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z"
     },
     {
       "audit_id": "audit_afd7303be92f7780836c8d00",
@@ -1636,7 +1645,7 @@
       "change_type": "gate_decision",
       "trigger": "CleanGateAgent",
       "operator_type": "system",
-      "created_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z"
     },
     {
       "audit_id": "audit_e733a333a8732136a8f71cd3",
@@ -1679,16 +1688,16 @@
       "change_type": "variable_canonicalized",
       "trigger": "NormalizationAgent",
       "operator_type": "system",
-      "created_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z"
     }
   ],
   "rewrite_reports": [
     {
-      "rewrite_id": "rewrite_c5ffc1f4c623f837d134b88b",
+      "rewrite_id": "rewrite_f80b25f565d2ea78162bd807",
       "problem_id": "prob_90d45a1806756f769f311ab0",
       "source_problem_id": "4",
       "strategy": "blank_open",
-      "rationale": "The numeric key \"3\" is interpreted as the third choice, so the multiple-choice prompt is rewritten as a direct open-ended question asking for the true statement.",
+      "rationale": "Converted the multiple-choice prompt into an open-ended question while preserving the original graph-based meaning.",
       "discard_reason_codes": [],
       "variant_count": 1,
       "variants": [
@@ -1697,13 +1706,13 @@
           "parent_problem_id": "prob_90d45a1806756f769f311ab0",
           "variant_index": 1,
           "title": "SCEMQA 开放题",
-          "rewritten_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, what true statement can be made about $f$?",
+          "rewritten_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, state the true conclusion about $f$.",
           "expected_answer_type": "text",
-          "expected_answer": "$f$ is increasing from $x = 1$ to $x = 3$.",
+          "expected_answer": "$f$ is increasing from $x = -3$ to $x = -1$",
           "split_role": "single"
         }
       ],
-      "created_at": "2026-03-27T04:12:22Z"
+      "created_at": "2026-03-29T04:30:08Z"
     }
   ],
   "open_ended_problem_variants": [
@@ -1712,9 +1721,9 @@
       "parent_problem_id": "prob_90d45a1806756f769f311ab0",
       "variant_index": 1,
       "title": "SCEMQA 开放题",
-      "rewritten_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, what true statement can be made about $f$?",
+      "rewritten_question_text": "Shown is a graph of $f'$, the derivative of function $f$. Based on the graph, state the true conclusion about $f$.",
       "expected_answer_type": "text",
-      "expected_answer": "$f$ is increasing from $x = 1$ to $x = 3$.",
+      "expected_answer": "$f$ is increasing from $x = -3$ to $x = -1$",
       "split_role": "single"
     }
   ]

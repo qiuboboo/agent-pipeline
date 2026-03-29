@@ -118,6 +118,15 @@ def normalize_whitespace(text: str) -> str:
     return text.strip()
 
 
+def canonicalize_answer_text(text: Any) -> str:
+    value = normalize_whitespace(to_plain_text(text))
+    if not value:
+        return ""
+    value = re.sub(r"[。．\.,，；;:：!?！？]+$", "", value)
+    value = re.sub(r"\s+", "", value)
+    return value.casefold()
+
+
 NULL_LIKE_STRINGS = {"null", "none", "nan", "n/a", "na", "[]", "{}"}
 
 
@@ -1053,9 +1062,42 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
                     if mapped_answer:
                         return mapped_answer
     mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.IGNORECASE)
-    if mixed_match:
-        answer = mixed_match.group(2).strip()
+    if mixed_match and choice_map:
+        label = mixed_match.group(1).upper()
+        suffix = normalize_whitespace(mixed_match.group(2))
+        choice_text = normalize_whitespace(choice_map.get(label, ""))
+        if choice_text and (suffix == choice_text or suffix.casefold() == choice_text.casefold()):
+            return choice_text
     return normalize_whitespace(answer)
+
+
+def rewrite_answer_consistency_flags(normalized_answer_text: str, rewrite_report: Dict[str, Any], open_variants: Sequence[Dict[str, Any]]) -> List[str]:
+    strategy = to_plain_text(rewrite_report.get("strategy")).strip().lower()
+    if strategy not in {"blank_open", "keep_open"}:
+        return []
+    if len(open_variants) != 1:
+        return []
+    variant = open_variants[0] if isinstance(open_variants[0], dict) else {}
+    expected_answer = to_plain_text(variant.get("expected_answer"))
+    if canonicalize_answer_text(expected_answer) == canonicalize_answer_text(normalized_answer_text):
+        return []
+    return ["rewrite_expected_answer_mismatch", "answer_annotation_inconsistent", "gold_answer_mismatch"]
+
+
+def rewrite_question_residual_flags(rewrite_report: Dict[str, Any], open_variants: Sequence[Dict[str, Any]]) -> List[str]:
+    strategy = to_plain_text(rewrite_report.get("strategy")).strip().lower()
+    if strategy not in {"blank_open", "keep_open"}:
+        return []
+    if len(open_variants) != 1:
+        return []
+    variant = open_variants[0] if isinstance(open_variants[0], dict) else {}
+    rewritten_question = to_plain_text(variant.get("rewritten_question_text"))
+    if not rewritten_question:
+        return ["rewrite_missing_question_text"]
+    if re.search(r"\b(which of the following|following statements?|following intervals?|which statement|which option|among the following)\b", rewritten_question, flags=re.IGNORECASE):
+        return ["rewrite_mcq_residual"]
+    return []
+
 
 class LocalFileConnector(BaseConnector):
     def iter_records(self, path: Path) -> Iterable[Dict[str, Any]]:
@@ -1573,8 +1615,12 @@ class GitHubConnector(BaseConnector):
             if path.stat().st_size > 0:
                 score += 1
             if self.spec.key == "geometry3k":
+                if re.search(r"data/geometry3k/(train|test|val)\.zip$", rel):
+                    score += 40
                 if re.search(r"annotation_tool/data_collection/data_examples/\d+/data\.json$", rel):
                     score += 30
+                if re.search(r"diagram_parser/detection/.*\.csv$", rel):
+                    score -= 50
                 if rel.endswith("logic_form.json"):
                     score -= 10
             scored.append((score, path))
@@ -1681,10 +1727,122 @@ class GitHubConnector(BaseConnector):
                 return images, sources
         return images, sources
 
+    def sample_from_geometry3k_zip(self, repo_dir: Path) -> Tuple[str, List[UnifiedSample], Optional[str]]:
+        import zipfile
+
+        preferred_split = (self.spec.split or "test").strip().lower()
+        preferred_split = {"valid": "val", "validation": "val"}.get(preferred_split, preferred_split)
+        candidate_specs: List[Tuple[str, Path]] = []
+        if preferred_split in {"train", "test", "val"}:
+            candidate_specs.append((preferred_split, repo_dir / "data" / "geometry3k" / f"{preferred_split}.zip"))
+        for split_name in ["test", "val", "train"]:
+            candidate = (split_name, repo_dir / "data" / "geometry3k" / f"{split_name}.zip")
+            if candidate not in candidate_specs:
+                candidate_specs.append(candidate)
+
+        chosen_split: Optional[str] = None
+        zip_path: Optional[Path] = None
+        for split_name, candidate_path in candidate_specs:
+            if candidate_path.exists():
+                chosen_split = split_name
+                zip_path = candidate_path
+                break
+        if zip_path is None or chosen_split is None:
+            return "source_unavailable", [], "No Geometry3K split zip found under data/geometry3k"
+
+        samples: List[UnifiedSample] = []
+        with zipfile.ZipFile(zip_path) as zf:
+            problem_members = sorted(
+                name for name in zf.namelist() if name.startswith(f"{chosen_split}/") and name.endswith("/data.json")
+            )
+            if not problem_members:
+                return "source_unavailable", [], f"No data.json entries found in {zip_path.name}"
+            for index, member in enumerate(problem_members):
+                try:
+                    data = json.loads(zf.read(member).decode("utf-8"))
+                except Exception:
+                    continue
+                if not isinstance(data, dict):
+                    continue
+                problem_dir = str(Path(member).parent).replace("\\", "/")
+                question_text = normalize_whitespace(
+                    to_plain_text(
+                        data.get("annotat_text")
+                        or data.get("compact_text")
+                        or data.get("problem_text")
+                        or data.get("question")
+                    )
+                )
+                choice_source = data.get("choices") or data.get("compact_choices")
+                choice_map = parse_choice_map(choice_source)
+                raw_answer = resolve_multiple_choice_answer_text(
+                    to_plain_text(data.get("answer") or data.get("label") or data.get("solution")),
+                    choice_map,
+                    self.spec.answer_index_base,
+                )
+                images: List[Image.Image] = []
+                image_sources: List[str] = []
+                for candidate_name in ["img_diagram.png", "img_problem.png"]:
+                    image_member = f"{problem_dir}/{candidate_name}"
+                    if image_member not in zf.namelist():
+                        continue
+                    try:
+                        images.append(Image.open(io.BytesIO(zf.read(image_member))).convert("RGB"))
+                        image_sources.append(image_member)
+                    except Exception:
+                        continue
+                if not question_text and not images:
+                    continue
+                question_field = "annotat_text" if data.get("annotat_text") else "compact_text" if data.get("compact_text") else "problem_text" if data.get("problem_text") else "question"
+                answer_field = "answer" if data.get("answer") is not None else "label" if data.get("label") is not None else "solution"
+                choice_field = "choices" if data.get("choices") is not None else "compact_choices" if data.get("compact_choices") is not None else None
+                samples.append(
+                    UnifiedSample(
+                        dataset_key=self.spec.key,
+                        dataset_display_name=self.spec.display_name,
+                        subject=self.spec.subject,
+                        source_dataset=self.spec.display_name,
+                        source_split=chosen_split,
+                        source_problem_id=str(data.get("id", Path(problem_dir).name)),
+                        raw_question_text=question_text,
+                        raw_answer_text=raw_answer,
+                        images=images,
+                        image_sources=image_sources,
+                        raw_record=data,
+                        metadata={
+                            "row_index": index,
+                            "data_file": f"{zip_path.relative_to(repo_dir)}::{member}",
+                            "image_paths": image_sources,
+                            "extraction_notes": ["geometry3k_zip_extraction"],
+                            "question_field": question_field,
+                            "answer_field": answer_field,
+                            "image_field": "zip_members",
+                            "choice_field": choice_field,
+                        },
+                        choice_map=choice_map,
+                        force_requires_image=True,
+                    )
+                )
+                if self.config.sample_strategy != "random" and len(samples) >= self.config.sample_per_dataset:
+                    break
+        if not samples:
+            return "source_unavailable", [], f"No usable Geometry3K samples extracted from {zip_path.name}"
+        if self.config.sample_strategy == "random":
+            rng = np.random.default_rng(self.config.shuffle_seed)
+            indices = rng.permutation(len(samples)).tolist()[: self.config.sample_per_dataset]
+            samples = [samples[i] for i in indices]
+        else:
+            samples = samples[: self.config.sample_per_dataset]
+        return "available", samples, chosen_split
+
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         repo_dir, error = self.ensure_repo()
         if repo_dir is None:
             return "source_unavailable", [], error or "git clone failed"
+        if self.spec.key == "geometry3k":
+            source_status, samples, detail = self.sample_from_geometry3k_zip(repo_dir)
+            if source_status == "available" and samples:
+                return source_status, samples, detail
         files = self.discover_data_files(repo_dir)
         if not files:
             return "source_unavailable", [], "No structured data files discovered in repository"
@@ -1872,6 +2030,7 @@ class AssetRegistryAgent(BaseStructuredAgent):
         image_qualities: Sequence[Dict[str, Any]],
         metadata: Dict[str, Any],
         requires_image: bool,
+        choice_count: int,
     ) -> Dict[str, Any]:
         image_manifest: List[Dict[str, Any]] = []
         image_total = max(len(image_sources), len(image_qualities))
@@ -1908,6 +2067,15 @@ class AssetRegistryAgent(BaseStructuredAgent):
         has_image = any(item.get("exists") for item in image_manifest)
         if requires_image and not has_image:
             issues.append("missing_required_image")
+        choice_required = bool(
+            re.search(
+                r"\b(which of the following|following statements?|following intervals?|which statement|which option|choices?)\b",
+                question_text,
+                flags=re.IGNORECASE,
+            )
+        )
+        if choice_required and choice_count <= 0:
+            issues.append("missing_choice_map")
         fallback = {
             "problem_id": problem_id,
             "image_manifest": image_manifest,
@@ -1922,7 +2090,7 @@ class AssetRegistryAgent(BaseStructuredAgent):
                 "answer_char_length": len(answer_text),
             },
             "issues": sorted(set(issues)),
-            "registry_passed": bool(question_text) and bool(answer_text) and (has_image or not requires_image),
+            "registry_passed": bool(question_text) and bool(answer_text) and (has_image or not requires_image) and (not choice_required or choice_count > 0),
             "llm_used": False,
         }
         return fallback
@@ -1936,8 +2104,9 @@ class AssetRegistryAgent(BaseStructuredAgent):
         image_qualities: Sequence[Dict[str, Any]],
         metadata: Dict[str, Any],
         requires_image: bool,
+        choice_count: int,
     ) -> Dict[str, Any]:
-        fallback = self.fallback_process(problem_id, question_text, answer_text, image_sources, image_qualities, metadata, requires_image)
+        fallback = self.fallback_process(problem_id, question_text, answer_text, image_sources, image_qualities, metadata, requires_image, choice_count)
         if not self.client.config.enabled or not self.client.config.api_key:
             return fallback
         llm_result = self.call_json(
@@ -1946,6 +2115,7 @@ class AssetRegistryAgent(BaseStructuredAgent):
                 "question_text": question_text,
                 "answer_text": answer_text,
                 "image_paths": list(image_sources),
+                "choice_count": choice_count,
                 "metadata": metadata,
                 "asset_integrity": {
                     "requires_image": requires_image,
@@ -1970,9 +2140,13 @@ class AssetRegistryAgent(BaseStructuredAgent):
         issues = llm_result.get("issues")
         if not isinstance(issues, list):
             issues = fallback["issues"]
-        registry_passed = llm_result.get("registry_passed")
-        if not isinstance(registry_passed, bool):
-            registry_passed = fallback["registry_passed"]
+        normalized_issues = [to_plain_text(item) for item in list(fallback["issues"]) + list(issues) if to_plain_text(item)]
+        if choice_count > 0:
+            normalized_issues = [
+                item
+                for item in normalized_issues
+                if "choices are not provided" not in item.lower() and item.lower() != "missing_choice_map"
+            ]
         text_manifest = llm_result.get("text_manifest") if isinstance(llm_result.get("text_manifest"), dict) else fallback["text_manifest"]
         answer_manifest = llm_result.get("answer_manifest") if isinstance(llm_result.get("answer_manifest"), dict) else fallback["answer_manifest"]
         return {
@@ -1980,8 +2154,8 @@ class AssetRegistryAgent(BaseStructuredAgent):
             "image_manifest": image_manifest,
             "text_manifest": text_manifest,
             "answer_manifest": answer_manifest,
-            "issues": sorted(set(to_plain_text(item) for item in issues if to_plain_text(item))),
-            "registry_passed": registry_passed,
+            "issues": sorted(set(normalized_issues)),
+            "registry_passed": bool(fallback["registry_passed"]),
             "llm_used": True,
         }
 
@@ -2583,6 +2757,19 @@ class RewriteAgent(BaseStructuredAgent):
         discard_reason_codes = llm_result.get("discard_reason_codes")
         if not isinstance(discard_reason_codes, list):
             discard_reason_codes = fallback["discard_reason_codes"]
+        if strategy in {"blank_open", "keep_open"} and fallback.get("variants"):
+            fallback_variant = fallback["variants"][0] if isinstance(fallback["variants"][0], dict) else {}
+            primary_variant = variants[0] if variants and isinstance(variants[0], dict) else {}
+            variants = [
+                {
+                    "variant_id": to_plain_text(primary_variant.get("variant_id") or fallback_variant.get("variant_id") or "open_1"),
+                    "title": to_plain_text(primary_variant.get("title") or fallback_variant.get("title") or f"{dataset_name} 开放题"),
+                    "rewritten_question_text": to_plain_text(primary_variant.get("rewritten_question_text") or fallback_variant.get("rewritten_question_text")),
+                    "expected_answer_type": to_plain_text(fallback_variant.get("expected_answer_type") or primary_variant.get("expected_answer_type") or "short_text"),
+                    "expected_answer": to_plain_text(fallback_variant.get("expected_answer") or primary_variant.get("expected_answer")),
+                    "split_role": to_plain_text(primary_variant.get("split_role") or fallback_variant.get("split_role") or "single"),
+                }
+            ]
         return {
             "strategy": strategy,
             "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
@@ -2655,6 +2842,12 @@ class DecisionAgent(BaseStructuredAgent):
             reason_codes.append("missing_answer")
         if not open_variants:
             reason_codes.append("rewrite_failed")
+        if "asset_registry_failed" in quality_flags:
+            reason_codes.append("asset_registry_failed")
+        if "rewrite_mcq_residual" in quality_flags:
+            reason_codes.append("rewrite_mcq_residual")
+        if "rewrite_expected_answer_mismatch" in quality_flags:
+            reason_codes.extend(["rewrite_expected_answer_mismatch", "answer_annotation_inconsistent", "gold_answer_mismatch"])
         if completeness_status == "partial":
             reason_codes.extend(sample_understanding.get("reason_codes", []))
         if image_support_status == "uncertain_but_usable":
@@ -2755,6 +2948,9 @@ class DecisionAgent(BaseStructuredAgent):
         review_required = llm_result.get("review_required")
         if not isinstance(review_required, bool):
             review_required = decision == "review"
+        hard_review_reasons = {"split_variant_needs_review", "rewrite_failed", "rewrite_mcq_residual", "rewrite_expected_answer_mismatch", "answer_annotation_inconsistent", "gold_answer_mismatch", "asset_registry_failed"}
+        if decision == "pass" and hard_review_reasons.intersection(set(fallback.get("reason_codes", []))):
+            return fallback
         return {
             "decision": decision,
             "reason_codes": sorted(set(to_plain_text(code) for code in reason_codes if to_plain_text(code))) or fallback["reason_codes"],
@@ -3024,18 +3220,13 @@ class MultiDatasetCleaningPipeline:
             for sample in samples:
                 consume_result(self.process_sample(spec, sample, image_dir, crop_dir))
         else:
-            ordered_results: List[Optional[Dict[str, Any]]] = [None] * len(samples)
             with ThreadPoolExecutor(max_workers=sample_concurrency) as executor:
                 future_to_index = {
                     executor.submit(self.process_sample, spec, sample, image_dir, crop_dir): index
                     for index, sample in enumerate(samples)
                 }
                 for future in as_completed(future_to_index):
-                    index = future_to_index[future]
-                    ordered_results[index] = future.result()
-            for result in ordered_results:
-                if result is not None:
-                    consume_result(result)
+                    consume_result(future.result())
 
         records_dir = dataset_dir / "records"
         ensure_dir(records_dir)
@@ -4199,6 +4390,7 @@ class MultiDatasetCleaningPipeline:
             image_qualities=image_qualities,
             metadata=sample.metadata,
             requires_image=requires_image,
+            choice_count=len(choices),
         )
         asset_registry_record.update(
             {
@@ -4281,13 +4473,22 @@ class MultiDatasetCleaningPipeline:
 
         rewrite_report = self.rewrite_agent.rewrite(spec.display_name, normalized_question_text, normalized_answer_text, original_answer_type, choices)
         open_variants = self.build_open_variants(problem_id, rewrite_report)
+        rewrite_consistency_flags = rewrite_answer_consistency_flags(normalized_answer_text, rewrite_report, open_variants)
+        rewrite_question_flags = rewrite_question_residual_flags(rewrite_report, open_variants)
+        rewrite_report["consistency_check_passed"] = not rewrite_consistency_flags
+        rewrite_report["consistency_issue_codes"] = list(rewrite_consistency_flags)
+        rewrite_report["question_check_passed"] = not rewrite_question_flags
+        rewrite_report["question_issue_codes"] = list(rewrite_question_flags)
         text_structure = self.text_parser.parse(problem_id, normalized_question_text, open_variants, requires_image, question_norm, answer_norm, choices)
         visual_structures = [] if text_dominant else self.visual_parser.parse_many(problem_id, sample.images, image_qualities, normalized_question_text)
         alignment_record = self.build_alignment_record(problem_id, normalized_question_text, requires_image, text_structure, visual_structures, image_qualities)
         quality_flags = sorted(
             set(
                 self.build_quality_flags(raw_question_text, raw_answer_text, text_completeness, image_qualities, requires_image)
+                + (["asset_registry_failed"] if not asset_registry_record.get("registry_passed", True) else [])
                 + list(asset_registry_record.get("issues", []))
+                + list(rewrite_consistency_flags)
+                + list(rewrite_question_flags)
             )
         )
         sample_understanding = self.agentic_orchestrator.assess_sample(
