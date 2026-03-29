@@ -852,6 +852,20 @@ def read_prompt(path: Path) -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
+class BaseStructuredAgent:
+    def __init__(self, client: OpenAICompatibleClient, prompt_path: Path, fallback_system_prompt: str):
+        self.client = client
+        self.prompt_path = prompt_path
+        self.system_prompt = read_prompt(prompt_path) if prompt_path.exists() else fallback_system_prompt
+
+    def call_json(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        user_prompt = json.dumps(payload, ensure_ascii=False, indent=2)
+        result = self.client.chat_json(self.system_prompt, user_prompt, caller=self.__class__.__name__.lower())
+        if not isinstance(result, dict):
+            return None
+        return result
+
+
 class RunLogger:
     def __init__(self, run_dir: Path, enabled: bool = True):
         self.enabled = enabled
@@ -2055,22 +2069,17 @@ class GitHubConnector(BaseConnector):
             samples = samples[:limit]
         return "available", samples, None
 
-class RewriteAgent:
+class RewriteAgent(BaseStructuredAgent):
     def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer, logger: Optional[RunLogger] = None):
-        self.client = client
-        self.normalizer = normalizer
-        self.system_prompt = read_prompt(REWRITE_AGENT_PROMPT_PATH) if REWRITE_AGENT_PROMPT_PATH.exists() else (
-            "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. "
-            "Convert multiple-choice questions into open-ended variants under strict rules. "
-            "If the question is already open-ended, keep it. "
-            "If it is a pure graph/diagram/waveform label selection question, drop it. "
-            "If it is concept discrimination whose target is carried by options, rewrite it as a blank-style open question without options. "
-            "If one option contains multiple atomic answers, split into multiple subquestions. Output strict JSON only."
+        super().__init__(
+            client,
+            REWRITE_AGENT_PROMPT_PATH,
+            "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. Convert multiple-choice questions into open-ended variants and return strict JSON only.",
         )
+        self.normalizer = normalizer
 
     def call_json(self, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        user_prompt = json.dumps(payload, ensure_ascii=False, indent=2)
-        result = self.client.chat_json(self.system_prompt, user_prompt, caller="rewrite")
+        result = super().call_json(payload)
         if not isinstance(result, dict):
             return None
         variants = result.get("variants")
