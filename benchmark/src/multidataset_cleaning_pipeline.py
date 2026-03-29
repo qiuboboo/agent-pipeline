@@ -2093,7 +2093,7 @@ class GitHubConnector(BaseConnector):
         return "available", samples, None
 
 class RewriteAgent(BaseStructuredAgent):
-    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer, logger: Optional[RunLogger] = None):
+    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer):
         super().__init__(
             client,
             REWRITE_AGENT_PROMPT_PATH,
