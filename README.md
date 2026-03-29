@@ -2,7 +2,37 @@
 
 多数据集、多模态题目采集与清洗流水线。
 
+> 当前状态声明：在**重构代码**，`docs/` 内的架构与分阶段方案已经完成设计，主线工作正处于“代码实现与文档契约对齐”阶段，还**未运行验证**。
+
+> rewrite 口径声明：**rewrite 部分完全以 ler 分支为准**；当前分支仅做对齐、迁移与验证，不单独定义新的 rewrite 策略口径。
+
 当前主线已经完成一轮**模块拆分**，统一入口是 [run_pipeline.py](run_pipeline.py)，核心实现位于 [benchmark/src/](benchmark/src/)。当前工作重点不再是把单体脚本拆开，而是继续提高 **rewrite 质量**、补强 **运行日志**，并稳定 **LLM 调用链路**。
+
+## 下一步计划
+
+基于当前文档与代码现状，下一阶段按以下顺序推进：
+
+1. 继续缩小 orchestrator 壳层职责
+  - 把 `multidataset_cleaning_pipeline.py` 中 remaining runtime（尤其 decision runtime / shared infra 残留）继续向专属模块下沉。
+  - 参考：[docs/architecture/overview/PIPELINE_ARCHITECTURE.md](docs/architecture/overview/PIPELINE_ARCHITECTURE.md)
+
+2. 优先稳定 rewrite 质量
+  - 对齐 ler 分支中的 rewrite 实现与策略口径，重点处理 `SCEMQA` 的“伪开放化”（编号答案未语义化）与 `MM-Math` 的过保守 review 压制问题。
+  - 参考：[docs/architecture/cleaning/rewrite-policy.md](docs/architecture/cleaning/rewrite-policy.md)
+
+3. 提升 LLM 调用链路稳态
+  - 围绕 `chat_json returned empty` 增强可观测性与容错策略，保持 fail-fast 与 caller/stage 维度日志可用。
+  - 参考：[docs/run_summaries/2026-03-28/rewrite_llm_recovery_and_runlog_2026-03-28.md](docs/run_summaries/2026-03-28/rewrite_llm_recovery_and_runlog_2026-03-28.md)
+
+4. 按数据集推进 loader 分流固化
+  - 继续执行 `hf_standard / hf_zip_member / hf_raw_bundle / github_local` 的分流策略，减少资源组织猜测逻辑。
+  - 参考：[docs/architecture/steup/loader_recommendations.md](docs/architecture/steup/loader_recommendations.md)
+
+5. 维持“代码-文档-运行摘要”同步
+  - 代码变更同步更新 architecture/contracts/migration 文档，并按日期目录维护 run summary。
+  - 参考：[docs/run_summaries/README.md](docs/run_summaries/README.md)
+  - 参考：[docs/plans/pipeline分阶段拆分设计.md](docs/plans/pipeline分阶段拆分设计.md)
+  - 参考：[docs/plans/数据采集与清洗自动化搭建文档.md](docs/plans/数据采集与清洗自动化搭建文档.md)
 
 ## 当前阶段在做什么
 
@@ -18,6 +48,7 @@
    - `chat_json(...)` 已补 `caller/stage` 维度，方便定位是哪一段在请求 LLM
 
 3. **继续追当前最难的问题：rewrite 不理想、LLM 调用不稳定**
+  - rewrite 行为与验收标准以 ler 分支为准，当前分支不另起 rewrite 口径
    - 有些样本看起来 pass 了，但其实是“伪开放化”
    - 有些样本 rewrite 仍然过保守
    - LLM 链路虽然已经修过一轮 `401 Unauthorized / ${OPENAI_API_KEY}` 问题，但当前仍会出现 `chat_json returned empty`、改写质量不稳定等现象
@@ -30,13 +61,18 @@
 run_pipeline.py
     ↓
 multidataset_cleaning_pipeline.py
-    ├─ Setup       -> pipeline_setup.py
-    ├─ Collection  -> pipeline_collection.py + cleaning_semantics.py
-    │                 ├─ ingestion / preprocess
-    │                 ├─ initial collection scoring
-    │                 └─ structure extract
-    ├─ Cleaning    -> pipeline_cleaning.py
-    └─ Report      -> pipeline_reporting.py
+  ├─ Setup       -> pipeline_setup.py
+  ├─ Collection  -> pipeline_collection.py
+  ├─ Cleaning    -> pipeline_cleaning.py
+  ├─ Report      -> pipeline_reporting.py
+  └─ Shared Infra
+    ├─ pipeline_types.py
+    ├─ pipeline_utils.py
+    ├─ pipeline_clients.py
+    ├─ pipeline_logging.py
+    ├─ pipeline_normalization.py
+    ├─ pipeline_extraction.py
+    └─ pipeline_rewrite.py
 ```
 
 ### 四段职责
@@ -60,6 +96,15 @@ multidataset_cleaning_pipeline.py
   - `pass / review / reject` 判定
   - 当前最需要持续打磨的阶段
 
+- **Shared Infra（跨阶段共享）**
+  - `pipeline_types.py`：稳定类型与 dataclass
+  - `pipeline_utils.py`：纯工具函数
+  - `pipeline_clients.py`：模型客户端
+  - `pipeline_logging.py`：运行日志
+  - `pipeline_normalization.py`：文本/答案规范化与图像质量分析
+  - `pipeline_extraction.py`：原始字段提取与提取辅助
+  - `pipeline_rewrite.py`：rewrite runtime、fallback 与 LLM 改写调用
+
 - **Report**
   - 写出 `records/*.jsonl`
   - dataset summary
@@ -81,11 +126,25 @@ multidataset_cleaning_pipeline.py
 - [benchmark/src/pipeline_collection.py](benchmark/src/pipeline_collection.py)
   - Collection 模块
 - [benchmark/src/cleaning_semantics.py](benchmark/src/cleaning_semantics.py)
-  - Collection / Cleaning 共用语义分析
+  - Collection / Cleaning 共用语义分析（结构、对齐、可解性）
 - [benchmark/src/pipeline_cleaning.py](benchmark/src/pipeline_cleaning.py)
   - rewrite、质量 gate、决策逻辑
 - [benchmark/src/pipeline_reporting.py](benchmark/src/pipeline_reporting.py)
   - records / summary 写出
+- [benchmark/src/pipeline_types.py](benchmark/src/pipeline_types.py)
+  - 稳定类型定义
+- [benchmark/src/pipeline_utils.py](benchmark/src/pipeline_utils.py)
+  - 共用工具函数
+- [benchmark/src/pipeline_clients.py](benchmark/src/pipeline_clients.py)
+  - LLM/客户端封装
+- [benchmark/src/pipeline_logging.py](benchmark/src/pipeline_logging.py)
+  - run 级日志能力
+- [benchmark/src/pipeline_normalization.py](benchmark/src/pipeline_normalization.py)
+  - 文本/答案规范化与图像质量分析
+- [benchmark/src/pipeline_extraction.py](benchmark/src/pipeline_extraction.py)
+  - 字段提取与提取辅助逻辑
+- [benchmark/src/pipeline_rewrite.py](benchmark/src/pipeline_rewrite.py)
+  - rewrite runtime、fallback、临时 rewrite compat
 
 ### 配置与 prompt
 - [configs/](configs/)
@@ -96,6 +155,14 @@ multidataset_cleaning_pipeline.py
 ### 文档与输出
 - [docs/](docs/)
   - 模块说明、run summary、benchmark 分析
+- [docs/architecture/overview/pipeline-overview.md](docs/architecture/overview/pipeline-overview.md)
+  - 端到端流程与重构原则
+- [docs/architecture/overview/PIPELINE_ARCHITECTURE.md](docs/architecture/overview/PIPELINE_ARCHITECTURE.md)
+  - 当前架构边界与依赖方向约束
+- [docs/contracts/PIPELINE_MODULE_CONTRACTS.md](docs/contracts/PIPELINE_MODULE_CONTRACTS.md)
+  - 模块契约与字段稳定性要求
+- [docs/migration/rewrite-migration-notes.md](docs/migration/rewrite-migration-notes.md)
+  - rewrite 迁移状态与兼容层说明
 - [outputs/](outputs/)
   - 运行输出
 
@@ -242,7 +309,7 @@ multidataset_cleaning_pipeline.py
 ## loader 方向的当前判断
 
 相关文档：
-- [docs/loader_recommendations.md](docs/loader_recommendations.md)
+- [docs/architecture/steup/loader_recommendations.md](docs/architecture/steup/loader_recommendations.md)
 
 当前推荐：
 
@@ -307,15 +374,15 @@ outputs/<run-group>/<run_id>/
 
 ## 建议先看哪些文档
 
-- [docs/architecture/pipeline-architecture.md](docs/architecture/pipeline-architecture.md)
+- [docs/architecture/overview/pipeline-architecture.md](docs/architecture/overview/pipeline-architecture.md)
   - 当前主线总体架构与文档导航入口
-- [docs/cleaning/collection-cleaning-spec.md](docs/cleaning/collection-cleaning-spec.md)
+- [docs/architecture/cleaning/collection-cleaning-spec.md](docs/architecture/cleaning/collection-cleaning-spec.md)
   - Collection / Cleaning 专项规格
-- [docs/cleaning/rewrite-policy.md](docs/cleaning/rewrite-policy.md)
+- [docs/architecture/cleaning/rewrite-policy.md](docs/architecture/cleaning/rewrite-policy.md)
   - rewrite 策略与分流建议
-- [docs/architecture/pipeline-modules-reference.md](docs/architecture/pipeline-modules-reference.md)
+- [docs/architecture/overview/pipeline-modules-reference.md](docs/architecture/overview/pipeline-modules-reference.md)
   - 模块职责与阶段映射
-- [docs/loader_recommendations.md](docs/loader_recommendations.md)
+- [docs/architecture/steup/loader_recommendations.md](docs/architecture/steup/loader_recommendations.md)
   - 各数据集 loader 分流建议
 - [docs/run_summaries/README.md](docs/run_summaries/README.md)
   - run summary 保留规范

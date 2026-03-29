@@ -1,11 +1,18 @@
-# Rewrite Policy（当前主线）
+# Rewrite Policy（基于 prompt 与代码证据）
 
-> 本文档是 **rewrite 策略与分流建议** 的 canonical owner。
+> 本文档用于记录 **rewrite 策略对齐说明**。
 >
-> - 总体架构与阶段划分请看：[docs/architecture/pipeline-architecture.md](docs/architecture/pipeline-architecture.md)
+> 当前口径基于本仓库内可验证证据：
+> - rewrite prompt：[prompts/cleaning/rewrite_agent.md](prompts/cleaning/rewrite_agent.md)
+> - 当前 rewrite 实现：[benchmark/src/pipeline_rewrite.py](benchmark/src/pipeline_rewrite.py)
+> - pre-ler 快照参考：[archive/pre-ler-main-python-2026-03-25/run_pipeline.py](archive/pre-ler-main-python-2026-03-25/run_pipeline.py)
+>
+> 说明：若后续拿到明确的 ler 分支实现快照，应再做一次逐条对齐并更新本文档。
+>
+> - 总体架构与阶段划分请看：[docs/architecture/overview/pipeline-architecture.md](docs/architecture/overview/pipeline-architecture.md)
 > - 字段级稳定契约（rewrite report / gate / records）请看：[docs/contracts/PIPELINE_MODULE_CONTRACTS.md](docs/contracts/PIPELINE_MODULE_CONTRACTS.md)
 
-_最后更新：2026-03-24（工作版本）_
+_最后更新：2026-03-29（prompt/code 对齐版本）_
 
 ## 1. 核心目标
 
@@ -14,7 +21,9 @@ rewrite 的目标不是“把所有题统一改成同一种形态”，而是：
 - 对**标准视觉选择题**：把 option-target 显式转换成开放式 blank（`blank_open`）
 - 对**天然开放题 / 推导题 / 多步推理题**：尽量保留开放结构（`keep_open`）
 - 对**结构化数学目标（解集/区间/范围/多原子答案）**：拆分成可标注的子目标（`split_open`）
-- 对**纯图片索引/标号选择**：直接丢弃（`drop_image_index`）
+- 对**纯图片索引/标号选择**：
+	- 能保留有效开放目标时优先 `blank_open`
+	- 仅在不可恢复为有效开放目标时使用 `drop_image_index`
 
 ## 2. 三条底线（避免最常见误分流）
 
@@ -84,23 +93,37 @@ rewrite 的目标不是“把所有题统一改成同一种形态”，而是：
 
 典型数据集：CMM-Math（以及 SCEMQA 的一部分）。
 
-### 4.5 纯图片索引题 → `drop_image_index`
+### 4.5 纯图片索引题：优先 `blank_open`，必要时 `drop_image_index`
 
 特征：
 - 问题本质是在选某个图/某个 figure index
-- 选项语义无法稳定文本化
-- rewrite 后易退化
+- 若题目仍可转成可评测的开放问答目标，则保留并走 `blank_open`
+- 仅当语义不可恢复、无法形成稳定开放目标时，才走 `drop_image_index`
 
-## 5. 建议的决策顺序（从强证据到弱证据）
+## 5. 当前代码对齐的决策顺序（实现优先）
 
-1. 纯图片索引题 → `drop_image_index`
-2. 多子问结构 → `keep_open`
-3. set / range / structured target → `split_open`
-4. 视觉 numeric 开放题 → `keep_open`
-5. 数据集 prior（弱） → tie-breaker
-6. 标准视觉 MCQ → `blank_open`
-7. 默认兜底 → `blank_open`
+当前 `RewriteAgent.fallback_rewrite(...)` 的实际优先级可归纳为：
 
-## 6. 说明
+1. `choices` 为空：
+	- 常规走 `keep_open`
+	- 若是图像标签选择语义（`which picture/figure/diagram/...`）则走 `blank_open`
+2. `choices` 非空且命中 pure image index：优先 `blank_open`
+3. 命中复合答案（compound answer）：走 `split_open`
+4. 其他多选题兜底：走 `blank_open`
 
-当前主线请以本文档为准。
+补充：
+- `drop_image_index` 仍是允许策略，并且 LLM 返回该策略时可被接受。
+- 但当前 fallback 主路径并不主动产出 `drop_image_index`。
+
+## 6. 代码对应关系
+
+- 策略集合定义：`ALLOWED_REWRITE_STRATEGIES`
+- fallback 主逻辑：`RewriteAgent.fallback_rewrite(...)`
+- LLM 结果校验与回退：`RewriteAgent.rewrite(...)`
+
+对应代码文件：
+- [benchmark/src/pipeline_rewrite.py](benchmark/src/pipeline_rewrite.py)
+
+## 7. 说明
+
+本文档用于帮助当前分支在“prompt + 代码 + 已归档快照”之间保持一致；当可获得明确 ler 分支实现时，再做一次证据化对齐更新。
