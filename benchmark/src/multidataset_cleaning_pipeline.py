@@ -865,6 +865,12 @@ class BaseStructuredAgent:
             return None
         return result
 
+    def normalize_list_field(self, result: Dict[str, Any], field_name: str) -> Dict[str, Any]:
+        field_value = result.get(field_name)
+        if field_value is not None and not isinstance(field_value, list):
+            result[field_name] = []
+        return result
+
 
 class RunLogger:
     def __init__(self, run_dir: Path, enabled: bool = True):
@@ -2105,12 +2111,8 @@ class RewriteAgent(BaseStructuredAgent):
         result = super().call_json(payload)
         if not isinstance(result, dict):
             return None
-        variants = result.get("variants")
-        if variants is not None and not isinstance(variants, list):
-            result["variants"] = []
-        discard_reason_codes = result.get("discard_reason_codes")
-        if discard_reason_codes is not None and not isinstance(discard_reason_codes, list):
-            result["discard_reason_codes"] = []
+        result = self.normalize_list_field(result, "variants")
+        result = self.normalize_list_field(result, "discard_reason_codes")
         return result
 
     def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
