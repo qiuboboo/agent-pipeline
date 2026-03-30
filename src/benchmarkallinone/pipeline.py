@@ -957,10 +957,18 @@ def heuristic_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec") -
     answer_field = choose_candidate_field(row, spec.answer_fields or ["solution", "answer"], r"answer|solution|label|target")
     image_field = choose_candidate_field(row, spec.image_fields or ["image", "image_path"], r"image|img|diagram|figure|picture|decoded_image")
     choice_field = choose_candidate_field(row, spec.choice_fields or ["options", "choices"], r"options|choices")
+    reasoning_chain_field = choose_candidate_field(
+        row,
+        spec.metadata_fields or ["reasoning_chain", "chain_of_thought", "cot", "rationale", "explanation"],
+        r"reasoning_chain|chain_of_thought|cot|rationale|explanation",
+    )
     raw_question = to_plain_text(row.get(question_field)) if question_field else ""
     raw_answer = to_plain_text(row.get(answer_field)) if answer_field else ""
     if is_null_like_text(raw_answer):
         raw_answer = ""
+    reasoning_chain = normalize_whitespace(to_plain_text(row.get(reasoning_chain_field))) if reasoning_chain_field else ""
+    if is_null_like_text(reasoning_chain):
+        reasoning_chain = ""
     choice_map = parse_choice_map(row.get(choice_field) if choice_field else None)
     raw_images = row.get(image_field) if image_field else row.get("images")
     image_paths = normalize_image_path_list(raw_images)
@@ -974,6 +982,8 @@ def heuristic_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec") -
     return {
         "raw_question_text": raw_question,
         "raw_answer_text": raw_answer,
+        "reasoning_chain": reasoning_chain,
+        "has_reasoning_chain": bool(reasoning_chain),
         "choice_map": choice_map,
         "image_paths": image_paths,
         "force_requires_image": force_requires_image,
@@ -982,6 +992,7 @@ def heuristic_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec") -
         "answer_field": answer_field,
         "image_field": image_field,
         "choice_field": choice_field,
+        "reasoning_chain_field": reasoning_chain_field,
     }
 
 
@@ -1255,6 +1266,9 @@ class LocalFileConnector(BaseConnector):
                         "answer_field": extracted.get("answer_field"),
                         "image_field": extracted.get("image_field"),
                         "choice_field": extracted.get("choice_field"),
+                        "reasoning_chain_field": extracted.get("reasoning_chain_field"),
+                        "reasoning_chain": extracted.get("reasoning_chain", ""),
+                        "has_reasoning_chain": bool(extracted.get("has_reasoning_chain", False)),
                     },
                     choice_map=extracted["choice_map"],
                     force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
@@ -1568,6 +1582,9 @@ class HuggingFaceConnector(BaseConnector):
                         "answer_field": extracted.get("answer_field"),
                         "image_field": extracted.get("image_field"),
                         "choice_field": extracted.get("choice_field"),
+                        "reasoning_chain_field": extracted.get("reasoning_chain_field"),
+                        "reasoning_chain": extracted.get("reasoning_chain", ""),
+                        "has_reasoning_chain": bool(extracted.get("has_reasoning_chain", False)),
                     },
                     choice_map=extracted["choice_map"],
                     force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
@@ -2005,6 +2022,8 @@ class SourceIntakeAgent(BaseStructuredAgent):
             **fallback,
             "raw_question_text": raw_question_text or fallback["raw_question_text"],
             "raw_answer_text": raw_answer_text or fallback["raw_answer_text"],
+            "reasoning_chain": normalize_whitespace(to_plain_text(llm_result.get("reasoning_chain") or fallback.get("reasoning_chain") or "")),
+            "has_reasoning_chain": bool(normalize_whitespace(to_plain_text(llm_result.get("reasoning_chain") or fallback.get("reasoning_chain") or ""))),
             "choice_map": choice_map,
             "image_paths": image_paths,
             "force_requires_image": force_requires_image,
@@ -4270,6 +4289,8 @@ class MultiDatasetCleaningPipeline:
             "raw_answer_text": sample.raw_answer_text,
             "normalized_answer_text": normalized_answer_text,
             "answer_type": answer_type,
+            "has_reasoning_chain": bool(normalize_whitespace(to_plain_text(sample.metadata.get("reasoning_chain", "")))),
+            "reasoning_chain": normalize_whitespace(to_plain_text(sample.metadata.get("reasoning_chain", ""))),
             "image_count": image_count,
             "has_multiple_images": image_count > 1,
             "requires_image": requires_image,
