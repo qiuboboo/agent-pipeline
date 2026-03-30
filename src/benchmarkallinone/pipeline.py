@@ -3067,6 +3067,12 @@ class MultiDatasetCleaningPipeline:
         if spec.source_kind == "local_file":
             return LocalFileConnector(spec, self.config, self.client)
         if spec.source_kind == "huggingface":
+            if spec.key == "phyx":
+                try:
+                    from .phyx_connector import PhyXConnector
+                except ImportError:
+                    from phyx_connector import PhyXConnector  # type: ignore
+                return PhyXConnector(spec, self.config, self.client)
             return HuggingFaceConnector(spec, self.config, self.client)
         if spec.source_kind == "github":
             return GitHubConnector(spec, self.config, self.client)
