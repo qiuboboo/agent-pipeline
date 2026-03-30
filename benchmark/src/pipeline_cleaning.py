@@ -7,10 +7,18 @@ from typing import Any, Dict, List, Optional
 
 try:
     from .pipeline_clients import OpenAICompatibleClient
+    from .pipeline_extraction import read_prompt
     from .pipeline_utils import to_plain_text
 except ImportError:
     from pipeline_clients import OpenAICompatibleClient
+    from pipeline_extraction import read_prompt
     from pipeline_utils import to_plain_text
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROMPT_ROOT = PROJECT_ROOT / "prompts"
+GATE_DECISION_PROMPT_PATH = PROMPT_ROOT / "cleaning" / "gate_decision_agent.md"
+SAMPLE_UNDERSTANDING_PROMPT_PATH = PROMPT_ROOT / "cleaning" / "sample_understanding_agent.md"
 
 
 class DecisionOverrideProtocol:
@@ -21,13 +29,181 @@ class DecisionOverrideProtocol:
         alignment_record: Dict[str, Any],
         solvability_report: Dict[str, Any],
         quality_flags: List[str],
+        sample_understanding: Optional[Dict[str, Any]] = None,
     ) -> Optional[Dict[str, Any]]:
         ...
+
+
+class SampleUnderstandingAgent:
+    def __init__(self, client: OpenAICompatibleClient):
+        self.client = client
+        self.system_prompt = read_prompt(SAMPLE_UNDERSTANDING_PROMPT_PATH) if SAMPLE_UNDERSTANDING_PROMPT_PATH.exists() else (
+            "You are the Multimodal Sample Understanding Agent in a cleaning pipeline. "
+            "Judge whether the sample is semantically understandable enough for downstream annotation or review. "
+            "Prefer semantic usefulness over hard visual thresholds and return strict JSON only."
+        )
+
+    def fallback_assess(
+        self,
+        raw_question_text: str,
+        raw_answer_text: str,
+        requires_image: bool,
+        quality_flags: List[str],
+        alignment_record: Dict[str, Any],
+        solvability_report: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        question_complete = bool(raw_question_text)
+        answer_complete = bool(raw_answer_text)
+        if not question_complete or (requires_image and "missing_core_image" in quality_flags):
+            completeness_status = "broken"
+        elif not answer_complete or "low_text_completeness" in quality_flags:
+            completeness_status = "partial"
+        else:
+            completeness_status = "complete"
+        if not requires_image:
+            image_support_status = "not_needed"
+        elif "missing_core_image" in quality_flags or "key_text_unreadable" in quality_flags:
+            image_support_status = "missing_or_unusable"
+        elif alignment_record.get("alignment_status") in {"bad", "risky"} or "low_resolution" in quality_flags:
+            image_support_status = "uncertain_but_usable"
+        else:
+            image_support_status = "clear_enough"
+        if completeness_status == "broken" or (requires_image and image_support_status == "missing_or_unusable"):
+            joint_understanding_status = "not_understandable"
+        elif completeness_status == "partial" or image_support_status == "uncertain_but_usable" or solvability_report.get("decision_hint") != "pass":
+            joint_understanding_status = "partially_understandable"
+        else:
+            joint_understanding_status = "understandable"
+        reason_codes: List[str] = []
+        if not question_complete:
+            reason_codes.append("missing_question_text")
+        if not answer_complete:
+            reason_codes.append("missing_answer")
+        if requires_image and image_support_status == "missing_or_unusable":
+            reason_codes.append("missing_required_image")
+        if alignment_record.get("alignment_status") in {"bad", "risky"}:
+            reason_codes.append("alignment_requires_review")
+        if not reason_codes:
+            reason_codes.append(
+                "jointly_understandable"
+                if joint_understanding_status == "understandable"
+                else "joint_understanding_partial"
+            )
+        risk_flags = [flag for flag in quality_flags if flag in {"low_resolution", "severe_global_blur", "key_text_unreadable", "contrast_too_low", "multi_image_quality_variance"}]
+        rationale = (
+            "The sample is understandable for downstream cleaning."
+            if joint_understanding_status == "understandable"
+            else "The sample remains partially understandable but carries review risk."
+            if joint_understanding_status == "partially_understandable"
+            else "The sample lacks enough jointly understandable signal for confident downstream handling."
+        )
+        confidence = 0.9 if joint_understanding_status == "understandable" else 0.65 if joint_understanding_status == "partially_understandable" else 0.35
+        return {
+            "question_complete": question_complete,
+            "answer_complete": answer_complete,
+            "completeness_status": completeness_status,
+            "image_support_status": image_support_status,
+            "joint_understanding_status": joint_understanding_status,
+            "reason_codes": sorted(set(reason_codes)),
+            "risk_flags": sorted(set(risk_flags)),
+            "rationale": rationale,
+            "confidence": confidence,
+            "llm_used": False,
+        }
+
+    def assess(
+        self,
+        dataset_name: str,
+        raw_question_text: str,
+        raw_answer_text: str,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        requires_image: bool,
+        text_dominant: bool,
+        cleaning_path: str,
+        quality_flags: List[str],
+        rewrite_report: Dict[str, Any],
+        open_variants: List[Dict[str, Any]],
+        text_structure: Dict[str, Any],
+        alignment_record: Dict[str, Any],
+        solvability_report: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        fallback = self.fallback_assess(
+            raw_question_text,
+            raw_answer_text,
+            requires_image,
+            quality_flags,
+            alignment_record,
+            solvability_report,
+        )
+        if not self.client.config.enabled:
+            return fallback
+        payload = {
+            "dataset_name": dataset_name,
+            "raw_question_text": raw_question_text,
+            "raw_answer_text": raw_answer_text,
+            "normalized_question_text": normalized_question_text,
+            "normalized_answer_text": normalized_answer_text,
+            "requires_image": requires_image,
+            "text_dominant": text_dominant,
+            "cleaning_path": cleaning_path,
+            "quality_flags": quality_flags,
+            "rewrite_report": rewrite_report,
+            "open_variants": open_variants[:2],
+            "text_structure": {
+                "question_type": text_structure.get("question_type"),
+                "status": text_structure.get("text_structure_status"),
+                "parser_confidence": text_structure.get("parser_confidence"),
+            },
+            "alignment_record": {
+                "alignment_status": alignment_record.get("alignment_status"),
+                "coverage_score": alignment_record.get("coverage_score"),
+                "consistency_score": alignment_record.get("consistency_score"),
+            },
+            "solvability_report": {
+                "decision_hint": solvability_report.get("decision_hint"),
+                "solvability_score": solvability_report.get("solvability_score"),
+                "failure_codes": solvability_report.get("failure_codes", []),
+            },
+            "fallback": fallback,
+        }
+        result = self.client.chat_json(self.system_prompt, json.dumps(payload, ensure_ascii=False, indent=2))
+        if not isinstance(result, dict):
+            return fallback
+        completeness_status = to_plain_text(result.get("completeness_status")).strip() or fallback["completeness_status"]
+        image_support_status = to_plain_text(result.get("image_support_status")).strip() or fallback["image_support_status"]
+        joint_understanding_status = to_plain_text(result.get("joint_understanding_status")).strip() or fallback["joint_understanding_status"]
+        if completeness_status not in {"complete", "partial", "broken"}:
+            return fallback
+        if image_support_status not in {"not_needed", "clear_enough", "uncertain_but_usable", "missing_or_unusable"}:
+            return fallback
+        if joint_understanding_status not in {"understandable", "partially_understandable", "not_understandable"}:
+            return fallback
+        reason_codes = result.get("reason_codes") if isinstance(result.get("reason_codes"), list) else fallback["reason_codes"]
+        risk_flags = result.get("risk_flags") if isinstance(result.get("risk_flags"), list) else fallback["risk_flags"]
+        return {
+            "question_complete": bool(result.get("question_complete", fallback["question_complete"])),
+            "answer_complete": bool(result.get("answer_complete", fallback["answer_complete"])),
+            "completeness_status": completeness_status,
+            "image_support_status": image_support_status,
+            "joint_understanding_status": joint_understanding_status,
+            "reason_codes": [to_plain_text(code) for code in reason_codes if to_plain_text(code)],
+            "risk_flags": [to_plain_text(flag) for flag in risk_flags if to_plain_text(flag)],
+            "rationale": to_plain_text(result.get("rationale")) or fallback["rationale"],
+            "confidence": float(result.get("confidence", fallback["confidence"])),
+            "llm_used": True,
+        }
 
 
 class DecisionAgent:
     def __init__(self, client: OpenAICompatibleClient):
         self.client = client
+        self.system_prompt = read_prompt(GATE_DECISION_PROMPT_PATH) if GATE_DECISION_PROMPT_PATH.exists() else (
+            "You are the Cleaning Decision Agent. Read the structured signals and decide one of pass/review/reject. "
+            "Prefer semantic usability over hard threshold vetoes. If rewrite strategy is drop_image_index, prefer review unless the sample is clearly unrecoverable. "
+            "If alignment is risky, solvability is weak, or quality is borderline, review or reject. "
+            "Return strict JSON with keys: decision, reason_codes, rationale."
+        )
 
     def review_override(
         self,
@@ -36,14 +212,10 @@ class DecisionAgent:
         alignment_record: Dict[str, Any],
         solvability_report: Dict[str, Any],
         quality_flags: List[str],
+        sample_understanding: Optional[Dict[str, Any]] = None,
     ) -> Optional[Dict[str, Any]]:
         if not self.client.config.enabled:
             return None
-        system_prompt = (
-            "You are the Cleaning Decision Agent. Read the structured signals and decide one of pass/review/reject. "
-            "Be conservative. If rewrite strategy is drop_image_index, reject. If alignment is risky, solvability is weak, or quality is borderline, review or reject. "
-            "Return strict JSON with keys: decision, reason_codes, rationale."
-        )
         user_prompt = json.dumps(
             {
                 "quality_components": quality_components,
@@ -51,11 +223,12 @@ class DecisionAgent:
                 "alignment_record": alignment_record,
                 "solvability_report": solvability_report,
                 "quality_flags": quality_flags,
+                "sample_understanding": sample_understanding,
             },
             ensure_ascii=False,
             indent=2,
         )
-        result = self.client.chat_json(system_prompt, user_prompt)
+        result = self.client.chat_json(self.system_prompt, user_prompt)
         if not result:
             return None
         decision = to_plain_text(result.get("decision")).strip().lower()
@@ -69,17 +242,6 @@ class DecisionAgent:
             "reason_codes": [to_plain_text(code) for code in reason_codes if to_plain_text(code)],
             "rationale": to_plain_text(result.get("rationale")),
         }
-
-
-    def review_override(
-        self,
-        quality_components: Dict[str, Any],
-        rewrite_report: Dict[str, Any],
-        alignment_record: Dict[str, Any],
-        solvability_report: Dict[str, Any],
-        quality_flags: List[str],
-    ) -> Optional[Dict[str, Any]]:
-        ...
 
 
 def build_open_variants(pipeline: Any, problem_id: str, rewrite_report: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -623,7 +785,7 @@ def build_rewrite_record(pipeline: Any, problem_id: str, sample: Any, rewrite_re
     }
 
 
-def build_cleaning_record(pipeline: Any, problem_id: str, spec: Any, asset_records: List[Dict[str, Any]], alignment_record: Dict[str, Any], quality_flags: List[str], gate: Dict[str, Any], rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]], question_norm: Dict[str, Any], answer_norm: Dict[str, Any], image_qualities: Any, text_structure: Dict[str, Any], solvability_report: Dict[str, Any]) -> Dict[str, Any]:
+def build_cleaning_record(pipeline: Any, problem_id: str, spec: Any, asset_records: List[Dict[str, Any]], alignment_record: Dict[str, Any], quality_flags: List[str], gate: Dict[str, Any], rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]], question_norm: Dict[str, Any], answer_norm: Dict[str, Any], image_qualities: Any, text_structure: Dict[str, Any], solvability_report: Dict[str, Any], sample_understanding: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     return {
         "cleaning_id": f"clean_{pipeline.stable_digest([problem_id, pipeline.pipeline_run_id])}",
         "problem_id": problem_id,
@@ -661,6 +823,7 @@ def build_cleaning_record(pipeline: Any, problem_id: str, spec: Any, asset_recor
             "decision_hint": solvability_report["decision_hint"],
             "failure_codes": solvability_report.get("failure_codes", []),
         },
+        "sample_understanding_summary": sample_understanding,
         "rewrite_summary": {"strategy": rewrite_report.get("strategy"), "variant_count": len(open_variants), "discard_reason_codes": rewrite_report.get("discard_reason_codes", [])},
         "missing_field_summary": {
             "missing_question_text": not bool(question_norm["normalized_text"]),
@@ -678,7 +841,7 @@ def build_cleaning_record(pipeline: Any, problem_id: str, spec: Any, asset_recor
     }
 
 
-def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text_completeness: float, requires_image: bool, image_qualities: List[Dict[str, Any]], alignment_record: Dict[str, Any], potential_scores: Dict[str, Any], quality_flags: List[str], rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]], text_structure: Dict[str, Any], solvability_report: Dict[str, Any]) -> Dict[str, Any]:
+def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text_completeness: float, requires_image: bool, image_qualities: List[Dict[str, Any]], alignment_record: Dict[str, Any], potential_scores: Dict[str, Any], quality_flags: List[str], rewrite_report: Dict[str, Any], open_variants: List[Dict[str, Any]], text_structure: Dict[str, Any], solvability_report: Dict[str, Any], sample_understanding: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     th = pipeline.config.thresholds
     risk_reason_codes: List[str] = []
     reason_codes: List[str] = []
@@ -703,6 +866,8 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
         risk_reason_codes.append("rewrite_failed")
     if not solvability_report.get("reasoning_path_exists") and solvability_report.get("decision_hint") == "reject":
         risk_reason_codes.extend(solvability_report.get("failure_codes", []))
+    if sample_understanding and sample_understanding.get("joint_understanding_status") == "not_understandable":
+        risk_reason_codes.append("sample_not_understandable")
     best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=1.0 if not requires_image else 0.0)
     quality_components = {
         "text_completeness": text_completeness,
@@ -710,7 +875,7 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
         "alignment_consistency": alignment_record["consistency_score"] if requires_image else 1.0,
         "multimodal_strength": potential_scores["multimodal_strength_score"],
         "verifiability": potential_scores["verifiability_score"],
-        "rewrite_quality": 0.0 if strategy == "drop_image_index" else 0.9 if open_variants else 0.2,
+        "rewrite_quality": 0.55 if strategy == "drop_image_index" else 0.9 if open_variants else 0.2,
         "solvability": solvability_report.get("solvability_score", 0.0),
         "text_structure_quality": text_structure.get("parser_confidence", 0.0),
     }
@@ -728,9 +893,25 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
         4,
     )
     reason_codes.extend(sorted(set(risk_reason_codes)))
-    if clean_score < th.reject_clean_score_below:
-        decision = "reject"
-        reason_codes.append("low_clean_score")
+    sample_joint_status = sample_understanding.get("joint_understanding_status") if sample_understanding else None
+    sample_completeness = sample_understanding.get("completeness_status") if sample_understanding else None
+    sample_image_support = sample_understanding.get("image_support_status") if sample_understanding else None
+    sample_reason_codes = sample_understanding.get("reason_codes", []) if sample_understanding else []
+    if sample_joint_status == "not_understandable":
+        if sample_completeness == "broken" or sample_image_support == "missing_or_unusable":
+            decision = "reject"
+            reason_codes.append("sample_semantics_broken")
+        else:
+            decision = "review"
+            reason_codes.append("sample_understanding_review_required")
+        reason_codes.extend(sample_reason_codes)
+    elif clean_score < th.reject_clean_score_below:
+        if strategy == "drop_image_index" and raw_question_text:
+            decision = "review"
+            reason_codes.append("pure_image_choice_needs_review")
+        else:
+            decision = "reject"
+            reason_codes.append("low_clean_score")
     elif (
         clean_score < th.review_clean_score_below
         or text_completeness < th.min_text_completeness_score
@@ -739,7 +920,8 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
         or "multi_image_quality_variance" in quality_flags
         or rewrite_report.get("strategy") == "split_open"
         or text_structure.get("text_structure_status") != "complete"
-        or solvability_report.get("decision_hint") != "pass"
+        or sample_completeness == "broken"
+        or (sample_understanding and sample_understanding.get("joint_understanding_status") == "partially_understandable")
     ):
         decision = "review"
         if clean_score < th.review_clean_score_below:
@@ -758,6 +940,10 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
             reason_codes.append("text_structure_partial")
         if solvability_report.get("decision_hint") != "pass":
             reason_codes.extend(solvability_report.get("failure_codes", []))
+        if sample_completeness == "broken":
+            reason_codes.append("sample_completeness_broken")
+        if sample_understanding and sample_understanding.get("joint_understanding_status") == "partially_understandable":
+            reason_codes.extend(sample_reason_codes)
     else:
         decision = "pass"
         reason_codes.append("meets_cleaning_requirements")
@@ -768,6 +954,7 @@ def clean_gate(pipeline: Any, raw_question_text: str, raw_answer_text: str, text
         alignment_record,
         solvability_report,
         quality_flags,
+        sample_understanding,
     )
     if llm_override and decision == "review" and llm_override["decision"] in {"review", "reject"}:
         decision = llm_override["decision"]
@@ -789,6 +976,7 @@ def apply_decision_override(
     alignment_record: Dict[str, Any],
     solvability_report: Dict[str, Any],
     quality_flags: List[str],
+    sample_understanding: Optional[Dict[str, Any]] = None,
 ) -> Optional[Dict[str, Any]]:
     if decision_agent is None:
         return None
@@ -798,6 +986,7 @@ def apply_decision_override(
         alignment_record,
         solvability_report,
         quality_flags,
+        sample_understanding,
     )
 def build_reject_record(pipeline: Any, problem_id: str, gate: Dict[str, Any], quality_flags: List[str], rewrite_report: Dict[str, Any], alignment_record: Dict[str, Any], solvability_report: Dict[str, Any]):
     if gate["decision"] != "reject":
@@ -974,6 +1163,7 @@ def rewrite_sample(pipeline: Any, spec: Any, sample: Any, preprocessed: Dict[str
         "rewrite_report": rewrite_report,
         "open_variants": open_variants,
         "rewrite_record": rewrite_record,
+        "sample_understanding": None,
     }
 
 
@@ -1013,6 +1203,24 @@ def build_potential_scores(
 
 
 def finalize_cleaning_sample(pipeline: Any, spec: Any, sample: Any, crop_dir: Path, preprocessed: Dict[str, Any], extracted: Dict[str, Any], rewritten: Dict[str, Any]) -> Dict[str, Any]:
+    sample_understanding = rewritten.get("sample_understanding")
+    if getattr(pipeline, "sample_understanding_agent", None) is not None:
+        sample_understanding = pipeline.sample_understanding_agent.assess(
+            dataset_name=spec.display_name,
+            raw_question_text=preprocessed["raw_question_text"],
+            raw_answer_text=preprocessed["raw_answer_text"],
+            normalized_question_text=preprocessed["normalized_question_text"],
+            normalized_answer_text=preprocessed["normalized_answer_text"],
+            requires_image=preprocessed["requires_image"],
+            text_dominant=preprocessed["text_dominant"],
+            cleaning_path=preprocessed["cleaning_path"],
+            quality_flags=extracted["quality_flags"],
+            rewrite_report=rewritten["rewrite_report"],
+            open_variants=rewritten["open_variants"],
+            text_structure=extracted["text_structure"],
+            alignment_record=extracted["alignment_record"],
+            solvability_report=extracted["solvability_report"],
+        )
     potential_scores = build_potential_scores(
         pipeline,
         preprocessed["normalized_question_text"],
@@ -1039,6 +1247,7 @@ def finalize_cleaning_sample(pipeline: Any, spec: Any, sample: Any, crop_dir: Pa
         rewritten["open_variants"],
         extracted["text_structure"],
         extracted["solvability_report"],
+        sample_understanding,
     )
     clean_problem_record = build_clean_problem_record(
         pipeline,
@@ -1118,6 +1327,7 @@ def finalize_cleaning_sample(pipeline: Any, spec: Any, sample: Any, crop_dir: Pa
         preprocessed["image_qualities"],
         extracted["text_structure"],
         extracted["solvability_report"],
+        sample_understanding,
     )
     reject_record = build_reject_record(
         pipeline,

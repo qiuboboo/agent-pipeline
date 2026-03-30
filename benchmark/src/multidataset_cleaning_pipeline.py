@@ -29,7 +29,7 @@ from PIL import Image
 
 try:
     from .cleaning_semantics import AlignmentEngine, SolvabilityChecker, TextContextParser, VisualParser, normalize_structured_text
-    from .pipeline_cleaning import DecisionAgent, finalize_cleaning_sample, rewrite_sample
+    from .pipeline_cleaning import DecisionAgent, SampleUnderstandingAgent, finalize_cleaning_sample, rewrite_sample
     from .pipeline_collection import default_image_quality, extract_sample_structure, ingest_dataset_samples, preprocess_sample
     from .pipeline_reporting import (
         append_sample_result,
@@ -55,7 +55,7 @@ try:
     )
 except ImportError:
     from cleaning_semantics import AlignmentEngine, SolvabilityChecker, TextContextParser, VisualParser, normalize_structured_text
-    from pipeline_cleaning import DecisionAgent, finalize_cleaning_sample, rewrite_sample
+    from pipeline_cleaning import DecisionAgent, SampleUnderstandingAgent, finalize_cleaning_sample, rewrite_sample
     from pipeline_collection import default_image_quality, extract_sample_structure, ingest_dataset_samples, preprocess_sample
     from pipeline_reporting import (
         append_sample_result,
@@ -500,6 +500,8 @@ class UnifiedSample:
     metadata: Dict[str, Any] = field(default_factory=dict)
     choice_map: Dict[str, str] = field(default_factory=dict)
     force_requires_image: bool = False
+    has_reasoning_chain: bool = False
+    reasoning_chain: str = ""
 
     @property
     def image(self) -> Optional[Image.Image]:
@@ -1081,18 +1083,10 @@ class LocalFileConnector(BaseConnector):
                     images=images,
                     image_sources=image_sources or extracted["image_paths"],
                     raw_record=row,
-                    metadata={
-                        "row_index": index,
-                        "source_file": str(path),
-                        "image_paths": extracted.get("image_paths", []),
-                        "extraction_notes": extracted.get("extraction_notes", []),
-                        "question_field": extracted.get("question_field"),
-                        "answer_field": extracted.get("answer_field"),
-                        "image_field": extracted.get("image_field"),
-                        "choice_field": extracted.get("choice_field"),
-                    },
                     choice_map=extracted["choice_map"],
                     force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
+                    has_reasoning_chain=bool(extracted.get("has_reasoning_chain", False)),
+                    reasoning_chain=to_plain_text(extracted.get("reasoning_chain")) if extracted.get("has_reasoning_chain") else "",
                 )
             )
         if self.config.sample_strategy == "random" and samples:
@@ -1391,6 +1385,8 @@ class HuggingFaceConnector(BaseConnector):
                         },
                         choice_map=extracted["choice_map"],
                         force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
+                        has_reasoning_chain=bool(extracted.get("has_reasoning_chain", False)),
+                        reasoning_chain=to_plain_text(extracted.get("reasoning_chain")) if extracted.get("has_reasoning_chain") else "",
                     )
                 )
                 if len(samples) >= self.config.sample_per_dataset:
@@ -1468,6 +1464,8 @@ class HuggingFaceConnector(BaseConnector):
                     },
                     choice_map=extracted["choice_map"],
                     force_requires_image=bool(extracted["force_requires_image"] or image_sources),
+                    has_reasoning_chain=bool(extracted.get("has_reasoning_chain", False)),
+                    reasoning_chain=to_plain_text(extracted.get("reasoning_chain")) if extracted.get("has_reasoning_chain") else "",
                 )
             )
             if len(samples) >= self.config.sample_per_dataset:
@@ -1554,6 +1552,8 @@ class HuggingFaceConnector(BaseConnector):
                     },
                     choice_map=extracted["choice_map"],
                     force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
+                    has_reasoning_chain=bool(extracted.get("has_reasoning_chain", False)),
+                    reasoning_chain=to_plain_text(extracted.get("reasoning_chain")) if extracted.get("has_reasoning_chain") else "",
                 )
             )
         return "available", samples, None
@@ -1920,6 +1920,7 @@ class MultiDatasetCleaningPipeline:
         self.client = SharedOpenAICompatibleClient(self.config.model)
         self.logger = SharedRunLogger(setup.run_dir, enabled=True)
         self.rewrite_agent = RewriteAgent(self.client, self.text_normalizer, logger=self.logger)
+        self.sample_understanding_agent = SampleUnderstandingAgent(self.client)
         self.decision_agent = DecisionAgent(self.client)
         self.text_parser = TextContextParser()
         self.visual_parser = VisualParser()

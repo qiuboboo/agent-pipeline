@@ -253,6 +253,8 @@ class UnifiedSample:
     metadata: Dict[str, Any] = field(default_factory=dict)
     choice_map: Dict[str, str] = field(default_factory=dict)
     force_requires_image: bool = False
+    has_reasoning_chain: bool = False
+    reasoning_chain: str = ""
 
     @property
     def image(self) -> Optional[Image.Image]:
@@ -307,6 +309,8 @@ class ExtractedRecord(TypedDict):
     answer_field: Optional[str]
     image_field: Optional[str]
     choice_field: Optional[str]
+    has_reasoning_chain: bool
+    reasoning_chain: str
 
 
 class PreprocessedSample(TypedDict, total=False):
@@ -329,6 +333,8 @@ class PreprocessedSample(TypedDict, total=False):
     answer_norm: Dict[str, Any]
     normalized_assets: Dict[str, Any]
     cleaning_path: str
+    has_reasoning_chain: bool
+    reasoning_chain: str
 
 
 class CleaningRecord(TypedDict, total=False):

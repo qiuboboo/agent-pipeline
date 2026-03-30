@@ -48,5 +48,6 @@
 ```
 
 ## Decision guidance
-- `registry_passed=true` 仅当至少一张图片存在、题干存在、答案存在。
+- `registry_passed=true` 仍表示严格的多模态资产完整通过；如果图片缺失、但题干/答案仍存在，请在 `issues` 中记录问题，不要额外编造结论。
+- 资产登记阶段负责记录缺口，不等于候选入池阶段必须直接 reject。
 - `issues` 只写明确可证实的问题。

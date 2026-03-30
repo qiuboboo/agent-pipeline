@@ -313,11 +313,16 @@
 
 ```python
 {
-  "record_type": "rewrite_report",
+  "rewrite_id": str,
   "problem_id": str,
+  "source_problem_id": str | None,
   "strategy": str | None,
   "rationale": str | None,
   "llm_used": bool | None,
+  "fallback_used": bool,
+  "fallback_reason": str | None,
+  "schema_valid": bool,
+  "normalization_warnings": list[str],
   "discard_reason_codes": list[str],
   "variant_count": int,
   "variants": [
@@ -334,6 +339,13 @@
 }
 ```
 
+### 关键字段要求
+- `strategy`：必填，稳定字段名，不得重命名
+- `discard_reason_codes`：必填，必须始终为 list
+- `variant_count`：必填，和 `variants` 长度保持一致
+- `llm_used`：必填，必须保留
+- 当前实现不强制写出 `record_type`
+
 ---
 
 ### 5.6 `cleaning_record`
@@ -342,25 +354,79 @@
 
 ```python
 {
+  "cleaning_id": str,
   "problem_id": str,
-  "source_dataset": str,
-  "quality_flags": list[str],
-  "alignment_status": str | None,
-  "solvability_score": float | None,
-  "solvability_decision_hint": str | None,
+  "cleaning_version": str,
+  "pipeline_run_id": str,
+  "dataset_name": str,
+  "input_asset_ids": list[str],
+  "normalization_actions": list,
+  "quality_checks": list,
+  "alignment_summary": {
+    "alignment_id": str,
+    "coverage_score": float | None,
+    "consistency_score": float | None,
+    "alignment_status": str | None,
+    "conflict_count": int
+  },
+  "text_structure_summary": {
+    "text_structure_id": str,
+    "question_type": str | None,
+    "condition_count": int,
+    "target_count": int,
+    "answer_slot_count": int,
+    "status": str | None
+  },
+  "solvability_summary": {
+    "solvability_id": str,
+    "solvability_score": float | None,
+    "reasoning_path_exists": bool,
+    "decision_hint": str | None,
+    "failure_codes": list[str]
+  },
+  "sample_understanding_summary": {
+    "question_complete": bool,
+    "answer_complete": bool,
+    "completeness_status": str,
+    "image_support_status": str,
+    "joint_understanding_status": str,
+    "reason_codes": list[str],
+    "risk_flags": list[str],
+    "rationale": str,
+    "confidence": float,
+    "llm_used": bool | None
+  } | None,
   "rewrite_summary": {
     "strategy": str | None,
     "variant_count": int,
     "discard_reason_codes": list[str]
   },
+  "missing_field_summary": {
+    "missing_question_text": bool,
+    "missing_answer_text": bool,
+    "missing_image_count": int
+  },
+  "risk_flags": list[str],
+  "clean_score": float | None,
   "decision": str,
   "decision_reason_codes": list[str],
   "review_ticket_id": str | None,
-  "quality_checks": list,
-  "actions": list,
-  "created_at": str
+  "operator_type": str,
+  "started_at": str,
+  "finished_at": str,
+  "candidate_id": str,
+  "cleaning_path": str,
+  "text_dominant": bool
 }
 ```
+
+### 关键字段要求
+- `decision`：必填，典型值 `pass/review/reject`
+- `decision_reason_codes`：必填，必须始终为 list
+- `rewrite_summary`：必填，供下游快速消费 rewrite 结果
+- `alignment_summary.alignment_status`：必填，作为当前稳定对齐字段
+- `solvability_summary.decision_hint`：必填，作为当前稳定可解性提示字段
+- `sample_understanding_summary`：允许为空；若存在，则作为 cleaning 阶段的补充语义理解摘要写出，不单独替代最终 gate
 
 ---
 
@@ -390,22 +456,45 @@
 {
   "problem_id": str,
   "source_dataset": str,
+  "source_split": str | None,
   "source_problem_id": str,
+  "ingest_batch_id": str,
+  "problem_type": str,
+  "domain_tags": list[str],
+  "language": str,
+  "raw_question_text": str,
   "normalized_question_text": str,
+  "raw_answer_text": str,
   "normalized_answer_text": str,
   "answer_type": str,
   "image_count": int,
+  "has_multiple_images": bool,
   "requires_image": bool,
+  "multimodal_strength_score": float | None,
+  "multi_step_score": float | None,
+  "verifiability_score": float | None,
+  "quality_risk_flags": list[str],
   "current_status": str,
   "clean_decision": str,
   "clean_decision_reason_codes": list[str],
+  "review_priority": str | None,
   "annotation_ready": bool,
   "qa_precheck_ready": bool,
+  "release_reserved": bool,
   "rewrite_strategy": str | None,
   "open_variant_count": int,
+  "candidate_id": str,
+  "text_dominant": bool,
+  "cleaning_path": str,
   "alignment_status": str | None,
+  "solvability_score": float | None,
   "solvability_decision_hint": str | None,
-  "created_at": str
+  "created_at": str,
+  "updated_at": str,
+  "initial_image_dependency_score": float | None,
+  "initial_multi_solution_score": float | None,
+  "initial_verifiability_score": float | None,
+  "multi_solution_mining_policy": str | None
 }
 ```
 
@@ -476,9 +565,17 @@
   "visual_structure_records": list,
   "alignment_records": list,
   "solvability_reports": list,
-  "clean_pool_entries": list
+  "clean_pool_entries": list,
+  "candidate_problem_records": list,
+  "candidate_pool_entries": list,
+  "clean_problem_records": list,
+  "normalized_assets": list,
+  "raw_asset_bundles": list,
+  "node_records": list
 }
 ```
+
+说明：后七类记录属于当前主线已稳定写出的 dataset 级扩展产物；下游若只消费清洗后正式主输出，可优先依赖前十二类核心 bundle。
 
 #### dataset summary
 

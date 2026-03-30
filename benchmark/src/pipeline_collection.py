@@ -48,6 +48,59 @@ def compute_collection_priority(pipeline: Any, initial_scores: Dict[str, Any]) -
     }
 
 
+def determine_multi_solution_policy(spec: Any) -> Dict[str, Any]:
+    mode = (spec.multi_solution_mode or "auto").strip().lower()
+    if mode == "auto":
+        if spec.key in {"scemqa", "seephy", "multi_physics", "emma"}:
+            mode = "conservative"
+        elif spec.key in {"geometry3k", "cmm_math", "mathvision", "mm_math", "eee_bench", "physreason", "geosqa"}:
+            mode = "aggressive"
+        elif any(token in spec.subject for token in ["生物", "化学"]):
+            mode = "conservative"
+        elif any(token in spec.subject for token in ["数学", "电气", "物理"]):
+            mode = "balanced"
+        else:
+            mode = "balanced"
+    rationale_map = {
+        "aggressive": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+        "balanced": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+        "conservative": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    }
+    return {"mode": mode, "should_push_multi_solution_agent": mode == "aggressive", "rationale": rationale_map.get(mode, rationale_map["balanced"])}
+
+
+def compute_initial_collection_scores(
+    pipeline: Any,
+    normalized_question_text: str,
+    normalized_answer_text: str,
+    answer_type: str,
+    requires_image: bool,
+    text_dominant: bool,
+    image_qualities: Any,
+    choices: Dict[str, str],
+    multi_solution_policy: Dict[str, Any],
+) -> Dict[str, Any]:
+    best_readability = max((quality.get("readability_score", 0.0) for quality in image_qualities), default=0.0)
+    image_dependency = 0.9 if requires_image else 0.2 + 0.08 * int(bool(choices))
+    multi_solution = 0.18
+    if multi_solution_policy["mode"] == "aggressive":
+        multi_solution += 0.28
+    elif multi_solution_policy["mode"] == "balanced":
+        multi_solution += 0.14
+    if any(token in normalized_question_text.lower() for token in ["prove", "different", "all possible", "另一种", "不同", "证明"]):
+        multi_solution += 0.18
+    if len(choices) >= 4 and not text_dominant:
+        multi_solution += 0.06
+    verifiability = 0.2 + 0.42 * int(bool(normalized_answer_text))
+    if answer_type in {"numeric", "option", "short_text"}:
+        verifiability += 0.16
+    if requires_image:
+        verifiability += 0.12 * pipeline.clamp(best_readability)
+    return {
+        "initial_image_dependency_score": round(pipeline.clamp(image_dependency), 4),
+        "initial_multi_solution_score": round(pipeline.clamp(multi_solution), 4),
+        "initial_verifiability_score": round(pipeline.clamp(verifiability), 4),
+    }
 def run_initial_collection_scoring(
     pipeline: Any,
     spec: Any,
@@ -59,8 +112,9 @@ def run_initial_collection_scoring(
     image_qualities: Any,
     choices: Dict[str, str],
 ) -> Dict[str, Any]:
-    multi_solution_policy = pipeline.determine_multi_solution_policy(spec)
-    initial_scores = pipeline.compute_initial_collection_scores(
+    multi_solution_policy = determine_multi_solution_policy(spec)
+    initial_scores = compute_initial_collection_scores(
+        pipeline,
         normalized_question_text,
         normalized_answer_text,
         original_answer_type,
