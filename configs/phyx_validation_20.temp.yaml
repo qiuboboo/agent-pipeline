@@ -1,0 +1,38 @@
+runtime:
+  sample_per_dataset: 20
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: benchmarkallinone/outputs/phyx_validation_20
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-phyx-validation-20
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+model:
+  base_url: http://9854399.xyz:8888/v1
+  api_key: "sk-e6049d352cc1a8c0427cb1e945b67e59f73915223cb987deb0c95d1b9f33424b"
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+datasets:
+- key: phyx
+  display_name: PhyX
+  subject: 物理
+  note: 使用当前现有框架对 Cloudriver/PhyX 做 20 条单数据集试跑，不修改代码
+  source_kind: huggingface
+  source_locator: Cloudriver/PhyX
+  question_fields:
+  - question
+  - question_description
+  - question_simply
+  answer_fields:
+  - answer
+  image_fields:
+  - image
+  choice_fields:
+  - options
+  force_requires_image: true
+  hf_config_name: data_for_llms_eval
+  split: phyx_mc

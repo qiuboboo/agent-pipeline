@@ -168,25 +168,51 @@ def parse_choice_map(value: Any) -> Dict[str, str]:
             if text and not is_null_like_text(text):
                 choices[label] = text
         return choices
-    text = normalize_whitespace(to_plain_text(value))
+    raw_text = to_plain_text(value)
+    text = normalize_whitespace(raw_text)
     if not text or is_null_like_text(text):
         return {}
     choices: Dict[str, str] = {}
     current_key: Optional[str] = None
     current_value: List[str] = []
-    for line in text.splitlines():
-        stripped = line.strip()
-        match = re.match(r"^[\(\[]?([A-H])[\)\].:]?\s*(.*)$", stripped)
+    pending_prefix: List[str] = []
+    for line in raw_text.splitlines():
+        stripped = normalize_whitespace(line)
+        if not stripped:
+            continue
+        match = re.match(r"^[\(\[]?([A-H])[\)\].:、]?\s*(.*)$", stripped)
         if match:
+            label = match.group(1).upper()
+            suffix = match.group(2).strip()
+            if current_key is None and pending_prefix:
+                if not suffix:
+                    choices[label] = normalize_whitespace(" ".join(pending_prefix))
+                    pending_prefix = []
+                    continue
+                if label > "A":
+                    inferred_label = chr(ord(label) - 1)
+                    if inferred_label not in choices:
+                        choices[inferred_label] = normalize_whitespace(" ".join(pending_prefix))
+                        pending_prefix = []
             if current_key is not None:
                 choices[current_key] = normalize_whitespace(" ".join(current_value))
-            current_key = match.group(1).upper()
-            current_value = [match.group(2).strip()]
-        elif current_key is not None and stripped:
+            current_key = label
+            current_value = [suffix] if suffix else []
+        elif current_key is not None:
             current_value.append(stripped)
+        else:
+            pending_prefix.append(stripped)
     if current_key is not None:
         choices[current_key] = normalize_whitespace(" ".join(current_value))
     return {key: item for key, item in choices.items() if item and not is_null_like_text(item)}
+
+
+def is_placeholder_choice_text(text: str) -> bool:
+    normalized = normalize_whitespace(text)
+    if not normalized:
+        return False
+    compact = re.sub(r"\s+", "", normalized)
+    return bool(re.fullmatch(r"(?:<imagehere>|imagehere|<image>)+", compact, flags=re.IGNORECASE))
 
 
 def extract_json_object(text: str) -> Optional[Dict[str, Any]]:
@@ -237,6 +263,7 @@ class DatasetSpec:
     force_requires_image: bool = False
     answer_index_base: Optional[int] = None
     multi_solution_mode: str = "auto"
+    sample_offset: int = 0
 
 
 @dataclass
@@ -971,6 +998,8 @@ def heuristic_extract_record_content(row: Dict[str, Any], spec: "DatasetSpec") -
         force_requires_image = force_requires_image or bool(
             re.search(r"\b(figure|diagram|graph|chart|image|shown|below|sample|下图|图中|示意图)\b", raw_question, flags=re.IGNORECASE)
         )
+    if not force_requires_image and image_paths and any(is_placeholder_choice_text(choice) for choice in choice_map.values()):
+        force_requires_image = True
     return {
         "raw_question_text": raw_question,
         "raw_answer_text": raw_answer,
@@ -1045,7 +1074,10 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
     if letter_match:
         key = letter_match.group(1)
         if key in choice_map:
-            return normalize_whitespace(choice_map[key])
+            mapped_text = normalize_whitespace(choice_map[key])
+            if mapped_text and not is_placeholder_choice_text(mapped_text):
+                return mapped_text
+        return key
     if choice_map and answer_index_base is not None:
         numeric_match = re.fullmatch(r"[+-]?\d+", answer)
         if numeric_match:
@@ -1059,14 +1091,14 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
                 if 0 <= resolved_index < len(choice_labels):
                     mapped_label = choice_labels[resolved_index]
                     mapped_answer = normalize_whitespace(choice_map.get(mapped_label, ""))
-                    if mapped_answer:
+                    if mapped_answer and not is_placeholder_choice_text(mapped_answer):
                         return mapped_answer
     mixed_match = re.match(r"^\(?([A-Z])\)?[\s.、:_-]+(.+)$", answer, flags=re.IGNORECASE)
     if mixed_match and choice_map:
         label = mixed_match.group(1).upper()
         suffix = normalize_whitespace(mixed_match.group(2))
         choice_text = normalize_whitespace(choice_map.get(label, ""))
-        if choice_text and (suffix == choice_text or suffix.casefold() == choice_text.casefold()):
+        if choice_text and not is_placeholder_choice_text(choice_text) and (suffix == choice_text or suffix.casefold() == choice_text.casefold()):
             return choice_text
     return normalize_whitespace(answer)
 
@@ -1506,9 +1538,13 @@ class HuggingFaceConnector(BaseConnector):
             if self.spec.key == "physreason":
                 return self.sample_from_physreason_zip()
             return "source_unavailable", [], detail or "load_dataset failed"
+        offset = max(0, int(self.spec.sample_offset or 0))
         if self.config.sample_strategy == "random":
             dataset = dataset.shuffle(seed=self.config.shuffle_seed)
-        rows = dataset.select(range(min(self.config.sample_per_dataset, len(dataset))))
+        if offset >= len(dataset):
+            return "available", [], detail
+        end_index = min(offset + self.config.sample_per_dataset, len(dataset))
+        rows = dataset.select(range(offset, end_index))
         samples: List[UnifiedSample] = []
         for index, row in enumerate(rows):
             row = dict(row)
@@ -3073,6 +3109,12 @@ class MultiDatasetCleaningPipeline:
                 except ImportError:
                     from phyx_connector import PhyXConnector  # type: ignore
                 return PhyXConnector(spec, self.config, self.client)
+            if spec.key == "cmm_math":
+                try:
+                    from .cmm_math_connector import CMMMathConnector
+                except ImportError:
+                    from cmm_math_connector import CMMMathConnector  # type: ignore
+                return CMMMathConnector(spec, self.config, self.client)
             return HuggingFaceConnector(spec, self.config, self.client)
         if spec.source_kind == "github":
             return GitHubConnector(spec, self.config, self.client)

@@ -1,11 +1,11 @@
 runtime:
-  sample_per_dataset: 2
+  sample_per_dataset: 300
   sample_strategy: head
   shuffle_seed: 42
-  sample_concurrency: 1
-  output_root: benchmarkallinone/outputs/phyx_validation_2
+  sample_concurrency: 2
+  output_root: benchmarkallinone/outputs/phyx_029_328_rerun
   cleaning_version: v3.2.0
-  batch_id_prefix: benchmarkallinone-phyx-validation-2
+  batch_id_prefix: benchmarkallinone-phyx-029-328-rerun
   save_sample_bundle: true
   git_cache_root: benchmarkallinone/outputs/repo_cache
 
@@ -22,7 +22,7 @@ datasets:
   - key: phyx
     display_name: PhyX
     subject: 物理
-    note: 使用专用 connector 对 PhyX 做 2 条验证试跑
+    note: PhyX 从 fallback 起点 row_index=29 开始重跑 300 条
     source_kind: huggingface
     source_locator: Cloudriver/PhyX
     hf_config_name: data_for_llms_eval
@@ -32,3 +32,4 @@ datasets:
     image_fields: [image]
     choice_fields: [options]
     force_requires_image: true
+    sample_offset: 29

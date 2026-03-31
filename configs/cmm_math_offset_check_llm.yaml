@@ -1,0 +1,33 @@
+runtime:
+  sample_per_dataset: 3
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: benchmarkallinone/outputs/cmm_math_offset_check_llm
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-cmm-math-offset-check-llm
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: http://9854399.xyz:8888/v1
+  api_key: "sk-e6049d352cc1a8c0427cb1e945b67e59f73915223cb987deb0c95d1b9f33424b"
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: cmm_math
+    display_name: CMM-Math
+    subject: 数学
+    note: CMM-Math offset 快速验证，跳过前 100 条，启用 LLM
+    source_kind: huggingface
+    source_locator: ecnu-icalk/cmm-math
+    split: train
+    question_fields: [question]
+    answer_fields: [answer, solution]
+    image_fields: [decoded_image, image]
+    choice_fields: [options, choices]
+    sample_offset: 100

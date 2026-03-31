@@ -84,9 +84,13 @@ class PhyXConnector(HuggingFaceConnector):
         dataset, detail = self.load_dataset_any()
         if dataset is None:
             return "source_unavailable", [], detail or "load_dataset failed"
+        offset = max(0, int(self.spec.sample_offset or 0))
         if self.config.sample_strategy == "random":
             dataset = dataset.shuffle(seed=self.config.shuffle_seed)
-        rows = dataset.select(range(min(self.config.sample_per_dataset, len(dataset))))
+        if offset >= len(dataset):
+            return "available", [], detail
+        end_index = min(offset + self.config.sample_per_dataset, len(dataset))
+        rows = dataset.select(range(offset, end_index))
         samples: List[UnifiedSample] = []
         for index, row in enumerate(rows):
             row = dict(row)
@@ -117,7 +121,7 @@ class PhyXConnector(HuggingFaceConnector):
                     raw_record=row,
                     metadata={
                         "row_index": index,
-                        "image_paths": [],
+                        "image_paths": list(image_sources),
                         "extraction_notes": [
                             "phyx_connector",
                             "phyx_base64_image",

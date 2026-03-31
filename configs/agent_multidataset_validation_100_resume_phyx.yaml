@@ -1,13 +1,13 @@
 runtime:
-  sample_per_dataset: 10
+  sample_per_dataset: 100
   sample_strategy: head
   shuffle_seed: 42
-  sample_concurrency: 1
-  output_root: benchmarkallinone/outputs/other_datasets_validation_10
-  cleaning_version: v3.1.0
-  batch_id_prefix: benchmarkallinone-other-datasets-validation-10
+  sample_concurrency: 2
+  output_root: benchmarkallinone/outputs/agent_multidataset_validation_100
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-agent-multidataset-validation-100-resume-phyx
   save_sample_bundle: true
-  git_cache_root: benchmark/outputs/repo_cache
+  git_cache_root: benchmarkallinone/outputs/repo_cache
 
 model:
   base_url: http://9854399.xyz:8888/v1
@@ -19,22 +19,10 @@ model:
   enabled: true
 
 datasets:
-  - key: geometry3k
-    display_name: Geometry3K
-    subject: 数学
-    note: 其他数据集 10 条验证，复用本地 repo cache / GitHub 结构发现
-    source_kind: github
-    source_locator: https://github.com/lupantech/InterGPS
-    question_fields: [problem_text, compact_text, annotat_text, problem, question, text]
-    answer_fields: [answer, solution, label]
-    image_fields: [img_diagram, img_problem, diagram, image, img_path, image_path]
-    choice_fields: [choices, compact_choices, options]
-    force_requires_image: true
-
   - key: cmm_math
     display_name: CMM-Math
     subject: 数学
-    note: 其他数据集 10 条验证，使用 Hugging Face 数据源
+    note: 从中断位置继续进行 100 条 agent 采集与清洗验证
     source_kind: huggingface
     source_locator: ecnu-icalk/cmm-math
     split: train
@@ -46,7 +34,7 @@ datasets:
   - key: mathvision
     display_name: MathVision
     subject: 数学
-    note: 其他数据集 10 条验证，使用 Hugging Face 数据源
+    note: 从中断位置继续进行 100 条 agent 采集与清洗验证
     source_kind: huggingface
     source_locator: MathLLMs/MathVision
     split: test
@@ -58,7 +46,7 @@ datasets:
   - key: physreason
     display_name: PhysReason
     subject: 物理
-    note: 其他数据集 10 条验证，使用 Hugging Face 数据源以启用 raw zip fallback
+    note: 从中断位置继续进行 100 条 agent 采集与清洗验证，并启用 raw zip fallback
     source_kind: huggingface
     source_locator: zhibei1204/PhysReason
     split: mini
@@ -66,3 +54,17 @@ datasets:
     answer_fields: [answer, solution, label]
     image_fields: [image, decoded_image, image_path, img_path, figure]
     choice_fields: [choices, options]
+
+  - key: phyx
+    display_name: PhyX
+    subject: 物理
+    note: 在 100 条续跑中纳入 PhyX，使用专用 connector
+    source_kind: huggingface
+    source_locator: Cloudriver/PhyX
+    hf_config_name: data_for_llms_eval
+    split: phyx_mc
+    question_fields: [question]
+    answer_fields: [answer]
+    image_fields: [image]
+    choice_fields: [options]
+    force_requires_image: true
