@@ -1,0 +1,43 @@
+runtime:
+  sample_per_dataset: 3
+  sample_strategy: head
+  shuffle_seed: 42
+  output_root: benchmarkallinone/outputs/msearth_open_ended_qjb_probe
+  cleaning_version: v3.1.0
+  batch_id_prefix: benchmarkallinone-msearth-open-ended-qjb-probe
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: https://synai996.space/v1
+  api_key: ${OPENAI_API_KEY}
+  model: gpt-5.4
+  reasoning_effort: xhigh
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  agent_only_extraction: false
+
+thresholds:
+  min_width: 256
+  min_height: 256
+  min_sharpness_score: 0.22
+  min_readability_score: 0.35
+  min_contrast_score: 18.0
+  reject_clean_score_below: 0.45
+  review_clean_score_below: 0.62
+  min_text_completeness_score: 0.60
+  min_alignment_consistency: 0.55
+
+datasets:
+  - key: msearth_open_ended
+    display_name: MSEarth Open Ended
+    subject: earth_science
+    note: qjb branch probe for MSEarth Open Ended
+    source_kind: huggingface
+    source_locator: MSEarth/MSEarth_Open_Ended
+    split: train
+    question_fields: [query]
+    answer_fields: [response]
+    image_fields: [image]
+    force_requires_image: true
