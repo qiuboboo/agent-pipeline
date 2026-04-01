@@ -13,7 +13,7 @@
 
 合并后的机器可读汇总已写入：
 
-- [merged_summary.json](../benchmarkallinone/outputs/mathvision_300_batches/merged_summary.json)
+- [merged_summary.json](../outputs/mathvision_300_batches/merged_summary.json)
 
 ## 2. 合并后总结果
 

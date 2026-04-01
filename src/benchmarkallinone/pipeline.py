@@ -211,7 +211,7 @@ def extract_json_object(text: str) -> Optional[Dict[str, Any]]:
 @dataclass
 class ModelConfig:
     base_url: str = "https://synai996.space/v1"
-    api_key: str = os.environ.get("OPENAI_API_KEY", "")
+    api_key: str = os.environ.get("OPENAI_API_KEY_AGENT", "")
     model: str = "gpt-5.4"
     reasoning_effort: str = "high"
     temperature: float = 0.1
