@@ -524,6 +524,7 @@ class OpenAICompatibleClient:
             return None
         debug = os.environ.get("PIPELINE_DEBUG_CHAT_JSON", "").strip().lower() in {"1", "true", "yes", "on"}
         debug_log_path = os.environ.get("PIPELINE_DEBUG_CHAT_JSON_LOG", "").strip()
+        strict_no_fallback = bool(self.config.enabled)
 
         def emit_debug(message: str) -> None:
             if not debug:
@@ -550,7 +551,9 @@ class OpenAICompatibleClient:
         }
         attempts = max(1, int(getattr(self.config, "retry_attempts", 1) or 1))
         backoff = float(getattr(self.config, "retry_backoff_seconds", 0.0) or 0.0)
-        for attempt in range(1, attempts + 1):
+        attempt = 0
+        while True:
+            attempt += 1
             req = urllib.request.Request(
                 url,
                 data=json.dumps(payload).encode("utf-8"),
@@ -563,63 +566,87 @@ class OpenAICompatibleClient:
                 },
                 method="POST",
             )
-            if debug and attempts > 1 and attempt > 1:
-                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} retrying attempt={attempt}/{attempts}")
+            if debug and attempt > 1:
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} retrying attempt={attempt}{' (strict_no_fallback)' if strict_no_fallback else ''}")
             try:
                 with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
                     raw_body = response.read().decode("utf-8")
                     body = json.loads(raw_body)
             except urllib.error.HTTPError as exc:
                 error_body = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else ""
-                self.last_error_reason = f"HTTPError attempt={attempt}/{attempts} status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:200]}"
+                self.last_error_reason = f"HTTPError attempt={attempt} status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:200]}"
                 emit_debug(
-                    f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
+                    f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt} HTTPError status={getattr(exc, 'code', None)} reason={getattr(exc, 'reason', None)} body_preview={error_body[:400]}"
                 )
-                if attempt < attempts and getattr(exc, "code", None) in {408, 409, 425, 429, 500, 502, 503, 504}:
+                if strict_no_fallback or getattr(exc, "code", None) in {408, 409, 425, 429, 500, 502, 503, 504}:
                     if backoff > 0:
-                        time.sleep(backoff * attempt)
+                        time.sleep(backoff * max(1, min(attempt, attempts)))
                     continue
                 return None
             except urllib.error.URLError as exc:
-                self.last_error_reason = f"URLError attempt={attempt}/{attempts} reason={exc}"
-                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} URLError reason={exc}")
+                self.last_error_reason = f"URLError attempt={attempt} reason={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt} URLError reason={exc}")
+                if strict_no_fallback:
+                    if backoff > 0:
+                        time.sleep(backoff * max(1, min(attempt, attempts)))
+                    continue
                 if attempt < attempts:
                     if backoff > 0:
                         time.sleep(backoff * attempt)
                     continue
                 return None
             except http.client.RemoteDisconnected as exc:
-                self.last_error_reason = f"RemoteDisconnected attempt={attempt}/{attempts} reason={exc}"
-                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} RemoteDisconnected reason={exc}")
+                self.last_error_reason = f"RemoteDisconnected attempt={attempt} reason={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt} RemoteDisconnected reason={exc}")
+                if strict_no_fallback:
+                    if backoff > 0:
+                        time.sleep(backoff * max(1, min(attempt, attempts)))
+                    continue
                 if attempt < attempts:
                     if backoff > 0:
                         time.sleep(backoff * attempt)
                     continue
                 return None
             except ConnectionResetError as exc:
-                self.last_error_reason = f"ConnectionResetError attempt={attempt}/{attempts} reason={exc}"
-                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} ConnectionResetError reason={exc}")
+                self.last_error_reason = f"ConnectionResetError attempt={attempt} reason={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt} ConnectionResetError reason={exc}")
+                if strict_no_fallback:
+                    if backoff > 0:
+                        time.sleep(backoff * max(1, min(attempt, attempts)))
+                    continue
                 if attempt < attempts:
                     if backoff > 0:
                         time.sleep(backoff * attempt)
                     continue
                 return None
             except TimeoutError as exc:
-                self.last_error_reason = f"TimeoutError attempt={attempt}/{attempts} reason={exc}"
-                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} TimeoutError reason={exc}")
+                self.last_error_reason = f"TimeoutError attempt={attempt} reason={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt} TimeoutError reason={exc}")
+                if strict_no_fallback:
+                    if backoff > 0:
+                        time.sleep(backoff * max(1, min(attempt, attempts)))
+                    continue
                 if attempt < attempts:
                     if backoff > 0:
                         time.sleep(backoff * attempt)
                     continue
                 return None
             except json.JSONDecodeError as exc:
-                self.last_error_reason = f"Response JSON decode failed attempt={attempt}/{attempts} error={exc}"
-                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Response JSON decode failed error={exc}")
+                self.last_error_reason = f"Response JSON decode failed attempt={attempt} error={exc}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt} Response JSON decode failed error={exc}")
+                if strict_no_fallback:
+                    if backoff > 0:
+                        time.sleep(backoff * max(1, min(attempt, attempts)))
+                    continue
                 return None
             choices = body.get("choices") or []
             if not choices:
-                self.last_error_reason = f"Missing choices attempt={attempt}/{attempts} body_preview={json.dumps(body, ensure_ascii=False)[:200]}"
-                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
+                self.last_error_reason = f"Missing choices attempt={attempt} body_preview={json.dumps(body, ensure_ascii=False)[:200]}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt} Missing choices body_preview={json.dumps(body, ensure_ascii=False)[:400]}")
+                if strict_no_fallback:
+                    if backoff > 0:
+                        time.sleep(backoff * max(1, min(attempt, attempts)))
+                    continue
                 return None
             message = choices[0].get("message") or {}
             content = message.get("content", "")
@@ -627,10 +654,13 @@ class OpenAICompatibleClient:
                 content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
             parsed = extract_json_object(to_plain_text(content))
             if parsed is None:
-                self.last_error_reason = f"Content JSON extraction failed attempt={attempt}/{attempts} content_preview={to_plain_text(content)[:200]}"
-                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt}/{attempts} Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
+                self.last_error_reason = f"Content JSON extraction failed attempt={attempt} content_preview={to_plain_text(content)[:200]}"
+                emit_debug(f"[chat_json debug] caller={caller or 'unknown'} attempt={attempt} Content JSON extraction failed content_preview={to_plain_text(content)[:400]}")
+                if strict_no_fallback:
+                    if backoff > 0:
+                        time.sleep(backoff * max(1, min(attempt, attempts)))
+                    continue
             return parsed
-        return None
 
 
 class TextNormalizer:
@@ -1042,7 +1072,11 @@ class LocalFileConnector(BaseConnector):
             return "source_unavailable", [], f"Input not found: {path}"
         samples: List[UnifiedSample] = []
         prompt_client = OpenAICompatibleClient(self.config.model)
+        offset = max(0, int(getattr(self.spec, "sample_offset", 0) or 0))
         for index, row in enumerate(self.iter_records(path)):
+            if index < offset:
+                continue
+            absolute_index = index
             extracted = prompt_extract_record_content(row, self.spec, prompt_client)
             raw_question = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"], self.spec.answer_index_base)
@@ -1068,7 +1102,7 @@ class LocalFileConnector(BaseConnector):
                         images.extend(child_images)
                         image_sources.extend(child_sources)
                         break
-            if not raw_question and not images:
+            if not images:
                 continue
             samples.append(
                 UnifiedSample(
@@ -1077,7 +1111,7 @@ class LocalFileConnector(BaseConnector):
                     subject=self.spec.subject,
                     source_dataset=self.spec.display_name,
                     source_split=self.spec.split or "local_file",
-                    source_problem_id=str(row.get("id", row.get("problem_id", index))),
+                    source_problem_id=str(row.get("id", row.get("problem_id", absolute_index))),
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
@@ -1089,6 +1123,8 @@ class LocalFileConnector(BaseConnector):
                     reasoning_chain=to_plain_text(extracted.get("reasoning_chain")) if extracted.get("has_reasoning_chain") else "",
                 )
             )
+            if self.config.sample_strategy != "random" and len(samples) >= self.config.sample_per_dataset:
+                break
         if self.config.sample_strategy == "random" and samples:
             rng = np.random.default_rng(self.config.shuffle_seed)
             indices = rng.permutation(len(samples)).tolist()[: self.config.sample_per_dataset]
@@ -1112,16 +1148,17 @@ class HuggingFaceConnector(BaseConnector):
         return [item for item in raw if item]
 
     def load_dataset_any(self) -> Tuple[Optional[Dataset], Optional[str]]:
+        token = self.hf_token()
         last_error = None
         for split in self.candidate_splits():
             try:
-                dataset = load_dataset(self.spec.source_locator, self.spec.hf_config_name, split=split)
+                dataset = load_dataset(self.spec.source_locator, self.spec.hf_config_name, split=split, token=token)
                 if isinstance(dataset, Dataset):
                     return dataset, split
             except Exception as exc:
                 last_error = str(exc)
         try:
-            dataset_obj = load_dataset(self.spec.source_locator, self.spec.hf_config_name)
+            dataset_obj = load_dataset(self.spec.source_locator, self.spec.hf_config_name, token=token)
             if isinstance(dataset_obj, DatasetDict):
                 for split_name in dataset_obj.keys():
                     return dataset_obj[split_name], split_name
@@ -1133,13 +1170,20 @@ class HuggingFaceConnector(BaseConnector):
             last_error = str(exc)
         return None, last_error
 
+    def hf_token(self) -> Optional[str]:
+        token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_HUB_TOKEN") or os.environ.get("HF_API_TOKEN")
+        if not token:
+            return None
+        token = token.strip()
+        return token or None
+
     def _repo_files(self) -> List[str]:
         if self._repo_files_cache is not None:
             return self._repo_files_cache
         try:
             from huggingface_hub import list_repo_files
 
-            self._repo_files_cache = list_repo_files(self.spec.source_locator, repo_type="dataset")
+            self._repo_files_cache = list_repo_files(self.spec.source_locator, repo_type="dataset", token=self.hf_token())
         except Exception:
             self._repo_files_cache = []
         return self._repo_files_cache
@@ -1200,7 +1244,7 @@ class HuggingFaceConnector(BaseConnector):
                     return
                 repo_file = candidates[0]
                 self._zip_repo_file = repo_file
-            local_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type='dataset', filename=repo_file))
+            local_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type='dataset', filename=repo_file, token=self.hf_token()))
             self._zip_local_path = local_path
             with zipfile.ZipFile(local_path, 'r') as zf:
                 index: Dict[str, List[str]] = {}
@@ -1236,7 +1280,7 @@ class HuggingFaceConnector(BaseConnector):
         try:
             from huggingface_hub import hf_hub_download
 
-            local_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename=repo_file))
+            local_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename=repo_file, token=self.hf_token()))
             return [Image.open(local_path).convert("RGB")], [str(local_path)]
         except Exception:
             return [], []
@@ -1249,6 +1293,59 @@ class HuggingFaceConnector(BaseConnector):
             return [image], [url]
         except Exception:
             return [], []
+
+    def _ensure_sciverse_archive(self, repo_file: str) -> Path:
+        from huggingface_hub import hf_hub_download
+        import zipfile
+
+        extract_root = Path(self.config.git_cache_root) / "hf_raw" / "sciverse" / Path(repo_file).stem
+        if extract_root.exists():
+            return extract_root
+        ensure_dir(extract_root)
+        zip_path = Path(
+            hf_hub_download(
+                repo_id=self.spec.source_locator,
+                repo_type="dataset",
+                filename=repo_file,
+                token=self.hf_token(),
+            )
+        )
+        with zipfile.ZipFile(zip_path) as zf:
+            zf.extractall(extract_root)
+        return extract_root
+
+    def _load_sciverse_image(self, repo_file: str, folder_name: str, value: Any) -> Tuple[List[Image.Image], List[str]]:
+        text = to_plain_text(value).strip()
+        if not text or is_null_like_text(text):
+            return [], []
+        basename = Path(text).name
+        if not basename:
+            return [], []
+        if "." not in basename:
+            basename = f"{basename}.png"
+        extract_root = self._ensure_sciverse_archive(repo_file)
+        candidate_paths: List[Path] = [extract_root / folder_name / basename]
+        normalized = text.replace('\\', '/').lstrip('./')
+        if normalized:
+            raw_candidate = extract_root / normalized
+            candidate_paths.append(raw_candidate)
+            if raw_candidate.suffix.lower() != ".png":
+                candidate_paths.append(Path(str(raw_candidate) + ".png"))
+        for match in extract_root.rglob(basename):
+            candidate_paths.append(match)
+        seen: set[str] = set()
+        for candidate in candidate_paths:
+            key = str(candidate)
+            if key in seen:
+                continue
+            seen.add(key)
+            if not candidate.exists():
+                continue
+            try:
+                return [Image.open(candidate).convert("RGB")], [str(candidate)]
+            except Exception:
+                continue
+        return [], []
 
     def load_images(self, value: Any) -> Tuple[List[Image.Image], List[str]]:
         images: List[Image.Image] = []
@@ -1321,8 +1418,8 @@ class HuggingFaceConnector(BaseConnector):
         import zipfile
 
         try:
-            jsonl_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.jsonl"))
-            zip_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.zip"))
+            jsonl_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.jsonl", token=self.hf_token()))
+            zip_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.zip", token=self.hf_token()))
         except Exception as exc:
             return "source_unavailable", [], str(exc)
 
@@ -1362,7 +1459,7 @@ class HuggingFaceConnector(BaseConnector):
                         except Exception:
                             images = []
                             image_sources = []
-                if not raw_question and not images:
+                if not images:
                     continue
                 samples.append(
                     UnifiedSample(
@@ -1401,7 +1498,7 @@ class HuggingFaceConnector(BaseConnector):
         if self.spec.split and self.spec.split.lower() in {"train", "full"}:
             zip_name = "PhysReason-full.zip"
         try:
-            zip_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename=zip_name))
+            zip_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename=zip_name, token=self.hf_token()))
         except Exception as exc:
             return "source_unavailable", [], str(exc)
 
@@ -1441,7 +1538,7 @@ class HuggingFaceConnector(BaseConnector):
                         image_sources.append(str(candidate))
                     except Exception:
                         continue
-            if not question_text and not images:
+            if not images:
                 continue
             samples.append(
                 UnifiedSample(
@@ -1474,6 +1571,99 @@ class HuggingFaceConnector(BaseConnector):
             return "source_unavailable", [], "No usable samples extracted from PhysReason zip"
         return "available", samples, None
 
+    def sample_from_sciverse(self, dataset: Dataset, split_name: Optional[str]) -> Tuple[str, List[UnifiedSample], Optional[str]]:
+        variant_specs = [
+            ("knowledge_lite", "knowledge_lite", "image", "Image.zip", "Image"),
+            ("knowledge_rich", "knowledge_rich", "image", "Image.zip", "Image"),
+            ("knowledge_professional", "knowledge_professional", "image", "Image.zip", "Image"),
+            ("vision_dominant", "question_vd", "vision_dominant", "Image_VisionDominant.zip", "Image_VisionDominant"),
+        ]
+
+        def strip_choice_prefix(label: str, text: Any) -> str:
+            cleaned = normalize_whitespace(to_plain_text(text))
+            cleaned = re.sub(rf"^[\(\[]?{label}[\)\].:、]\s*", "", cleaned, flags=re.IGNORECASE)
+            return cleaned.strip()
+
+        if self.config.sample_strategy == "random":
+            dataset = dataset.shuffle(seed=self.config.shuffle_seed)
+        offset = max(0, int(getattr(self.spec, "sample_offset", 0) or 0))
+        if offset >= len(dataset):
+            return "available", [], split_name
+        samples: List[UnifiedSample] = []
+        for absolute_index in range(offset, len(dataset)):
+            row = dict(dataset[absolute_index])
+            row_id = to_plain_text(row.get("id") or absolute_index)
+            choice_map: Dict[str, str] = {}
+            for label, field_name in zip(["A", "B", "C", "D", "E"], ["choiceA", "choiceB", "choiceC", "choiceD", "choiceE"]):
+                choice_text = strip_choice_prefix(label, row.get(field_name))
+                if choice_text and not is_null_like_text(choice_text):
+                    choice_map[label] = choice_text
+            raw_answer = resolve_multiple_choice_answer_text(to_plain_text(row.get("answer")), choice_map, self.spec.answer_index_base)
+            reasoning_chain = normalize_whitespace(to_plain_text(row.get("explanation") or row.get("explanation_zh")))
+            subject = to_plain_text(row.get("subject")) or self.spec.subject
+            variant_candidates: List[Dict[str, Any]] = []
+            for variant_name, question_field, image_field, repo_file, folder_name in variant_specs:
+                raw_question = normalize_whitespace(to_plain_text(row.get(question_field)))
+                if not raw_question or is_null_like_text(raw_question):
+                    continue
+                images, image_sources = self._load_sciverse_image(repo_file, folder_name, row.get(image_field))
+                if not images:
+                    continue
+                variant_candidates.append(
+                    {
+                        "variant": variant_name,
+                        "question_field": question_field,
+                        "image_field": image_field,
+                        "image_ref": to_plain_text(row.get(image_field)),
+                        "raw_question_text": raw_question,
+                        "images": images,
+                        "image_sources": image_sources,
+                    }
+                )
+            if not variant_candidates:
+                continue
+            selected = variant_candidates[0]
+            if getattr(self, "logger", None):
+                self.logger.log(
+                    "SAMPLE",
+                    f"sciverse row_id={row_id} selected_variant={selected['variant']} question_field={selected['question_field']} image_field={selected['image_field']} candidate_variants={len(variant_candidates)} image_source={selected['image_sources'][0] if selected['image_sources'] else ''}",
+                    dataset=self.spec.key,
+                    problem_id=row_id,
+                )
+            samples.append(
+                UnifiedSample(
+                    dataset_key=self.spec.key,
+                    dataset_display_name=self.spec.display_name,
+                    subject=subject,
+                    source_dataset=self.spec.display_name,
+                    source_split=split_name or self.spec.split or "test",
+                    source_problem_id=row_id,
+                    raw_question_text=selected["raw_question_text"],
+                    raw_answer_text=raw_answer,
+                    images=selected["images"],
+                    image_sources=selected["image_sources"],
+                    raw_record=row,
+                    metadata={
+                        "row_index": absolute_index,
+                        "source_row_id": row_id,
+                        "selected_variant": selected["variant"],
+                        "selected_question_field": selected["question_field"],
+                        "selected_image_field": selected["image_field"],
+                        "selected_image_ref": selected["image_ref"],
+                        "available_variants": [item["variant"] for item in variant_candidates],
+                        "question_zh": to_plain_text(row.get("question_zh")),
+                        "explanation_zh": to_plain_text(row.get("explanation_zh")),
+                    },
+                    choice_map=choice_map,
+                    force_requires_image=True,
+                    has_reasoning_chain=bool(reasoning_chain),
+                    reasoning_chain=reasoning_chain,
+                )
+            )
+            if len(samples) >= self.config.sample_per_dataset:
+                return "available", samples, split_name
+        return "available", samples, split_name
+
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         dataset, detail = self.load_dataset_any()
         if dataset is None:
@@ -1482,13 +1672,18 @@ class HuggingFaceConnector(BaseConnector):
             if self.spec.key == "physreason":
                 return self.sample_from_physreason_zip()
             return "source_unavailable", [], detail or "load_dataset failed"
+        if self.spec.key == "sciverse":
+            return self.sample_from_sciverse(dataset, detail)
         if self.config.sample_strategy == "random":
             dataset = dataset.shuffle(seed=self.config.shuffle_seed)
-        rows = dataset.select(range(min(self.config.sample_per_dataset, len(dataset))))
+        offset = max(0, int(getattr(self.spec, "sample_offset", 0) or 0))
+        total_rows = len(dataset)
+        if offset >= total_rows:
+            return "available", [], detail
         samples: List[UnifiedSample] = []
         prompt_client = OpenAICompatibleClient(self.config.model)
-        for index, row in enumerate(rows):
-            row = dict(row)
+        for absolute_index in range(offset, total_rows):
+            row = dict(dataset[absolute_index])
             extracted = prompt_extract_record_content(row, self.spec, prompt_client)
             raw_question = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(extracted["raw_answer_text"]), extracted["choice_map"], self.spec.answer_index_base)
@@ -1518,9 +1713,9 @@ class HuggingFaceConnector(BaseConnector):
                         images.extend(child_images)
                         image_sources.extend(child_sources)
                         break
-            if not raw_question and not images:
+            if not images:
                 continue
-            source_problem_id = str(row.get("id", row.get("problem_id", index)))
+            source_problem_id = str(row.get("id", row.get("problem_id", absolute_index)))
             if getattr(self, "logger", None):
                 self.logger.log(
                     "SAMPLE",
@@ -1542,7 +1737,7 @@ class HuggingFaceConnector(BaseConnector):
                     image_sources=image_sources or extracted["image_paths"],
                     raw_record=row,
                     metadata={
-                        "row_index": index,
+                        "row_index": absolute_index,
                         "image_paths": extracted.get("image_paths", []),
                         "extraction_notes": extracted.get("extraction_notes", []),
                         "question_field": extracted.get("question_field"),
@@ -1556,6 +1751,8 @@ class HuggingFaceConnector(BaseConnector):
                     reasoning_chain=to_plain_text(extracted.get("reasoning_chain")) if extracted.get("has_reasoning_chain") else "",
                 )
             )
+            if len(samples) >= self.config.sample_per_dataset:
+                break
         return "available", samples, None
 
 
@@ -1639,7 +1836,7 @@ class GitHubConnector(BaseConnector):
                     break
                 except Exception:
                     continue
-            if not raw_question and not images:
+            if not images:
                 continue
             samples.append(
                 UnifiedSample(
@@ -1866,7 +2063,7 @@ class GitHubConnector(BaseConnector):
                             image_sources.append(str(candidate))
                         except Exception:
                             continue
-                if not raw_question and not images:
+                if not images:
                     continue
                 samples.append(
                     UnifiedSample(

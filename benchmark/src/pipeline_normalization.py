@@ -221,6 +221,10 @@ class ImageQualityAnalyzer:
     def crop_integrity_score(self, bbox: Optional[Dict[str, int]], width: int, height: int) -> float:
         if bbox is None:
             return 0.0
+        coverage_x = bbox["width"] / max(width, 1)
+        coverage_y = bbox["height"] / max(height, 1)
+        if coverage_x >= 0.96 and coverage_y >= 0.96:
+            return 1.0
         margins = [bbox["x"], bbox["y"], width - (bbox["x"] + bbox["width"]), height - (bbox["y"] + bbox["height"])]
         clipped_edges = sum(margin <= 1 for margin in margins)
         return round(clamp(1.0 - 0.22 * clipped_edges), 4)

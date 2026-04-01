@@ -199,6 +199,41 @@ def extract_json_object(text: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+BASE64_IMAGE_TEXT_PATTERN = re.compile(r"^[A-Za-z0-9+/=_-]+$")
+
+
+def safe_path_exists(value: Any) -> bool:
+    try:
+        text = to_plain_text(value).strip()
+        return bool(text) and Path(text).exists()
+    except (OSError, ValueError, TypeError):
+        return False
+
+
+def decode_inline_image_text(value: Any) -> Tuple[List[Image.Image], List[str]]:
+    text = to_plain_text(value).strip()
+    if not text or is_null_like_text(text):
+        return [], []
+    source = ""
+    payload = ""
+    if text.lower().startswith("data:image/"):
+        _, _, payload = text.partition(",")
+        payload = re.sub(r"\s+", "", payload)
+        source = "inline://data_url_image"
+    else:
+        compact = re.sub(r"\s+", "", text)
+        if len(compact) < 128 or not BASE64_IMAGE_TEXT_PATTERN.fullmatch(compact):
+            return [], []
+        payload = compact
+        source = "inline://base64_image"
+    try:
+        image_bytes = base64.b64decode(payload, validate=False)
+        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        return [image], [source]
+    except Exception:
+        return [], []
+
+
 @dataclass
 class ModelConfig:
     base_url: str = "https://synai996.space/v1"
@@ -228,6 +263,7 @@ class DatasetSpec:
     force_requires_image: bool = False
     answer_index_base: Optional[int] = None
     multi_solution_mode: str = "auto"
+    sample_offset: int = 0
 
 
 @dataclass
@@ -504,7 +540,9 @@ class OpenAICompatibleClient:
                 self.usage_totals["text_request_count"] += 1
         url = self.config.base_url.rstrip("/") + "/chat/completions"
         last_error_text = None
-        for attempt in range(1, 4):
+        attempt = 0
+        while True:
+            attempt += 1
             started = time.perf_counter()
             req = urllib.request.Request(
                 url,
@@ -531,29 +569,22 @@ class OpenAICompatibleClient:
                 except Exception:
                     error_body = ""
                 last_error_text = f"HTTP {exc.code}: {error_body[:240] or exc.reason}"
-                retryable = exc.code in {408, 409, 429} or exc.code >= 500
-                if retryable and attempt < 3:
-                    with self._usage_lock:
-                        self.usage_totals["retry_count"] += 1
-                    time.sleep(min(2.0, 0.5 * attempt))
-                    continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
-                return None
+                    self.usage_totals["retry_count"] += 1
+                time.sleep(min(8.0, 0.5 * min(attempt, 16)))
+                continue
             except (urllib.error.URLError, http.client.RemoteDisconnected, ConnectionResetError, BrokenPipeError, ssl.SSLError, TimeoutError, json.JSONDecodeError) as exc:
                 elapsed_seconds = time.perf_counter() - started
                 with self._usage_lock:
                     self.usage_totals["failed_request_count"] += 1
                     self.usage_totals["total_request_seconds"] += elapsed_seconds
                 last_error_text = f"{type(exc).__name__}: {exc}"
-                if attempt < 3:
-                    with self._usage_lock:
-                        self.usage_totals["retry_count"] += 1
-                    time.sleep(min(2.0, 0.5 * attempt))
-                    continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
-                return None
+                    self.usage_totals["retry_count"] += 1
+                time.sleep(min(8.0, 0.5 * min(attempt, 16)))
+                continue
             elapsed_seconds = time.perf_counter() - started
             usage = self._extract_usage(body)
             with self._usage_lock:
@@ -564,20 +595,26 @@ class OpenAICompatibleClient:
                     self.usage_totals[key] += value
             choices = body.get("choices") or []
             if not choices:
+                last_error_text = "Response missing choices."
                 with self._usage_lock:
                     self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["last_error"] = "Response missing choices."
-                return None
+                    self.usage_totals["last_error"] = last_error_text
+                    self.usage_totals["retry_count"] += 1
+                time.sleep(min(8.0, 0.5 * min(attempt, 16)))
+                continue
             message = choices[0].get("message") or {}
             content = message.get("content", "")
             if isinstance(content, list):
                 content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
             parsed = extract_json_object(to_plain_text(content))
             if not parsed:
+                last_error_text = "Response missing JSON object."
                 with self._usage_lock:
                     self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["last_error"] = "Response missing JSON object."
-                return None
+                    self.usage_totals["last_error"] = last_error_text
+                    self.usage_totals["retry_count"] += 1
+                time.sleep(min(8.0, 0.5 * min(attempt, 16)))
+                continue
             with self._usage_lock:
                 self.usage_totals["successful_request_count"] += 1
                 self.usage_totals["last_error"] = None
@@ -585,9 +622,6 @@ class OpenAICompatibleClient:
             parsed["_llm_elapsed_seconds"] = round(elapsed_seconds, 3)
             parsed["_llm_request_mode"] = "multimodal" if has_images else "text"
             return parsed
-        with self._usage_lock:
-            self.usage_totals["last_error"] = last_error_text
-        return None
 
     def image_to_data_url(self, image: Image.Image) -> str:
         buffer = io.BytesIO()
@@ -1159,7 +1193,11 @@ class LocalFileConnector(BaseConnector):
         if not path.exists():
             return "source_unavailable", [], f"Input not found: {path}"
         samples: List[UnifiedSample] = []
+        offset = max(0, int(getattr(self.spec, "sample_offset", 0) or 0))
         for index, row in enumerate(self.iter_records(path)):
+            if index < offset:
+                continue
+            absolute_index = index
             extracted = self.extract_record_content(row)
             raw_question = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(
@@ -1198,14 +1236,14 @@ class LocalFileConnector(BaseConnector):
                     subject=self.spec.subject,
                     source_dataset=self.spec.display_name,
                     source_split=self.spec.split or "local_file",
-                    source_problem_id=str(row.get("id", row.get("problem_id", index))),
+                    source_problem_id=str(row.get("id", row.get("problem_id", absolute_index))),
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
                     image_sources=image_sources or extracted["image_paths"],
                     raw_record=row,
                     metadata={
-                        "row_index": index,
+                        "row_index": absolute_index,
                         "source_file": str(path),
                         "image_paths": extracted.get("image_paths", []),
                         "extraction_notes": extracted.get("extraction_notes", []),
@@ -1218,6 +1256,8 @@ class LocalFileConnector(BaseConnector):
                     force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
                 )
             )
+            if self.config.sample_strategy != "random" and len(samples) >= self.config.sample_per_dataset:
+                break
         if self.config.sample_strategy == "random" and samples:
             rng = np.random.default_rng(self.config.shuffle_seed)
             indices = rng.permutation(len(samples)).tolist()[: self.config.sample_per_dataset]
@@ -1272,11 +1312,16 @@ class HuggingFaceConnector(BaseConnector):
             bytes_data = value.get("bytes")
             if bytes_data:
                 try:
+                    if isinstance(bytes_data, str):
+                        bytes_data = base64.b64decode(re.sub(r"\s+", "", bytes_data), validate=False)
                     image = Image.open(io.BytesIO(bytes_data)).convert("RGB")
                     return [image], [path or "inline://hf_image_bytes"]
                 except Exception:
+                    inline_images, inline_sources = decode_inline_image_text(bytes_data)
+                    if inline_images:
+                        return inline_images, inline_sources
                     return images, sources
-            if path and Path(path).exists():
+            if safe_path_exists(path):
                 try:
                     return [Image.open(path).convert("RGB")], [str(path)]
                 except Exception:
@@ -1284,12 +1329,19 @@ class HuggingFaceConnector(BaseConnector):
             nested_value = value.get("image") or value.get("images") or value.get("decoded_image")
             if nested_value is not None and nested_value is not value:
                 return self.load_images(nested_value)
+            inline_images, inline_sources = decode_inline_image_text(value.get("base64") or value.get("data") or value.get("image_base64"))
+            if inline_images:
+                return inline_images, inline_sources
             return images, sources
-        if isinstance(value, str) and not is_null_like_text(value) and Path(value).exists():
-            try:
-                return [Image.open(value).convert("RGB")], [value]
-            except Exception:
-                return images, sources
+        if isinstance(value, str) and not is_null_like_text(value):
+            if safe_path_exists(value):
+                try:
+                    return [Image.open(value).convert("RGB")], [value]
+                except Exception:
+                    return images, sources
+            inline_images, inline_sources = decode_inline_image_text(value)
+            if inline_images:
+                return inline_images, inline_sources
         return images, sources
 
     def resolve_answer_text(self, raw_answer: Any) -> str:
@@ -1466,9 +1518,14 @@ class HuggingFaceConnector(BaseConnector):
             return "source_unavailable", [], detail or "load_dataset failed"
         if self.config.sample_strategy == "random":
             dataset = dataset.shuffle(seed=self.config.shuffle_seed)
-        rows = dataset.select(range(min(self.config.sample_per_dataset, len(dataset))))
+        offset = max(0, int(getattr(self.spec, "sample_offset", 0) or 0))
+        if offset >= len(dataset):
+            return "available", [], detail
+        end = min(offset + self.config.sample_per_dataset, len(dataset))
+        rows = dataset.select(range(offset, end))
         samples: List[UnifiedSample] = []
         for index, row in enumerate(rows):
+            absolute_index = offset + index
             row = dict(row)
             extracted = self.extract_record_content(row)
             raw_question = extracted["raw_question_text"]
@@ -1512,14 +1569,14 @@ class HuggingFaceConnector(BaseConnector):
                     subject=self.spec.subject,
                     source_dataset=self.spec.display_name,
                     source_split=detail or self.spec.split or "unknown",
-                    source_problem_id=str(row.get("id", row.get("problem_id", index))),
+                    source_problem_id=str(row.get("id", row.get("problem_id", absolute_index))),
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
                     image_sources=image_sources or extracted["image_paths"],
                     raw_record=row,
                     metadata={
-                        "row_index": index,
+                        "row_index": absolute_index,
                         "image_paths": extracted.get("image_paths", []),
                         "extraction_notes": extracted.get("extraction_notes", []),
                         "question_field": extracted.get("question_field"),
@@ -1798,6 +1855,12 @@ class BaseStructuredAgent:
             return read_prompt(self.prompt_path)
         return self.fallback_system_prompt
 
+    def llm_enabled(self) -> bool:
+        return bool(self.client.config.enabled and self.client.config.api_key)
+
+    def wait_before_retry(self, attempt: int) -> None:
+        time.sleep(min(5.0, 0.5 * max(1, min(attempt, 10))))
+
     def call_json(self, payload: Dict[str, Any], images: Optional[Sequence[Image.Image]] = None) -> Optional[Dict[str, Any]]:
         user_prompt = json.dumps(payload, ensure_ascii=False, indent=2, default=json_default)
         if images:
@@ -1815,43 +1878,51 @@ class SourceIntakeAgent(BaseStructuredAgent):
 
     def extract(self, row: Dict[str, Any], spec: DatasetSpec) -> Dict[str, Any]:
         fallback = heuristic_extract_record_content(row, spec)
-        if not self.client.config.enabled or not self.client.config.api_key:
+        if not self.llm_enabled():
             return fallback
-        llm_result = self.call_json(
-            {
-                "dataset_name": spec.display_name,
-                "source_kind": spec.source_kind,
-                "raw_record": row,
-                "fallback": fallback,
-            }
-        )
-        if not llm_result:
-            return fallback
-        raw_question_text = normalize_whitespace(
-            to_plain_text(llm_result.get("raw_question_text") or llm_result.get("question_text") or fallback["raw_question_text"])
-        )
-        raw_answer_text = normalize_whitespace(
-            to_plain_text(llm_result.get("raw_answer_text") or llm_result.get("answer_text") or fallback["raw_answer_text"])
-        )
-        choice_map = parse_choice_map(llm_result.get("choice_map")) or fallback["choice_map"]
-        image_paths = normalize_image_path_list(llm_result.get("image_paths")) or fallback["image_paths"]
-        force_requires_image = llm_result.get("force_requires_image")
-        if not isinstance(force_requires_image, bool):
-            force_requires_image = fallback["force_requires_image"]
-        extraction_notes = llm_result.get("extraction_notes")
-        if not isinstance(extraction_notes, list):
-            extraction_notes = []
-        extraction_notes = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)]
-        extraction_notes.append("source_intake_agent")
-        return {
-            **fallback,
-            "raw_question_text": raw_question_text or fallback["raw_question_text"],
-            "raw_answer_text": raw_answer_text or fallback["raw_answer_text"],
-            "choice_map": choice_map,
-            "image_paths": image_paths,
-            "force_requires_image": force_requires_image,
-            "extraction_notes": extraction_notes,
+        payload = {
+            "dataset_name": spec.display_name,
+            "source_kind": spec.source_kind,
+            "raw_record": row,
+            "fallback": fallback,
         }
+        attempt = 0
+        while True:
+            attempt += 1
+            llm_result = self.call_json(payload)
+            if not llm_result:
+                self.wait_before_retry(attempt)
+                continue
+            question_value = llm_result.get("raw_question_text")
+            if question_value is None:
+                question_value = llm_result.get("question_text")
+            answer_value = llm_result.get("raw_answer_text")
+            if answer_value is None:
+                answer_value = llm_result.get("answer_text")
+            if question_value is None or answer_value is None:
+                self.wait_before_retry(attempt)
+                continue
+            raw_question_text = normalize_whitespace(to_plain_text(question_value))
+            raw_answer_text = normalize_whitespace(to_plain_text(answer_value))
+            choice_map = parse_choice_map(llm_result.get("choice_map")) or fallback["choice_map"]
+            image_paths = normalize_image_path_list(llm_result.get("image_paths")) or fallback["image_paths"]
+            force_requires_image = llm_result.get("force_requires_image")
+            if not isinstance(force_requires_image, bool):
+                force_requires_image = fallback["force_requires_image"]
+            extraction_notes = llm_result.get("extraction_notes")
+            if not isinstance(extraction_notes, list):
+                extraction_notes = []
+            extraction_notes = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)]
+            extraction_notes.append("source_intake_agent")
+            return {
+                **fallback,
+                "raw_question_text": raw_question_text or fallback["raw_question_text"],
+                "raw_answer_text": raw_answer_text or fallback["raw_answer_text"],
+                "choice_map": choice_map,
+                "image_paths": image_paths,
+                "force_requires_image": force_requires_image,
+                "extraction_notes": extraction_notes,
+            }
 
 
 class AssetRegistryAgent(BaseStructuredAgent):
@@ -1938,52 +2009,56 @@ class AssetRegistryAgent(BaseStructuredAgent):
         requires_image: bool,
     ) -> Dict[str, Any]:
         fallback = self.fallback_process(problem_id, question_text, answer_text, image_sources, image_qualities, metadata, requires_image)
-        if not self.client.config.enabled or not self.client.config.api_key:
+        if not self.llm_enabled():
             return fallback
-        llm_result = self.call_json(
-            {
-                "problem_id": problem_id,
-                "question_text": question_text,
-                "answer_text": answer_text,
-                "image_paths": list(image_sources),
-                "metadata": metadata,
-                "asset_integrity": {
-                    "requires_image": requires_image,
-                    "image_quality_summaries": [
-                        {
-                            "width": quality.get("width"),
-                            "height": quality.get("height"),
-                            "readability_score": quality.get("readability_score"),
-                            "contrast_score": quality.get("contrast_score"),
-                        }
-                        for quality in image_qualities
-                    ],
-                },
-                "fallback": fallback,
-            }
-        )
-        if not llm_result:
-            return fallback
-        image_manifest = llm_result.get("image_manifest")
-        if not isinstance(image_manifest, list):
-            image_manifest = fallback["image_manifest"]
-        issues = llm_result.get("issues")
-        if not isinstance(issues, list):
-            issues = fallback["issues"]
-        registry_passed = llm_result.get("registry_passed")
-        if not isinstance(registry_passed, bool):
-            registry_passed = fallback["registry_passed"]
-        text_manifest = llm_result.get("text_manifest") if isinstance(llm_result.get("text_manifest"), dict) else fallback["text_manifest"]
-        answer_manifest = llm_result.get("answer_manifest") if isinstance(llm_result.get("answer_manifest"), dict) else fallback["answer_manifest"]
-        return {
+        payload = {
             "problem_id": problem_id,
-            "image_manifest": image_manifest,
-            "text_manifest": text_manifest,
-            "answer_manifest": answer_manifest,
-            "issues": sorted(set(to_plain_text(item) for item in issues if to_plain_text(item))),
-            "registry_passed": registry_passed,
-            "llm_used": True,
+            "question_text": question_text,
+            "answer_text": answer_text,
+            "image_paths": list(image_sources),
+            "metadata": metadata,
+            "asset_integrity": {
+                "requires_image": requires_image,
+                "image_quality_summaries": [
+                    {
+                        "width": quality.get("width"),
+                        "height": quality.get("height"),
+                        "readability_score": quality.get("readability_score"),
+                        "contrast_score": quality.get("contrast_score"),
+                    }
+                    for quality in image_qualities
+                ],
+            },
+            "fallback": fallback,
         }
+        attempt = 0
+        while True:
+            attempt += 1
+            llm_result = self.call_json(payload)
+            if not llm_result:
+                self.wait_before_retry(attempt)
+                continue
+            registry_passed = llm_result.get("registry_passed")
+            if not isinstance(registry_passed, bool):
+                self.wait_before_retry(attempt)
+                continue
+            image_manifest = llm_result.get("image_manifest")
+            if not isinstance(image_manifest, list):
+                image_manifest = fallback["image_manifest"]
+            issues = llm_result.get("issues")
+            if not isinstance(issues, list):
+                issues = fallback["issues"]
+            text_manifest = llm_result.get("text_manifest") if isinstance(llm_result.get("text_manifest"), dict) else fallback["text_manifest"]
+            answer_manifest = llm_result.get("answer_manifest") if isinstance(llm_result.get("answer_manifest"), dict) else fallback["answer_manifest"]
+            return {
+                "problem_id": problem_id,
+                "image_manifest": image_manifest,
+                "text_manifest": text_manifest,
+                "answer_manifest": answer_manifest,
+                "issues": sorted(set(to_plain_text(item) for item in issues if to_plain_text(item))),
+                "registry_passed": registry_passed,
+                "llm_used": True,
+            }
 
 
 class PotentialScorerAgent(BaseStructuredAgent):
@@ -2067,54 +2142,59 @@ class PotentialScorerAgent(BaseStructuredAgent):
             asset_registry_record,
             fallback_scores,
         )
-        if not self.client.config.enabled or not self.client.config.api_key:
+        if not self.llm_enabled():
             return fallback
-        llm_result = self.call_json(
-            {
-                "problem_id": problem_id,
-                "question_text": normalized_question_text,
-                "answer_text": normalized_answer_text,
-                "answer_type": answer_type,
-                "requires_image": requires_image,
-                "text_dominant": text_dominant,
-                "choices": choices,
-                "metadata": {
-                    "multi_solution_policy": multi_solution_policy,
-                    "image_quality_summaries": [
-                        {
-                            "width": quality.get("width"),
-                            "height": quality.get("height"),
-                            "readability_score": quality.get("readability_score"),
-                            "contrast_score": quality.get("contrast_score"),
-                        }
-                        for quality in image_qualities
-                    ],
-                },
-                "asset_registry_record": asset_registry_record,
-                "fallback": fallback,
-            }
-        )
-        if not llm_result:
-            return fallback
-        score_evidence = llm_result.get("score_evidence") if isinstance(llm_result.get("score_evidence"), dict) else fallback["score_evidence"]
-        risk_flags = llm_result.get("risk_flags")
-        if not isinstance(risk_flags, list):
-            risk_flags = fallback["risk_flags"]
-        def coerce_score(key: str) -> float:
-            try:
-                return round(clamp(float(llm_result.get(key))), 4)
-            except (TypeError, ValueError):
-                return fallback[key]
-        return {
+        payload = {
             "problem_id": problem_id,
-            "image_dependency_score": coerce_score("image_dependency_score"),
-            "multi_step_score": coerce_score("multi_step_score"),
-            "verifiability_score": coerce_score("verifiability_score"),
-            "score_evidence": score_evidence,
-            "risk_flags": sorted(set(to_plain_text(flag) for flag in risk_flags if to_plain_text(flag))),
-            "scoring_version": to_plain_text(llm_result.get("scoring_version") or "agent_v1"),
-            "llm_used": True,
+            "question_text": normalized_question_text,
+            "answer_text": normalized_answer_text,
+            "answer_type": answer_type,
+            "requires_image": requires_image,
+            "text_dominant": text_dominant,
+            "choices": choices,
+            "metadata": {
+                "multi_solution_policy": multi_solution_policy,
+                "image_quality_summaries": [
+                    {
+                        "width": quality.get("width"),
+                        "height": quality.get("height"),
+                        "readability_score": quality.get("readability_score"),
+                        "contrast_score": quality.get("contrast_score"),
+                    }
+                    for quality in image_qualities
+                ],
+            },
+            "asset_registry_record": asset_registry_record,
+            "fallback": fallback,
         }
+        attempt = 0
+        while True:
+            attempt += 1
+            llm_result = self.call_json(payload)
+            if not llm_result:
+                self.wait_before_retry(attempt)
+                continue
+            try:
+                image_dependency_score = round(clamp(float(llm_result.get("image_dependency_score"))), 4)
+                multi_step_score = round(clamp(float(llm_result.get("multi_step_score"))), 4)
+                verifiability_score = round(clamp(float(llm_result.get("verifiability_score"))), 4)
+            except (TypeError, ValueError):
+                self.wait_before_retry(attempt)
+                continue
+            score_evidence = llm_result.get("score_evidence") if isinstance(llm_result.get("score_evidence"), dict) else fallback["score_evidence"]
+            risk_flags = llm_result.get("risk_flags")
+            if not isinstance(risk_flags, list):
+                risk_flags = fallback["risk_flags"]
+            return {
+                "problem_id": problem_id,
+                "image_dependency_score": image_dependency_score,
+                "multi_step_score": multi_step_score,
+                "verifiability_score": verifiability_score,
+                "score_evidence": score_evidence,
+                "risk_flags": sorted(set(to_plain_text(flag) for flag in risk_flags if to_plain_text(flag))),
+                "scoring_version": to_plain_text(llm_result.get("scoring_version") or "agent_v1"),
+                "llm_used": True,
+            }
 
 
 class CandidateRegistrarAgent(BaseStructuredAgent):
@@ -2171,39 +2251,44 @@ class CandidateRegistrarAgent(BaseStructuredAgent):
 
     def process(self, problem_id: str, asset_registry_record: Dict[str, Any], initial_scoring_record: Dict[str, Any]) -> Dict[str, Any]:
         fallback = self.fallback_process(problem_id, asset_registry_record, initial_scoring_record)
-        if not self.client.config.enabled or not self.client.config.api_key:
+        if not self.llm_enabled():
             return fallback
-        llm_result = self.call_json(
-            {
-                "problem_id": problem_id,
-                "asset_registry_record": asset_registry_record,
-                "initial_scoring_record": initial_scoring_record,
-                "fallback": fallback,
-            }
-        )
-        if not llm_result:
-            return fallback
-        decision = to_plain_text(llm_result.get("decision")).strip().lower()
-        if decision not in {"keep", "low_priority", "reject"}:
-            decision = fallback["decision"]
-        reasons = llm_result.get("decision_reasons")
-        if not isinstance(reasons, list):
-            reasons = fallback["decision_reasons"]
-        try:
-            priority = round(clamp(float(llm_result.get("priority"))), 4)
-        except (TypeError, ValueError):
-            priority = fallback["priority"]
-        if decision == "reject" and fallback["decision"] == "low_priority":
-            decision = fallback["decision"]
-            reasons = fallback["decision_reasons"]
-            priority = max(priority, fallback["priority"])
-        return {
+        payload = {
             "problem_id": problem_id,
-            "priority": priority,
-            "decision": decision,
-            "decision_reasons": [to_plain_text(item) for item in reasons if to_plain_text(item)] or fallback["decision_reasons"],
-            "llm_used": True,
+            "asset_registry_record": asset_registry_record,
+            "initial_scoring_record": initial_scoring_record,
+            "fallback": fallback,
         }
+        attempt = 0
+        while True:
+            attempt += 1
+            llm_result = self.call_json(payload)
+            if not llm_result:
+                self.wait_before_retry(attempt)
+                continue
+            decision = to_plain_text(llm_result.get("decision")).strip().lower()
+            if decision not in {"keep", "low_priority", "reject"}:
+                self.wait_before_retry(attempt)
+                continue
+            try:
+                priority = round(clamp(float(llm_result.get("priority"))), 4)
+            except (TypeError, ValueError):
+                self.wait_before_retry(attempt)
+                continue
+            reasons = llm_result.get("decision_reasons")
+            if not isinstance(reasons, list):
+                reasons = fallback["decision_reasons"]
+            if decision == "reject" and fallback["decision"] == "low_priority":
+                decision = fallback["decision"]
+                reasons = fallback["decision_reasons"]
+                priority = max(priority, fallback["priority"])
+            return {
+                "problem_id": problem_id,
+                "priority": priority,
+                "decision": decision,
+                "decision_reasons": [to_plain_text(item) for item in reasons if to_plain_text(item)] or fallback["decision_reasons"],
+                "llm_used": True,
+            }
 
 
 class NormalizationAgent(BaseStructuredAgent):
@@ -2250,57 +2335,64 @@ class NormalizationAgent(BaseStructuredAgent):
         image_qualities: Sequence[Dict[str, Any]],
     ) -> Dict[str, Any]:
         fallback = self.fallback_process(raw_question_text, raw_answer_text, choice_map, force_requires_image, len(images))
-        if not self.client.config.enabled or not self.client.config.api_key:
+        if not self.llm_enabled():
             return fallback
-        llm_result = self.call_json(
-            {
-                "dataset_name": dataset_name,
-                "raw_question_text": raw_question_text,
-                "raw_answer_text": raw_answer_text,
-                "choice_map": choice_map,
-                "force_requires_image": force_requires_image,
-                "image_count": len(images),
-                "image_quality_summaries": [
-                    {
-                        "width": quality.get("width"),
-                        "height": quality.get("height"),
-                        "readability_score": quality.get("readability_score"),
-                        "contrast_score": quality.get("contrast_score"),
-                        "crop_integrity_score": quality.get("crop_integrity_score"),
-                    }
-                    for quality in image_qualities
-                ],
-                "fallback": fallback,
-            },
-            images=images if images else None,
-        )
-        if not llm_result:
-            return fallback
-        normalized_question_text = normalize_whitespace(to_plain_text(llm_result.get("normalized_question_text") or fallback["normalized_question_text"])) or fallback["normalized_question_text"]
-        normalized_answer_text = normalize_whitespace(to_plain_text(llm_result.get("normalized_answer_text") or fallback["normalized_answer_text"]))
-        normalized_choice_map = parse_choice_map(llm_result.get("normalized_choice_map") or llm_result.get("choice_map")) or fallback["normalized_choice_map"]
-        requires_image = llm_result.get("requires_image")
-        if not isinstance(requires_image, bool):
-            requires_image = fallback["requires_image"]
-        text_dominant = llm_result.get("text_dominant")
-        if not isinstance(text_dominant, bool):
-            text_dominant = fallback["text_dominant"]
-        cleaning_path = to_plain_text(llm_result.get("cleaning_path") or fallback["cleaning_path"]).strip() or fallback["cleaning_path"]
-        if cleaning_path not in {"text_lightweight", "multimodal_full"}:
-            cleaning_path = fallback["cleaning_path"]
-        normalization_notes = llm_result.get("normalization_notes")
-        if not isinstance(normalization_notes, list):
-            normalization_notes = fallback["normalization_notes"]
-        return {
-            "normalized_question_text": normalized_question_text,
-            "normalized_answer_text": normalized_answer_text,
-            "normalized_choice_map": normalized_choice_map,
-            "requires_image": requires_image,
-            "text_dominant": text_dominant,
-            "cleaning_path": cleaning_path,
-            "normalization_notes": [to_plain_text(item) for item in normalization_notes if to_plain_text(item)] or fallback["normalization_notes"],
-            "llm_used": True,
+        payload = {
+            "dataset_name": dataset_name,
+            "raw_question_text": raw_question_text,
+            "raw_answer_text": raw_answer_text,
+            "choice_map": choice_map,
+            "force_requires_image": force_requires_image,
+            "image_count": len(images),
+            "image_quality_summaries": [
+                {
+                    "width": quality.get("width"),
+                    "height": quality.get("height"),
+                    "readability_score": quality.get("readability_score"),
+                    "contrast_score": quality.get("contrast_score"),
+                    "crop_integrity_score": quality.get("crop_integrity_score"),
+                }
+                for quality in image_qualities
+            ],
+            "fallback": fallback,
         }
+        attempt = 0
+        while True:
+            attempt += 1
+            llm_result = self.call_json(payload, images=images if images else None)
+            if not llm_result:
+                self.wait_before_retry(attempt)
+                continue
+            question_value = llm_result.get("normalized_question_text")
+            answer_value = llm_result.get("normalized_answer_text")
+            requires_image = llm_result.get("requires_image")
+            text_dominant = llm_result.get("text_dominant")
+            cleaning_path = to_plain_text(llm_result.get("cleaning_path") or "").strip()
+            if question_value is None or answer_value is None:
+                self.wait_before_retry(attempt)
+                continue
+            if not isinstance(requires_image, bool) or not isinstance(text_dominant, bool):
+                self.wait_before_retry(attempt)
+                continue
+            if cleaning_path not in {"text_lightweight", "multimodal_full"}:
+                self.wait_before_retry(attempt)
+                continue
+            normalized_question_text = normalize_whitespace(to_plain_text(question_value)) or fallback["normalized_question_text"]
+            normalized_answer_text = normalize_whitespace(to_plain_text(answer_value))
+            normalized_choice_map = parse_choice_map(llm_result.get("normalized_choice_map") or llm_result.get("choice_map")) or fallback["normalized_choice_map"]
+            normalization_notes = llm_result.get("normalization_notes")
+            if not isinstance(normalization_notes, list):
+                normalization_notes = fallback["normalization_notes"]
+            return {
+                "normalized_question_text": normalized_question_text,
+                "normalized_answer_text": normalized_answer_text,
+                "normalized_choice_map": normalized_choice_map,
+                "requires_image": requires_image,
+                "text_dominant": text_dominant,
+                "cleaning_path": cleaning_path,
+                "normalization_notes": [to_plain_text(item) for item in normalization_notes if to_plain_text(item)] or fallback["normalization_notes"],
+                "llm_used": True,
+            }
 
 
 class SampleUnderstandingAgent(BaseStructuredAgent):
@@ -2413,42 +2505,52 @@ class SampleUnderstandingAgent(BaseStructuredAgent):
             "soft_quality_signals": list(quality_flags),
             "fallback_assessment": fallback,
         }
-        llm_result = self.call_json(payload, images=images if requires_image else None)
-        if not llm_result:
+        if not self.llm_enabled():
             return fallback
-        completeness_status = to_plain_text(llm_result.get("completeness_status")).strip().lower()
-        image_support_status = to_plain_text(llm_result.get("image_support_status")).strip().lower()
-        joint_understanding_status = to_plain_text(llm_result.get("joint_understanding_status")).strip().lower()
-        if completeness_status not in {"complete", "partial", "broken"}:
-            return fallback
-        if image_support_status not in {"not_needed", "clear_enough", "uncertain_but_usable", "missing_or_unusable"}:
-            return fallback
-        if joint_understanding_status not in {"understandable", "partially_understandable", "not_understandable"}:
-            return fallback
-        reason_codes = llm_result.get("reason_codes")
-        if not isinstance(reason_codes, list):
-            reason_codes = fallback["reason_codes"]
-        risk_flags = llm_result.get("risk_flags")
-        if not isinstance(risk_flags, list):
-            risk_flags = fallback["risk_flags"]
-        confidence = llm_result.get("confidence")
-        try:
-            confidence = float(confidence)
-        except (TypeError, ValueError):
-            confidence = fallback["confidence"]
-        return {
-            "dataset_name": dataset_name,
-            "question_complete": bool(llm_result.get("question_complete", fallback["question_complete"])),
-            "answer_complete": bool(llm_result.get("answer_complete", fallback["answer_complete"])),
-            "completeness_status": completeness_status,
-            "image_support_status": image_support_status,
-            "joint_understanding_status": joint_understanding_status,
-            "reason_codes": sorted(set(to_plain_text(code) for code in reason_codes if to_plain_text(code))),
-            "risk_flags": sorted(set(to_plain_text(flag) for flag in risk_flags if to_plain_text(flag))),
-            "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
-            "confidence": round(max(0.0, min(1.0, confidence)), 4),
-            "llm_used": True,
-        }
+        attempt = 0
+        while True:
+            attempt += 1
+            llm_result = self.call_json(payload, images=images if requires_image else None)
+            if not llm_result:
+                self.wait_before_retry(attempt)
+                continue
+            completeness_status = to_plain_text(llm_result.get("completeness_status")).strip().lower()
+            image_support_status = to_plain_text(llm_result.get("image_support_status")).strip().lower()
+            joint_understanding_status = to_plain_text(llm_result.get("joint_understanding_status")).strip().lower()
+            if completeness_status not in {"complete", "partial", "broken"}:
+                self.wait_before_retry(attempt)
+                continue
+            if image_support_status not in {"not_needed", "clear_enough", "uncertain_but_usable", "missing_or_unusable"}:
+                self.wait_before_retry(attempt)
+                continue
+            if joint_understanding_status not in {"understandable", "partially_understandable", "not_understandable"}:
+                self.wait_before_retry(attempt)
+                continue
+            confidence = llm_result.get("confidence")
+            try:
+                confidence = float(confidence)
+            except (TypeError, ValueError):
+                self.wait_before_retry(attempt)
+                continue
+            reason_codes = llm_result.get("reason_codes")
+            if not isinstance(reason_codes, list):
+                reason_codes = fallback["reason_codes"]
+            risk_flags = llm_result.get("risk_flags")
+            if not isinstance(risk_flags, list):
+                risk_flags = fallback["risk_flags"]
+            return {
+                "dataset_name": dataset_name,
+                "question_complete": bool(llm_result.get("question_complete", fallback["question_complete"])),
+                "answer_complete": bool(llm_result.get("answer_complete", fallback["answer_complete"])),
+                "completeness_status": completeness_status,
+                "image_support_status": image_support_status,
+                "joint_understanding_status": joint_understanding_status,
+                "reason_codes": sorted(set(to_plain_text(code) for code in reason_codes if to_plain_text(code))),
+                "risk_flags": sorted(set(to_plain_text(flag) for flag in risk_flags if to_plain_text(flag))),
+                "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
+                "confidence": round(max(0.0, min(1.0, confidence)), 4),
+                "llm_used": True,
+            }
 
 
 class RewriteAgent(BaseStructuredAgent):
@@ -2557,39 +2659,47 @@ class RewriteAgent(BaseStructuredAgent):
 
     def rewrite(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
         fallback = self.fallback_rewrite(dataset_name, normalized_question_text, normalized_answer_text, answer_type, choices)
-        if not self.client.config.enabled or not choices:
+        if not self.llm_enabled():
             return fallback
-        llm_result = self.call_json(
-            {
-                "dataset_name": dataset_name,
-                "question_text": normalized_question_text,
-                "choices": choices,
-                "correct_option_letter": normalized_answer_text if answer_type == "option" else None,
-                "correct_option_text": choices.get(normalized_answer_text, normalized_answer_text),
-                "answer_type": answer_type,
-                "fallback_result": fallback,
-            }
-        )
-        if not llm_result:
-            return fallback
-        strategy = to_plain_text(llm_result.get("strategy")).strip() or fallback["strategy"]
-        variants = llm_result.get("variants")
-        if not isinstance(variants, list):
-            variants = fallback["variants"]
-        if strategy == "drop_image_index":
-            variants = []
-        if not variants and strategy != "drop_image_index":
-            return fallback
-        discard_reason_codes = llm_result.get("discard_reason_codes")
-        if not isinstance(discard_reason_codes, list):
-            discard_reason_codes = fallback["discard_reason_codes"]
-        return {
-            "strategy": strategy,
-            "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
-            "variants": variants,
-            "discard_reason_codes": [to_plain_text(code) for code in discard_reason_codes if to_plain_text(code)],
-            "llm_used": True,
+        payload = {
+            "dataset_name": dataset_name,
+            "question_text": normalized_question_text,
+            "choices": choices,
+            "correct_option_letter": normalized_answer_text if answer_type == "option" else None,
+            "correct_option_text": choices.get(normalized_answer_text, normalized_answer_text),
+            "answer_type": answer_type,
+            "fallback_result": fallback,
         }
+        attempt = 0
+        while True:
+            attempt += 1
+            llm_result = self.call_json(payload)
+            if not llm_result:
+                self.wait_before_retry(attempt)
+                continue
+            strategy = to_plain_text(llm_result.get("strategy")).strip()
+            if not strategy:
+                self.wait_before_retry(attempt)
+                continue
+            variants = llm_result.get("variants")
+            if not isinstance(variants, list):
+                self.wait_before_retry(attempt)
+                continue
+            if strategy == "drop_image_index":
+                variants = []
+            if not variants and strategy != "drop_image_index":
+                self.wait_before_retry(attempt)
+                continue
+            discard_reason_codes = llm_result.get("discard_reason_codes")
+            if not isinstance(discard_reason_codes, list):
+                discard_reason_codes = fallback["discard_reason_codes"]
+            return {
+                "strategy": strategy,
+                "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
+                "variants": variants,
+                "discard_reason_codes": [to_plain_text(code) for code in discard_reason_codes if to_plain_text(code)],
+                "llm_used": True,
+            }
 
 
 class DecisionAgent(BaseStructuredAgent):
@@ -2743,25 +2853,32 @@ class DecisionAgent(BaseStructuredAgent):
             "soft_quality_signals": list(quality_flags),
             "fallback_decision": fallback,
         }
-        llm_result = self.call_json(payload)
-        if not llm_result:
+        if not self.llm_enabled():
             return fallback
-        decision = to_plain_text(llm_result.get("decision")).strip().lower()
-        if decision not in {"pass", "review", "reject"}:
-            return fallback
-        reason_codes = llm_result.get("reason_codes")
-        if not isinstance(reason_codes, list):
-            reason_codes = fallback["reason_codes"]
-        review_required = llm_result.get("review_required")
-        if not isinstance(review_required, bool):
-            review_required = decision == "review"
-        return {
-            "decision": decision,
-            "reason_codes": sorted(set(to_plain_text(code) for code in reason_codes if to_plain_text(code))) or fallback["reason_codes"],
-            "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
-            "review_required": review_required,
-            "llm_used": True,
-        }
+        attempt = 0
+        while True:
+            attempt += 1
+            llm_result = self.call_json(payload)
+            if not llm_result:
+                self.wait_before_retry(attempt)
+                continue
+            decision = to_plain_text(llm_result.get("decision")).strip().lower()
+            if decision not in {"pass", "review", "reject"}:
+                self.wait_before_retry(attempt)
+                continue
+            reason_codes = llm_result.get("reason_codes")
+            if not isinstance(reason_codes, list):
+                reason_codes = fallback["reason_codes"]
+            review_required = llm_result.get("review_required")
+            if not isinstance(review_required, bool):
+                review_required = decision == "review"
+            return {
+                "decision": decision,
+                "reason_codes": sorted(set(to_plain_text(code) for code in reason_codes if to_plain_text(code))) or fallback["reason_codes"],
+                "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
+                "review_required": review_required,
+                "llm_used": True,
+            }
 
 
 class AgenticCleaningOrchestrator:

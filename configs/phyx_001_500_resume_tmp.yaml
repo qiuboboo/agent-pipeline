@@ -1,0 +1,34 @@
+runtime:
+  sample_per_dataset: 471
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 2
+  output_root: benchmarkallinone/outputs/phyx_001_500_resume_tmp
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-phyx-001-500-resume
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: http://9854399.xyz:8888/v1
+  api_key: "sk-e6049d352cc1a8c0427cb1e945b67e59f73915223cb987deb0c95d1b9f33424b"
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: phyx
+    display_name: PhyX
+    subject: 物理
+    note: PhyX 无痕续跑补齐到旧 500 条终点
+    source_kind: local_file
+    source_locator: benchmarkallinone/outputs/local_inputs/phyx_029_499_local.jsonl
+    split: local
+    question_fields: [question]
+    answer_fields: [answer]
+    image_fields: [image]
+    choice_fields: [options]
+    force_requires_image: true
+    sample_offset: 0

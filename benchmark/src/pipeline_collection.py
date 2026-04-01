@@ -28,9 +28,24 @@ def connector_for(pipeline: Any, spec: Any):
     return pipeline.source_unavailable_connector_cls(spec, pipeline.config)
 
 
+def is_multimodal_sample(sample: Any) -> bool:
+    return bool(getattr(sample, "images", None))
+
+
 def ingest_dataset_samples(pipeline: Any, spec: Any):
     connector = connector_for(pipeline, spec)
-    return connector.sample()
+    source_status, samples, detail = connector.sample()
+    if source_status != "available":
+        return source_status, samples, detail
+    kept_samples = [sample for sample in samples if is_multimodal_sample(sample)]
+    dropped_count = len(samples) - len(kept_samples)
+    if dropped_count and getattr(pipeline, "logger", None) is not None:
+        pipeline.logger.log(
+            "DATASET",
+            f"drop_text_only_samples dropped={dropped_count} kept={len(kept_samples)} source_samples={len(samples)}",
+            dataset=spec.key,
+        )
+    return source_status, kept_samples, detail
 
 
 def compute_collection_priority(pipeline: Any, initial_scores: Dict[str, Any]) -> Dict[str, Any]:
@@ -348,9 +363,13 @@ def build_quality_flags(pipeline: Any, raw_question_text: str, raw_answer_text: 
     if requires_image and not image_qualities:
         flags.append("missing_core_image")
     if requires_image and image_qualities:
-        if all(quality.get("width") is not None and quality["width"] < th.min_width for quality in image_qualities):
-            flags.append("low_resolution")
-        if all(quality.get("height") is not None and quality["height"] < th.min_height for quality in image_qualities):
+        if all(
+            quality.get("width") is not None
+            and quality.get("height") is not None
+            and quality["width"] < th.min_width
+            and quality["height"] < th.min_height
+            for quality in image_qualities
+        ):
             flags.append("low_resolution")
         if all(pipeline.clamp(pipeline.math.log1p(max(quality.get("blur_score", 0.0), 0.0)) / 8.0) < th.min_sharpness_score for quality in image_qualities):
             flags.append("severe_global_blur")

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import base64
 import http.client
+import io
 import json
 import time
 import urllib.error
@@ -21,7 +23,7 @@ class OpenAICompatibleClient:
         self.config = config
         self.last_error_reason: str = ""
 
-    def chat_json(self, system_prompt: str, user_prompt: str, caller: str = "") -> Optional[Dict[str, Any]]:
+    def chat_json(self, system_prompt: str, user_prompt: str, caller: str = "", images: Optional[Any] = None) -> Optional[Dict[str, Any]]:
         self.last_error_reason = ""
         if not self.config.enabled or not self.config.api_key:
             self.last_error_reason = "client disabled or missing api_key"
@@ -41,12 +43,28 @@ class OpenAICompatibleClient:
                 return
             print(message, flush=True)
 
+        def image_to_data_url(image: Any) -> str:
+            buffer = io.BytesIO()
+            image.convert("RGB").save(buffer, format="PNG")
+            encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+            return f"data:image/png;base64,{encoded}"
+
+        user_content: Any = user_prompt
+        image_list = [item for item in (images or []) if item is not None]
+        if image_list:
+            user_content = [{"type": "text", "text": user_prompt}]
+            for image in image_list:
+                user_content.append({
+                    "type": "image_url",
+                    "image_url": {"url": image_to_data_url(image)},
+                })
+
         url = self.config.base_url.rstrip("/") + "/chat/completions"
         payload = {
             "model": self.config.model,
             "messages": [
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
+                {"role": "user", "content": user_content},
             ],
             "temperature": self.config.temperature,
             "response_format": {"type": "json_object"},

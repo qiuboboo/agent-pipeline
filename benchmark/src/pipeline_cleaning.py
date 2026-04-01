@@ -51,6 +51,8 @@ class SampleUnderstandingAgent:
         quality_flags: List[str],
         alignment_record: Dict[str, Any],
         solvability_report: Dict[str, Any],
+        image_count: int = 0,
+        image_qualities: Optional[List[Dict[str, Any]]] = None,
     ) -> Dict[str, Any]:
         question_complete = bool(raw_question_text)
         answer_complete = bool(raw_answer_text)
@@ -60,9 +62,11 @@ class SampleUnderstandingAgent:
             completeness_status = "partial"
         else:
             completeness_status = "complete"
+        image_qualities = image_qualities or []
+        has_image = image_count > 0 or bool(image_qualities)
         if not requires_image:
             image_support_status = "not_needed"
-        elif "missing_core_image" in quality_flags or "key_text_unreadable" in quality_flags:
+        elif not has_image or "missing_core_image" in quality_flags or "key_text_unreadable" in quality_flags:
             image_support_status = "missing_or_unusable"
         elif alignment_record.get("alignment_status") in {"bad", "risky"} or "low_resolution" in quality_flags:
             image_support_status = "uncertain_but_usable"
@@ -127,6 +131,8 @@ class SampleUnderstandingAgent:
         text_structure: Dict[str, Any],
         alignment_record: Dict[str, Any],
         solvability_report: Dict[str, Any],
+        images: Optional[List[Any]] = None,
+        image_qualities: Optional[List[Dict[str, Any]]] = None,
     ) -> Dict[str, Any]:
         fallback = self.fallback_assess(
             raw_question_text,
@@ -135,6 +141,8 @@ class SampleUnderstandingAgent:
             quality_flags,
             alignment_record,
             solvability_report,
+            image_count=len(images or []),
+            image_qualities=image_qualities,
         )
         if not self.client.config.enabled:
             return fallback
@@ -165,9 +173,25 @@ class SampleUnderstandingAgent:
                 "solvability_score": solvability_report.get("solvability_score"),
                 "failure_codes": solvability_report.get("failure_codes", []),
             },
+            "image_count": len(images or []),
+            "image_quality_summaries": [
+                {
+                    "width": item.get("width"),
+                    "height": item.get("height"),
+                    "readability_score": item.get("readability_score"),
+                    "contrast_score": item.get("contrast_score"),
+                    "crop_integrity_score": item.get("crop_integrity_score"),
+                }
+                for item in (image_qualities or [])
+            ],
             "fallback": fallback,
         }
-        result = self.client.chat_json(self.system_prompt, json.dumps(payload, ensure_ascii=False, indent=2))
+        result = self.client.chat_json(
+            self.system_prompt,
+            json.dumps(payload, ensure_ascii=False, indent=2),
+            caller="sample_understanding",
+            images=images,
+        )
         if not isinstance(result, dict):
             return fallback
         completeness_status = to_plain_text(result.get("completeness_status")).strip() or fallback["completeness_status"]
@@ -181,6 +205,11 @@ class SampleUnderstandingAgent:
             return fallback
         reason_codes = result.get("reason_codes") if isinstance(result.get("reason_codes"), list) else fallback["reason_codes"]
         risk_flags = result.get("risk_flags") if isinstance(result.get("risk_flags"), list) else fallback["risk_flags"]
+        confidence_raw = result.get("confidence", fallback["confidence"])
+        try:
+            confidence = float(confidence_raw)
+        except (TypeError, ValueError):
+            confidence = float(fallback["confidence"])
         return {
             "question_complete": bool(result.get("question_complete", fallback["question_complete"])),
             "answer_complete": bool(result.get("answer_complete", fallback["answer_complete"])),
@@ -190,7 +219,7 @@ class SampleUnderstandingAgent:
             "reason_codes": [to_plain_text(code) for code in reason_codes if to_plain_text(code)],
             "risk_flags": [to_plain_text(flag) for flag in risk_flags if to_plain_text(flag)],
             "rationale": to_plain_text(result.get("rationale")) or fallback["rationale"],
-            "confidence": float(result.get("confidence", fallback["confidence"])),
+            "confidence": confidence,
             "llm_used": True,
         }
 
@@ -228,7 +257,7 @@ class DecisionAgent:
             ensure_ascii=False,
             indent=2,
         )
-        result = self.client.chat_json(self.system_prompt, user_prompt)
+        result = self.client.chat_json(self.system_prompt, user_prompt, caller="decision_override")
         if not result:
             return None
         decision = to_plain_text(result.get("decision")).strip().lower()
@@ -1220,6 +1249,8 @@ def finalize_cleaning_sample(pipeline: Any, spec: Any, sample: Any, crop_dir: Pa
             text_structure=extracted["text_structure"],
             alignment_record=extracted["alignment_record"],
             solvability_report=extracted["solvability_report"],
+            images=list(sample.images),
+            image_qualities=list(preprocessed["image_qualities"]),
         )
     potential_scores = build_potential_scores(
         pipeline,

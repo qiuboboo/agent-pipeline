@@ -1,0 +1,43 @@
+runtime:
+  sample_per_dataset: 500
+  sample_strategy: head
+  shuffle_seed: 42
+  output_root: benchmarkallinone/outputs/formal/sciverse_validation_500
+  cleaning_version: v3.1.0
+  batch_id_prefix: benchmarkallinone-sciverse-validation-500
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: http://9854399.xyz:8888/v1
+  api_key: "sk-e6049d352cc1a8c0427cb1e945b67e59f73915223cb987deb0c95d1b9f33424b"
+  model: gpt-5.4
+  reasoning_effort: xhigh
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  agent_only_extraction: false
+
+thresholds:
+  min_width: 256
+  min_height: 180
+  min_sharpness_score: 0.22
+  min_readability_score: 0.35
+  min_contrast_score: 18.0
+  reject_clean_score_below: 0.45
+  review_clean_score_below: 0.62
+  min_text_completeness_score: 0.60
+  min_alignment_consistency: 0.55
+
+datasets:
+  - key: sciverse
+    display_name: SciVerse
+    subject: 物理、化学、生物
+    note: 直接接入 ZiyuG/SciVerse，仅保留 Knowledge Lite / Knowledge Rich / Knowledge Professional / Vision Dominant，排除 Text Only / Vision Only
+    source_kind: huggingface
+    source_locator: ZiyuG/SciVerse
+    split: test
+    question_fields: [knowledge_lite, knowledge_rich, knowledge_professional, question_vd]
+    answer_fields: [answer]
+    image_fields: [image, vision_dominant]
+    force_requires_image: true

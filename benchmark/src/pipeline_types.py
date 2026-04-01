@@ -59,6 +59,7 @@ class DatasetSpec:
     force_requires_image: bool = False
     multi_solution_mode: str = "auto"
     answer_index_base: Optional[int] = None
+    sample_offset: int = 0
 
 
 @dataclass
@@ -175,6 +176,19 @@ class PipelineConfig:
                 question_fields=["question", "problem", "query", "text"],
                 answer_fields=["answer", "solution", "label"],
                 image_fields=["image", "image_path", "img_path", "figure"],
+            ),
+            DatasetSpec(
+                key="sciverse",
+                display_name="SciVerse",
+                subject="物理、化学、生物",
+                note="Hugging Face 数据集，仅保留 Knowledge Lite / Knowledge Rich / Knowledge Professional / Vision Dominant，排除 Text Only / Vision Only",
+                source_kind="huggingface",
+                source_locator="ZiyuG/SciVerse",
+                split="test",
+                question_fields=["knowledge_lite", "knowledge_rich", "knowledge_professional", "question_vd"],
+                answer_fields=["answer"],
+                image_fields=["image", "vision_dominant"],
+                force_requires_image=True,
             ),
             DatasetSpec(
                 key="eee_bench",
