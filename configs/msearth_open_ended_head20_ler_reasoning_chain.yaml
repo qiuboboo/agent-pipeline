@@ -1,0 +1,31 @@
+runtime:
+  sample_per_dataset: 20
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: benchmarkallinone/outputs/msearth_open_ended_head20_ler_reasoning_chain
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-msearth-open-ended-head20-ler-reasoning-chain
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: https://synai996.space/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: msearth_open_ended
+    display_name: MSEarth Open Ended
+    subject: 地球科学
+    note: 在 ler-reasoning-chain-msearth 分支上跑前20个样本
+    source_kind: huggingface
+    source_locator: MSEarth/MSEarth_Open_Ended
+    split: train
+    question_fields: [query]
+    answer_fields: [response]
+    image_fields: [image]
+    metadata_fields: [reasoning_chain, caption, title, classification_result, vqa_type]
