@@ -969,6 +969,19 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
     return shared_resolve_multiple_choice_answer_text(answer_text, choice_map, answer_index_base)
 
 
+
+def collect_image_path_refs(*values: Any) -> List[str]:
+    refs: List[str] = []
+    seen: set[str] = set()
+    for value in values:
+        for item in normalize_image_path_list(value):
+            if not item or item in seen:
+                continue
+            seen.add(item)
+            refs.append(item)
+    return refs
+
+
 class LocalFileConnector(BaseConnector):
     def iter_records(self, path: Path) -> Iterable[Dict[str, Any]]:
         suffix = path.suffix.lower()
@@ -1080,20 +1093,26 @@ class LocalFileConnector(BaseConnector):
             extracted = prompt_extract_record_content(row, self.spec, prompt_client)
             raw_question = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"], self.spec.answer_index_base)
+            image_field_candidates: List[str] = []
+            explicit_image_field = extracted.get("image_field")
+            if explicit_image_field:
+                image_field_candidates.append(str(explicit_image_field))
+            for field_name in list(self.spec.image_fields or []) + ["image", "images", "decoded_image", "diagram"]:
+                if field_name and field_name not in image_field_candidates:
+                    image_field_candidates.append(field_name)
+            image_path_refs = collect_image_path_refs(
+                extracted.get("image_paths"),
+                *[row.get(field_name) for field_name in image_field_candidates if field_name in row],
+            )
+            if not image_path_refs:
+                continue
             images: List[Image.Image] = []
             image_sources: List[str] = []
-            for path_str in extracted["image_paths"]:
+            for path_str in image_path_refs:
                 child_images, child_sources = self.load_inline_images(path_str, path.parent)
                 images.extend(child_images)
                 image_sources.extend(child_sources)
             if not images:
-                image_field_candidates: List[str] = []
-                explicit_image_field = extracted.get("image_field")
-                if explicit_image_field:
-                    image_field_candidates.append(str(explicit_image_field))
-                for field_name in list(self.spec.image_fields or []) + ["image", "images", "decoded_image", "diagram"]:
-                    if field_name and field_name not in image_field_candidates:
-                        image_field_candidates.append(field_name)
                 for field_name in image_field_candidates:
                     if field_name not in row:
                         continue
@@ -1115,8 +1134,18 @@ class LocalFileConnector(BaseConnector):
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
-                    image_sources=image_sources or extracted["image_paths"],
+                    image_sources=image_sources or image_path_refs,
                     raw_record=row,
+                    metadata={
+                        "row_index": absolute_index,
+                        "image_path_refs": image_path_refs,
+                        "image_paths": image_path_refs,
+                        "extraction_notes": extracted.get("extraction_notes", []),
+                        "question_field": extracted.get("question_field"),
+                        "answer_field": extracted.get("answer_field"),
+                        "image_field": extracted.get("image_field"),
+                        "choice_field": extracted.get("choice_field"),
+                    },
                     choice_map=extracted["choice_map"],
                     force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
                     has_reasoning_chain=bool(extracted.get("has_reasoning_chain", False)),
@@ -1447,9 +1476,12 @@ class HuggingFaceConnector(BaseConnector):
                     extracted["choice_map"],
                     self.spec.answer_index_base,
                 )
+                file_name = to_plain_text(row.get("file_name"))
+                image_path_refs = collect_image_path_refs(extracted.get("image_paths"), file_name)
+                if not image_path_refs:
+                    continue
                 images: List[Image.Image] = []
                 image_sources: List[str] = []
-                file_name = to_plain_text(row.get("file_name"))
                 if file_name:
                     candidate = image_root / file_name
                     if candidate.exists():
@@ -1472,11 +1504,12 @@ class HuggingFaceConnector(BaseConnector):
                         raw_question_text=raw_question,
                         raw_answer_text=raw_answer,
                         images=images,
-                        image_sources=image_sources,
+                        image_sources=image_sources or image_path_refs,
                         raw_record=row,
                         metadata={
                             "row_index": index,
-                            "image_paths": [file_name] if file_name else [],
+                            "image_path_refs": image_path_refs,
+                            "image_paths": image_path_refs,
                             "extraction_notes": extracted.get("extraction_notes", []) + ["hf_raw_mm_math_images"],
                             "image_field": extracted.get("image_field"),
                         },
@@ -1525,9 +1558,12 @@ class HuggingFaceConnector(BaseConnector):
             extracted = prompt_extract_record_content(data, self.spec, prompt_client)
             question_text = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(self.resolve_answer_text(extracted["raw_answer_text"]), extracted["choice_map"], self.spec.answer_index_base)
+            image_list = data.get("question_image_list") or []
+            image_path_refs = collect_image_path_refs(extracted.get("image_paths"), image_list)
+            if not image_path_refs:
+                continue
             images: List[Image.Image] = []
             image_sources: List[str] = []
-            image_list = data.get("question_image_list") or []
             if isinstance(image_list, list):
                 for rel in image_list:
                     candidate = problem_path.parent / to_plain_text(rel)
@@ -1551,11 +1587,12 @@ class HuggingFaceConnector(BaseConnector):
                     raw_question_text=question_text,
                     raw_answer_text=raw_answer,
                     images=images,
-                    image_sources=image_sources,
+                    image_sources=image_sources or image_path_refs,
                     raw_record=data,
                     metadata={
                         "row_index": index,
-                        "image_paths": image_list,
+                        "image_path_refs": image_path_refs,
+                        "image_paths": image_path_refs,
                         "extraction_notes": extracted.get("extraction_notes", []) + ["hf_raw_physreason_images"],
                         "difficulty": data.get("difficulty"),
                     },
@@ -1601,6 +1638,7 @@ class HuggingFaceConnector(BaseConnector):
             raw_answer = resolve_multiple_choice_answer_text(to_plain_text(row.get("answer")), choice_map, self.spec.answer_index_base)
             reasoning_chain = normalize_whitespace(to_plain_text(row.get("explanation") or row.get("explanation_zh")))
             subject = to_plain_text(row.get("subject")) or self.spec.subject
+            preferred_question_zh = normalize_whitespace(to_plain_text(row.get("question_zh")))
             variant_candidates: List[Dict[str, Any]] = []
             for variant_name, question_field, image_field, repo_file, folder_name in variant_specs:
                 raw_question = normalize_whitespace(to_plain_text(row.get(question_field)))
@@ -1623,6 +1661,9 @@ class HuggingFaceConnector(BaseConnector):
             if not variant_candidates:
                 continue
             selected = variant_candidates[0]
+            image_path_refs = collect_image_path_refs(selected["image_ref"], selected["image_sources"])
+            if not image_path_refs:
+                continue
             if getattr(self, "logger", None):
                 self.logger.log(
                     "SAMPLE",
@@ -1638,7 +1679,7 @@ class HuggingFaceConnector(BaseConnector):
                     source_dataset=self.spec.display_name,
                     source_split=split_name or self.spec.split or "test",
                     source_problem_id=row_id,
-                    raw_question_text=selected["raw_question_text"],
+                    raw_question_text=preferred_question_zh or selected["raw_question_text"],
                     raw_answer_text=raw_answer,
                     images=selected["images"],
                     image_sources=selected["image_sources"],
@@ -1650,7 +1691,9 @@ class HuggingFaceConnector(BaseConnector):
                         "selected_question_field": selected["question_field"],
                         "selected_image_field": selected["image_field"],
                         "selected_image_ref": selected["image_ref"],
+                        "image_path_refs": image_path_refs,
                         "available_variants": [item["variant"] for item in variant_candidates],
+                        "raw_question_source": "question_zh" if preferred_question_zh else selected["question_field"],
                         "question_zh": to_plain_text(row.get("question_zh")),
                         "explanation_zh": to_plain_text(row.get("explanation_zh")),
                     },
@@ -1694,6 +1737,12 @@ class HuggingFaceConnector(BaseConnector):
             for field_name in list(self.spec.image_fields or []) + ["image", "images", "decoded_image", "diagram"]:
                 if field_name and field_name not in image_field_candidates:
                     image_field_candidates.append(field_name)
+            image_path_refs = collect_image_path_refs(
+                extracted.get("image_paths"),
+                *[row.get(field_name) for field_name in image_field_candidates if field_name in row],
+            )
+            if not image_path_refs:
+                continue
             images: List[Image.Image] = []
             image_sources: List[str] = []
             seen_fields: set[str] = set()
@@ -1707,7 +1756,7 @@ class HuggingFaceConnector(BaseConnector):
                     image_sources.extend(child_sources)
                     break
             if not images:
-                for path_str in extracted["image_paths"]:
+                for path_str in image_path_refs:
                     child_images, child_sources = self.load_images(path_str)
                     if child_images:
                         images.extend(child_images)
@@ -1734,11 +1783,12 @@ class HuggingFaceConnector(BaseConnector):
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
-                    image_sources=image_sources or extracted["image_paths"],
+                    image_sources=image_sources or image_path_refs,
                     raw_record=row,
                     metadata={
                         "row_index": absolute_index,
-                        "image_paths": extracted.get("image_paths", []),
+                        "image_path_refs": image_path_refs,
+                        "image_paths": image_path_refs,
                         "extraction_notes": extracted.get("extraction_notes", []),
                         "question_field": extracted.get("question_field"),
                         "answer_field": extracted.get("answer_field"),
@@ -1824,10 +1874,16 @@ class GitHubConnector(BaseConnector):
                 extracted["choice_map"],
                 self.spec.answer_index_base,
             )
+            geometry_image_candidates = [file_path.parent / candidate_name for candidate_name in ["img_diagram.png", "img_problem.png", "img_diagram_point.png"]]
+            image_path_refs = collect_image_path_refs(
+                extracted.get("image_paths"),
+                [str(candidate) for candidate in geometry_image_candidates if candidate.exists()],
+            )
+            if not image_path_refs:
+                continue
             images: List[Image.Image] = []
             image_sources: List[str] = []
-            for candidate_name in ["img_diagram.png", "img_problem.png", "img_diagram_point.png"]:
-                candidate = file_path.parent / candidate_name
+            for candidate in geometry_image_candidates:
                 if not candidate.exists():
                     continue
                 try:
@@ -1849,11 +1905,12 @@ class GitHubConnector(BaseConnector):
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
-                    image_sources=image_sources or extracted["image_paths"],
+                    image_sources=image_sources or image_path_refs,
                     raw_record=row,
                     metadata={
                         "data_file": str(file_path),
-                        "image_paths": extracted.get("image_paths", []),
+                        "image_path_refs": image_path_refs,
+                        "image_paths": image_path_refs,
                         "extraction_notes": extracted.get("extraction_notes", []) + ["geometry3k_zip_repo"],
                         "question_field": extracted.get("question_field"),
                         "answer_field": extracted.get("answer_field"),
@@ -2027,8 +2084,6 @@ class GitHubConnector(BaseConnector):
                 extracted = prompt_extract_record_content(row, self.spec, prompt_client)
                 raw_question = extracted["raw_question_text"]
                 raw_answer = resolve_multiple_choice_answer_text(extracted["raw_answer_text"], extracted["choice_map"], self.spec.answer_index_base)
-                images: List[Image.Image] = []
-                image_sources: List[str] = []
                 image_field_candidates: List[str] = []
                 explicit_image_field = extracted.get("image_field")
                 if explicit_image_field:
@@ -2036,6 +2091,16 @@ class GitHubConnector(BaseConnector):
                 for field_name in list(self.spec.image_fields or []) + ["image", "images", "image_path", "img_path", "diagram", "figure", "picture"]:
                     if field_name and field_name not in image_field_candidates:
                         image_field_candidates.append(field_name)
+                image_path_refs = collect_image_path_refs(
+                    extracted.get("image_paths"),
+                    *[row.get(field_name) for field_name in image_field_candidates if field_name in row],
+                )
+                if not image_path_refs and self.spec.key == "geometry3k":
+                    image_path_refs = collect_image_path_refs([str(file_path.parent / candidate_name) for candidate_name in ["img_diagram.png", "img_problem.png", "img_diagram_point.png"] if (file_path.parent / candidate_name).exists()])
+                if not image_path_refs:
+                    continue
+                images: List[Image.Image] = []
+                image_sources: List[str] = []
                 seen_fields: set[str] = set()
                 for field_name in image_field_candidates:
                     if not field_name or field_name in seen_fields or field_name not in row:
@@ -2047,7 +2112,7 @@ class GitHubConnector(BaseConnector):
                         image_sources.extend(child_sources)
                         break
                 if not images:
-                    for path_str in extracted["image_paths"]:
+                    for path_str in image_path_refs:
                         child_images, child_sources = self.resolve_images(path_str, file_path.parent)
                         if child_images:
                             images.extend(child_images)
@@ -2076,11 +2141,12 @@ class GitHubConnector(BaseConnector):
                         raw_question_text=raw_question,
                         raw_answer_text=raw_answer,
                         images=images,
-                        image_sources=image_sources or extracted["image_paths"],
+                        image_sources=image_sources or image_path_refs,
                         raw_record=row,
                         metadata={
                             "data_file": str(file_path),
-                            "image_paths": extracted.get("image_paths", []),
+                            "image_path_refs": image_path_refs,
+                            "image_paths": image_path_refs,
                             "extraction_notes": extracted.get("extraction_notes", []),
                             "question_field": extracted.get("question_field"),
                             "answer_field": extracted.get("answer_field"),

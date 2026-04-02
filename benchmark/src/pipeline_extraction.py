@@ -32,6 +32,8 @@ def normalize_image_path_list(value: Any) -> List[str]:
         stripped = value.strip()
         if not stripped:
             return []
+        if re.search(r"(?:^|<)\s*PIL\.Image\.Image\b", stripped, flags=re.IGNORECASE):
+            return []
         if stripped.startswith("[") and stripped.endswith("]"):
             try:
                 parsed = json.loads(stripped)

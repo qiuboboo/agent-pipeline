@@ -106,6 +106,161 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
     return normalize_whitespace(answer)
 
 
+GENERIC_RELATION_PROMPT_REGEX = re.compile(
+    r"which of the following is true|what is true|which statement is correct|what is the correct|state the correct (?:geometric )?relationship|以下哪项描述正确|下列说法正确的是|请写出正确的(?:几何)?关系|关于[^。？！?]*几何(?:构型|关系)[^。？！?]*(?:正确|符合)",
+    flags=re.IGNORECASE,
+)
+OPTION_DEPENDENT_STEM_REGEX = re.compile(
+    r"which of the following|what is true about|which statement is correct|what is the correct|state the correct|以下哪项|下列哪项|下列说法|以下说法|哪项描述正确|正确的是",
+    flags=re.IGNORECASE,
+)
+
+PLANE_ANSWER_HINT_REGEX = re.compile(r"plane|coplanar|同一平面|共面", flags=re.IGNORECASE)
+PARALLEL_ANSWER_HINT_REGEX = re.compile(r"parallel|平行", flags=re.IGNORECASE)
+PERPENDICULAR_ANSWER_HINT_REGEX = re.compile(r"perpendicular|垂直", flags=re.IGNORECASE)
+QUESTION_RELATION_HINT_REGEX = re.compile(
+    r"geometry|geometric|structure|structural|conformation|arrangement|relationship|几何|构型|结构|空间关系|几何关系|共面|平行|垂直",
+    flags=re.IGNORECASE,
+)
+CHINESE_CHAR_REGEX = re.compile(r"[\u4e00-\u9fff]")
+ENGLISH_PROPOSITION_REGEX = re.compile(
+    r"^(?P<subject>.+?)\s+(?P<verb>corresponds to|correspond to|belongs to|belong to|lies in|lie in|is|are|was|were|lie|lies|remain|remains|become|becomes|has|have|contain|contains|form|forms|equals|equal|represents|represent)\s+(?P<predicate>.+?)\.?$",
+    flags=re.IGNORECASE,
+)
+CHINESE_PROPOSITION_REGEX = re.compile(
+    r"^(?P<subject>.+?)(?P<verb>位于|处于|属于|平行于|垂直于|等于|表示|对应|具有|为|是)(?P<predicate>.+?)[。；;]?$"
+)
+GENERIC_SUBJECT_REGEX = re.compile(
+    r"^(?:it|they|this|that|these|those|the correct(?: answer| statement)?|the answer|the statement|the geometry|the structure|其|它|它们|该项|该说法|这一项|这个关系)$",
+    flags=re.IGNORECASE,
+)
+
+
+def _clean_question_target(text: str) -> str:
+    return re.sub(r"[\s\.;:!?]+$", "", normalize_whitespace(text))
+
+
+def extract_option_prompt_prefix(question_text: str) -> str:
+    question = normalize_whitespace(question_text)
+    lower_question = question.lower()
+    for marker in [
+        "which of the following is true about",
+        "what is true about",
+        "which statement is correct about",
+        "which statement is correct",
+        "what is the correct",
+        "state the correct",
+        "which of the following",
+    ]:
+        index = lower_question.find(marker)
+        if index != -1:
+            return _clean_question_target(question[:index])
+    for marker in ["以下哪项", "下列哪项", "下列说法", "以下说法", "哪项描述正确", "正确的是"]:
+        index = question.find(marker)
+        if index != -1:
+            return _clean_question_target(question[:index])
+    return ""
+
+
+def is_option_dependent_question(question_text: str) -> bool:
+    return bool(OPTION_DEPENDENT_STEM_REGEX.search(normalize_whitespace(question_text)))
+
+
+def split_proposition(answer_text: str) -> Optional[Tuple[str, str, str]]:
+    answer = normalize_whitespace(answer_text)
+    if not answer:
+        return None
+    english_match = ENGLISH_PROPOSITION_REGEX.match(answer)
+    if english_match:
+        return (
+            normalize_whitespace(english_match.group("subject")),
+            normalize_whitespace(english_match.group("verb")),
+            normalize_whitespace(english_match.group("predicate")),
+        )
+    chinese_match = CHINESE_PROPOSITION_REGEX.match(answer)
+    if chinese_match:
+        return (
+            normalize_whitespace(chinese_match.group("subject")),
+            normalize_whitespace(chinese_match.group("verb")),
+            normalize_whitespace(chinese_match.group("predicate")),
+        )
+    return None
+
+
+def build_guided_relation_question(question_text: str, expected_answer: str) -> str:
+    question = normalize_whitespace(question_text)
+    expected = normalize_whitespace(expected_answer)
+    if not question or not expected:
+        return question
+    if not (QUESTION_RELATION_HINT_REGEX.search(question) or GENERIC_RELATION_PROMPT_REGEX.search(question)):
+        return question
+    is_zh = bool(CHINESE_CHAR_REGEX.search(question))
+    guidance = ""
+    if PLANE_ANSWER_HINT_REGEX.search(expected):
+        guidance = "请明确指出哪些原子位于同一平面。" if is_zh else "State explicitly which atoms lie in the same plane."
+    elif PARALLEL_ANSWER_HINT_REGEX.search(expected):
+        guidance = "请明确指出哪些部分互相平行。" if is_zh else "State explicitly which parts are parallel."
+    elif PERPENDICULAR_ANSWER_HINT_REGEX.search(expected):
+        guidance = "请明确指出哪些部分互相垂直。" if is_zh else "State explicitly which parts are perpendicular."
+    if not guidance or guidance in question:
+        return question
+    separator = "" if is_zh else " "
+    return f"{question}{separator}{guidance}"
+
+
+def build_option_anchor_question(question_text: str, expected_answer: str) -> Tuple[str, str]:
+    question = normalize_whitespace(question_text)
+    expected = normalize_whitespace(expected_answer)
+    if not question or not expected or not is_option_dependent_question(question):
+        return question, expected
+    is_zh = bool(CHINESE_CHAR_REGEX.search(question) or CHINESE_CHAR_REGEX.search(expected))
+    prefix = extract_option_prompt_prefix(question)
+    if prefix:
+        if is_zh and not prefix.endswith(("。", "？", "！", "：", "；", "，", "、")):
+            prefix = f"{prefix}。"
+        if not is_zh and not prefix.endswith((".", "?", "!", ":", ";", ",")):
+            prefix = f"{prefix}."
+    parsed = split_proposition(expected)
+    if not parsed:
+        fallback_prompt = "请写出正确表述。" if is_zh else "State the correct statement explicitly."
+        anchored_question = f"{prefix}{fallback_prompt}" if is_zh else f"{prefix} {fallback_prompt}".strip()
+        return normalize_whitespace(anchored_question), expected
+    subject, verb, predicate = parsed
+    blank_subject = not GENERIC_SUBJECT_REGEX.search(subject)
+    if is_zh:
+        if blank_subject:
+            anchored_core = f"填空完成正确表述：____{verb}{predicate}"
+            anchored_answer = subject
+        else:
+            anchored_core = f"填空完成正确表述：{subject}{verb}____"
+            anchored_answer = predicate
+        anchored_question = f"{prefix}{anchored_core}" if prefix else anchored_core
+    else:
+        clean_predicate = predicate.rstrip(".")
+        if blank_subject:
+            anchored_core = f"Fill in the blank to complete the correct statement: ____ {verb} {clean_predicate}."
+            anchored_answer = subject
+        else:
+            anchored_core = f"Fill in the blank to complete the correct statement: {subject} {verb} ____."
+            anchored_answer = clean_predicate
+        anchored_question = f"{prefix} {anchored_core}".strip() if prefix else anchored_core
+    return normalize_whitespace(anchored_question), normalize_whitespace(anchored_answer)
+
+
+def maybe_refine_rewritten_question(original_question_text: str, candidate_question_text: str, expected_answer: str) -> Tuple[str, str]:
+    original = normalize_whitespace(original_question_text)
+    candidate = normalize_whitespace(candidate_question_text) or original
+    expected = normalize_whitespace(expected_answer)
+    base_question = original or candidate
+    anchored_question, anchored_answer = build_option_anchor_question(base_question, expected)
+    if anchored_question != base_question and (candidate == base_question or is_option_dependent_question(candidate)):
+        return anchored_question, anchored_answer
+    guided = build_guided_relation_question(candidate, expected)
+    if guided != candidate and (candidate == base_question or GENERIC_RELATION_PROMPT_REGEX.search(candidate)):
+        return guided, expected
+    return candidate, expected
+
+
 def normalize_rewrite_variants_temp(
     normalizer: TextNormalizer,
     dataset_name: str,
@@ -131,12 +286,17 @@ def normalize_rewrite_variants_temp(
             expected_answer = fallback_answer
             warnings.append(f"variant_{idx}_missing_expected_answer")
         expected_answer_type = to_plain_text(variant.get("expected_answer_type")).strip() or answer_type
+        candidate_question_text = to_plain_text(variant.get("rewritten_question_text")) or normalized_question_text
+        if not to_plain_text(variant.get("rewritten_question_text")).strip():
+            warnings.append(f"variant_{idx}_missing_question_text")
+        rewritten_question_text, expected_answer = maybe_refine_rewritten_question(
+            normalized_question_text,
+            candidate_question_text,
+            expected_answer,
+        )
         inferred_type = normalizer.infer_answer_type(normalizer.normalize_answer(expected_answer)) if expected_answer else expected_answer_type
         if inferred_type == "option":
             inferred_type = "short_text"
-        rewritten_question_text = to_plain_text(variant.get("rewritten_question_text")) or normalized_question_text
-        if not to_plain_text(variant.get("rewritten_question_text")).strip():
-            warnings.append(f"variant_{idx}_missing_question_text")
         normalized_variant: RewriteVariant = {
             "variant_id": to_plain_text(variant.get("variant_id")) or f"open_{idx}",
             "title": to_plain_text(variant.get("title")) or f"{dataset_name} 开放题",
@@ -272,6 +432,8 @@ class RewriteAgent(BaseStructuredAgent):
                 normalization_warnings=[],
             )
         resolved_answer = choices.get(normalized_answer, normalized_answer)
+        guided_question, guided_answer = maybe_refine_rewritten_question(question_only, question_only, resolved_answer)
+        resolved_answer = guided_answer or resolved_answer
         resolved_answer_type = self.normalizer.infer_answer_type(self.normalizer.normalize_answer(resolved_answer))
         if resolved_answer_type == "option":
             resolved_answer_type = "short_text"
@@ -282,7 +444,7 @@ class RewriteAgent(BaseStructuredAgent):
                 {
                     "variant_id": "open_1",
                     "title": f"{dataset_name} 开放题",
-                    "rewritten_question_text": question_only,
+                    "rewritten_question_text": guided_question,
                     "expected_answer_type": resolved_answer_type,
                     "expected_answer": resolved_answer,
                     "split_role": "single",
