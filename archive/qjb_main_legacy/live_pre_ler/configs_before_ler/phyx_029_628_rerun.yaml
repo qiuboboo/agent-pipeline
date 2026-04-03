@@ -1,0 +1,35 @@
+runtime:
+  sample_per_dataset: 600
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 2
+  output_root: benchmarkallinone/outputs/phyx_029_628_rerun
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-phyx-029-628-rerun
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: http://9854399.xyz:8888/v1
+  api_key: ""
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: phyx
+    display_name: PhyX
+    subject: 物理
+    note: PhyX 从 fallback 起点 row_index=29 开始继续跑 600 条，LLM 调用失败时原地重试，不使用 fallback
+    source_kind: huggingface
+    source_locator: Cloudriver/PhyX
+    hf_config_name: data_for_llms_eval
+    split: phyx_mc
+    question_fields: [question]
+    answer_fields: [answer]
+    image_fields: [image]
+    choice_fields: [options]
+    force_requires_image: true
+    sample_offset: 29

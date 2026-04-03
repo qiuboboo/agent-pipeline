@@ -1,0 +1,81 @@
+runtime:
+  sample_per_dataset: 20
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 2
+  output_root: outputs/agent_multidataset_validation_20
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-agent-multidataset-validation-20
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://synai996.space/v1
+  api_key: ""
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: scemqa
+    display_name: SCEMQA
+    subject: 数学、物理、生物、化学
+    note: 使用 Hugging Face 数据源进行 20 条 agent 采集与清洗验证
+    source_kind: huggingface
+    source_locator: pkulium/scemqa
+    split: train
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [decoded_image, image, image_path, img_path, diagram]
+    choice_fields: [options, choices]
+    answer_index_base: 0
+
+  - key: geometry3k
+    display_name: Geometry3K
+    subject: 数学
+    note: 使用 InterGPS GitHub 数据源进行 20 条 agent 采集与清洗验证
+    source_kind: github
+    source_locator: https://github.com/lupantech/InterGPS
+    question_fields: [problem_text, compact_text, annotat_text, problem, question, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [img_diagram, img_problem, diagram, image, img_path, image_path]
+    choice_fields: [choices, compact_choices, options]
+    force_requires_image: true
+
+  - key: cmm_math
+    display_name: CMM-Math
+    subject: 数学
+    note: 使用 Hugging Face 数据源进行 20 条 agent 采集与清洗验证
+    source_kind: huggingface
+    source_locator: ecnu-icalk/cmm-math
+    split: train
+    question_fields: [question]
+    answer_fields: [answer, solution]
+    image_fields: [decoded_image, image]
+    choice_fields: [options, choices]
+
+  - key: mathvision
+    display_name: MathVision
+    subject: 数学
+    note: 使用 Hugging Face 数据源进行 20 条 agent 采集与清洗验证
+    source_kind: huggingface
+    source_locator: MathLLMs/MathVision
+    split: test
+    question_fields: [question]
+    answer_fields: [answer, solution]
+    image_fields: [decoded_image, image]
+    choice_fields: [options, choices]
+
+  - key: physreason
+    display_name: PhysReason
+    subject: 物理
+    note: 使用 Hugging Face 数据源进行 20 条 agent 采集与清洗验证，并启用 raw zip fallback
+    source_kind: huggingface
+    source_locator: zhibei1204/PhysReason
+    split: mini
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [image, decoded_image, image_path, img_path, figure]
+    choice_fields: [choices, options]

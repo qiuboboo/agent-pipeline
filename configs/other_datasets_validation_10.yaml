@@ -1,0 +1,68 @@
+runtime:
+  sample_per_dataset: 10
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: outputs/other_datasets_validation_10
+  cleaning_version: v3.1.0
+  batch_id_prefix: benchmarkallinone-other-datasets-validation-10
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://synai996.space/v1
+  api_key: 
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: geometry3k
+    display_name: Geometry3K
+    subject: 数学
+    note: 其他数据集 10 条验证，复用本地 repo cache / GitHub 结构发现
+    source_kind: github
+    source_locator: https://github.com/lupantech/InterGPS
+    question_fields: [problem_text, compact_text, annotat_text, problem, question, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [img_diagram, img_problem, diagram, image, img_path, image_path]
+    choice_fields: [choices, compact_choices, options]
+    force_requires_image: true
+
+  - key: cmm_math
+    display_name: CMM-Math
+    subject: 数学
+    note: 其他数据集 10 条验证，使用 Hugging Face 数据源
+    source_kind: huggingface
+    source_locator: ecnu-icalk/cmm-math
+    split: train
+    question_fields: [question]
+    answer_fields: [answer, solution]
+    image_fields: [decoded_image, image]
+    choice_fields: [options, choices]
+
+  - key: mathvision
+    display_name: MathVision
+    subject: 数学
+    note: 其他数据集 10 条验证，使用 Hugging Face 数据源
+    source_kind: huggingface
+    source_locator: MathLLMs/MathVision
+    split: test
+    question_fields: [question]
+    answer_fields: [answer, solution]
+    image_fields: [decoded_image, image]
+    choice_fields: [options, choices]
+
+  - key: physreason
+    display_name: PhysReason
+    subject: 物理
+    note: 其他数据集 10 条验证，使用 Hugging Face 数据源以启用 raw zip fallback
+    source_kind: huggingface
+    source_locator: zhibei1204/PhysReason
+    split: mini
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [image, decoded_image, image_path, img_path, figure]
+    choice_fields: [choices, options]
