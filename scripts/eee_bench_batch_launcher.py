@@ -61,7 +61,7 @@ def main() -> int:
     parser.add_argument("--config-dir", default="configs/generated")
     parser.add_argument("--output-prefix", default="outputs/eee_bench_batched_eval")
     parser.add_argument("--base-url", default=os.getenv("CUSTOM_OPENAI_BASE_URL", "https://cf.cuylerchen.uk/openai"))
-    parser.add_argument("--api-key", default=os.getenv("CUSTOM_OPENAI_API_KEY", "cr_6b801d4bbf975f3c9eaae62372300186513a778912a6689d54fe51128572ea5e"))
+    parser.add_argument("--api-key", default=os.getenv("CUSTOM_OPENAI_API_KEY", ""))
     parser.add_argument("--api-mode", default=os.getenv("CUSTOM_OPENAI_API_MODE", "responses"))
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()

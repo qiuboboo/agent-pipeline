@@ -60,8 +60,8 @@ def main() -> int:
     parser.add_argument("--step", type=int, default=20)
     parser.add_argument("--config-dir", default="configs/generated")
     parser.add_argument("--output-prefix", default="outputs/msearth_open_ended_batched_ler_reasoning_chain")
-    parser.add_argument("--base-url", default="http://9854399.xyz:8888")
-    parser.add_argument("--api-key", default="sk-e6049d352cc1a8c0427cb1e945b67e59f73915223cb987deb0c95d1b9f33424b")
+    parser.add_argument("--base-url", default=os.getenv("OPENAI_BASE_URL", "http://9854399.xyz:8888"))
+    parser.add_argument("--api-key", default=os.getenv("OPENAI_API_KEY", ""))
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
