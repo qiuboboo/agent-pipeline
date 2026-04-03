@@ -217,6 +217,7 @@ class ModelConfig:
     temperature: float = 0.1
     timeout_seconds: int = 180
     enabled: bool = True
+    api_mode: str = "chat_completions"
 
 
 @dataclass
@@ -500,9 +501,74 @@ class OpenAICompatibleClient:
             "temperature": self.config.temperature,
             "response_format": {"type": "json_object"},
             "reasoning_effort": self.config.reasoning_effort,
+            "stream": True,
         }
 
-    def _post_json(self, payload: Dict[str, Any], has_images: bool = False) -> Optional[Dict[str, Any]]:
+    def _build_responses_payload(self, system_prompt: str, user_content: Any) -> Dict[str, Any]:
+        def to_responses_parts(content: Any) -> List[Dict[str, Any]]:
+            parts: List[Dict[str, Any]] = []
+            if isinstance(content, list):
+                for item in content:
+                    if not isinstance(item, dict):
+                        continue
+                    item_type = item.get("type")
+                    if item_type == "text":
+                        text_value = to_plain_text(item.get("text"))
+                        if text_value:
+                            parts.append({"type": "input_text", "text": text_value})
+                    elif item_type == "image_url":
+                        image_url = item.get("image_url") or {}
+                        url_value = to_plain_text(image_url.get("url"))
+                        if url_value:
+                            parts.append({"type": "input_image", "image_url": url_value})
+            else:
+                text_value = to_plain_text(content)
+                if text_value:
+                    parts.append({"type": "input_text", "text": text_value})
+            return parts or [{"type": "input_text", "text": "{}"}]
+
+        return {
+            "model": self.config.model,
+            "input": [
+                {
+                    "role": "system",
+                    "content": [{"type": "input_text", "text": system_prompt or ""}],
+                },
+                {
+                    "role": "user",
+                    "content": to_responses_parts(user_content),
+                },
+            ],
+            "reasoning": {"effort": self.config.reasoning_effort},
+            "stream": True,
+        }
+
+    def _read_sse_text(self, response: Any) -> str:
+        chunks: List[str] = []
+        for raw_line in response:
+            try:
+                line = raw_line.decode("utf-8", errors="ignore").strip()
+            except Exception:
+                continue
+            if not line.startswith("data:"):
+                continue
+            data = line[5:].strip()
+            if not data or data == "[DONE]":
+                continue
+            try:
+                event = json.loads(data)
+            except json.JSONDecodeError:
+                continue
+            event_type = event.get("type")
+            if event_type == "response.output_text.delta":
+                delta = to_plain_text(event.get("delta"))
+                if delta:
+                    chunks.append(delta)
+            elif event_type in {"response.completed", "response.output_text.done"}:
+                continue
+        return "".join(chunks)
+
+    def _post_responses(self, payload: Dict[str, Any], has_images: bool = False) -> Optional[Dict[str, Any]]:
         if not self.config.enabled or not self.config.api_key:
             return None
         with self._usage_lock:
@@ -511,7 +577,7 @@ class OpenAICompatibleClient:
                 self.usage_totals["multimodal_request_count"] += 1
             else:
                 self.usage_totals["text_request_count"] += 1
-        url = self.config.base_url.rstrip("/") + "/chat/completions"
+        url = self.config.base_url.rstrip("/") + "/responses"
         last_error_text = None
         for attempt in range(1, 4):
             started = time.perf_counter()
@@ -520,7 +586,7 @@ class OpenAICompatibleClient:
                 data=json.dumps(payload).encode("utf-8"),
                 headers={
                     "Content-Type": "application/json",
-                    "Accept": "application/json",
+                    "Accept": "text/event-stream",
                     "Connection": "close",
                     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
                     "Authorization": f"Bearer {self.config.api_key}",
@@ -529,7 +595,7 @@ class OpenAICompatibleClient:
             )
             try:
                 with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
-                    body = json.loads(response.read().decode("utf-8"))
+                    content = self._read_sse_text(response)
             except urllib.error.HTTPError as exc:
                 elapsed_seconds = time.perf_counter() - started
                 with self._usage_lock:
@@ -564,33 +630,24 @@ class OpenAICompatibleClient:
                     self.usage_totals["last_error"] = last_error_text
                 return None
             elapsed_seconds = time.perf_counter() - started
-            usage = self._extract_usage(body)
-            with self._usage_lock:
-                self.usage_totals["total_request_seconds"] += elapsed_seconds
-                if usage["total_tokens"] > 0:
-                    self.usage_totals["requests_with_usage"] += 1
-                for key, value in usage.items():
-                    self.usage_totals[key] += value
-            choices = body.get("choices") or []
-            if not choices:
-                with self._usage_lock:
-                    self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["last_error"] = "Response missing choices."
-                return None
-            message = choices[0].get("message") or {}
-            content = message.get("content", "")
-            if isinstance(content, list):
-                content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
             parsed = extract_json_object(to_plain_text(content))
             if not parsed:
                 with self._usage_lock:
                     self.usage_totals["failed_request_count"] += 1
+                    self.usage_totals["total_request_seconds"] += elapsed_seconds
                     self.usage_totals["last_error"] = "Response missing JSON object."
                 return None
             with self._usage_lock:
                 self.usage_totals["successful_request_count"] += 1
+                self.usage_totals["total_request_seconds"] += elapsed_seconds
                 self.usage_totals["last_error"] = None
-            parsed["_llm_usage"] = usage
+            parsed["_llm_usage"] = {
+                "prompt_tokens": 0,
+                "completion_tokens": 0,
+                "total_tokens": 0,
+                "cached_tokens": 0,
+                "reasoning_tokens": 0,
+            }
             parsed["_llm_elapsed_seconds"] = round(elapsed_seconds, 3)
             parsed["_llm_request_mode"] = "multimodal" if has_images else "text"
             return parsed
@@ -630,6 +687,8 @@ class OpenAICompatibleClient:
         if not content_parts:
             content_parts = [{"type": "text", "text": "{}"}]
         has_images = any(part.get("type") == "image_url" for part in content_parts)
+        if self.config.api_mode == "responses":
+            return self._post_responses(self._build_responses_payload(system_prompt, content_parts), has_images=has_images)
         return self._post_json(self._build_payload(system_prompt, content_parts), has_images=has_images)
 
     def chat_json(self, system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:
