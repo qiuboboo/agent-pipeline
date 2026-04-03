@@ -1,0 +1,44 @@
+runtime:
+  sample_per_dataset: 20
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: outputs/physreason_batched_eval/0140_0160
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-physreason-0140-0160
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+model:
+  base_url: http://9854399.xyz:8888/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_key: sk-e6049d352cc1a8c0427cb1e945b67e59f73915223cb987deb0c95d1b9f33424b
+datasets:
+- key: physreason
+  display_name: PhysReason
+  subject: 物理
+  note: 分批运行区间 mini[140:160]
+  source_kind: huggingface
+  source_locator: zhibei1204/PhysReason
+  split: mini[140:160]
+  question_fields:
+  - question
+  - problem
+  - query
+  - text
+  answer_fields:
+  - answer
+  - solution
+  - label
+  image_fields:
+  - image
+  - decoded_image
+  - image_path
+  - img_path
+  - figure
+  choice_fields:
+  - choices
+  - options

@@ -1,0 +1,38 @@
+runtime:
+  sample_per_dataset: 1
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: outputs/mm_math_multi_physics_validation_1
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-mm-math-multi-physics-validation-1
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://cf.cuylerchen.uk/openai/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: responses
+
+datasets:
+  - key: mm_math
+    display_name: MM-Math
+    subject: 数学
+    note: MM-Math 10 条验证，使用 Hugging Face 原始文件 fallback 采样
+    source_kind: huggingface
+    source_locator: THU-KEG/MM_Math
+    split: train
+
+  - key: multi_physics
+    display_name: Multi-Physics
+    subject: 物理
+    note: Multi-Physics 10 条验证，使用 GitHub 数据源自动发现
+    source_kind: github
+    source_locator: https://github.com/luozhongze/Multi-Physics
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [picture, image, image_path, img_path, figure]
