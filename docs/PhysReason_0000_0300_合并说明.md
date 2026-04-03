@@ -101,10 +101,25 @@ PhysReason 主批跑按 `step=20` 执行，共覆盖 `0:300`。
 
 - `requested_samples = 300`
 - `processed_samples = 300`
-- `pass = 118`
-- `review = 182`
+- `pass = 118`（`39.3%`）
+- `review = 182`（`60.7%`）
 - `reject = 0`
 - `rewrite_strategy_counts.keep_open = 300`
+- `started_at = 2026-04-01T02:49:05Z`
+- `finished_at = 2026-04-01T11:49:28Z`
+- `elapsed_seconds = 32423`（约 `9.0` 小时）
+
+LLM 使用统计：
+
+- `request_count = 1800`
+- `successful_request_count = 1706`
+- `failed_request_count = 306`
+- `retry_count = 212`
+- `text_request_count = 1230`
+- `multimodal_request_count = 570`
+- `last_error = null`
+
+从最终决策分布看，本次 merged 结果以 `review` 为主，未出现 `reject`。
 
 最终 merged 结果的索引与说明文件包括：
 

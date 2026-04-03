@@ -1,0 +1,105 @@
+# Add MSEarth + PhyX on top of the current default dataset set.
+
+runtime:
+  sample_per_dataset: 1
+  sample_strategy: head
+  shuffle_seed: 42
+  output_root: benchmarkallinone/outputs/multidataset_with_msearth_phyx
+  cleaning_version: v3.1.0
+  batch_id_prefix: benchmarkallinone-msearth-phyx
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: https://synai996.space/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: geosqa
+    display_name: GeoSQA
+    subject: 地理
+    note: 论文页公开，但当前未配置稳定程序化下载入口
+    source_kind: source_unavailable
+    source_locator: https://aclanthology.org/D19-1597/
+
+  - key: mathvision
+    display_name: MathVision
+    subject: 数学
+    note: Hugging Face 数据集
+    source_kind: huggingface
+    source_locator: MathLLMs/MathVision
+    split: test
+    question_fields: [question]
+    answer_fields: [answer, solution]
+    image_fields: [decoded_image, image]
+    choice_fields: [options, choices]
+
+  - key: mm_math
+    display_name: MM-Math
+    subject: 数学
+    note: Hugging Face 数据集
+    source_kind: huggingface
+    source_locator: THU-KEG/MM_Math
+    split: train
+
+  - key: seephy
+    display_name: Seephy
+    subject: 物理
+    note: 当前仅论文入口，未配置稳定程序化下载源
+    source_kind: source_unavailable
+    source_locator: https://arxiv.org/abs/2509.06079
+
+  - key: multi_physics
+    display_name: muti- physics
+    subject: 物理
+    note: GitHub 公开仓库，尝试自动发现数据文件
+    source_kind: github
+    source_locator: https://github.com/luozhongze/Multi-Physics
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [picture, image, image_path, img_path, figure]
+
+  - key: physreason
+    display_name: PhysReason
+    subject: 物理
+    note: GitHub 公开仓库，尝试自动发现数据文件
+    source_kind: github
+    source_locator: https://github.com/dxzxy12138/PhysReason
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [image, image_path, img_path, figure]
+
+  - key: eee_bench
+    display_name: EEE-Bench
+    subject: 电气电子工程领域
+    note: Hugging Face 数据集
+    source_kind: huggingface
+    source_locator: afdsafas/EEE-Bench
+    split: test
+    question_fields: [problem]
+    answer_fields: [solution]
+    image_fields: [image]
+
+  - key: emma
+    display_name: EMMA
+    subject: 数学、物理、代码、化学
+    note: 当前仅论文入口，未配置稳定程序化下载源
+    source_kind: source_unavailable
+    source_locator: https://arxiv.org/abs/2501.05444
+
+  - key: msearth_mcq
+    display_name: MSEarth-MCQ
+    subject: 地球科学
+    note: Hugging Face 数据集
+    source_kind: huggingface
+    source_locator: MSEarth/MSEarth_MCQ
+    split: train
+    question_fields: [query]
+    answer_fields: [response]
+    image_fields: [image]
+    choice_fields: [options, choices]
+    force_requires_image: true
