@@ -531,7 +531,37 @@ class OpenAICompatibleClient:
             )
             try:
                 with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
-                    body = json.loads(response.read().decode("utf-8"))
+                    status_code = getattr(response, "status", None) or response.getcode()
+                    content_type = response.headers.get("Content-Type", "")
+                    raw_body = response.read().decode("utf-8", errors="replace")
+                    body = None
+                    streamed_content = None
+                    if "text/event-stream" in content_type.lower():
+                        stream_chunks: List[str] = []
+                        for raw_line in raw_body.splitlines():
+                            line = raw_line.strip()
+                            if not line.startswith("data:"):
+                                continue
+                            data = line[5:].strip()
+                            if not data or data == "[DONE]":
+                                continue
+                            try:
+                                event = json.loads(data)
+                            except json.JSONDecodeError:
+                                continue
+                            choices = event.get("choices") or []
+                            if not choices:
+                                continue
+                            delta = choices[0].get("delta") or {}
+                            piece = delta.get("content", "")
+                            if isinstance(piece, list):
+                                piece = "".join(item.get("text", "") for item in piece if isinstance(item, dict))
+                            piece_text = to_plain_text(piece)
+                            if piece_text:
+                                stream_chunks.append(piece_text)
+                        streamed_content = "".join(stream_chunks)
+                    else:
+                        body = json.loads(raw_body)
             except urllib.error.HTTPError as exc:
                 elapsed_seconds = time.perf_counter() - started
                 with self._usage_lock:
@@ -551,7 +581,7 @@ class OpenAICompatibleClient:
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
                 return None
-            except (urllib.error.URLError, http.client.RemoteDisconnected, ConnectionResetError, BrokenPipeError, ssl.SSLError, TimeoutError, json.JSONDecodeError) as exc:
+            except (urllib.error.URLError, http.client.RemoteDisconnected, ConnectionResetError, BrokenPipeError, ssl.SSLError, TimeoutError) as exc:
                 elapsed_seconds = time.perf_counter() - started
                 with self._usage_lock:
                     self.usage_totals["failed_request_count"] += 1
@@ -565,30 +595,59 @@ class OpenAICompatibleClient:
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
                 return None
+            except json.JSONDecodeError as exc:
+                elapsed_seconds = time.perf_counter() - started
+                body_preview = (raw_body[:500] if isinstance(raw_body, str) else "")
+                body_preview = body_preview.replace("\n", "\\n")
+                with self._usage_lock:
+                    self.usage_totals["failed_request_count"] += 1
+                    self.usage_totals["total_request_seconds"] += elapsed_seconds
+                last_error_text = (
+                    f"JSONDecodeError: {exc}; "
+                    f"status={status_code}; "
+                    f"content_type={content_type!r}; "
+                    f"body_preview={body_preview!r}"
+                )
+                if attempt < 3:
+                    with self._usage_lock:
+                        self.usage_totals["retry_count"] += 1
+                    time.sleep(min(2.0, 0.5 * attempt))
+                    continue
+                with self._usage_lock:
+                    self.usage_totals["last_error"] = last_error_text
+                return None
             elapsed_seconds = time.perf_counter() - started
-            usage = self._extract_usage(body)
+            usage = self._extract_usage(body or {})
             with self._usage_lock:
                 self.usage_totals["total_request_seconds"] += elapsed_seconds
                 if usage["total_tokens"] > 0:
                     self.usage_totals["requests_with_usage"] += 1
                 for key, value in usage.items():
                     self.usage_totals[key] += value
-            choices = body.get("choices") or []
-            if not choices:
-                with self._usage_lock:
-                    self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["last_error"] = "Response missing choices."
-                return None
-            message = choices[0].get("message") or {}
-            content = message.get("content", "")
-            if isinstance(content, list):
-                content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
-            parsed = extract_json_object(to_plain_text(content))
-            if not parsed:
-                with self._usage_lock:
-                    self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["last_error"] = "Response missing JSON object."
-                return None
+            if streamed_content is not None:
+                parsed = extract_json_object(to_plain_text(streamed_content))
+                if not parsed:
+                    with self._usage_lock:
+                        self.usage_totals["failed_request_count"] += 1
+                        self.usage_totals["last_error"] = "Response missing JSON object in streamed content."
+                    return None
+            else:
+                choices = body.get("choices") or []
+                if not choices:
+                    with self._usage_lock:
+                        self.usage_totals["failed_request_count"] += 1
+                        self.usage_totals["last_error"] = "Response missing choices."
+                    return None
+                message = choices[0].get("message") or {}
+                content = message.get("content", "")
+                if isinstance(content, list):
+                    content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
+                parsed = extract_json_object(to_plain_text(content))
+                if not parsed:
+                    with self._usage_lock:
+                        self.usage_totals["failed_request_count"] += 1
+                        self.usage_totals["last_error"] = "Response missing JSON object."
+                    return None
             with self._usage_lock:
                 self.usage_totals["successful_request_count"] += 1
                 self.usage_totals["last_error"] = None
