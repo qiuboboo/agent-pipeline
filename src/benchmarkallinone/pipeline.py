@@ -251,6 +251,7 @@ class PipelineConfig:
     batch_id_prefix: str = "benchmarkallinone-clean"
     save_sample_bundle: bool = True
     git_cache_root: str = "benchmarkallinone/outputs/repo_cache"
+    resume: bool = False
     model: ModelConfig = field(default_factory=ModelConfig)
     datasets: List[DatasetSpec] = field(default_factory=list)
 
@@ -397,6 +398,7 @@ class PipelineConfig:
             batch_id_prefix=runtime.get("batch_id_prefix", "multidataset-clean"),
             save_sample_bundle=runtime.get("save_sample_bundle", True),
             git_cache_root=runtime.get("git_cache_root", "outputs/repo_cache"),
+            resume=runtime.get("resume", False),
             model=ModelConfig(**{**asdict(ModelConfig()), **model_raw}),
             datasets=datasets,
         )
@@ -3334,6 +3336,45 @@ class MultiDatasetCleaningPipeline:
         )
         return self.aggregate_summary
 
+    def load_completed_source_problem_ids(self, spec: DatasetSpec) -> Set[str]:
+        completed: Set[str] = set()
+        if not self.config.resume:
+            return completed
+        if not self.output_root.exists():
+            return completed
+        for prior_run_dir in sorted(self.output_root.glob("run_*")):
+            if prior_run_dir == self.run_dir or not prior_run_dir.is_dir():
+                continue
+            dataset_dir = prior_run_dir / "datasets" / spec.key
+            records_dir = dataset_dir / "records"
+            sample_dir = dataset_dir / "samples"
+            problem_main_file = records_dir / "problem_main_records.jsonl"
+            if problem_main_file.exists():
+                try:
+                    for line in problem_main_file.read_text(encoding="utf-8").splitlines():
+                        line = line.strip()
+                        if not line:
+                            continue
+                        try:
+                            row = json.loads(line)
+                        except json.JSONDecodeError:
+                            continue
+                        source_problem_id = to_plain_text(row.get("source_problem_id"))
+                        if source_problem_id:
+                            completed.add(source_problem_id)
+                except Exception:
+                    pass
+            if sample_dir.exists():
+                for sample_file in sample_dir.glob("*.json"):
+                    try:
+                        data = json.loads(sample_file.read_text(encoding="utf-8"))
+                    except Exception:
+                        continue
+                    source_problem_id = to_plain_text((data.get("problem_main_record") or {}).get("source_problem_id"))
+                    if source_problem_id:
+                        completed.add(source_problem_id)
+        return completed
+
     def run_single_dataset(self, spec: DatasetSpec) -> Dict[str, Any]:
         started_at = utc_now()
         started_perf = time.perf_counter()
@@ -3367,6 +3408,15 @@ class MultiDatasetCleaningPipeline:
         self.progress(
             f"[Dataset {spec.key}] source ready sampled={len(samples)}/{self.config.sample_per_dataset} concurrency={max(1, int(self.config.sample_concurrency or 1))}"
         )
+        completed_source_problem_ids = self.load_completed_source_problem_ids(spec)
+        if completed_source_problem_ids:
+            original_count = len(samples)
+            samples = [sample for sample in samples if sample.source_problem_id not in completed_source_problem_ids]
+            skipped_count = original_count - len(samples)
+            if skipped_count > 0:
+                self.progress(
+                    f"[Dataset {spec.key}] resume enabled skipped={skipped_count} remaining={len(samples)}"
+                )
         bundle = {
             "source_intake_records": [],
             "asset_registry_records": [],
@@ -4851,6 +4901,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--api-key", type=str, default=None, help="OpenAI 兼容接口 key")
     parser.add_argument("--model", type=str, default=None, help="模型名称")
     parser.add_argument("--reasoning-effort", type=str, default=None, help="推理强度，如 xhigh")
+    parser.add_argument("--resume", action="store_true", help="从已有 records / samples 继续，跳过已完成样本")
     return parser.parse_args()
 
 
@@ -4875,6 +4926,8 @@ def merge_cli_overrides(config: PipelineConfig, args: argparse.Namespace) -> Pip
         config.model.model = args.model
     if args.reasoning_effort:
         config.model.reasoning_effort = args.reasoning_effort
+    if args.resume:
+        config.resume = True
     return config
 
 
