@@ -1,0 +1,34 @@
+runtime:
+  sample_per_dataset: 10
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: outputs/emma_physics_validation_10_label_first
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-emma-physics-validation-10-label-first
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://9854399.xyz/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: chat_completions
+
+datasets:
+  - key: emma_physics
+    display_name: EMMA-Physics
+    subject: 物理
+    note: EMMA Physics 10 条验证，label 优先，chat_completions + 9854399.xyz
+    source_kind: huggingface
+    source_locator: EMMAModal/EMMA
+    hf_config_name: Physics
+    split: test
+    question_fields: [question, problem, query, text]
+    answer_fields: [label, answer, solution]
+    image_fields: [image_1, image_2, image_3, image_4, image_5, images, image, decoded_image]
+    choice_fields: [options, choices]
+    metadata_fields: [pid, subject, task, category, source, type, context]

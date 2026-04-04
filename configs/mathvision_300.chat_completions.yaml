@@ -1,0 +1,32 @@
+runtime:
+  sample_per_dataset: 300
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: benchmarkallinone/outputs/mathvision_300_chat
+  cleaning_version: v3.1.0
+  batch_id_prefix: benchmarkallinone-mathvision300-chat
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: https://cf.cuylerchen.uk/openai/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: chat_completions
+
+datasets:
+  - key: mathvision
+    display_name: MathVision
+    subject: 数学
+    note: Hugging Face 数据集，旧 API 模式（chat_completions）
+    source_kind: huggingface
+    source_locator: MathLLMs/MathVision
+    split: test
+    question_fields: [question]
+    answer_fields: [answer, solution]
+    image_fields: [decoded_image, image]
+    choice_fields: [options, choices]

@@ -504,6 +504,102 @@ class OpenAICompatibleClient:
             "stream": True,
         }
 
+    def _post_json(self, payload: Dict[str, Any], has_images: bool = False) -> Optional[Dict[str, Any]]:
+        if not self.config.enabled or not self.config.api_key:
+            return None
+        with self._usage_lock:
+            self.usage_totals["request_count"] += 1
+            if has_images:
+                self.usage_totals["multimodal_request_count"] += 1
+            else:
+                self.usage_totals["text_request_count"] += 1
+        url = self.config.base_url.rstrip("/") + "/chat/completions"
+        last_error_text = None
+        for attempt in range(1, 4):
+            started = time.perf_counter()
+            req = urllib.request.Request(
+                url,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Connection": "close",
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+                    "Authorization": f"Bearer {self.config.api_key}",
+                },
+                method="POST",
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
+                    body = json.loads(response.read().decode("utf-8"))
+            except urllib.error.HTTPError as exc:
+                elapsed_seconds = time.perf_counter() - started
+                with self._usage_lock:
+                    self.usage_totals["failed_request_count"] += 1
+                    self.usage_totals["total_request_seconds"] += elapsed_seconds
+                try:
+                    error_body = exc.read().decode("utf-8", errors="ignore")
+                except Exception:
+                    error_body = ""
+                last_error_text = f"HTTP {exc.code}: {error_body[:240] or exc.reason}"
+                retryable = exc.code in {408, 409, 429} or exc.code >= 500
+                if retryable and attempt < 3:
+                    with self._usage_lock:
+                        self.usage_totals["retry_count"] += 1
+                    time.sleep(min(2.0, 0.5 * attempt))
+                    continue
+                with self._usage_lock:
+                    self.usage_totals["last_error"] = last_error_text
+                return None
+            except (urllib.error.URLError, http.client.RemoteDisconnected, ConnectionResetError, BrokenPipeError, ssl.SSLError, TimeoutError, json.JSONDecodeError) as exc:
+                elapsed_seconds = time.perf_counter() - started
+                with self._usage_lock:
+                    self.usage_totals["failed_request_count"] += 1
+                    self.usage_totals["total_request_seconds"] += elapsed_seconds
+                last_error_text = f"{type(exc).__name__}: {exc}"
+                if attempt < 3:
+                    with self._usage_lock:
+                        self.usage_totals["retry_count"] += 1
+                    time.sleep(min(2.0, 0.5 * attempt))
+                    continue
+                with self._usage_lock:
+                    self.usage_totals["last_error"] = last_error_text
+                return None
+            elapsed_seconds = time.perf_counter() - started
+            usage = self._extract_usage(body)
+            with self._usage_lock:
+                self.usage_totals["total_request_seconds"] += elapsed_seconds
+                if usage["total_tokens"] > 0:
+                    self.usage_totals["requests_with_usage"] += 1
+                for key, value in usage.items():
+                    self.usage_totals[key] += value
+            choices = body.get("choices") or []
+            if not choices:
+                with self._usage_lock:
+                    self.usage_totals["failed_request_count"] += 1
+                    self.usage_totals["last_error"] = "Response missing choices."
+                return None
+            message = choices[0].get("message") or {}
+            content = message.get("content", "")
+            if isinstance(content, list):
+                content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
+            parsed = extract_json_object(to_plain_text(content))
+            if not parsed:
+                with self._usage_lock:
+                    self.usage_totals["failed_request_count"] += 1
+                    self.usage_totals["last_error"] = "Response missing JSON object."
+                return None
+            with self._usage_lock:
+                self.usage_totals["successful_request_count"] += 1
+                self.usage_totals["last_error"] = None
+            parsed["_llm_usage"] = usage
+            parsed["_llm_elapsed_seconds"] = round(elapsed_seconds, 3)
+            parsed["_llm_request_mode"] = "multimodal" if has_images else "text"
+            return parsed
+        with self._usage_lock:
+            self.usage_totals["last_error"] = last_error_text
+        return None
+
     def _build_responses_payload(self, system_prompt: str, user_content: Any) -> Dict[str, Any]:
         def to_responses_parts(content: Any) -> List[Dict[str, Any]]:
             parts: List[Dict[str, Any]] = []
