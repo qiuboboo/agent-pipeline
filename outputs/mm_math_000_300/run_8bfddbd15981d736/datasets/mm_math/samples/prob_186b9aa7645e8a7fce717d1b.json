@@ -1,0 +1,2615 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_4f959c84290c96f767fd7372",
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "52836781.png",
+    "raw_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+    "raw_answer_text": "\\textbf{Solution:} Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$.\\\\\nHence, $a^{2} + b^{2} = 40$.\\\\\nSince $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$,\\\\\nit follows that $2ab = 64 - 40 = 24$,\\\\\nand thus, $ab = 12$.\\\\\nTherefore, the area of the shaded part is equal to $\\frac{1}{2} ab = \\frac{1}{2} \\times 12 = \\boxed{6}$.",
+    "choice_map": {},
+    "image_paths": [
+      "52836781.png"
+    ],
+    "force_requires_image": true,
+    "question_field": null,
+    "answer_field": null,
+    "image_field": null,
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent",
+      "hf_raw_mm_math_fallback"
+    ],
+    "created_at": "2026-04-04T03:01:57Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+    "image_manifest": [
+      {
+        "path": "outputs/mm_math_000_300/run_8bfddbd15981d736/datasets/mm_math/artifacts/images/prob_186b9aa7645e8a7fce717d1b_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 702,
+        "height": 739,
+        "file_size": 62127
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 307,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "long_text",
+      "answer_char_length": 362
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_4f959c84290c96f767fd7372",
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "52836781.png",
+    "created_at": "2026-04-04T03:01:57Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.78,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写有“As shown in the figure”且要求求“shaded part”面积，阴影区域的具体定义依赖图片。",
+        "requires_image=true，text_dominant=false，说明该题不是纯文本可充分表达的题目。",
+        "几何对象的相对位置（C 在线段 BG 上、两侧作正方形）与阴影区域形状都属于视觉/空间信息。"
+      ],
+      "multi_step": [
+        "解答需要先设 BC=a、CG=b，再由 BG=8 得到 a+b=8。",
+        "还需将两个正方形面积转化为 a^2+b^2=40，再结合 (a+b)^2 展开求出 ab=12。",
+        "最后再把阴影部分识别为面积为 1/2 ab 的区域，属于图形理解与代数计算的组合推理。"
+      ],
+      "verifiability": [
+        "标准答案是明确的数值结果 6，结果形式清晰，便于核验。",
+        "中间量关系 a+b=8、a^2+b^2=40、ab=12 都可被规则化检查，推导链较完整。",
+        "asset_registry_record.registry_passed=true，且题目与答案均已登记存在。"
+      ]
+    },
+    "risk_flags": [
+      "answer_type_mismatch_top_level_vs_registry",
+      "shaded_region_not_fully_specified_in_text"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_4f959c84290c96f767fd7372",
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "52836781.png",
+    "created_at": "2026-04-04T03:01:57Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+    "priority": 0.93,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像都已登记存在，且 asset registry 无 issues、registry_passed=true，核心语义资产完整。",
+      "该题虽强依赖图片来定义阴影区域，但图片资源实际可用，因此并不存在因缺图导致的语义不可恢复问题。",
+      "initial scoring 中 image_dependency_score=0.95、multi_step_score=0.78、verifiability_score=0.9，说明样本质量较高且可核验性强。",
+      "风险标记主要是文本中阴影区域说明不足和答案类型字段不一致，但在图像与答案均存在的前提下，这些更像标注/结构风险，不足以降为 low_priority 或 reject。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_4f959c84290c96f767fd7372",
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "52836781.png",
+    "created_at": "2026-04-04T03:01:57Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_4f959c84290c96f767fd7372",
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+    "dataset_name": "MM-Math",
+    "normalized_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+    "normalized_answer_text": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed solution-formatting markup and normalized the answer into plain text.",
+      "Question explicitly depends on the figure and force_requires_image is true.",
+      "No multiple-choice options were provided."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T03:01:57Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "source_dataset": "MM-Math",
+    "source_split": "train[0:300]",
+    "source_problem_id": "52836781.png",
+    "subject": "数学",
+    "raw_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+    "raw_answer_text": "\\textbf{Solution:} Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$.\\\\\nHence, $a^{2} + b^{2} = 40$.\\\\\nSince $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$,\\\\\nit follows that $2ab = 64 - 40 = 24$,\\\\\nand thus, $ab = 12$.\\\\\nTherefore, the area of the shaded part is equal to $\\frac{1}{2} ab = \\frac{1}{2} \\times 12 = \\boxed{6}$.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.78,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 283,
+      "image_paths": [
+        "52836781.png"
+      ],
+      "extraction_notes": [
+        "source_intake_agent",
+        "hf_raw_mm_math_fallback"
+      ],
+      "image_field": null
+    },
+    "created_at": "2026-04-04T03:03:12Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.93,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都已登记存在，且 asset registry 无 issues、registry_passed=true，核心语义资产完整。",
+      "该题虽强依赖图片来定义阴影区域，但图片资源实际可用，因此并不存在因缺图导致的语义不可恢复问题。",
+      "initial scoring 中 image_dependency_score=0.95、multi_step_score=0.78、verifiability_score=0.9，说明样本质量较高且可核验性强。",
+      "风险标记主要是文本中阴影区域说明不足和答案类型字段不一致，但在图像与答案均存在的前提下，这些更像标注/结构风险，不足以降为 low_priority 或 reject。"
+    ],
+    "collection_risk_flags": [
+      "answer_type_mismatch_top_level_vs_registry",
+      "shaded_region_not_fully_specified_in_text"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_831a1e70795f60d9fbdaff58",
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "52836781.png",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_186b9aa7645e8a7fce717d1b/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_186b9aa7645e8a7fce717d1b/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/52836781.png",
+        "is_present": true,
+        "width": 702,
+        "height": 739
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.78,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-04T03:03:12Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_ea17ad4991ab56a318330f4b",
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "52836781.png",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.93,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.78,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-04T03:03:12Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像都已登记存在，且 asset registry 无 issues、registry_passed=true，核心语义资产完整。",
+      "该题虽强依赖图片来定义阴影区域，但图片资源实际可用，因此并不存在因缺图导致的语义不可恢复问题。",
+      "initial scoring 中 image_dependency_score=0.95、multi_step_score=0.78、verifiability_score=0.9，说明样本质量较高且可核验性强。",
+      "风险标记主要是文本中阴影区域说明不足和答案类型字段不一致，但在图像与答案均存在的前提下，这些更像标注/结构风险，不足以降为 low_priority 或 reject。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_4f959c84290c96f767fd7372",
+      "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "dataset_name": "MM-Math",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T03:03:12Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_4f959c84290c96f767fd7372",
+    "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "52836781.png",
+    "normalized_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+    "normalized_answer_text": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "minor_visual_risk"
+    ],
+    "created_at": "2026-04-04T03:03:12Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_4f959c84290c96f767fd7372",
+    "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+    "normalized_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+    "normalized_answer_text": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "line",
+        "canonical": "line",
+        "variable_type": "label"
+      },
+      {
+        "original": "BG",
+        "canonical": "BG",
+        "variable_type": "label"
+      },
+      {
+        "original": "With",
+        "canonical": "With",
+        "variable_type": "label"
+      },
+      {
+        "original": "BC",
+        "canonical": "BC",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "CG",
+        "canonical": "CG",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "both",
+        "canonical": "both",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "by",
+        "canonical": "by",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "sum",
+        "canonical": "sum",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "two",
+        "canonical": "two",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "area",
+        "canonical": "area",
+        "variable_type": "label"
+      },
+      {
+        "original": "part",
+        "canonical": "part",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "As shown in the figure, point C is on the line segment BG."
+      },
+      {
+        "segment_index": 2,
+        "text": "With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively."
+      },
+      {
+        "segment_index": 3,
+        "text": "The sum of the areas of the two squares is $S_{1}+S_{2}=40$."
+      },
+      {
+        "segment_index": 4,
+        "text": "Given that BG=8, what is the area of the shaded part in the figure?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/52836781.png",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 702,
+          "height": 739
+        },
+        "readability_score": 0.6818,
+        "contrast_score": 32.8953
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T03:03:12Z",
+    "normalization_notes": [
+      "Removed solution-formatting markup and normalized the answer into plain text.",
+      "Question explicitly depends on the figure and force_requires_image is true.",
+      "No multiple-choice options were provided."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+    "source_dataset": "MM-Math",
+    "source_split": "train[0:300]",
+    "source_problem_id": "52836781.png",
+    "ingest_batch_id": "benchmarkallinone-mm-math-000-300_20260403T200434Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+    "normalized_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+    "raw_answer_text": "\\textbf{Solution:} Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$.\\\\\nHence, $a^{2} + b^{2} = 40$.\\\\\nSince $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$,\\\\\nit follows that $2ab = 64 - 40 = 24$,\\\\\nand thus, $ab = 12$.\\\\\nTherefore, the area of the shaded part is equal to $\\frac{1}{2} ab = \\frac{1}{2} \\times 12 = \\boxed{6}$.",
+    "normalized_answer_text": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+    "answer_type": "set",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9412,
+    "multi_step_score": 0.4637,
+    "verifiability_score": 0.9748,
+    "quality_risk_flags": [
+      "minor_label_cropping"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "minor_visual_risk"
+    ],
+    "clean_decision_rationale": "The sample is complete, understandable, and fully solvable, with a usable rewritten question and answer. However, the alignment record is marked risky and the image has minor label cropping, so it retains semantic value but warrants a manual check rather than an automatic pass.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T03:01:57Z",
+    "updated_at": "2026-04-04T03:03:12Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.78,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.93,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都已登记存在，且 asset registry 无 issues、registry_passed=true，核心语义资产完整。",
+      "该题虽强依赖图片来定义阴影区域，但图片资源实际可用，因此并不存在因缺图导致的语义不可恢复问题。",
+      "initial scoring 中 image_dependency_score=0.95、multi_step_score=0.78、verifiability_score=0.9，说明样本质量较高且可核验性强。",
+      "风险标记主要是文本中阴影区域说明不足和答案类型字段不一致，但在图像与答案均存在的前提下，这些更像标注/结构风险，不足以降为 low_priority 或 reject。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_d75735918268a8c474f0fd8b",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mm_math/train[0:300]/52836781.png/question",
+      "storage_uri": "inline://prob_186b9aa7645e8a7fce717d1b/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 307,
+      "width": null,
+      "height": null,
+      "sha256": "1d73ec1c55fc15725d3ec6153d82188c00d8f4a391f6af41cc4ef00b0811f7ac",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "BG",
+          "canonical": "BG",
+          "variable_type": "label"
+        },
+        {
+          "original": "With",
+          "canonical": "With",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CG",
+          "canonical": "CG",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "asset_id": "asset_8a213c918b3a1d757f7556aa",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_186b9aa7645e8a7fce717d1b/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 307,
+      "width": null,
+      "height": null,
+      "sha256": "1d73ec1c55fc15725d3ec6153d82188c00d8f4a391f6af41cc4ef00b0811f7ac",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "normalized_text_snapshot": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "BG",
+          "canonical": "BG",
+          "variable_type": "label"
+        },
+        {
+          "original": "With",
+          "canonical": "With",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CG",
+          "canonical": "CG",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "asset_id": "asset_1a9218f7fa7a9bd44572674d",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mm_math/train[0:300]/52836781.png/answer",
+      "storage_uri": "inline://prob_186b9aa7645e8a7fce717d1b/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 362,
+      "width": null,
+      "height": null,
+      "sha256": "4b8fbd99d1c7b8de5ba2026692c2833827b452e868c0c5fbcab237611480a755",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$.\\\\\nHence, $a^{2} + b^{2} = 40$.\\\\\nSince $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$,\\\\\nit follows that $2ab = 64 - 40 = 24$,\\\\\nand thus, $ab = 12$.\\\\\nTherefore, the area of the shaded part is equal to $\\frac{1}{2} ab = \\frac{1}{2} \\times 12 = \\boxed{6}$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CG",
+          "canonical": "CG",
+          "variable_type": "label"
+        },
+        {
+          "original": "b",
+          "canonical": "b",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Then",
+          "canonical": "Then",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "BG",
+          "canonical": "BG",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "thus",
+          "canonical": "thus",
+          "variable_type": "label"
+        },
+        {
+          "original": "ab",
+          "canonical": "ab",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "asset_id": "asset_39f8310d6b7151d2ff96bad3",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_186b9aa7645e8a7fce717d1b/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 315,
+      "width": null,
+      "height": null,
+      "sha256": "2997ac896e3441ffb2269461e036f8bafb48a2f1dc4db702404375093e95bc40",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$.\\\\\nHence, $a^{2} + b^{2} = 40$.\\\\\nSince $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$,\\\\\nit follows that $2ab = 64 - 40 = 24$,\\\\\nand thus, $ab = 12$.\\\\\nTherefore, the area of the shaded part is equal to $\\frac{1}{2} ab = \\frac{1}{2} \\times 12 = \\boxed{6}$.",
+      "normalized_text_snapshot": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CG",
+          "canonical": "CG",
+          "variable_type": "label"
+        },
+        {
+          "original": "b",
+          "canonical": "b",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Then",
+          "canonical": "Then",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "BG",
+          "canonical": "BG",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "thus",
+          "canonical": "thus",
+          "variable_type": "label"
+        },
+        {
+          "original": "ab",
+          "canonical": "ab",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "asset_id": "asset_d487997dca625af9e1bec011",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/52836781.png",
+      "storage_uri": "outputs/mm_math_000_300/run_8bfddbd15981d736/datasets/mm_math/artifacts/images/prob_186b9aa7645e8a7fce717d1b_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 62127,
+      "width": 702,
+      "height": 739,
+      "sha256": "c4dee526018e2bb2df43b7894078fdca7110810f25d011ddc9b1e76d6b493302",
+      "perceptual_hash": "73ffdfff0287e5f2",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 816.4338,
+      "readability_score": 0.6818,
+      "noise_score": 19.0611,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 702,
+        "height": 739
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "minor_label_cropping"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "asset_id": "asset_22d90e2793963e3eafd810d7",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_e384b1508e2b12855a7beb74",
+      "file_format": "txt",
+      "file_size_bytes": 307,
+      "width": null,
+      "height": null,
+      "sha256": "1d73ec1c55fc15725d3ec6153d82188c00d8f4a391f6af41cc4ef00b0811f7ac",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "normalized_text_snapshot": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "BG",
+          "canonical": "BG",
+          "variable_type": "label"
+        },
+        {
+          "original": "With",
+          "canonical": "With",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CG",
+          "canonical": "CG",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_186b9aa7645e8a7fce717d1b",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "As shown in the figure, point C is on the line segment BG.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "2"
+          ],
+          "unit_mentions": [
+            "W",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The sum of the areas of the two squares is $S_{1}+S_{2}=40$.",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "2",
+            "40"
+          ],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Given that BG=8, what is the area of the shaded part in the figure?",
+          "segment_index": 4,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "8"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_186b9aa7645e8a7fce717d1b_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "set",
+          "target_text": "Given that BG=8, what is the area of the shaded part in the figure?",
+          "expected_answer_type": "set",
+          "expected_answer": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "point",
+          "entity_category": "point",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "line",
+          "entity_category": "line",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "C",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BG",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "CG",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "BG",
+          "canonical": "BG",
+          "variable_type": "label"
+        },
+        {
+          "original": "With",
+          "canonical": "With",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CG",
+          "canonical": "CG",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "As shown in the figure, point C is on the line segment BG."
+        },
+        {
+          "segment_index": 2,
+          "text": "With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively."
+        },
+        {
+          "segment_index": 3,
+          "text": "The sum of the areas of the two squares is $S_{1}+S_{2}=40$."
+        },
+        {
+          "segment_index": 4,
+          "text": "Given that BG=8, what is the area of the shaded part in the figure?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T03:02:58Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_186b9aa7645e8a7fce717d1b_1",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 0.9499,
+        "dark_pixel_ratio": 0.1193,
+        "readability_score": 0.6818,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 702,
+            "height": 739
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 702,
+            "height": 739
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 369,
+            "width": 351,
+            "height": 370
+          },
+          "salience": 0.6001
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 351,
+            "y": 369,
+            "width": 351,
+            "height": 370
+          },
+          "salience": 0.5344
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8427,
+      "created_at": "2026-04-04T03:02:58Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_186b9aa7645e8a7fce717d1b",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-04T03:03:07Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_d1f710775d2ff75b82ac1a4e",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, point C is on the line segment BG.",
+      "surface_forms": [
+        "As shown in the figure, point C is on the line segment BG."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8a213c918b3a1d757f7556aa"
+      ],
+      "evidence_refs": [
+        "asset_8a213c918b3a1d757f7556aa"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "As shown in the figure, point C is on the line segment BG.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_6d4f8053496c6d39ca913aab",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "text_fact",
+      "canonical_value": "With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively.",
+      "surface_forms": [
+        "With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8a213c918b3a1d757f7556aa"
+      ],
+      "evidence_refs": [
+        "asset_8a213c918b3a1d757f7556aa"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "2"
+        ],
+        "unit_mentions": [
+          "W",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "W,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_fc95198d0158fbdda189cf98",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "text_fact",
+      "canonical_value": "The sum of the areas of the two squares is $S_{1}+S_{2}=40$.",
+      "surface_forms": [
+        "The sum of the areas of the two squares is $S_{1}+S_{2}=40$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8a213c918b3a1d757f7556aa"
+      ],
+      "evidence_refs": [
+        "asset_8a213c918b3a1d757f7556aa"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The sum of the areas of the two squares is $S_{1}+S_{2}=40$.",
+        "segment_index": 3,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "2",
+          "40"
+        ],
+        "unit_mentions": [
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_4896deed2b5d6ba377ebda09",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "target_slot",
+      "canonical_value": "Given that BG=8, what is the area of the shaded part in the figure?",
+      "surface_forms": [
+        "Given that BG=8, what is the area of the shaded part in the figure?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_8a213c918b3a1d757f7556aa"
+      ],
+      "evidence_refs": [
+        "asset_8a213c918b3a1d757f7556aa"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "slot_id": "slot_prob_186b9aa7645e8a7fce717d1b_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "set",
+        "target_text": "Given that BG=8, what is the area of the shaded part in the figure?",
+        "expected_answer_type": "set",
+        "expected_answer": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_b5902f6c1ae3d9efc8a03f29",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "answer_claim",
+      "canonical_value": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+      "surface_forms": [
+        "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_39f8310d6b7151d2ff96bad3"
+      ],
+      "evidence_refs": [
+        "asset_39f8310d6b7151d2ff96bad3"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$."
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_5695ed8ffc01c584b1bccb9d",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 702,
+          "height": 739
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8427,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_f2d0d5feb0488dce926f7ba1",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 702,
+          "height": 739
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8427,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_5c07921f7b58b7d3994d6f33",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 369,
+          "width": 351,
+          "height": 370
+        },
+        "salience": 0.6001
+      },
+      "unit": null,
+      "confidence": 0.8427,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_c2336e90dbe60388b231da95",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 351,
+          "y": 369,
+          "width": 351,
+          "height": 370
+        },
+        "salience": 0.5344
+      },
+      "unit": null,
+      "confidence": 0.8427,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_869d2a1b927446739f96370a",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "surface_forms": [
+        "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_22d90e2793963e3eafd810d7"
+      ],
+      "evidence_refs": [
+        "asset_22d90e2793963e3eafd810d7"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_e384b1508e2b12855a7beb74",
+        "parent_problem_id": "prob_186b9aa7645e8a7fce717d1b",
+        "variant_index": 1,
+        "title": "MM-Math 开放题",
+        "rewritten_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+        "expected_answer_type": "set",
+        "expected_answer": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_67b0bd2720f49406112844f1",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "quality_signal",
+      "canonical_value": "minor_label_cropping",
+      "surface_forms": [
+        "minor_label_cropping"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "minor_label_cropping"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_9c9abcd71267890f7da992a4",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_186b9aa7645e8a7fce717d1b",
+        "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-04T03:03:07Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "node_id": "node_40995ff201fd81a33141124b",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "minor_visual_risk"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T03:03:12Z",
+      "updated_at": "2026-04-04T03:03:12Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_4f959c84290c96f767fd7372",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_8bfddbd15981d736",
+      "dataset_name": "MM-Math",
+      "input_asset_ids": [
+        "asset_d75735918268a8c474f0fd8b",
+        "asset_8a213c918b3a1d757f7556aa",
+        "asset_1a9218f7fa7a9bd44572674d",
+        "asset_39f8310d6b7151d2ff96bad3",
+        "asset_d487997dca625af9e1bec011",
+        "asset_22d90e2793963e3eafd810d7"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 24
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 702,
+            "height": 739,
+            "blur_score": 816.4338,
+            "contrast_score": 32.8953,
+            "noise_score": 19.0611,
+            "readability_score": 0.6818,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 702,
+              "height": 739
+            },
+            "perceptual_hash": "73ffdfff0287e5f2"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_4f959c84290c96f767fd7372",
+        "coverage_score": 0.9,
+        "consistency_score": 0.82,
+        "alignment_status": "risky",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_186b9aa7645e8a7fce717d1b",
+        "question_type": "open",
+        "condition_count": 3,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_186b9aa7645e8a7fce717d1b",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_matches_text",
+          "jointly_understandable"
+        ],
+        "rationale": "The question text is complete, and the image clearly shows point C on BG, the two squares on BC and CG, and the shaded triangular region whose area is being asked for. Although a few outer labels are slightly close to the crop, the geometric relationships remain easy to understand.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "minor_label_cropping"
+      ],
+      "clean_score": 1.0,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "minor_visual_risk"
+      ],
+      "decision_rationale": "The sample is complete, understandable, and fully solvable, with a usable rewritten question and answer. However, the alignment record is marked risky and the image has minor label cropping, so it retains semantic value but warrants a manual check rather than an automatic pass.",
+      "review_ticket_id": "review_prob_186b9aa7645e8a7fce717d1b",
+      "operator_type": "system",
+      "started_at": "2026-04-04T03:03:12Z",
+      "finished_at": "2026-04-04T03:03:12Z",
+      "candidate_id": "cand_186b9aa7645e8a7fce717d1b",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_4f959c84290c96f767fd7372",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "image_entity_refs": [
+        "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+        "visual_prob_186b9aa7645e8a7fce717d1b_1::roi_bottom_left",
+        "visual_prob_186b9aa7645e8a7fce717d1b_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_186b9aa7645e8a7fce717d1b_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7607
+        },
+        {
+          "text_ref": "point",
+          "image_ref": "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+          "relation": "grounds_point",
+          "confidence": 0.7607
+        },
+        {
+          "text_ref": "line",
+          "image_ref": "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+          "relation": "grounds_line",
+          "confidence": 0.7607
+        },
+        {
+          "text_ref": "C",
+          "image_ref": "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7607
+        },
+        {
+          "text_ref": "BG",
+          "image_ref": "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7607
+        },
+        {
+          "text_ref": "BC",
+          "image_ref": "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7607
+        },
+        {
+          "text_ref": "CG",
+          "image_ref": "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7607
+        },
+        {
+          "text_ref": "slot_prob_186b9aa7645e8a7fce717d1b_1",
+          "image_ref": "visual_prob_186b9aa7645e8a7fce717d1b_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7654
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "visual_reference_density_mismatch",
+          "detail": "文本中的视觉锚点明显多于可识别视觉区域。",
+          "severity": "major",
+          "confidence": 0.72
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.82,
+      "alignment_status": "risky",
+      "created_at": "2026-04-04T03:02:58Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_c2afa297b5f7eda5396506c0",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "after_value": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "audit_id": "audit_cf632d32ea48515b998bb479",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "\\textbf{Solution:} Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$.\\\\\nHence, $a^{2} + b^{2} = 40$.\\\\\nSince $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$,\\\\\nit follows that $2ab = 64 - 40 = 24$,\\\\\nand thus, $ab = 12$.\\\\\nTherefore, the area of the shaded part is equal to $\\frac{1}{2} ab = \\frac{1}{2} \\times 12 = \\boxed{6}$.",
+      "after_value": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "audit_id": "audit_984f43b48901bc420fdb3327",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "audit_id": "audit_40995ff201fd81a33141124b",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T03:03:12Z"
+    },
+    {
+      "audit_id": "audit_986bdc0589713b731c1fd084",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "BG",
+          "canonical": "BG",
+          "variable_type": "label"
+        },
+        {
+          "original": "With",
+          "canonical": "With",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CG",
+          "canonical": "CG",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T03:03:12Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_4f959c84290c96f767fd7372",
+      "problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "source_problem_id": "52836781.png",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_e384b1508e2b12855a7beb74",
+          "parent_problem_id": "prob_186b9aa7645e8a7fce717d1b",
+          "variant_index": 1,
+          "title": "MM-Math 开放题",
+          "rewritten_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+          "expected_answer_type": "set",
+          "expected_answer": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-04T03:03:12Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_e384b1508e2b12855a7beb74",
+      "parent_problem_id": "prob_186b9aa7645e8a7fce717d1b",
+      "variant_index": 1,
+      "title": "MM-Math 开放题",
+      "rewritten_question_text": "As shown in the figure, point C is on the line segment BG. With BC and CG as sides, squares are constructed on both sides, with areas denoted by $S_{1}$ and $S_{2}$ respectively. The sum of the areas of the two squares is $S_{1}+S_{2}=40$. Given that BG=8, what is the area of the shaded part in the figure?",
+      "expected_answer_type": "set",
+      "expected_answer": "Let $BC = a$ and $CG = b$. Then, $S_{1} = a^{2}$ and $S_{2} = b^{2}$, with $a + b = BG = 8$. Hence, $a^{2} + b^{2} = 40$. Since $(a + b)^{2} = a^{2} + b^{2} + 2ab = 64$, it follows that $2ab = 64 - 40 = 24$, and thus, $ab = 12$. Therefore, the area of the shaded part is $\\frac{1}{2}ab = \\frac{1}{2} \\times 12 = 6$.",
+      "split_role": "single"
+    }
+  ]
+}
