@@ -1,0 +1,2505 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_3573c3e6e08e8a7e69c828e5",
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "problem_id": "prob_b6b024f6c5565da63b820672",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "196",
+    "raw_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5 M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is (the $z$-axis is out of the paper). Find the moment of inertia tensor of the combination of disk and point mass about point $A$ in the coordinate system shown.",
+    "raw_answer_text": "$\\frac{M R^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(180, 171)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains a PIL image object representation rather than a file path or URL",
+      "caption mass value '$m = \\\\frac{5}{7} M$' conflicts with question text '$m=5 M/4$'",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T00:56:05Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_b6b024f6c5565da63b820672",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/images/prob_b6b024f6c5565da63b820672_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 180,
+        "height": 171,
+        "file_size": 14441
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 358,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 84
+    },
+    "issues": [
+      "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')",
+      "metadata.image_paths contains a PIL image object representation rather than a file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_3573c3e6e08e8a7e69c828e5",
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "196",
+    "created_at": "2026-04-04T00:56:05Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_b6b024f6c5565da63b820672",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.78,
+    "verifiability_score": 0.72,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写明“as shown in Fig. 1.109”且要求在“the coordinate system shown”下作答，关键信息依赖图示位置与坐标定义。",
+        "requires_image=true，text_dominant=false，说明该题不是纯文本即可完整求解。",
+        "需要从图中确定点质量相对圆盘与点A的空间关系，否则转动惯量张量的非对角项难以唯一确定。"
+      ],
+      "multi_step": [
+        "目标是求组合体关于点A的转动惯量张量，通常需要分别处理圆盘与边缘点质量，再做张量叠加。",
+        "题目涉及从质心转到点A的参考点变换，以及二维平面分布导致的张量分量与乘积惯量计算，属于多步物理推导。",
+        "答案为完整3x3矩阵而非单一标量，通常需要多项分量计算与一致性检查。"
+      ],
+      "verifiability": [
+        "answer_present=true，且给出明确的解析矩阵形式，最终答案结构清晰，可逐项核验。",
+        "题目对象和已知量明确（薄圆盘、半径R、质量M、附着点质量m），理论上可用标准转动惯量与平行轴定理验证。",
+        "但资产记录中存在质量值冲突（图注与题干不一致），会降低基于题面的唯一可验证性。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')",
+      "metadata.image_paths contains a PIL image object representation rather than a file path or URL",
+      "图中坐标系与点A位置若读取有歧义，会直接影响惯量张量分量与非对角项"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_3573c3e6e08e8a7e69c828e5",
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "196",
+    "created_at": "2026-04-04T00:56:05Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_b6b024f6c5565da63b820672",
+    "priority": 0.78,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题干、答案和主图像都存在，样本仍具备可恢复的核心语义，不应直接 reject。",
+      "该题明显依赖图示中的坐标系与几何位置关系，而图像资产已存在，保留后续恢复与核验的可能性。",
+      "存在关键质量参数冲突：图注写为 m = 5M/7，而题干写为 m = 5M/4，这会直接影响惯量张量结果，降低唯一可验证性。",
+      "初步评分显示图像依赖和多步推导程度都较高，说明样本有价值，但当前资产一致性风险使其更适合进入低优先级候选池。",
+      "metadata.image_paths 的记录异常属于元数据问题，不构成核心语义缺失。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_3573c3e6e08e8a7e69c828e5",
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "196",
+    "created_at": "2026-04-04T00:56:05Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_3573c3e6e08e8a7e69c828e5",
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "problem_id": "prob_b6b024f6c5565da63b820672",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+    "normalized_answer_text": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "requires figure-based coordinate and point-A reference, so image dependence is retained",
+      "lightly normalized spacing in formulas",
+      "rephrased incomplete clause without adding new physical information"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T00:56:05Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "source_dataset": "SeePhys",
+    "source_split": "train[0:300]",
+    "source_problem_id": "196",
+    "subject": "物理",
+    "raw_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5 M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is (the $z$-axis is out of the paper). Find the moment of inertia tensor of the combination of disk and point mass about point $A$ in the coordinate system shown.",
+    "raw_answer_text": "$\\frac{M R^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.78,
+    "initial_verifiability_score": 0.72,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 196,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(180, 171)>"
+      ],
+      "extraction_notes": [
+        "image field contains a PIL image object representation rather than a file path or URL",
+        "caption mass value '$m = \\\\frac{5}{7} M$' conflicts with question text '$m=5 M/4$'",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "The contribution of a mass element $\\Delta m$ at radius vector $\\mathbf{r}=(x_{1}, x_{2}, x_{3})$ to the moments and products of inertia about the origin is given by $I_{ij}=\\Delta m\\,(r^{2}\\delta_{ij}-x_{i}x_{j})$. Thus the moment of inertia tensor of the point mass about $A$ is\\n$$\\frac{5MR^{2}}{4}\\begin{pmatrix}1 & -1 & 0\\\\ -1 & 1 & 0\\\\ 0 & 0 & 2\\end{pmatrix},$$\\nand by using the parallel‐axis theorem the moment of inertia tensor of the disk about $A$ is\\n$$\\frac{MR^{2}}{4}\\begin{pmatrix}5 & 0 & 0\\\\ 0 & 1 & 0\\\\ 0 & 0 & 6\\end{pmatrix}.$$ \\nHence, the combined moment of inertia tensor about $A$ is\\n$$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}.$$",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-04T00:57:11Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都存在，样本仍具备可恢复的核心语义，不应直接 reject。",
+      "该题明显依赖图示中的坐标系与几何位置关系，而图像资产已存在，保留后续恢复与核验的可能性。",
+      "存在关键质量参数冲突：图注写为 m = 5M/7，而题干写为 m = 5M/4，这会直接影响惯量张量结果，降低唯一可验证性。",
+      "初步评分显示图像依赖和多步推导程度都较高，说明样本有价值，但当前资产一致性风险使其更适合进入低优先级候选池。",
+      "metadata.image_paths 的记录异常属于元数据问题，不构成核心语义缺失。"
+    ],
+    "collection_risk_flags": [
+      "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')",
+      "metadata.image_paths contains a PIL image object representation rather than a file path or URL",
+      "图中坐标系与点A位置若读取有歧义，会直接影响惯量张量分量与非对角项"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_a43af54c96f77b772f6f63db",
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "196",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_b6b024f6c5565da63b820672/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_b6b024f6c5565da63b820672/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 180,
+        "height": 171
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.78,
+      "initial_verifiability_score": 0.72
+    },
+    "created_at": "2026-04-04T00:57:11Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')",
+      "metadata.image_paths contains a PIL image object representation rather than a file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_5cc09f2e017f638871293091",
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "196",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.78,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.78,
+      "initial_verifiability_score": 0.72
+    },
+    "created_at": "2026-04-04T00:57:11Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题干、答案和主图像都存在，样本仍具备可恢复的核心语义，不应直接 reject。",
+      "该题明显依赖图示中的坐标系与几何位置关系，而图像资产已存在，保留后续恢复与核验的可能性。",
+      "存在关键质量参数冲突：图注写为 m = 5M/7，而题干写为 m = 5M/4，这会直接影响惯量张量结果，降低唯一可验证性。",
+      "初步评分显示图像依赖和多步推导程度都较高，说明样本有价值，但当前资产一致性风险使其更适合进入低优先级候选池。",
+      "metadata.image_paths 的记录异常属于元数据问题，不构成核心语义缺失。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_3573c3e6e08e8a7e69c828e5",
+      "candidate_id": "cand_b6b024f6c5565da63b820672",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T00:57:11Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_3573c3e6e08e8a7e69c828e5",
+    "problem_id": "prob_b6b024f6c5565da63b820672",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "196",
+    "normalized_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+    "normalized_answer_text": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "jointly_understandable",
+      "nonblocking_metadata_conflict"
+    ],
+    "created_at": "2026-04-04T00:57:11Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_3573c3e6e08e8a7e69c828e5",
+    "problem_id": "prob_b6b024f6c5565da63b820672",
+    "normalized_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+    "normalized_answer_text": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "thin",
+        "canonical": "thin",
+        "variable_type": "label"
+      },
+      {
+        "original": "disk",
+        "canonical": "disk",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "R",
+        "canonical": "R",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "mass",
+        "canonical": "mass",
+        "variable_type": "label"
+      },
+      {
+        "original": "M",
+        "canonical": "M",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "xy",
+        "canonical": "xy",
+        "variable_type": "label"
+      },
+      {
+        "original": "has",
+        "canonical": "has",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "its",
+        "canonical": "its",
+        "variable_type": "label"
+      },
+      {
+        "original": "edge",
+        "canonical": "edge",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "Fig",
+        "canonical": "Fig",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig."
+      },
+      {
+        "segment_index": 2,
+        "text": "1.109)."
+      },
+      {
+        "segment_index": 3,
+        "text": "The moment of inertia of the disk about its center of mass is given."
+      },
+      {
+        "segment_index": 4,
+        "text": "Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 35,
+          "y": 17,
+          "width": 141,
+          "height": 147
+        },
+        "readability_score": 0.7849,
+        "contrast_score": 43.0393
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T00:57:11Z",
+    "normalization_notes": [
+      "requires figure-based coordinate and point-A reference, so image dependence is retained",
+      "lightly normalized spacing in formulas",
+      "rephrased incomplete clause without adding new physical information"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_b6b024f6c5565da63b820672",
+    "source_dataset": "SeePhys",
+    "source_split": "train[0:300]",
+    "source_problem_id": "196",
+    "ingest_batch_id": "benchmarkallinone-seephys-000-300_20260403T200700Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "en",
+    "raw_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5 M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is (the $z$-axis is out of the paper). Find the moment of inertia tensor of the combination of disk and point mass about point $A$ in the coordinate system shown.",
+    "normalized_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+    "raw_answer_text": "$\\frac{M R^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+    "normalized_answer_text": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+    "answer_type": "text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "The contribution of a mass element $\\Delta m$ at radius vector $\\mathbf{r}=(x_{1}, x_{2}, x_{3})$ to the moments and products of inertia about the origin is given by $I_{ij}=\\Delta m\\,(r^{2}\\delta_{ij}-x_{i}x_{j})$. Thus the moment of inertia tensor of the point mass about $A$ is\\n$$\\frac{5MR^{2}}{4}\\begin{pmatrix}1 & -1 & 0\\\\ -1 & 1 & 0\\\\ 0 & 0 & 2\\end{pmatrix},$$\\nand by using the parallel‐axis theorem the moment of inertia tensor of the disk about $A$ is\\n$$\\frac{MR^{2}}{4}\\begin{pmatrix}5 & 0 & 0\\\\ 0 & 1 & 0\\\\ 0 & 0 & 6\\end{pmatrix}.$$ \\nHence, the combined moment of inertia tensor about $A$ is\\n$$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}.$$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9755,
+    "multi_step_score": 0.4817,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')",
+      "metadata.image_paths contains a PIL image object representation rather than a file path or URL",
+      "possible_mass_value_conflict_in_metadata"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "jointly_understandable",
+      "nonblocking_metadata_conflict"
+    ],
+    "clean_decision_rationale": "The sample is semantically usable: the question and answer are complete, the diagram provides the needed geometry, the rewrite is usable, and alignment/solvability signals are strong. There is a noted mass-value conflict in metadata, but it appears non-blocking for annotation given the explicit question text and stable target answer.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_b6b024f6c5565da63b820672",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T00:56:05Z",
+    "updated_at": "2026-04-04T00:57:11Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.78,
+    "initial_verifiability_score": 0.72,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都存在，样本仍具备可恢复的核心语义，不应直接 reject。",
+      "该题明显依赖图示中的坐标系与几何位置关系，而图像资产已存在，保留后续恢复与核验的可能性。",
+      "存在关键质量参数冲突：图注写为 m = 5M/7，而题干写为 m = 5M/4，这会直接影响惯量张量结果，降低唯一可验证性。",
+      "初步评分显示图像依赖和多步推导程度都较高，说明样本有价值，但当前资产一致性风险使其更适合进入低优先级候选池。",
+      "metadata.image_paths 的记录异常属于元数据问题，不构成核心语义缺失。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_3fc3d694402b0a0dfeef18d1",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[0:300]/196/question",
+      "storage_uri": "inline://prob_b6b024f6c5565da63b820672/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 358,
+      "width": null,
+      "height": null,
+      "sha256": "e8413f3734a7a67b85a1b45967f0d7e9e97e3bcb2add7f9d4879fff37d32c84d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5 M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is (the $z$-axis is out of the paper). Find the moment of inertia tensor of the combination of disk and point mass about point $A$ in the coordinate system shown.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "disk",
+          "canonical": "disk",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "xy",
+          "canonical": "xy",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "asset_id": "asset_fe8cbccfc71e449b2b9d69ea",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_b6b024f6c5565da63b820672/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 332,
+      "width": null,
+      "height": null,
+      "sha256": "9954fa0c14bb04dc9a3ad5d0099382b81602ae50b6d8ce992a8bb8b8e9cc7eda",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5 M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is (the $z$-axis is out of the paper). Find the moment of inertia tensor of the combination of disk and point mass about point $A$ in the coordinate system shown.",
+      "normalized_text_snapshot": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "disk",
+          "canonical": "disk",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "xy",
+          "canonical": "xy",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "asset_id": "asset_fb5efd11d7fb81ff5cf41b30",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[0:300]/196/answer",
+      "storage_uri": "inline://prob_b6b024f6c5565da63b820672/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 84,
+      "width": null,
+      "height": null,
+      "sha256": "63b749ed44a596566ac601e366a8237c211c7f38915887c2360637a2f3fb437f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\frac{M R^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "MR",
+          "canonical": "MR",
+          "variable_type": "label"
+        },
+        {
+          "original": "end",
+          "canonical": "end",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "asset_id": "asset_22f2a867ce53b15ff64ef82c",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_b6b024f6c5565da63b820672/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 83,
+      "width": null,
+      "height": null,
+      "sha256": "b8ee304dd976daf037958bd4014bc2197fb2f6610b0a800c516fe0b6d6cef703",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\frac{M R^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+      "normalized_text_snapshot": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "MR",
+          "canonical": "MR",
+          "variable_type": "label"
+        },
+        {
+          "original": "end",
+          "canonical": "end",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "asset_id": "asset_b82efe3f23eaeb12d10ac893",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/images/prob_b6b024f6c5565da63b820672_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 14441,
+      "width": 180,
+      "height": 171,
+      "sha256": "9300a783e03af8507c63f5eef5ad3b11bb038497df2db0484480e1b60e3fe766",
+      "perceptual_hash": "ffefc4c0c3c3ffc7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3194.803,
+      "readability_score": 0.7849,
+      "noise_score": 29.2409,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 35,
+        "y": 17,
+        "width": 141,
+        "height": 147
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')",
+        "metadata.image_paths contains a PIL image object representation rather than a file path or URL",
+        "possible_mass_value_conflict_in_metadata"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "asset_id": "asset_6309bf934e547a1b1a3ed1ab",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/crops/prob_b6b024f6c5565da63b820672_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 14099,
+      "width": 141,
+      "height": 147,
+      "sha256": "94ff3e5d8bf2ea8934a6ee5a6b7ef34ef318eefacbcd0c1a195604c03eefc979",
+      "perceptual_hash": "df9f80070783ff0f",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3194.803,
+      "readability_score": 0.7849,
+      "noise_score": 29.2409,
+      "cropped_from_asset_id": "asset_b82efe3f23eaeb12d10ac893",
+      "roi_bbox": {
+        "x": 35,
+        "y": 17,
+        "width": 141,
+        "height": 147
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "asset_id": "asset_a4b15009d2b56d3975efd960",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_2e627ae4bf754cbd75b5f07c",
+      "file_format": "txt",
+      "file_size_bytes": 332,
+      "width": null,
+      "height": null,
+      "sha256": "9954fa0c14bb04dc9a3ad5d0099382b81602ae50b6d8ce992a8bb8b8e9cc7eda",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5 M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is (the $z$-axis is out of the paper). Find the moment of inertia tensor of the combination of disk and point mass about point $A$ in the coordinate system shown.",
+      "normalized_text_snapshot": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "disk",
+          "canonical": "disk",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "xy",
+          "canonical": "xy",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_b6b024f6c5565da63b820672",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "5",
+            "4"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "1.109).",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1.109"
+          ],
+          "unit_mentions": [],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The moment of inertia of the disk about its center of mass is given.",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_b6b024f6c5565da63b820672_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "text",
+          "target_text": "Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+          "expected_answer_type": "text",
+          "expected_answer": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "point",
+          "entity_category": "point",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "R",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "M",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "disk",
+          "canonical": "disk",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "xy",
+          "canonical": "xy",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig."
+        },
+        {
+          "segment_index": 2,
+          "text": "1.109)."
+        },
+        {
+          "segment_index": 3,
+          "text": "The moment of inertia of the disk about its center of mass is given."
+        },
+        {
+          "segment_index": 4,
+          "text": "Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T00:56:52Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_b6b024f6c5565da63b820672_1",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.0526,
+        "dark_pixel_ratio": 0.078,
+        "readability_score": 0.7849,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 180,
+            "height": 171
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 35,
+            "y": 17,
+            "width": 141,
+            "height": 147
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 35,
+            "y": 17,
+            "width": 70,
+            "height": 73
+          },
+          "salience": 0.5107
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 105,
+            "y": 17,
+            "width": 71,
+            "height": 73
+          },
+          "salience": 0.4482
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 35,
+            "y": 90,
+            "width": 70,
+            "height": 74
+          },
+          "salience": 0.521
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        }
+      ],
+      "parser_confidence": 0.914,
+      "created_at": "2026-04-04T00:56:52Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_b6b024f6c5565da63b820672",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-04T00:57:04Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_3b6d135704103da26632efcc",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "text_fact",
+      "canonical_value": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig.",
+      "surface_forms": [
+        "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fe8cbccfc71e449b2b9d69ea"
+      ],
+      "evidence_refs": [
+        "asset_fe8cbccfc71e449b2b9d69ea"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "5",
+          "4"
+        ],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_b9e9c3407c9dbc9b9e31d1ef",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "text_fact",
+      "canonical_value": "1.109).",
+      "surface_forms": [
+        "1.109)."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fe8cbccfc71e449b2b9d69ea"
+      ],
+      "evidence_refs": [
+        "asset_fe8cbccfc71e449b2b9d69ea"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "1.109).",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1.109"
+        ],
+        "unit_mentions": [],
+        "condition_role": "explicit"
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_8bd5cab967e1a4c774cf3fc7",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "text_fact",
+      "canonical_value": "The moment of inertia of the disk about its center of mass is given.",
+      "surface_forms": [
+        "The moment of inertia of the disk about its center of mass is given."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fe8cbccfc71e449b2b9d69ea"
+      ],
+      "evidence_refs": [
+        "asset_fe8cbccfc71e449b2b9d69ea"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The moment of inertia of the disk about its center of mass is given.",
+        "segment_index": 3,
+        "mentions_visual": false,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_cd0e88397ee8345efcad6c12",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "target_slot",
+      "canonical_value": "Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+      "surface_forms": [
+        "Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_fe8cbccfc71e449b2b9d69ea"
+      ],
+      "evidence_refs": [
+        "asset_fe8cbccfc71e449b2b9d69ea"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "slot_id": "slot_prob_b6b024f6c5565da63b820672_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "text",
+        "target_text": "Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+        "expected_answer_type": "text",
+        "expected_answer": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_57fbdfaa8a6caa8c4de512f3",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "answer_claim",
+      "canonical_value": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+      "surface_forms": [
+        "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_22f2a867ce53b15ff64ef82c"
+      ],
+      "evidence_refs": [
+        "asset_22f2a867ce53b15ff64ef82c"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "answer": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_1a0779485cf748038cd32003",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 180,
+          "height": 171
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.914,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_187cd27da606cac051a652e7",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 35,
+          "y": 17,
+          "width": 141,
+          "height": 147
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.914,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_2593b1ff391f3797bd5037a6",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 35,
+          "y": 17,
+          "width": 70,
+          "height": 73
+        },
+        "salience": 0.5107
+      },
+      "unit": null,
+      "confidence": 0.914,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_f6bc7de12670c033f46e437d",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 105,
+          "y": 17,
+          "width": 71,
+          "height": 73
+        },
+        "salience": 0.4482
+      },
+      "unit": null,
+      "confidence": 0.914,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_834a519ae8ea54ec2e962001",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 35,
+          "y": 90,
+          "width": 70,
+          "height": 74
+        },
+        "salience": 0.521
+      },
+      "unit": null,
+      "confidence": 0.914,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_5d9fd11efb7d33749e6f5dff",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "text_fact",
+      "canonical_value": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+      "surface_forms": [
+        "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_a4b15009d2b56d3975efd960"
+      ],
+      "evidence_refs": [
+        "asset_a4b15009d2b56d3975efd960"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_2e627ae4bf754cbd75b5f07c",
+        "parent_problem_id": "prob_b6b024f6c5565da63b820672",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+        "expected_answer_type": "text",
+        "expected_answer": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_51c66da9acfe249abb97b41c",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')",
+      "surface_forms": [
+        "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_2d63d81c092ef0c6dbcfd3c0",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL image object representation rather than a file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL image object representation rather than a file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL image object representation rather than a file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_e825575fc2cf7fca2bb38d23",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "quality_signal",
+      "canonical_value": "possible_mass_value_conflict_in_metadata",
+      "surface_forms": [
+        "possible_mass_value_conflict_in_metadata"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "possible_mass_value_conflict_in_metadata"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_9a3a62e3525354952dfdddfd",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_b6b024f6c5565da63b820672",
+        "problem_id": "prob_b6b024f6c5565da63b820672",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-04T00:57:04Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "node_id": "node_ac52864fb64444d65ec92b96",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "jointly_understandable",
+          "nonblocking_metadata_conflict"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T00:57:11Z",
+      "updated_at": "2026-04-04T00:57:11Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_3573c3e6e08e8a7e69c828e5",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a246d322f4a1c1ca",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_3fc3d694402b0a0dfeef18d1",
+        "asset_fe8cbccfc71e449b2b9d69ea",
+        "asset_fb5efd11d7fb81ff5cf41b30",
+        "asset_22f2a867ce53b15ff64ef82c",
+        "asset_b82efe3f23eaeb12d10ac893",
+        "asset_6309bf934e547a1b1a3ed1ab",
+        "asset_a4b15009d2b56d3975efd960"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 21
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.89,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 180,
+            "height": 171,
+            "blur_score": 3194.803,
+            "contrast_score": 43.0393,
+            "noise_score": 29.2409,
+            "readability_score": 0.7849,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 35,
+              "y": 17,
+              "width": 141,
+              "height": 147
+            },
+            "perceptual_hash": "ffefc4c0c3c3ffc7"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_3573c3e6e08e8a7e69c828e5",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_b6b024f6c5565da63b820672",
+        "question_type": "calculation",
+        "condition_count": 3,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_b6b024f6c5565da63b820672",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_target_explicit",
+          "diagram_geometry_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for the inertia tensor about point A, and the diagram is semantically usable: it shows the disk, axes, point A, radius marking, and the attached point mass on the rim. The expected answer format is explicit as a matrix. A metadata note mentions a mass-value conflict, but the visible figure appears consistent enough to keep the sample understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes reports a mass-value conflict between the caption ('$m = \\\\frac{5}{7} M$') and the question text ('$m=5 M/4$')",
+        "metadata.image_paths contains a PIL image object representation rather than a file path or URL",
+        "possible_mass_value_conflict_in_metadata"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "jointly_understandable",
+        "nonblocking_metadata_conflict"
+      ],
+      "decision_rationale": "The sample is semantically usable: the question and answer are complete, the diagram provides the needed geometry, the rewrite is usable, and alignment/solvability signals are strong. There is a noted mass-value conflict in metadata, but it appears non-blocking for annotation given the explicit question text and stable target answer.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-04T00:57:11Z",
+      "finished_at": "2026-04-04T00:57:11Z",
+      "candidate_id": "cand_b6b024f6c5565da63b820672",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_3573c3e6e08e8a7e69c828e5",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "image_entity_refs": [
+        "visual_prob_b6b024f6c5565da63b820672_1::roi",
+        "visual_prob_b6b024f6c5565da63b820672_1::roi_top_left",
+        "visual_prob_b6b024f6c5565da63b820672_1::roi_top_right",
+        "visual_prob_b6b024f6c5565da63b820672_1::roi_bottom_left"
+      ],
+      "text_span_refs": [
+        "asset_prob_b6b024f6c5565da63b820672_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "point",
+          "image_ref": "visual_prob_b6b024f6c5565da63b820672_1::roi",
+          "relation": "grounds_point",
+          "confidence": 0.7785
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_b6b024f6c5565da63b820672_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7785
+        },
+        {
+          "text_ref": "R",
+          "image_ref": "visual_prob_b6b024f6c5565da63b820672_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7785
+        },
+        {
+          "text_ref": "M",
+          "image_ref": "visual_prob_b6b024f6c5565da63b820672_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7785
+        },
+        {
+          "text_ref": "slot_prob_b6b024f6c5565da63b820672_1",
+          "image_ref": "visual_prob_b6b024f6c5565da63b820672_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7811
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-04T00:56:52Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_7d54bb34dbce1ac53b316fcc",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5 M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is (the $z$-axis is out of the paper). Find the moment of inertia tensor of the combination of disk and point mass about point $A$ in the coordinate system shown.",
+      "after_value": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "audit_id": "audit_8a31871214405c366aeaa4d6",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$\\frac{M R^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+      "after_value": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "audit_id": "audit_266c2e878ef0ab743c498bad",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "audit_id": "audit_ac52864fb64444d65ec92b96",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T00:57:11Z"
+    },
+    {
+      "audit_id": "audit_c88719fd1febd118bce666b3",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "disk",
+          "canonical": "disk",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "xy",
+          "canonical": "xy",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T00:57:11Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_3573c3e6e08e8a7e69c828e5",
+      "problem_id": "prob_b6b024f6c5565da63b820672",
+      "source_problem_id": "196",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_2e627ae4bf754cbd75b5f07c",
+          "parent_problem_id": "prob_b6b024f6c5565da63b820672",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+          "expected_answer_type": "text",
+          "expected_answer": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-04T00:57:11Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_2e627ae4bf754cbd75b5f07c",
+      "parent_problem_id": "prob_b6b024f6c5565da63b820672",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "A thin disk of radius $R$ and mass $M$ lying in the $xy$-plane has a point mass $m=5M/4$ attached on its edge (as shown in Fig. 1.109). The moment of inertia of the disk about its center of mass is given. Find the moment of inertia tensor of the combination of the disk and point mass about point $A$ in the coordinate system shown.",
+      "expected_answer_type": "text",
+      "expected_answer": "$\\frac{MR^{2}}{4}\\begin{pmatrix}10 & -5 & 0\\\\ -5 & 6 & 0\\\\ 0 & 0 & 16\\end{pmatrix}$",
+      "split_role": "single"
+    }
+  ]
+}
