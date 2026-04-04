@@ -84,6 +84,18 @@ python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/def
 python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/local_file_example.yaml
 ```
 
+### 5. 导出 ready 数据为统一 problem JSON
+```bash
+python3 scripts/export_ready_to_problem_json.py --ready-root ready
+```
+
+默认会导出到仓库根目录下的 `ready_problem_exports/`，避免与运行时缓存和中间产物混在 `outputs/` 目录里。
+
+如需只导出某个 ready 包，可指定：
+```bash
+python3 scripts/export_ready_to_problem_json.py --ready-root ready --dataset mm_math_000_300
+```
+
 ## 标注前就绪输出
 
 运行完成后，每个数据集目录下会生成：
