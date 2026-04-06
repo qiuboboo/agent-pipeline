@@ -1,0 +1,998 @@
+[2026-03-28T21:09:38+08:00] START merge_qjb_ler_rewrite_longtask
+
+[2026-03-28T21:09:38+08:00] STEP read plan doc and inspect current branch status
+qjb
+?? archive/rewrite_backup_2026-03-28_qjb/
+?? docs/qjb_vs_ler_rewrite_merge_plan_2026-03-28.md
+?? monitor_candidate_200.sh
+?? scripts/
+# qjb vs ler 分支对比与 rewrite 替换计划
+
+## 目标
+
+本文件用于系统对比 `qjb` 与 `origin/ler` 两个分支的实现差异，并据此制定后续合并/替换计划。
+
+当前目标不是简单 merge 两个分支，而是：
+
+- 保留 `qjb` 当前更清晰的模块化主干、日志与可观测性
+- 用 `origin/ler` 中效果更好的 rewrite 子系统，**整体替换** `qjb` 当前偏弱的 rewrite 部分
+
+最终目标是：
+
+> **结构清晰 + 记录完整 + 改写结果明显优于当前 `qjb`，避免出现“看似 open，实则几乎没改写”的样本。**
+
+---
+
+## 一、两个分支的总体定位
+
+### `qjb`
+当前主线入口：
+- `run_pipeline.py -> benchmark/src/multidataset_cleaning_pipeline.py`
+
+优势：
+- 模块化更清晰
+- 阶段拆分更明确
+- `run.log`、`rewrite_reports.jsonl`、`records/*.jsonl` 可观测性更好
+- 已补齐：
+  - `llm_used`
+  - `chat_json` 失败细节
+  - transient retry
+  - `attempt=x/y`
+- 更适合作为长期维护主干
+
+当前短板：
+- rewrite 质量不稳定
+- 对 multiple-choice → open-ended 的语义转换能力不足
+- 仍会出现“伪开放化”样本
+- 对 choice 编号答案的语义还原不足
+
+### `origin/ler`
+当前主线入口：
+- `run_pipeline.py -> src/benchmarkallinone/pipeline.py`
+
+优势：
+- rewrite 子系统更强
+- 已显式具备多种与 rewrite 相关的关键逻辑，例如：
+  - `resolve_multiple_choice_answer_text(...)`
+  - `is_pure_image_index_question(...)`
+  - `is_compound_answer_question(...)`
+  - `fallback_rewrite(...)`
+  - 更完整的 `drop_image_index / split_open / blank_open` 分叉
+- 对 multiple-choice 题更倾向于输出真正语义答案，而不是保留原始编号
+
+当前短板：
+- 结构更偏一体化 / 单体实现
+- 模块边界不如 `qjb` 清晰
+- 日志、记录、可观测性体系不如 `qjb` 这条主线成熟
+
+---
+
+## 二、总体判断
+
+### 应保留 `qjb` 的部分
+- `run_pipeline.py` 薄入口
+- `benchmark/src/` 的模块化组织
+- `pipeline_setup.py`
+- `pipeline_collection.py`
+- `pipeline_reporting.py`
+- `run.log`
+- `rewrite_reports.jsonl`
+- `llm_used`
+- retry / `attempt=x/y`
+- 当前 outputs / records / samples 组织方式
+
+### 应整体替换为 `ler` 的部分
+- rewrite 主体逻辑
+- fallback rewrite 逻辑
+- multiple-choice 语义化改写逻辑
+- 选项编号 → 选项文本 / 真实答案的恢复逻辑
+- 纯图索引题丢弃逻辑
+- compound answer / split_open 相关逻辑
+
+换句话说，后续方向不是“局部借几个函数”，而是：
+
+> **以 `qjb` 为主干，完整替换其 rewrite 子系统为 `origin/ler` 的 rewrite 实现/设计。**
+
+---
+
+## 三、典型对照案例：SCEMQA `prob_2c51d6bcc3e66f75a13abc12`
+
+这是一个非常适合做回归基准的样本：
+
+- `problem_id`: `prob_2c51d6bcc3e66f75a13abc12`
+- `source_problem_id`: `5`
+- 原题：
+  - `Which of the graphs shown does the $\lim_{x \to 3} f(x)$ exist?`
+- 原答案：
+  - `4`
+- `choice_map`:
+  - `A`: `I only`
+  - `B`: `II only`
+  - `C`: `I and II only`
+  - `D`: `III only`
+  - `E`: `I and III only`
+
+### `qjb` 的结果
+文件：
+- `outputs/candidate_200_remote/run_38bce3437874d962/datasets/scemqa/samples/prob_2c51d6bcc3e66f75a13abc12.json`
+
+`open_ended_problem_variants`：
+
+```json
+[
+  {
+    "open_variant_id": "open_89286a1c610352219781907d",
+    "parent_problem_id": "prob_2c51d6bcc3e66f75a13abc12",
+    "variant_index": 1,
+    "title": "SCEMQA 开放题",
+    "rewritten_question_text": "Which of the graphs shown does the $\\lim_{x \\to 3} f(x)$ exist?",
+    "expected_answer_type": "numeric",
+    "expected_answer": "4",
+    "split_role": "single"
+  }
+]
+```
+
+问题：
+1. 题面几乎没有改写，仍然是 multiple-choice 风格问法
+2. `expected_answer` 仍保留原始编号 `4`
+3. `expected_answer_type` 仍是 `numeric`
+4. 没有把编号答案还原成真实语义答案
+
+这类结果本质上是：
+
+> **看似生成了 open variant，实则没有完成真正的 open-ended 改写。**
+
+### `ler` 的结果
+文件：
+- `origin/ler:outputs/scemqa_agent_validation_20/run_d7cb02b6b5b0be0a/datasets/scemqa/samples/prob_2c51d6bcc3e66f75a13abc12.json`
+
+`open_ended_problem_variants`：
+
+```json
+[
+  {
+    "open_variant_id": "open_89286a1c610352219781907d",
+    "parent_problem_id": "prob_2c51d6bcc3e66f75a13abc12",
+    "variant_index": 1,
+    "title": "SCEMQA 开放题",
+    "rewritten_question_text": "Among graphs I, II, and III shown, for which graph(s) does $\\lim_{x \\to 3} f(x)$ exist? Answer using the graph label(s).",
+    "expected_answer_type": "text",
+    "expected_answer": "III only",
+    "split_role": "single"
+  }
+]
+```
+
+优点：
+1. 显式指出图中对象：`graphs I, II, and III`
+2. 问法从“选项选择”改成“for which graph(s)”的开放问法
+3. 把原答案编号 `4` 成功还原成语义答案 `III only`
+4. `expected_answer_type` 也修正为 `text`
+
+### 这个案例说明了什么
+这个案例几乎直接证明：
+
+- `qjb` 当前缺的不是“有没有做 blank_open”
+- 而是 **choice-aware rewrite 能力本身**
+
+更具体地说，`qjb` 当前 rewrite 的主要缺口是：
+- 不会可靠地把 answer index 映射成真实选项语义
+- 不会稳定地把题面从“选项壳”改成真正开放式问法
+
+而 `ler` 已经显式具备这类能力。
+
+因此，这条样本应作为后续 rewrite 替换工作的**回归基准案例**。
+
+---
+
+## 四、字段与 prompt 驱动差异
+
+### 1. 字段 schema 差异其实不大
+
+对照样本：
+- `prob_2c51d6bcc3e66f75a13abc12`
+
+结论：
+- `clean_problem_record` 在两边几乎同构
+- `candidate_problem_record` 与 `problem_main_record` 的 schema 也没有本质分叉
+- `ler` 主要多出的是一些中间 agent / collection 状态字段，而不是一套完全不同的数据结构
+
+具体表现：
+
+#### `candidate_problem_record`
+`ler` 比 `qjb` 额外记录了：
+- `asset_registry_passed`
+- `collection_decision`
+- `collection_decision_reasons`
+- `collection_priority_score`
+- `collection_risk_flags`
+
+#### `problem_main_record`
+`ler` 比 `qjb` 额外记录了：
+- `agent_completeness_status`
+- `agent_decision_source`
+- `agent_image_support_status`
+- `agent_joint_understanding_status`
+- `clean_decision_rationale`
+- `collection_decision`
+- `collection_decision_reasons`
+- `collection_priority_score`
+
+这说明：
+> 两边真正大的差别不在 schema，而在这些字段里写进去的内容质量，尤其是 rewrite 产物质量。
+
+### 2. `ler` 的额外字段，本质上是 prompt 驱动出来的
+
+对照 `origin/ler` 的 prompts：
+
+#### `prompts/cleaning/rewrite_agent.md`
+明确要求返回：
+- `strategy`
+- `rationale`
+- `discard_reason_codes`
+- `variants`
+- `expected_answer_type`
+- `expected_answer`
+
+并特别写明：
+- `remember scemqa dataset's answer is 0-based counting`
+
+这直接解释了为什么 `ler` 能把 `SCEMQA` 中的答案编号 `4` 还原为 `III only`，而 `qjb` 会保留成数字 `4`。
+
+#### `prompts/cleaning/sample_understanding_agent.md`
+明确要求返回：
+- `completeness_status`
+- `image_support_status`
+- `joint_understanding_status`
+- `reason_codes`
+- `risk_flags`
+- `rationale`
+- `confidence`
+
+这和 `ler` 中额外出现的：
+- `agent_completeness_status`
+- `agent_image_support_status`
+- `agent_joint_understanding_status`
+
+是直接对应的。
+
+#### `prompts/cleaning/gate_decision_agent.md`
+明确要求返回：
+- `decision`
+- `reason_codes`
+- `rationale`
+- `review_required`
+
+这与 `ler` 中更细的 gate / rationale 字段是直接对应的。
+
+
+[2026-03-28T21:09:38+08:00] STEP inspect rewrite-related diffs between qjb and origin/ler
+From https://github.com/qiuboboo/agent-pipeline
+ * branch            ler        -> FETCH_HEAD
+> 3636c98 修复改写问题
+> d57f315 每个数据集20个样本测试
+< 3887e42 docs: summarize 200-sample rerun findings and rewrite issues
+< f6d153c feat: add hf zip-member loader support and loader recommendations
+> 10e095a 创建一键运行脚本
+> b67ccab Update benchmarkallinone files
+< 667d3d4 debug: include retry attempt counts in chat_json errors
+< 3083129 feat: retry transient chat_json API failures
+< 51ce6b1 debug: surface chat_json failure details in run log
+< 6850ea7 fix: persist llm_used in rewrite reports
+< 9cb20f0 fix: parse JSON-encoded image path lists
+< 07b3f01 fix: resolve relative HF image paths in connector
+< 984d2fb outputs: add candidate_200_remote rerun outputs and launcher log
+< 8eec878 outputs: add latest smoke_scemqa_weak_hints run
+< 486ff22 docs: record 2026-03-28 candidate_200 rerun analysis
+< 2062bd9 docs: record rewrite llm recovery verification
+< 5c650c6 feat: add run logs and verify rewrite llm recovery
+< 49de646 fix: expand env api keys and fail fast on placeholders
+< 490ee4b feat: add run log for rewrite debugging
+< 46b1dd9 docs: add runtime summary for candidate 200 long run
+< b3a3065 data: add candidate 200 long-run artifacts
+< 825d20d data: add candidate 200 long-run summaries and sample records
+< cdc5e7f docs: summarize candidate 200 long-run analysis
+< 82bad4d fix: load Geometry3K samples from official zip splits
+< 8b0577d docs: append prompt references to structure docs
+< 056bfa2 docs: mark cleaning stage as agent-heavy in structure docs
+< 248d3b7 docs: record SCEMQA weak visual hint improvement
+< 1597c36 fix: add weak visual hints for implicit function-graph questions
+< a798b2b docs: record MM-Math review example and smoke findings
+< 621f5d9 fix: tighten split-open detection for math-style answers
+< 62a3a92 fix: handle remote disconnects in chat client
+< a5e9a6d refactor collection scoring and fix geometry3k ingest ranking
+< 3a60ed9 add staged pipeline design plan document
+< d73d6dc refactor pipeline into staged modules and add agent-only extraction mode
+< fd4767d docs: refine laptop chat memory sync scope
+< 829adcc docs: add repository collaboration guide for memory sync
+> d64e7d7 Remove nested benchmarkallinone directory
+> aa2f584 Update benchmarkallinone
+> 69ee7db Commit benchmarkallinone changes
+> 0fbd20e Update from working directory
+< 6f85825 Sync new main pipeline and benchmark docs (#4)
+> b1d9ede chore: trim generated artifacts for benchmarkallinone merge
+> 32e60fc chore: keep only benchmarkallinone and plans on ler
+< 3c42533 docs: update README with branch overview and roadmap
+> c41647c upload benchmarkallinone to ler branch
+> c2ea960 Initial commit on ler branch
+< 435fddf docs: describe prompt docs replacing Python heuristics
+< 10b4029 docs: translate core markdown docs to Chinese on main
+< a9e85ac feat/multi dataset iter (#3)
+< 75ae4fc Track outputs and update ignore rules
+< ab4ec82 Reorganize project layout, update README, and add remote configs
+< 2ec67ec Integrate candidate intake into reference cleaning pipeline (#2)
+< d895a0a Switch pipeline model to gpt-5.2 and add README
+< b9d30f1 Add cleaning-style rewrite and alignment records
+< 66e47bf Restructure pipeline around UnifiedSample records
+< 6e2f275 Normalize extracted multiple-choice answers
+< 2ddf436 Add preliminary value scoring pipeline
+< e767e0a Add agent pipeline with mini test dataset.
+[INFO] start targeted code inspection
+            "requires_image": requires_image,
+            "image_count": len(images),
+            "image_quality_summaries": [
+                {
+                    "width": quality.get("width"),
+                    "height": quality.get("height"),
+                    "blur_score": quality.get("blur_score"),
+                    "contrast_score": quality.get("contrast_score"),
+                    "readability_score": quality.get("readability_score"),
+                    "crop_integrity_score": quality.get("crop_integrity_score"),
+                }
+                for quality in image_qualities
+            ],
+            "soft_quality_signals": list(quality_flags),
+            "fallback_assessment": fallback,
+        }
+        llm_result = self.call_json(payload, images=images if requires_image else None)
+        if not llm_result:
+            return fallback
+        completeness_status = to_plain_text(llm_result.get("completeness_status")).strip().lower()
+        image_support_status = to_plain_text(llm_result.get("image_support_status")).strip().lower()
+        joint_understanding_status = to_plain_text(llm_result.get("joint_understanding_status")).strip().lower()
+        if completeness_status not in {"complete", "partial", "broken"}:
+            return fallback
+        if image_support_status not in {"not_needed", "clear_enough", "uncertain_but_usable", "missing_or_unusable"}:
+            return fallback
+        if joint_understanding_status not in {"understandable", "partially_understandable", "not_understandable"}:
+            return fallback
+        reason_codes = llm_result.get("reason_codes")
+        if not isinstance(reason_codes, list):
+            reason_codes = fallback["reason_codes"]
+        risk_flags = llm_result.get("risk_flags")
+        if not isinstance(risk_flags, list):
+            risk_flags = fallback["risk_flags"]
+        confidence = llm_result.get("confidence")
+        try:
+            confidence = float(confidence)
+        except (TypeError, ValueError):
+            confidence = fallback["confidence"]
+        return {
+            "dataset_name": dataset_name,
+            "question_complete": bool(llm_result.get("question_complete", fallback["question_complete"])),
+            "answer_complete": bool(llm_result.get("answer_complete", fallback["answer_complete"])),
+            "completeness_status": completeness_status,
+            "image_support_status": image_support_status,
+            "joint_understanding_status": joint_understanding_status,
+            "reason_codes": sorted(set(to_plain_text(code) for code in reason_codes if to_plain_text(code))),
+            "risk_flags": sorted(set(to_plain_text(flag) for flag in risk_flags if to_plain_text(flag))),
+            "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
+            "confidence": round(max(0.0, min(1.0, confidence)), 4),
+            "llm_used": True,
+        }
+
+
+class RewriteAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient, normalizer: TextNormalizer):
+        super().__init__(
+            client,
+            REWRITE_AGENT_PROMPT_PATH,
+            "You are the Question Rewrite Agent in a multimodal dataset cleaning pipeline. Convert multiple-choice questions into open-ended variants and return strict JSON only.",
+        )
+        self.normalizer = normalizer
+
+    def fallback_rewrite(self, dataset_name: str, question_text: str, normalized_answer: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+        question_only, _ = self.normalizer.split_question_and_choices(question_text)
+        question_only = self.normalizer.strip_hint(question_only)
+        if not choices:
+            if answer_type == "option" and any(token in question_only.lower() for token in ["which picture", "in which picture", "which figure", "which diagram", "which graph", "shown below", "illustrated"]):
+                return {
+                    "strategy": "blank_open",
+                    "rationale": "Pure-image label selection tasks are in scope, so keep the task and require the answer as the correct option label.",
+                    "variants": [
+                        {
+                            "variant_id": "open_1",
+                            "title": f"{dataset_name} 图像标签题",
+                            "rewritten_question_text": question_only,
+                            "expected_answer_type": "short_text",
+                            "expected_answer": normalized_answer,
+                            "split_role": "single",
+                        }
+                    ],
+                    "discard_reason_codes": [],
+                }
+            return {
+                "strategy": "keep_open",
+                "rationale": "Question is already open-ended.",
+                "variants": [
+                    {
+                        "variant_id": "open_1",
+                        "title": f"{dataset_name} 开放题",
+                        "rewritten_question_text": question_only,
+                        "expected_answer_type": answer_type,
+                        "expected_answer": normalized_answer,
+                        "split_role": "single",
+                    }
+                ],
+                "discard_reason_codes": [],
+            }
+        if self.normalizer.is_pure_image_index_question(question_only, choices):
+            resolved_answer = choices.get(normalized_answer, normalized_answer)
+            return {
+                "strategy": "blank_open",
+                "rationale": "Pure-image choice questions remain valid tasks for this pipeline, so convert them into answer-with-label open questions instead of dropping them.",
+                "variants": [
+                    {
+                        "variant_id": "open_1",
+                        "title": f"{dataset_name} 图像标签题",
+                        "rewritten_question_text": question_only,
+                        "expected_answer_type": "short_text",
+                        "expected_answer": resolved_answer,
+                        "split_role": "single",
+                    }
+                ],
+                "discard_reason_codes": [],
+            }
+        if self.normalizer.is_compound_answer_question(question_only, choices):
+            correct_text = choices.get(normalized_answer, "")
+            pieces = [piece.strip() for piece in re.split(r"[;；]", correct_text) if piece.strip()]
+            if not pieces:
+                pieces = [correct_text] if correct_text else []
+            variants = []
+            for idx, piece in enumerate(pieces or [normalized_answer], start=1):
+                variants.append(
+                    {
+                        "variant_id": f"open_{idx}",
+                        "title": f"{dataset_name} 子题 {idx}",
+                        "rewritten_question_text": f"{question_only}\n请只回答第 {idx} 个目标量。",
+                        "expected_answer_type": "short_text",
+                        "expected_answer": piece,
+                        "split_role": f"part_{idx}",
+                    }
+                )
+            return {
+                "strategy": "split_open",
+                "rationale": "Compound choice answer was split into multiple open-ended targets.",
+                "variants": variants,
+                "discard_reason_codes": [],
+            }
+        resolved_answer = choices.get(normalized_answer, normalized_answer)
+        resolved_answer_type = self.normalizer.infer_answer_type(self.normalizer.normalize_answer(resolved_answer))
+        if resolved_answer_type == "option":
+            resolved_answer_type = "short_text"
+        return {
+            "strategy": "blank_open",
+            "rationale": "Converted multiple choice into blank-style open-ended question.",
+            "variants": [
+                {
+                    "variant_id": "open_1",
+                    "title": f"{dataset_name} 开放题",
+                    "rewritten_question_text": question_only,
+                    "expected_answer_type": resolved_answer_type,
+                    "expected_answer": resolved_answer,
+                    "split_role": "single",
+                }
+            ],
+            "discard_reason_codes": [],
+        }
+
+    def rewrite(self, dataset_name: str, normalized_question_text: str, normalized_answer_text: str, answer_type: str, choices: Dict[str, str]) -> Dict[str, Any]:
+        fallback = self.fallback_rewrite(dataset_name, normalized_question_text, normalized_answer_text, answer_type, choices)
+        if not self.client.config.enabled or not choices:
+            return fallback
+        llm_result = self.call_json(
+            {
+                "dataset_name": dataset_name,
+                "question_text": normalized_question_text,
+                "choices": choices,
+                "correct_option_letter": normalized_answer_text if answer_type == "option" else None,
+                "correct_option_text": choices.get(normalized_answer_text, normalized_answer_text),
+                "answer_type": answer_type,
+                "fallback_result": fallback,
+            }
+        )
+        if not llm_result:
+            return fallback
+        strategy = to_plain_text(llm_result.get("strategy")).strip() or fallback["strategy"]
+        variants = llm_result.get("variants")
+        if not isinstance(variants, list):
+            variants = fallback["variants"]
+        if strategy == "drop_image_index":
+            variants = []
+        if not variants and strategy != "drop_image_index":
+            return fallback
+        discard_reason_codes = llm_result.get("discard_reason_codes")
+        if not isinstance(discard_reason_codes, list):
+            discard_reason_codes = fallback["discard_reason_codes"]
+        return {
+            "strategy": strategy,
+            "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
+            "variants": variants,
+            "discard_reason_codes": [to_plain_text(code) for code in discard_reason_codes if to_plain_text(code)],
+            "llm_used": True,
+        }
+
+
+class DecisionAgent(BaseStructuredAgent):
+    def __init__(self, client: OpenAICompatibleClient):
+        super().__init__(
+            client,
+            GATE_DECISION_PROMPT_PATH,
+            "You are the Gate Decision Agent in an agent-first cleaning pipeline. Decide pass, review, or reject using semantic usefulness rather than hard thresholds. Return strict JSON only.",
+        )
+
+    def fallback_decide(
+        self,
+        dataset_name: str,
+        raw_question_text: str,
+        raw_answer_text: str,
+        quality_components: Dict[str, Any],
+        sample_understanding: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        open_variants: Sequence[Dict[str, Any]],
+        alignment_record: Dict[str, Any],
+        solvability_report: Dict[str, Any],
+        quality_flags: Sequence[str],
+        text_structure: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        reason_codes: List[str] = []
+        strategy = rewrite_report.get("strategy")
+        completeness_status = sample_understanding.get("completeness_status", "partial")
+        joint_status = sample_understanding.get("joint_understanding_status", "partially_understandable")
+        image_support_status = sample_understanding.get("image_support_status", "uncertain_but_usable")
+        if strategy == "drop_image_index":
+            return {
+                "decision": "review",
+                "reason_codes": ["pure_image_choice_needs_review"],
+                "rationale": "Rewrite stage classified the sample as a pure image-choice task. Since pure-image tasks are in scope, keep it for review instead of rejecting it outright.",
+                "review_required": True,
+                "llm_used": False,
+            }
+        if not raw_question_text:
+            return {
+                "decision": "reject",
+                "reason_codes": ["missing_question_text"],
+                "rationale": "The sample lacks a usable question signal.",
+                "review_required": False,
+                "llm_used": False,
+            }
+        if "text_only_without_visual_need" in quality_flags:
+            return {
+                "decision": "reject",
+                "reason_codes": ["text_only_without_visual_need"],
+                "rationale": "The sample can be solved from text alone and does not satisfy the required multimodal dependency.",
+                "review_required": False,
+                "llm_used": False,
+            }
+        if completeness_status == "broken" or joint_status == "not_understandable":
+            return {
+                "decision": "reject",
+                "reason_codes": sorted(set(sample_understanding.get("reason_codes") or ["sample_not_understandable"])),
+                "rationale": sample_understanding.get("rationale") or "The sample is not semantically understandable enough for annotation.",
+                "review_required": False,
+                "llm_used": False,
+            }
+        if not raw_answer_text:
+            reason_codes.append("missing_answer")
+        if not open_variants:
+            reason_codes.append("rewrite_failed")
+        if completeness_status == "partial":
+            reason_codes.extend(sample_understanding.get("reason_codes", []))
+        if image_support_status == "uncertain_but_usable":
+            reason_codes.append("visual_evidence_uncertain")
+        elif image_support_status == "missing_or_unusable":
+            reason_codes.append("missing_required_image")
+        if alignment_record.get("alignment_status") in {"bad", "risky"}:
+            reason_codes.append("alignment_requires_review")
+        if rewrite_report.get("strategy") == "split_open":
+            reason_codes.append("split_variant_needs_review")
+        if text_structure.get("text_structure_status") != "complete":
+            reason_codes.append("text_structure_partial")
+        if solvability_report.get("decision_hint") != "pass":
+            reason_codes.extend(solvability_report.get("failure_codes", []))
+        if "multi_image_sample" in quality_flags:
+            reason_codes.append("multi_image_coordination_needed")
+        if reason_codes:
+            return {
+                "decision": "review",
+                "reason_codes": sorted(set(reason_codes)),
+                "rationale": f"The sample from {dataset_name} appears recoverable and should be reviewed rather than rejected.",
+                "review_required": True,
+                "llm_used": False,
+            }
+        return {
+            "decision": "pass",
+            "reason_codes": ["meets_cleaning_requirements"],
+            "rationale": f"The sample from {dataset_name} is semantically understandable and ready for annotation.",
+            "review_required": False,
+            "llm_used": False,
+        }
+
+    def decide(
+        self,
+        dataset_name: str,
+        raw_question_text: str,
+        raw_answer_text: str,
+        quality_components: Dict[str, Any],
+        sample_understanding: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        open_variants: Sequence[Dict[str, Any]],
+        alignment_record: Dict[str, Any],
+        solvability_report: Dict[str, Any],
+        quality_flags: Sequence[str],
+        text_structure: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        fallback = self.fallback_decide(
+            dataset_name=dataset_name,
+            raw_question_text=raw_question_text,
+            raw_answer_text=raw_answer_text,
+            quality_components=quality_components,
+            sample_understanding=sample_understanding,
+            rewrite_report=rewrite_report,
+            open_variants=open_variants,
+            alignment_record=alignment_record,
+            solvability_report=solvability_report,
+            quality_flags=quality_flags,
+            text_structure=text_structure,
+        )
+        payload = {
+            "dataset_name": dataset_name,
+            "raw_question_text": raw_question_text,
+            "raw_answer_text": raw_answer_text,
+            "quality_components": quality_components,
+            "sample_understanding": sample_understanding,
+            "rewrite_report": rewrite_report,
+            "open_variants": list(open_variants)[:2],
+            "alignment_record": {
+                "alignment_status": alignment_record.get("alignment_status"),
+                "coverage_score": alignment_record.get("coverage_score"),
+                "consistency_score": alignment_record.get("consistency_score"),
+                "conflict_count": len(alignment_record.get("conflict_pairs", [])),
+            },
+            "solvability_report": {
+                "solvability_score": solvability_report.get("solvability_score"),
+                "decision_hint": solvability_report.get("decision_hint"),
+                "failure_codes": solvability_report.get("failure_codes", []),
+                "reasoning_path_exists": solvability_report.get("reasoning_path_exists"),
+            },
+            "text_structure": {
+                "text_structure_status": text_structure.get("text_structure_status"),
+                "question_type": text_structure.get("question_type"),
+                "condition_count": len(text_structure.get("conditions", [])),
+                "target_count": len(text_structure.get("targets", [])),
+            },
+            "soft_quality_signals": list(quality_flags),
+            "fallback_decision": fallback,
+        }
+        llm_result = self.call_json(payload)
+        if not llm_result:
+            return fallback
+        decision = to_plain_text(llm_result.get("decision")).strip().lower()
+        if decision not in {"pass", "review", "reject"}:
+            return fallback
+        reason_codes = llm_result.get("reason_codes")
+        if not isinstance(reason_codes, list):
+            reason_codes = fallback["reason_codes"]
+        review_required = llm_result.get("review_required")
+        if not isinstance(review_required, bool):
+            review_required = decision == "review"
+        return {
+            "decision": decision,
+            "reason_codes": sorted(set(to_plain_text(code) for code in reason_codes if to_plain_text(code))) or fallback["reason_codes"],
+            "rationale": to_plain_text(llm_result.get("rationale")) or fallback["rationale"],
+            "review_required": review_required,
+            "llm_used": True,
+        }
+
+
+class AgenticCleaningOrchestrator:
+    def __init__(self, sample_understanding_agent: SampleUnderstandingAgent, decision_agent: DecisionAgent):
+        self.sample_understanding_agent = sample_understanding_agent
+        self.decision_agent = decision_agent
+
+    def assess_sample(
+        self,
+        dataset_name: str,
+        normalized_question_text: str,
+        normalized_answer_text: str,
+        answer_type: str,
+        choices: Dict[str, str],
+        requires_image: bool,
+        images: Sequence[Image.Image],
+        image_qualities: Sequence[Dict[str, Any]],
+        quality_flags: Sequence[str],
+    ) -> Dict[str, Any]:
+        return self.sample_understanding_agent.assess(
+            dataset_name=dataset_name,
+            normalized_question_text=normalized_question_text,
+            normalized_answer_text=normalized_answer_text,
+            answer_type=answer_type,
+            choices=choices,
+            requires_image=requires_image,
+            images=images,
+            image_qualities=image_qualities,
+            quality_flags=quality_flags,
+        )
+
+    def decide_gate(
+        self,
+        dataset_name: str,
+        raw_question_text: str,
+        raw_answer_text: str,
+        quality_components: Dict[str, Any],
+        sample_understanding: Dict[str, Any],
+        rewrite_report: Dict[str, Any],
+        open_variants: Sequence[Dict[str, Any]],
+        alignment_record: Dict[str, Any],
+        solvability_report: Dict[str, Any],
+        quality_flags: Sequence[str],
+        text_structure: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        return self.decision_agent.decide(
+            dataset_name=dataset_name,
+            raw_question_text=raw_question_text,
+            raw_answer_text=raw_answer_text,
+            quality_components=quality_components,
+            sample_understanding=sample_understanding,
+            rewrite_report=rewrite_report,
+            open_variants=open_variants,
+            alignment_record=alignment_record,
+            solvability_report=solvability_report,
+            quality_flags=quality_flags,
+            text_structure=text_structure,
+        )
+
+
+class MultiDatasetCleaningPipeline:
+    def __init__(self, config: PipelineConfig):
+        self.config = config
+        self.text_normalizer = TextNormalizer()
+        self.image_analyzer = ImageQualityAnalyzer()
+        self.client = OpenAICompatibleClient(config.model)
+        self.source_intake_agent = SourceIntakeAgent(self.client)
+        self.asset_registry_agent = AssetRegistryAgent(self.client, self.text_normalizer)
+        self.potential_scorer_agent = PotentialScorerAgent(self.client)
+        self.candidate_registrar_agent = CandidateRegistrarAgent(self.client)
+        self.normalization_agent = NormalizationAgent(self.client, self.text_normalizer)
+        self.rewrite_agent = RewriteAgent(self.client, self.text_normalizer)
+        self.sample_understanding_agent = SampleUnderstandingAgent(self.client)
+        self.decision_agent = DecisionAgent(self.client)
+        self.agentic_orchestrator = AgenticCleaningOrchestrator(self.sample_understanding_agent, self.decision_agent)
+        self.text_parser = TextContextParser()
+        self.visual_parser = VisualParser()
+        self.alignment_engine = AlignmentEngine()
+        self.solvability_checker = SolvabilityChecker()
+        self.pipeline_run_id = f"run_{stable_digest([utc_now(), 'multidataset-clean'], 16)}"
+        self.ingest_batch_id = f"{config.batch_id_prefix}_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
+        self.output_root = Path(config.output_root)
+        self.run_dir = self.output_root / self.pipeline_run_id
+        self.records_dir = self.run_dir / "records"
+        self.dataset_root = self.run_dir / "datasets"
+        ensure_dir(self.records_dir)
+        ensure_dir(self.dataset_root)
+        self.aggregate_summary: Dict[str, Any] = {"pipeline_run_id": self.pipeline_run_id, "created_at": utc_now(), "datasets": []}
+
+    def progress(self, message: str) -> None:
+        print(message, flush=True)
+
+    def default_image_quality(self) -> Dict[str, Any]:
+        return {
+            "width": None,
+            "height": None,
+            "blur_score": 0.0,
+            "contrast_score": 0.0,
+            "noise_score": 0.0,
+            "readability_score": 0.0,
+            "crop_integrity_score": 0.0,
+            "roi_bbox": None,
+            "perceptual_hash": None,
+        }
+
+    def connector_for(self, spec: DatasetSpec) -> BaseConnector:
+        if spec.source_kind == "local_file":
+            return LocalFileConnector(spec, self.config, self.client)
+        if spec.source_kind == "huggingface":
+            return HuggingFaceConnector(spec, self.config, self.client)
+        if spec.source_kind == "github":
+            return GitHubConnector(spec, self.config, self.client)
+        return SourceUnavailableConnector(spec, self.config, self.client)
+
+    def run(self) -> Dict[str, Any]:
+        started_at = utc_now()
+        started_perf = time.perf_counter()
+        dataset_summaries = []
+        total_datasets = len(self.config.datasets)
+        self.progress(
+            f"[Pipeline] run_id={self.pipeline_run_id} start datasets={total_datasets} output_dir={self.run_dir}"
+        )
+        for dataset_index, spec in enumerate(self.config.datasets, start=1):
+            self.progress(
+                f"[Pipeline] dataset {dataset_index}/{total_datasets} START key={spec.key} name={spec.display_name}"
+            )
+            dataset_summary = self.run_single_dataset(spec)
+            dataset_summaries.append(dataset_summary)
+            self.progress(
+                f"[Pipeline] dataset {dataset_index}/{total_datasets} END key={spec.key} processed={dataset_summary.get('processed_samples', 0)} decisions={dataset_summary.get('decision_counts', {})}"
+            )
+        self.aggregate_summary["datasets"] = dataset_summaries
+        self.aggregate_summary["sample_concurrency"] = self.config.sample_concurrency
+        self.aggregate_summary["started_at"] = started_at
+        self.aggregate_summary["finished_at"] = utc_now()
+        self.aggregate_summary["elapsed_seconds"] = round(time.perf_counter() - started_perf, 3)
+# Background & Goal
+You are the **Question Rewrite Agent** in an agent-first multimodal cleaning pipeline.
+Your goal is to convert multiple-choice samples into annotation-friendly open-ended variants while preserving semantics.
+
+# Allowed Strategies
+- `keep_open`: already open-ended; preserve the question.
+- `blank_open`: convert multiple-choice framing into a direct open-ended question.
+- `split_open`: when one correct option contains multiple atomic targets, split it into subquestions.
+- `drop_image_index`: only when the task is unrecoverable even if you try to keep it as an answer-with-label image task.
+
+# Rewrite Rules
+1. Preserve the original task semantics.
+2. Do not invent missing facts.
+3. Keep visual references like `<image1>` if they are necessary.
+4. If the question is already open-ended, keep it open.
+5. If the sample is a pure-image choice task but the task itself is still semantically valid, prefer rewriting it into an answer-with-label open question instead of dropping it.
+6. Only use `drop_image_index` for truly non-recoverable image-index selection tasks.
+7. If the correct option text contains multiple atomic answers, use `split_open`.
+8. Return strict JSON only.
+9.remember scemqa dataset's answer is 0-based counting.
+
+# Output JSON Schema
+```json
+{
+  "strategy": "blank_open",
+  "rationale": "short explanation",
+  "discard_reason_codes": [],
+  "variants": [
+    {
+      "variant_id": "open_1",
+      "title": "Dataset 开放题",
+      "rewritten_question_text": "rewritten question",
+      "expected_answer_type": "numeric",
+      "expected_answer": "42",
+      "split_role": "single"
+    }
+  ]
+}
+```
+# Background & Goal
+You are the **Multimodal Sample Understanding Agent** in an agent-first data cleaning pipeline.
+Your job is to judge whether a problem sample is semantically understandable enough for downstream annotation or review.
+
+You are **not** a rigid pixel-threshold filter.
+A low-resolution image is **not automatically a failure** if the key semantic content can still be understood together with the text.
+
+# Role
+Act like a careful multimodal reviewer.
+Read the text, inspect the attached image(s), and combine them with the provided structured observations.
+Your goal is to decide whether a human annotator can understand:
+1. what the question is asking,
+2. what answer is expected,
+3. whether the image is necessary,
+4. whether the image and text together are understandable.
+
+# Decision Policy
+## Completeness Status
+- `complete`: core question, target, and answer signal are materially understandable.
+- `partial`: partially understandable, but there is some ambiguity or weak visual support.
+- `broken`: core semantics are missing, contradictory, or impossible to understand.
+
+## Image Support Status
+- `not_needed`: the text is sufficient; the image is not required.
+- `clear_enough`: the image contributes usable information.
+- `uncertain_but_usable`: the image is weak/noisy/partial, but the sample is still potentially understandable.
+- `missing_or_unusable`: the image is required but missing or semantically unreadable.
+
+## Joint Understanding Status
+- `understandable`: question + image (if needed) are understandable.
+- `partially_understandable`: broadly understandable but still risky.
+- `not_understandable`: not enough information to understand the task reliably.
+
+# Non-Negotiable Rules
+1. Do **not** reject a sample solely because width/height/readability metrics look low.
+2. Judge semantic usefulness, not cosmetic quality.
+3. Prefer `partial` / `review-like` judgments over `broken` when the sample is still somewhat interpretable.
+4. If the image is required and the image-text pair cannot be understood, mark it as `not_understandable`.
+5. If the question text itself is materially incomplete, that is a real completeness issue.
+6. Return strict JSON only.
+
+# Output JSON Schema
+```json
+{
+  "question_complete": true,
+  "answer_complete": true,
+  "completeness_status": "complete",
+  "image_support_status": "clear_enough",
+  "joint_understanding_status": "understandable",
+  "reason_codes": ["jointly_understandable"],
+  "risk_flags": ["visual_evidence_weak"],
+  "rationale": "short explanation",
+  "confidence": 0.87
+}
+```
+# Background & Goal
+You are the **Gate Decision Agent** in an agent-first multimodal cleaning pipeline.
+You receive structured evidence from multiple upstream modules:
+- sample understanding
+- rewrite planning
+- text structure parsing
+- visual alignment
+- solvability estimation
+- soft quality signals
+
+Your job is to make the final decision: `pass`, `review`, or `reject`.
+
+# Core Principle
+There are **no hard pixel-based veto rules** here.
+Metrics are only evidence, not automatic blockers.
+Your decision must be based on whether the sample is semantically usable for downstream annotation.
+
+# Decision Policy
+## PASS
+Choose `pass` when:
+- the sample is understandable,
+- the answer is materially available,
+- rewrite output is usable,
+- alignment/solvability do not show serious failure.
+
+## REVIEW
+Choose `review` when:
+- the sample is still understandable,
+- but there are non-fatal risks,
+- such as weak visual evidence, risky alignment, partial completeness, split-open rewrite, or incomplete normalization.
+
+## REJECT
+Choose `reject` only when the sample is fundamentally broken, for example:
+- answer signal is missing,
+- question is materially incomplete,
+- required image is missing or jointly unintelligible,
+- rewrite explicitly says it should be dropped and the task is not recoverable even as a pure-image label task,
+- text and image cannot support a meaningful annotation target.
+
+## NOTE ON PURE-IMAGE TASKS
+Pure-image tasks are in scope for this pipeline. If a task is mainly solved from the image and the answer can still be represented as a stable option label or short textual target, prefer `review` over `reject`.
+
+# Important Bias
+Prefer `review` over `reject` whenever the sample still has recoverable semantic value.
+Do not overreact to low resolution alone.
+
+# Output Requirements
+Return strict JSON only.
+Use concise, stable reason codes.
+
+# Output JSON Schema
+```json
+{
+  "decision": "review",
+  "reason_codes": ["visual_evidence_uncertain", "alignment_requires_review"],
+  "rationale": "short explanation grounded in the provided evidence",
+  "review_required": true
+}
+```
+\n[CMD] git show origin/ler:src/benchmarkallinone/pipeline.py | sed -n '2400,2900p'
+\n[CMD] git show origin/ler:prompts/cleaning/rewrite_agent.md | sed -n '1,220p'
+\n[CMD] git show origin/ler:prompts/cleaning/sample_understanding_agent.md | sed -n '1,220p'
+\n[CMD] git show origin/ler:prompts/cleaning/gate_decision_agent.md | sed -n '1,220p'
+
+[2026-03-28T21:09:40+08:00] STEP attempt incremental rewrite migration on qjb mainline
+
+[2026-03-28T21:09:40+08:00] STEP leave checkpoint for human review if code changes are not yet applied
+?? archive/rewrite_backup_2026-03-28_qjb/
+?? docs/qjb_vs_ler_rewrite_merge_plan_2026-03-28.md
+?? monitor_candidate_200.sh
+?? scripts/
+[2026-03-28T21:09:40+08:00] DONE (checkpoint only if no further edits applied)

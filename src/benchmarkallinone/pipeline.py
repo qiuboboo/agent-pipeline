@@ -1665,6 +1665,8 @@ class HuggingFaceConnector(BaseConnector):
 
         problem_files = sorted(marker_dir.rglob("problem.json"))
         if not problem_files:
+            problem_files = sorted(extract_root.rglob("problem.json"))
+        if not problem_files:
             return "source_unavailable", [], "No problem.json extracted from PhysReason zip"
 
         samples: List[UnifiedSample] = []

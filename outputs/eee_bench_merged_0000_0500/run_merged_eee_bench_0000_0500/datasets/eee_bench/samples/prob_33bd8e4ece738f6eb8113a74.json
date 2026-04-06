@@ -1,0 +1,2660 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_0a9a40150d9614d5aaea59da",
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "0",
+    "raw_question_text": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: The single phase equivalent circuit of a three-phase, four pole induction motor is shown in\nFigure 1. For the purposes of this problem we will assume armature resistance is negligible.\nThe machine is connected to a three-phase voltage source with line-neutral voltage of 200\nvolts, RMS (346 volts, line-line) and a frequency of 400 radians/second. The motor reaches\npeak torque at a speed of 160 Radians/second (about 1528 RPM).\nWhat is the value of that peak torque (in N-m)?",
+    "raw_answer_text": "48",
+    "choice_map": {},
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field is a PIL.Image object; no image path or URL is provided",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-03-31T19:50:35Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+    "image_manifest": [
+      {
+        "path": "outputs/eee_bench_batched_eval/0190_0210/run_ed62a4d91d192009/datasets/eee_bench/artifacts/images/prob_33bd8e4ece738f6eb8113a74_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 384,
+        "height": 384,
+        "file_size": 37083
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 638,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.extraction_notes states no image path or URL is provided, but a top-level image path is present",
+      "metadata.image_paths is empty while top-level image_paths contains 1 image path"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_0a9a40150d9614d5aaea59da",
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "0",
+    "created_at": "2026-03-31T19:50:35Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.82,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly says the single-phase equivalent circuit is shown in Figure 1",
+        "requires_image=true",
+        "text_dominant=false",
+        "the numerical circuit parameters needed for torque computation are not provided in the text and are likely encoded only in the figure"
+      ],
+      "multi_step": [
+        "solving likely requires extracting equivalent-circuit values from the image before applying induction motor torque relations",
+        "question combines multiple given quantities: voltage, frequency, pole count, and peak-torque speed",
+        "the task is not direct lookup; it requires electrical-machine reasoning and numerical calculation to reach a single torque value"
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_text is a single number",
+        "the question asks for a specific physical quantity with units (N-m), making the target output well-defined",
+        "registry_passed=true and answer_present=true",
+        "a downstream checker could verify the result by reconstructing the induction motor calculation from the figure and text"
+      ]
+    },
+    "risk_flags": [
+      "asset_registry_record.issues_present",
+      "figure-dependent circuit values may be hard to parse automatically from the image",
+      "metadata.extraction_notes/image_paths inconsistency reported in asset registry"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_0a9a40150d9614d5aaea59da",
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "0",
+    "created_at": "2026-03-31T19:50:35Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+    "priority": 0.86,
+    "decision": "keep",
+    "decision_reasons": [
+      "question, answer, and primary image are all present, so the core semantic assets are available",
+      "initial scoring is strong: high image dependency, multi-step reasoning, and verifiability scores",
+      "the sample appears recoverable and useful because the figure referenced by the question is available",
+      "reported issues are metadata inconsistencies rather than missing core assets",
+      "figure-dependent parameter extraction may be challenging, so priority is slightly reduced rather than maximal"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_0a9a40150d9614d5aaea59da",
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "0",
+    "created_at": "2026-03-31T19:50:35Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_0a9a40150d9614d5aaea59da",
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+    "dataset_name": "EEE-Bench",
+    "normalized_question_text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+    "normalized_answer_text": "48",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed answer-formatting hint as non-core instructional noise.",
+      "Retained the figure reference because the equivalent-circuit component values are provided visually.",
+      "Image is required for solving, so multimodal processing is necessary."
+    ],
+    "llm_used": true,
+    "created_at": "2026-03-31T19:50:35Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[190:210]",
+    "source_problem_id": "0",
+    "subject": "电气电子工程领域",
+    "raw_question_text": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: The single phase equivalent circuit of a three-phase, four pole induction motor is shown in\nFigure 1. For the purposes of this problem we will assume armature resistance is negligible.\nThe machine is connected to a three-phase voltage source with line-neutral voltage of 200\nvolts, RMS (346 volts, line-line) and a frequency of 400 radians/second. The motor reaches\npeak torque at a speed of 160 Radians/second (about 1528 RPM).\nWhat is the value of that peak torque (in N-m)?",
+    "raw_answer_text": "48",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 0,
+      "image_paths": [],
+      "extraction_notes": [
+        "image field is a PIL.Image object; no image path or URL is provided",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "solution",
+      "image_field": "image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-03-31T19:51:39Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.86,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question, answer, and primary image are all present, so the core semantic assets are available",
+      "initial scoring is strong: high image dependency, multi-step reasoning, and verifiability scores",
+      "the sample appears recoverable and useful because the figure referenced by the question is available",
+      "reported issues are metadata inconsistencies rather than missing core assets",
+      "figure-dependent parameter extraction may be challenging, so priority is slightly reduced rather than maximal"
+    ],
+    "collection_risk_flags": [
+      "asset_registry_record.issues_present",
+      "figure-dependent circuit values may be hard to parse automatically from the image",
+      "metadata.extraction_notes/image_paths inconsistency reported in asset registry"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_ddfdce2f215bb815119d4a9d",
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "0",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_33bd8e4ece738f6eb8113a74/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_33bd8e4ece738f6eb8113a74/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 384,
+        "height": 384
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-03-31T19:51:39Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes states no image path or URL is provided, but a top-level image path is present",
+      "metadata.image_paths is empty while top-level image_paths contains 1 image path"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_93e93488fc462282d35f23d6",
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "0",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.86,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-03-31T19:51:39Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "question, answer, and primary image are all present, so the core semantic assets are available",
+      "initial scoring is strong: high image dependency, multi-step reasoning, and verifiability scores",
+      "the sample appears recoverable and useful because the figure referenced by the question is available",
+      "reported issues are metadata inconsistencies rather than missing core assets",
+      "figure-dependent parameter extraction may be challenging, so priority is slightly reduced rather than maximal"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_0a9a40150d9614d5aaea59da",
+      "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "dataset_name": "EEE-Bench",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-03-31T19:51:39Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_0a9a40150d9614d5aaea59da",
+    "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "0",
+    "normalized_question_text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200V RMS (346V line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+    "normalized_answer_text": "48",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "solvable",
+      "understandable_sample"
+    ],
+    "created_at": "2026-03-31T19:51:39Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_0a9a40150d9614d5aaea59da",
+    "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+    "normalized_question_text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200V RMS (346V line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+    "normalized_answer_text": "48",
+    "question_unit_normalization_map": [
+      {
+        "canonical_unit": "V",
+        "match_count": 2,
+        "matched_examples": [
+          "volts"
+        ]
+      }
+    ],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "four",
+        "canonical": "four",
+        "variable_type": "label"
+      },
+      {
+        "original": "pole",
+        "canonical": "pole",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "For",
+        "canonical": "For",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      },
+      {
+        "original": "we",
+        "canonical": "we",
+        "variable_type": "label"
+      },
+      {
+        "original": "will",
+        "canonical": "will",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "line",
+        "canonical": "line",
+        "variable_type": "label"
+      },
+      {
+        "original": "RMS",
+        "canonical": "RMS",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "peak",
+        "canonical": "peak",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "RPM",
+        "canonical": "RPM",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "N",
+        "canonical": "N",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1."
+      },
+      {
+        "segment_index": 2,
+        "text": "For the purposes of this problem we will assume armature resistance is negligible."
+      },
+      {
+        "segment_index": 3,
+        "text": "The machine is connected to a three-phase voltage source with line-neutral voltage of 200V RMS (346V line-line) and a frequency of 400 radians/second."
+      },
+      {
+        "segment_index": 4,
+        "text": "The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM)."
+      },
+      {
+        "segment_index": 5,
+        "text": "What is the value of that peak torque (in N-m)?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 19,
+          "y": 22,
+          "width": 358,
+          "height": 337
+        },
+        "readability_score": 0.8806,
+        "contrast_score": 46.2234
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-03-31T19:51:39Z",
+    "normalization_notes": [
+      "Removed answer-formatting hint as non-core instructional noise.",
+      "Retained the figure reference because the equivalent-circuit component values are provided visually.",
+      "Image is required for solving, so multimodal processing is necessary."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[190:210]",
+    "source_problem_id": "0",
+    "ingest_batch_id": "benchmarkallinone-eee-bench-0190-0210_20260331T194600Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "电气电子工程领域"
+    ],
+    "language": "en",
+    "raw_question_text": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: The single phase equivalent circuit of a three-phase, four pole induction motor is shown in\nFigure 1. For the purposes of this problem we will assume armature resistance is negligible.\nThe machine is connected to a three-phase voltage source with line-neutral voltage of 200\nvolts, RMS (346 volts, line-line) and a frequency of 400 radians/second. The motor reaches\npeak torque at a speed of 160 Radians/second (about 1528 RPM).\nWhat is the value of that peak torque (in N-m)?",
+    "normalized_question_text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+    "raw_answer_text": "48",
+    "normalized_answer_text": "48",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9851,
+    "multi_step_score": 0.5537,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.extraction_notes states no image path or URL is provided, but a top-level image path is present",
+      "metadata.image_paths is empty while top-level image_paths contains 1 image path"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "solvable",
+      "understandable_sample"
+    ],
+    "clean_decision_rationale": "The sample is complete and understandable, the required figure is clear enough, the rewritten question is usable, and alignment and solvability indicate no serious failure. Minor metadata image-path inconsistencies do not reduce semantic usability.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-03-31T19:50:35Z",
+    "updated_at": "2026-03-31T19:51:39Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.86,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question, answer, and primary image are all present, so the core semantic assets are available",
+      "initial scoring is strong: high image dependency, multi-step reasoning, and verifiability scores",
+      "the sample appears recoverable and useful because the figure referenced by the question is available",
+      "reported issues are metadata inconsistencies rather than missing core assets",
+      "figure-dependent parameter extraction may be challenging, so priority is slightly reduced rather than maximal"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_55c952ea415cc27604e43d0f",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://eee_bench/test[190:210]/0/question",
+      "storage_uri": "inline://prob_33bd8e4ece738f6eb8113a74/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 638,
+      "width": null,
+      "height": null,
+      "sha256": "67d252182c58f9b80706c01ff2b7bdde159235cc675c7dc437d85086e935b002",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: The single phase equivalent circuit of a three-phase, four pole induction motor is shown in\nFigure 1. For the purposes of this problem we will assume armature resistance is negligible.\nThe machine is connected to a three-phase voltage source with line-neutral voltage of 200\nvolts, RMS (346 volts, line-line) and a frequency of 400 radians/second. The motor reaches\npeak torque at a speed of 160 Radians/second (about 1528 RPM).\nWhat is the value of that peak torque (in N-m)?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "V",
+          "match_count": 2,
+          "matched_examples": [
+            "volts"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "pole",
+          "canonical": "pole",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "RMS",
+          "canonical": "RMS",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "peak",
+          "canonical": "peak",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "RPM",
+          "canonical": "RPM",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "asset_id": "asset_de64000ea4d8d9f590e02c2a",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_33bd8e4ece738f6eb8113a74/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 474,
+      "width": null,
+      "height": null,
+      "sha256": "1c6b4f65e4124cc8eec085cf3f17cf669e7760fcad99571dba7d2dd2f80ab815",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: The single phase equivalent circuit of a three-phase, four pole induction motor is shown in\nFigure 1. For the purposes of this problem we will assume armature resistance is negligible.\nThe machine is connected to a three-phase voltage source with line-neutral voltage of 200\nvolts, RMS (346 volts, line-line) and a frequency of 400 radians/second. The motor reaches\npeak torque at a speed of 160 Radians/second (about 1528 RPM).\nWhat is the value of that peak torque (in N-m)?",
+      "normalized_text_snapshot": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "V",
+          "match_count": 2,
+          "matched_examples": [
+            "volts"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "pole",
+          "canonical": "pole",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "RMS",
+          "canonical": "RMS",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "peak",
+          "canonical": "peak",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "RPM",
+          "canonical": "RPM",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "asset_id": "asset_46e9a77a8172b5adb6b7ccdf",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://eee_bench/test[190:210]/0/answer",
+      "storage_uri": "inline://prob_33bd8e4ece738f6eb8113a74/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "98010bd9270f9b100b6214a21754fd33bdc8d41b2bc9f9dd16ff54d3c34ffd71",
+      "perceptual_hash": null,
+      "source_text_snapshot": "48",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "asset_id": "asset_274e546558105f61e1de5ad7",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_33bd8e4ece738f6eb8113a74/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "98010bd9270f9b100b6214a21754fd33bdc8d41b2bc9f9dd16ff54d3c34ffd71",
+      "perceptual_hash": null,
+      "source_text_snapshot": "48",
+      "normalized_text_snapshot": "48",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "asset_id": "asset_422941f18253e772e7a665e4",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/eee_bench_batched_eval/0190_0210/run_ed62a4d91d192009/datasets/eee_bench/artifacts/images/prob_33bd8e4ece738f6eb8113a74_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 37083,
+      "width": 384,
+      "height": 384,
+      "sha256": "ce6fd8c1e0a3bbd51916f60a848e1842fb46007cb18f836ae79884171d9d4abe",
+      "perceptual_hash": "cbcbff30b7ffc000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4856.4565,
+      "readability_score": 0.8806,
+      "noise_score": 33.2772,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 19,
+        "y": 22,
+        "width": 358,
+        "height": 337
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes states no image path or URL is provided, but a top-level image path is present",
+        "metadata.image_paths is empty while top-level image_paths contains 1 image path"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "asset_id": "asset_e590eb7a0db54cf6621b35c2",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/eee_bench_batched_eval/0190_0210/run_ed62a4d91d192009/datasets/eee_bench/artifacts/crops/prob_33bd8e4ece738f6eb8113a74_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 36338,
+      "width": 358,
+      "height": 337,
+      "sha256": "7801378d8cbdd5ca967da6b97abf64a1af758130a833671608110189d29c3698",
+      "perceptual_hash": "cbcbff30ffffff00",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4856.4565,
+      "readability_score": 0.8806,
+      "noise_score": 33.2772,
+      "cropped_from_asset_id": "asset_422941f18253e772e7a665e4",
+      "roi_bbox": {
+        "x": 19,
+        "y": 22,
+        "width": 358,
+        "height": 337
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "asset_id": "asset_b3c9cff28baad88cc1d11445",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_7f82cac08794d8927982409b",
+      "file_format": "txt",
+      "file_size_bytes": 474,
+      "width": null,
+      "height": null,
+      "sha256": "1c6b4f65e4124cc8eec085cf3f17cf669e7760fcad99571dba7d2dd2f80ab815",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: The single phase equivalent circuit of a three-phase, four pole induction motor is shown in\nFigure 1. For the purposes of this problem we will assume armature resistance is negligible.\nThe machine is connected to a three-phase voltage source with line-neutral voltage of 200\nvolts, RMS (346 volts, line-line) and a frequency of 400 radians/second. The motor reaches\npeak torque at a speed of 160 Radians/second (about 1528 RPM).\nWhat is the value of that peak torque (in N-m)?",
+      "normalized_text_snapshot": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "V",
+          "match_count": 2,
+          "matched_examples": [
+            "volts"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "pole",
+          "canonical": "pole",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "RMS",
+          "canonical": "RMS",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "peak",
+          "canonical": "peak",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "RPM",
+          "canonical": "RPM",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_33bd8e4ece738f6eb8113a74",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "1"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The machine is connected to a three-phase voltage source with line-neutral voltage of 200V RMS (346V line-line) and a frequency of 400 radians/second.",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "200",
+            "346",
+            "400"
+          ],
+          "unit_mentions": [
+            "V",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM).",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "160",
+            "1528"
+          ],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "What is the value of that peak torque (in N-m)?",
+          "segment_index": 5,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "N",
+            "W",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_33bd8e4ece738f6eb8113a74_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "What is the value of that peak torque (in N-m)?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "48",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "circuit",
+          "entity_category": "circuit",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "line",
+          "entity_category": "line",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "RMS",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "RPM",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "N",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "pole",
+          "canonical": "pole",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "RMS",
+          "canonical": "RMS",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "peak",
+          "canonical": "peak",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "RPM",
+          "canonical": "RPM",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "N",
+        "V",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1."
+        },
+        {
+          "segment_index": 2,
+          "text": "For the purposes of this problem we will assume armature resistance is negligible."
+        },
+        {
+          "segment_index": 3,
+          "text": "The machine is connected to a three-phase voltage source with line-neutral voltage of 200V RMS (346V line-line) and a frequency of 400 radians/second."
+        },
+        {
+          "segment_index": 4,
+          "text": "The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM)."
+        },
+        {
+          "segment_index": 5,
+          "text": "What is the value of that peak torque (in N-m)?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-03-31T19:51:23Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_33bd8e4ece738f6eb8113a74_1",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "circuit_diagram",
+        "aspect_ratio": 1.0,
+        "dark_pixel_ratio": 0.07,
+        "readability_score": 0.8806,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 384,
+            "height": 384
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 19,
+            "y": 22,
+            "width": 358,
+            "height": 337
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 19,
+            "y": 22,
+            "width": 179,
+            "height": 168
+          },
+          "salience": 0.43
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 198,
+            "y": 22,
+            "width": 179,
+            "height": 168
+          },
+          "salience": 0.4488
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 19,
+            "y": 190,
+            "width": 179,
+            "height": 169
+          },
+          "salience": 0.4253
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 198,
+            "y": 190,
+            "width": 179,
+            "height": 169
+          },
+          "salience": 0.4381
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9522,
+      "created_at": "2026-03-31T19:51:23Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_33bd8e4ece738f6eb8113a74",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-03-31T19:51:31Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_568d175e7cc8df31b2f8de4c",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "text_fact",
+      "canonical_value": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1.",
+      "surface_forms": [
+        "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_de64000ea4d8d9f590e02c2a"
+      ],
+      "evidence_refs": [
+        "asset_de64000ea4d8d9f590e02c2a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "1"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_f0e4b91da780dc263d4c70ad",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "text_fact",
+      "canonical_value": "The machine is connected to a three-phase voltage source with line-neutral voltage of 200V RMS (346V line-line) and a frequency of 400 radians/second.",
+      "surface_forms": [
+        "The machine is connected to a three-phase voltage source with line-neutral voltage of 200V RMS (346V line-line) and a frequency of 400 radians/second."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_de64000ea4d8d9f590e02c2a"
+      ],
+      "evidence_refs": [
+        "asset_de64000ea4d8d9f590e02c2a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The machine is connected to a three-phase voltage source with line-neutral voltage of 200V RMS (346V line-line) and a frequency of 400 radians/second.",
+        "segment_index": 3,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "200",
+          "346",
+          "400"
+        ],
+        "unit_mentions": [
+          "V",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "V,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_13b07449e3706f3e2178dd1b",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "text_fact",
+      "canonical_value": "The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM).",
+      "surface_forms": [
+        "The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM)."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_de64000ea4d8d9f590e02c2a"
+      ],
+      "evidence_refs": [
+        "asset_de64000ea4d8d9f590e02c2a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM).",
+        "segment_index": 4,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "160",
+          "1528"
+        ],
+        "unit_mentions": [
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_06e9049c219dce3ccbaeeaad",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "target_slot",
+      "canonical_value": "What is the value of that peak torque (in N-m)?",
+      "surface_forms": [
+        "What is the value of that peak torque (in N-m)?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_de64000ea4d8d9f590e02c2a"
+      ],
+      "evidence_refs": [
+        "asset_de64000ea4d8d9f590e02c2a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_33bd8e4ece738f6eb8113a74_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "What is the value of that peak torque (in N-m)?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "48",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_322af24d07d4f554d6de5abd",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "answer_claim",
+      "canonical_value": "48",
+      "surface_forms": [
+        "48"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_274e546558105f61e1de5ad7"
+      ],
+      "evidence_refs": [
+        "asset_274e546558105f61e1de5ad7"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "48"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_e9dc17214a07d2a7517807fc",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 384,
+          "height": 384
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9522,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_405941040db05169167ae8d2",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 19,
+          "y": 22,
+          "width": 358,
+          "height": 337
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9522,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_e78d772828d40067ad87f623",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 19,
+          "y": 22,
+          "width": 179,
+          "height": 168
+        },
+        "salience": 0.43
+      },
+      "unit": null,
+      "confidence": 0.9522,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_23fb6764f93f5bd11aa41d76",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 198,
+          "y": 22,
+          "width": 179,
+          "height": 168
+        },
+        "salience": 0.4488
+      },
+      "unit": null,
+      "confidence": 0.9522,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_7460a7e6f887b1db8d63925e",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 19,
+          "y": 190,
+          "width": 179,
+          "height": 169
+        },
+        "salience": 0.4253
+      },
+      "unit": null,
+      "confidence": 0.9522,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_ea60c7751634289d6f5ff1b0",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 198,
+          "y": 190,
+          "width": 179,
+          "height": 169
+        },
+        "salience": 0.4381
+      },
+      "unit": null,
+      "confidence": 0.9522,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_1e838a9972ac5d2dcf41dca8",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "text_fact",
+      "canonical_value": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+      "surface_forms": [
+        "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_b3c9cff28baad88cc1d11445"
+      ],
+      "evidence_refs": [
+        "asset_b3c9cff28baad88cc1d11445"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_7f82cac08794d8927982409b",
+        "parent_problem_id": "prob_33bd8e4ece738f6eb8113a74",
+        "variant_index": 1,
+        "title": "EEE-Bench 开放题",
+        "rewritten_question_text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "48",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_05e919db13ea32319520b630",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states no image path or URL is provided, but a top-level image path is present",
+      "surface_forms": [
+        "metadata.extraction_notes states no image path or URL is provided, but a top-level image path is present"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states no image path or URL is provided, but a top-level image path is present"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_5ab131231581788b18980808",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty while top-level image_paths contains 1 image path",
+      "surface_forms": [
+        "metadata.image_paths is empty while top-level image_paths contains 1 image path"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty while top-level image_paths contains 1 image path"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_0177a871adeb6d10c59a5fc9",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_33bd8e4ece738f6eb8113a74",
+        "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-03-31T19:51:31Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "node_id": "node_04ac58ea15e786c13340a4ab",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "solvable",
+          "understandable_sample"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T19:51:39Z",
+      "updated_at": "2026-03-31T19:51:39Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_0a9a40150d9614d5aaea59da",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_ed62a4d91d192009",
+      "dataset_name": "EEE-Bench",
+      "input_asset_ids": [
+        "asset_55c952ea415cc27604e43d0f",
+        "asset_de64000ea4d8d9f590e02c2a",
+        "asset_46e9a77a8172b5adb6b7ccdf",
+        "asset_274e546558105f61e1de5ad7",
+        "asset_422941f18253e772e7a665e4",
+        "asset_e590eb7a0db54cf6621b35c2",
+        "asset_b3c9cff28baad88cc1d11445"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 1,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 23
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 384,
+            "height": 384,
+            "blur_score": 4856.4565,
+            "contrast_score": 46.2234,
+            "noise_score": 33.2772,
+            "readability_score": 0.8806,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 19,
+              "y": 22,
+              "width": 358,
+              "height": 337
+            },
+            "perceptual_hash": "cbcbff30b7ffc000"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_0a9a40150d9614d5aaea59da",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_33bd8e4ece738f6eb8113a74",
+        "question_type": "open",
+        "condition_count": 3,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_33bd8e4ece738f6eb8113a74",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for the peak torque of the induction motor, and the figure provides the needed equivalent-circuit reactances and rotor term. The diagram is legible and semantically usable, so the question-image pair is understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes states no image path or URL is provided, but a top-level image path is present",
+        "metadata.image_paths is empty while top-level image_paths contains 1 image path"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "solvable",
+        "understandable_sample"
+      ],
+      "decision_rationale": "The sample is complete and understandable, the required figure is clear enough, the rewritten question is usable, and alignment and solvability indicate no serious failure. Minor metadata image-path inconsistencies do not reduce semantic usability.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-03-31T19:51:39Z",
+      "finished_at": "2026-03-31T19:51:39Z",
+      "candidate_id": "cand_33bd8e4ece738f6eb8113a74",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_0a9a40150d9614d5aaea59da",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "image_entity_refs": [
+        "visual_prob_33bd8e4ece738f6eb8113a74_1::roi",
+        "visual_prob_33bd8e4ece738f6eb8113a74_1::roi_top_left",
+        "visual_prob_33bd8e4ece738f6eb8113a74_1::roi_top_right",
+        "visual_prob_33bd8e4ece738f6eb8113a74_1::roi_bottom_left",
+        "visual_prob_33bd8e4ece738f6eb8113a74_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_33bd8e4ece738f6eb8113a74_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_33bd8e4ece738f6eb8113a74_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7881
+        },
+        {
+          "text_ref": "circuit",
+          "image_ref": "visual_prob_33bd8e4ece738f6eb8113a74_1::roi",
+          "relation": "grounds_circuit",
+          "confidence": 0.7881
+        },
+        {
+          "text_ref": "line",
+          "image_ref": "visual_prob_33bd8e4ece738f6eb8113a74_1::roi",
+          "relation": "grounds_line",
+          "confidence": 0.7881
+        },
+        {
+          "text_ref": "RMS",
+          "image_ref": "visual_prob_33bd8e4ece738f6eb8113a74_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7881
+        },
+        {
+          "text_ref": "RPM",
+          "image_ref": "visual_prob_33bd8e4ece738f6eb8113a74_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7881
+        },
+        {
+          "text_ref": "N",
+          "image_ref": "visual_prob_33bd8e4ece738f6eb8113a74_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7881
+        },
+        {
+          "text_ref": "slot_prob_33bd8e4ece738f6eb8113a74_1",
+          "image_ref": "visual_prob_33bd8e4ece738f6eb8113a74_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7895
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-03-31T19:51:23Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_2bbd709aa3e6cf85057f1185",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: The single phase equivalent circuit of a three-phase, four pole induction motor is shown in\nFigure 1. For the purposes of this problem we will assume armature resistance is negligible.\nThe machine is connected to a three-phase voltage source with line-neutral voltage of 200\nvolts, RMS (346 volts, line-line) and a frequency of 400 radians/second. The motor reaches\npeak torque at a speed of 160 Radians/second (about 1528 RPM).\nWhat is the value of that peak torque (in N-m)?",
+      "after_value": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "audit_id": "audit_b22d7fceef1514307d95a7e3",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "48",
+      "after_value": "48",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "audit_id": "audit_a0b2147011710158972b6ef9",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "audit_id": "audit_04ac58ea15e786c13340a4ab",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "audit_id": "audit_07161cbeff7aa198305c1959",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "record_type": "normalized_assets",
+      "field_name": "question_unit_normalization_map",
+      "before_value": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: The single phase equivalent circuit of a three-phase, four pole induction motor is shown in\nFigure 1. For the purposes of this problem we will assume armature resistance is negligible.\nThe machine is connected to a three-phase voltage source with line-neutral voltage of 200\nvolts, RMS (346 volts, line-line) and a frequency of 400 radians/second. The motor reaches\npeak torque at a speed of 160 Radians/second (about 1528 RPM).\nWhat is the value of that peak torque (in N-m)?",
+      "after_value": [
+        {
+          "canonical_unit": "V",
+          "match_count": 2,
+          "matched_examples": [
+            "volts"
+          ]
+        }
+      ],
+      "change_type": "unit_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T19:51:39Z"
+    },
+    {
+      "audit_id": "audit_baaadb7345ff996d67ffcb42",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "pole",
+          "canonical": "pole",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "RMS",
+          "canonical": "RMS",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "peak",
+          "canonical": "peak",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "RPM",
+          "canonical": "RPM",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T19:51:39Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_0a9a40150d9614d5aaea59da",
+      "problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "source_problem_id": "0",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_7f82cac08794d8927982409b",
+          "parent_problem_id": "prob_33bd8e4ece738f6eb8113a74",
+          "variant_index": 1,
+          "title": "EEE-Bench 开放题",
+          "rewritten_question_text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "48",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-03-31T19:51:39Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_7f82cac08794d8927982409b",
+      "parent_problem_id": "prob_33bd8e4ece738f6eb8113a74",
+      "variant_index": 1,
+      "title": "EEE-Bench 开放题",
+      "rewritten_question_text": "The single phase equivalent circuit of a three-phase, four pole induction motor is shown in Figure 1. For the purposes of this problem we will assume armature resistance is negligible. The machine is connected to a three-phase voltage source with line-neutral voltage of 200 volts RMS (346 volts line-line) and a frequency of 400 radians/second. The motor reaches peak torque at a speed of 160 radians/second (about 1528 RPM). What is the value of that peak torque (in N-m)?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "48",
+      "split_role": "single"
+    }
+  ]
+}
