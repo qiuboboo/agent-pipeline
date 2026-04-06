@@ -1,0 +1,32 @@
+runtime:
+  sample_per_dataset: 300
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: outputs/seephys_000_300
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-seephys-000-300
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://cf.cuylerchen.uk/openai/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: responses
+
+datasets:
+  - key: seephys
+    display_name: SeePhys
+    subject: 物理
+    note: SeePhys，使用 Hugging Face 数据源
+    source_kind: huggingface
+    source_locator: SeePhys/SeePhys
+    split: train[0:300]
+    question_fields: [question, text, problem, query]
+    answer_fields: [answer, solution, label]
+    image_fields: [images, image, decoded_image]
+    metadata_fields: [reasoning, sig_figs, level, subject, language, img_category, vision_relevance, caption]

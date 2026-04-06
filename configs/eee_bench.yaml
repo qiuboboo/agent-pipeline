@@ -1,0 +1,33 @@
+runtime:
+  sample_per_dataset: 1860
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: outputs/eee_bench_1000_2860
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-eee-bench-1000-2860
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+  resume: true
+
+model:
+  base_url: http://9854399.xyz:8888/v1
+  api_key: sk-e6049d352cc1a8c0427cb1e945b67e59f73915223cb987deb0c95d1b9f33424b
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: chat_completions
+
+datasets:
+- key: eee_bench
+  display_name: EEE-Bench
+  subject: 电气电子工程领域
+  note: EEE-Bench 主测试集，从 1000 到最后（test[1000:2860]）
+  source_kind: huggingface
+  source_locator: afdsafas/EEE-Bench
+  split: test[1000:2860]
+  question_fields: [problem]
+  answer_fields: [solution]
+  image_fields: [image]
