@@ -1,0 +1,1710 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_025ab96d279385932b95e4cb",
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "problem_id": "prob_e8b4696dacf103defceca7ed",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "323",
+    "raw_question_text": "A signal as shown in the <image> is applied to a matched filter. Which of the following represents the output of this matched filter?",
+    "raw_answer_text": "Graph C",
+    "choice_map": {
+      "A": "Graph A",
+      "B": "Graph B",
+      "C": "Graph C",
+      "D": "Graph D"
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains a PIL.Image object representation, not a usable path or URL",
+      "raw_answer_text mapped from option letter C to corresponding choice text",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T20:12:59Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_e8b4696dacf103defceca7ed",
+    "image_manifest": [
+      {
+        "path": "outputs/eee_bench_0500_1000/run_9f5f586a7c134721/datasets/eee_bench/artifacts/images/prob_e8b4696dacf103defceca7ed_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 384,
+        "height": 384,
+        "file_size": 29439
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 133,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 7
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_025ab96d279385932b95e4cb",
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "323",
+    "created_at": "2026-04-04T20:12:59Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_e8b4696dacf103defceca7ed",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly says \"as shown in the image\"",
+        "requires_image=true",
+        "text_dominant=false",
+        "choices are graph labels (Graph A/ B/ C/ D), so selecting the answer likely depends on visual comparison",
+        "asset_registry_record.registry_passed=true and image_manifest shows 1 existing image"
+      ],
+      "multi_step": [
+        "question_text asks about a signal being \"applied to a matched filter\" and then asks for the resulting output, implying a transformation step before option selection",
+        "the task appears to require relating the input signal in the image to one of 4 candidate graph outputs",
+        "choice_count=4, so the problem is not simple extraction and likely involves comparison among alternatives",
+        "multi_solution_policy.should_push_multi_solution_agent=true suggests upstream metadata sees nontrivial reasoning potential, though this is only weak supporting evidence"
+      ],
+      "verifiability": [
+        "answer_type is short_text with a discrete option-style answer: \"Graph C\"",
+        "choices are explicitly enumerated as A/B/C/D, enabling exact answer matching",
+        "answer_present=true",
+        "asset_registry_record.registry_passed=true",
+        "the final answer can be checked deterministically against the provided choice set"
+      ]
+    },
+    "risk_flags": [
+      "domain_specific_reasoning_required",
+      "moderate_image_readability"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_025ab96d279385932b95e4cb",
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "323",
+    "created_at": "2026-04-04T20:12:59Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_e8b4696dacf103defceca7ed",
+    "priority": 0.91,
+    "decision": "keep",
+    "decision_reasons": [
+      "Core assets are complete: question, image, and answer are all present, and registry_passed=true with no recorded issues.",
+      "Initial scoring is strong overall: image_dependency_score=0.97, verifiability_score=0.9, and multi_step_score=0.68.",
+      "The sample appears recoverable and usable as-is, with a discrete short-text answer (\"Graph C\") that supports deterministic checking.",
+      "Risk flags exist (domain_specific_reasoning_required, moderate_image_readability) but do not indicate missing core semantic support."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_025ab96d279385932b95e4cb",
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "323",
+    "created_at": "2026-04-04T20:12:59Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_025ab96d279385932b95e4cb",
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "problem_id": "prob_e8b4696dacf103defceca7ed",
+    "dataset_name": "EEE-Bench",
+    "normalized_question_text": "A signal as shown in the image is applied to a matched filter. Which of the following represents the output of this matched filter?",
+    "normalized_answer_text": "Graph C",
+    "normalized_choice_map": {
+      "A": "Graph A",
+      "B": "Graph B",
+      "C": "Graph C",
+      "D": "Graph D"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the literal <image> placeholder and normalized it to 'the image'.",
+      "Question and answer options explicitly depend on interpreting plotted graphs.",
+      "force_requires_image=true, so the sample is routed to multimodal_full."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T20:12:59Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[500:2860]",
+    "source_problem_id": "323",
+    "subject": "电气电子工程领域",
+    "raw_question_text": "A signal as shown in the <image> is applied to a matched filter. Which of the following represents the output of this matched filter?",
+    "raw_answer_text": "Graph C",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 323,
+      "image_paths": [],
+      "extraction_notes": [
+        "image field contains a PIL.Image object representation, not a usable path or URL",
+        "raw_answer_text mapped from option letter C to corresponding choice text",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "solution",
+      "image_field": "image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-04T20:14:14Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.91,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Core assets are complete: question, image, and answer are all present, and registry_passed=true with no recorded issues.",
+      "Initial scoring is strong overall: image_dependency_score=0.97, verifiability_score=0.9, and multi_step_score=0.68.",
+      "The sample appears recoverable and usable as-is, with a discrete short-text answer (\"Graph C\") that supports deterministic checking.",
+      "Risk flags exist (domain_specific_reasoning_required, moderate_image_readability) but do not indicate missing core semantic support."
+    ],
+    "collection_risk_flags": [
+      "domain_specific_reasoning_required",
+      "moderate_image_readability"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_f3985f56895ce7a02eaee982",
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "323",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_e8b4696dacf103defceca7ed/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_e8b4696dacf103defceca7ed/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 384,
+        "height": 384
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-04T20:14:14Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_e29f46bca5189b68b21c3b06",
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "323",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.91,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-04T20:14:14Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Core assets are complete: question, image, and answer are all present, and registry_passed=true with no recorded issues.",
+      "Initial scoring is strong overall: image_dependency_score=0.97, verifiability_score=0.9, and multi_step_score=0.68.",
+      "The sample appears recoverable and usable as-is, with a discrete short-text answer (\"Graph C\") that supports deterministic checking.",
+      "Risk flags exist (domain_specific_reasoning_required, moderate_image_readability) but do not indicate missing core semantic support."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_025ab96d279385932b95e4cb",
+      "candidate_id": "cand_e8b4696dacf103defceca7ed",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "dataset_name": "EEE-Bench",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T20:14:14Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_025ab96d279385932b95e4cb",
+    "problem_id": "prob_e8b4696dacf103defceca7ed",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "323",
+    "normalized_question_text": "A signal as shown in the image is applied to a matched filter. Which of the following represents the output of this matched filter?",
+    "normalized_answer_text": "Graph C",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "pure_image_option_task",
+      "rewrite_variant_unusable",
+      "semantic_value_recoverable"
+    ],
+    "created_at": "2026-04-04T20:14:14Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_025ab96d279385932b95e4cb",
+    "problem_id": "prob_e8b4696dacf103defceca7ed",
+    "normalized_question_text": "A signal as shown in the image is applied to a matched filter. Which of the following represents the output of this matched filter?",
+    "normalized_answer_text": "Graph C",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "A signal as shown in the image is applied to a matched filter."
+      },
+      {
+        "segment_index": 2,
+        "text": "Which of the following represents the output of this matched filter?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 2,
+          "width": 384,
+          "height": 382
+        },
+        "readability_score": 0.6571,
+        "contrast_score": 23.003
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T20:14:14Z",
+    "normalization_notes": [
+      "Removed the literal <image> placeholder and normalized it to 'the image'.",
+      "Question and answer options explicitly depend on interpreting plotted graphs.",
+      "force_requires_image=true, so the sample is routed to multimodal_full."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_e8b4696dacf103defceca7ed",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[500:2860]",
+    "source_problem_id": "323",
+    "ingest_batch_id": "benchmarkallinone-eee-bench-0500-1000_20260404T112155Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "电气电子工程领域"
+    ],
+    "language": "en",
+    "raw_question_text": "A signal as shown in the <image> is applied to a matched filter. Which of the following represents the output of this matched filter?",
+    "normalized_question_text": "A signal as shown in the image is applied to a matched filter. Which of the following represents the output of this matched filter?",
+    "raw_answer_text": "Graph C",
+    "normalized_answer_text": "Graph C",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9627,
+    "multi_step_score": 0.32,
+    "verifiability_score": 0.8572,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "pure_image_option_task",
+      "rewrite_variant_unusable",
+      "semantic_value_recoverable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable and the answer is materially present, with strong image support and good alignment. The main issue is that the rewrite stage could not produce a usable open-form variant because the correct answer is only an option label ('Graph C'). Since this is still a recoverable pure-image multiple-choice task, it should be kept for manual review rather than rejected.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_e8b4696dacf103defceca7ed",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T20:12:59Z",
+    "updated_at": "2026-04-04T20:14:14Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.91,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Core assets are complete: question, image, and answer are all present, and registry_passed=true with no recorded issues.",
+      "Initial scoring is strong overall: image_dependency_score=0.97, verifiability_score=0.9, and multi_step_score=0.68.",
+      "The sample appears recoverable and usable as-is, with a discrete short-text answer (\"Graph C\") that supports deterministic checking.",
+      "Risk flags exist (domain_specific_reasoning_required, moderate_image_readability) but do not indicate missing core semantic support."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_15b595f8da9153910b0e5801",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://eee_bench/test[500:2860]/323/question",
+      "storage_uri": "inline://prob_e8b4696dacf103defceca7ed/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 133,
+      "width": null,
+      "height": null,
+      "sha256": "63620561872da351b8ddd02655bd8337d23a6a926253ab132246b8d04ee6d74a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A signal as shown in the <image> is applied to a matched filter. Which of the following represents the output of this matched filter?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.667,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "asset_id": "asset_c1db8b3482abb42a65bfb995",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_e8b4696dacf103defceca7ed/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 131,
+      "width": null,
+      "height": null,
+      "sha256": "400a93fd434362f664a961969f83a0400aabfaaba2f45ea4907fd188d49ed6aa",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A signal as shown in the <image> is applied to a matched filter. Which of the following represents the output of this matched filter?",
+      "normalized_text_snapshot": "A signal as shown in the image is applied to a matched filter. Which of the following represents the output of this matched filter?",
+      "text_completeness_score": 0.667,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "asset_id": "asset_16f698f60c02f02c2292271b",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://eee_bench/test[500:2860]/323/answer",
+      "storage_uri": "inline://prob_e8b4696dacf103defceca7ed/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 7,
+      "width": null,
+      "height": null,
+      "sha256": "0ea4b24cb4314e9252d8c6e4adf185f3b7b3589c0282fbeedfa72e1e812be56d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Graph C",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "asset_id": "asset_6657f20ab69ccc1006630d0c",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_e8b4696dacf103defceca7ed/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 7,
+      "width": null,
+      "height": null,
+      "sha256": "0ea4b24cb4314e9252d8c6e4adf185f3b7b3589c0282fbeedfa72e1e812be56d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Graph C",
+      "normalized_text_snapshot": "Graph C",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "asset_id": "asset_c689fed468c1e7be6cad2f6c",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/eee_bench_0500_1000/run_9f5f586a7c134721/datasets/eee_bench/artifacts/images/prob_e8b4696dacf103defceca7ed_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 29439,
+      "width": 384,
+      "height": 384,
+      "sha256": "02833e73d95851cc8550a203a5814fb9e65e1e559b2dc8940349ab106beba964",
+      "perceptual_hash": "7f1f1fbb88b99988",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1516.3384,
+      "readability_score": 0.6571,
+      "noise_score": 17.7724,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 2,
+        "width": 384,
+        "height": 382
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_e8b4696dacf103defceca7ed",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "A signal as shown in the image is applied to a matched filter.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which of the following represents the output of this matched filter?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_e8b4696dacf103defceca7ed_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "Which of the following represents the output of this matched filter?",
+          "expected_answer_type": "unknown",
+          "expected_answer": "Graph C",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "image",
+          "entity_category": "image",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "A signal as shown in the image is applied to a matched filter."
+        },
+        {
+          "segment_index": 2,
+          "text": "Which of the following represents the output of this matched filter?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T20:13:54Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_e8b4696dacf103defceca7ed_1",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.0,
+        "dark_pixel_ratio": 0.0441,
+        "readability_score": 0.6571,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 384,
+            "height": 384
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 2,
+            "width": 384,
+            "height": 382
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 2,
+            "width": 192,
+            "height": 191
+          },
+          "salience": 0.3996
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 193,
+            "width": 192,
+            "height": 191
+          },
+          "salience": 0.4102
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 192,
+            "y": 193,
+            "width": 192,
+            "height": 191
+          },
+          "salience": 0.4119
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8628,
+      "created_at": "2026-04-04T20:13:54Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_e8b4696dacf103defceca7ed",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-04T20:14:05Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_4ab34d27f637456b34710667",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "text_fact",
+      "canonical_value": "A signal as shown in the image is applied to a matched filter.",
+      "surface_forms": [
+        "A signal as shown in the image is applied to a matched filter."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_c1db8b3482abb42a65bfb995"
+      ],
+      "evidence_refs": [
+        "asset_c1db8b3482abb42a65bfb995"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "A signal as shown in the image is applied to a matched filter.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_1d013dd9cafc92e42a946142",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "target_slot",
+      "canonical_value": "Which of the following represents the output of this matched filter?",
+      "surface_forms": [
+        "Which of the following represents the output of this matched filter?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_c1db8b3482abb42a65bfb995"
+      ],
+      "evidence_refs": [
+        "asset_c1db8b3482abb42a65bfb995"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_e8b4696dacf103defceca7ed_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "Which of the following represents the output of this matched filter?",
+        "expected_answer_type": "unknown",
+        "expected_answer": "Graph C",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_66b9f934089e3a9deaadf581",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "answer_claim",
+      "canonical_value": "Graph C",
+      "surface_forms": [
+        "Graph C"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_6657f20ab69ccc1006630d0c"
+      ],
+      "evidence_refs": [
+        "asset_6657f20ab69ccc1006630d0c"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "Graph C"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_c86dad4e19df77234e594355",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 384,
+          "height": 384
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8628,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_d1ea94b98a0028542091cdf6",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 2,
+          "width": 384,
+          "height": 382
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8628,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_128c8a7995eb0f2bca5c01ef",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 2,
+          "width": 192,
+          "height": 191
+        },
+        "salience": 0.3996
+      },
+      "unit": null,
+      "confidence": 0.8628,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_4dcb317c113c7a2d84133e01",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 193,
+          "width": 192,
+          "height": 191
+        },
+        "salience": 0.4102
+      },
+      "unit": null,
+      "confidence": 0.8628,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_4b136a484edb58ada1589a4f",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 192,
+          "y": 193,
+          "width": 192,
+          "height": 191
+        },
+        "salience": 0.4119
+      },
+      "unit": null,
+      "confidence": 0.8628,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_bcc5207686dd8cb57625ee05",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_e8b4696dacf103defceca7ed",
+        "problem_id": "prob_e8b4696dacf103defceca7ed",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-04T20:14:05Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "node_id": "node_4e477fe9865fe4663e019b22",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "pure_image_option_task",
+          "rewrite_variant_unusable",
+          "semantic_value_recoverable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T20:14:14Z",
+      "updated_at": "2026-04-04T20:14:14Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_025ab96d279385932b95e4cb",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_9f5f586a7c134721",
+      "dataset_name": "EEE-Bench",
+      "input_asset_ids": [
+        "asset_15b595f8da9153910b0e5801",
+        "asset_c1db8b3482abb42a65bfb995",
+        "asset_16f698f60c02f02c2292271b",
+        "asset_6657f20ab69ccc1006630d0c",
+        "asset_c689fed468c1e7be6cad2f6c"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 9
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.92,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 384,
+            "height": 384,
+            "blur_score": 1516.3384,
+            "contrast_score": 23.003,
+            "noise_score": 17.7724,
+            "readability_score": 0.6571,
+            "crop_integrity_score": 0.34,
+            "roi_bbox": {
+              "x": 0,
+              "y": 2,
+              "width": 384,
+              "height": 382
+            },
+            "perceptual_hash": "7f1f1fbb88b99988"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_025ab96d279385932b95e4cb",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_e8b4696dacf103defceca7ed",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_e8b4696dacf103defceca7ed",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "image_option_index_only",
+          "non_semantic_correct_option",
+          "under_specified_without_choices"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_available",
+          "jointly_understandable",
+          "question_target_clear"
+        ],
+        "rationale": "The prompt clearly asks which output graph corresponds to the matched-filter response of the shown input signal. The image includes the input waveform and the multiple-choice output graphs, and they are visually interpretable enough for a human annotator to understand the task and expected answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.8841,
+      "decision": "review",
+      "decision_reason_codes": [
+        "pure_image_option_task",
+        "rewrite_variant_unusable",
+        "semantic_value_recoverable"
+      ],
+      "decision_rationale": "The sample is jointly understandable and the answer is materially present, with strong image support and good alignment. The main issue is that the rewrite stage could not produce a usable open-form variant because the correct answer is only an option label ('Graph C'). Since this is still a recoverable pure-image multiple-choice task, it should be kept for manual review rather than rejected.",
+      "review_ticket_id": "review_prob_e8b4696dacf103defceca7ed",
+      "operator_type": "system",
+      "started_at": "2026-04-04T20:14:14Z",
+      "finished_at": "2026-04-04T20:14:14Z",
+      "candidate_id": "cand_e8b4696dacf103defceca7ed",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_025ab96d279385932b95e4cb",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "image_entity_refs": [
+        "visual_prob_e8b4696dacf103defceca7ed_1::roi",
+        "visual_prob_e8b4696dacf103defceca7ed_1::roi_top_left",
+        "visual_prob_e8b4696dacf103defceca7ed_1::roi_bottom_left",
+        "visual_prob_e8b4696dacf103defceca7ed_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_e8b4696dacf103defceca7ed_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "image",
+          "image_ref": "visual_prob_e8b4696dacf103defceca7ed_1::roi",
+          "relation": "grounds_image",
+          "confidence": 0.7657
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_e8b4696dacf103defceca7ed_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7657
+        },
+        {
+          "text_ref": "slot_prob_e8b4696dacf103defceca7ed_1",
+          "image_ref": "visual_prob_e8b4696dacf103defceca7ed_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7698
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-04T20:13:54Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_a7208712ac98e5d9d44a6ca6",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "A signal as shown in the <image> is applied to a matched filter. Which of the following represents the output of this matched filter?",
+      "after_value": "A signal as shown in the image is applied to a matched filter. Which of the following represents the output of this matched filter?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "audit_id": "audit_dc8be13a613bc41a738e4a98",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "Graph C",
+      "after_value": "Graph C",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "audit_id": "audit_ca3ff6e032d5322100debed5",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "audit_id": "audit_4e477fe9865fe4663e019b22",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T20:14:14Z"
+    },
+    {
+      "audit_id": "audit_d95766b7f80612de576082fc",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T20:14:14Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_025ab96d279385932b95e4cb",
+      "problem_id": "prob_e8b4696dacf103defceca7ed",
+      "source_problem_id": "323",
+      "strategy": "drop_image_index",
+      "rationale": "The sample is a pure image-option selection task, and the correct option text is only a non-semantic label ('Graph C'). Removing the choices makes the question under-specified, with no recoverable open-ended target answer.",
+      "discard_reason_codes": [
+        "image_option_index_only",
+        "non_semantic_correct_option",
+        "under_specified_without_choices"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-04T20:14:14Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}

@@ -1,0 +1,2072 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_c370cff078c63071c727b086",
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "problem_id": "prob_d6136536d6526873da3562cd",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "580",
+    "raw_question_text": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: Consider the circuit shown in <image>. Assuming \\( V_{BE1} = V_{EB2} = 0.7 \\) volt, the value of the DC voltage \\( V_{C2} \\) (in volt) is ________",
+    "raw_answer_text": "0.5",
+    "choice_map": {},
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains a PIL.Image placeholder, not a path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T23:18:20Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_d6136536d6526873da3562cd",
+    "image_manifest": [
+      {
+        "path": "outputs/eee_bench_1000_2860/run_9ab7b7c008590714/datasets/eee_bench/artifacts/images/prob_d6136536d6526873da3562cd_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 384,
+        "height": 384,
+        "file_size": 28265
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 308,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 3
+    },
+    "issues": [
+      "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL",
+      "metadata.image_paths is empty while top-level image_paths contains a valid image path"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_c370cff078c63071c727b086",
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "580",
+    "created_at": "2026-04-05T23:18:20Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_d6136536d6526873da3562cd",
+    "image_dependency_score": 0.98,
+    "multi_step_score": 0.62,
+    "verifiability_score": 0.91,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly says 'Consider the circuit shown in the image'",
+        "requires_image=true",
+        "text_dominant=false",
+        "the target quantity V_C2 depends on circuit topology/nodes that are not described in text"
+      ],
+      "multi_step": [
+        "question asks for a DC node voltage in a transistor circuit rather than simple lookup",
+        "question_text provides device assumptions V_BE1 = V_EB2 = 0.7 V, which suggests combining given conditions with the circuit diagram",
+        "solving likely requires reading the circuit from the image and then applying electrical relations to compute V_C2",
+        "numeric free-response format with no choices usually implies worked circuit analysis rather than direct recognition"
+      ],
+      "verifiability": [
+        "answer_type is numeric",
+        "question requests the answer in one decimal place",
+        "answer_text is a concrete value: 0.5",
+        "asset_registry_record.answer_manifest shows answer_present=true",
+        "asset_registry_record.registry_passed=true"
+      ]
+    },
+    "risk_flags": [
+      "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL",
+      "metadata.image_paths is empty while top-level image_paths contains a valid image path",
+      "multi_step score is estimated from the wording because the actual circuit content is not described in text"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_c370cff078c63071c727b086",
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "580",
+    "created_at": "2026-04-05T23:18:20Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_d6136536d6526873da3562cd",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "question text, answer, and a valid primary image are all present, so the core semantic assets are available",
+      "verifiability is high because the expected answer is a concrete numeric value and the answer is present",
+      "the problem appears strongly image-dependent, and the required image asset exists with recorded dimensions and file size",
+      "recorded issues are metadata inconsistencies rather than clear loss of the usable problem content"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_c370cff078c63071c727b086",
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "580",
+    "created_at": "2026-04-05T23:18:20Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_c370cff078c63071c727b086",
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "problem_id": "prob_d6136536d6526873da3562cd",
+    "dataset_name": "EEE-Bench",
+    "normalized_question_text": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+    "normalized_answer_text": "0.5",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the generic hint wrapper while preserving the one-decimal-place answer-format instruction.",
+      "Replaced the inline <image> placeholder with an explicit image reference.",
+      "Question remains image-dependent because the circuit topology is only provided in the image."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T23:18:20Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[1000:2860]",
+    "source_problem_id": "580",
+    "subject": "电气电子工程领域",
+    "raw_question_text": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: Consider the circuit shown in <image>. Assuming \\( V_{BE1} = V_{EB2} = 0.7 \\) volt, the value of the DC voltage \\( V_{C2} \\) (in volt) is ________",
+    "raw_answer_text": "0.5",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.62,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 580,
+      "image_paths": [],
+      "extraction_notes": [
+        "image field contains a PIL.Image placeholder, not a path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "solution",
+      "image_field": "image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T23:19:20Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question text, answer, and a valid primary image are all present, so the core semantic assets are available",
+      "verifiability is high because the expected answer is a concrete numeric value and the answer is present",
+      "the problem appears strongly image-dependent, and the required image asset exists with recorded dimensions and file size",
+      "recorded issues are metadata inconsistencies rather than clear loss of the usable problem content"
+    ],
+    "collection_risk_flags": [
+      "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL",
+      "metadata.image_paths is empty while top-level image_paths contains a valid image path",
+      "multi_step score is estimated from the wording because the actual circuit content is not described in text"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_3de2f45799eaab92acb60a71",
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "580",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_d6136536d6526873da3562cd/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_d6136536d6526873da3562cd/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 384,
+        "height": 384
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.62,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-05T23:19:20Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL",
+      "metadata.image_paths is empty while top-level image_paths contains a valid image path"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_071c3554ea537be08145d492",
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "580",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.62,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-05T23:19:20Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "question text, answer, and a valid primary image are all present, so the core semantic assets are available",
+      "verifiability is high because the expected answer is a concrete numeric value and the answer is present",
+      "the problem appears strongly image-dependent, and the required image asset exists with recorded dimensions and file size",
+      "recorded issues are metadata inconsistencies rather than clear loss of the usable problem content"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_c370cff078c63071c727b086",
+      "candidate_id": "cand_d6136536d6526873da3562cd",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "dataset_name": "EEE-Bench",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T23:19:20Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_c370cff078c63071c727b086",
+    "problem_id": "prob_d6136536d6526873da3562cd",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "580",
+    "normalized_question_text": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) V, the value of the DC voltage \\(V_{C2}\\) (in V) is ________. Answer in one decimal place.",
+    "normalized_answer_text": "0.5",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "image_reference_metadata_inconsistent"
+    ],
+    "created_at": "2026-04-05T23:19:20Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_c370cff078c63071c727b086",
+    "problem_id": "prob_d6136536d6526873da3562cd",
+    "normalized_question_text": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) V, the value of the DC voltage \\(V_{C2}\\) (in V) is ________. Answer in one decimal place.",
+    "normalized_answer_text": "0.5",
+    "question_unit_normalization_map": [
+      {
+        "canonical_unit": "V",
+        "match_count": 2,
+        "matched_examples": [
+          "volt"
+        ]
+      }
+    ],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "BE1",
+        "canonical": "BE1",
+        "variable_type": "label"
+      },
+      {
+        "original": "EB2",
+        "canonical": "EB2",
+        "variable_type": "label"
+      },
+      {
+        "original": "V",
+        "canonical": "V",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "DC",
+        "canonical": "DC",
+        "variable_type": "label"
+      },
+      {
+        "original": "C2",
+        "canonical": "C2",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "one",
+        "canonical": "one",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Consider the circuit shown in the image."
+      },
+      {
+        "segment_index": 2,
+        "text": "Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) V, the value of the DC voltage \\(V_{C2}\\) (in V) is ________."
+      },
+      {
+        "segment_index": 3,
+        "text": "Answer in one decimal place."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 14,
+          "y": 14,
+          "width": 368,
+          "height": 365
+        },
+        "readability_score": 0.8158,
+        "contrast_score": 32.5845
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T23:19:20Z",
+    "normalization_notes": [
+      "Removed the generic hint wrapper while preserving the one-decimal-place answer-format instruction.",
+      "Replaced the inline <image> placeholder with an explicit image reference.",
+      "Question remains image-dependent because the circuit topology is only provided in the image."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_d6136536d6526873da3562cd",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[1000:2860]",
+    "source_problem_id": "580",
+    "ingest_batch_id": "benchmarkallinone-eee-bench-1000-2860_20260405T044622Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "电气电子工程领域"
+    ],
+    "language": "en",
+    "raw_question_text": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: Consider the circuit shown in <image>. Assuming \\( V_{BE1} = V_{EB2} = 0.7 \\) volt, the value of the DC voltage \\( V_{C2} \\) (in volt) is ________",
+    "normalized_question_text": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+    "raw_answer_text": "0.5",
+    "normalized_answer_text": "0.5",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9546,
+    "multi_step_score": 0.4187,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL",
+      "metadata.image_paths is empty while top-level image_paths contains a valid image path"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "image_reference_metadata_inconsistent"
+    ],
+    "clean_decision_rationale": "The sample is understandable, complete, and solvable, with a clear numeric answer and usable rewrite. However, alignment is marked risky with one conflict, and the image reference metadata is inconsistent, so manual review is appropriate rather than automatic pass.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_d6136536d6526873da3562cd",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T23:18:20Z",
+    "updated_at": "2026-04-05T23:19:20Z",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.62,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question text, answer, and a valid primary image are all present, so the core semantic assets are available",
+      "verifiability is high because the expected answer is a concrete numeric value and the answer is present",
+      "the problem appears strongly image-dependent, and the required image asset exists with recorded dimensions and file size",
+      "recorded issues are metadata inconsistencies rather than clear loss of the usable problem content"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_c900261c939860be9bc02152",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://eee_bench/test[1000:2860]/580/question",
+      "storage_uri": "inline://prob_d6136536d6526873da3562cd/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 308,
+      "width": null,
+      "height": null,
+      "sha256": "eb1b6232f4346ca1d54c4db3d3628efbc99c2e2827e7c51c7deb52488e0451dd",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: Consider the circuit shown in <image>. Assuming \\( V_{BE1} = V_{EB2} = 0.7 \\) volt, the value of the DC voltage \\( V_{C2} \\) (in volt) is ________",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7054,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "V",
+          "match_count": 2,
+          "matched_examples": [
+            "volt"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "BE1",
+          "canonical": "BE1",
+          "variable_type": "label"
+        },
+        {
+          "original": "EB2",
+          "canonical": "EB2",
+          "variable_type": "label"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "DC",
+          "canonical": "DC",
+          "variable_type": "label"
+        },
+        {
+          "original": "C2",
+          "canonical": "C2",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "asset_id": "asset_6478ff5f65cb97c13f693cc9",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_d6136536d6526873da3562cd/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 174,
+      "width": null,
+      "height": null,
+      "sha256": "77f32e7bf3f46e3eb9bac85cac1a6f5e103479a40f94a209fcd506c1ab63ffc9",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: Consider the circuit shown in <image>. Assuming \\( V_{BE1} = V_{EB2} = 0.7 \\) volt, the value of the DC voltage \\( V_{C2} \\) (in volt) is ________",
+      "normalized_text_snapshot": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+      "text_completeness_score": 0.7054,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "V",
+          "match_count": 2,
+          "matched_examples": [
+            "volt"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "BE1",
+          "canonical": "BE1",
+          "variable_type": "label"
+        },
+        {
+          "original": "EB2",
+          "canonical": "EB2",
+          "variable_type": "label"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "DC",
+          "canonical": "DC",
+          "variable_type": "label"
+        },
+        {
+          "original": "C2",
+          "canonical": "C2",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "asset_id": "asset_7d625563f3d5bff25ef7c131",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://eee_bench/test[1000:2860]/580/answer",
+      "storage_uri": "inline://prob_d6136536d6526873da3562cd/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 3,
+      "width": null,
+      "height": null,
+      "sha256": "d2cbad71ff333de67d07ec676e352ab7f38248eb69c942950157220607c55e84",
+      "perceptual_hash": null,
+      "source_text_snapshot": "0.5",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "asset_id": "asset_d08016509006ae95b32ca894",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_d6136536d6526873da3562cd/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 3,
+      "width": null,
+      "height": null,
+      "sha256": "d2cbad71ff333de67d07ec676e352ab7f38248eb69c942950157220607c55e84",
+      "perceptual_hash": null,
+      "source_text_snapshot": "0.5",
+      "normalized_text_snapshot": "0.5",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "asset_id": "asset_e0fc1e2334a1d05cec1b1292",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/eee_bench_1000_2860/run_9ab7b7c008590714/datasets/eee_bench/artifacts/images/prob_d6136536d6526873da3562cd_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 28265,
+      "width": 384,
+      "height": 384,
+      "sha256": "a3d089368bc7c7cd82db482ab0351660d5341aca1954e99c0e06ce1b0ac2faf2",
+      "perceptual_hash": "1f1f87e1c0e4e5f1",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2370.2725,
+      "readability_score": 0.8158,
+      "noise_score": 24.6463,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 14,
+        "y": 14,
+        "width": 368,
+        "height": 365
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL",
+        "metadata.image_paths is empty while top-level image_paths contains a valid image path"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "asset_id": "asset_96b0d29445c4bce917dbf698",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/eee_bench_1000_2860/run_9ab7b7c008590714/datasets/eee_bench/artifacts/crops/prob_d6136536d6526873da3562cd_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 27783,
+      "width": 368,
+      "height": 365,
+      "sha256": "b7927f4674374de0e98a1f3587f64f12f1da79c78e9b746c1f5c2cc4fe6343cb",
+      "perceptual_hash": "3f1f87e1cce4e7f1",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2370.2725,
+      "readability_score": 0.8158,
+      "noise_score": 24.6463,
+      "cropped_from_asset_id": "asset_e0fc1e2334a1d05cec1b1292",
+      "roi_bbox": {
+        "x": 14,
+        "y": 14,
+        "width": 368,
+        "height": 365
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "asset_id": "asset_e5812ed49ff34ca67f89f6eb",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_127b2808eb4c7f1b6aee59cc",
+      "file_format": "txt",
+      "file_size_bytes": 174,
+      "width": null,
+      "height": null,
+      "sha256": "77f32e7bf3f46e3eb9bac85cac1a6f5e103479a40f94a209fcd506c1ab63ffc9",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: Consider the circuit shown in <image>. Assuming \\( V_{BE1} = V_{EB2} = 0.7 \\) volt, the value of the DC voltage \\( V_{C2} \\) (in volt) is ________",
+      "normalized_text_snapshot": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+      "text_completeness_score": 0.7054,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "V",
+          "match_count": 2,
+          "matched_examples": [
+            "volt"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "BE1",
+          "canonical": "BE1",
+          "variable_type": "label"
+        },
+        {
+          "original": "EB2",
+          "canonical": "EB2",
+          "variable_type": "label"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "DC",
+          "canonical": "DC",
+          "variable_type": "label"
+        },
+        {
+          "original": "C2",
+          "canonical": "C2",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_d6136536d6526873da3562cd",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "Consider the circuit shown in the image.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) V, the value of the DC voltage \\(V_{C2}\\) (in V) is ________.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "2",
+            "0.7",
+            "2"
+          ],
+          "unit_mentions": [
+            "A",
+            "V",
+            "g",
+            "h",
+            "m",
+            "min",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+          "segment_index": 3,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "1",
+            "2",
+            "0.7",
+            "2"
+          ],
+          "unit_mentions": [
+            "A",
+            "V",
+            "g",
+            "h",
+            "m",
+            "min",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_d6136536d6526873da3562cd_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Answer in one decimal place.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "0.5",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "circuit",
+          "entity_category": "circuit",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "image",
+          "entity_category": "image",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BE1",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "EB2",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "DC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "C2",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "BE1",
+          "canonical": "BE1",
+          "variable_type": "label"
+        },
+        {
+          "original": "EB2",
+          "canonical": "EB2",
+          "variable_type": "label"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "DC",
+          "canonical": "DC",
+          "variable_type": "label"
+        },
+        {
+          "original": "C2",
+          "canonical": "C2",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "V",
+        "g",
+        "h",
+        "m",
+        "min",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Consider the circuit shown in the image."
+        },
+        {
+          "segment_index": 2,
+          "text": "Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) V, the value of the DC voltage \\(V_{C2}\\) (in V) is ________."
+        },
+        {
+          "segment_index": 3,
+          "text": "Answer in one decimal place."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T23:19:06Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_d6136536d6526873da3562cd_1",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "circuit_diagram",
+        "aspect_ratio": 1.0,
+        "dark_pixel_ratio": 0.0414,
+        "readability_score": 0.8158,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 384,
+            "height": 384
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 14,
+            "y": 14,
+            "width": 368,
+            "height": 365
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 14,
+            "y": 14,
+            "width": 184,
+            "height": 182
+          },
+          "salience": 0.4204
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 198,
+            "y": 196,
+            "width": 184,
+            "height": 183
+          },
+          "salience": 0.4046
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8963,
+      "created_at": "2026-04-05T23:19:06Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_d6136536d6526873da3562cd",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-05T23:19:15Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_dd03b2a8c553645a3addd518",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "text_fact",
+      "canonical_value": "Consider the circuit shown in the image.",
+      "surface_forms": [
+        "Consider the circuit shown in the image."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_6478ff5f65cb97c13f693cc9"
+      ],
+      "evidence_refs": [
+        "asset_6478ff5f65cb97c13f693cc9"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Consider the circuit shown in the image.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_e6f31ac5b56024456c44f41c",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "text_fact",
+      "canonical_value": "Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) V, the value of the DC voltage \\(V_{C2}\\) (in V) is ________.",
+      "surface_forms": [
+        "Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) V, the value of the DC voltage \\(V_{C2}\\) (in V) is ________."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_6478ff5f65cb97c13f693cc9"
+      ],
+      "evidence_refs": [
+        "asset_6478ff5f65cb97c13f693cc9"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) V, the value of the DC voltage \\(V_{C2}\\) (in V) is ________.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "2",
+          "0.7",
+          "2"
+        ],
+        "unit_mentions": [
+          "A",
+          "V",
+          "g",
+          "h",
+          "m",
+          "min",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,V,g,h,m,min,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_3df0ba71779d65f4b9c9e4bf",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "target_slot",
+      "canonical_value": "Answer in one decimal place.",
+      "surface_forms": [
+        "Answer in one decimal place."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_6478ff5f65cb97c13f693cc9"
+      ],
+      "evidence_refs": [
+        "asset_6478ff5f65cb97c13f693cc9"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_d6136536d6526873da3562cd_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Answer in one decimal place.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "0.5",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_2877ddf4f3096602004a916b",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "answer_claim",
+      "canonical_value": "0.5",
+      "surface_forms": [
+        "0.5"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d08016509006ae95b32ca894"
+      ],
+      "evidence_refs": [
+        "asset_d08016509006ae95b32ca894"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "0.5"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_29397ec3a0c8e867bb4fe769",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 384,
+          "height": 384
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8963,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_15996e5f2ef71210cdf97dd0",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 14,
+          "y": 14,
+          "width": 368,
+          "height": 365
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8963,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_ff51dcc082d6ec37a8d04cab",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 14,
+          "y": 14,
+          "width": 184,
+          "height": 182
+        },
+        "salience": 0.4204
+      },
+      "unit": null,
+      "confidence": 0.8963,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_09638acc4b428f4f257de4fb",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 198,
+          "y": 196,
+          "width": 184,
+          "height": 183
+        },
+        "salience": 0.4046
+      },
+      "unit": null,
+      "confidence": 0.8963,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_73227d731db2969affe0194a",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "text_fact",
+      "canonical_value": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+      "surface_forms": [
+        "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_e5812ed49ff34ca67f89f6eb"
+      ],
+      "evidence_refs": [
+        "asset_e5812ed49ff34ca67f89f6eb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_127b2808eb4c7f1b6aee59cc",
+        "parent_problem_id": "prob_d6136536d6526873da3562cd",
+        "variant_index": 1,
+        "title": "EEE-Bench 开放题",
+        "rewritten_question_text": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "0.5",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_492f0015de60b716eef130a6",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL",
+      "surface_forms": [
+        "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_405b9eaebb8490b44833616a",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty while top-level image_paths contains a valid image path",
+      "surface_forms": [
+        "metadata.image_paths is empty while top-level image_paths contains a valid image path"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty while top-level image_paths contains a valid image path"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_ba4b17cb407caafca8781361",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_d6136536d6526873da3562cd",
+        "problem_id": "prob_d6136536d6526873da3562cd",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-05T23:19:15Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "node_id": "node_225ad8803259050b327e057d",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "image_reference_metadata_inconsistent"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T23:19:20Z",
+      "updated_at": "2026-04-05T23:19:20Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_c370cff078c63071c727b086",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_9ab7b7c008590714",
+      "dataset_name": "EEE-Bench",
+      "input_asset_ids": [
+        "asset_c900261c939860be9bc02152",
+        "asset_6478ff5f65cb97c13f693cc9",
+        "asset_7d625563f3d5bff25ef7c131",
+        "asset_d08016509006ae95b32ca894",
+        "asset_e0fc1e2334a1d05cec1b1292",
+        "asset_96b0d29445c4bce917dbf698",
+        "asset_e5812ed49ff34ca67f89f6eb"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 1,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 10
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 384,
+            "height": 384,
+            "blur_score": 2370.2725,
+            "contrast_score": 32.5845,
+            "noise_score": 24.6463,
+            "readability_score": 0.8158,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 14,
+              "y": 14,
+              "width": 368,
+              "height": 365
+            },
+            "perceptual_hash": "1f1f87e1c0e4e5f1"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_c370cff078c63071c727b086",
+        "coverage_score": 0.9,
+        "consistency_score": 0.82,
+        "alignment_status": "risky",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_d6136536d6526873da3562cd",
+        "question_type": "open",
+        "condition_count": 2,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_d6136536d6526873da3562cd",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_semantically_clear",
+          "jointly_understandable",
+          "question_text_clear"
+        ],
+        "rationale": "The problem statement clearly asks for the DC voltage V_C2, and the circuit image provides the necessary transistor connections, component values, and supply voltages. The image is readable enough for a human to understand the task and expected numeric answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes states the source image field contained a PIL.Image placeholder rather than a path or URL",
+        "metadata.image_paths is empty while top-level image_paths contains a valid image path"
+      ],
+      "clean_score": 1.0,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "image_reference_metadata_inconsistent"
+      ],
+      "decision_rationale": "The sample is understandable, complete, and solvable, with a clear numeric answer and usable rewrite. However, alignment is marked risky with one conflict, and the image reference metadata is inconsistent, so manual review is appropriate rather than automatic pass.",
+      "review_ticket_id": "review_prob_d6136536d6526873da3562cd",
+      "operator_type": "system",
+      "started_at": "2026-04-05T23:19:20Z",
+      "finished_at": "2026-04-05T23:19:20Z",
+      "candidate_id": "cand_d6136536d6526873da3562cd",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_c370cff078c63071c727b086",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "image_entity_refs": [
+        "visual_prob_d6136536d6526873da3562cd_1::roi",
+        "visual_prob_d6136536d6526873da3562cd_1::roi_top_left",
+        "visual_prob_d6136536d6526873da3562cd_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_d6136536d6526873da3562cd_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "circuit",
+          "image_ref": "visual_prob_d6136536d6526873da3562cd_1::roi",
+          "relation": "grounds_circuit",
+          "confidence": 0.7741
+        },
+        {
+          "text_ref": "image",
+          "image_ref": "visual_prob_d6136536d6526873da3562cd_1::roi",
+          "relation": "grounds_image",
+          "confidence": 0.7741
+        },
+        {
+          "text_ref": "BE1",
+          "image_ref": "visual_prob_d6136536d6526873da3562cd_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7741
+        },
+        {
+          "text_ref": "EB2",
+          "image_ref": "visual_prob_d6136536d6526873da3562cd_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7741
+        },
+        {
+          "text_ref": "DC",
+          "image_ref": "visual_prob_d6136536d6526873da3562cd_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7741
+        },
+        {
+          "text_ref": "C2",
+          "image_ref": "visual_prob_d6136536d6526873da3562cd_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7741
+        },
+        {
+          "text_ref": "slot_prob_d6136536d6526873da3562cd_1",
+          "image_ref": "visual_prob_d6136536d6526873da3562cd_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7772
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "visual_reference_density_mismatch",
+          "detail": "文本中的视觉锚点明显多于可识别视觉区域。",
+          "severity": "major",
+          "confidence": 0.72
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.82,
+      "alignment_status": "risky",
+      "created_at": "2026-04-05T23:19:06Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_12271b0fdeb16c57062c139e",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: Consider the circuit shown in <image>. Assuming \\( V_{BE1} = V_{EB2} = 0.7 \\) volt, the value of the DC voltage \\( V_{C2} \\) (in volt) is ________",
+      "after_value": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "audit_id": "audit_62a5b6740b520734fde7838e",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "0.5",
+      "after_value": "0.5",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "audit_id": "audit_9c56779494d8dbf0c7d779eb",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "audit_id": "audit_225ad8803259050b327e057d",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "audit_id": "audit_3e252561271c061611f247ba",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "record_type": "normalized_assets",
+      "field_name": "question_unit_normalization_map",
+      "before_value": "Hint: Please answer the question requiring a floating-point number with one decimal place and provide the final value, e.g., 1.2, 1.3, 1.4, at the end.\nQuestion: Consider the circuit shown in <image>. Assuming \\( V_{BE1} = V_{EB2} = 0.7 \\) volt, the value of the DC voltage \\( V_{C2} \\) (in volt) is ________",
+      "after_value": [
+        {
+          "canonical_unit": "V",
+          "match_count": 2,
+          "matched_examples": [
+            "volt"
+          ]
+        }
+      ],
+      "change_type": "unit_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T23:19:20Z"
+    },
+    {
+      "audit_id": "audit_884e3235a0f2f446c6a611a3",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "BE1",
+          "canonical": "BE1",
+          "variable_type": "label"
+        },
+        {
+          "original": "EB2",
+          "canonical": "EB2",
+          "variable_type": "label"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "DC",
+          "canonical": "DC",
+          "variable_type": "label"
+        },
+        {
+          "original": "C2",
+          "canonical": "C2",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T23:19:20Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_c370cff078c63071c727b086",
+      "problem_id": "prob_d6136536d6526873da3562cd",
+      "source_problem_id": "580",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_127b2808eb4c7f1b6aee59cc",
+          "parent_problem_id": "prob_d6136536d6526873da3562cd",
+          "variant_index": 1,
+          "title": "EEE-Bench 开放题",
+          "rewritten_question_text": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "0.5",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-05T23:19:20Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_127b2808eb4c7f1b6aee59cc",
+      "parent_problem_id": "prob_d6136536d6526873da3562cd",
+      "variant_index": 1,
+      "title": "EEE-Bench 开放题",
+      "rewritten_question_text": "Consider the circuit shown in the image. Assuming \\(V_{BE1} = V_{EB2} = 0.7\\) volt, the value of the DC voltage \\(V_{C2}\\) (in volt) is ________. Answer in one decimal place.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "0.5",
+      "split_role": "single"
+    }
+  ]
+}

@@ -1,0 +1,1792 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_c117e0a5ec4a46aac4a95b7d",
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "problem_id": "prob_e22d62698986dad5ae159397",
+    "dataset_name": "MathVision",
+    "source_problem_id": "31",
+    "raw_question_text": "How many ducks weigh the same as a crocodile?\n<image1>\n<image2>",
+    "raw_answer_text": "B",
+    "choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "image_paths": [
+      "images/31.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "options field contains only option labels, no option text content",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T12:19:16Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_e22d62698986dad5ae159397",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/images/prob_e22d62698986dad5ae159397_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1405,
+        "height": 755,
+        "file_size": 392990
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 63,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "Option text content is missing; metadata notes that the options field contains only option labels.",
+      "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_c117e0a5ec4a46aac4a95b7d",
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "dataset_name": "MathVision",
+    "source_problem_id": "31",
+    "created_at": "2026-04-04T12:19:16Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_e22d62698986dad5ae159397",
+    "image_dependency_score": 0.92,
+    "multi_step_score": 0.55,
+    "verifiability_score": 0.62,
+    "score_evidence": {
+      "image_dependency": [
+        "requires_image=true",
+        "text_dominant=false",
+        "Question asks about relative weights ('How many ducks weigh the same as a crocodile?'), which likely depends on visual information not contained in the text alone.",
+        "asset_registry_record.image_manifest shows an image exists."
+      ],
+      "multi_step": [
+        "The question asks for an equivalence between quantities/weights, which suggests combining at least comparison and counting information.",
+        "requires_image=true indicates likely image-text reasoning rather than pure text lookup.",
+        "Conservative scoring because the actual image content is not available here and option contents are missing."
+      ],
+      "verifiability": [
+        "answer_present=true",
+        "answer_type is choice/option, so the final response format is constrained.",
+        "registry_passed=true",
+        "Verifiability is reduced because option text content is missing, so label 'B' cannot be grounded to a concrete value from the provided fields alone.",
+        "Registry notes a mismatch between referenced image placeholders and provided image assets, which may complicate downstream checking."
+      ]
+    },
+    "risk_flags": [
+      "Option text content is missing; metadata notes that the options field contains only option labels.",
+      "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_c117e0a5ec4a46aac4a95b7d",
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "dataset_name": "MathVision",
+    "source_problem_id": "31",
+    "created_at": "2026-04-04T12:19:16Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_e22d62698986dad5ae159397",
+    "priority": 0.71,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Question text, one image asset, and an answer label are present, so the sample still retains recoverable core semantics and should not be rejected.",
+      "The problem appears strongly image-dependent, but the question references two image placeholders while only one image path is provided, creating an asset mismatch.",
+      "Option text content is missing, so the answer label cannot be fully grounded to a concrete choice value, which lowers usability and verifiability.",
+      "Given the asset gaps, the sample is better retained for follow-up recovery rather than prioritized as a clean keep."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_c117e0a5ec4a46aac4a95b7d",
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "dataset_name": "MathVision",
+    "source_problem_id": "31",
+    "created_at": "2026-04-04T12:19:16Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_c117e0a5ec4a46aac4a95b7d",
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "problem_id": "prob_e22d62698986dad5ae159397",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "How many ducks weigh the same as a crocodile?",
+    "normalized_answer_text": "B",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed inline image placeholder tags from the question text.",
+      "Question depends on balance-scale visuals and visually presented answer choices.",
+      "Retained answer as the original option label.",
+      "Retained choice map as provided because the concrete option contents are image-based."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T12:19:16Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "source_dataset": "MathVision",
+    "source_split": "test[0:300]",
+    "source_problem_id": "31",
+    "subject": "数学",
+    "raw_question_text": "How many ducks weigh the same as a crocodile?\n<image1>\n<image2>",
+    "raw_answer_text": "B",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.92,
+    "initial_multi_solution_score": 0.55,
+    "initial_verifiability_score": 0.62,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 30,
+      "image_paths": [
+        "images/31.jpg"
+      ],
+      "extraction_notes": [
+        "options field contains only option labels, no option text content",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-04T12:21:03Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.71,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question text, one image asset, and an answer label are present, so the sample still retains recoverable core semantics and should not be rejected.",
+      "The problem appears strongly image-dependent, but the question references two image placeholders while only one image path is provided, creating an asset mismatch.",
+      "Option text content is missing, so the answer label cannot be fully grounded to a concrete choice value, which lowers usability and verifiability.",
+      "Given the asset gaps, the sample is better retained for follow-up recovery rather than prioritized as a clean keep."
+    ],
+    "collection_risk_flags": [
+      "Option text content is missing; metadata notes that the options field contains only option labels.",
+      "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_2c5847a1054417941383dd9a",
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "source_dataset": "MathVision",
+    "source_problem_id": "31",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_e22d62698986dad5ae159397/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_e22d62698986dad5ae159397/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1405,
+        "height": 755
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.92,
+      "initial_multi_solution_score": 0.55,
+      "initial_verifiability_score": 0.62
+    },
+    "created_at": "2026-04-04T12:21:03Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Option text content is missing; metadata notes that the options field contains only option labels.",
+      "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_b5fc74e77688251cfb0b6780",
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "source_dataset": "MathVision",
+    "source_problem_id": "31",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.71,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.92,
+      "initial_multi_solution_score": 0.55,
+      "initial_verifiability_score": 0.62
+    },
+    "created_at": "2026-04-04T12:21:03Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Question text, one image asset, and an answer label are present, so the sample still retains recoverable core semantics and should not be rejected.",
+      "The problem appears strongly image-dependent, but the question references two image placeholders while only one image path is provided, creating an asset mismatch.",
+      "Option text content is missing, so the answer label cannot be fully grounded to a concrete choice value, which lowers usability and verifiability.",
+      "Given the asset gaps, the sample is better retained for follow-up recovery rather than prioritized as a clean keep."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_c117e0a5ec4a46aac4a95b7d",
+      "candidate_id": "cand_e22d62698986dad5ae159397",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T12:21:03Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_c117e0a5ec4a46aac4a95b7d",
+    "problem_id": "prob_e22d62698986dad5ae159397",
+    "source_dataset": "MathVision",
+    "source_problem_id": "31",
+    "normalized_question_text": "How many ducks weigh the same as a crocodile?",
+    "normalized_answer_text": "B",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "image_placeholder_mismatch",
+      "option_text_missing",
+      "pure_image_choice_needs_review",
+      "rewrite_unusable"
+    ],
+    "created_at": "2026-04-04T12:21:03Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_c117e0a5ec4a46aac4a95b7d",
+    "problem_id": "prob_e22d62698986dad5ae159397",
+    "normalized_question_text": "How many ducks weigh the same as a crocodile?",
+    "normalized_answer_text": "B",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "How",
+        "canonical": "How",
+        "variable_type": "label"
+      },
+      {
+        "original": "many",
+        "canonical": "many",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "same",
+        "canonical": "same",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "How many ducks weigh the same as a crocodile?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1405,
+          "height": 712
+        },
+        "readability_score": 0.7779,
+        "contrast_score": 41.0145
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T12:21:03Z",
+    "normalization_notes": [
+      "Removed inline image placeholder tags from the question text.",
+      "Question depends on balance-scale visuals and visually presented answer choices.",
+      "Retained answer as the original option label.",
+      "Retained choice map as provided because the concrete option contents are image-based."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_e22d62698986dad5ae159397",
+    "source_dataset": "MathVision",
+    "source_split": "test[0:300]",
+    "source_problem_id": "31",
+    "ingest_batch_id": "benchmarkallinone-mathvision-000-300_20260404T104756Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "How many ducks weigh the same as a crocodile?\n<image1>\n<image2>",
+    "normalized_question_text": "How many ducks weigh the same as a crocodile?",
+    "raw_answer_text": "B",
+    "normalized_answer_text": "B",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9628,
+    "multi_step_score": 0.23,
+    "verifiability_score": 0.906,
+    "quality_risk_flags": [
+      "Option text content is missing; metadata notes that the options field contains only option labels.",
+      "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided.",
+      "image_placeholder_mismatch",
+      "metadata_choice_text_missing"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "image_placeholder_mismatch",
+      "option_text_missing",
+      "pure_image_choice_needs_review",
+      "rewrite_unusable"
+    ],
+    "clean_decision_rationale": "The sample is still semantically usable: the image appears to contain the balance puzzle and visual answer options, so the task is understandable and answer label B is available. However, the option text is missing from metadata, the rewrite stage could not produce a faithful open-ended target, and the two-image placeholder reference does not match the provided image setup, so manual review is warranted.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_e22d62698986dad5ae159397",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T12:19:16Z",
+    "updated_at": "2026-04-04T12:21:03Z",
+    "initial_image_dependency_score": 0.92,
+    "initial_multi_solution_score": 0.55,
+    "initial_verifiability_score": 0.62,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.71,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question text, one image asset, and an answer label are present, so the sample still retains recoverable core semantics and should not be rejected.",
+      "The problem appears strongly image-dependent, but the question references two image placeholders while only one image path is provided, creating an asset mismatch.",
+      "Option text content is missing, so the answer label cannot be fully grounded to a concrete choice value, which lowers usability and verifiability.",
+      "Given the asset gaps, the sample is better retained for follow-up recovery rather than prioritized as a clean keep."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_c2ab58f82c0072cabe172b52",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[0:300]/31/question",
+      "storage_uri": "inline://prob_e22d62698986dad5ae159397/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 63,
+      "width": null,
+      "height": null,
+      "sha256": "2f0fad1ddea27ecfbc66bdef38557a7e4255b90d74b864204c91ac9965681467",
+      "perceptual_hash": null,
+      "source_text_snapshot": "How many ducks weigh the same as a crocodile?\n<image1>\n<image2>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.5902,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "asset_id": "asset_531f28485d84533d6afa910d",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_e22d62698986dad5ae159397/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 45,
+      "width": null,
+      "height": null,
+      "sha256": "06dd87e6eceac06bb2f5ac33b458dbba40f00aa39b8c15b73f98f16f07b3c078",
+      "perceptual_hash": null,
+      "source_text_snapshot": "How many ducks weigh the same as a crocodile?\n<image1>\n<image2>",
+      "normalized_text_snapshot": "How many ducks weigh the same as a crocodile?",
+      "text_completeness_score": 0.5902,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "asset_id": "asset_e082849d7252af1321a773cb",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[0:300]/31/answer",
+      "storage_uri": "inline://prob_e22d62698986dad5ae159397/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "B",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "asset_id": "asset_17ee6478eaed3df9409e3948",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_e22d62698986dad5ae159397/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "df7e70e5021544f4834bbee64a9e3789febc4be81470df629cad6ddb03320a5c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "B",
+      "normalized_text_snapshot": "B",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "asset_id": "asset_600e504113d24ca73de2810c",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/images/prob_e22d62698986dad5ae159397_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 392990,
+      "width": 1405,
+      "height": 755,
+      "sha256": "63b95d9e05058b231542219b3d4c38a227be340feb0d5006d1dda006e50027ee",
+      "perceptual_hash": "3f1b19e7e71f1f00",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 790.256,
+      "readability_score": 0.7779,
+      "noise_score": 17.3975,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1405,
+        "height": 712
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Option text content is missing; metadata notes that the options field contains only option labels.",
+        "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided.",
+        "image_placeholder_mismatch",
+        "metadata_choice_text_missing"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "asset_id": "asset_4d76b3b1f1a2b5085be77e72",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/crops/prob_e22d62698986dad5ae159397_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 391522,
+      "width": 1405,
+      "height": 712,
+      "sha256": "651cd5e02ef17ee6857caf650e0b67de600de3d3ecc6772bd0622e09705cce3a",
+      "perceptual_hash": "3f1919e7e71fbf00",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 790.256,
+      "readability_score": 0.7779,
+      "noise_score": 17.3975,
+      "cropped_from_asset_id": "asset_600e504113d24ca73de2810c",
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1405,
+        "height": 712
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_e22d62698986dad5ae159397",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "question_type": "multiple_choice",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "How many ducks weigh the same as a crocodile?",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_e22d62698986dad5ae159397_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "How many ducks weigh the same as a crocodile?",
+          "expected_answer_type": "unknown",
+          "expected_answer": "B",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "How many ducks weigh the same as a crocodile?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T12:20:38Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_e22d62698986dad5ae159397_1",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 1.8609,
+        "dark_pixel_ratio": 0.1238,
+        "readability_score": 0.7779,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1405,
+            "height": 755
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 1405,
+            "height": 712
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 702,
+            "height": 356
+          },
+          "salience": 0.5345
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 702,
+            "y": 24,
+            "width": 703,
+            "height": 356
+          },
+          "salience": 0.4613
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 380,
+            "width": 702,
+            "height": 356
+          },
+          "salience": 0.4879
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 702,
+            "y": 380,
+            "width": 703,
+            "height": 356
+          },
+          "salience": 0.4416
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9112,
+      "created_at": "2026-04-04T12:20:38Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_e22d62698986dad5ae159397",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-04T12:20:52Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_52d6a37b3927faac13d7d526",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "target_slot",
+      "canonical_value": "How many ducks weigh the same as a crocodile?",
+      "surface_forms": [
+        "How many ducks weigh the same as a crocodile?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_531f28485d84533d6afa910d"
+      ],
+      "evidence_refs": [
+        "asset_531f28485d84533d6afa910d"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_e22d62698986dad5ae159397_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "How many ducks weigh the same as a crocodile?",
+        "expected_answer_type": "unknown",
+        "expected_answer": "B",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_1e6a725b5197440f03d2a63c",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "answer_claim",
+      "canonical_value": "B",
+      "surface_forms": [
+        "B"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_17ee6478eaed3df9409e3948"
+      ],
+      "evidence_refs": [
+        "asset_17ee6478eaed3df9409e3948"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "B"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_a9aeae2921a94b3752aefe13",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1405,
+          "height": 755
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9112,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_db529e21443747e113623391",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1405,
+          "height": 712
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9112,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_b938321d86e2e21de4324285",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 702,
+          "height": 356
+        },
+        "salience": 0.5345
+      },
+      "unit": null,
+      "confidence": 0.9112,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_72a1d1cbb073f75f49b5a654",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 702,
+          "y": 24,
+          "width": 703,
+          "height": 356
+        },
+        "salience": 0.4613
+      },
+      "unit": null,
+      "confidence": 0.9112,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_aa68fb0d5bcaa262ad6b3072",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 380,
+          "width": 702,
+          "height": 356
+        },
+        "salience": 0.4879
+      },
+      "unit": null,
+      "confidence": 0.9112,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_4408a443aff1732bd5819f12",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 702,
+          "y": 380,
+          "width": 703,
+          "height": 356
+        },
+        "salience": 0.4416
+      },
+      "unit": null,
+      "confidence": 0.9112,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_4686105f681d718ec0fd749a",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "quality_signal",
+      "canonical_value": "Option text content is missing; metadata notes that the options field contains only option labels.",
+      "surface_forms": [
+        "Option text content is missing; metadata notes that the options field contains only option labels."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Option text content is missing; metadata notes that the options field contains only option labels."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_965519ac21f07e1ba9bbe77a",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "quality_signal",
+      "canonical_value": "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided.",
+      "surface_forms": [
+        "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_918cc138c4c1518551a5484d",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "quality_signal",
+      "canonical_value": "image_placeholder_mismatch",
+      "surface_forms": [
+        "image_placeholder_mismatch"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "image_placeholder_mismatch"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_d3cfe623cae82bacd5d2436f",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_choice_text_missing",
+      "surface_forms": [
+        "metadata_choice_text_missing"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_choice_text_missing"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_3969f8463706f7ba27a91802",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_e22d62698986dad5ae159397",
+        "problem_id": "prob_e22d62698986dad5ae159397",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-04T12:20:52Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "node_id": "node_4771ad701aa00a6b887d30ee",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "image_placeholder_mismatch",
+          "option_text_missing",
+          "pure_image_choice_needs_review",
+          "rewrite_unusable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:21:03Z",
+      "updated_at": "2026-04-04T12:21:03Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_c117e0a5ec4a46aac4a95b7d",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_8d24366e519d1ecf",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_c2ab58f82c0072cabe172b52",
+        "asset_531f28485d84533d6afa910d",
+        "asset_e082849d7252af1321a773cb",
+        "asset_17ee6478eaed3df9409e3948",
+        "asset_600e504113d24ca73de2810c",
+        "asset_4d76b3b1f1a2b5085be77e72"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 6
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.93,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1405,
+            "height": 755,
+            "blur_score": 790.256,
+            "contrast_score": 41.0145,
+            "noise_score": 17.3975,
+            "readability_score": 0.7779,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 24,
+              "width": 1405,
+              "height": 712
+            },
+            "perceptual_hash": "3f1b19e7e71f1f00"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_c117e0a5ec4a46aac4a95b7d",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_e22d62698986dad5ae159397",
+        "question_type": "multiple_choice",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_e22d62698986dad5ae159397",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "option_text_is_index_only",
+          "correct_answer_semantics_unrecoverable"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_contains_visual_options",
+          "jointly_understandable",
+          "visual_relation_clear"
+        ],
+        "rationale": "The question is clear and the single provided image is semantically sufficient: it shows the balance relations and also includes the visual answer options A-E. Although the metadata says two image placeholders are referenced and the text choices are missing, both parts appear combined into one image, so a human can still understand the task and the answer label B.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Option text content is missing; metadata notes that the options field contains only option labels.",
+        "Question text references two image placeholders ('<image1>' and '<image2>'), but only one image path is provided.",
+        "image_placeholder_mismatch",
+        "metadata_choice_text_missing"
+      ],
+      "clean_score": 0.8814,
+      "decision": "review",
+      "decision_reason_codes": [
+        "image_placeholder_mismatch",
+        "option_text_missing",
+        "pure_image_choice_needs_review",
+        "rewrite_unusable"
+      ],
+      "decision_rationale": "The sample is still semantically usable: the image appears to contain the balance puzzle and visual answer options, so the task is understandable and answer label B is available. However, the option text is missing from metadata, the rewrite stage could not produce a faithful open-ended target, and the two-image placeholder reference does not match the provided image setup, so manual review is warranted.",
+      "review_ticket_id": "review_prob_e22d62698986dad5ae159397",
+      "operator_type": "system",
+      "started_at": "2026-04-04T12:21:03Z",
+      "finished_at": "2026-04-04T12:21:03Z",
+      "candidate_id": "cand_e22d62698986dad5ae159397",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_c117e0a5ec4a46aac4a95b7d",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "image_entity_refs": [
+        "visual_prob_e22d62698986dad5ae159397_1::roi",
+        "visual_prob_e22d62698986dad5ae159397_1::roi_top_left",
+        "visual_prob_e22d62698986dad5ae159397_1::roi_top_right",
+        "visual_prob_e22d62698986dad5ae159397_1::roi_bottom_left",
+        "visual_prob_e22d62698986dad5ae159397_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_e22d62698986dad5ae159397_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "slot_prob_e22d62698986dad5ae159397_1",
+          "image_ref": "visual_prob_e22d62698986dad5ae159397_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7805
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-04T12:20:38Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_94f405f9a13a7a8cad8d4131",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "How many ducks weigh the same as a crocodile?\n<image1>\n<image2>",
+      "after_value": "How many ducks weigh the same as a crocodile?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "audit_id": "audit_13df401cbd096ab98d7712bb",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "B",
+      "after_value": "B",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "audit_id": "audit_90a681eedac1ff9861ba8785",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "audit_id": "audit_4771ad701aa00a6b887d30ee",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:21:03Z"
+    },
+    {
+      "audit_id": "audit_937e49e3f95e60bbe98b08e2",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:21:03Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_c117e0a5ec4a46aac4a95b7d",
+      "problem_id": "prob_e22d62698986dad5ae159397",
+      "source_problem_id": "31",
+      "strategy": "drop_image_index",
+      "rationale": "The question stem is meaningful, but the choices and correct answer are only index letters (A-E, with B correct). Since the actual answer content behind option B is not provided, a faithful open-ended rewrite with a recoverable expected answer cannot be constructed.",
+      "discard_reason_codes": [
+        "option_text_is_index_only",
+        "correct_answer_semantics_unrecoverable"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-04T12:21:03Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}

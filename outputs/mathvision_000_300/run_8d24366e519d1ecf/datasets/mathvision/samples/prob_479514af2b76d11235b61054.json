@@ -1,0 +1,1779 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_ce246c475a57ff8806d51bb0",
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "problem_id": "prob_479514af2b76d11235b61054",
+    "dataset_name": "MathVision",
+    "source_problem_id": "60",
+    "raw_question_text": "Ellen wants to decorate the butterfly Which butterfly can she make?\n<image1>\nusing these 6 stickers\n<image2>\n<image3>",
+    "raw_answer_text": "A",
+    "choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "image_paths": [
+      "images/60.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "options field contains only option letters without option text; option mapping cannot be determined from the JSON text fields",
+      "answer kept as original option letter because no textual option content is available",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T12:56:17Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_479514af2b76d11235b61054",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/images/prob_479514af2b76d11235b61054_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1747,
+        "height": 956,
+        "file_size": 444368
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 117,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_ce246c475a57ff8806d51bb0",
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "dataset_name": "MathVision",
+    "source_problem_id": "60",
+    "created_at": "2026-04-04T12:56:17Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_479514af2b76d11235b61054",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.78,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly references visual inputs: '<image1>', '<image2>', and '<image3>'",
+        "requires_image=true and text_dominant=false indicate the task cannot be solved reliably from text alone",
+        "the task asks which decorated butterfly can be made from given stickers, which depends on visual shape/pattern matching"
+      ],
+      "multi_step": [
+        "the solver must relate the base butterfly in image1 to the 6 stickers in image2 and then compare the resulting configuration against candidates in image3",
+        "this requires combining multiple visual constraints rather than reading off a single visible fact",
+        "multiple-choice format with 5 options suggests a comparison/elimination step after constructing the valid decoration mentally"
+      ],
+      "verifiability": [
+        "answer_manifest shows answer_present=true and answer_type='choice', so the expected output format is clear",
+        "the correct answer is a single option letter ('A'), which is easy to check once the correct visual option is identified",
+        "registry_passed=true supports that core assets are available, but the registry issue notes that option mapping is not fully recoverable from text fields alone"
+      ]
+    },
+    "risk_flags": [
+      "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_ce246c475a57ff8806d51bb0",
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "dataset_name": "MathVision",
+    "source_problem_id": "60",
+    "created_at": "2026-04-04T12:56:17Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_479514af2b76d11235b61054",
+    "priority": 0.83,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Core assets are present: the question text exists, a primary image file exists, and an answer is provided.",
+      "The sample is strongly image-dependent and appears recoverable because the visual content is available.",
+      "There is a verification risk: the answer is only an option letter, and option mapping is not recoverable from the provided text fields alone.",
+      "Given the recoverable core semantics but incomplete answer-option grounding in text, low_priority is safer than reject."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_ce246c475a57ff8806d51bb0",
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "dataset_name": "MathVision",
+    "source_problem_id": "60",
+    "created_at": "2026-04-04T12:56:17Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_ce246c475a57ff8806d51bb0",
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "problem_id": "prob_479514af2b76d11235b61054",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>. Which butterfly can she make? <image3>",
+    "normalized_answer_text": "A",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Cleaned spacing and reordered the sentence for readability while preserving the original meaning.",
+      "Kept image placeholders because the task depends on matching the butterfly, stickers, and answer choices visually.",
+      "force_requires_image=true, so the sample is marked as requiring image input."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T12:56:17Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "source_dataset": "MathVision",
+    "source_split": "test[0:300]",
+    "source_problem_id": "60",
+    "subject": "数学",
+    "raw_question_text": "Ellen wants to decorate the butterfly Which butterfly can she make?\n<image1>\nusing these 6 stickers\n<image2>\n<image3>",
+    "raw_answer_text": "A",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.78,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 59,
+      "image_paths": [
+        "images/60.jpg"
+      ],
+      "extraction_notes": [
+        "options field contains only option letters without option text; option mapping cannot be determined from the JSON text fields",
+        "answer kept as original option letter because no textual option content is available",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-04T12:57:42Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.83,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Core assets are present: the question text exists, a primary image file exists, and an answer is provided.",
+      "The sample is strongly image-dependent and appears recoverable because the visual content is available.",
+      "There is a verification risk: the answer is only an option letter, and option mapping is not recoverable from the provided text fields alone.",
+      "Given the recoverable core semantics but incomplete answer-option grounding in text, low_priority is safer than reject."
+    ],
+    "collection_risk_flags": [
+      "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_fa8b4581a20202b8f3de0230",
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "source_dataset": "MathVision",
+    "source_problem_id": "60",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_479514af2b76d11235b61054/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_479514af2b76d11235b61054/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1747,
+        "height": 956
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.78
+    },
+    "created_at": "2026-04-04T12:57:42Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_2028d65f87a1cd40ec8007ce",
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "source_dataset": "MathVision",
+    "source_problem_id": "60",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.83,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.78
+    },
+    "created_at": "2026-04-04T12:57:42Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Core assets are present: the question text exists, a primary image file exists, and an answer is provided.",
+      "The sample is strongly image-dependent and appears recoverable because the visual content is available.",
+      "There is a verification risk: the answer is only an option letter, and option mapping is not recoverable from the provided text fields alone.",
+      "Given the recoverable core semantics but incomplete answer-option grounding in text, low_priority is safer than reject."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_ce246c475a57ff8806d51bb0",
+      "candidate_id": "cand_479514af2b76d11235b61054",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T12:57:42Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_ce246c475a57ff8806d51bb0",
+    "problem_id": "prob_479514af2b76d11235b61054",
+    "source_dataset": "MathVision",
+    "source_problem_id": "60",
+    "normalized_question_text": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>. Which butterfly can she make? <image3>",
+    "normalized_answer_text": "A",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "answer_option_only_in_text",
+      "pure_image_index_selection",
+      "rewrite_unusable"
+    ],
+    "created_at": "2026-04-04T12:57:42Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_ce246c475a57ff8806d51bb0",
+    "problem_id": "prob_479514af2b76d11235b61054",
+    "normalized_question_text": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>. Which butterfly can she make? <image3>",
+    "normalized_answer_text": "A",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "can",
+        "canonical": "can",
+        "variable_type": "label"
+      },
+      {
+        "original": "she",
+        "canonical": "she",
+        "variable_type": "label"
+      },
+      {
+        "original": "make",
+        "canonical": "make",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>."
+      },
+      {
+        "segment_index": 2,
+        "text": "Which butterfly can she make?"
+      },
+      {
+        "segment_index": 3,
+        "text": "<image3>"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1747,
+          "height": 919
+        },
+        "readability_score": 0.8125,
+        "contrast_score": 48.9111
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T12:57:42Z",
+    "normalization_notes": [
+      "Cleaned spacing and reordered the sentence for readability while preserving the original meaning.",
+      "Kept image placeholders because the task depends on matching the butterfly, stickers, and answer choices visually.",
+      "force_requires_image=true, so the sample is marked as requiring image input."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_479514af2b76d11235b61054",
+    "source_dataset": "MathVision",
+    "source_split": "test[0:300]",
+    "source_problem_id": "60",
+    "ingest_batch_id": "benchmarkallinone-mathvision-000-300_20260404T104756Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Ellen wants to decorate the butterfly Which butterfly can she make?\n<image1>\nusing these 6 stickers\n<image2>\n<image3>",
+    "normalized_question_text": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>. Which butterfly can she make? <image3>",
+    "raw_answer_text": "A",
+    "normalized_answer_text": "A",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9663,
+    "multi_step_score": 0.365,
+    "verifiability_score": 0.906,
+    "quality_risk_flags": [
+      "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content.",
+      "answer_option_only_in_text"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "answer_option_only_in_text",
+      "pure_image_index_selection",
+      "rewrite_unusable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable and visually supported: the butterfly, stickers, and labeled options appear sufficient to solve the task. However, the rewrite stage could not produce a usable open variant because the correct answer is only an option letter with no textual semantics. Since pure-image multiple-choice tasks are still recoverable, this should be kept for manual review rather than rejected.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_479514af2b76d11235b61054",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T12:56:17Z",
+    "updated_at": "2026-04-04T12:57:42Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.78,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.83,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Core assets are present: the question text exists, a primary image file exists, and an answer is provided.",
+      "The sample is strongly image-dependent and appears recoverable because the visual content is available.",
+      "There is a verification risk: the answer is only an option letter, and option mapping is not recoverable from the provided text fields alone.",
+      "Given the recoverable core semantics but incomplete answer-option grounding in text, low_priority is safer than reject."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_278dac0bdeba3fbd9815c397",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[0:300]/60/question",
+      "storage_uri": "inline://prob_479514af2b76d11235b61054/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 120,
+      "width": null,
+      "height": null,
+      "sha256": "9a4ce40348f9ab97cade9416ee593880a07520daa0a5a55d66970b7986861bbe",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Ellen wants to decorate the butterfly Which butterfly can she make?\n<image1>\nusing these 6 stickers\n<image2>\n<image3>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6554,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "asset_id": "asset_28da6b3be9bf1403e5b2ae69",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_479514af2b76d11235b61054/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 118,
+      "width": null,
+      "height": null,
+      "sha256": "dd7c94714b5e59deb434472ebfe2837251ac6c662badee640d03ac3d1d38a6e4",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Ellen wants to decorate the butterfly Which butterfly can she make?\n<image1>\nusing these 6 stickers\n<image2>\n<image3>",
+      "normalized_text_snapshot": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>. Which butterfly can she make? <image3>",
+      "text_completeness_score": 0.6554,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "asset_id": "asset_a051dc7e9f4dc264a1dd1182",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[0:300]/60/answer",
+      "storage_uri": "inline://prob_479514af2b76d11235b61054/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "asset_id": "asset_bc487748b3c98594ea69a240",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_479514af2b76d11235b61054/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A",
+      "normalized_text_snapshot": "A",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "asset_id": "asset_035bf185188cf4a4e954e8f8",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/images/prob_479514af2b76d11235b61054_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 444368,
+      "width": 1747,
+      "height": 956,
+      "sha256": "8aaa9ad396c2617abab4f757abb3166a9065b3e4832527784e662115abee79c3",
+      "perceptual_hash": "3fe73ff7e73f0000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 851.6829,
+      "readability_score": 0.8125,
+      "noise_score": 19.6811,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1747,
+        "height": 919
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content.",
+        "answer_option_only_in_text"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "asset_id": "asset_0c99f0a88880e94c83fada00",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/crops/prob_479514af2b76d11235b61054_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 443332,
+      "width": 1747,
+      "height": 919,
+      "sha256": "53a91ce77f54b5ad5ebdc30f8ef6957a0d27dab16b25eb387a0d773d4e1bb13b",
+      "perceptual_hash": "3fe73ff7e73f0000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 851.6829,
+      "readability_score": 0.8125,
+      "noise_score": 19.6811,
+      "cropped_from_asset_id": "asset_035bf185188cf4a4e954e8f8",
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1747,
+        "height": 919
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_479514af2b76d11235b61054",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "6",
+            "2"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "<image3>",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3"
+          ],
+          "unit_mentions": [
+            "g",
+            "m"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which butterfly can she make?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_479514af2b76d11235b61054_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "Which butterfly can she make?",
+          "expected_answer_type": "unknown",
+          "expected_answer": "A",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "image",
+          "entity_category": "image",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>."
+        },
+        {
+          "segment_index": 2,
+          "text": "Which butterfly can she make?"
+        },
+        {
+          "segment_index": 3,
+          "text": "<image3>"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T12:57:22Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_479514af2b76d11235b61054_1",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 1.8274,
+        "dark_pixel_ratio": 0.0842,
+        "readability_score": 0.8125,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1747,
+            "height": 956
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 1747,
+            "height": 919
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 873,
+            "height": 459
+          },
+          "salience": 0.3974
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 483,
+            "width": 873,
+            "height": 460
+          },
+          "salience": 0.49
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 873,
+            "y": 483,
+            "width": 874,
+            "height": 460
+          },
+          "salience": 0.486
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.925,
+      "created_at": "2026-04-04T12:57:22Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_479514af2b76d11235b61054",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-04T12:57:32Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_4be9ad03c49c30cedfc37410",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "text_fact",
+      "canonical_value": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>.",
+      "surface_forms": [
+        "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_28da6b3be9bf1403e5b2ae69"
+      ],
+      "evidence_refs": [
+        "asset_28da6b3be9bf1403e5b2ae69"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "6",
+          "2"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_0c75d3e3cc51545f1dc73112",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "text_fact",
+      "canonical_value": "<image3>",
+      "surface_forms": [
+        "<image3>"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_28da6b3be9bf1403e5b2ae69"
+      ],
+      "evidence_refs": [
+        "asset_28da6b3be9bf1403e5b2ae69"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "<image3>",
+        "segment_index": 3,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "3"
+        ],
+        "unit_mentions": [
+          "g",
+          "m"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,m",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_02e7fcf035e631632ca41c47",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "target_slot",
+      "canonical_value": "Which butterfly can she make?",
+      "surface_forms": [
+        "Which butterfly can she make?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_28da6b3be9bf1403e5b2ae69"
+      ],
+      "evidence_refs": [
+        "asset_28da6b3be9bf1403e5b2ae69"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_479514af2b76d11235b61054_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "Which butterfly can she make?",
+        "expected_answer_type": "unknown",
+        "expected_answer": "A",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_85565bdd6c21b7d4f22db2bc",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "answer_claim",
+      "canonical_value": "A",
+      "surface_forms": [
+        "A"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_bc487748b3c98594ea69a240"
+      ],
+      "evidence_refs": [
+        "asset_bc487748b3c98594ea69a240"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "A"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_cbb8adf9f1be2c2f328a5296",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1747,
+          "height": 956
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.925,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_99639d751d7a85de7741c6cd",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1747,
+          "height": 919
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.925,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_435c99b164bd627b7fbe3c47",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 873,
+          "height": 459
+        },
+        "salience": 0.3974
+      },
+      "unit": null,
+      "confidence": 0.925,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_01a717144aa64649020c1b10",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 483,
+          "width": 873,
+          "height": 460
+        },
+        "salience": 0.49
+      },
+      "unit": null,
+      "confidence": 0.925,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_a7b425f186a3ff5b08a501ae",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_479514af2b76d11235b61054_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 873,
+          "y": 483,
+          "width": 874,
+          "height": 460
+        },
+        "salience": 0.486
+      },
+      "unit": null,
+      "confidence": 0.925,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_fa53f8bacffa0c14228c883f",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "quality_signal",
+      "canonical_value": "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content.",
+      "surface_forms": [
+        "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_7e68455761903632990f6dfe",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "quality_signal",
+      "canonical_value": "answer_option_only_in_text",
+      "surface_forms": [
+        "answer_option_only_in_text"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "answer_option_only_in_text"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_ad01600539719be156a27f1d",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_479514af2b76d11235b61054",
+        "problem_id": "prob_479514af2b76d11235b61054",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-04T12:57:32Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "node_id": "node_110c7fb295a0d85463a6b1b5",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "answer_option_only_in_text",
+          "pure_image_index_selection",
+          "rewrite_unusable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T12:57:42Z",
+      "updated_at": "2026-04-04T12:57:42Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_ce246c475a57ff8806d51bb0",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_8d24366e519d1ecf",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_278dac0bdeba3fbd9815c397",
+        "asset_28da6b3be9bf1403e5b2ae69",
+        "asset_a051dc7e9f4dc264a1dd1182",
+        "asset_bc487748b3c98594ea69a240",
+        "asset_035bf185188cf4a4e954e8f8",
+        "asset_0c99f0a88880e94c83fada00"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 5
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1747,
+            "height": 956,
+            "blur_score": 851.6829,
+            "contrast_score": 48.9111,
+            "noise_score": 19.6811,
+            "readability_score": 0.8125,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 24,
+              "width": 1747,
+              "height": 919
+            },
+            "perceptual_hash": "3fe73ff7e73f0000"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_ce246c475a57ff8806d51bb0",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_479514af2b76d11235b61054",
+        "question_type": "multiple_choice",
+        "condition_count": 2,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_479514af2b76d11235b61054",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "pure_image_index_selection",
+          "correct_option_has_no_textual_semantics"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_contains_required_option_mapping",
+          "jointly_understandable",
+          "visual_task_semantically_clear"
+        ],
+        "rationale": "The sample is understandable: the image shows the base butterfly, the 6 stickers, and the labeled answer options A-E. A human can infer the task is to match the sticker set to the feasible decorated butterfly. The answer text is only an option letter, but the visual options are clearly labeled.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Option mapping cannot be determined from the provided JSON text fields; the answer is only an option letter without textual option content.",
+        "answer_option_only_in_text"
+      ],
+      "clean_score": 0.8924,
+      "decision": "review",
+      "decision_reason_codes": [
+        "answer_option_only_in_text",
+        "pure_image_index_selection",
+        "rewrite_unusable"
+      ],
+      "decision_rationale": "The sample is jointly understandable and visually supported: the butterfly, stickers, and labeled options appear sufficient to solve the task. However, the rewrite stage could not produce a usable open variant because the correct answer is only an option letter with no textual semantics. Since pure-image multiple-choice tasks are still recoverable, this should be kept for manual review rather than rejected.",
+      "review_ticket_id": "review_prob_479514af2b76d11235b61054",
+      "operator_type": "system",
+      "started_at": "2026-04-04T12:57:42Z",
+      "finished_at": "2026-04-04T12:57:42Z",
+      "candidate_id": "cand_479514af2b76d11235b61054",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_ce246c475a57ff8806d51bb0",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "image_entity_refs": [
+        "visual_prob_479514af2b76d11235b61054_1::roi",
+        "visual_prob_479514af2b76d11235b61054_1::roi_top_left",
+        "visual_prob_479514af2b76d11235b61054_1::roi_bottom_left",
+        "visual_prob_479514af2b76d11235b61054_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_479514af2b76d11235b61054_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "image",
+          "image_ref": "visual_prob_479514af2b76d11235b61054_1::roi",
+          "relation": "grounds_image",
+          "confidence": 0.7812
+        },
+        {
+          "text_ref": "slot_prob_479514af2b76d11235b61054_1",
+          "image_ref": "visual_prob_479514af2b76d11235b61054_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7835
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-04T12:57:22Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_d6dd53a2341b6058185a1cd5",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Ellen wants to decorate the butterfly Which butterfly can she make?\n<image1>\nusing these 6 stickers\n<image2>\n<image3>",
+      "after_value": "Ellen wants to decorate the butterfly <image1> using these 6 stickers <image2>. Which butterfly can she make? <image3>",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "audit_id": "audit_3a3c135d8f0c525337df37ce",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "A",
+      "after_value": "A",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "audit_id": "audit_8ed5255b80c9958306ca5220",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "audit_id": "audit_110c7fb295a0d85463a6b1b5",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:57:42Z"
+    },
+    {
+      "audit_id": "audit_120877625c004a04583040fa",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T12:57:42Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_ce246c475a57ff8806d51bb0",
+      "problem_id": "prob_479514af2b76d11235b61054",
+      "source_problem_id": "60",
+      "strategy": "drop_image_index",
+      "rationale": "This is a pure image-selection task: the options are butterfly images labeled A-E, and the correct option text is only the index label \"A\", which provides no recoverable textual content to rewrite into an open-ended question.",
+      "discard_reason_codes": [
+        "pure_image_index_selection",
+        "correct_option_has_no_textual_semantics"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-04T12:57:42Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}

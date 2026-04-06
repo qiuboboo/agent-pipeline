@@ -1,0 +1,4162 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_1611f894c0b3c2b281e5bc07",
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "problem_id": "prob_3483d75678f26468fa581967",
+    "dataset_name": "EMMA-Physics",
+    "source_problem_id": "74",
+    "raw_question_text": "## T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright, see the photo below (left). This phenomenon can be modelled by a lens setup, see the photo on right, and the diagram beneath the photos.\n<image_1>\n\nThe photo on right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line (in the photo) is shown in the graph below: the log base 10 of the light intensity (measured as the number of photons caught by each pixel) is plotted against the $x$-coordinate, with the pixels' side length serving as the unit length.\n\n<image_2>\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length $f=55 \\mathrm{~mm}$ and diameter $D=$ $39 \\mathrm{~mm}$; however, you should keep in mind that the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are; this effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with the accuracy of ca 20\\%) the distance $h$ between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was $L=4.8 \\mathrm{~m}$.",
+    "raw_answer_text": "80",
+    "choice_map": {
+      "A": "4.4 \\, \\text{cm}",
+      "B": "80",
+      "C": "0.0116 \\mathrm{~m}",
+      "D": "20"
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image_1",
+    "choice_field": "options",
+    "extraction_notes": [
+      "Answer field is \"B\" and was mapped to the corresponding option text.",
+      "image_1 and image_2 are present as PIL.Image placeholders, but no actual image path/URL/filename is provided.",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T13:13:35Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_3483d75678f26468fa581967",
+    "image_manifest": [
+      {
+        "path": "outputs/emma_physics_000_100/run_3b2b8a211abc49a5/datasets/emma_physics/artifacts/images/prob_3483d75678f26468fa581967_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 928,
+        "height": 690,
+        "file_size": 281107
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 1487,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+      "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+      "metadata.image_paths is empty while top-level image_paths contains one file path."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_1611f894c0b3c2b281e5bc07",
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "dataset_name": "EMMA-Physics",
+    "source_problem_id": "74",
+    "created_at": "2026-04-04T13:13:35Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_3483d75678f26468fa581967",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.76,
+    "verifiability_score": 0.78,
+    "score_evidence": {
+      "image_dependency": [
+        "requires_image=true and text_dominant=false",
+        "Question explicitly refers to photos, a diagram, and a graph of pixel intensity versus x-coordinate",
+        "The task asks to estimate h based on 'the given data', which includes visual measurement data not fully recoverable from text alone",
+        "An image asset is registered and exists, indicating intended visual grounding"
+      ],
+      "multi_step": [
+        "Question asks for an estimated physical distance h using multiple provided quantities: focal length, lens diameter, camera-paper distance, and graph data",
+        "The prompt combines visual reading from a graph/photo with thin-lens modelling and adjustment for stated non-ideal reflection effects",
+        "This is not simple lookup: it requires extracting information from the image/graph and relating it to the optical setup"
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_present=true",
+        "The question requests an estimate with about 20% accuracy, which makes approximate numeric checking feasible",
+        "Multiple concrete parameters are given in the text, supporting rule-based or solver-based verification attempts",
+        "Verifiability is reduced because the question references two image placeholders but only one image path is provided, and answer_text='80' has no explicit unit"
+      ]
+    },
+    "risk_flags": [
+      "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+      "answer_text is unitless while the question asks for a physical distance",
+      "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+      "metadata.image_paths is empty while top-level image_paths contains one file path."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_1611f894c0b3c2b281e5bc07",
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "dataset_name": "EMMA-Physics",
+    "source_problem_id": "74",
+    "created_at": "2026-04-04T13:13:35Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_3483d75678f26468fa581967",
+    "priority": 0.68,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Question text and numeric answer are present, so the sample retains core semantic content and should not be rejected at collection time.",
+      "The problem appears highly image-dependent, and the question references two image placeholders while only one image file is registered.",
+      "Asset inconsistencies in the image metadata make the visual grounding incomplete and reduce confidence in full recoverability.",
+      "The answer is unitless even though the task asks for a physical distance, which adds verification risk."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_1611f894c0b3c2b281e5bc07",
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "dataset_name": "EMMA-Physics",
+    "source_problem_id": "74",
+    "created_at": "2026-04-04T13:13:35Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_1611f894c0b3c2b281e5bc07",
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "problem_id": "prob_3483d75678f26468fa581967",
+    "dataset_name": "EMMA-Physics",
+    "normalized_question_text": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+    "normalized_answer_text": "80",
+    "normalized_choice_map": {
+      "A": "4.4 \\, \\text{cm}",
+      "B": "80",
+      "C": "0.0116 \\mathrm{~m}",
+      "D": "20"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed image placeholder tags while preserving references to photos, diagram, and graph.",
+      "Question explicitly depends on visual data from the photo, marked red line, and graph.",
+      "force_requires_image=true, so requires_image is set to true."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T13:13:35Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "source_dataset": "EMMA-Physics",
+    "source_split": "test[0:100]",
+    "source_problem_id": "74",
+    "subject": "物理",
+    "raw_question_text": "## T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright, see the photo below (left). This phenomenon can be modelled by a lens setup, see the photo on right, and the diagram beneath the photos.\n<image_1>\n\nThe photo on right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line (in the photo) is shown in the graph below: the log base 10 of the light intensity (measured as the number of photons caught by each pixel) is plotted against the $x$-coordinate, with the pixels' side length serving as the unit length.\n\n<image_2>\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length $f=55 \\mathrm{~mm}$ and diameter $D=$ $39 \\mathrm{~mm}$; however, you should keep in mind that the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are; this effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with the accuracy of ca 20\\%) the distance $h$ between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was $L=4.8 \\mathrm{~m}$.",
+    "raw_answer_text": "80",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.76,
+    "initial_verifiability_score": 0.78,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 74,
+      "image_paths": [],
+      "extraction_notes": [
+        "Answer field is \"B\" and was mapped to the corresponding option text.",
+        "image_1 and image_2 are present as PIL.Image placeholders, but no actual image path/URL/filename is provided.",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image_1",
+      "choice_field": "options",
+      "reasoning_chain_field": "pid",
+      "reasoning_chain": "phy_75",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-04T13:15:44Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.68,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question text and numeric answer are present, so the sample retains core semantic content and should not be rejected at collection time.",
+      "The problem appears highly image-dependent, and the question references two image placeholders while only one image file is registered.",
+      "Asset inconsistencies in the image metadata make the visual grounding incomplete and reduce confidence in full recoverability.",
+      "The answer is unitless even though the task asks for a physical distance, which adds verification risk."
+    ],
+    "collection_risk_flags": [
+      "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+      "answer_text is unitless while the question asks for a physical distance",
+      "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+      "metadata.image_paths is empty while top-level image_paths contains one file path."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_fd9f7b86ae34991e1764f5cb",
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "source_dataset": "EMMA-Physics",
+    "source_problem_id": "74",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_3483d75678f26468fa581967/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_3483d75678f26468fa581967/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 928,
+        "height": 690
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.76,
+      "initial_verifiability_score": 0.78
+    },
+    "created_at": "2026-04-04T13:15:44Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+      "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+      "metadata.image_paths is empty while top-level image_paths contains one file path."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_65423bc5622431ddd0e08101",
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "source_dataset": "EMMA-Physics",
+    "source_problem_id": "74",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.68,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.76,
+      "initial_verifiability_score": 0.78
+    },
+    "created_at": "2026-04-04T13:15:44Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Question text and numeric answer are present, so the sample retains core semantic content and should not be rejected at collection time.",
+      "The problem appears highly image-dependent, and the question references two image placeholders while only one image file is registered.",
+      "Asset inconsistencies in the image metadata make the visual grounding incomplete and reduce confidence in full recoverability.",
+      "The answer is unitless even though the task asks for a physical distance, which adds verification risk."
+    ]
+  },
+  "clean_pool_entries": [],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_1611f894c0b3c2b281e5bc07",
+    "problem_id": "prob_3483d75678f26468fa581967",
+    "source_dataset": "EMMA-Physics",
+    "source_problem_id": "74",
+    "normalized_question_text": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55mm and diameter D = 39mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8m.",
+    "normalized_answer_text": "80",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "reject",
+    "decision_reason_codes": [
+      "question_materially_incomplete",
+      "referenced_graph_not_provided",
+      "required_visual_missing"
+    ],
+    "created_at": "2026-04-04T13:15:44Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_1611f894c0b3c2b281e5bc07",
+    "problem_id": "prob_3483d75678f26468fa581967",
+    "normalized_question_text": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55mm and diameter D = 39mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8m.",
+    "normalized_answer_text": "80",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "T3",
+        "canonical": "T3",
+        "variable_type": "label"
+      },
+      {
+        "original": "Cat",
+        "canonical": "Cat",
+        "variable_type": "label"
+      },
+      {
+        "original": "eyes",
+        "canonical": "eyes",
+        "variable_type": "label"
+      },
+      {
+        "original": "You",
+        "canonical": "You",
+        "variable_type": "label"
+      },
+      {
+        "original": "may",
+        "canonical": "may",
+        "variable_type": "label"
+      },
+      {
+        "original": "have",
+        "canonical": "have",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "when",
+        "canonical": "when",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "cat",
+        "canonical": "cat",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "beam",
+        "canonical": "beam",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "its",
+        "canonical": "its",
+        "variable_type": "label"
+      },
+      {
+        "original": "very",
+        "canonical": "very",
+        "variable_type": "label"
+      },
+      {
+        "original": "This",
+        "canonical": "This",
+        "variable_type": "label"
+      },
+      {
+        "original": "can",
+        "canonical": "can",
+        "variable_type": "label"
+      },
+      {
+        "original": "be",
+        "canonical": "be",
+        "variable_type": "label"
+      },
+      {
+        "original": "by",
+        "canonical": "by",
+        "variable_type": "label"
+      },
+      {
+        "original": "lens",
+        "canonical": "lens",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "was",
+        "canonical": "was",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "red",
+        "canonical": "red",
+        "variable_type": "label"
+      },
+      {
+        "original": "line",
+        "canonical": "line",
+        "variable_type": "label"
+      },
+      {
+        "original": "base",
+        "canonical": "base",
+        "variable_type": "label"
+      },
+      {
+        "original": "each",
+        "canonical": "each",
+        "variable_type": "label"
+      },
+      {
+        "original": "x",
+        "canonical": "x",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "side",
+        "canonical": "side",
+        "variable_type": "label"
+      },
+      {
+        "original": "unit",
+        "canonical": "unit",
+        "variable_type": "label"
+      },
+      {
+        "original": "an",
+        "canonical": "an",
+        "variable_type": "label"
+      },
+      {
+        "original": "thin",
+        "canonical": "thin",
+        "variable_type": "label"
+      },
+      {
+        "original": "f",
+        "canonical": "f",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "D",
+        "canonical": "D",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "real",
+        "canonical": "real",
+        "variable_type": "label"
+      },
+      {
+        "original": "data",
+        "canonical": "data",
+        "variable_type": "label"
+      },
+      {
+        "original": "has",
+        "canonical": "has",
+        "variable_type": "label"
+      },
+      {
+        "original": "non",
+        "canonical": "non",
+        "variable_type": "label"
+      },
+      {
+        "original": "Most",
+        "canonical": "Most",
+        "variable_type": "label"
+      },
+      {
+        "original": "lit",
+        "canonical": "lit",
+        "variable_type": "label"
+      },
+      {
+        "original": "from",
+        "canonical": "from",
+        "variable_type": "label"
+      },
+      {
+        "original": "dark",
+        "canonical": "dark",
+        "variable_type": "label"
+      },
+      {
+        "original": "seen",
+        "canonical": "seen",
+        "variable_type": "label"
+      },
+      {
+        "original": "less",
+        "canonical": "less",
+        "variable_type": "label"
+      },
+      {
+        "original": "than",
+        "canonical": "than",
+        "variable_type": "label"
+      },
+      {
+        "original": "they",
+        "canonical": "they",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "but",
+        "canonical": "but",
+        "variable_type": "label"
+      },
+      {
+        "original": "not",
+        "canonical": "not",
+        "variable_type": "label"
+      },
+      {
+        "original": "so",
+        "canonical": "so",
+        "variable_type": "label"
+      },
+      {
+        "original": "s",
+        "canonical": "s",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "eye",
+        "canonical": "eye",
+        "variable_type": "label"
+      },
+      {
+        "original": "h",
+        "canonical": "h",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "axis",
+        "canonical": "axis",
+        "variable_type": "label"
+      },
+      {
+        "original": "lamp",
+        "canonical": "lamp",
+        "variable_type": "label"
+      },
+      {
+        "original": "if",
+        "canonical": "if",
+        "variable_type": "label"
+      },
+      {
+        "original": "L",
+        "canonical": "L",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "T3: Cat eyes"
+      },
+      {
+        "segment_index": 2,
+        "text": "You may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright."
+      },
+      {
+        "segment_index": 3,
+        "text": "This phenomenon can be modelled by a lens setup, as shown in the photos and diagram."
+      },
+      {
+        "segment_index": 4,
+        "text": "The photo on the right was taken by a digital single-lens reflex camera."
+      },
+      {
+        "segment_index": 5,
+        "text": "The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length."
+      },
+      {
+        "segment_index": 6,
+        "text": "The lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55mm and diameter D = 39mm"
+      },
+      {
+        "segment_index": 7,
+        "text": "however, the given graph shows real measurement data, and the lens has certain non-ideal features."
+      },
+      {
+        "segment_index": 8,
+        "text": "Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are."
+      },
+      {
+        "segment_index": 9,
+        "text": "This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye."
+      },
+      {
+        "segment_index": 10,
+        "text": "Based on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8m."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 928,
+          "height": 690
+        },
+        "readability_score": 0.8302,
+        "contrast_score": 113.4652
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T13:15:44Z",
+    "normalization_notes": [
+      "Removed image placeholder tags while preserving references to photos, diagram, and graph.",
+      "Question explicitly depends on visual data from the photo, marked red line, and graph.",
+      "force_requires_image=true, so requires_image is set to true."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_3483d75678f26468fa581967",
+    "source_dataset": "EMMA-Physics",
+    "source_split": "test[0:100]",
+    "source_problem_id": "74",
+    "ingest_batch_id": "benchmarkallinone-emma-000-100_20260404T104916Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "en",
+    "raw_question_text": "## T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright, see the photo below (left). This phenomenon can be modelled by a lens setup, see the photo on right, and the diagram beneath the photos.\n<image_1>\n\nThe photo on right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line (in the photo) is shown in the graph below: the log base 10 of the light intensity (measured as the number of photons caught by each pixel) is plotted against the $x$-coordinate, with the pixels' side length serving as the unit length.\n\n<image_2>\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length $f=55 \\mathrm{~mm}$ and diameter $D=$ $39 \\mathrm{~mm}$; however, you should keep in mind that the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are; this effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with the accuracy of ca 20\\%) the distance $h$ between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was $L=4.8 \\mathrm{~m}$.",
+    "normalized_question_text": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+    "raw_answer_text": "80",
+    "normalized_answer_text": "80",
+    "answer_type": "numeric",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "phy_75",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.98,
+    "multi_step_score": 0.6437,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+      "critical_visual_context_missing",
+      "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+      "metadata.image_paths is empty while top-level image_paths contains one file path.",
+      "multiple_image_placeholders_inconsistent"
+    ],
+    "current_status": "clean_rejected",
+    "clean_decision": "reject",
+    "clean_decision_reason_codes": [
+      "question_materially_incomplete",
+      "referenced_graph_not_provided",
+      "required_visual_missing"
+    ],
+    "clean_decision_rationale": "The sample’s target answer exists, but the problem explicitly depends on a missing light-intensity graph and inconsistent referenced visuals. Because the critical visual evidence is absent, the question is materially incomplete and cannot support reliable annotation or verification.",
+    "review_priority": "normal",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_3483d75678f26468fa581967",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "partial",
+    "agent_image_support_status": "missing_or_unusable",
+    "agent_joint_understanding_status": "not_understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T13:13:35Z",
+    "updated_at": "2026-04-04T13:15:44Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.76,
+    "initial_verifiability_score": 0.78,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.68,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question text and numeric answer are present, so the sample retains core semantic content and should not be rejected at collection time.",
+      "The problem appears highly image-dependent, and the question references two image placeholders while only one image file is registered.",
+      "Asset inconsistencies in the image metadata make the visual grounding incomplete and reduce confidence in full recoverability.",
+      "The answer is unitless even though the task asks for a physical distance, which adds verification risk."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_778a73d3732b5fbc46d07b79",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://emma_physics/test[0:100]/74/question",
+      "storage_uri": "inline://prob_3483d75678f26468fa581967/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 1487,
+      "width": null,
+      "height": null,
+      "sha256": "a550f42cd38f19ae9b7157e9e280ed69cccf109f6d574df148e2444031582490",
+      "perceptual_hash": null,
+      "source_text_snapshot": "## T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright, see the photo below (left). This phenomenon can be modelled by a lens setup, see the photo on right, and the diagram beneath the photos.\n<image_1>\n\nThe photo on right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line (in the photo) is shown in the graph below: the log base 10 of the light intensity (measured as the number of photons caught by each pixel) is plotted against the $x$-coordinate, with the pixels' side length serving as the unit length.\n\n<image_2>\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length $f=55 \\mathrm{~mm}$ and diameter $D=$ $39 \\mathrm{~mm}$; however, you should keep in mind that the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are; this effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with the accuracy of ca 20\\%) the distance $h$ between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was $L=4.8 \\mathrm{~m}$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "T3",
+          "canonical": "T3",
+          "variable_type": "label"
+        },
+        {
+          "original": "Cat",
+          "canonical": "Cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "eyes",
+          "canonical": "eyes",
+          "variable_type": "label"
+        },
+        {
+          "original": "You",
+          "canonical": "You",
+          "variable_type": "label"
+        },
+        {
+          "original": "may",
+          "canonical": "may",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "beam",
+          "canonical": "beam",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "lens",
+          "canonical": "lens",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "base",
+          "canonical": "base",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "unit",
+          "canonical": "unit",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "real",
+          "canonical": "real",
+          "variable_type": "label"
+        },
+        {
+          "original": "data",
+          "canonical": "data",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "non",
+          "canonical": "non",
+          "variable_type": "label"
+        },
+        {
+          "original": "Most",
+          "canonical": "Most",
+          "variable_type": "label"
+        },
+        {
+          "original": "lit",
+          "canonical": "lit",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "dark",
+          "canonical": "dark",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "less",
+          "canonical": "less",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "they",
+          "canonical": "they",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "eye",
+          "canonical": "eye",
+          "variable_type": "label"
+        },
+        {
+          "original": "h",
+          "canonical": "h",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "axis",
+          "canonical": "axis",
+          "variable_type": "label"
+        },
+        {
+          "original": "lamp",
+          "canonical": "lamp",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "asset_id": "asset_9e73ad12b6e778358b6fd8a6",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_3483d75678f26468fa581967/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1348,
+      "width": null,
+      "height": null,
+      "sha256": "c0277d344d13d6b484517222a4704dc65b7b90a064a52266d4fac384f6037707",
+      "perceptual_hash": null,
+      "source_text_snapshot": "## T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright, see the photo below (left). This phenomenon can be modelled by a lens setup, see the photo on right, and the diagram beneath the photos.\n<image_1>\n\nThe photo on right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line (in the photo) is shown in the graph below: the log base 10 of the light intensity (measured as the number of photons caught by each pixel) is plotted against the $x$-coordinate, with the pixels' side length serving as the unit length.\n\n<image_2>\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length $f=55 \\mathrm{~mm}$ and diameter $D=$ $39 \\mathrm{~mm}$; however, you should keep in mind that the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are; this effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with the accuracy of ca 20\\%) the distance $h$ between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was $L=4.8 \\mathrm{~m}$.",
+      "normalized_text_snapshot": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "T3",
+          "canonical": "T3",
+          "variable_type": "label"
+        },
+        {
+          "original": "Cat",
+          "canonical": "Cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "eyes",
+          "canonical": "eyes",
+          "variable_type": "label"
+        },
+        {
+          "original": "You",
+          "canonical": "You",
+          "variable_type": "label"
+        },
+        {
+          "original": "may",
+          "canonical": "may",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "beam",
+          "canonical": "beam",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "lens",
+          "canonical": "lens",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "base",
+          "canonical": "base",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "unit",
+          "canonical": "unit",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "real",
+          "canonical": "real",
+          "variable_type": "label"
+        },
+        {
+          "original": "data",
+          "canonical": "data",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "non",
+          "canonical": "non",
+          "variable_type": "label"
+        },
+        {
+          "original": "Most",
+          "canonical": "Most",
+          "variable_type": "label"
+        },
+        {
+          "original": "lit",
+          "canonical": "lit",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "dark",
+          "canonical": "dark",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "less",
+          "canonical": "less",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "they",
+          "canonical": "they",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "eye",
+          "canonical": "eye",
+          "variable_type": "label"
+        },
+        {
+          "original": "h",
+          "canonical": "h",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "axis",
+          "canonical": "axis",
+          "variable_type": "label"
+        },
+        {
+          "original": "lamp",
+          "canonical": "lamp",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "asset_id": "asset_423e7a49666c92be9c985449",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://emma_physics/test[0:100]/74/answer",
+      "storage_uri": "inline://prob_3483d75678f26468fa581967/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "48449a14a4ff7d79bb7a1b6f3d488eba397c36ef25634c111b49baf362511afc",
+      "perceptual_hash": null,
+      "source_text_snapshot": "80",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "asset_id": "asset_3d0966e4ba5de02f6d699189",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_3483d75678f26468fa581967/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "48449a14a4ff7d79bb7a1b6f3d488eba397c36ef25634c111b49baf362511afc",
+      "perceptual_hash": null,
+      "source_text_snapshot": "80",
+      "normalized_text_snapshot": "80",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "asset_id": "asset_c5308ceb8d4ded820c2d7d40",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/emma_physics_000_100/run_3b2b8a211abc49a5/datasets/emma_physics/artifacts/images/prob_3483d75678f26468fa581967_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 281107,
+      "width": 928,
+      "height": 690,
+      "sha256": "a3cd7b0f1ceade4c9f4c7f397fe75f68264a8f3ebe2caef41d0120ee6dc3267f",
+      "perceptual_hash": "0000040000ffffff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1399.1517,
+      "readability_score": 0.8302,
+      "noise_score": 18.6465,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 928,
+        "height": 690
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+        "critical_visual_context_missing",
+        "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+        "metadata.image_paths is empty while top-level image_paths contains one file path.",
+        "multiple_image_placeholders_inconsistent"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "asset_id": "asset_9f88ca9a94c6dd3e09f620bd",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_a38f6984ae955ef9e94f7d5a",
+      "file_format": "txt",
+      "file_size_bytes": 1348,
+      "width": null,
+      "height": null,
+      "sha256": "c0277d344d13d6b484517222a4704dc65b7b90a064a52266d4fac384f6037707",
+      "perceptual_hash": null,
+      "source_text_snapshot": "## T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright, see the photo below (left). This phenomenon can be modelled by a lens setup, see the photo on right, and the diagram beneath the photos.\n<image_1>\n\nThe photo on right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line (in the photo) is shown in the graph below: the log base 10 of the light intensity (measured as the number of photons caught by each pixel) is plotted against the $x$-coordinate, with the pixels' side length serving as the unit length.\n\n<image_2>\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length $f=55 \\mathrm{~mm}$ and diameter $D=$ $39 \\mathrm{~mm}$; however, you should keep in mind that the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are; this effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with the accuracy of ca 20\\%) the distance $h$ between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was $L=4.8 \\mathrm{~m}$.",
+      "normalized_text_snapshot": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "T3",
+          "canonical": "T3",
+          "variable_type": "label"
+        },
+        {
+          "original": "Cat",
+          "canonical": "Cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "eyes",
+          "canonical": "eyes",
+          "variable_type": "label"
+        },
+        {
+          "original": "You",
+          "canonical": "You",
+          "variable_type": "label"
+        },
+        {
+          "original": "may",
+          "canonical": "may",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "beam",
+          "canonical": "beam",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "lens",
+          "canonical": "lens",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "base",
+          "canonical": "base",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "unit",
+          "canonical": "unit",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "real",
+          "canonical": "real",
+          "variable_type": "label"
+        },
+        {
+          "original": "data",
+          "canonical": "data",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "non",
+          "canonical": "non",
+          "variable_type": "label"
+        },
+        {
+          "original": "Most",
+          "canonical": "Most",
+          "variable_type": "label"
+        },
+        {
+          "original": "lit",
+          "canonical": "lit",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "dark",
+          "canonical": "dark",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "less",
+          "canonical": "less",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "they",
+          "canonical": "they",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "eye",
+          "canonical": "eye",
+          "variable_type": "label"
+        },
+        {
+          "original": "h",
+          "canonical": "h",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "axis",
+          "canonical": "axis",
+          "variable_type": "label"
+        },
+        {
+          "original": "lamp",
+          "canonical": "lamp",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_3483d75678f26468fa581967",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "T3: Cat eyes",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3"
+          ],
+          "unit_mentions": [
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "You may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.",
+          "segment_index": 3,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.",
+          "segment_index": 5,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "-10"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55mm and diameter D = 39mm",
+          "segment_index": 6,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "55",
+            "39"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "mm",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "however, the given graph shows real measurement data, and the lens has certain non-ideal features.",
+          "segment_index": 7,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Based on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8m.",
+          "segment_index": 10,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "20",
+            "4.8"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_3483d75678f26468fa581967_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "Based on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+          "expected_answer_type": "short_text",
+          "expected_answer": "80",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "diagram",
+          "entity_category": "diagram",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "graph",
+          "entity_category": "graph",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "plot",
+          "entity_category": "graph",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "point",
+          "entity_category": "point",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "line",
+          "entity_category": "line",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "axis",
+          "entity_category": "axis",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "T3",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "D",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "L",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "T3",
+          "canonical": "T3",
+          "variable_type": "label"
+        },
+        {
+          "original": "Cat",
+          "canonical": "Cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "eyes",
+          "canonical": "eyes",
+          "variable_type": "label"
+        },
+        {
+          "original": "You",
+          "canonical": "You",
+          "variable_type": "label"
+        },
+        {
+          "original": "may",
+          "canonical": "may",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "beam",
+          "canonical": "beam",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "lens",
+          "canonical": "lens",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "base",
+          "canonical": "base",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "unit",
+          "canonical": "unit",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "real",
+          "canonical": "real",
+          "variable_type": "label"
+        },
+        {
+          "original": "data",
+          "canonical": "data",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "non",
+          "canonical": "non",
+          "variable_type": "label"
+        },
+        {
+          "original": "Most",
+          "canonical": "Most",
+          "variable_type": "label"
+        },
+        {
+          "original": "lit",
+          "canonical": "lit",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "dark",
+          "canonical": "dark",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "less",
+          "canonical": "less",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "they",
+          "canonical": "they",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "eye",
+          "canonical": "eye",
+          "variable_type": "label"
+        },
+        {
+          "original": "h",
+          "canonical": "h",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "axis",
+          "canonical": "axis",
+          "variable_type": "label"
+        },
+        {
+          "original": "lamp",
+          "canonical": "lamp",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "mm",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "T3: Cat eyes"
+        },
+        {
+          "segment_index": 2,
+          "text": "You may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright."
+        },
+        {
+          "segment_index": 3,
+          "text": "This phenomenon can be modelled by a lens setup, as shown in the photos and diagram."
+        },
+        {
+          "segment_index": 4,
+          "text": "The photo on the right was taken by a digital single-lens reflex camera."
+        },
+        {
+          "segment_index": 5,
+          "text": "The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length."
+        },
+        {
+          "segment_index": 6,
+          "text": "The lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55mm and diameter D = 39mm"
+        },
+        {
+          "segment_index": 7,
+          "text": "however, the given graph shows real measurement data, and the lens has certain non-ideal features."
+        },
+        {
+          "segment_index": 8,
+          "text": "Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are."
+        },
+        {
+          "segment_index": 9,
+          "text": "This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye."
+        },
+        {
+          "segment_index": 10,
+          "text": "Based on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8m."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T13:15:04Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_3483d75678f26468fa581967_1",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "chart_like",
+        "aspect_ratio": 1.3449,
+        "dark_pixel_ratio": 0.5662,
+        "readability_score": 0.8302,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 928,
+            "height": 690
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 928,
+            "height": 690
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 464,
+            "height": 345
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 464,
+            "y": 0,
+            "width": 464,
+            "height": 345
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 345,
+            "width": 464,
+            "height": 345
+          },
+          "salience": 0.5633
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 464,
+            "y": 345,
+            "width": 464,
+            "height": 345
+          },
+          "salience": 0.5365
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9321,
+      "created_at": "2026-04-04T13:15:04Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_3483d75678f26468fa581967",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-04T13:15:27Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_78bbd9a406dd22c146b6b988",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "text_fact",
+      "canonical_value": "T3: Cat eyes",
+      "surface_forms": [
+        "T3: Cat eyes"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "evidence_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "T3: Cat eyes",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "3"
+        ],
+        "unit_mentions": [
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_c0348fc5da6db91d604337ce",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "text_fact",
+      "canonical_value": "You may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright.",
+      "surface_forms": [
+        "You may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "evidence_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "You may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_8a5ce4a8456d9202bd874ee4",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "text_fact",
+      "canonical_value": "This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.",
+      "surface_forms": [
+        "This phenomenon can be modelled by a lens setup, as shown in the photos and diagram."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "evidence_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.",
+        "segment_index": 3,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_813981e4e88f972302638958",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "text_fact",
+      "canonical_value": "The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.",
+      "surface_forms": [
+        "The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "evidence_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.",
+        "segment_index": 5,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "-10"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_74604ecfa4b3b31e821878ff",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "text_fact",
+      "canonical_value": "The lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55mm and diameter D = 39mm",
+      "surface_forms": [
+        "The lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55mm and diameter D = 39mm"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "evidence_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55mm and diameter D = 39mm",
+        "segment_index": 6,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "55",
+          "39"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "mm",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,mm,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_1474e40bd00ea1ccb281e7ae",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "text_fact",
+      "canonical_value": "however, the given graph shows real measurement data, and the lens has certain non-ideal features.",
+      "surface_forms": [
+        "however, the given graph shows real measurement data, and the lens has certain non-ideal features."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "evidence_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "however, the given graph shows real measurement data, and the lens has certain non-ideal features.",
+        "segment_index": 7,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_5458ab95afdee1d608710870",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "target_slot",
+      "canonical_value": "Based on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+      "surface_forms": [
+        "Based on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "evidence_refs": [
+        "asset_9e73ad12b6e778358b6fd8a6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_3483d75678f26468fa581967_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "Based on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+        "expected_answer_type": "short_text",
+        "expected_answer": "80",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_8ae2ace24db7cc1f4c7eb428",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "answer_claim",
+      "canonical_value": "80",
+      "surface_forms": [
+        "80"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_3d0966e4ba5de02f6d699189"
+      ],
+      "evidence_refs": [
+        "asset_3d0966e4ba5de02f6d699189"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "80"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_46f140ea2f5b7a2cdb32d733",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 928,
+          "height": 690
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9321,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_2b666308cc697df7c53bf257",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 928,
+          "height": 690
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9321,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_173eb125255e3f429e5edd56",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 464,
+          "height": 345
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9321,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_0280d9810b13f4afea668d25",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 464,
+          "y": 0,
+          "width": 464,
+          "height": 345
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9321,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_d7c760545a4038715c269184",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 345,
+          "width": 464,
+          "height": 345
+        },
+        "salience": 0.5633
+      },
+      "unit": null,
+      "confidence": 0.9321,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_3fecafe18c3f22798683f051",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3483d75678f26468fa581967_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 464,
+          "y": 345,
+          "width": 464,
+          "height": 345
+        },
+        "salience": 0.5365
+      },
+      "unit": null,
+      "confidence": 0.9321,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_b97dd32f1c36271fc37a9981",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "text_fact",
+      "canonical_value": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+      "surface_forms": [
+        "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_9f88ca9a94c6dd3e09f620bd"
+      ],
+      "evidence_refs": [
+        "asset_9f88ca9a94c6dd3e09f620bd"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_a38f6984ae955ef9e94f7d5a",
+        "parent_problem_id": "prob_3483d75678f26468fa581967",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+        "expected_answer_type": "short_text",
+        "expected_answer": "80",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_01161d06b4f5616062dae33a",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "quality_signal",
+      "canonical_value": "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+      "surface_forms": [
+        "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_b9d2ed93c0499341dbd25c61",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "quality_signal",
+      "canonical_value": "critical_visual_context_missing",
+      "surface_forms": [
+        "critical_visual_context_missing"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "critical_visual_context_missing"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_96875f803a9c82de6c124c4c",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+      "surface_forms": [
+        "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_07ad98840bc896d40006e5e6",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty while top-level image_paths contains one file path.",
+      "surface_forms": [
+        "metadata.image_paths is empty while top-level image_paths contains one file path."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty while top-level image_paths contains one file path."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_0830bc99a70677722e4272f6",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "quality_signal",
+      "canonical_value": "multiple_image_placeholders_inconsistent",
+      "surface_forms": [
+        "multiple_image_placeholders_inconsistent"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "multiple_image_placeholders_inconsistent"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_327968698b08be5ae3b6d916",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_3483d75678f26468fa581967",
+        "problem_id": "prob_3483d75678f26468fa581967",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-04T13:15:27Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "node_id": "node_fe6d7d513e246ef1a1a1e0f5",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "reject",
+        "reasons": [
+          "question_materially_incomplete",
+          "referenced_graph_not_provided",
+          "required_visual_missing"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T13:15:44Z",
+      "updated_at": "2026-04-04T13:15:44Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_1611f894c0b3c2b281e5bc07",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_3b2b8a211abc49a5",
+      "dataset_name": "EMMA-Physics",
+      "input_asset_ids": [
+        "asset_778a73d3732b5fbc46d07b79",
+        "asset_9e73ad12b6e778358b6fd8a6",
+        "asset_423e7a49666c92be9c985449",
+        "asset_3d0966e4ba5de02f6d699189",
+        "asset_c5308ceb8d4ded820c2d7d40",
+        "asset_9f88ca9a94c6dd3e09f620bd"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 64
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.92,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 928,
+            "height": 690,
+            "blur_score": 1399.1517,
+            "contrast_score": 113.4652,
+            "noise_score": 18.6465,
+            "readability_score": 0.8302,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 928,
+              "height": 690
+            },
+            "perceptual_hash": "0000040000ffffff"
+          },
+          "passed": false,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_1611f894c0b3c2b281e5bc07",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_3483d75678f26468fa581967",
+        "question_type": "multiple_choice",
+        "condition_count": 6,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_3483d75678f26468fa581967",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "partial",
+        "image_support_status": "missing_or_unusable",
+        "joint_understanding_status": "not_understandable",
+        "reason_codes": [
+          "image_text_mismatch",
+          "referenced_graph_not_provided",
+          "required_visual_missing"
+        ],
+        "rationale": "The sample clearly asks for a numeric estimate of the lamp-camera axis separation h, and the expected answer format is understandable. However, the question explicitly depends on a light-intensity graph that is not present in the provided image. The composite image gives the photos and geometry diagram, but not the critical graph/data needed to interpret or solve the task reliably.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+        "critical_visual_context_missing",
+        "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+        "metadata.image_paths is empty while top-level image_paths contains one file path.",
+        "multiple_image_placeholders_inconsistent"
+      ],
+      "clean_score": 0.8312,
+      "decision": "reject",
+      "decision_reason_codes": [
+        "question_materially_incomplete",
+        "referenced_graph_not_provided",
+        "required_visual_missing"
+      ],
+      "decision_rationale": "The sample’s target answer exists, but the problem explicitly depends on a missing light-intensity graph and inconsistent referenced visuals. Because the critical visual evidence is absent, the question is materially incomplete and cannot support reliable annotation or verification.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-04T13:15:44Z",
+      "finished_at": "2026-04-04T13:15:44Z",
+      "candidate_id": "cand_3483d75678f26468fa581967",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [
+    {
+      "reject_id": "reject_1611f894c0b3c2b281e5bc07",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "stage": "cleaning",
+      "reject_level": "problem",
+      "reject_reason_codes": [
+        "question_materially_incomplete",
+        "referenced_graph_not_provided",
+        "required_visual_missing"
+      ],
+      "reject_reason_detail": "The sample’s target answer exists, but the problem explicitly depends on a missing light-intensity graph and inconsistent referenced visuals. Because the critical visual evidence is absent, the question is materially incomplete and cannot support reliable annotation or verification.",
+      "blocking_fields": [
+        "Question text contains two image placeholders (<image_1> and <image_2>), but only one image path is provided.",
+        "critical_visual_context_missing",
+        "metadata.extraction_notes indicate that image_1 and image_2 did not have actual original image path/URL/filename entries.",
+        "metadata.image_paths is empty while top-level image_paths contains one file path.",
+        "multiple_image_placeholders_inconsistent"
+      ],
+      "evidence_refs": [
+        "align_1611f894c0b3c2b281e5bc07",
+        "solv_prob_3483d75678f26468fa581967"
+      ],
+      "recoverable": false,
+      "recommended_action": "drop",
+      "reviewed_by": null,
+      "created_at": "2026-04-04T13:15:44Z"
+    }
+  ],
+  "alignment_records": [
+    {
+      "alignment_id": "align_1611f894c0b3c2b281e5bc07",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "image_entity_refs": [
+        "visual_prob_3483d75678f26468fa581967_1::roi",
+        "visual_prob_3483d75678f26468fa581967_1::roi_top_left",
+        "visual_prob_3483d75678f26468fa581967_1::roi_top_right",
+        "visual_prob_3483d75678f26468fa581967_1::roi_bottom_left",
+        "visual_prob_3483d75678f26468fa581967_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_3483d75678f26468fa581967_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "diagram",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_diagram",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "graph",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_graph",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "plot",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_graph",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "point",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_point",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "line",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_line",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "axis",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_axis",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "T3",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "D",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "L",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.783
+        },
+        {
+          "text_ref": "slot_prob_3483d75678f26468fa581967_1",
+          "image_ref": "visual_prob_3483d75678f26468fa581967_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7851
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-04T13:15:04Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_da2e550a21d368040d97d833",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "## T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright, see the photo below (left). This phenomenon can be modelled by a lens setup, see the photo on right, and the diagram beneath the photos.\n<image_1>\n\nThe photo on right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line (in the photo) is shown in the graph below: the log base 10 of the light intensity (measured as the number of photons caught by each pixel) is plotted against the $x$-coordinate, with the pixels' side length serving as the unit length.\n\n<image_2>\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length $f=55 \\mathrm{~mm}$ and diameter $D=$ $39 \\mathrm{~mm}$; however, you should keep in mind that the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are; this effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with the accuracy of ca 20\\%) the distance $h$ between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was $L=4.8 \\mathrm{~m}$.",
+      "after_value": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "audit_id": "audit_ce806ce3cfdb278bdfc01d89",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "80",
+      "after_value": "80",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "audit_id": "audit_445d41c902a9a990e7def756",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "audit_id": "audit_fe6d7d513e246ef1a1a1e0f5",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "reject",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T13:15:44Z"
+    },
+    {
+      "audit_id": "audit_3824afa7788ac2b02a6206b9",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "T3",
+          "canonical": "T3",
+          "variable_type": "label"
+        },
+        {
+          "original": "Cat",
+          "canonical": "Cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "eyes",
+          "canonical": "eyes",
+          "variable_type": "label"
+        },
+        {
+          "original": "You",
+          "canonical": "You",
+          "variable_type": "label"
+        },
+        {
+          "original": "may",
+          "canonical": "may",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "beam",
+          "canonical": "beam",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "lens",
+          "canonical": "lens",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "base",
+          "canonical": "base",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "unit",
+          "canonical": "unit",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "thin",
+          "canonical": "thin",
+          "variable_type": "label"
+        },
+        {
+          "original": "f",
+          "canonical": "f",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "real",
+          "canonical": "real",
+          "variable_type": "label"
+        },
+        {
+          "original": "data",
+          "canonical": "data",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "non",
+          "canonical": "non",
+          "variable_type": "label"
+        },
+        {
+          "original": "Most",
+          "canonical": "Most",
+          "variable_type": "label"
+        },
+        {
+          "original": "lit",
+          "canonical": "lit",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "dark",
+          "canonical": "dark",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "less",
+          "canonical": "less",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "they",
+          "canonical": "they",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "eye",
+          "canonical": "eye",
+          "variable_type": "label"
+        },
+        {
+          "original": "h",
+          "canonical": "h",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "axis",
+          "canonical": "axis",
+          "variable_type": "label"
+        },
+        {
+          "original": "lamp",
+          "canonical": "lamp",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T13:15:44Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_1611f894c0b3c2b281e5bc07",
+      "problem_id": "prob_3483d75678f26468fa581967",
+      "source_problem_id": "74",
+      "strategy": "keep_open",
+      "rationale": "The stem is already a directly answerable open-ended estimation question; the multiple-choice options are not needed to preserve the task.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_a38f6984ae955ef9e94f7d5a",
+          "parent_problem_id": "prob_3483d75678f26468fa581967",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+          "expected_answer_type": "short_text",
+          "expected_answer": "80",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-04T13:15:44Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_a38f6984ae955ef9e94f7d5a",
+      "parent_problem_id": "prob_3483d75678f26468fa581967",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "T3: Cat eyes\n\nYou may have noticed that in darkness, when a cat is within the light beam of a headlamp, its eyes appear very bright. This phenomenon can be modelled by a lens setup, as shown in the photos and diagram.\n\nThe photo on the right was taken by a digital single-lens reflex camera. The light intensity at the camera sensor pixels marked by a red line in the photo is shown in the graph: the base-10 logarithm of the light intensity (measured as the number of photons caught by each pixel) is plotted against the x-coordinate, with the pixels' side length serving as the unit length.\n\nThe lens modelling cat eyes can be treated as an ideal thin lens of focal length f = 55 mm and diameter D = 39 mm; however, the given graph shows real measurement data, and the lens has certain non-ideal features. Most importantly, partial reflections of brightly lit areas from the lens surfaces may decrease the contrast: dark areas seen through the lens appear less dark than they actually are. This effect can be neglected for the camera lens, but not so for the lens serving as a model of a cat's eye.\n\nBased on the given data, estimate (with an accuracy of about 20%) the distance h between the axis of the camera and the axis of the lamp (which can be considered as a point source) if the distance of the camera from the paper sheet was L = 4.8 m.",
+      "expected_answer_type": "short_text",
+      "expected_answer": "80",
+      "split_role": "single"
+    }
+  ]
+}

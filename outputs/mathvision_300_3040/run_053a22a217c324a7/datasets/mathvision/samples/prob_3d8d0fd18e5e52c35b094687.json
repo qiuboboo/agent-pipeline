@@ -1,0 +1,2026 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_2ab61ea2bd6ff77ba69ab0b9",
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+    "dataset_name": "MathVision",
+    "source_problem_id": "648",
+    "raw_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?\n<image1>\n<image2>",
+    "raw_answer_text": "(E)",
+    "choice_map": {
+      "A": "(A)",
+      "B": "(B)",
+      "C": "(C)",
+      "D": "(D)",
+      "E": "(E)"
+    },
+    "image_paths": [
+      "images/648.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "Options only contain choice labels without option text; answer kept as original label.",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T19:56:40Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_3d8d0fd18e5e52c35b094687_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1554,
+        "height": 592,
+        "file_size": 195436
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 151,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 3
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_2ab61ea2bd6ff77ba69ab0b9",
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "dataset_name": "MathVision",
+    "source_problem_id": "648",
+    "created_at": "2026-04-05T19:56:40Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.78,
+    "verifiability_score": 0.86,
+    "score_evidence": {
+      "image_dependency": [
+        "requires_image=true",
+        "text_dominant=false",
+        "Question refers to selecting shapes from boxes, which implies the needed box contents are in the image",
+        "asset_registry_record.image_manifest contains 1 existing image and registry_passed=true"
+      ],
+      "multi_step": [
+        "The task combines at least two constraints: pick 5 different shapes and only 1 shape from each box",
+        "The question asks what shape must be picked from box 4, suggesting cross-box constraint reasoning rather than direct lookup",
+        "There are 5 answer choices, consistent with a constrained selection/elimination process",
+        "Conservative scoring: the exact box contents are not available in text, so full reasoning depth cannot be confirmed from text alone"
+      ],
+      "verifiability": [
+        "Answer is a specific discrete shape label: 'diamond'",
+        "Choices are provided, so the final answer can be checked against a closed set",
+        "registry_passed=true and answer_present=true",
+        "Given the image and constraints, the solution can likely be verified by enumerating valid picks across boxes"
+      ]
+    },
+    "risk_flags": [
+      "answer_type_mismatch_top_level_vs_registry_manifest"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_2ab61ea2bd6ff77ba69ab0b9",
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "dataset_name": "MathVision",
+    "source_problem_id": "648",
+    "created_at": "2026-04-05T19:56:40Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+    "priority": 0.84,
+    "decision": "keep",
+    "decision_reasons": [
+      "Core assets are complete: question text, one existing image, and an answer are all present, and registry_passed=true.",
+      "Initial scoring is strong for candidate value, with high image_dependency_score (0.96), multi_step_score (0.78), and verifiability_score (0.86).",
+      "The image appears essential to solving the problem, which increases usefulness for the candidate pool.",
+      "The only noted risk is answer_type_mismatch_top_level_vs_registry_manifest, which is a metadata consistency concern rather than a loss of core semantic recoverability."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_2ab61ea2bd6ff77ba69ab0b9",
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "dataset_name": "MathVision",
+    "source_problem_id": "648",
+    "created_at": "2026-04-05T19:56:40Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_2ab61ea2bd6ff77ba69ab0b9",
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+    "normalized_answer_text": "diamond",
+    "normalized_choice_map": {
+      "A": "star",
+      "B": "circle",
+      "C": "pentagon",
+      "D": "triangle",
+      "E": "diamond"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed inline image placeholder markers from the question text.",
+      "Question remains image-dependent because the box contents and answer choices are conveyed visually.",
+      "Normalized choice labels using the visible shapes shown in the answer-choice image."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T19:56:40Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "648",
+    "subject": "数学",
+    "raw_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?\n<image1>\n<image2>",
+    "raw_answer_text": "(E)",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.78,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 347,
+      "image_paths": [
+        "images/648.jpg"
+      ],
+      "extraction_notes": [
+        "Options only contain choice labels without option text; answer kept as original label.",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T19:57:58Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Core assets are complete: question text, one existing image, and an answer are all present, and registry_passed=true.",
+      "Initial scoring is strong for candidate value, with high image_dependency_score (0.96), multi_step_score (0.78), and verifiability_score (0.86).",
+      "The image appears essential to solving the problem, which increases usefulness for the candidate pool.",
+      "The only noted risk is answer_type_mismatch_top_level_vs_registry_manifest, which is a metadata consistency concern rather than a loss of core semantic recoverability."
+    ],
+    "collection_risk_flags": [
+      "answer_type_mismatch_top_level_vs_registry_manifest"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_60ebbc8471d1e3cd7e395ef6",
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "source_dataset": "MathVision",
+    "source_problem_id": "648",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_3d8d0fd18e5e52c35b094687/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_3d8d0fd18e5e52c35b094687/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1554,
+        "height": 592
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.78,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-05T19:57:58Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_881e4c75e57463cc2b1580f0",
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "source_dataset": "MathVision",
+    "source_problem_id": "648",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.84,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.78,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-05T19:57:58Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Core assets are complete: question text, one existing image, and an answer are all present, and registry_passed=true.",
+      "Initial scoring is strong for candidate value, with high image_dependency_score (0.96), multi_step_score (0.78), and verifiability_score (0.86).",
+      "The image appears essential to solving the problem, which increases usefulness for the candidate pool.",
+      "The only noted risk is answer_type_mismatch_top_level_vs_registry_manifest, which is a metadata consistency concern rather than a loss of core semantic recoverability."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_2ab61ea2bd6ff77ba69ab0b9",
+      "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T19:57:58Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_2ab61ea2bd6ff77ba69ab0b9",
+    "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+    "source_dataset": "MathVision",
+    "source_problem_id": "648",
+    "normalized_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+    "normalized_answer_text": "diamond",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "created_at": "2026-04-05T19:57:58Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_2ab61ea2bd6ff77ba69ab0b9",
+    "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+    "normalized_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+    "normalized_answer_text": "diamond",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "pick",
+        "canonical": "pick",
+        "variable_type": "label"
+      },
+      {
+        "original": "from",
+        "canonical": "from",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "She",
+        "canonical": "She",
+        "variable_type": "label"
+      },
+      {
+        "original": "can",
+        "canonical": "can",
+        "variable_type": "label"
+      },
+      {
+        "original": "only",
+        "canonical": "only",
+        "variable_type": "label"
+      },
+      {
+        "original": "each",
+        "canonical": "each",
+        "variable_type": "label"
+      },
+      {
+        "original": "box",
+        "canonical": "box",
+        "variable_type": "label"
+      },
+      {
+        "original": "must",
+        "canonical": "must",
+        "variable_type": "label"
+      },
+      {
+        "original": "she",
+        "canonical": "she",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Sofie wants to pick 5 different shapes from the boxes."
+      },
+      {
+        "segment_index": 2,
+        "text": "She can only pick 1 shape from each box."
+      },
+      {
+        "segment_index": 3,
+        "text": "Which shape must she pick from box 4?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1554,
+          "height": 552
+        },
+        "readability_score": 0.8212,
+        "contrast_score": 46.7291
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T19:57:58Z",
+    "normalization_notes": [
+      "Removed inline image placeholder markers from the question text.",
+      "Question remains image-dependent because the box contents and answer choices are conveyed visually.",
+      "Normalized choice labels using the visible shapes shown in the answer-choice image."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "648",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?\n<image1>\n<image2>",
+    "normalized_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+    "raw_answer_text": "(E)",
+    "normalized_answer_text": "diamond",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.8471,
+    "multi_step_score": 0.3917,
+    "verifiability_score": 0.874,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable, complete, and has a usable rewritten target with a clear expected answer, so it is not fundamentally broken. However, the very weak alignment/grounding evidence creates non-fatal risk that the answer is not fully supported by the extracted visual path, so manual review is appropriate.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T19:56:40Z",
+    "updated_at": "2026-04-05T19:57:58Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.78,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Core assets are complete: question text, one existing image, and an answer are all present, and registry_passed=true.",
+      "Initial scoring is strong for candidate value, with high image_dependency_score (0.96), multi_step_score (0.78), and verifiability_score (0.86).",
+      "The image appears essential to solving the problem, which increases usefulness for the candidate pool.",
+      "The only noted risk is answer_type_mismatch_top_level_vs_registry_manifest, which is a metadata consistency concern rather than a loss of core semantic recoverability."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_4ffd611717e3ef4056c6cfba",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/648/question",
+      "storage_uri": "inline://prob_3d8d0fd18e5e52c35b094687/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 151,
+      "width": null,
+      "height": null,
+      "sha256": "96a3d9985a375777185c588f5f2d973c0e47b3d4a295529ec165d3b1062da508",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?\n<image1>\n<image2>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6688,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "pick",
+          "canonical": "pick",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "She",
+          "canonical": "She",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "only",
+          "canonical": "only",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "box",
+          "canonical": "box",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "asset_id": "asset_50b6bba2c3976f5d189d43e2",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_3d8d0fd18e5e52c35b094687/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 133,
+      "width": null,
+      "height": null,
+      "sha256": "da143deeb93bc854b11735b6f8f53bda93c66feb3ae54b56761b03e672135428",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?\n<image1>\n<image2>",
+      "normalized_text_snapshot": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+      "text_completeness_score": 0.6688,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "pick",
+          "canonical": "pick",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "She",
+          "canonical": "She",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "only",
+          "canonical": "only",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "box",
+          "canonical": "box",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "asset_id": "asset_003616e9bad7af0de9ebcb28",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/648/answer",
+      "storage_uri": "inline://prob_3d8d0fd18e5e52c35b094687/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 3,
+      "width": null,
+      "height": null,
+      "sha256": "cf725bc17907cc5e0c950fd9c2fca1042dc19a8f4b54be5de5cb545244fdd32c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "(E)",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "asset_id": "asset_8aa0f33649e59718bb122216",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_3d8d0fd18e5e52c35b094687/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 7,
+      "width": null,
+      "height": null,
+      "sha256": "81c9d6128b5fcd7bbe4ba65c177388ff767a2017f971c053dcaa6f32b4d6a758",
+      "perceptual_hash": null,
+      "source_text_snapshot": "(E)",
+      "normalized_text_snapshot": "diamond",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "asset_id": "asset_a451fdba02cbda105595f69a",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_3d8d0fd18e5e52c35b094687_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 195436,
+      "width": 1554,
+      "height": 592,
+      "sha256": "4544366515b50f2865e7f711097955246834744ecad0f42480b70d50081095b4",
+      "perceptual_hash": "3fefc3c3c33f3fde",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1203.7097,
+      "readability_score": 0.8212,
+      "noise_score": 22.6663,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1554,
+        "height": 552
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "asset_id": "asset_f99dcdcf8d2da0a44594270c",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_3d8d0fd18e5e52c35b094687_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 194223,
+      "width": 1554,
+      "height": 552,
+      "sha256": "38f1a385c6a1cfa40a04b8e3a91bba145b84f89283d8a46eda6838fc08ba5b9e",
+      "perceptual_hash": "3fc7c3c3c33d3f5a",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1203.7097,
+      "readability_score": 0.8212,
+      "noise_score": 22.6663,
+      "cropped_from_asset_id": "asset_a451fdba02cbda105595f69a",
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1554,
+        "height": 552
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "asset_id": "asset_d32dd9e1df8d4390325c5f1e",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_bb347ac4167bbc22c4f3bfc3",
+      "file_format": "txt",
+      "file_size_bytes": 133,
+      "width": null,
+      "height": null,
+      "sha256": "da143deeb93bc854b11735b6f8f53bda93c66feb3ae54b56761b03e672135428",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?\n<image1>\n<image2>",
+      "normalized_text_snapshot": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+      "text_completeness_score": 0.6688,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "pick",
+          "canonical": "pick",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "She",
+          "canonical": "She",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "only",
+          "canonical": "only",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "box",
+          "canonical": "box",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_3d8d0fd18e5e52c35b094687",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "Sofie wants to pick 5 different shapes from the boxes.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "5"
+          ],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "She can only pick 1 shape from each box.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1"
+          ],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which shape must she pick from box 4?",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "4"
+          ],
+          "unit_mentions": [
+            "W",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_3d8d0fd18e5e52c35b094687_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "Which shape must she pick from box 4?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "diamond",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "pick",
+          "canonical": "pick",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "She",
+          "canonical": "She",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "only",
+          "canonical": "only",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "box",
+          "canonical": "box",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Sofie wants to pick 5 different shapes from the boxes."
+        },
+        {
+          "segment_index": 2,
+          "text": "She can only pick 1 shape from each box."
+        },
+        {
+          "segment_index": 3,
+          "text": "Which shape must she pick from box 4?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T19:57:39Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_3d8d0fd18e5e52c35b094687_1",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 2.625,
+        "dark_pixel_ratio": 0.0791,
+        "readability_score": 0.8212,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1554,
+            "height": 592
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 1554,
+            "height": 552
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 777,
+            "height": 276
+          },
+          "salience": 0.4602
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 777,
+            "y": 24,
+            "width": 777,
+            "height": 276
+          },
+          "salience": 0.4305
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 300,
+            "width": 777,
+            "height": 276
+          },
+          "salience": 0.4354
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 777,
+            "y": 300,
+            "width": 777,
+            "height": 276
+          },
+          "salience": 0.4134
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9285,
+      "created_at": "2026-04-05T19:57:39Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_3d8d0fd18e5e52c35b094687",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": false,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "missing_grounded_visual_path"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 0.0
+      },
+      "solvability_score": 0.8,
+      "decision_hint": "reject",
+      "created_at": "2026-04-05T19:57:52Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_11d6ed319e8b7276ba441853",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "text_fact",
+      "canonical_value": "Sofie wants to pick 5 different shapes from the boxes.",
+      "surface_forms": [
+        "Sofie wants to pick 5 different shapes from the boxes."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_50b6bba2c3976f5d189d43e2"
+      ],
+      "evidence_refs": [
+        "asset_50b6bba2c3976f5d189d43e2"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Sofie wants to pick 5 different shapes from the boxes.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "5"
+        ],
+        "unit_mentions": [
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_4dffe994c6f92feb836d9a2f",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "text_fact",
+      "canonical_value": "She can only pick 1 shape from each box.",
+      "surface_forms": [
+        "She can only pick 1 shape from each box."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_50b6bba2c3976f5d189d43e2"
+      ],
+      "evidence_refs": [
+        "asset_50b6bba2c3976f5d189d43e2"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "She can only pick 1 shape from each box.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1"
+        ],
+        "unit_mentions": [
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_a746b8a2a0d4c6c39cf3dee7",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "target_slot",
+      "canonical_value": "Which shape must she pick from box 4?",
+      "surface_forms": [
+        "Which shape must she pick from box 4?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_50b6bba2c3976f5d189d43e2"
+      ],
+      "evidence_refs": [
+        "asset_50b6bba2c3976f5d189d43e2"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_3d8d0fd18e5e52c35b094687_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "Which shape must she pick from box 4?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "diamond",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_47c71024713b6b41c486f590",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "answer_claim",
+      "canonical_value": "diamond",
+      "surface_forms": [
+        "diamond"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8aa0f33649e59718bb122216"
+      ],
+      "evidence_refs": [
+        "asset_8aa0f33649e59718bb122216"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "diamond"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_f6ae036ddc47ebab70318e23",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1554,
+          "height": 592
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9285,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_085ec3c979c6de0991348554",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1554,
+          "height": 552
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9285,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_b5c373a99b193f654bab04b1",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 777,
+          "height": 276
+        },
+        "salience": 0.4602
+      },
+      "unit": null,
+      "confidence": 0.9285,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_5938b7e73560d283f9b430a6",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 777,
+          "y": 24,
+          "width": 777,
+          "height": 276
+        },
+        "salience": 0.4305
+      },
+      "unit": null,
+      "confidence": 0.9285,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_8a3d367cc091182d047e9c76",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 300,
+          "width": 777,
+          "height": 276
+        },
+        "salience": 0.4354
+      },
+      "unit": null,
+      "confidence": 0.9285,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_d2935ce53d7b16e5541542a5",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 777,
+          "y": 300,
+          "width": 777,
+          "height": 276
+        },
+        "salience": 0.4134
+      },
+      "unit": null,
+      "confidence": 0.9285,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_4913f29105bd9cee0424d691",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "text_fact",
+      "canonical_value": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+      "surface_forms": [
+        "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_d32dd9e1df8d4390325c5f1e"
+      ],
+      "evidence_refs": [
+        "asset_d32dd9e1df8d4390325c5f1e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_bb347ac4167bbc22c4f3bfc3",
+        "parent_problem_id": "prob_3d8d0fd18e5e52c35b094687",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "diamond",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_c075b7cf4ca1f0b8e4393f76",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_3d8d0fd18e5e52c35b094687",
+        "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": false,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 0.0
+        },
+        "solvability_score": 0.8,
+        "decision_hint": "reject",
+        "created_at": "2026-04-05T19:57:52Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "node_id": "node_f60926d85438c97403c655cc",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "missing_grounded_visual_path"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:57:58Z",
+      "updated_at": "2026-04-05T19:57:58Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_2ab61ea2bd6ff77ba69ab0b9",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_4ffd611717e3ef4056c6cfba",
+        "asset_50b6bba2c3976f5d189d43e2",
+        "asset_003616e9bad7af0de9ebcb28",
+        "asset_8aa0f33649e59718bb122216",
+        "asset_a451fdba02cbda105595f69a",
+        "asset_f99dcdcf8d2da0a44594270c",
+        "asset_d32dd9e1df8d4390325c5f1e"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 11
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1554,
+            "height": 592,
+            "blur_score": 1203.7097,
+            "contrast_score": 46.7291,
+            "noise_score": 22.6663,
+            "readability_score": 0.8212,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 24,
+              "width": 1554,
+              "height": 552
+            },
+            "perceptual_hash": "3fefc3c3c33f3fde"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_2ab61ea2bd6ff77ba69ab0b9",
+        "coverage_score": 0.18,
+        "consistency_score": 0.1,
+        "alignment_status": "bad",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_3d8d0fd18e5e52c35b094687",
+        "question_type": "multiple_choice",
+        "condition_count": 2,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_3d8d0fd18e5e52c35b094687",
+        "solvability_score": 0.8,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_target_clear",
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_semantically_complete"
+        ],
+        "rationale": "The question clearly asks which shape must be chosen from box 4 under a one-shape-per-box, all-different constraint. The image is legible and shows the box contents and answer options clearly enough to understand and solve the task.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.8852,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "missing_grounded_visual_path"
+      ],
+      "decision_rationale": "The sample is jointly understandable, complete, and has a usable rewritten target with a clear expected answer, so it is not fundamentally broken. However, the very weak alignment/grounding evidence creates non-fatal risk that the answer is not fully supported by the extracted visual path, so manual review is appropriate.",
+      "review_ticket_id": "review_prob_3d8d0fd18e5e52c35b094687",
+      "operator_type": "system",
+      "started_at": "2026-04-05T19:57:58Z",
+      "finished_at": "2026-04-05T19:57:58Z",
+      "candidate_id": "cand_3d8d0fd18e5e52c35b094687",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_2ab61ea2bd6ff77ba69ab0b9",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "image_entity_refs": [
+        "visual_prob_3d8d0fd18e5e52c35b094687_1::roi",
+        "visual_prob_3d8d0fd18e5e52c35b094687_1::roi_top_left",
+        "visual_prob_3d8d0fd18e5e52c35b094687_1::roi_top_right",
+        "visual_prob_3d8d0fd18e5e52c35b094687_1::roi_bottom_left",
+        "visual_prob_3d8d0fd18e5e52c35b094687_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_3d8d0fd18e5e52c35b094687_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.18,
+      "consistency_score": 0.1,
+      "alignment_status": "bad",
+      "created_at": "2026-04-05T19:57:39Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_2c463f402fb3ac2bb6155c59",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?\n<image1>\n<image2>",
+      "after_value": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "audit_id": "audit_a62740278884b995caf65c7d",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "(E)",
+      "after_value": "diamond",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "audit_id": "audit_2cd6e49cb6cf99e303bd1425",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "audit_id": "audit_f60926d85438c97403c655cc",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:57:58Z"
+    },
+    {
+      "audit_id": "audit_ba5ecb363055f285acf6406e",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "pick",
+          "canonical": "pick",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "She",
+          "canonical": "She",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "only",
+          "canonical": "only",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "box",
+          "canonical": "box",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:57:58Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_2ab61ea2bd6ff77ba69ab0b9",
+      "problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "source_problem_id": "648",
+      "strategy": "keep_open",
+      "rationale": "The stem is already a directly answerable open-ended question; removing the multiple-choice options preserves the original task.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_bb347ac4167bbc22c4f3bfc3",
+          "parent_problem_id": "prob_3d8d0fd18e5e52c35b094687",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "diamond",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-05T19:57:58Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_bb347ac4167bbc22c4f3bfc3",
+      "parent_problem_id": "prob_3d8d0fd18e5e52c35b094687",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "Sofie wants to pick 5 different shapes from the boxes. She can only pick 1 shape from each box. Which shape must she pick from box 4?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "diamond",
+      "split_role": "single"
+    }
+  ]
+}

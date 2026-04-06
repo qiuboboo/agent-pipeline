@@ -1,0 +1,1954 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_bd55f5630e410ee7b363f2b8",
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "problem_id": "prob_cb540bae22c1f2a88043a407",
+    "dataset_name": "MathVision",
+    "source_problem_id": "583",
+    "raw_question_text": "Lucy folds a piece of paper exactly half way and then cuts out a figure:\n<image1>\nThen she unfolds the paper again. Which of the five pictures can she see?\n<image2>",
+    "raw_answer_text": "D",
+    "choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "image_paths": [
+      "images/583.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "options are provided only as labels without option text",
+      "question includes <image1> and <image2> placeholders but only one image path is present",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T18:40:46Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_cb540bae22c1f2a88043a407",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_cb540bae22c1f2a88043a407_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1682,
+        "height": 506,
+        "file_size": 174404
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 164,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_bd55f5630e410ee7b363f2b8",
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "dataset_name": "MathVision",
+    "source_problem_id": "583",
+    "created_at": "2026-04-05T18:40:46Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_cb540bae22c1f2a88043a407",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.84,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly asks which of five pictures is possible after folding, cutting, and unfolding, so the visual options are necessary",
+        "requires_image=true",
+        "text_dominant=false",
+        "answer_type is choice among A-E, but the choice labels alone do not contain the needed visual content"
+      ],
+      "multi_step": [
+        "question requires at least a fold-cut-unfold mental simulation before matching against the five pictured options",
+        "solving involves combining sequential transformations with option comparison rather than reading off a single fact",
+        "choice_count=5"
+      ],
+      "verifiability": [
+        "answer_text is a single option label ('D'), which is easy to compare against a gold answer",
+        "answer_type=option/choice",
+        "registry_passed=true",
+        "image_quality summary shows readable image dimensions and readability_score=0.815, supporting later human or model verification",
+        "verifiability is slightly reduced by the registry issue about <image1> and <image2> placeholders versus one top-level image path"
+      ]
+    },
+    "risk_flags": [
+      "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_bd55f5630e410ee7b363f2b8",
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "dataset_name": "MathVision",
+    "source_problem_id": "583",
+    "created_at": "2026-04-05T18:40:46Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_cb540bae22c1f2a88043a407",
+    "priority": 0.83,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "question, answer, and at least one image asset are present, so the core semantics are still likely recoverable",
+      "the sample is strongly image-dependent and the provided choice label answer is verifiable",
+      "there is an asset consistency issue: the question references <image1> and <image2>, but only one top-level image path is registered",
+      "because the visual asset mapping may be incomplete for an image-centric problem, it should enter the pool with lower priority rather than be rejected"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_bd55f5630e410ee7b363f2b8",
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "dataset_name": "MathVision",
+    "source_problem_id": "583",
+    "created_at": "2026-04-05T18:40:46Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_bd55f5630e410ee7b363f2b8",
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "problem_id": "prob_cb540bae22c1f2a88043a407",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Lucy folds a piece of paper exactly half way and then cuts out a figure. Then she unfolds the paper again. Which of the five pictures can she see?",
+    "normalized_answer_text": "D",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed inline image placeholder tokens from the question text.",
+      "Question meaning is unchanged and still explicitly depends on the figure and visual answer options.",
+      "force_requires_image=true, so the sample is routed to multimodal_full."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T18:40:46Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "583",
+    "subject": "数学",
+    "raw_question_text": "Lucy folds a piece of paper exactly half way and then cuts out a figure:\n<image1>\nThen she unfolds the paper again. Which of the five pictures can she see?\n<image2>",
+    "raw_answer_text": "D",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 282,
+      "image_paths": [
+        "images/583.jpg"
+      ],
+      "extraction_notes": [
+        "options are provided only as labels without option text",
+        "question includes <image1> and <image2> placeholders but only one image path is present",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T18:42:09Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.83,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "question, answer, and at least one image asset are present, so the core semantics are still likely recoverable",
+      "the sample is strongly image-dependent and the provided choice label answer is verifiable",
+      "there is an asset consistency issue: the question references <image1> and <image2>, but only one top-level image path is registered",
+      "because the visual asset mapping may be incomplete for an image-centric problem, it should enter the pool with lower priority rather than be rejected"
+    ],
+    "collection_risk_flags": [
+      "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_4403787d8b4adeb36e98b3a4",
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "source_dataset": "MathVision",
+    "source_problem_id": "583",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_cb540bae22c1f2a88043a407/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_cb540bae22c1f2a88043a407/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1682,
+        "height": 506
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-05T18:42:09Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_e6849b1712f0352c8664a31f",
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "source_dataset": "MathVision",
+    "source_problem_id": "583",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.83,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-05T18:42:09Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "question, answer, and at least one image asset are present, so the core semantics are still likely recoverable",
+      "the sample is strongly image-dependent and the provided choice label answer is verifiable",
+      "there is an asset consistency issue: the question references <image1> and <image2>, but only one top-level image path is registered",
+      "because the visual asset mapping may be incomplete for an image-centric problem, it should enter the pool with lower priority rather than be rejected"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_bd55f5630e410ee7b363f2b8",
+      "candidate_id": "cand_cb540bae22c1f2a88043a407",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T18:42:09Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_bd55f5630e410ee7b363f2b8",
+    "problem_id": "prob_cb540bae22c1f2a88043a407",
+    "source_dataset": "MathVision",
+    "source_problem_id": "583",
+    "normalized_question_text": "Lucy folds a piece of paper exactly half way and then cuts out a figure. Then she unfolds the paper again. Which of the five pictures can she see?",
+    "normalized_answer_text": "D",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "placeholder_image_mismatch",
+      "pure_image_choice_needs_review",
+      "rewrite_output_missing"
+    ],
+    "created_at": "2026-04-05T18:42:09Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_bd55f5630e410ee7b363f2b8",
+    "problem_id": "prob_cb540bae22c1f2a88043a407",
+    "normalized_question_text": "Lucy folds a piece of paper exactly half way and then cuts out a figure. Then she unfolds the paper again. Which of the five pictures can she see?",
+    "normalized_answer_text": "D",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "Lucy",
+        "canonical": "Lucy",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "half",
+        "canonical": "half",
+        "variable_type": "label"
+      },
+      {
+        "original": "way",
+        "canonical": "way",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "then",
+        "canonical": "then",
+        "variable_type": "label"
+      },
+      {
+        "original": "cuts",
+        "canonical": "cuts",
+        "variable_type": "label"
+      },
+      {
+        "original": "out",
+        "canonical": "out",
+        "variable_type": "label"
+      },
+      {
+        "original": "Then",
+        "canonical": "Then",
+        "variable_type": "label"
+      },
+      {
+        "original": "she",
+        "canonical": "she",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "five",
+        "canonical": "five",
+        "variable_type": "label"
+      },
+      {
+        "original": "can",
+        "canonical": "can",
+        "variable_type": "label"
+      },
+      {
+        "original": "see",
+        "canonical": "see",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Lucy folds a piece of paper exactly half way and then cuts out a figure."
+      },
+      {
+        "segment_index": 2,
+        "text": "Then she unfolds the paper again."
+      },
+      {
+        "segment_index": 3,
+        "text": "Which of the five pictures can she see?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1682,
+          "height": 466
+        },
+        "readability_score": 0.815,
+        "contrast_score": 38.3571
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T18:42:09Z",
+    "normalization_notes": [
+      "Removed inline image placeholder tokens from the question text.",
+      "Question meaning is unchanged and still explicitly depends on the figure and visual answer options.",
+      "force_requires_image=true, so the sample is routed to multimodal_full."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_cb540bae22c1f2a88043a407",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "583",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Lucy folds a piece of paper exactly half way and then cuts out a figure:\n<image1>\nThen she unfolds the paper again. Which of the five pictures can she see?\n<image2>",
+    "normalized_question_text": "Lucy folds a piece of paper exactly half way and then cuts out a figure. Then she unfolds the paper again. Which of the five pictures can she see?",
+    "raw_answer_text": "D",
+    "normalized_answer_text": "D",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9785,
+    "multi_step_score": 0.32,
+    "verifiability_score": 0.9172,
+    "quality_risk_flags": [
+      "placeholder_image_count_mismatch",
+      "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "placeholder_image_mismatch",
+      "pure_image_choice_needs_review",
+      "rewrite_output_missing"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable and the answer label is present, with strong image support and alignment. However, the rewrite stage produced no usable variant and the image placeholder mismatch adds integration risk. Because this is a recoverable pure-image multiple-choice task, it should be kept for review rather than rejected.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_cb540bae22c1f2a88043a407",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T18:40:46Z",
+    "updated_at": "2026-04-05T18:42:09Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.83,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "question, answer, and at least one image asset are present, so the core semantics are still likely recoverable",
+      "the sample is strongly image-dependent and the provided choice label answer is verifiable",
+      "there is an asset consistency issue: the question references <image1> and <image2>, but only one top-level image path is registered",
+      "because the visual asset mapping may be incomplete for an image-centric problem, it should enter the pool with lower priority rather than be rejected"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_3e886e0ae395e037626fbf43",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/583/question",
+      "storage_uri": "inline://prob_cb540bae22c1f2a88043a407/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 164,
+      "width": null,
+      "height": null,
+      "sha256": "af2a24e29959746e5411e4fbd3f256b576e1da72b6cedaa62ac264f99e4d3488",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Lucy folds a piece of paper exactly half way and then cuts out a figure:\n<image1>\nThen she unfolds the paper again. Which of the five pictures can she see?\n<image2>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6804,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Lucy",
+          "canonical": "Lucy",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "half",
+          "canonical": "half",
+          "variable_type": "label"
+        },
+        {
+          "original": "way",
+          "canonical": "way",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "cuts",
+          "canonical": "cuts",
+          "variable_type": "label"
+        },
+        {
+          "original": "out",
+          "canonical": "out",
+          "variable_type": "label"
+        },
+        {
+          "original": "Then",
+          "canonical": "Then",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "asset_id": "asset_80a21e84e18b7176d53902a1",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_cb540bae22c1f2a88043a407/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 146,
+      "width": null,
+      "height": null,
+      "sha256": "b7c96456e24f1f7e52aa75178189951d4e594927f6e467c5ba0d951e65419337",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Lucy folds a piece of paper exactly half way and then cuts out a figure:\n<image1>\nThen she unfolds the paper again. Which of the five pictures can she see?\n<image2>",
+      "normalized_text_snapshot": "Lucy folds a piece of paper exactly half way and then cuts out a figure. Then she unfolds the paper again. Which of the five pictures can she see?",
+      "text_completeness_score": 0.6804,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Lucy",
+          "canonical": "Lucy",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "half",
+          "canonical": "half",
+          "variable_type": "label"
+        },
+        {
+          "original": "way",
+          "canonical": "way",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "cuts",
+          "canonical": "cuts",
+          "variable_type": "label"
+        },
+        {
+          "original": "out",
+          "canonical": "out",
+          "variable_type": "label"
+        },
+        {
+          "original": "Then",
+          "canonical": "Then",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "asset_id": "asset_b5e7a4337dba3c822aabada0",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/583/answer",
+      "storage_uri": "inline://prob_cb540bae22c1f2a88043a407/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43",
+      "perceptual_hash": null,
+      "source_text_snapshot": "D",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "asset_id": "asset_0676fe1ecb1c1a3a7437b9d3",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_cb540bae22c1f2a88043a407/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43",
+      "perceptual_hash": null,
+      "source_text_snapshot": "D",
+      "normalized_text_snapshot": "D",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "asset_id": "asset_c63e2abef4f90c9b4c02941b",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_cb540bae22c1f2a88043a407_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 174404,
+      "width": 1682,
+      "height": 506,
+      "sha256": "47b18aef70b6d8395bc4c9d21263cd7e78cc7befb6645abbf98da3437dc59b58",
+      "perceptual_hash": "3f3fff003f3f0000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2144.7051,
+      "readability_score": 0.815,
+      "noise_score": 23.2812,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1682,
+        "height": 466
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "placeholder_image_count_mismatch",
+        "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "asset_id": "asset_9f69de67df12dced7e24e2ae",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_cb540bae22c1f2a88043a407_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 172916,
+      "width": 1682,
+      "height": 466,
+      "sha256": "07be6306cce105c5a8f913a7a36b94fe661b362b9090f3a0da86cc8f3fa1f542",
+      "perceptual_hash": "3fffff003f3fc800",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2144.7051,
+      "readability_score": 0.815,
+      "noise_score": 23.2812,
+      "cropped_from_asset_id": "asset_c63e2abef4f90c9b4c02941b",
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1682,
+        "height": 466
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_cb540bae22c1f2a88043a407",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "Lucy folds a piece of paper exactly half way and then cuts out a figure.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which of the five pictures can she see?",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_cb540bae22c1f2a88043a407_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "Which of the five pictures can she see?",
+          "expected_answer_type": "unknown",
+          "expected_answer": "D",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "Lucy",
+          "canonical": "Lucy",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "half",
+          "canonical": "half",
+          "variable_type": "label"
+        },
+        {
+          "original": "way",
+          "canonical": "way",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "cuts",
+          "canonical": "cuts",
+          "variable_type": "label"
+        },
+        {
+          "original": "out",
+          "canonical": "out",
+          "variable_type": "label"
+        },
+        {
+          "original": "Then",
+          "canonical": "Then",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Lucy folds a piece of paper exactly half way and then cuts out a figure."
+        },
+        {
+          "segment_index": 2,
+          "text": "Then she unfolds the paper again."
+        },
+        {
+          "segment_index": 3,
+          "text": "Which of the five pictures can she see?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T18:41:50Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_cb540bae22c1f2a88043a407_1",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 3.3241,
+        "dark_pixel_ratio": 0.0464,
+        "readability_score": 0.815,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1682,
+            "height": 506
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 1682,
+            "height": 466
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 841,
+            "height": 233
+          },
+          "salience": 0.3994
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 257,
+            "width": 841,
+            "height": 233
+          },
+          "salience": 0.4262
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 841,
+            "y": 257,
+            "width": 841,
+            "height": 233
+          },
+          "salience": 0.4018
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.926,
+      "created_at": "2026-04-05T18:41:50Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_cb540bae22c1f2a88043a407",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-05T18:42:00Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_4b8d715f6b9cff025b0a0dca",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "text_fact",
+      "canonical_value": "Lucy folds a piece of paper exactly half way and then cuts out a figure.",
+      "surface_forms": [
+        "Lucy folds a piece of paper exactly half way and then cuts out a figure."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_80a21e84e18b7176d53902a1"
+      ],
+      "evidence_refs": [
+        "asset_80a21e84e18b7176d53902a1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Lucy folds a piece of paper exactly half way and then cuts out a figure.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_00feae9112768ad965cd5a40",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "target_slot",
+      "canonical_value": "Which of the five pictures can she see?",
+      "surface_forms": [
+        "Which of the five pictures can she see?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_80a21e84e18b7176d53902a1"
+      ],
+      "evidence_refs": [
+        "asset_80a21e84e18b7176d53902a1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_cb540bae22c1f2a88043a407_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "Which of the five pictures can she see?",
+        "expected_answer_type": "unknown",
+        "expected_answer": "D",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_1f4a8a6cc98d08fbf8ce2fd1",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "answer_claim",
+      "canonical_value": "D",
+      "surface_forms": [
+        "D"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_0676fe1ecb1c1a3a7437b9d3"
+      ],
+      "evidence_refs": [
+        "asset_0676fe1ecb1c1a3a7437b9d3"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "D"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_f12a4a71ea555b8c56de492a",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1682,
+          "height": 506
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.926,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_30bb15a2bd13763bc95cbba7",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1682,
+          "height": 466
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.926,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_d0330a70e4756bcf659aef9f",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 841,
+          "height": 233
+        },
+        "salience": 0.3994
+      },
+      "unit": null,
+      "confidence": 0.926,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_747100c7fdc93f0b4b309579",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 257,
+          "width": 841,
+          "height": 233
+        },
+        "salience": 0.4262
+      },
+      "unit": null,
+      "confidence": 0.926,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_db8bdc4c8feb18b89e418e52",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 841,
+          "y": 257,
+          "width": 841,
+          "height": 233
+        },
+        "salience": 0.4018
+      },
+      "unit": null,
+      "confidence": 0.926,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_9bf7376be67cba9c0dc5cf70",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "quality_signal",
+      "canonical_value": "placeholder_image_count_mismatch",
+      "surface_forms": [
+        "placeholder_image_count_mismatch"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "placeholder_image_count_mismatch"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_010df33ae4a5761712c6a0d6",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "quality_signal",
+      "canonical_value": "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided",
+      "surface_forms": [
+        "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_2adb7c99b58ccc4b8b30e339",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_cb540bae22c1f2a88043a407",
+        "problem_id": "prob_cb540bae22c1f2a88043a407",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-05T18:42:00Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "node_id": "node_be389f1b3b6cd4dcdc36660d",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "placeholder_image_mismatch",
+          "pure_image_choice_needs_review",
+          "rewrite_output_missing"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T18:42:09Z",
+      "updated_at": "2026-04-05T18:42:09Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_bd55f5630e410ee7b363f2b8",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_3e886e0ae395e037626fbf43",
+        "asset_80a21e84e18b7176d53902a1",
+        "asset_b5e7a4337dba3c822aabada0",
+        "asset_0676fe1ecb1c1a3a7437b9d3",
+        "asset_c63e2abef4f90c9b4c02941b",
+        "asset_9f69de67df12dced7e24e2ae"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 15
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1682,
+            "height": 506,
+            "blur_score": 2144.7051,
+            "contrast_score": 38.3571,
+            "noise_score": 23.2812,
+            "readability_score": 0.815,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 24,
+              "width": 1682,
+              "height": 466
+            },
+            "perceptual_hash": "3f3fff003f3f0000"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_bd55f5630e410ee7b363f2b8",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_cb540bae22c1f2a88043a407",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_cb540bae22c1f2a88043a407",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "image_index_selection_nonrecoverable"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "combined_image_contains_needed_diagram_and_options",
+          "image_required_and_available",
+          "jointly_understandable",
+          "question_and_expected_answer_format_clear"
+        ],
+        "rationale": "The task is clear: infer the unfolded shape from the folded-paper cut and choose among options A-E. The single provided image contains both the folded-paper diagram and the answer choices, and the visual information is readable enough to understand the problem despite the placeholder/path mismatch.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "placeholder_image_count_mismatch",
+        "question_text contains <image1> and <image2> placeholders, but only one top-level image path is provided"
+      ],
+      "clean_score": 0.9062,
+      "decision": "review",
+      "decision_reason_codes": [
+        "placeholder_image_mismatch",
+        "pure_image_choice_needs_review",
+        "rewrite_output_missing"
+      ],
+      "decision_rationale": "The sample is jointly understandable and the answer label is present, with strong image support and alignment. However, the rewrite stage produced no usable variant and the image placeholder mismatch adds integration risk. Because this is a recoverable pure-image multiple-choice task, it should be kept for review rather than rejected.",
+      "review_ticket_id": "review_prob_cb540bae22c1f2a88043a407",
+      "operator_type": "system",
+      "started_at": "2026-04-05T18:42:09Z",
+      "finished_at": "2026-04-05T18:42:09Z",
+      "candidate_id": "cand_cb540bae22c1f2a88043a407",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_bd55f5630e410ee7b363f2b8",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "image_entity_refs": [
+        "visual_prob_cb540bae22c1f2a88043a407_1::roi",
+        "visual_prob_cb540bae22c1f2a88043a407_1::roi_top_left",
+        "visual_prob_cb540bae22c1f2a88043a407_1::roi_bottom_left",
+        "visual_prob_cb540bae22c1f2a88043a407_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_cb540bae22c1f2a88043a407_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_cb540bae22c1f2a88043a407_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7815
+        },
+        {
+          "text_ref": "slot_prob_cb540bae22c1f2a88043a407_1",
+          "image_ref": "visual_prob_cb540bae22c1f2a88043a407_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7837
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-05T18:41:50Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_39ae8f027d98fa97aa84d6e7",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Lucy folds a piece of paper exactly half way and then cuts out a figure:\n<image1>\nThen she unfolds the paper again. Which of the five pictures can she see?\n<image2>",
+      "after_value": "Lucy folds a piece of paper exactly half way and then cuts out a figure. Then she unfolds the paper again. Which of the five pictures can she see?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "audit_id": "audit_42defaef0e310ee48092ab5a",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "D",
+      "after_value": "D",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "audit_id": "audit_42111610fab5b701fa72b649",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "audit_id": "audit_be389f1b3b6cd4dcdc36660d",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T18:42:09Z"
+    },
+    {
+      "audit_id": "audit_de781778bf4e00ab890b14bc",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "Lucy",
+          "canonical": "Lucy",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "half",
+          "canonical": "half",
+          "variable_type": "label"
+        },
+        {
+          "original": "way",
+          "canonical": "way",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "cuts",
+          "canonical": "cuts",
+          "variable_type": "label"
+        },
+        {
+          "original": "out",
+          "canonical": "out",
+          "variable_type": "label"
+        },
+        {
+          "original": "Then",
+          "canonical": "Then",
+          "variable_type": "label"
+        },
+        {
+          "original": "she",
+          "canonical": "she",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T18:42:09Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_bd55f5630e410ee7b363f2b8",
+      "problem_id": "prob_cb540bae22c1f2a88043a407",
+      "source_problem_id": "583",
+      "strategy": "drop_image_index",
+      "rationale": "This is a pure image-option selection task: the answer choices are only picture labels (A-E), and the correct option text \"D\" provides no semantic content that can be turned into an open-ended question without access to the option images.",
+      "discard_reason_codes": [
+        "image_index_selection_nonrecoverable"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-05T18:42:09Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}
