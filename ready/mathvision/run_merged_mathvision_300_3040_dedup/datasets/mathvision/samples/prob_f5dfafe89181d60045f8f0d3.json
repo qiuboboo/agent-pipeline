@@ -1,0 +1,2052 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_3d931468681f50e3cceb4331",
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+    "dataset_name": "MathVision",
+    "source_problem_id": "954",
+    "raw_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?\n<image1>",
+    "raw_answer_text": "8",
+    "choice_map": {},
+    "image_paths": [
+      "images/954.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": null,
+    "extraction_notes": [
+      "Question contains <image1> and refers to 'this recipe', indicating the needed recipe information is likely in the image.",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-06T01:52:42Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_f5dfafe89181d60045f8f0d3_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 515,
+        "height": 250,
+        "file_size": 71102
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 210,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 1
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_3d931468681f50e3cceb4331",
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "dataset_name": "MathVision",
+    "source_problem_id": "954",
+    "created_at": "2026-04-06T01:52:42Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.91,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text refers to 'this recipe' but does not provide the recipe quantities in text, so the missing recipe information is likely in the image",
+        "requires_image=true",
+        "text_dominant=false",
+        "asset_registry_record.image_manifest shows 1 existing image and registry_passed=true"
+      ],
+      "multi_step": [
+        "to solve, one must first read/extract the recipe amounts, then compare them with the available eggs, flour, milk, and butter",
+        "the phrase 'largest number of pancakes' indicates a limiting-ingredient / maximum-feasible-count computation rather than a single direct lookup",
+        "multiple ingredient constraints are listed in question_text, which suggests combining several conditions"
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_text='8'",
+        "given the recipe amounts from the image, the result can be checked by computing feasible pancake counts per ingredient and taking the minimum",
+        "asset_registry_record indicates answer_present=true and registry_passed=true, supporting downstream checking"
+      ]
+    },
+    "risk_flags": [
+      "image_required_but_recipe_not_in_text",
+      "upstream_registry_llm_used"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_3d931468681f50e3cceb4331",
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "dataset_name": "MathVision",
+    "source_problem_id": "954",
+    "created_at": "2026-04-06T01:52:42Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+    "priority": 0.92,
+    "decision": "keep",
+    "decision_reasons": [
+      "question, answer, and required image are all present, so the core semantic assets are available",
+      "initial scoring is strong: high image dependency, high verifiability, and solid multi-step value",
+      "although the recipe is not recoverable from text alone, the referenced image exists and registry passed",
+      "the only noted risk is upstream LLM usage, which is not by itself sufficient to downgrade a complete and recoverable sample"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_3d931468681f50e3cceb4331",
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "dataset_name": "MathVision",
+    "source_problem_id": "954",
+    "created_at": "2026-04-06T01:52:42Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_3d931468681f50e3cceb4331",
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+    "normalized_answer_text": "8",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder token '<image1>' as formatting noise.",
+      "The question explicitly depends on the recipe shown in the image, so image use is required.",
+      "No answer or option content was altered."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-06T01:52:42Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "954",
+    "subject": "数学",
+    "raw_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?\n<image1>",
+    "raw_answer_text": "8",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 653,
+      "image_paths": [
+        "images/954.jpg"
+      ],
+      "extraction_notes": [
+        "Question contains <image1> and refers to 'this recipe', indicating the needed recipe information is likely in the image.",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-06T01:53:40Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question, answer, and required image are all present, so the core semantic assets are available",
+      "initial scoring is strong: high image dependency, high verifiability, and solid multi-step value",
+      "although the recipe is not recoverable from text alone, the referenced image exists and registry passed",
+      "the only noted risk is upstream LLM usage, which is not by itself sufficient to downgrade a complete and recoverable sample"
+    ],
+    "collection_risk_flags": [
+      "image_required_but_recipe_not_in_text",
+      "upstream_registry_llm_used"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_f33058bc6c36005de81cecf3",
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "source_dataset": "MathVision",
+    "source_problem_id": "954",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_f5dfafe89181d60045f8f0d3/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_f5dfafe89181d60045f8f0d3/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 515,
+        "height": 250
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-06T01:53:40Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_3889b7eecc6373b982095131",
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "source_dataset": "MathVision",
+    "source_problem_id": "954",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.92,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-06T01:53:40Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "question, answer, and required image are all present, so the core semantic assets are available",
+      "initial scoring is strong: high image dependency, high verifiability, and solid multi-step value",
+      "although the recipe is not recoverable from text alone, the referenced image exists and registry passed",
+      "the only noted risk is upstream LLM usage, which is not by itself sufficient to downgrade a complete and recoverable sample"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_3d931468681f50e3cceb4331",
+      "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-06T01:53:40Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_3d931468681f50e3cceb4331",
+    "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+    "source_dataset": "MathVision",
+    "source_problem_id": "954",
+    "normalized_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+    "normalized_answer_text": "8",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "created_at": "2026-04-06T01:53:40Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_3d931468681f50e3cceb4331",
+    "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+    "normalized_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+    "normalized_answer_text": "8",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "chef",
+        "canonical": "chef",
+        "variable_type": "label"
+      },
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "his",
+        "canonical": "his",
+        "variable_type": "label"
+      },
+      {
+        "original": "has",
+        "canonical": "has",
+        "variable_type": "label"
+      },
+      {
+        "original": "eggs",
+        "canonical": "eggs",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "milk",
+        "canonical": "milk",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "he",
+        "canonical": "he",
+        "variable_type": "label"
+      },
+      {
+        "original": "can",
+        "canonical": "can",
+        "variable_type": "label"
+      },
+      {
+        "original": "make",
+        "canonical": "make",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Maurice asked the canteen chef for the recipe for his pancakes."
+      },
+      {
+        "segment_index": 2,
+        "text": "Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter."
+      },
+      {
+        "segment_index": 3,
+        "text": "What is the largest number of pancakes he can make using this recipe?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 23,
+          "y": 18,
+          "width": 471,
+          "height": 210
+        },
+        "readability_score": 0.8374,
+        "contrast_score": 53.5589
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-06T01:53:40Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder token '<image1>' as formatting noise.",
+      "The question explicitly depends on the recipe shown in the image, so image use is required.",
+      "No answer or option content was altered."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "954",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?\n<image1>",
+    "normalized_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+    "raw_answer_text": "8",
+    "normalized_answer_text": "8",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.8487,
+    "multi_step_score": 0.3467,
+    "verifiability_score": 0.954,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "clean_decision_rationale": "The sample is understandable, complete, and appears solvable with a verifiable answer, and the rewrite is usable. However, the alignment evidence is weak and the grounded visual reasoning path was not established, so it should be reviewed rather than passed or rejected.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-06T01:52:42Z",
+    "updated_at": "2026-04-06T01:53:40Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question, answer, and required image are all present, so the core semantic assets are available",
+      "initial scoring is strong: high image dependency, high verifiability, and solid multi-step value",
+      "although the recipe is not recoverable from text alone, the referenced image exists and registry passed",
+      "the only noted risk is upstream LLM usage, which is not by itself sufficient to downgrade a complete and recoverable sample"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_44d71eb5cd4644a13a16b260",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/954/question",
+      "storage_uri": "inline://prob_f5dfafe89181d60045f8f0d3/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 210,
+      "width": null,
+      "height": null,
+      "sha256": "95255d29e718caeb404031b9dbbac2d6a13a98cb6b4116a84f06b10d2c9bec49",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?\n<image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7295,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "chef",
+          "canonical": "chef",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "his",
+          "canonical": "his",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "eggs",
+          "canonical": "eggs",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "asset_id": "asset_3e6921511c1a9823897e3add",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_f5dfafe89181d60045f8f0d3/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 201,
+      "width": null,
+      "height": null,
+      "sha256": "b4d78d9339f3112ed9b8c5230be43c9cde073e9f044a6aa0abea4f59129b2618",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?\n<image1>",
+      "normalized_text_snapshot": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+      "text_completeness_score": 0.7295,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "chef",
+          "canonical": "chef",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "his",
+          "canonical": "his",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "eggs",
+          "canonical": "eggs",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "asset_id": "asset_dcb7030d6516e52ef2f63463",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/954/answer",
+      "storage_uri": "inline://prob_f5dfafe89181d60045f8f0d3/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+      "perceptual_hash": null,
+      "source_text_snapshot": "8",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "asset_id": "asset_1bd50722fce76be7b39fb19a",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_f5dfafe89181d60045f8f0d3/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+      "perceptual_hash": null,
+      "source_text_snapshot": "8",
+      "normalized_text_snapshot": "8",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "asset_id": "asset_75d5c0917edd66241d7c56b8",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_f5dfafe89181d60045f8f0d3_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 71102,
+      "width": 515,
+      "height": 250,
+      "sha256": "20e1d04cf08af704ebd4a7edfb491b7b82d9d94afd0fb0e61dcbaa625ffe195a",
+      "perceptual_hash": "ff50009f939112ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2019.7081,
+      "readability_score": 0.8374,
+      "noise_score": 34.0098,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 23,
+        "y": 18,
+        "width": 471,
+        "height": 210
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "asset_id": "asset_aeb1889ead5f0b90d85c186e",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_f5dfafe89181d60045f8f0d3_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 69430,
+      "width": 471,
+      "height": 210,
+      "sha256": "2c09bda993490dbc6d619cddbacaf6992281bf960d099c862180dba8ba154b91",
+      "perceptual_hash": "7e10003f137f117e",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2019.7081,
+      "readability_score": 0.8374,
+      "noise_score": 34.0098,
+      "cropped_from_asset_id": "asset_75d5c0917edd66241d7c56b8",
+      "roi_bbox": {
+        "x": 23,
+        "y": 18,
+        "width": 471,
+        "height": 210
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "asset_id": "asset_640d64c9fd6d188b212a6c1d",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_131e9425670fce0c56625bb8",
+      "file_format": "txt",
+      "file_size_bytes": 201,
+      "width": null,
+      "height": null,
+      "sha256": "b4d78d9339f3112ed9b8c5230be43c9cde073e9f044a6aa0abea4f59129b2618",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?\n<image1>",
+      "normalized_text_snapshot": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+      "text_completeness_score": 0.7295,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "chef",
+          "canonical": "chef",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "his",
+          "canonical": "his",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "eggs",
+          "canonical": "eggs",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_f5dfafe89181d60045f8f0d3",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "6",
+            "400",
+            "0.5",
+            "200"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "What is the largest number of pancakes he can make using this recipe?",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_f5dfafe89181d60045f8f0d3_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "What is the largest number of pancakes he can make using this recipe?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "8",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "chef",
+          "canonical": "chef",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "his",
+          "canonical": "his",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "eggs",
+          "canonical": "eggs",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Maurice asked the canteen chef for the recipe for his pancakes."
+        },
+        {
+          "segment_index": 2,
+          "text": "Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter."
+        },
+        {
+          "segment_index": 3,
+          "text": "What is the largest number of pancakes he can make using this recipe?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-06T01:53:23Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_f5dfafe89181d60045f8f0d3_1",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 2.06,
+        "dark_pixel_ratio": 0.1408,
+        "readability_score": 0.8374,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 515,
+            "height": 250
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 23,
+            "y": 18,
+            "width": 471,
+            "height": 210
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 23,
+            "y": 18,
+            "width": 235,
+            "height": 105
+          },
+          "salience": 0.5556
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 258,
+            "y": 18,
+            "width": 236,
+            "height": 105
+          },
+          "salience": 0.5398
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 23,
+            "y": 123,
+            "width": 235,
+            "height": 105
+          },
+          "salience": 0.5166
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 258,
+            "y": 123,
+            "width": 236,
+            "height": 105
+          },
+          "salience": 0.5211
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.935,
+      "created_at": "2026-04-06T01:53:23Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_f5dfafe89181d60045f8f0d3",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": false,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "missing_grounded_visual_path"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 0.0
+      },
+      "solvability_score": 0.8,
+      "decision_hint": "reject",
+      "created_at": "2026-04-06T01:53:33Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_1ecc430a2e7baa8a2efcc151",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "text_fact",
+      "canonical_value": "Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter.",
+      "surface_forms": [
+        "Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_3e6921511c1a9823897e3add"
+      ],
+      "evidence_refs": [
+        "asset_3e6921511c1a9823897e3add"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "6",
+          "400",
+          "0.5",
+          "200"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_8a7ef21100129a133f8d4a92",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "target_slot",
+      "canonical_value": "What is the largest number of pancakes he can make using this recipe?",
+      "surface_forms": [
+        "What is the largest number of pancakes he can make using this recipe?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_3e6921511c1a9823897e3add"
+      ],
+      "evidence_refs": [
+        "asset_3e6921511c1a9823897e3add"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_f5dfafe89181d60045f8f0d3_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "What is the largest number of pancakes he can make using this recipe?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "8",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_22573d435f495659260d196d",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "answer_claim",
+      "canonical_value": "8",
+      "surface_forms": [
+        "8"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_1bd50722fce76be7b39fb19a"
+      ],
+      "evidence_refs": [
+        "asset_1bd50722fce76be7b39fb19a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "8"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_1a68a3042544d8d8c66f15e9",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 515,
+          "height": 250
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.935,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_4b22f2370c74556e8a9ea21a",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 23,
+          "y": 18,
+          "width": 471,
+          "height": 210
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.935,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_4e7e25fbb12dfaad48ff058a",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 23,
+          "y": 18,
+          "width": 235,
+          "height": 105
+        },
+        "salience": 0.5556
+      },
+      "unit": null,
+      "confidence": 0.935,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_e71f0c0e12fc1380ace98481",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 258,
+          "y": 18,
+          "width": 236,
+          "height": 105
+        },
+        "salience": 0.5398
+      },
+      "unit": null,
+      "confidence": 0.935,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_3dad4169ba5f8cf9e06db671",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 23,
+          "y": 123,
+          "width": 235,
+          "height": 105
+        },
+        "salience": 0.5166
+      },
+      "unit": null,
+      "confidence": 0.935,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_dc64c90efefebc03543147d0",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 258,
+          "y": 123,
+          "width": 236,
+          "height": 105
+        },
+        "salience": 0.5211
+      },
+      "unit": null,
+      "confidence": 0.935,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_726bf83cad4f102b1f15bf92",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "text_fact",
+      "canonical_value": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+      "surface_forms": [
+        "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_640d64c9fd6d188b212a6c1d"
+      ],
+      "evidence_refs": [
+        "asset_640d64c9fd6d188b212a6c1d"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_131e9425670fce0c56625bb8",
+        "parent_problem_id": "prob_f5dfafe89181d60045f8f0d3",
+        "variant_index": 1,
+        "title": "MathVision 开放题",
+        "rewritten_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "8",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_d7c143179f5a69201196217b",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_f5dfafe89181d60045f8f0d3",
+        "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": false,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 0.0
+        },
+        "solvability_score": 0.8,
+        "decision_hint": "reject",
+        "created_at": "2026-04-06T01:53:33Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "node_id": "node_bf1f8aba5efa9a36053ba96c",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "missing_grounded_visual_path"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:53:40Z",
+      "updated_at": "2026-04-06T01:53:40Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_3d931468681f50e3cceb4331",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_44d71eb5cd4644a13a16b260",
+        "asset_3e6921511c1a9823897e3add",
+        "asset_dcb7030d6516e52ef2f63463",
+        "asset_1bd50722fce76be7b39fb19a",
+        "asset_75d5c0917edd66241d7c56b8",
+        "asset_aeb1889ead5f0b90d85c186e",
+        "asset_640d64c9fd6d188b212a6c1d"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 14
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 515,
+            "height": 250,
+            "blur_score": 2019.7081,
+            "contrast_score": 53.5589,
+            "noise_score": 34.0098,
+            "readability_score": 0.8374,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 23,
+              "y": 18,
+              "width": 471,
+              "height": 210
+            },
+            "perceptual_hash": "ff50009f939112ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_3d931468681f50e3cceb4331",
+        "coverage_score": 0.18,
+        "consistency_score": 0.1,
+        "alignment_status": "bad",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_f5dfafe89181d60045f8f0d3",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_f5dfafe89181d60045f8f0d3",
+        "solvability_score": 0.8,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_verifiable_from_image",
+          "image_text_consistent",
+          "jointly_understandable"
+        ],
+        "rationale": "The question is complete, and the image clearly provides the recipe quantities needed to solve it. A human can understand the task, infer that the limiting ingredient is flour, and verify the expected answer of 8 pancakes.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.902,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "missing_grounded_visual_path"
+      ],
+      "decision_rationale": "The sample is understandable, complete, and appears solvable with a verifiable answer, and the rewrite is usable. However, the alignment evidence is weak and the grounded visual reasoning path was not established, so it should be reviewed rather than passed or rejected.",
+      "review_ticket_id": "review_prob_f5dfafe89181d60045f8f0d3",
+      "operator_type": "system",
+      "started_at": "2026-04-06T01:53:40Z",
+      "finished_at": "2026-04-06T01:53:40Z",
+      "candidate_id": "cand_f5dfafe89181d60045f8f0d3",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_3d931468681f50e3cceb4331",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "image_entity_refs": [
+        "visual_prob_f5dfafe89181d60045f8f0d3_1::roi",
+        "visual_prob_f5dfafe89181d60045f8f0d3_1::roi_top_left",
+        "visual_prob_f5dfafe89181d60045f8f0d3_1::roi_top_right",
+        "visual_prob_f5dfafe89181d60045f8f0d3_1::roi_bottom_left",
+        "visual_prob_f5dfafe89181d60045f8f0d3_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_f5dfafe89181d60045f8f0d3_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.18,
+      "consistency_score": 0.1,
+      "alignment_status": "bad",
+      "created_at": "2026-04-06T01:53:23Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_437f93aa636fbefc9887d231",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?\n<image1>",
+      "after_value": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "audit_id": "audit_2fafe9326b265a2f3d8be6a2",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "8",
+      "after_value": "8",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "audit_id": "audit_3a6e5ea567cd486386457355",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "audit_id": "audit_bf1f8aba5efa9a36053ba96c",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:53:40Z"
+    },
+    {
+      "audit_id": "audit_a4ba4bc90823ad6b20d5d76d",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "chef",
+          "canonical": "chef",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "his",
+          "canonical": "his",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "eggs",
+          "canonical": "eggs",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "make",
+          "canonical": "make",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:53:40Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_3d931468681f50e3cceb4331",
+      "problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "source_problem_id": "954",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_131e9425670fce0c56625bb8",
+          "parent_problem_id": "prob_f5dfafe89181d60045f8f0d3",
+          "variant_index": 1,
+          "title": "MathVision 开放题",
+          "rewritten_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "8",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-06T01:53:40Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_131e9425670fce0c56625bb8",
+      "parent_problem_id": "prob_f5dfafe89181d60045f8f0d3",
+      "variant_index": 1,
+      "title": "MathVision 开放题",
+      "rewritten_question_text": "Maurice asked the canteen chef for the recipe for his pancakes. Maurice has 6 eggs, 400g flour, 0.5 liters of milk and 200g butter. What is the largest number of pancakes he can make using this recipe?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "8",
+      "split_role": "single"
+    }
+  ]
+}

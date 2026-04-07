@@ -1,0 +1,2237 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_04163354479a58f11471fa07",
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "problem_id": "prob_6d5793742e9406750ce7d067",
+    "dataset_name": "MathVision",
+    "source_problem_id": "467",
+    "raw_question_text": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?\n<image1>\n<image2>",
+    "raw_answer_text": "E",
+    "choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "image_paths": [
+      "images/467.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "options field only contains option labels without descriptive option text",
+      "question contains two image placeholders but only one image path field is present",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T16:24:10Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_6d5793742e9406750ce7d067",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_6d5793742e9406750ce7d067_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1100,
+        "height": 987,
+        "file_size": 206621
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 261,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "Metadata extraction notes indicate the options field only contains option labels without descriptive option text.",
+      "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_04163354479a58f11471fa07",
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "dataset_name": "MathVision",
+    "source_problem_id": "467",
+    "created_at": "2026-04-05T16:24:10Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_6d5793742e9406750ce7d067",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.79,
+    "verifiability_score": 0.69,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly says 'In the picture on the right you see a map' and asks what the missing middle piece should look like",
+        "requires_image=true and text_dominant=false",
+        "the task depends on spatial/path relations among cat, mouse, milk, cheese, and a missing map piece, which cannot be resolved from text alone",
+        "asset_registry_record shows an image exists in image_manifest"
+      ],
+      "multi_step": [
+        "question_text imposes multiple simultaneous constraints: cat must reach milk, mouse must reach cheese, and cat and mouse must not meet",
+        "solving requires evaluating how a candidate middle piece changes connectivity/routes on the map",
+        "the answer is a 5-way choice, so the solver must compare candidate pieces against all stated constraints"
+      ],
+      "verifiability": [
+        "answer_manifest indicates a clear choice answer with answer_type='choice' and answer_text='E'",
+        "the constraint structure is concrete enough that a downstream checker could verify whether option E satisfies the route and non-intersection conditions from the image",
+        "registry_passed=true and image asset exists, which supports potential checking",
+        "verifiability is reduced because the options field contains only labels without descriptive option text",
+        "verifiability is also reduced because the registry issues note two image placeholders in the question but only one image path is provided"
+      ]
+    },
+    "risk_flags": [
+      "Metadata extraction notes indicate the options field only contains option labels without descriptive option text.",
+      "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_04163354479a58f11471fa07",
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "dataset_name": "MathVision",
+    "source_problem_id": "467",
+    "created_at": "2026-04-05T16:24:10Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_6d5793742e9406750ce7d067",
+    "priority": 0.78,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Core assets are partially present: the question text, one image, and a choice answer are available, so the sample still appears recoverable.",
+      "The problem is highly image-dependent, but the question references two image placeholders while only one image file is registered, creating an asset gap.",
+      "The options metadata is incomplete because it contains only option labels without descriptive option text, which lowers reconstruction and verification quality.",
+      "Given the missing/ambiguous visual-option assets, the sample should remain in the candidate pool but with reduced priority rather than being rejected."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_04163354479a58f11471fa07",
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "dataset_name": "MathVision",
+    "source_problem_id": "467",
+    "created_at": "2026-04-05T16:24:10Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_04163354479a58f11471fa07",
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "problem_id": "prob_6d5793742e9406750ce7d067",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?",
+    "normalized_answer_text": "E",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed inline image placeholders from the question text.",
+      "Question and answer choices are inherently visual and require the image to interpret.",
+      "Preserved letter-only choice map because the option content is shown graphically rather than textually."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T16:24:10Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "467",
+    "subject": "数学",
+    "raw_question_text": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?\n<image1>\n<image2>",
+    "raw_answer_text": "E",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.79,
+    "initial_verifiability_score": 0.69,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 166,
+      "image_paths": [
+        "images/467.jpg"
+      ],
+      "extraction_notes": [
+        "options field only contains option labels without descriptive option text",
+        "question contains two image placeholders but only one image path field is present",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T16:25:42Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Core assets are partially present: the question text, one image, and a choice answer are available, so the sample still appears recoverable.",
+      "The problem is highly image-dependent, but the question references two image placeholders while only one image file is registered, creating an asset gap.",
+      "The options metadata is incomplete because it contains only option labels without descriptive option text, which lowers reconstruction and verification quality.",
+      "Given the missing/ambiguous visual-option assets, the sample should remain in the candidate pool but with reduced priority rather than being rejected."
+    ],
+    "collection_risk_flags": [
+      "Metadata extraction notes indicate the options field only contains option labels without descriptive option text.",
+      "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_592e3c2e53454dd643906a40",
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "source_dataset": "MathVision",
+    "source_problem_id": "467",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_6d5793742e9406750ce7d067/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_6d5793742e9406750ce7d067/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1100,
+        "height": 987
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.79,
+      "initial_verifiability_score": 0.69
+    },
+    "created_at": "2026-04-05T16:25:42Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Metadata extraction notes indicate the options field only contains option labels without descriptive option text.",
+      "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_7cb2d11855136a9300cc5fa6",
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "source_dataset": "MathVision",
+    "source_problem_id": "467",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.78,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.79,
+      "initial_verifiability_score": 0.69
+    },
+    "created_at": "2026-04-05T16:25:42Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Core assets are partially present: the question text, one image, and a choice answer are available, so the sample still appears recoverable.",
+      "The problem is highly image-dependent, but the question references two image placeholders while only one image file is registered, creating an asset gap.",
+      "The options metadata is incomplete because it contains only option labels without descriptive option text, which lowers reconstruction and verification quality.",
+      "Given the missing/ambiguous visual-option assets, the sample should remain in the candidate pool but with reduced priority rather than being rejected."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_04163354479a58f11471fa07",
+      "candidate_id": "cand_6d5793742e9406750ce7d067",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T16:25:42Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_04163354479a58f11471fa07",
+    "problem_id": "prob_6d5793742e9406750ce7d067",
+    "source_dataset": "MathVision",
+    "source_problem_id": "467",
+    "normalized_question_text": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?",
+    "normalized_answer_text": "E",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "placeholder_image_count_mismatch",
+      "pure_image_choice_needs_review",
+      "rewrite_variant_invalid"
+    ],
+    "created_at": "2026-04-05T16:25:42Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_04163354479a58f11471fa07",
+    "problem_id": "prob_6d5793742e9406750ce7d067",
+    "normalized_question_text": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?",
+    "normalized_answer_text": "E",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "you",
+        "canonical": "you",
+        "variable_type": "label"
+      },
+      {
+        "original": "see",
+        "canonical": "see",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "map",
+        "canonical": "map",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "cat",
+        "canonical": "cat",
+        "variable_type": "label"
+      },
+      {
+        "original": "be",
+        "canonical": "be",
+        "variable_type": "label"
+      },
+      {
+        "original": "able",
+        "canonical": "able",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "milk",
+        "canonical": "milk",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "but",
+        "canonical": "but",
+        "variable_type": "label"
+      },
+      {
+        "original": "must",
+        "canonical": "must",
+        "variable_type": "label"
+      },
+      {
+        "original": "not",
+        "canonical": "not",
+        "variable_type": "label"
+      },
+      {
+        "original": "meet",
+        "canonical": "meet",
+        "variable_type": "label"
+      },
+      {
+        "original": "each",
+        "canonical": "each",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "look",
+        "canonical": "look",
+        "variable_type": "label"
+      },
+      {
+        "original": "like",
+        "canonical": "like",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In the picture on the right you see a map."
+      },
+      {
+        "segment_index": 2,
+        "text": "In the middle a piece is missing."
+      },
+      {
+        "segment_index": 3,
+        "text": "The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other."
+      },
+      {
+        "segment_index": 4,
+        "text": "What should the piece in the middle look like?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1100,
+          "height": 945
+        },
+        "readability_score": 0.8152,
+        "contrast_score": 53.538
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T16:25:42Z",
+    "normalization_notes": [
+      "Removed inline image placeholders from the question text.",
+      "Question and answer choices are inherently visual and require the image to interpret.",
+      "Preserved letter-only choice map because the option content is shown graphically rather than textually."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_6d5793742e9406750ce7d067",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "467",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?\n<image1>\n<image2>",
+    "normalized_question_text": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?",
+    "raw_answer_text": "E",
+    "normalized_answer_text": "E",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9665,
+    "multi_step_score": 0.275,
+    "verifiability_score": 0.906,
+    "quality_risk_flags": [
+      "Metadata extraction notes indicate the options field only contains option labels without descriptive option text.",
+      "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided.",
+      "options_only_labeled_in_metadata",
+      "placeholder_image_count_mismatch"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "placeholder_image_count_mismatch",
+      "pure_image_choice_needs_review",
+      "rewrite_variant_invalid"
+    ],
+    "clean_decision_rationale": "The sample is understandable, image-supported, and the answer label E is available. However, it is still a pure image-choice task with no usable rewritten open variant, and there is a minor placeholder/image-count mismatch in the metadata. It retains semantic value, but should be reviewed instead of passed.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_6d5793742e9406750ce7d067",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T16:24:10Z",
+    "updated_at": "2026-04-05T16:25:42Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.79,
+    "initial_verifiability_score": 0.69,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Core assets are partially present: the question text, one image, and a choice answer are available, so the sample still appears recoverable.",
+      "The problem is highly image-dependent, but the question references two image placeholders while only one image file is registered, creating an asset gap.",
+      "The options metadata is incomplete because it contains only option labels without descriptive option text, which lowers reconstruction and verification quality.",
+      "Given the missing/ambiguous visual-option assets, the sample should remain in the candidate pool but with reduced priority rather than being rejected."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_5b93bbec47fb8982b743c451",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/467/question",
+      "storage_uri": "inline://prob_6d5793742e9406750ce7d067/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 261,
+      "width": null,
+      "height": null,
+      "sha256": "1a2f542ea65853261ad2ad800d4d8ecc03e6a22be935f3d4b1927e108974d5da",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?\n<image1>\n<image2>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.767,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "you",
+          "canonical": "you",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "able",
+          "canonical": "able",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "meet",
+          "canonical": "meet",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "look",
+          "canonical": "look",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "asset_id": "asset_430b79bccd81def023b22ef5",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_6d5793742e9406750ce7d067/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 243,
+      "width": null,
+      "height": null,
+      "sha256": "f00321798d31a01ffab99f020e8a63d845df66bc4c08415139c0ab0c481aa24a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?\n<image1>\n<image2>",
+      "normalized_text_snapshot": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?",
+      "text_completeness_score": 0.767,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "you",
+          "canonical": "you",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "able",
+          "canonical": "able",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "meet",
+          "canonical": "meet",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "look",
+          "canonical": "look",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "asset_id": "asset_642cbf46d0ec9c5939c65d1a",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/467/answer",
+      "storage_uri": "inline://prob_6d5793742e9406750ce7d067/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "a9f51566bd6705f7ea6ad54bb9deb449f795582d6529a0e22207b8981233ec58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "E",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "asset_id": "asset_d302cf083ae00e5543c42cb8",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_6d5793742e9406750ce7d067/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "a9f51566bd6705f7ea6ad54bb9deb449f795582d6529a0e22207b8981233ec58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "E",
+      "normalized_text_snapshot": "E",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "asset_id": "asset_322768ad18e67cc71211b254",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_6d5793742e9406750ce7d067_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 206621,
+      "width": 1100,
+      "height": 987,
+      "sha256": "80ae069dc24daca3c92e61bbfe2c2b9bbad8ce97fb08250c6a9c8bdfd2121fbb",
+      "perceptual_hash": "9fc3c3c3c3ffff7f",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 626.5725,
+      "readability_score": 0.8152,
+      "noise_score": 16.1708,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1100,
+        "height": 945
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Metadata extraction notes indicate the options field only contains option labels without descriptive option text.",
+        "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided.",
+        "options_only_labeled_in_metadata",
+        "placeholder_image_count_mismatch"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "asset_id": "asset_e76e0b40f8b80de1002acba9",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_6d5793742e9406750ce7d067_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 205535,
+      "width": 1100,
+      "height": 945,
+      "sha256": "de162374f5688370564079c0011ef4f0665c32c083e313f8c9d7805d69fcef0c",
+      "perceptual_hash": "83c3c3c3c3ffff7f",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 626.5725,
+      "readability_score": 0.8152,
+      "noise_score": 16.1708,
+      "cropped_from_asset_id": "asset_322768ad18e67cc71211b254",
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1100,
+        "height": 945
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_6d5793742e9406750ce7d067",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "question_type": "multiple_choice",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "What should the piece in the middle look like?",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_6d5793742e9406750ce7d067_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "What should the piece in the middle look like?",
+          "expected_answer_type": "unknown",
+          "expected_answer": "E",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "you",
+          "canonical": "you",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "able",
+          "canonical": "able",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "meet",
+          "canonical": "meet",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "look",
+          "canonical": "look",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In the picture on the right you see a map."
+        },
+        {
+          "segment_index": 2,
+          "text": "In the middle a piece is missing."
+        },
+        {
+          "segment_index": 3,
+          "text": "The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other."
+        },
+        {
+          "segment_index": 4,
+          "text": "What should the piece in the middle look like?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T16:25:17Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_6d5793742e9406750ce7d067_1",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.1145,
+        "dark_pixel_ratio": 0.2832,
+        "readability_score": 0.8152,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1100,
+            "height": 987
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 1100,
+            "height": 945
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 550,
+            "height": 472
+          },
+          "salience": 0.7266
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 550,
+            "y": 24,
+            "width": 550,
+            "height": 472
+          },
+          "salience": 0.6835
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 496,
+            "width": 550,
+            "height": 473
+          },
+          "salience": 0.5986
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 550,
+            "y": 496,
+            "width": 550,
+            "height": 473
+          },
+          "salience": 0.5744
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9261,
+      "created_at": "2026-04-05T16:25:17Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_6d5793742e9406750ce7d067",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-05T16:25:29Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_2c9b1acf56ac72d95a860340",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "target_slot",
+      "canonical_value": "What should the piece in the middle look like?",
+      "surface_forms": [
+        "What should the piece in the middle look like?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_430b79bccd81def023b22ef5"
+      ],
+      "evidence_refs": [
+        "asset_430b79bccd81def023b22ef5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_6d5793742e9406750ce7d067_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "What should the piece in the middle look like?",
+        "expected_answer_type": "unknown",
+        "expected_answer": "E",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_88495411da081635573eba96",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "answer_claim",
+      "canonical_value": "E",
+      "surface_forms": [
+        "E"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d302cf083ae00e5543c42cb8"
+      ],
+      "evidence_refs": [
+        "asset_d302cf083ae00e5543c42cb8"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "E"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_92efa27701579a18549465dd",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1100,
+          "height": 987
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9261,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_6546377db0701922c55fcab0",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1100,
+          "height": 945
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9261,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_02a399e66058838003c5c9f2",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 550,
+          "height": 472
+        },
+        "salience": 0.7266
+      },
+      "unit": null,
+      "confidence": 0.9261,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_2bac3422057d8aef8e31f8e1",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 550,
+          "y": 24,
+          "width": 550,
+          "height": 472
+        },
+        "salience": 0.6835
+      },
+      "unit": null,
+      "confidence": 0.9261,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_dad490a78c2e154e443cb7e3",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 496,
+          "width": 550,
+          "height": 473
+        },
+        "salience": 0.5986
+      },
+      "unit": null,
+      "confidence": 0.9261,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_bcc98e3c2cd557cb5233e8bb",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 550,
+          "y": 496,
+          "width": 550,
+          "height": 473
+        },
+        "salience": 0.5744
+      },
+      "unit": null,
+      "confidence": 0.9261,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_23329c23da4ce4c143070569",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "quality_signal",
+      "canonical_value": "Metadata extraction notes indicate the options field only contains option labels without descriptive option text.",
+      "surface_forms": [
+        "Metadata extraction notes indicate the options field only contains option labels without descriptive option text."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Metadata extraction notes indicate the options field only contains option labels without descriptive option text."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_193ab029492cf5b681d61417",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "quality_signal",
+      "canonical_value": "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided.",
+      "surface_forms": [
+        "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_3a4abd3aa90009312672dc89",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "quality_signal",
+      "canonical_value": "options_only_labeled_in_metadata",
+      "surface_forms": [
+        "options_only_labeled_in_metadata"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "options_only_labeled_in_metadata"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_82b7fcee2d89af8200684afc",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "quality_signal",
+      "canonical_value": "placeholder_image_count_mismatch",
+      "surface_forms": [
+        "placeholder_image_count_mismatch"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "placeholder_image_count_mismatch"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_00167699e8823b8e6100ff2a",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_6d5793742e9406750ce7d067",
+        "problem_id": "prob_6d5793742e9406750ce7d067",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-05T16:25:29Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "node_id": "node_f8be29cec0922e890e90cda0",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "placeholder_image_count_mismatch",
+          "pure_image_choice_needs_review",
+          "rewrite_variant_invalid"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T16:25:42Z",
+      "updated_at": "2026-04-05T16:25:42Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_04163354479a58f11471fa07",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_5b93bbec47fb8982b743c451",
+        "asset_430b79bccd81def023b22ef5",
+        "asset_642cbf46d0ec9c5939c65d1a",
+        "asset_d302cf083ae00e5543c42cb8",
+        "asset_322768ad18e67cc71211b254",
+        "asset_e76e0b40f8b80de1002acba9"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 23
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1100,
+            "height": 987,
+            "blur_score": 626.5725,
+            "contrast_score": 53.538,
+            "noise_score": 16.1708,
+            "readability_score": 0.8152,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 24,
+              "width": 1100,
+              "height": 945
+            },
+            "perceptual_hash": "9fc3c3c3c3ffff7f"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_04163354479a58f11471fa07",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_6d5793742e9406750ce7d067",
+        "question_type": "multiple_choice",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_6d5793742e9406750ce7d067",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "non_recoverable_image_index_selection"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "jointly_understandable",
+          "question_semantics_clear",
+          "single_image_contains_both_panels",
+          "visual_options_present"
+        ],
+        "rationale": "The task is clear: choose the missing center road piece so the cat can reach the milk, the mouse can reach the cheese, and they do not meet. Although the metadata mentions two image placeholders and only label-only options, the provided single image clearly contains both the map and the visual answer choices.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Metadata extraction notes indicate the options field only contains option labels without descriptive option text.",
+        "Question contains two image placeholders ('<image1>' and '<image2>') but only one image path is provided.",
+        "options_only_labeled_in_metadata",
+        "placeholder_image_count_mismatch"
+      ],
+      "clean_score": 0.906,
+      "decision": "review",
+      "decision_reason_codes": [
+        "placeholder_image_count_mismatch",
+        "pure_image_choice_needs_review",
+        "rewrite_variant_invalid"
+      ],
+      "decision_rationale": "The sample is understandable, image-supported, and the answer label E is available. However, it is still a pure image-choice task with no usable rewritten open variant, and there is a minor placeholder/image-count mismatch in the metadata. It retains semantic value, but should be reviewed instead of passed.",
+      "review_ticket_id": "review_prob_6d5793742e9406750ce7d067",
+      "operator_type": "system",
+      "started_at": "2026-04-05T16:25:42Z",
+      "finished_at": "2026-04-05T16:25:42Z",
+      "candidate_id": "cand_6d5793742e9406750ce7d067",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_04163354479a58f11471fa07",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "image_entity_refs": [
+        "visual_prob_6d5793742e9406750ce7d067_1::roi",
+        "visual_prob_6d5793742e9406750ce7d067_1::roi_top_left",
+        "visual_prob_6d5793742e9406750ce7d067_1::roi_top_right",
+        "visual_prob_6d5793742e9406750ce7d067_1::roi_bottom_left",
+        "visual_prob_6d5793742e9406750ce7d067_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_6d5793742e9406750ce7d067_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "slot_prob_6d5793742e9406750ce7d067_1",
+          "image_ref": "visual_prob_6d5793742e9406750ce7d067_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7837
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-05T16:25:17Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_a6dac7adaf3ada3a1773569a",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?\n<image1>\n<image2>",
+      "after_value": "In the picture on the right you see a map. In the middle a piece is missing. The cat should be able to reach the milk, and the mouse the cheese, but the cat and the mouse must not meet each other. What should the piece in the middle look like?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "audit_id": "audit_a07564bf8bbf10b85a28bd75",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "E",
+      "after_value": "E",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "audit_id": "audit_6ec6fe7dcdea380d546cfce1",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "audit_id": "audit_f8be29cec0922e890e90cda0",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T16:25:42Z"
+    },
+    {
+      "audit_id": "audit_5bea0a1a99a3e1b5cbb510bb",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "you",
+          "canonical": "you",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "cat",
+          "canonical": "cat",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "able",
+          "canonical": "able",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "milk",
+          "canonical": "milk",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "must",
+          "canonical": "must",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "meet",
+          "canonical": "meet",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "look",
+          "canonical": "look",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T16:25:42Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_04163354479a58f11471fa07",
+      "problem_id": "prob_6d5793742e9406750ce7d067",
+      "source_problem_id": "467",
+      "strategy": "drop_image_index",
+      "rationale": "This is a pure image-piece selection task: the correct answer is option image E, and the option text provides no semantic content that can be rewritten into an answerable open-ended question.",
+      "discard_reason_codes": [
+        "non_recoverable_image_index_selection"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-05T16:25:42Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}

@@ -1,0 +1,1872 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_c1ad60462d97e6bef369f2a3",
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "problem_id": "prob_9dd8a70f7351835215e09c2b",
+    "dataset_name": "MathVision",
+    "source_problem_id": "788",
+    "raw_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$ ?\n<image1>",
+    "raw_answer_text": "$10 \\times 10$",
+    "choice_map": {
+      "A": "$10 \\times 10$",
+      "B": "$11 \\times 11$",
+      "C": "$12 \\times 12$",
+      "D": "$13 \\times 13$",
+      "E": "$14 \\times 14$"
+    },
+    "image_paths": [
+      "images/788.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T22:34:49Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_9dd8a70f7351835215e09c2b",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_9dd8a70f7351835215e09c2b_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 377,
+        "height": 356,
+        "file_size": 21199
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 102,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 14
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_c1ad60462d97e6bef369f2a3",
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "dataset_name": "MathVision",
+    "source_problem_id": "788",
+    "created_at": "2026-04-05T22:34:49Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_9dd8a70f7351835215e09c2b",
+    "image_dependency_score": 0.72,
+    "multi_step_score": 0.64,
+    "verifiability_score": 0.96,
+    "score_evidence": {
+      "image_dependency": [
+        "Question explicitly references an adjacent picture.",
+        "Input flags indicate requires_image=true and text_dominant=false.",
+        "However, the textual example '1+3+5+7=4×4' already exposes the main pattern, so image dependence is not maximal."
+      ],
+      "multi_step": [
+        "Solving requires identifying the sequence of odd numbers up to 19 and relating it to the square pattern shown by the example.",
+        "This is at least a two-step reasoning process: count/recognize terms, then map to the resulting square.",
+        "Multiple-choice options are structurally similar, so some reasoning is needed beyond direct extraction."
+      ],
+      "verifiability": [
+        "Answer is a short, explicit expression ('$10 × 10$') and can be checked deterministically.",
+        "The problem has fixed multiple-choice options, enabling straightforward answer validation.",
+        "asset_registry_record.registry_passed=true and answer_present=true support reliable downstream checking."
+      ]
+    },
+    "risk_flags": [
+      "Image may be helpful for pattern discovery, but the text alone may be sufficient for many solvers."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_c1ad60462d97e6bef369f2a3",
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "dataset_name": "MathVision",
+    "source_problem_id": "788",
+    "created_at": "2026-04-05T22:34:49Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_9dd8a70f7351835215e09c2b",
+    "priority": 0.86,
+    "decision": "keep",
+    "decision_reasons": [
+      "Assets are complete and registry passed: question, answer, and primary image are all present with no recorded issues.",
+      "Initial scoring is strong overall, especially verifiability (0.96), with solid image dependency and multi-step reasoning signals.",
+      "The noted risk is limited: the image is helpful but not the only carrier of core semantics, so this does not block inclusion in the candidate pool."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_c1ad60462d97e6bef369f2a3",
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "dataset_name": "MathVision",
+    "source_problem_id": "788",
+    "created_at": "2026-04-05T22:34:49Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_c1ad60462d97e6bef369f2a3",
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "problem_id": "prob_9dd8a70f7351835215e09c2b",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+    "normalized_answer_text": "$10 \\times 10$",
+    "normalized_choice_map": {
+      "A": "$10 \\times 10$",
+      "B": "$11 \\times 11$",
+      "C": "$12 \\times 12$",
+      "D": "$13 \\times 13$",
+      "E": "$14 \\times 14$"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder token.",
+      "Kept the explicit reference to the adjacent picture.",
+      "Set requires_image=true because force_requires_image=true and the prompt explicitly references the picture."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T22:34:49Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "788",
+    "subject": "数学",
+    "raw_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$ ?\n<image1>",
+    "raw_answer_text": "$10 \\times 10$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.72,
+    "initial_multi_solution_score": 0.64,
+    "initial_verifiability_score": 0.96,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 487,
+      "image_paths": [
+        "images/788.jpg"
+      ],
+      "extraction_notes": [
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T22:36:00Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.86,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Assets are complete and registry passed: question, answer, and primary image are all present with no recorded issues.",
+      "Initial scoring is strong overall, especially verifiability (0.96), with solid image dependency and multi-step reasoning signals.",
+      "The noted risk is limited: the image is helpful but not the only carrier of core semantics, so this does not block inclusion in the candidate pool."
+    ],
+    "collection_risk_flags": [
+      "Image may be helpful for pattern discovery, but the text alone may be sufficient for many solvers."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_0f6c7ccd595018f622896e90",
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "source_dataset": "MathVision",
+    "source_problem_id": "788",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_9dd8a70f7351835215e09c2b/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_9dd8a70f7351835215e09c2b/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 377,
+        "height": 356
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.72,
+      "initial_multi_solution_score": 0.64,
+      "initial_verifiability_score": 0.96
+    },
+    "created_at": "2026-04-05T22:36:00Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_44fe02cc9cf628c3756055bd",
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "source_dataset": "MathVision",
+    "source_problem_id": "788",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.86,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.72,
+      "initial_multi_solution_score": 0.64,
+      "initial_verifiability_score": 0.96
+    },
+    "created_at": "2026-04-05T22:36:00Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Assets are complete and registry passed: question, answer, and primary image are all present with no recorded issues.",
+      "Initial scoring is strong overall, especially verifiability (0.96), with solid image dependency and multi-step reasoning signals.",
+      "The noted risk is limited: the image is helpful but not the only carrier of core semantics, so this does not block inclusion in the candidate pool."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_c1ad60462d97e6bef369f2a3",
+      "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T22:36:00Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_c1ad60462d97e6bef369f2a3",
+    "problem_id": "prob_9dd8a70f7351835215e09c2b",
+    "source_dataset": "MathVision",
+    "source_problem_id": "788",
+    "normalized_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+    "normalized_answer_text": "$10 \\times 10$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "created_at": "2026-04-05T22:36:00Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_c1ad60462d97e6bef369f2a3",
+    "problem_id": "prob_9dd8a70f7351835215e09c2b",
+    "normalized_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+    "normalized_answer_text": "$10 \\times 10$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "we",
+        "canonical": "we",
+        "variable_type": "label"
+      },
+      {
+        "original": "see",
+        "canonical": "see",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "How",
+        "canonical": "How",
+        "variable_type": "label"
+      },
+      {
+        "original": "big",
+        "canonical": "big",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$."
+      },
+      {
+        "segment_index": 2,
+        "text": "How big is $1+3+5+7+\\ldots+17+19$?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 320,
+          "height": 319
+        },
+        "readability_score": 0.7934,
+        "contrast_score": 53.6845
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T22:36:00Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder token.",
+      "Kept the explicit reference to the adjacent picture.",
+      "Set requires_image=true because force_requires_image=true and the prompt explicitly references the picture."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_9dd8a70f7351835215e09c2b",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "788",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$ ?\n<image1>",
+    "normalized_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+    "raw_answer_text": "$10 \\times 10$",
+    "normalized_answer_text": "$10 \\times 10$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.8443,
+    "multi_step_score": 0.3917,
+    "verifiability_score": 0.874,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "clean_decision_rationale": "The sample is understandable and answerable, with a usable rewrite and complete answer signal, but the very weak alignment/grounded-visual-path evidence creates a non-fatal risk that should be checked before passing.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T22:34:49Z",
+    "updated_at": "2026-04-05T22:36:00Z",
+    "initial_image_dependency_score": 0.72,
+    "initial_multi_solution_score": 0.64,
+    "initial_verifiability_score": 0.96,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.86,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Assets are complete and registry passed: question, answer, and primary image are all present with no recorded issues.",
+      "Initial scoring is strong overall, especially verifiability (0.96), with solid image dependency and multi-step reasoning signals.",
+      "The noted risk is limited: the image is helpful but not the only carrier of core semantics, so this does not block inclusion in the candidate pool."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_feaa5f27fae74a35b902df25",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/788/question",
+      "storage_uri": "inline://prob_9dd8a70f7351835215e09c2b/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 102,
+      "width": null,
+      "height": null,
+      "sha256": "e2c8cdece5916fefce67dd675f588a9770dc3baa108148f2c2fee100fcf16cd2",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$ ?\n<image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6321,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "big",
+          "canonical": "big",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "asset_id": "asset_a5f80596d26fcb009aa49c85",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_9dd8a70f7351835215e09c2b/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 92,
+      "width": null,
+      "height": null,
+      "sha256": "b940f83f3d4f83c5cee7f4f58bb45a7c1c311e5a17eff0b034e76e40d8cc3b0c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$ ?\n<image1>",
+      "normalized_text_snapshot": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+      "text_completeness_score": 0.6321,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "big",
+          "canonical": "big",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "asset_id": "asset_85ace5107a8730398e76937c",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/788/answer",
+      "storage_uri": "inline://prob_9dd8a70f7351835215e09c2b/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 14,
+      "width": null,
+      "height": null,
+      "sha256": "645aba6402efffccf8f105b0013477e38fcde98136548972ddd9bac1b72a0964",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$10 \\times 10$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "asset_id": "asset_3bc03772d9f203432f0c9b8c",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_9dd8a70f7351835215e09c2b/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 14,
+      "width": null,
+      "height": null,
+      "sha256": "645aba6402efffccf8f105b0013477e38fcde98136548972ddd9bac1b72a0964",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$10 \\times 10$",
+      "normalized_text_snapshot": "$10 \\times 10$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "asset_id": "asset_7e0b777d4eb23513506b9847",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_9dd8a70f7351835215e09c2b_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 21199,
+      "width": 377,
+      "height": 356,
+      "sha256": "a7813c1fbe174713faf90c5f3c41bee1e753b7851e2b5962e00252de363fb7c1",
+      "perceptual_hash": "00fcd6c6fe16df56",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 361.6933,
+      "readability_score": 0.7934,
+      "noise_score": 19.5017,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 24,
+        "y": 24,
+        "width": 320,
+        "height": 319
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "asset_id": "asset_7811f856c96f7aa74751ae6a",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_9dd8a70f7351835215e09c2b_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 20139,
+      "width": 320,
+      "height": 319,
+      "sha256": "d54a095607846f4e5c61a8af6060ce37b8d6ea1e522de9552b24011dcd87ab51",
+      "perceptual_hash": "00ff02fafa5aff5a",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 361.6933,
+      "readability_score": 0.7934,
+      "noise_score": 19.5017,
+      "cropped_from_asset_id": "asset_7e0b777d4eb23513506b9847",
+      "roi_bbox": {
+        "x": 24,
+        "y": 24,
+        "width": 320,
+        "height": 319
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "asset_id": "asset_3322efac6a83f2f325199a4c",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_0c6b5127f95ad33d3085ff94",
+      "file_format": "txt",
+      "file_size_bytes": 92,
+      "width": null,
+      "height": null,
+      "sha256": "b940f83f3d4f83c5cee7f4f58bb45a7c1c311e5a17eff0b034e76e40d8cc3b0c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$ ?\n<image1>",
+      "normalized_text_snapshot": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+      "text_completeness_score": 0.6321,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "big",
+          "canonical": "big",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_9dd8a70f7351835215e09c2b",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "+3",
+            "+5",
+            "+7",
+            "4",
+            "4"
+          ],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "How big is $1+3+5+7+\\ldots+17+19$?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "+3",
+            "+5",
+            "+7",
+            "+17",
+            "+19"
+          ],
+          "unit_mentions": [
+            "g",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_9dd8a70f7351835215e09c2b_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "How big is $1+3+5+7+\\ldots+17+19$?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$10 \\times 10$",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "big",
+          "canonical": "big",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$."
+        },
+        {
+          "segment_index": 2,
+          "text": "How big is $1+3+5+7+\\ldots+17+19$?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T22:35:42Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_9dd8a70f7351835215e09c2b_1",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.059,
+        "dark_pixel_ratio": 0.0844,
+        "readability_score": 0.7934,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 377,
+            "height": 356
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 24,
+            "y": 24,
+            "width": 320,
+            "height": 319
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 24,
+            "width": 160,
+            "height": 159
+          },
+          "salience": 0.4596
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 184,
+            "y": 24,
+            "width": 160,
+            "height": 159
+          },
+          "salience": 0.4809
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 183,
+            "width": 160,
+            "height": 160
+          },
+          "salience": 0.4408
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 184,
+            "y": 183,
+            "width": 160,
+            "height": 160
+          },
+          "salience": 0.4625
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9174,
+      "created_at": "2026-04-05T22:35:42Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_9dd8a70f7351835215e09c2b",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": false,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "missing_grounded_visual_path"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 0.0
+      },
+      "solvability_score": 0.8,
+      "decision_hint": "reject",
+      "created_at": "2026-04-05T22:35:53Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_8b3c17f1a953d304668b4298",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "text_fact",
+      "canonical_value": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$.",
+      "surface_forms": [
+        "In the adjacent picture we see that $1+3+5+7=4 \\times 4$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_a5f80596d26fcb009aa49c85"
+      ],
+      "evidence_refs": [
+        "asset_a5f80596d26fcb009aa49c85"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "+3",
+          "+5",
+          "+7",
+          "4",
+          "4"
+        ],
+        "unit_mentions": [
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_d3d9ab3460f03683f93f5012",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "target_slot",
+      "canonical_value": "How big is $1+3+5+7+\\ldots+17+19$?",
+      "surface_forms": [
+        "How big is $1+3+5+7+\\ldots+17+19$?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_a5f80596d26fcb009aa49c85"
+      ],
+      "evidence_refs": [
+        "asset_a5f80596d26fcb009aa49c85"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_9dd8a70f7351835215e09c2b_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "How big is $1+3+5+7+\\ldots+17+19$?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$10 \\times 10$",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_8f5db3f7d1d2215728a64caf",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "answer_claim",
+      "canonical_value": "$10 \\times 10$",
+      "surface_forms": [
+        "$10 \\times 10$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_3bc03772d9f203432f0c9b8c"
+      ],
+      "evidence_refs": [
+        "asset_3bc03772d9f203432f0c9b8c"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$10 \\times 10$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_54496be0e7ec5574359ee73a",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 377,
+          "height": 356
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9174,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_2a5c3881a97f47b39630c749",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 320,
+          "height": 319
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9174,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_29526a74d8922edc4bcd2327",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 160,
+          "height": 159
+        },
+        "salience": 0.4596
+      },
+      "unit": null,
+      "confidence": 0.9174,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_c6307c30aec11e13fc2f404f",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 184,
+          "y": 24,
+          "width": 160,
+          "height": 159
+        },
+        "salience": 0.4809
+      },
+      "unit": null,
+      "confidence": 0.9174,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_af5bf04323a2082777cd9a39",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 183,
+          "width": 160,
+          "height": 160
+        },
+        "salience": 0.4408
+      },
+      "unit": null,
+      "confidence": 0.9174,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_81e327da29203ec2b93b9fca",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 184,
+          "y": 183,
+          "width": 160,
+          "height": 160
+        },
+        "salience": 0.4625
+      },
+      "unit": null,
+      "confidence": 0.9174,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_da6fff8fea6d11f9d95efcba",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "text_fact",
+      "canonical_value": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+      "surface_forms": [
+        "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_3322efac6a83f2f325199a4c"
+      ],
+      "evidence_refs": [
+        "asset_3322efac6a83f2f325199a4c"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_0c6b5127f95ad33d3085ff94",
+        "parent_problem_id": "prob_9dd8a70f7351835215e09c2b",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$10 \\times 10$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_0dbd75b394bc734de69b3370",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_9dd8a70f7351835215e09c2b",
+        "problem_id": "prob_9dd8a70f7351835215e09c2b",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": false,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 0.0
+        },
+        "solvability_score": 0.8,
+        "decision_hint": "reject",
+        "created_at": "2026-04-05T22:35:53Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "node_id": "node_a38cc8ad57c777ae7d451ba2",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "missing_grounded_visual_path"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T22:36:00Z",
+      "updated_at": "2026-04-05T22:36:00Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_c1ad60462d97e6bef369f2a3",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_feaa5f27fae74a35b902df25",
+        "asset_a5f80596d26fcb009aa49c85",
+        "asset_85ace5107a8730398e76937c",
+        "asset_3bc03772d9f203432f0c9b8c",
+        "asset_7e0b777d4eb23513506b9847",
+        "asset_7811f856c96f7aa74751ae6a",
+        "asset_3322efac6a83f2f325199a4c"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 8
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 377,
+            "height": 356,
+            "blur_score": 361.6933,
+            "contrast_score": 53.6845,
+            "noise_score": 19.5017,
+            "readability_score": 0.7934,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 24,
+              "y": 24,
+              "width": 320,
+              "height": 319
+            },
+            "perceptual_hash": "00fcd6c6fe16df56"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_c1ad60462d97e6bef369f2a3",
+        "coverage_score": 0.18,
+        "consistency_score": 0.1,
+        "alignment_status": "bad",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_9dd8a70f7351835215e09c2b",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_9dd8a70f7351835215e09c2b",
+        "solvability_score": 0.8,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_semantically_supportive",
+          "jointly_understandable",
+          "question_clear"
+        ],
+        "rationale": "The question clearly asks for the pattern extending the visual idea that sums of consecutive odd numbers form a square. The image is simple but usable and supports the stated example 1+3+5+7=4x4, so the expected answer 10x10 is understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.8782,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "missing_grounded_visual_path"
+      ],
+      "decision_rationale": "The sample is understandable and answerable, with a usable rewrite and complete answer signal, but the very weak alignment/grounded-visual-path evidence creates a non-fatal risk that should be checked before passing.",
+      "review_ticket_id": "review_prob_9dd8a70f7351835215e09c2b",
+      "operator_type": "system",
+      "started_at": "2026-04-05T22:36:00Z",
+      "finished_at": "2026-04-05T22:36:00Z",
+      "candidate_id": "cand_9dd8a70f7351835215e09c2b",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_c1ad60462d97e6bef369f2a3",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "image_entity_refs": [
+        "visual_prob_9dd8a70f7351835215e09c2b_1::roi",
+        "visual_prob_9dd8a70f7351835215e09c2b_1::roi_top_left",
+        "visual_prob_9dd8a70f7351835215e09c2b_1::roi_top_right",
+        "visual_prob_9dd8a70f7351835215e09c2b_1::roi_bottom_left",
+        "visual_prob_9dd8a70f7351835215e09c2b_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_9dd8a70f7351835215e09c2b_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.18,
+      "consistency_score": 0.1,
+      "alignment_status": "bad",
+      "created_at": "2026-04-05T22:35:42Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_95cb56bd1c937e49d295a12c",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$ ?\n<image1>",
+      "after_value": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "audit_id": "audit_f90115c95628e19b5a327d84",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$10 \\times 10$",
+      "after_value": "$10 \\times 10$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "audit_id": "audit_78af82f6237948eb8c188215",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "audit_id": "audit_a38cc8ad57c777ae7d451ba2",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T22:36:00Z"
+    },
+    {
+      "audit_id": "audit_e6b862b5b2f5a91ca7e8df2a",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "big",
+          "canonical": "big",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T22:36:00Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_c1ad60462d97e6bef369f2a3",
+      "problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "source_problem_id": "788",
+      "strategy": "keep_open",
+      "rationale": "The stem is already a directly answerable open-ended math question, so the multiple-choice options can be removed without changing its meaning.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_0c6b5127f95ad33d3085ff94",
+          "parent_problem_id": "prob_9dd8a70f7351835215e09c2b",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$10 \\times 10$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-05T22:36:00Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_0c6b5127f95ad33d3085ff94",
+      "parent_problem_id": "prob_9dd8a70f7351835215e09c2b",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "In the adjacent picture we see that $1+3+5+7=4 \\times 4$. How big is $1+3+5+7+\\ldots+17+19$?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$10 \\times 10$",
+      "split_role": "single"
+    }
+  ]
+}

@@ -1,0 +1,1871 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_4358febaae707241e6a042f7",
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "problem_id": "prob_c75de3cd34746076dce39d4a",
+    "dataset_name": "MathVision",
+    "source_problem_id": "686",
+    "raw_question_text": "Daniel sticks these two pieces of paper <image1> on this black circle: <image2> The two pieces of paper are not allowed to overlap. Which picture does he get?\n<image3>",
+    "raw_answer_text": "E",
+    "choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "image_paths": [
+      "images/686.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "选项字段仅提供了 A-E 标签，未提供可独立于图像的选项文本。",
+      "题目中的 <image1>、<image2>、<image3> 为图像占位符，不是实际路径。",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T20:42:05Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_c75de3cd34746076dce39d4a",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_c75de3cd34746076dce39d4a_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1551,
+        "height": 754,
+        "file_size": 184142
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 167,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "Option texts are not separately provided; only A-E labels are available according to metadata."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_4358febaae707241e6a042f7",
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "dataset_name": "MathVision",
+    "source_problem_id": "686",
+    "created_at": "2026-04-05T20:42:05Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_c75de3cd34746076dce39d4a",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.78,
+    "verifiability_score": 0.79,
+    "score_evidence": {
+      "image_dependency": [
+        "Question explicitly refers to 'image 1', 'image 2', and 'image 3' and asks which pictured result is obtained.",
+        "requires_image=true and text_dominant=false indicate the problem cannot be solved from text alone.",
+        "The task depends on visual shape placement and non-overlap constraints on a circle."
+      ],
+      "multi_step": [
+        "Solver must combine two paper pieces onto a target circle under a non-overlap constraint, then compare the resulting configuration against answer images.",
+        "This involves spatial transformation/composition plus option matching, which is at least a two-step visual reasoning process.",
+        "There are 5 answer choices, so the task includes discriminating among multiple candidate visual outcomes."
+      ],
+      "verifiability": [
+        "answer_type is option/choice and answer_text is a single label 'E', so the final response format is clear.",
+        "registry_passed=true, question_present=true, answer_present=true, and the image asset exists.",
+        "Verification is feasible by checking the visual composition against the provided options, though it is image-dependent."
+      ]
+    },
+    "risk_flags": [
+      "Correctness checking requires access to and interpretation of the images.",
+      "Option texts are not separately provided; only A-E labels are available according to metadata.",
+      "Spatial composition outcome may be harder to verify with text-only rules."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_4358febaae707241e6a042f7",
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "dataset_name": "MathVision",
+    "source_problem_id": "686",
+    "created_at": "2026-04-05T20:42:05Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_c75de3cd34746076dce39d4a",
+    "priority": 0.88,
+    "decision": "keep",
+    "decision_reasons": [
+      "Core semantic assets are present: question text exists, the primary image exists, and the answer is provided.",
+      "The problem is strongly image-dependent, but the required image asset is available, so the sample remains recoverable and usable.",
+      "Initial scoring is solid overall, with high image-dependency relevance and adequate multi-step and verifiability scores.",
+      "Although option texts are not separately provided, this appears to be a visual multiple-choice item and the image asset can still carry the option content."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_4358febaae707241e6a042f7",
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "dataset_name": "MathVision",
+    "source_problem_id": "686",
+    "created_at": "2026-04-05T20:42:05Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_4358febaae707241e6a042f7",
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "problem_id": "prob_c75de3cd34746076dce39d4a",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2. The two pieces of paper are not allowed to overlap. Which picture in image 3 does he get?",
+    "normalized_answer_text": "E",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Replaced inline image tags with textual image references while preserving the original question meaning.",
+      "Question depends on visual spatial arrangement and visual answer choices.",
+      "Answer and choice labels were kept as provided."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T20:42:05Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "686",
+    "subject": "数学",
+    "raw_question_text": "Daniel sticks these two pieces of paper <image1> on this black circle: <image2> The two pieces of paper are not allowed to overlap. Which picture does he get?\n<image3>",
+    "raw_answer_text": "E",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.78,
+    "initial_verifiability_score": 0.79,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 385,
+      "image_paths": [
+        "images/686.jpg"
+      ],
+      "extraction_notes": [
+        "选项字段仅提供了 A-E 标签，未提供可独立于图像的选项文本。",
+        "题目中的 <image1>、<image2>、<image3> 为图像占位符，不是实际路径。",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T20:43:20Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Core semantic assets are present: question text exists, the primary image exists, and the answer is provided.",
+      "The problem is strongly image-dependent, but the required image asset is available, so the sample remains recoverable and usable.",
+      "Initial scoring is solid overall, with high image-dependency relevance and adequate multi-step and verifiability scores.",
+      "Although option texts are not separately provided, this appears to be a visual multiple-choice item and the image asset can still carry the option content."
+    ],
+    "collection_risk_flags": [
+      "Correctness checking requires access to and interpretation of the images.",
+      "Option texts are not separately provided; only A-E labels are available according to metadata.",
+      "Spatial composition outcome may be harder to verify with text-only rules."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_8f7c75db5f4a59dddf0518cf",
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "source_dataset": "MathVision",
+    "source_problem_id": "686",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_c75de3cd34746076dce39d4a/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_c75de3cd34746076dce39d4a/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1551,
+        "height": 754
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.78,
+      "initial_verifiability_score": 0.79
+    },
+    "created_at": "2026-04-05T20:43:20Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Option texts are not separately provided; only A-E labels are available according to metadata."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_8c5a144cd01de9c6acb0ba19",
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "source_dataset": "MathVision",
+    "source_problem_id": "686",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.88,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.78,
+      "initial_verifiability_score": 0.79
+    },
+    "created_at": "2026-04-05T20:43:20Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Core semantic assets are present: question text exists, the primary image exists, and the answer is provided.",
+      "The problem is strongly image-dependent, but the required image asset is available, so the sample remains recoverable and usable.",
+      "Initial scoring is solid overall, with high image-dependency relevance and adequate multi-step and verifiability scores.",
+      "Although option texts are not separately provided, this appears to be a visual multiple-choice item and the image asset can still carry the option content."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_4358febaae707241e6a042f7",
+      "candidate_id": "cand_c75de3cd34746076dce39d4a",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T20:43:20Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_4358febaae707241e6a042f7",
+    "problem_id": "prob_c75de3cd34746076dce39d4a",
+    "source_dataset": "MathVision",
+    "source_problem_id": "686",
+    "normalized_question_text": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2. The two pieces of paper are not allowed to overlap. Which picture in image 3 does he get?",
+    "normalized_answer_text": "E",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "pure_image_option_selection",
+      "recoverable_semantic_value",
+      "rewrite_not_usable"
+    ],
+    "created_at": "2026-04-05T20:43:20Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_4358febaae707241e6a042f7",
+    "problem_id": "prob_c75de3cd34746076dce39d4a",
+    "normalized_question_text": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2. The two pieces of paper are not allowed to overlap. Which picture in image 3 does he get?",
+    "normalized_answer_text": "E",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "two",
+        "canonical": "two",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "onto",
+        "canonical": "onto",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "not",
+        "canonical": "not",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "does",
+        "canonical": "does",
+        "variable_type": "label"
+      },
+      {
+        "original": "he",
+        "canonical": "he",
+        "variable_type": "label"
+      },
+      {
+        "original": "get",
+        "canonical": "get",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2."
+      },
+      {
+        "segment_index": 2,
+        "text": "The two pieces of paper are not allowed to overlap."
+      },
+      {
+        "segment_index": 3,
+        "text": "Which picture in image 3 does he get?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 16,
+          "width": 1551,
+          "height": 720
+        },
+        "readability_score": 0.8432,
+        "contrast_score": 56.2742
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T20:43:20Z",
+    "normalization_notes": [
+      "Replaced inline image tags with textual image references while preserving the original question meaning.",
+      "Question depends on visual spatial arrangement and visual answer choices.",
+      "Answer and choice labels were kept as provided."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_c75de3cd34746076dce39d4a",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "686",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Daniel sticks these two pieces of paper <image1> on this black circle: <image2> The two pieces of paper are not allowed to overlap. Which picture does he get?\n<image3>",
+    "normalized_question_text": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2. The two pieces of paper are not allowed to overlap. Which picture in image 3 does he get?",
+    "raw_answer_text": "E",
+    "normalized_answer_text": "E",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9813,
+    "multi_step_score": 0.32,
+    "verifiability_score": 0.9172,
+    "quality_risk_flags": [
+      "Option texts are not separately provided; only A-E labels are available according to metadata."
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "pure_image_option_selection",
+      "recoverable_semantic_value",
+      "rewrite_not_usable"
+    ],
+    "clean_decision_rationale": "The sample is understandable, image-supported, and the answer is present as option E, with no serious alignment failure. However, the rewrite stage produced no usable normalized variant because this is a pure image-choice item, so it retains semantic value but needs review instead of pass or reject.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_c75de3cd34746076dce39d4a",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T20:42:05Z",
+    "updated_at": "2026-04-05T20:43:20Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.78,
+    "initial_verifiability_score": 0.79,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Core semantic assets are present: question text exists, the primary image exists, and the answer is provided.",
+      "The problem is strongly image-dependent, but the required image asset is available, so the sample remains recoverable and usable.",
+      "Initial scoring is solid overall, with high image-dependency relevance and adequate multi-step and verifiability scores.",
+      "Although option texts are not separately provided, this appears to be a visual multiple-choice item and the image asset can still carry the option content."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_6e11bcd692537cc37fb7c3e5",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/686/question",
+      "storage_uri": "inline://prob_c75de3cd34746076dce39d4a/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 167,
+      "width": null,
+      "height": null,
+      "sha256": "16dc95877799f463092358ab00b981233213b209ec733a738ec54c16f0378ee3",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Daniel sticks these two pieces of paper <image1> on this black circle: <image2> The two pieces of paper are not allowed to overlap. Which picture does he get?\n<image3>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7143,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "get",
+          "canonical": "get",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "asset_id": "asset_5f9a3ef2485637cdcf8130ed",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_c75de3cd34746076dce39d4a/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 184,
+      "width": null,
+      "height": null,
+      "sha256": "b8e19e336a063f97a173a768b43120bba5488a5346667183b9885985a2e7241f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Daniel sticks these two pieces of paper <image1> on this black circle: <image2> The two pieces of paper are not allowed to overlap. Which picture does he get?\n<image3>",
+      "normalized_text_snapshot": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2. The two pieces of paper are not allowed to overlap. Which picture in image 3 does he get?",
+      "text_completeness_score": 0.7143,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "get",
+          "canonical": "get",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "asset_id": "asset_99de61af2b24c9cec71b9172",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/686/answer",
+      "storage_uri": "inline://prob_c75de3cd34746076dce39d4a/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "a9f51566bd6705f7ea6ad54bb9deb449f795582d6529a0e22207b8981233ec58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "E",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "asset_id": "asset_1b0fe0ee18f9ee408cc1286e",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_c75de3cd34746076dce39d4a/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "a9f51566bd6705f7ea6ad54bb9deb449f795582d6529a0e22207b8981233ec58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "E",
+      "normalized_text_snapshot": "E",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "asset_id": "asset_c8dfd0b96d98a05417dfa656",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_c75de3cd34746076dce39d4a_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 184142,
+      "width": 1551,
+      "height": 754,
+      "sha256": "9b2b83d21c2a66c8bbbd2d4b5f0c2ef4414c263dfaab70cd057aec536b7cf655",
+      "perceptual_hash": "3fe73fe7e77f0000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 884.9125,
+      "readability_score": 0.8432,
+      "noise_score": 18.7207,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 16,
+        "width": 1551,
+        "height": 720
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Option texts are not separately provided; only A-E labels are available according to metadata."
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "asset_id": "asset_a858206c00b6cf0d490bf8b4",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_c75de3cd34746076dce39d4a_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 183414,
+      "width": 1551,
+      "height": 720,
+      "sha256": "9fa0d4c9667a4210505b2388237f573fbdc70e79a24ad420a3c85c710d9b068c",
+      "perceptual_hash": "7fe73fe7e73f0c00",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 884.9125,
+      "readability_score": 0.8432,
+      "noise_score": 18.7207,
+      "cropped_from_asset_id": "asset_c8dfd0b96d98a05417dfa656",
+      "roi_bbox": {
+        "x": 0,
+        "y": 16,
+        "width": 1551,
+        "height": 720
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_c75de3cd34746076dce39d4a",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "1",
+            "2"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which picture in image 3 does he get?",
+          "segment_index": 3,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "3"
+          ],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_c75de3cd34746076dce39d4a_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "Which picture in image 3 does he get?",
+          "expected_answer_type": "unknown",
+          "expected_answer": "E",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "image",
+          "entity_category": "image",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "circle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "get",
+          "canonical": "get",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2."
+        },
+        {
+          "segment_index": 2,
+          "text": "The two pieces of paper are not allowed to overlap."
+        },
+        {
+          "segment_index": 3,
+          "text": "Which picture in image 3 does he get?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T20:43:01Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_c75de3cd34746076dce39d4a_1",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 2.057,
+        "dark_pixel_ratio": 0.0886,
+        "readability_score": 0.8432,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1551,
+            "height": 754
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 16,
+            "width": 1551,
+            "height": 720
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 16,
+            "width": 775,
+            "height": 360
+          },
+          "salience": 0.4168
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 376,
+            "width": 775,
+            "height": 360
+          },
+          "salience": 0.5035
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 775,
+            "y": 376,
+            "width": 776,
+            "height": 360
+          },
+          "salience": 0.4728
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9373,
+      "created_at": "2026-04-05T20:43:01Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_c75de3cd34746076dce39d4a",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-05T20:43:11Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_a1b0146677d773456cf32b79",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "text_fact",
+      "canonical_value": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2.",
+      "surface_forms": [
+        "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_5f9a3ef2485637cdcf8130ed"
+      ],
+      "evidence_refs": [
+        "asset_5f9a3ef2485637cdcf8130ed"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "1",
+          "2"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_30569f8f3f4b0244d413e56f",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "target_slot",
+      "canonical_value": "Which picture in image 3 does he get?",
+      "surface_forms": [
+        "Which picture in image 3 does he get?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_5f9a3ef2485637cdcf8130ed"
+      ],
+      "evidence_refs": [
+        "asset_5f9a3ef2485637cdcf8130ed"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_c75de3cd34746076dce39d4a_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "Which picture in image 3 does he get?",
+        "expected_answer_type": "unknown",
+        "expected_answer": "E",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_2d40cdae226d3e90e00acd9a",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "answer_claim",
+      "canonical_value": "E",
+      "surface_forms": [
+        "E"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_1b0fe0ee18f9ee408cc1286e"
+      ],
+      "evidence_refs": [
+        "asset_1b0fe0ee18f9ee408cc1286e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "E"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_9950eb09f569e9e2a0d24afd",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1551,
+          "height": 754
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9373,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_aff47194329cf2854f1de670",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 16,
+          "width": 1551,
+          "height": 720
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9373,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_b2580233cb286eefba5b3a8f",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 16,
+          "width": 775,
+          "height": 360
+        },
+        "salience": 0.4168
+      },
+      "unit": null,
+      "confidence": 0.9373,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_b9aedb5785b423d7d8f6c230",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 376,
+          "width": 775,
+          "height": 360
+        },
+        "salience": 0.5035
+      },
+      "unit": null,
+      "confidence": 0.9373,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_284536932eb3d38f16becf6d",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 775,
+          "y": 376,
+          "width": 776,
+          "height": 360
+        },
+        "salience": 0.4728
+      },
+      "unit": null,
+      "confidence": 0.9373,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_dbdabc11905529401333ce05",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "quality_signal",
+      "canonical_value": "Option texts are not separately provided; only A-E labels are available according to metadata.",
+      "surface_forms": [
+        "Option texts are not separately provided; only A-E labels are available according to metadata."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Option texts are not separately provided; only A-E labels are available according to metadata."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_0092c155a546f21577bbe90c",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_c75de3cd34746076dce39d4a",
+        "problem_id": "prob_c75de3cd34746076dce39d4a",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-05T20:43:11Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "node_id": "node_f606fd8da21f739e374e9050",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "pure_image_option_selection",
+          "recoverable_semantic_value",
+          "rewrite_not_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T20:43:20Z",
+      "updated_at": "2026-04-05T20:43:20Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_4358febaae707241e6a042f7",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_6e11bcd692537cc37fb7c3e5",
+        "asset_5f9a3ef2485637cdcf8130ed",
+        "asset_99de61af2b24c9cec71b9172",
+        "asset_1b0fe0ee18f9ee408cc1286e",
+        "asset_c8dfd0b96d98a05417dfa656",
+        "asset_a858206c00b6cf0d490bf8b4"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 12
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1551,
+            "height": 754,
+            "blur_score": 884.9125,
+            "contrast_score": 56.2742,
+            "noise_score": 18.7207,
+            "readability_score": 0.8432,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 16,
+              "width": 1551,
+              "height": 720
+            },
+            "perceptual_hash": "3fe73fe7e77f0000"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_4358febaae707241e6a042f7",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_c75de3cd34746076dce39d4a",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_c75de3cd34746076dce39d4a",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "pure_image_option_selection",
+          "correct_option_is_image_index"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks which visual option results from placing the shown semicircle and quarter-circle onto the black circle without overlap, and the single image provides all three referenced sub-images and answer options clearly enough to understand the task.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Option texts are not separately provided; only A-E labels are available according to metadata."
+      ],
+      "clean_score": 0.9128,
+      "decision": "review",
+      "decision_reason_codes": [
+        "pure_image_option_selection",
+        "recoverable_semantic_value",
+        "rewrite_not_usable"
+      ],
+      "decision_rationale": "The sample is understandable, image-supported, and the answer is present as option E, with no serious alignment failure. However, the rewrite stage produced no usable normalized variant because this is a pure image-choice item, so it retains semantic value but needs review instead of pass or reject.",
+      "review_ticket_id": "review_prob_c75de3cd34746076dce39d4a",
+      "operator_type": "system",
+      "started_at": "2026-04-05T20:43:20Z",
+      "finished_at": "2026-04-05T20:43:20Z",
+      "candidate_id": "cand_c75de3cd34746076dce39d4a",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_4358febaae707241e6a042f7",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "image_entity_refs": [
+        "visual_prob_c75de3cd34746076dce39d4a_1::roi",
+        "visual_prob_c75de3cd34746076dce39d4a_1::roi_top_left",
+        "visual_prob_c75de3cd34746076dce39d4a_1::roi_bottom_left",
+        "visual_prob_c75de3cd34746076dce39d4a_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_c75de3cd34746076dce39d4a_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "image",
+          "image_ref": "visual_prob_c75de3cd34746076dce39d4a_1::roi",
+          "relation": "grounds_image",
+          "confidence": 0.7843
+        },
+        {
+          "text_ref": "circle",
+          "image_ref": "visual_prob_c75de3cd34746076dce39d4a_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7843
+        },
+        {
+          "text_ref": "slot_prob_c75de3cd34746076dce39d4a_1",
+          "image_ref": "visual_prob_c75de3cd34746076dce39d4a_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7862
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-05T20:43:01Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_9793eefbac692396037d7c49",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Daniel sticks these two pieces of paper <image1> on this black circle: <image2> The two pieces of paper are not allowed to overlap. Which picture does he get?\n<image3>",
+      "after_value": "Daniel sticks the two pieces of paper shown in image 1 onto the black circle shown in image 2. The two pieces of paper are not allowed to overlap. Which picture in image 3 does he get?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "audit_id": "audit_c8e137101d7a43804619d127",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "E",
+      "after_value": "E",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "audit_id": "audit_88dc50d39099a652841dd0f8",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "audit_id": "audit_f606fd8da21f739e374e9050",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T20:43:20Z"
+    },
+    {
+      "audit_id": "audit_a219a60a6d638c614d0fb585",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "he",
+          "canonical": "he",
+          "variable_type": "label"
+        },
+        {
+          "original": "get",
+          "canonical": "get",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T20:43:20Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_4358febaae707241e6a042f7",
+      "problem_id": "prob_c75de3cd34746076dce39d4a",
+      "source_problem_id": "686",
+      "strategy": "drop_image_index",
+      "rationale": "This is a pure image-index selection task: the answer is choosing option image E from image 3, and the correct option text contains no semantic content that can be turned into an answerable open-ended question.",
+      "discard_reason_codes": [
+        "pure_image_option_selection",
+        "correct_option_is_image_index"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-05T20:43:20Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}

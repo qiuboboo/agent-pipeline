@@ -1,0 +1,1746 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_1a3d37cdcf3238c929e7f2df",
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "problem_id": "prob_017b2865036845c29f987a7c",
+    "dataset_name": "MathVision",
+    "source_problem_id": "1161",
+    "raw_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep (see diagram). The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?\n<image1>",
+    "raw_answer_text": "20",
+    "choice_map": {},
+    "image_paths": [
+      "images/1161.jpg"
+    ],
+    "force_requires_image": false,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": null,
+    "extraction_notes": [
+      "Question references a diagram and includes an image placeholder, but the text itself appears sufficient to answer without the image.",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-06T06:02:58Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_017b2865036845c29f987a7c",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_017b2865036845c29f987a7c_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 880,
+        "height": 375,
+        "file_size": 133174
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 264,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_1a3d37cdcf3238c929e7f2df",
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "dataset_name": "MathVision",
+    "source_problem_id": "1161",
+    "created_at": "2026-04-06T06:02:58Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_017b2865036845c29f987a7c",
+    "image_dependency_score": 0.04,
+    "multi_step_score": 0.36,
+    "verifiability_score": 0.95,
+    "score_evidence": {
+      "image_dependency": [
+        "requires_image=false",
+        "text_dominant=true",
+        "Question is fully solvable from text alone: step height is 15 cm and total height is 3 m.",
+        "An image file exists in the registry, but no visual attribute, diagram reading, or spatial relation is needed to answer."
+      ],
+      "multi_step": [
+        "Solving requires at least two simple operations: convert 3 m to 300 cm, then divide 300 by 15.",
+        "The problem is a short arithmetic word problem with a single quantitative condition relevant to the answer.",
+        "No branching cases, comparison across options, or image-text integration is required."
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_text is '20', which is easy to check.",
+        "The intended computation is explicit from the text: 300 cm / 15 cm = 20.",
+        "asset_registry_record shows question_present=true, answer_present=true, and registry_passed=true."
+      ]
+    },
+    "risk_flags": [
+      "image_present_but_not_needed",
+      "possible_step_count_ambiguity_in_real_world_stair_design_but_text_implies_simple_height_division"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_1a3d37cdcf3238c929e7f2df",
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "dataset_name": "MathVision",
+    "source_problem_id": "1161",
+    "created_at": "2026-04-06T06:02:58Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_017b2865036845c29f987a7c",
+    "priority": 0.82,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和图像资产均已登记且可用，registry_passed=true，没有资产缺口。",
+      "可验证性很高：答案为数值型，且题目中的计算路径明确。",
+      "虽然存在“image_present_but_not_needed”风险标记，但这不影响核心语义完整性，题目仍可稳定求解。",
+      "风险中提到的台阶步数现实语义歧义较轻，记录也表明文本意图是直接按总高度除以每级高度进行计算。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_1a3d37cdcf3238c929e7f2df",
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "dataset_name": "MathVision",
+    "source_problem_id": "1161",
+    "created_at": "2026-04-06T06:02:58Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_1a3d37cdcf3238c929e7f2df",
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "problem_id": "prob_017b2865036845c29f987a7c",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+    "normalized_answer_text": "20",
+    "normalized_choice_map": {},
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "normalization_notes": [
+      "Removed image placeholder '<image1>'.",
+      "Dropped non-essential '(see diagram)' reference because the problem is solvable from text alone.",
+      "Standardized whitespace and preserved original math content."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-06T06:02:58Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "1161",
+    "subject": "数学",
+    "raw_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep (see diagram). The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?\n<image1>",
+    "raw_answer_text": "20",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": false,
+    "text_dominant": true,
+    "recommended_cleaning_path": "text_lightweight",
+    "initial_image_dependency_score": 0.04,
+    "initial_multi_solution_score": 0.36,
+    "initial_verifiability_score": 0.95,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 860,
+      "image_paths": [
+        "images/1161.jpg"
+      ],
+      "extraction_notes": [
+        "Question references a diagram and includes an image placeholder, but the text itself appears sufficient to answer without the image.",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-06T06:03:55Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.82,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已登记且可用，registry_passed=true，没有资产缺口。",
+      "可验证性很高：答案为数值型，且题目中的计算路径明确。",
+      "虽然存在“image_present_but_not_needed”风险标记，但这不影响核心语义完整性，题目仍可稳定求解。",
+      "风险中提到的台阶步数现实语义歧义较轻，记录也表明文本意图是直接按总高度除以每级高度进行计算。"
+    ],
+    "collection_risk_flags": [
+      "image_present_but_not_needed",
+      "possible_step_count_ambiguity_in_real_world_stair_design_but_text_implies_simple_height_division"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_254bacd051fd9ba976237987",
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "source_dataset": "MathVision",
+    "source_problem_id": "1161",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_017b2865036845c29f987a7c/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_017b2865036845c29f987a7c/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 880,
+        "height": 375
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.04,
+      "initial_multi_solution_score": 0.36,
+      "initial_verifiability_score": 0.95
+    },
+    "created_at": "2026-04-06T06:03:55Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_e701b53ddafcdb3aa45f3a12",
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "source_dataset": "MathVision",
+    "source_problem_id": "1161",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.82,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "text_lightweight",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.04,
+      "initial_multi_solution_score": 0.36,
+      "initial_verifiability_score": 0.95
+    },
+    "created_at": "2026-04-06T06:03:55Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和图像资产均已登记且可用，registry_passed=true，没有资产缺口。",
+      "可验证性很高：答案为数值型，且题目中的计算路径明确。",
+      "虽然存在“image_present_but_not_needed”风险标记，但这不影响核心语义完整性，题目仍可稳定求解。",
+      "风险中提到的台阶步数现实语义歧义较轻，记录也表明文本意图是直接按总高度除以每级高度进行计算。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_1a3d37cdcf3238c929e7f2df",
+      "candidate_id": "cand_017b2865036845c29f987a7c",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "dataset_name": "MathVision",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": true,
+      "cleaning_path": "text_lightweight",
+      "created_at": "2026-04-06T06:03:55Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_1a3d37cdcf3238c929e7f2df",
+    "problem_id": "prob_017b2865036845c29f987a7c",
+    "source_dataset": "MathVision",
+    "source_problem_id": "1161",
+    "normalized_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+    "normalized_answer_text": "20",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "text_only",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "answer_available",
+      "question_clear",
+      "rewrite_usable",
+      "solvable"
+    ],
+    "created_at": "2026-04-06T06:03:55Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_1a3d37cdcf3238c929e7f2df",
+    "problem_id": "prob_017b2865036845c29f987a7c",
+    "normalized_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+    "normalized_answer_text": "20",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "cm",
+        "canonical": "cm",
+        "variable_type": "label"
+      },
+      {
+        "original": "high",
+        "canonical": "high",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "deep",
+        "canonical": "deep",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "from",
+        "canonical": "from",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "How",
+        "canonical": "How",
+        "variable_type": "label"
+      },
+      {
+        "original": "many",
+        "canonical": "many",
+        "variable_type": "label"
+      },
+      {
+        "original": "does",
+        "canonical": "does",
+        "variable_type": "label"
+      },
+      {
+        "original": "have",
+        "canonical": "have",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep."
+      },
+      {
+        "segment_index": 2,
+        "text": "The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher."
+      },
+      {
+        "segment_index": 3,
+        "text": "How many steps does Bernd have to produce?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 30,
+          "y": 30,
+          "width": 810,
+          "height": 311
+        },
+        "readability_score": 0.9323,
+        "contrast_score": 60.3816
+      }
+    ],
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "created_at": "2026-04-06T06:03:55Z",
+    "normalization_notes": [
+      "Removed image placeholder '<image1>'.",
+      "Dropped non-essential '(see diagram)' reference because the problem is solvable from text alone.",
+      "Standardized whitespace and preserved original math content."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_017b2865036845c29f987a7c",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "1161",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep (see diagram). The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?\n<image1>",
+    "normalized_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+    "raw_answer_text": "20",
+    "normalized_answer_text": "20",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "multimodal_strength_score": 0.4232,
+    "multi_step_score": 0.3967,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "text_only_without_visual_need"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "answer_available",
+      "question_clear",
+      "rewrite_usable",
+      "solvable"
+    ],
+    "clean_decision_rationale": "The sample is complete, understandable, and directly solvable: 3 m = 300 cm, so 300/15 = 20 steps. The rewritten question is clean and consistent with the answer. Although the image is not needed, the sample remains semantically usable for annotation and shows no serious alignment or solvability failure.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_017b2865036845c29f987a7c",
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-06T06:02:58Z",
+    "updated_at": "2026-04-06T06:03:55Z",
+    "initial_image_dependency_score": 0.04,
+    "initial_multi_solution_score": 0.36,
+    "initial_verifiability_score": 0.95,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.82,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已登记且可用，registry_passed=true，没有资产缺口。",
+      "可验证性很高：答案为数值型，且题目中的计算路径明确。",
+      "虽然存在“image_present_but_not_needed”风险标记，但这不影响核心语义完整性，题目仍可稳定求解。",
+      "风险中提到的台阶步数现实语义歧义较轻，记录也表明文本意图是直接按总高度除以每级高度进行计算。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_6efc0e0bf3a6b77a9d95c54b",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/1161/question",
+      "storage_uri": "inline://prob_017b2865036845c29f987a7c/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 264,
+      "width": null,
+      "height": null,
+      "sha256": "f5752ca64a9398b518db01b8fcf016e26e00ee2e2aa210c23c1d135c56eed380",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep (see diagram). The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?\n<image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7652,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "high",
+          "canonical": "high",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "deep",
+          "canonical": "deep",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "asset_id": "asset_9e525aa5e1c901cb9612e397",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_017b2865036845c29f987a7c/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 241,
+      "width": null,
+      "height": null,
+      "sha256": "9f47bbf398a501ef7a24113108eda246283c22b3e67f30f687bdc99a49078f68",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep (see diagram). The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?\n<image1>",
+      "normalized_text_snapshot": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+      "text_completeness_score": 0.7652,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "high",
+          "canonical": "high",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "deep",
+          "canonical": "deep",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "asset_id": "asset_eae823e9ae5c7763ebcc9b39",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/1161/answer",
+      "storage_uri": "inline://prob_017b2865036845c29f987a7c/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "f5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "20",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "asset_id": "asset_eaac2ef821aba8463c6084ff",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_017b2865036845c29f987a7c/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "f5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "20",
+      "normalized_text_snapshot": "20",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "asset_id": "asset_5f5c4e843774cbc7e712065d",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_017b2865036845c29f987a7c_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 133174,
+      "width": 880,
+      "height": 375,
+      "sha256": "2c419078baac962c20900dc65cf7bf0b6c2112538e7e62d60fc9f7915c45b5fc",
+      "perceptual_hash": "ffb17171f1f191bf",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3821.2654,
+      "readability_score": 0.9323,
+      "noise_score": 33.7348,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 30,
+        "y": 30,
+        "width": 810,
+        "height": 311
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "text_only_without_visual_need"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "asset_id": "asset_e63530d6027a9cfea1cad7ef",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_017b2865036845c29f987a7c_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 130554,
+      "width": 810,
+      "height": 311,
+      "sha256": "546f5943c5c90de2f5ca5170f8b3b4ebf526c58c0e108b68dac3ae804a725f61",
+      "perceptual_hash": "fd7071f1f8f9f910",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3821.2654,
+      "readability_score": 0.9323,
+      "noise_score": 33.7348,
+      "cropped_from_asset_id": "asset_5f5c4e843774cbc7e712065d",
+      "roi_bbox": {
+        "x": 30,
+        "y": 30,
+        "width": 810,
+        "height": 311
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "asset_id": "asset_0f2f531ca0df716d2169c39c",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_113bdf5fe247d97030de7e24",
+      "file_format": "txt",
+      "file_size_bytes": 241,
+      "width": null,
+      "height": null,
+      "sha256": "9f47bbf398a501ef7a24113108eda246283c22b3e67f30f687bdc99a49078f68",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep (see diagram). The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?\n<image1>",
+      "normalized_text_snapshot": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+      "text_completeness_score": 0.7652,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "high",
+          "canonical": "high",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "deep",
+          "canonical": "deep",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_017b2865036845c29f987a7c",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "question_type": "open",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "15",
+            "15"
+          ],
+          "unit_mentions": [
+            "cm",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "How many steps does Bernd have to produce?",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_017b2865036845c29f987a7c_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "20",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "high",
+          "canonical": "high",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "deep",
+          "canonical": "deep",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "cm",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep."
+        },
+        {
+          "segment_index": 2,
+          "text": "The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher."
+        },
+        {
+          "segment_index": 3,
+          "text": "How many steps does Bernd have to produce?"
+        }
+      ],
+      "requires_visual_grounding": false,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-06T06:03:38Z"
+    }
+  ],
+  "visual_structure_records": [],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_017b2865036845c29f987a7c",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "text_only",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-06T06:03:46Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_5ad97b2657993b72ad160df8",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "node_type": "target_slot",
+      "canonical_value": "The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher.",
+      "surface_forms": [
+        "The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_9e525aa5e1c901cb9612e397"
+      ],
+      "evidence_refs": [
+        "asset_9e525aa5e1c901cb9612e397"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_017b2865036845c29f987a7c_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "20",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "node_id": "node_1324a3e8e988003f901e8668",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "node_type": "answer_claim",
+      "canonical_value": "20",
+      "surface_forms": [
+        "20"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_eaac2ef821aba8463c6084ff"
+      ],
+      "evidence_refs": [
+        "asset_eaac2ef821aba8463c6084ff"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "20"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "node_id": "node_75bb24599efd80756aab35e2",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "node_type": "text_fact",
+      "canonical_value": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+      "surface_forms": [
+        "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_0f2f531ca0df716d2169c39c"
+      ],
+      "evidence_refs": [
+        "asset_0f2f531ca0df716d2169c39c"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_113bdf5fe247d97030de7e24",
+        "parent_problem_id": "prob_017b2865036845c29f987a7c",
+        "variant_index": 1,
+        "title": "MathVision 开放题",
+        "rewritten_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "20",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "node_id": "node_83b40ababdfa486e3852c152",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "node_type": "quality_signal",
+      "canonical_value": "text_only_without_visual_need",
+      "surface_forms": [
+        "text_only_without_visual_need"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "text_only_without_visual_need"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "node_id": "node_c61da893076e5a19a275a99d",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_017b2865036845c29f987a7c",
+        "problem_id": "prob_017b2865036845c29f987a7c",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "text_only",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-06T06:03:46Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "node_id": "node_e109275b4822978c51354934",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "answer_available",
+          "question_clear",
+          "rewrite_usable",
+          "solvable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T06:03:55Z",
+      "updated_at": "2026-04-06T06:03:55Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_1a3d37cdcf3238c929e7f2df",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_6efc0e0bf3a6b77a9d95c54b",
+        "asset_9e525aa5e1c901cb9612e397",
+        "asset_eae823e9ae5c7763ebcc9b39",
+        "asset_eaac2ef821aba8463c6084ff",
+        "asset_5f5c4e843774cbc7e712065d",
+        "asset_e63530d6027a9cfea1cad7ef",
+        "asset_0f2f531ca0df716d2169c39c"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 17
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 880,
+            "height": 375,
+            "blur_score": 3821.2654,
+            "contrast_score": 60.3816,
+            "noise_score": 33.7348,
+            "readability_score": 0.9323,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 30,
+              "y": 30,
+              "width": 810,
+              "height": 311
+            },
+            "perceptual_hash": "ffb17171f1f191bf"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_1a3d37cdcf3238c929e7f2df",
+        "coverage_score": 1.0,
+        "consistency_score": 1.0,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_017b2865036845c29f987a7c",
+        "question_type": "open",
+        "condition_count": 0,
+        "target_count": 3,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_017b2865036845c29f987a7c",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_target_clear",
+          "question_clear",
+          "text_sufficient"
+        ],
+        "rationale": "The problem statement is fully self-contained and clearly asks for the number of 15 cm-high steps needed to reach a height of 3 m. The expected answer is a single numeric value, and the image is not necessary to understand the task.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "text_only_without_visual_need"
+      ],
+      "clean_score": 0.9878,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "answer_available",
+        "question_clear",
+        "rewrite_usable",
+        "solvable"
+      ],
+      "decision_rationale": "The sample is complete, understandable, and directly solvable: 3 m = 300 cm, so 300/15 = 20 steps. The rewritten question is clean and consistent with the answer. Although the image is not needed, the sample remains semantically usable for annotation and shows no serious alignment or solvability failure.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-06T06:03:55Z",
+      "finished_at": "2026-04-06T06:03:55Z",
+      "candidate_id": "cand_017b2865036845c29f987a7c",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_1a3d37cdcf3238c929e7f2df",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "image_entity_refs": [],
+      "text_span_refs": [
+        "asset_prob_017b2865036845c29f987a7c_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [],
+      "coverage_score": 1.0,
+      "consistency_score": 1.0,
+      "alignment_status": "good",
+      "created_at": "2026-04-06T06:03:38Z",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_249764969be9aa70c5324041",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep (see diagram). The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?\n<image1>",
+      "after_value": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "audit_id": "audit_8f51ea7d35a159875d717b11",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "20",
+      "after_value": "20",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "audit_id": "audit_25926b0df82c092f2ab847b4",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "audit_id": "audit_e109275b4822978c51354934",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T06:03:55Z"
+    },
+    {
+      "audit_id": "audit_a12bfe384bd9f4104f8a121a",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "high",
+          "canonical": "high",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "deep",
+          "canonical": "deep",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "does",
+          "canonical": "does",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T06:03:55Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_1a3d37cdcf3238c929e7f2df",
+      "problem_id": "prob_017b2865036845c29f987a7c",
+      "source_problem_id": "1161",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_113bdf5fe247d97030de7e24",
+          "parent_problem_id": "prob_017b2865036845c29f987a7c",
+          "variant_index": 1,
+          "title": "MathVision 开放题",
+          "rewritten_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "20",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-06T06:03:55Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_113bdf5fe247d97030de7e24",
+      "parent_problem_id": "prob_017b2865036845c29f987a7c",
+      "variant_index": 1,
+      "title": "MathVision 开放题",
+      "rewritten_question_text": "Bernd produces steps for a staircase which are $15 \\mathrm{~cm}$ high and $15 \\mathrm{~cm}$ deep. The staircase should reach from the ground floor to the first floor which is $3 \\mathrm{~m}$ higher. How many steps does Bernd have to produce?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "20",
+      "split_role": "single"
+    }
+  ]
+}
