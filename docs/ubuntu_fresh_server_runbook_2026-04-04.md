@@ -169,9 +169,11 @@ python3 scripts/eee_bench_batch_launcher.py \
 
 ```bash
 python3 run_pipeline.py \
-  --config configs/mm_math_validation_10.responses.yaml \
+  --config configs/mm_math.yaml \
   --api-key "$CUSTOM_OPENAI_API_KEY"
 ```
+
+> 注：早期 `*.responses.yaml` / `*.chat.yaml` / `*.auto.yaml` 验证配置已按仓库清理规则删除；如需复跑，请改用当前保留的单数据集标准 YAML。
 
 ---
 
@@ -180,37 +182,30 @@ python3 run_pipeline.py \
 当前建议保留并可直接跑的配置包括：
 
 ### 单数据集
+- `configs/mm_math.yaml`
+- `configs/multi_physics.yaml`
+- `configs/seephys.yaml`
+- `configs/emma_physics.yaml`
+
+### 多数据集
+- `configs/default_multidataset.yaml`
+- `configs/default_multidataset_with_msearth_phyx.yaml`
+
+---
+
+## 9. 旧验证 YAML 已清理
+
+以下旧改写 / 旧验证配置已删除，不再作为当前标准：
+
 - `configs/mm_math_validation_10.responses.yaml`
 - `configs/multi_physics_validation_10.responses.yaml`
 - `configs/seephys_validation_10.responses.yaml`
 - `configs/emma_physics_validation_3.responses.yaml`
 - `configs/emma_physics_validation_1.responses.yaml`
-
-### 多数据集
 - `configs/three_datasets_validation_3.responses.yaml`
-
----
-
-## 9. 新增：四个数据集总配置
-
-如果你要一起验证四个数据集：
-
-- `MM-Math`
-- `Multi-Physics`
-- `SeePhys`
-- `EMMA-Physics`
-
-请使用：
-
 - `configs/four_datasets_responses_10.yaml`
 
-运行方式：
-
-```bash
-python3 run_pipeline.py \
-  --config configs/four_datasets_responses_10.yaml \
-  --api-key "$CUSTOM_OPENAI_API_KEY"
-```
+如果需要重新做验证，请从保留的标准 YAML 复制一份临时配置，而不要恢复这些历史文件。
 
 ---
 
@@ -348,7 +343,7 @@ kill -9 <PID>
 
 ```bash
 nohup python3 run_pipeline.py \
-  --config configs/mm_math_validation_10.responses.yaml \
+  --config configs/mm_math.yaml \
   --api-key "$CUSTOM_OPENAI_API_KEY" \
   > .runlogs/mm_math_validation_10.log 2>&1 &
 ```
@@ -454,7 +449,7 @@ export CUSTOM_OPENAI_BASE_URL="https://cf.cuylerchen.uk/openai/v1"
 export CUSTOM_OPENAI_API_MODE="responses"
 
 python3 run_pipeline.py \
-  --config configs/seephys_validation_10.responses.yaml \
+  --config configs/seephys.yaml \
   --api-key "$CUSTOM_OPENAI_API_KEY"
 ```
 

@@ -155,12 +155,13 @@ MSEarth 是这条分支最核心的一条主线。
 2. **批量产物汇总**：推进到 `0:300` 规模
 3. **口径问题记录**：开始关注 records 层面的字段一致性问题
 
-另外当前未跟踪文件也表明，这条线后面还在继续往前推：
+另外当前未跟踪文件也表明，这条线后面还在继续往前推；不过当时用于验证 / 批跑的几份 EEE-Bench 专用 YAML 现在已经按仓库清理规则删除，只保留标准主配置与脚本：
 
-- [configs/eee_bench_10_debug.yaml](configs/eee_bench_10_debug.yaml)
-- [configs/eee_bench_20_batch.yaml](configs/eee_bench_20_batch.yaml)
-- [configs/eee_bench_300.yaml](configs/eee_bench_300.yaml)
+- `configs/eee_bench_10_debug.yaml`（已删除，旧验证配置）
+- `configs/eee_bench_20_batch.yaml`（已删除，旧批跑配置）
+- `configs/eee_bench_300.yaml`（已删除，旧汇总配置）
 - [scripts/run_eee_bench_20_batches.sh](scripts/run_eee_bench_20_batches.sh)
+- 当前保留标准配置：`configs/eee_bench.yaml`
 
 所以 EEE-Bench 这部分更准确的说法是：
 

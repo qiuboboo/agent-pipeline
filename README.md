@@ -84,7 +84,52 @@ python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/def
 python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/local_file_example.yaml
 ```
 
-### 5. 导出 ready 数据为统一 problem JSON
+### 6. 生成样本花名册 manifest
+```bash
+python3 scripts/build_sample_manifest.py --outputs-root outputs --ready-root ready
+```
+
+默认会生成仓库根目录下的 `manifests/sample_roster.json`，用于统一登记每条样本的：
+- 当前状态（如 `pass/review/reject`）
+- 来源 run 目录
+- 是否已进入哪些 `ready/...` package
+- run / sample 级时间字段
+
+如需只看某个数据集，可指定：
+```bash
+python3 scripts/build_sample_manifest.py --outputs-root outputs --ready-root ready --dataset eee_bench
+```
+
+manifest 里现在同时保留两种口径：
+- `records`：文件级明细；同一题如果出现在多个 source run，会保留多条，适合追来源、防误删。
+- `canonical_records`：按 `dataset_key + problem_id` 去重后的题目级口径，适合做统计、汇报和 merge 盘点。
+
+### 当前 manifest 摘要
+基于当前生成的 `manifests/sample_roster.json`：
+
+| 指标 | 当前值 |
+| --- | ---: |
+| 文件级样本记录数 | `8720` |
+| 按题唯一后的 `canonical_records` | `5729` |
+| 覆盖数据集数 | `14` |
+| 已登记 `ready` package 数 | `11` |
+
+按题唯一后的部分数据集状态分布：
+
+| 数据集 | 题目数 | pass | review | reject |
+| --- | ---: | ---: | ---: | ---: |
+| `eee_bench` | `2027` | `1456` | `567` | `4` |
+| `emma_physics` | `312` | `189` | `111` | `12` |
+| `mathvision` | `1239` | `711` | `523` | `5` |
+| `msearth_open_ended` | `495` | `180` | `273` | `42` |
+| `mm_math` | `340` | `73` | `257` | `10` |
+| `multi_physics` | `320` | `69` | `239` | `12` |
+| `physreason` | `548` | `268` | `273` | `7` |
+| `seephys` | `320` | `262` | `57` | `1` |
+
+这个摘要以后可以直接作为仓库内的当前结果口径；如 manifest 重建，以上数字也应同步更新。
+
+### 7. 导出 ready 数据为统一 problem JSON
 ```bash
 python3 scripts/export_ready_to_problem_json.py --ready-root ready
 ```
@@ -95,6 +140,12 @@ python3 scripts/export_ready_to_problem_json.py --ready-root ready
 ```bash
 python3 scripts/export_ready_to_problem_json.py --ready-root ready --dataset mm_math_000_300
 ```
+
+### outputs 保留规则
+- `outputs/repo_cache/` 及其嵌套 cache 目录继续视为运行缓存，不纳入版本控制。
+- 其余需要保留的 `outputs/` 运行结果应直接纳入 Git 跟踪，不再额外复制到 `outputs/ready_problem_exports/` 这类历史目录。
+- 超过 7 天、未进入 `ready/`、且未被文档或脚本引用的旧实验 / smoke / validation / debug 输出应及时清理。
+- `ready` 的标准导出位置固定为仓库根目录下的 `ready_problem_exports/`。
 
 ## 标注前就绪输出
 
