@@ -1731,10 +1731,15 @@ class HuggingFaceConnector(BaseConnector):
         return "available", samples, None
 
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
+        if self.spec.key == "mm_math":
+            return self.sample_from_mm_math_raw_files()
+        if self.spec.key == "physreason":
+            status, samples, detail = self.sample_from_physreason_zip()
+            if status == "available" and samples:
+                return status, samples, detail
+
         dataset, detail = self.load_dataset_any()
         if dataset is None:
-            if self.spec.key == "mm_math":
-                return self.sample_from_mm_math_raw_files()
             if self.spec.key == "physreason":
                 return self.sample_from_physreason_zip()
             return "source_unavailable", [], detail or "load_dataset failed"
