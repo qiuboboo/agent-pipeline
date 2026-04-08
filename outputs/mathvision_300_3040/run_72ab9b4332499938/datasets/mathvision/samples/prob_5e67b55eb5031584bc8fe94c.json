@@ -1,0 +1,2110 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_d9267f785001f0689f07223f",
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2820",
+    "raw_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph below that visit each vertex precisely once. \\n<image1>",
+    "raw_answer_text": "65",
+    "choice_map": {},
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": null,
+    "extraction_notes": [
+      "heuristic_field_extraction"
+    ],
+    "created_at": "2026-04-08T11:29:07Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_5e67b55eb5031584bc8fe94c_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 461,
+        "height": 370,
+        "file_size": 44933
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 211,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.image_paths is empty while top-level image_paths contains one image path."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_d9267f785001f0689f07223f",
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2820",
+    "created_at": "2026-04-08T11:29:07Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.8,
+    "verifiability_score": 0.88,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image=true` and `text_dominant=false` indicate the graph image is necessary, not optional.",
+        "Question refers to 'the graph' and asks for a path over vertices and weighted edges, which are typically specified visually.",
+        "Asset registry shows one valid image present with good readability metadata (`readability_score=0.8611`)."
+      ],
+      "multi_step": [
+        "The task asks for the minimum-weight path that visits each vertex precisely once, which implies combining path enumeration/selection with edge-weight summation.",
+        "Solving requires at least two reasoning stages: identify valid Hamiltonian-path candidates from the graph, then compare total weights.",
+        "`multi_solution_policy.should_push_multi_solution_agent=true` is consistent with nontrivial solution structure, though this is only supportive evidence."
+      ],
+      "verifiability": [
+        "`answer_type` is numeric and `answer_text='65'`, so the final output format is precise and easy to check.",
+        "The optimization target is explicit ('minimum weight'), so a correct solution can in principle be validated against the graph by recomputing candidate path sums.",
+        "`registry_passed=true`, and both question and answer are present in the manifests."
+      ]
+    },
+    "risk_flags": [
+      "Asset registry notes: `metadata.image_paths` is empty while top-level image paths contain one image path.",
+      "Image-based graph structure is not reproduced in text, so downstream verification depends on successful image interpretation."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_d9267f785001f0689f07223f",
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2820",
+    "created_at": "2026-04-08T11:29:07Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整。",
+      "该题对图像依赖高，但资产登记显示有一张可用图像，且可读性证据良好，因此关键图结构仍可恢复。",
+      "初步打分较高：image_dependency_score=0.96、multi_step_score=0.8、verifiability_score=0.88，说明样本价值和可验证性都较强。",
+      "当前风险主要是`metadata.image_paths`为空而顶层图像路径存在，属于元数据一致性问题，不足以否定样本进入候选池。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_d9267f785001f0689f07223f",
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2820",
+    "created_at": "2026-04-08T11:29:07Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_d9267f785001f0689f07223f",
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+    "normalized_answer_text": "65",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder token from the question text.",
+      "The problem depends on the graph structure and edge labels shown in the image."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-08T11:29:07Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2820",
+    "subject": "数学",
+    "raw_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph below that visit each vertex precisely once. \\n<image1>",
+    "raw_answer_text": "65",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.8,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 2519,
+      "image_paths": [],
+      "extraction_notes": [
+        "heuristic_field_extraction"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-08T11:30:11Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整。",
+      "该题对图像依赖高，但资产登记显示有一张可用图像，且可读性证据良好，因此关键图结构仍可恢复。",
+      "初步打分较高：image_dependency_score=0.96、multi_step_score=0.8、verifiability_score=0.88，说明样本价值和可验证性都较强。",
+      "当前风险主要是`metadata.image_paths`为空而顶层图像路径存在，属于元数据一致性问题，不足以否定样本进入候选池。"
+    ],
+    "collection_risk_flags": [
+      "Asset registry notes: `metadata.image_paths` is empty while top-level image paths contain one image path.",
+      "Image-based graph structure is not reproduced in text, so downstream verification depends on successful image interpretation."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_be061d74f40c05c7d47d4b03",
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2820",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_5e67b55eb5031584bc8fe94c/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_5e67b55eb5031584bc8fe94c/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 461,
+        "height": 370
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.8,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-08T11:30:11Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths is empty while top-level image_paths contains one image path."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_3c370d78c63a4fe9325c58fe",
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2820",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.8,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-08T11:30:11Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整。",
+      "该题对图像依赖高，但资产登记显示有一张可用图像，且可读性证据良好，因此关键图结构仍可恢复。",
+      "初步打分较高：image_dependency_score=0.96、multi_step_score=0.8、verifiability_score=0.88，说明样本价值和可验证性都较强。",
+      "当前风险主要是`metadata.image_paths`为空而顶层图像路径存在，属于元数据一致性问题，不足以否定样本进入候选池。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_d9267f785001f0689f07223f",
+      "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "dataset_name": "MathVision",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-08T11:30:11Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_d9267f785001f0689f07223f",
+    "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2820",
+    "normalized_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+    "normalized_answer_text": "65",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_ok",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-08T11:30:11Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_d9267f785001f0689f07223f",
+    "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+    "normalized_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+    "normalized_answer_text": "65",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "We",
+        "canonical": "We",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "emph",
+        "canonical": "emph",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "path",
+        "canonical": "path",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "be",
+        "canonical": "be",
+        "variable_type": "label"
+      },
+      {
+        "original": "sum",
+        "canonical": "sum",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "each",
+        "canonical": "each",
+        "variable_type": "label"
+      },
+      {
+        "original": "edge",
+        "canonical": "edge",
+        "variable_type": "label"
+      },
+      {
+        "original": "all",
+        "canonical": "all",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "once",
+        "canonical": "once",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find the minimum weight among all paths in the graph that visit each vertex precisely once."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 72,
+          "y": 24,
+          "width": 310,
+          "height": 304
+        },
+        "readability_score": 0.8611,
+        "contrast_score": 42.6523
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-08T11:30:11Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder token from the question text.",
+      "The problem depends on the graph structure and edge labels shown in the image."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2820",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260407T041348Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph below that visit each vertex precisely once. \\n<image1>",
+    "normalized_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+    "raw_answer_text": "65",
+    "normalized_answer_text": "65",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9831,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.image_paths is empty while top-level image_paths contains one image path.",
+      "metadata_inconsistency"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_ok",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable, the graph image is clear enough to support the Hamiltonian-path calculation, the numeric answer is present, and rewrite/alignment/solvability signals show no substantive failure. The noted metadata inconsistency is non-fatal and does not block annotation use.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-08T11:29:07Z",
+    "updated_at": "2026-04-08T11:30:11Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.8,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整。",
+      "该题对图像依赖高，但资产登记显示有一张可用图像，且可读性证据良好，因此关键图结构仍可恢复。",
+      "初步打分较高：image_dependency_score=0.96、multi_step_score=0.8、verifiability_score=0.88，说明样本价值和可验证性都较强。",
+      "当前风险主要是`metadata.image_paths`为空而顶层图像路径存在，属于元数据一致性问题，不足以否定样本进入候选池。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_f8a48cebc1b4b2ccce518666",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/2820/question",
+      "storage_uri": "inline://prob_5e67b55eb5031584bc8fe94c/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 211,
+      "width": null,
+      "height": null,
+      "sha256": "ec36b6f800a521453953c96360ba38b466bbe61b407121dfca5f51a12db73f2c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph below that visit each vertex precisely once. \\n<image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7232,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "We",
+          "canonical": "We",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "emph",
+          "canonical": "emph",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "once",
+          "canonical": "once",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "asset_id": "asset_2c403dfd116fa6500212b33e",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_5e67b55eb5031584bc8fe94c/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 194,
+      "width": null,
+      "height": null,
+      "sha256": "d69fa61a56673cb92d32ec9e32e3a3cb23f7a79b4164004727bd7b56f8dbb75f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph below that visit each vertex precisely once. \\n<image1>",
+      "normalized_text_snapshot": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+      "text_completeness_score": 0.7232,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "We",
+          "canonical": "We",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "emph",
+          "canonical": "emph",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "once",
+          "canonical": "once",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "asset_id": "asset_72d2fb66c473f17e0bcfb023",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/2820/answer",
+      "storage_uri": "inline://prob_5e67b55eb5031584bc8fe94c/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "108c995b953c8a35561103e2014cf828eb654a99e310f87fab94c2f4b7d2a04f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "65",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "asset_id": "asset_3b5ee1374583c68dd03d13ec",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_5e67b55eb5031584bc8fe94c/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "108c995b953c8a35561103e2014cf828eb654a99e310f87fab94c2f4b7d2a04f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "65",
+      "normalized_text_snapshot": "65",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "asset_id": "asset_38e1ec17a1361c7c67ebde9e",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_5e67b55eb5031584bc8fe94c_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 44933,
+      "width": 461,
+      "height": 370,
+      "sha256": "e0546b1edf2d59dd89133498f57a329a6b28505f0c9b378e40a6e171e0f2489b",
+      "perceptual_hash": "e7e7c3a181c3e7ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3194.7644,
+      "readability_score": 0.8611,
+      "noise_score": 20.7742,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 72,
+        "y": 24,
+        "width": 310,
+        "height": 304
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths is empty while top-level image_paths contains one image path.",
+        "metadata_inconsistency"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "asset_id": "asset_824664207bce8c6dbb692a84",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/crops/prob_5e67b55eb5031584bc8fe94c_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 41215,
+      "width": 310,
+      "height": 304,
+      "sha256": "f3dfdf829cf14d5948a48699ba44ec077e5aab3260f93f7a41d59e7c216d69a5",
+      "perceptual_hash": "e7db99666699dbe7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3194.7644,
+      "readability_score": 0.8611,
+      "noise_score": 20.7742,
+      "cropped_from_asset_id": "asset_38e1ec17a1361c7c67ebde9e",
+      "roi_bbox": {
+        "x": 72,
+        "y": 24,
+        "width": 310,
+        "height": 304
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "asset_id": "asset_d2a7e6d0b601e84220fad48a",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_3cbf0fe48bfbbc63656d1112",
+      "file_format": "txt",
+      "file_size_bytes": 194,
+      "width": null,
+      "height": null,
+      "sha256": "d69fa61a56673cb92d32ec9e32e3a3cb23f7a79b4164004727bd7b56f8dbb75f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph below that visit each vertex precisely once. \\n<image1>",
+      "normalized_text_snapshot": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+      "text_completeness_score": 0.7232,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "We",
+          "canonical": "We",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "emph",
+          "canonical": "emph",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "once",
+          "canonical": "once",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_5e67b55eb5031584bc8fe94c",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "question_type": "calculation",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+          "segment_index": 2,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "min",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_5e67b55eb5031584bc8fe94c_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "65",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "graph",
+          "entity_category": "graph",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "We",
+          "canonical": "We",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "emph",
+          "canonical": "emph",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "once",
+          "canonical": "once",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "min",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find the minimum weight among all paths in the graph that visit each vertex precisely once."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-08T11:29:55Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_5e67b55eb5031584bc8fe94c_1",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "chart_like",
+        "aspect_ratio": 1.2459,
+        "dark_pixel_ratio": 0.0493,
+        "readability_score": 0.8611,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 461,
+            "height": 370
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 72,
+            "y": 24,
+            "width": 310,
+            "height": 304
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 72,
+            "y": 24,
+            "width": 155,
+            "height": 152
+          },
+          "salience": 0.4405
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 227,
+            "y": 24,
+            "width": 155,
+            "height": 152
+          },
+          "salience": 0.4434
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 72,
+            "y": 176,
+            "width": 155,
+            "height": 152
+          },
+          "salience": 0.435
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 227,
+            "y": 176,
+            "width": 155,
+            "height": 152
+          },
+          "salience": 0.4383
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9444,
+      "created_at": "2026-04-08T11:29:55Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_5e67b55eb5031584bc8fe94c",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-08T11:30:03Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_8134c059740d0437df6d3cc6",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "target_slot",
+      "canonical_value": "Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+      "surface_forms": [
+        "Find the minimum weight among all paths in the graph that visit each vertex precisely once."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_2c403dfd116fa6500212b33e"
+      ],
+      "evidence_refs": [
+        "asset_2c403dfd116fa6500212b33e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_5e67b55eb5031584bc8fe94c_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "65",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_4bcc8cfd88317b92d9a37be6",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "answer_claim",
+      "canonical_value": "65",
+      "surface_forms": [
+        "65"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_3b5ee1374583c68dd03d13ec"
+      ],
+      "evidence_refs": [
+        "asset_3b5ee1374583c68dd03d13ec"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "65"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_151e0887e4fa685e6b4df77c",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 461,
+          "height": 370
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9444,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_65f3733371e875c212b7b9b2",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 72,
+          "y": 24,
+          "width": 310,
+          "height": 304
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9444,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_38d9405a204e28e9673400db",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 72,
+          "y": 24,
+          "width": 155,
+          "height": 152
+        },
+        "salience": 0.4405
+      },
+      "unit": null,
+      "confidence": 0.9444,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_f2dabfe83692c60fd1928252",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 227,
+          "y": 24,
+          "width": 155,
+          "height": 152
+        },
+        "salience": 0.4434
+      },
+      "unit": null,
+      "confidence": 0.9444,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_5e313ea4952e8e205aa3ddfc",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 72,
+          "y": 176,
+          "width": 155,
+          "height": 152
+        },
+        "salience": 0.435
+      },
+      "unit": null,
+      "confidence": 0.9444,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_624c9c214a4e6f4d510ff182",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 227,
+          "y": 176,
+          "width": 155,
+          "height": 152
+        },
+        "salience": 0.4383
+      },
+      "unit": null,
+      "confidence": 0.9444,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_823af93d14d0bd70ebc73e87",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "text_fact",
+      "canonical_value": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+      "surface_forms": [
+        "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_d2a7e6d0b601e84220fad48a"
+      ],
+      "evidence_refs": [
+        "asset_d2a7e6d0b601e84220fad48a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_3cbf0fe48bfbbc63656d1112",
+        "parent_problem_id": "prob_5e67b55eb5031584bc8fe94c",
+        "variant_index": 1,
+        "title": "MathVision 开放题",
+        "rewritten_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "65",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_cb2a37ff08c8dc6c04060337",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty while top-level image_paths contains one image path.",
+      "surface_forms": [
+        "metadata.image_paths is empty while top-level image_paths contains one image path."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty while top-level image_paths contains one image path."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_013a01d8db2181cca4ec281a",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_inconsistency",
+      "surface_forms": [
+        "metadata_inconsistency"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_inconsistency"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_0ea086b63ebde81aa50ffc31",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_5e67b55eb5031584bc8fe94c",
+        "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-08T11:30:03Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "node_id": "node_6032be2643332cf2c65dca7c",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_ok",
+          "answer_available",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T11:30:11Z",
+      "updated_at": "2026-04-08T11:30:11Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_d9267f785001f0689f07223f",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_72ab9b4332499938",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_f8a48cebc1b4b2ccce518666",
+        "asset_2c403dfd116fa6500212b33e",
+        "asset_72d2fb66c473f17e0bcfb023",
+        "asset_3b5ee1374583c68dd03d13ec",
+        "asset_38e1ec17a1361c7c67ebde9e",
+        "asset_824664207bce8c6dbb692a84",
+        "asset_d2a7e6d0b601e84220fad48a"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 16
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 461,
+            "height": 370,
+            "blur_score": 3194.7644,
+            "contrast_score": 42.6523,
+            "noise_score": 20.7742,
+            "readability_score": 0.8611,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 72,
+              "y": 24,
+              "width": 310,
+              "height": 304
+            },
+            "perceptual_hash": "e7e7c3a181c3e7ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_d9267f785001f0689f07223f",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_5e67b55eb5031584bc8fe94c",
+        "question_type": "calculation",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_5e67b55eb5031584bc8fe94c",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The question text clearly asks for the minimum-weight Hamiltonian path, and the graph image provides the needed vertices, edges, and edge weights with sufficient clarity to understand the task and expected numeric answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths is empty while top-level image_paths contains one image path.",
+        "metadata_inconsistency"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_ok",
+        "answer_available",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The sample is jointly understandable, the graph image is clear enough to support the Hamiltonian-path calculation, the numeric answer is present, and rewrite/alignment/solvability signals show no substantive failure. The noted metadata inconsistency is non-fatal and does not block annotation use.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-08T11:30:11Z",
+      "finished_at": "2026-04-08T11:30:11Z",
+      "candidate_id": "cand_5e67b55eb5031584bc8fe94c",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_d9267f785001f0689f07223f",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "image_entity_refs": [
+        "visual_prob_5e67b55eb5031584bc8fe94c_1::roi",
+        "visual_prob_5e67b55eb5031584bc8fe94c_1::roi_top_left",
+        "visual_prob_5e67b55eb5031584bc8fe94c_1::roi_top_right",
+        "visual_prob_5e67b55eb5031584bc8fe94c_1::roi_bottom_left",
+        "visual_prob_5e67b55eb5031584bc8fe94c_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_5e67b55eb5031584bc8fe94c_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "graph",
+          "image_ref": "visual_prob_5e67b55eb5031584bc8fe94c_1::roi",
+          "relation": "grounds_graph",
+          "confidence": 0.7861
+        },
+        {
+          "text_ref": "slot_prob_5e67b55eb5031584bc8fe94c_1",
+          "image_ref": "visual_prob_5e67b55eb5031584bc8fe94c_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7878
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-08T11:29:55Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_2fc90952ad87d955cffd6ba2",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph below that visit each vertex precisely once. \\n<image1>",
+      "after_value": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "audit_id": "audit_f31b998fbeae9039114d9a98",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "65",
+      "after_value": "65",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "audit_id": "audit_21f258722c607af7df40055a",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "audit_id": "audit_6032be2643332cf2c65dca7c",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T11:30:11Z"
+    },
+    {
+      "audit_id": "audit_0051896eca0f48bb9075e095",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "We",
+          "canonical": "We",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "emph",
+          "canonical": "emph",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "edge",
+          "canonical": "edge",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "once",
+          "canonical": "once",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T11:30:11Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_d9267f785001f0689f07223f",
+      "problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "source_problem_id": "2820",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_3cbf0fe48bfbbc63656d1112",
+          "parent_problem_id": "prob_5e67b55eb5031584bc8fe94c",
+          "variant_index": 1,
+          "title": "MathVision 开放题",
+          "rewritten_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "65",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-08T11:30:11Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_3cbf0fe48bfbbc63656d1112",
+      "parent_problem_id": "prob_5e67b55eb5031584bc8fe94c",
+      "variant_index": 1,
+      "title": "MathVision 开放题",
+      "rewritten_question_text": "We define the $\\emph{weight}$ of a path to be the sum of the numbers written on each edge of the path. Find the minimum weight among all paths in the graph that visit each vertex precisely once.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "65",
+      "split_role": "single"
+    }
+  ]
+}

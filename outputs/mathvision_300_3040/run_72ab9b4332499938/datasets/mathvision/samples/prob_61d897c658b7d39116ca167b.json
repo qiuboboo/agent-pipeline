@@ -1,0 +1,1964 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_2560753cac88c1984961f07e",
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "problem_id": "prob_61d897c658b7d39116ca167b",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2776",
+    "raw_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot below. In ounces, what is the weight of the pepper that offers the lowest price per ounce?\n\n<image1>",
+    "raw_answer_text": "3",
+    "choice_map": {},
+    "image_paths": [
+      "images/2776.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-08T10:39:45Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_61d897c658b7d39116ca167b",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_61d897c658b7d39116ca167b_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 864,
+        "height": 864,
+        "file_size": 51290
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 247,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 1
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_2560753cac88c1984961f07e",
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2776",
+    "created_at": "2026-04-08T10:39:45Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_61d897c658b7d39116ca167b",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.82,
+    "verifiability_score": 0.84,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image` is true",
+        "Question explicitly says the 30 options are \"shown in the scatter plot\"",
+        "`text_dominant` is false, so key information is not fully recoverable from text alone",
+        "Asset registry shows a valid primary image and `registry_passed=true`"
+      ],
+      "multi_step": [
+        "The task requires reading weight and price from plotted options, not just extracting a single marked value",
+        "It asks for the option with the lowest price per ounce, which implies computing or comparing price/weight ratios",
+        "There are thirty different options, so the solution involves comparison across many candidates rather than a one-step lookup",
+        "This is a visual-plus-quantitative reasoning problem based on scatter-plot data"
+      ],
+      "verifiability": [
+        "Expected answer is numeric (`answer_type` is number; provided answer is `3`), which is easy to compare against a gold answer",
+        "The target quantity is clearly specified: the weight of the pepper with minimum price per ounce",
+        "Because the source is a scatter plot, a verifier can in principle read candidate points and check the price-per-ounce comparison",
+        "Registry passed and the image quality summary reports reasonably strong readability (`readability_score=0.8472`)"
+      ]
+    },
+    "risk_flags": [
+      "ratio_computation_from_visual_data",
+      "scatter_plot_coordinate_reading"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_2560753cac88c1984961f07e",
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2776",
+    "created_at": "2026-04-08T10:39:45Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_61d897c658b7d39116ca167b",
+    "priority": 0.93,
+    "decision": "keep",
+    "decision_reasons": [
+      "资产完整：题干、答案和主图均存在，且 registry_passed=true",
+      "图像依赖强但关键视觉信息可用，散点图题所需核心语义没有缺失",
+      "初步评分整体较高（image_dependency、multi_step、verifiability 均较强），具备进入候选池的价值",
+      "虽有视觉读点与比值计算风险，但这属于题目难度特征，不构成核心语义不足"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_2560753cac88c1984961f07e",
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2776",
+    "created_at": "2026-04-08T10:39:45Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_2560753cac88c1984961f07e",
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "problem_id": "prob_61d897c658b7d39116ca167b",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+    "normalized_answer_text": "3",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder token while preserving the question's reference to the scatter plot.",
+      "Question remains image-dependent because identifying the lowest price per ounce requires reading plotted weight-price points.",
+      "No choices were provided, so normalized_choice_map is empty."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-08T10:39:45Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2776",
+    "subject": "数学",
+    "raw_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot below. In ounces, what is the weight of the pepper that offers the lowest price per ounce?\n\n<image1>",
+    "raw_answer_text": "3",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 2475,
+      "image_paths": [
+        "images/2776.jpg"
+      ],
+      "extraction_notes": [
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-08T10:41:02Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.93,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "资产完整：题干、答案和主图均存在，且 registry_passed=true",
+      "图像依赖强但关键视觉信息可用，散点图题所需核心语义没有缺失",
+      "初步评分整体较高（image_dependency、multi_step、verifiability 均较强），具备进入候选池的价值",
+      "虽有视觉读点与比值计算风险，但这属于题目难度特征，不构成核心语义不足"
+    ],
+    "collection_risk_flags": [
+      "ratio_computation_from_visual_data",
+      "scatter_plot_coordinate_reading"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_afb1fc73241d19ffefb129f4",
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2776",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_61d897c658b7d39116ca167b/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_61d897c658b7d39116ca167b/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 864,
+        "height": 864
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-08T10:41:02Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_bc5c503b6ec238e2b57cf1c2",
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2776",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.93,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-08T10:41:02Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "资产完整：题干、答案和主图均存在，且 registry_passed=true",
+      "图像依赖强但关键视觉信息可用，散点图题所需核心语义没有缺失",
+      "初步评分整体较高（image_dependency、multi_step、verifiability 均较强），具备进入候选池的价值",
+      "虽有视觉读点与比值计算风险，但这属于题目难度特征，不构成核心语义不足"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_2560753cac88c1984961f07e",
+      "candidate_id": "cand_61d897c658b7d39116ca167b",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "dataset_name": "MathVision",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-08T10:41:02Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_2560753cac88c1984961f07e",
+    "problem_id": "prob_61d897c658b7d39116ca167b",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2776",
+    "normalized_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+    "normalized_answer_text": "3",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_ok",
+      "image_text_jointly_usable",
+      "question_answer_complete",
+      "rewrite_usable",
+      "solvable"
+    ],
+    "created_at": "2026-04-08T10:41:02Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_2560753cac88c1984961f07e",
+    "problem_id": "prob_61d897c658b7d39116ca167b",
+    "normalized_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+    "normalized_answer_text": "3",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "went",
+        "canonical": "went",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "shop",
+        "canonical": "shop",
+        "variable_type": "label"
+      },
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "plot",
+        "canonical": "plot",
+        "variable_type": "label"
+      },
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "per",
+        "canonical": "per",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot."
+      },
+      {
+        "segment_index": 2,
+        "text": "In ounces, what is the weight of the pepper that offers the lowest price per ounce?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 32,
+          "y": 24,
+          "width": 805,
+          "height": 808
+        },
+        "readability_score": 0.8472,
+        "contrast_score": 31.7288
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-08T10:41:02Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder token while preserving the question's reference to the scatter plot.",
+      "Question remains image-dependent because identifying the lowest price per ounce requires reading plotted weight-price points.",
+      "No choices were provided, so normalized_choice_map is empty."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_61d897c658b7d39116ca167b",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2776",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260407T041348Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot below. In ounces, what is the weight of the pepper that offers the lowest price per ounce?\n\n<image1>",
+    "normalized_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+    "raw_answer_text": "3",
+    "normalized_answer_text": "3",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9817,
+    "multi_step_score": 0.3467,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_ok",
+      "image_text_jointly_usable",
+      "question_answer_complete",
+      "rewrite_usable",
+      "solvable"
+    ],
+    "clean_decision_rationale": "The sample is semantically clear and complete: the question, image-dependent target, and numeric answer are all present, the rewrite is usable, and alignment and solvability signals show no serious issues.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_61d897c658b7d39116ca167b",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-08T10:39:45Z",
+    "updated_at": "2026-04-08T10:41:02Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.93,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "资产完整：题干、答案和主图均存在，且 registry_passed=true",
+      "图像依赖强但关键视觉信息可用，散点图题所需核心语义没有缺失",
+      "初步评分整体较高（image_dependency、multi_step、verifiability 均较强），具备进入候选池的价值",
+      "虽有视觉读点与比值计算风险，但这属于题目难度特征，不构成核心语义不足"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_1e56539d8086dbe9c6a84fed",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/2776/question",
+      "storage_uri": "inline://prob_61d897c658b7d39116ca167b/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 247,
+      "width": null,
+      "height": null,
+      "sha256": "2c4e0bb772bdbf374b29bf49a58ed65535dc2b67a3b92c0747d33f800713aabe",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot below. In ounces, what is the weight of the pepper that offers the lowest price per ounce?\n\n<image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7563,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "went",
+          "canonical": "went",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "shop",
+          "canonical": "shop",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "plot",
+          "canonical": "plot",
+          "variable_type": "label"
+        },
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "asset_id": "asset_a098503c2da8e0dca90c6ff0",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_61d897c658b7d39116ca167b/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 231,
+      "width": null,
+      "height": null,
+      "sha256": "523b05d17974809dbc1a874ff0598a96c2fa5971815eac12d22aab076cd7e58a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot below. In ounces, what is the weight of the pepper that offers the lowest price per ounce?\n\n<image1>",
+      "normalized_text_snapshot": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+      "text_completeness_score": 0.7563,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "went",
+          "canonical": "went",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "shop",
+          "canonical": "shop",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "plot",
+          "canonical": "plot",
+          "variable_type": "label"
+        },
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "asset_id": "asset_fed733f3cffbf07dffafd0df",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/2776/answer",
+      "storage_uri": "inline://prob_61d897c658b7d39116ca167b/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "perceptual_hash": null,
+      "source_text_snapshot": "3",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "asset_id": "asset_985673ba3c1049911df821ee",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_61d897c658b7d39116ca167b/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "perceptual_hash": null,
+      "source_text_snapshot": "3",
+      "normalized_text_snapshot": "3",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "asset_id": "asset_fde2217385da21ac6b482cea",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_61d897c658b7d39116ca167b_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 51290,
+      "width": 864,
+      "height": 864,
+      "sha256": "bf5e682afe3e550f4c061e179425e2bd96647b1cfcc8379cb42691f642706bbb",
+      "perceptual_hash": "ffa14347c7dffff3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1744.5811,
+      "readability_score": 0.8472,
+      "noise_score": 19.0693,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 32,
+        "y": 24,
+        "width": 805,
+        "height": 808
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "asset_id": "asset_19eddc931c10a5c9d35694ae",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/crops/prob_61d897c658b7d39116ca167b_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 50100,
+      "width": 805,
+      "height": 808,
+      "sha256": "85905d5f0dd51cbd095e7391c65a50ccd6e968826e98c91dc9fe43807c3a3948",
+      "perceptual_hash": "f9e14347c7dffff3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1744.5811,
+      "readability_score": 0.8472,
+      "noise_score": 19.0693,
+      "cropped_from_asset_id": "asset_fde2217385da21ac6b482cea",
+      "roi_bbox": {
+        "x": 32,
+        "y": 24,
+        "width": 805,
+        "height": 808
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "asset_id": "asset_6108d7b31dfb9f30eddcb29b",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_55406e7163b8d1719c8c013b",
+      "file_format": "txt",
+      "file_size_bytes": 231,
+      "width": null,
+      "height": null,
+      "sha256": "523b05d17974809dbc1a874ff0598a96c2fa5971815eac12d22aab076cd7e58a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot below. In ounces, what is the weight of the pepper that offers the lowest price per ounce?\n\n<image1>",
+      "normalized_text_snapshot": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+      "text_completeness_score": 0.7563,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "went",
+          "canonical": "went",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "shop",
+          "canonical": "shop",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "plot",
+          "canonical": "plot",
+          "variable_type": "label"
+        },
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_61d897c658b7d39116ca167b",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_61d897c658b7d39116ca167b_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "3",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "plot",
+          "entity_category": "graph",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "line",
+          "entity_category": "line",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "went",
+          "canonical": "went",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "shop",
+          "canonical": "shop",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "plot",
+          "canonical": "plot",
+          "variable_type": "label"
+        },
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot."
+        },
+        {
+          "segment_index": 2,
+          "text": "In ounces, what is the weight of the pepper that offers the lowest price per ounce?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-08T10:40:48Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_61d897c658b7d39116ca167b_1",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "chart_like",
+        "aspect_ratio": 1.0,
+        "dark_pixel_ratio": 0.0478,
+        "readability_score": 0.8472,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 864,
+            "height": 864
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 32,
+            "y": 24,
+            "width": 805,
+            "height": 808
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 32,
+            "y": 24,
+            "width": 402,
+            "height": 404
+          },
+          "salience": 0.4092
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 434,
+            "y": 24,
+            "width": 403,
+            "height": 404
+          },
+          "salience": 0.4209
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 434,
+            "y": 428,
+            "width": 403,
+            "height": 404
+          },
+          "salience": 0.4028
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9389,
+      "created_at": "2026-04-08T10:40:48Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_61d897c658b7d39116ca167b",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-08T10:40:58Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_8eddef0333cd4ee584bcef04",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "text_fact",
+      "canonical_value": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot.",
+      "surface_forms": [
+        "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_a098503c2da8e0dca90c6ff0"
+      ],
+      "evidence_refs": [
+        "asset_a098503c2da8e0dca90c6ff0"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_d2f6f08228f07e7bf70628a9",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "target_slot",
+      "canonical_value": "In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+      "surface_forms": [
+        "In ounces, what is the weight of the pepper that offers the lowest price per ounce?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_a098503c2da8e0dca90c6ff0"
+      ],
+      "evidence_refs": [
+        "asset_a098503c2da8e0dca90c6ff0"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_61d897c658b7d39116ca167b_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "3",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_6c7b08e1f67936d64c55ba48",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "answer_claim",
+      "canonical_value": "3",
+      "surface_forms": [
+        "3"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_985673ba3c1049911df821ee"
+      ],
+      "evidence_refs": [
+        "asset_985673ba3c1049911df821ee"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "3"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_8f9c28ddb91dc54d61b4ef10",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 864,
+          "height": 864
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9389,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_ac6a0c6a491926bede8f5374",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 32,
+          "y": 24,
+          "width": 805,
+          "height": 808
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9389,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_804cd5e734438ceaf0c33b48",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 32,
+          "y": 24,
+          "width": 402,
+          "height": 404
+        },
+        "salience": 0.4092
+      },
+      "unit": null,
+      "confidence": 0.9389,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_e045057cc8e7e26d7eec0f91",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 434,
+          "y": 24,
+          "width": 403,
+          "height": 404
+        },
+        "salience": 0.4209
+      },
+      "unit": null,
+      "confidence": 0.9389,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_8007282b3e7ac46a856b75c6",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 434,
+          "y": 428,
+          "width": 403,
+          "height": 404
+        },
+        "salience": 0.4028
+      },
+      "unit": null,
+      "confidence": 0.9389,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_04c4b73a69044d7b94aa404e",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "text_fact",
+      "canonical_value": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+      "surface_forms": [
+        "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_6108d7b31dfb9f30eddcb29b"
+      ],
+      "evidence_refs": [
+        "asset_6108d7b31dfb9f30eddcb29b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_55406e7163b8d1719c8c013b",
+        "parent_problem_id": "prob_61d897c658b7d39116ca167b",
+        "variant_index": 1,
+        "title": "MathVision 开放题",
+        "rewritten_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "3",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_aefc7e1ca16eed7cd8ecc93e",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_61d897c658b7d39116ca167b",
+        "problem_id": "prob_61d897c658b7d39116ca167b",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-08T10:40:58Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "node_id": "node_b68d1c058c048b792770604a",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_ok",
+          "image_text_jointly_usable",
+          "question_answer_complete",
+          "rewrite_usable",
+          "solvable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:41:02Z",
+      "updated_at": "2026-04-08T10:41:02Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_2560753cac88c1984961f07e",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_72ab9b4332499938",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_1e56539d8086dbe9c6a84fed",
+        "asset_a098503c2da8e0dca90c6ff0",
+        "asset_fed733f3cffbf07dffafd0df",
+        "asset_985673ba3c1049911df821ee",
+        "asset_fde2217385da21ac6b482cea",
+        "asset_19eddc931c10a5c9d35694ae",
+        "asset_6108d7b31dfb9f30eddcb29b"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 13
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 864,
+            "height": 864,
+            "blur_score": 1744.5811,
+            "contrast_score": 31.7288,
+            "noise_score": 19.0693,
+            "readability_score": 0.8472,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 32,
+              "y": 24,
+              "width": 805,
+              "height": 808
+            },
+            "perceptual_hash": "ffa14347c7dffff3"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_2560753cac88c1984961f07e",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_61d897c658b7d39116ca167b",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_61d897c658b7d39116ca167b",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_target_clear",
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_clear"
+        ],
+        "rationale": "The question clearly asks for the weight corresponding to the lowest price-per-ounce from a scatter plot, the expected answer is a numeric weight, and the plot is present and readable enough to interpret the needed point ratios.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_ok",
+        "image_text_jointly_usable",
+        "question_answer_complete",
+        "rewrite_usable",
+        "solvable"
+      ],
+      "decision_rationale": "The sample is semantically clear and complete: the question, image-dependent target, and numeric answer are all present, the rewrite is usable, and alignment and solvability signals show no serious issues.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-08T10:41:02Z",
+      "finished_at": "2026-04-08T10:41:02Z",
+      "candidate_id": "cand_61d897c658b7d39116ca167b",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_2560753cac88c1984961f07e",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "image_entity_refs": [
+        "visual_prob_61d897c658b7d39116ca167b_1::roi",
+        "visual_prob_61d897c658b7d39116ca167b_1::roi_top_left",
+        "visual_prob_61d897c658b7d39116ca167b_1::roi_top_right",
+        "visual_prob_61d897c658b7d39116ca167b_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_61d897c658b7d39116ca167b_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "plot",
+          "image_ref": "visual_prob_61d897c658b7d39116ca167b_1::roi",
+          "relation": "grounds_graph",
+          "confidence": 0.7847
+        },
+        {
+          "text_ref": "line",
+          "image_ref": "visual_prob_61d897c658b7d39116ca167b_1::roi",
+          "relation": "grounds_line",
+          "confidence": 0.7847
+        },
+        {
+          "text_ref": "slot_prob_61d897c658b7d39116ca167b_1",
+          "image_ref": "visual_prob_61d897c658b7d39116ca167b_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7866
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-08T10:40:48Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_99a22530bcbadd18cbf71284",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot below. In ounces, what is the weight of the pepper that offers the lowest price per ounce?\n\n<image1>",
+      "after_value": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "audit_id": "audit_6c55a30dc078edf844b13a4a",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "3",
+      "after_value": "3",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "audit_id": "audit_5af40a91b9d77d8631f77d8c",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "audit_id": "audit_b68d1c058c048b792770604a",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:41:02Z"
+    },
+    {
+      "audit_id": "audit_93a84f782073dce3ad71c895",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "went",
+          "canonical": "went",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "shop",
+          "canonical": "shop",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "plot",
+          "canonical": "plot",
+          "variable_type": "label"
+        },
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:41:02Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_2560753cac88c1984961f07e",
+      "problem_id": "prob_61d897c658b7d39116ca167b",
+      "source_problem_id": "2776",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_55406e7163b8d1719c8c013b",
+          "parent_problem_id": "prob_61d897c658b7d39116ca167b",
+          "variant_index": 1,
+          "title": "MathVision 开放题",
+          "rewritten_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "3",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-08T10:41:02Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_55406e7163b8d1719c8c013b",
+      "parent_problem_id": "prob_61d897c658b7d39116ca167b",
+      "variant_index": 1,
+      "title": "MathVision 开放题",
+      "rewritten_question_text": "Laszlo went online to shop for black pepper and found thirty different black pepper options varying in weight and price, shown in the scatter plot. In ounces, what is the weight of the pepper that offers the lowest price per ounce?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "3",
+      "split_role": "single"
+    }
+  ]
+}
