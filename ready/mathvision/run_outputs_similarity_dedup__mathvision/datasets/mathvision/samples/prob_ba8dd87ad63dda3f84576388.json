@@ -1,0 +1,2051 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_b1fdf2e9ec8315fff2601652",
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "problem_id": "prob_ba8dd87ad63dda3f84576388",
+    "dataset_name": "MathVision",
+    "source_problem_id": "145",
+    "raw_question_text": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field.\n<image1>\nWhich path is the kangaroo allowed to take?\n<image2>",
+    "raw_answer_text": "C",
+    "choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "image_paths": [
+      "images/145.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "options field only contains option labels without option texts",
+      "answer kept as option label because no option-text mapping is available",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T14:53:24Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_ba8dd87ad63dda3f84576388",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/images/prob_ba8dd87ad63dda3f84576388_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 805,
+        "height": 1163,
+        "file_size": 432603
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 220,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "Option texts are unavailable in metadata; answer is recorded only as an option label.",
+      "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_b1fdf2e9ec8315fff2601652",
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "dataset_name": "MathVision",
+    "source_problem_id": "145",
+    "created_at": "2026-04-04T14:53:24Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_ba8dd87ad63dda3f84576388",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.8,
+    "score_evidence": {
+      "image_dependency": [
+        "requires_image=true and text_dominant=false indicate the problem is primarily visual.",
+        "Question refers to spatial/visual elements: squares with water, arrows, neighbouring fields, and path selection.",
+        "The correct path cannot be identified from question text alone because the layout and candidate paths are in the image."
+      ],
+      "multi_step": [
+        "Solving requires tracing a candidate path across multiple jumps rather than reading a single visual fact.",
+        "The rule 'not allowed to jump through a square with water' must be applied repeatedly along a path.",
+        "The task is multiple-choice with several candidate paths (A-E), requiring comparison across alternatives."
+      ],
+      "verifiability": [
+        "answer_type is option/choice and answer_text is a single label ('C'), giving a clear target output.",
+        "A path-validity rule is explicitly stated, so a later checker could verify whether the chosen path avoids water squares.",
+        "registry_passed=true and an image asset exists, which supports downstream checking, though metadata has some option/placeholder gaps."
+      ]
+    },
+    "risk_flags": [
+      "Option texts are unavailable in metadata; answer is recorded only as an option label.",
+      "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_b1fdf2e9ec8315fff2601652",
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "dataset_name": "MathVision",
+    "source_problem_id": "145",
+    "created_at": "2026-04-04T14:53:24Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_ba8dd87ad63dda3f84576388",
+    "priority": 0.62,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Core assets are still present enough for possible recovery: the question text exists, one image asset exists, and an answer label is available.",
+      "However, the sample is highly image-dependent, and the question text references two image placeholders while only one image path is provided.",
+      "Option texts are unavailable in metadata, so the recorded answer is only an option label, which weakens direct interpretability and verification.",
+      "Given the collection-stage high-recall rule, these gaps suggest follow-up rather than rejection."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_b1fdf2e9ec8315fff2601652",
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "dataset_name": "MathVision",
+    "source_problem_id": "145",
+    "created_at": "2026-04-04T14:53:24Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_b1fdf2e9ec8315fff2601652",
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "problem_id": "prob_ba8dd87ad63dda3f84576388",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field. Which path is the kangaroo allowed to take?",
+    "normalized_answer_text": "C",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed image placeholder tags from the question text.",
+      "Question explicitly depends on the grid layout and depicted path options, so image is required.",
+      "Choice map preserved as label-only options."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T14:53:24Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "source_dataset": "MathVision",
+    "source_split": "test[0:300]",
+    "source_problem_id": "145",
+    "subject": "数学",
+    "raw_question_text": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field.\n<image1>\nWhich path is the kangaroo allowed to take?\n<image2>",
+    "raw_answer_text": "C",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.8,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 144,
+      "image_paths": [
+        "images/145.jpg"
+      ],
+      "extraction_notes": [
+        "options field only contains option labels without option texts",
+        "answer kept as option label because no option-text mapping is available",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-04T14:55:19Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.62,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Core assets are still present enough for possible recovery: the question text exists, one image asset exists, and an answer label is available.",
+      "However, the sample is highly image-dependent, and the question text references two image placeholders while only one image path is provided.",
+      "Option texts are unavailable in metadata, so the recorded answer is only an option label, which weakens direct interpretability and verification.",
+      "Given the collection-stage high-recall rule, these gaps suggest follow-up rather than rejection."
+    ],
+    "collection_risk_flags": [
+      "Option texts are unavailable in metadata; answer is recorded only as an option label.",
+      "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_df3a4507596a99c414c2a9c8",
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "source_dataset": "MathVision",
+    "source_problem_id": "145",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_ba8dd87ad63dda3f84576388/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_ba8dd87ad63dda3f84576388/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 805,
+        "height": 1163
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.8
+    },
+    "created_at": "2026-04-04T14:55:19Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Option texts are unavailable in metadata; answer is recorded only as an option label.",
+      "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_849a65b595509f5b115b1192",
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "source_dataset": "MathVision",
+    "source_problem_id": "145",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.62,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.8
+    },
+    "created_at": "2026-04-04T14:55:19Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Core assets are still present enough for possible recovery: the question text exists, one image asset exists, and an answer label is available.",
+      "However, the sample is highly image-dependent, and the question text references two image placeholders while only one image path is provided.",
+      "Option texts are unavailable in metadata, so the recorded answer is only an option label, which weakens direct interpretability and verification.",
+      "Given the collection-stage high-recall rule, these gaps suggest follow-up rather than rejection."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_b1fdf2e9ec8315fff2601652",
+      "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T14:55:19Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_b1fdf2e9ec8315fff2601652",
+    "problem_id": "prob_ba8dd87ad63dda3f84576388",
+    "source_dataset": "MathVision",
+    "source_problem_id": "145",
+    "normalized_question_text": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field. Which path is the kangaroo allowed to take?",
+    "normalized_answer_text": "C",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "image_placeholder_mismatch",
+      "pure_image_option_label",
+      "rewrite_unusable"
+    ],
+    "created_at": "2026-04-04T14:55:19Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_b1fdf2e9ec8315fff2601652",
+    "problem_id": "prob_ba8dd87ad63dda3f84576388",
+    "normalized_question_text": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field. Which path is the kangaroo allowed to take?",
+    "normalized_answer_text": "C",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "On",
+        "canonical": "On",
+        "variable_type": "label"
+      },
+      {
+        "original": "its",
+        "canonical": "its",
+        "variable_type": "label"
+      },
+      {
+        "original": "way",
+        "canonical": "way",
+        "variable_type": "label"
+      },
+      {
+        "original": "it",
+        "canonical": "it",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "not",
+        "canonical": "not",
+        "variable_type": "label"
+      },
+      {
+        "original": "jump",
+        "canonical": "jump",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "Each",
+        "canonical": "Each",
+        "variable_type": "label"
+      },
+      {
+        "original": "one",
+        "canonical": "one",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "path",
+        "canonical": "path",
+        "variable_type": "label"
+      },
+      {
+        "original": "take",
+        "canonical": "take",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "The kangaroo wants to visit the koala."
+      },
+      {
+        "segment_index": 2,
+        "text": "On its way it is not allowed to jump through a square with water."
+      },
+      {
+        "segment_index": 3,
+        "text": "Each arrow shows one jump on to a neighbouring field."
+      },
+      {
+        "segment_index": 4,
+        "text": "Which path is the kangaroo allowed to take?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 16,
+          "width": 805,
+          "height": 1121
+        },
+        "readability_score": 0.8777,
+        "contrast_score": 58.796
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T14:55:19Z",
+    "normalization_notes": [
+      "Removed image placeholder tags from the question text.",
+      "Question explicitly depends on the grid layout and depicted path options, so image is required.",
+      "Choice map preserved as label-only options."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_ba8dd87ad63dda3f84576388",
+    "source_dataset": "MathVision",
+    "source_split": "test[0:300]",
+    "source_problem_id": "145",
+    "ingest_batch_id": "benchmarkallinone-mathvision-000-300_20260404T104756Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field.\n<image1>\nWhich path is the kangaroo allowed to take?\n<image2>",
+    "normalized_question_text": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field. Which path is the kangaroo allowed to take?",
+    "raw_answer_text": "C",
+    "normalized_answer_text": "C",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9728,
+    "multi_step_score": 0.275,
+    "verifiability_score": 0.906,
+    "quality_risk_flags": [
+      "Option texts are unavailable in metadata; answer is recorded only as an option label.",
+      "image_placeholder_mismatch",
+      "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "image_placeholder_mismatch",
+      "pure_image_option_label",
+      "rewrite_unusable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable and the image evidence appears clear enough to solve the path task, but the stored answer is only the option label 'C' and no usable rewritten semantic target was produced. Because this is a recoverable pure-image multiple-choice item rather than a fundamentally broken sample, it should be kept for review instead of rejected.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T14:53:24Z",
+    "updated_at": "2026-04-04T14:55:19Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.8,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.62,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Core assets are still present enough for possible recovery: the question text exists, one image asset exists, and an answer label is available.",
+      "However, the sample is highly image-dependent, and the question text references two image placeholders while only one image path is provided.",
+      "Option texts are unavailable in metadata, so the recorded answer is only an option label, which weakens direct interpretability and verification.",
+      "Given the collection-stage high-recall rule, these gaps suggest follow-up rather than rejection."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_538cb57d7a07baef82bcc945",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[0:300]/145/question",
+      "storage_uri": "inline://prob_ba8dd87ad63dda3f84576388/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 220,
+      "width": null,
+      "height": null,
+      "sha256": "c164da66e3b5d37ddf8df24093891cf751b276810e0830c5b058d9810f5d984f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field.\n<image1>\nWhich path is the kangaroo allowed to take?\n<image2>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7304,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "On",
+          "canonical": "On",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "way",
+          "canonical": "way",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "jump",
+          "canonical": "jump",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "take",
+          "canonical": "take",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "asset_id": "asset_67f0c6e213005596b844d11f",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_ba8dd87ad63dda3f84576388/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 202,
+      "width": null,
+      "height": null,
+      "sha256": "0e8a1f56655e0e5a3abdbe90ef90a816be129ab589a8497ebda27fec93af137e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field.\n<image1>\nWhich path is the kangaroo allowed to take?\n<image2>",
+      "normalized_text_snapshot": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field. Which path is the kangaroo allowed to take?",
+      "text_completeness_score": 0.7304,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "On",
+          "canonical": "On",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "way",
+          "canonical": "way",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "jump",
+          "canonical": "jump",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "take",
+          "canonical": "take",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "asset_id": "asset_d093d48b0178daae4d4a8394",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[0:300]/145/answer",
+      "storage_uri": "inline://prob_ba8dd87ad63dda3f84576388/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "C",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "asset_id": "asset_da5caaf16613c2ba1f9715f9",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_ba8dd87ad63dda3f84576388/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "6b23c0d5f35d1b11f9b683f0b0a617355deb11277d91ae091d399c655b87940d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "C",
+      "normalized_text_snapshot": "C",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "asset_id": "asset_bc927f252494e73b1721206c",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/images/prob_ba8dd87ad63dda3f84576388_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 432603,
+      "width": 805,
+      "height": 1163,
+      "sha256": "9aa150c8151e417a93b5fad11ae19e0d05adc1518a5036ff51d51820935f5398",
+      "perceptual_hash": "cfcc2427dfdfddff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1450.5057,
+      "readability_score": 0.8777,
+      "noise_score": 25.6984,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 16,
+        "width": 805,
+        "height": 1121
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Option texts are unavailable in metadata; answer is recorded only as an option label.",
+        "image_placeholder_mismatch",
+        "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "asset_id": "asset_0349ebce5d11dbd82733a0d0",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_000_300/run_8d24366e519d1ecf/datasets/mathvision/artifacts/crops/prob_ba8dd87ad63dda3f84576388_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 431926,
+      "width": 805,
+      "height": 1121,
+      "sha256": "433394be19a0eef21609100a791d5443672ff2f30883e1f7dbf0ef42b7bd4142",
+      "perceptual_hash": "cfcc2427dfdfdfdf",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1450.5057,
+      "readability_score": 0.8777,
+      "noise_score": 25.6984,
+      "cropped_from_asset_id": "asset_bc927f252494e73b1721206c",
+      "roi_bbox": {
+        "x": 0,
+        "y": 16,
+        "width": 805,
+        "height": 1121
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_ba8dd87ad63dda3f84576388",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "question_type": "multiple_choice",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Which path is the kangaroo allowed to take?",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_ba8dd87ad63dda3f84576388_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "Which path is the kangaroo allowed to take?",
+          "expected_answer_type": "unknown",
+          "expected_answer": "C",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "On",
+          "canonical": "On",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "way",
+          "canonical": "way",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "jump",
+          "canonical": "jump",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "take",
+          "canonical": "take",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "The kangaroo wants to visit the koala."
+        },
+        {
+          "segment_index": 2,
+          "text": "On its way it is not allowed to jump through a square with water."
+        },
+        {
+          "segment_index": 3,
+          "text": "Each arrow shows one jump on to a neighbouring field."
+        },
+        {
+          "segment_index": 4,
+          "text": "Which path is the kangaroo allowed to take?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T14:54:46Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_ba8dd87ad63dda3f84576388_1",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 0.6922,
+        "dark_pixel_ratio": 0.1833,
+        "readability_score": 0.8777,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 805,
+            "height": 1163
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 16,
+            "width": 805,
+            "height": 1121
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 16,
+            "width": 402,
+            "height": 560
+          },
+          "salience": 0.6474
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 402,
+            "y": 16,
+            "width": 403,
+            "height": 560
+          },
+          "salience": 0.5721
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 576,
+            "width": 402,
+            "height": 561
+          },
+          "salience": 0.4738
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 402,
+            "y": 576,
+            "width": 403,
+            "height": 561
+          },
+          "salience": 0.4679
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9511,
+      "created_at": "2026-04-04T14:54:46Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_ba8dd87ad63dda3f84576388",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-04T14:55:10Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_d03d7c76c0fd7839956c46b2",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "target_slot",
+      "canonical_value": "Which path is the kangaroo allowed to take?",
+      "surface_forms": [
+        "Which path is the kangaroo allowed to take?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_67f0c6e213005596b844d11f"
+      ],
+      "evidence_refs": [
+        "asset_67f0c6e213005596b844d11f"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_ba8dd87ad63dda3f84576388_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "Which path is the kangaroo allowed to take?",
+        "expected_answer_type": "unknown",
+        "expected_answer": "C",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_50d34c316b56b77cc1d9bb99",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "answer_claim",
+      "canonical_value": "C",
+      "surface_forms": [
+        "C"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_da5caaf16613c2ba1f9715f9"
+      ],
+      "evidence_refs": [
+        "asset_da5caaf16613c2ba1f9715f9"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "C"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_1c46efcde006de5506615f3c",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 805,
+          "height": 1163
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9511,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_d776e662d391a1ffcf11c682",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 16,
+          "width": 805,
+          "height": 1121
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9511,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_649777db3de0346e7e2fac16",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 16,
+          "width": 402,
+          "height": 560
+        },
+        "salience": 0.6474
+      },
+      "unit": null,
+      "confidence": 0.9511,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_3e44e3584da5d3a773a76fbb",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 402,
+          "y": 16,
+          "width": 403,
+          "height": 560
+        },
+        "salience": 0.5721
+      },
+      "unit": null,
+      "confidence": 0.9511,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_81d951916fd1a1237344a01e",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 576,
+          "width": 402,
+          "height": 561
+        },
+        "salience": 0.4738
+      },
+      "unit": null,
+      "confidence": 0.9511,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_d98b5193df504ba3bbadb8c0",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 402,
+          "y": 576,
+          "width": 403,
+          "height": 561
+        },
+        "salience": 0.4679
+      },
+      "unit": null,
+      "confidence": 0.9511,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_b5c2b44ace01e41afb193e9f",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "quality_signal",
+      "canonical_value": "Option texts are unavailable in metadata; answer is recorded only as an option label.",
+      "surface_forms": [
+        "Option texts are unavailable in metadata; answer is recorded only as an option label."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Option texts are unavailable in metadata; answer is recorded only as an option label."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_544dd35c6635f76209edc62a",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "quality_signal",
+      "canonical_value": "image_placeholder_mismatch",
+      "surface_forms": [
+        "image_placeholder_mismatch"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "image_placeholder_mismatch"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_8c34938108bbdb146eb12234",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "quality_signal",
+      "canonical_value": "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided.",
+      "surface_forms": [
+        "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_9c2f5c3676b4dd9465cd8c8c",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_ba8dd87ad63dda3f84576388",
+        "problem_id": "prob_ba8dd87ad63dda3f84576388",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-04T14:55:10Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "node_id": "node_a851dc4b20b3988ecc8e5885",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "image_placeholder_mismatch",
+          "pure_image_option_label",
+          "rewrite_unusable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T14:55:19Z",
+      "updated_at": "2026-04-04T14:55:19Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_b1fdf2e9ec8315fff2601652",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_8d24366e519d1ecf",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_538cb57d7a07baef82bcc945",
+        "asset_67f0c6e213005596b844d11f",
+        "asset_d093d48b0178daae4d4a8394",
+        "asset_da5caaf16613c2ba1f9715f9",
+        "asset_bc927f252494e73b1721206c",
+        "asset_0349ebce5d11dbd82733a0d0"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 17
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 805,
+            "height": 1163,
+            "blur_score": 1450.5057,
+            "contrast_score": 58.796,
+            "noise_score": 25.6984,
+            "readability_score": 0.8777,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 16,
+              "width": 805,
+              "height": 1121
+            },
+            "perceptual_hash": "cfcc2427dfdfddff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_b1fdf2e9ec8315fff2601652",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_ba8dd87ad63dda3f84576388",
+        "question_type": "multiple_choice",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_ba8dd87ad63dda3f84576388",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "pure_image_index_selection",
+          "non_semantic_option_label"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The task is semantically clear: use the grid map and the listed arrow paths to determine which route avoids water squares from kangaroo to koala. The single provided image contains both referenced sub-images, so the question-answer pair remains understandable and the option answer C is interpretable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Option texts are unavailable in metadata; answer is recorded only as an option label.",
+        "image_placeholder_mismatch",
+        "question_text references two image placeholders (<image1>, <image2>) but only 1 image path is provided."
+      ],
+      "clean_score": 0.9074,
+      "decision": "review",
+      "decision_reason_codes": [
+        "image_placeholder_mismatch",
+        "pure_image_option_label",
+        "rewrite_unusable"
+      ],
+      "decision_rationale": "The sample is jointly understandable and the image evidence appears clear enough to solve the path task, but the stored answer is only the option label 'C' and no usable rewritten semantic target was produced. Because this is a recoverable pure-image multiple-choice item rather than a fundamentally broken sample, it should be kept for review instead of rejected.",
+      "review_ticket_id": "review_prob_ba8dd87ad63dda3f84576388",
+      "operator_type": "system",
+      "started_at": "2026-04-04T14:55:19Z",
+      "finished_at": "2026-04-04T14:55:19Z",
+      "candidate_id": "cand_ba8dd87ad63dda3f84576388",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_b1fdf2e9ec8315fff2601652",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "image_entity_refs": [
+        "visual_prob_ba8dd87ad63dda3f84576388_1::roi",
+        "visual_prob_ba8dd87ad63dda3f84576388_1::roi_top_left",
+        "visual_prob_ba8dd87ad63dda3f84576388_1::roi_top_right",
+        "visual_prob_ba8dd87ad63dda3f84576388_1::roi_bottom_left",
+        "visual_prob_ba8dd87ad63dda3f84576388_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_ba8dd87ad63dda3f84576388_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "slot_prob_ba8dd87ad63dda3f84576388_1",
+          "image_ref": "visual_prob_ba8dd87ad63dda3f84576388_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7892
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-04T14:54:46Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_25c15862eb31d04c141a8223",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field.\n<image1>\nWhich path is the kangaroo allowed to take?\n<image2>",
+      "after_value": "The kangaroo wants to visit the koala. On its way it is not allowed to jump through a square with water. Each arrow shows one jump on to a neighbouring field. Which path is the kangaroo allowed to take?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "audit_id": "audit_fb5e67eae34b3020853bd49d",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "C",
+      "after_value": "C",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "audit_id": "audit_2405d90a767f8558b654241b",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "audit_id": "audit_a851dc4b20b3988ecc8e5885",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T14:55:19Z"
+    },
+    {
+      "audit_id": "audit_11f1ff8bacd40b757260c694",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "On",
+          "canonical": "On",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "way",
+          "canonical": "way",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "jump",
+          "canonical": "jump",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "path",
+          "canonical": "path",
+          "variable_type": "label"
+        },
+        {
+          "original": "take",
+          "canonical": "take",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T14:55:19Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_b1fdf2e9ec8315fff2601652",
+      "problem_id": "prob_ba8dd87ad63dda3f84576388",
+      "source_problem_id": "145",
+      "strategy": "drop_image_index",
+      "rationale": "The answer choices are only image-index labels for alternative path diagrams, and the correct option text ('C') contains no recoverable semantic content to rewrite into an open-ended question.",
+      "discard_reason_codes": [
+        "pure_image_index_selection",
+        "non_semantic_option_label"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-04T14:55:19Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}

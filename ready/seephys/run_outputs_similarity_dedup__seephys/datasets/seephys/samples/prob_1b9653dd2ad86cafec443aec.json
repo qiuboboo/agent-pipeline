@@ -1,0 +1,2554 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_c4a7f16440eea7039f066185",
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "problem_id": "prob_1b9653dd2ad86cafec443aec",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "42",
+    "raw_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$ ?",
+    "raw_answer_text": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(305, 248)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains a PIL image object string representation rather than a file path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-03T22:06:00Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_1b9653dd2ad86cafec443aec",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/images/prob_1b9653dd2ad86cafec443aec_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 305,
+        "height": 248,
+        "file_size": 9946
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 330,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 99
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL image object string representation rather than a file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_c4a7f16440eea7039f066185",
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "42",
+    "created_at": "2026-04-03T22:06:00Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_1b9653dd2ad86cafec443aec",
+    "image_dependency_score": 0.94,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.82,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写明“as shown in Fig. 3.83”，电路连接关系依赖配图",
+        "requires_image=true 且 text_dominant=false，说明关键信息不主要在文字中",
+        "要求求解 R1 两端电压的时间历程，必须先从图中读取电路拓扑"
+      ],
+      "multi_step": [
+        "需要先从图中识别 R1、R2、C 与电压源的连接方式，再建立瞬态方程",
+        "题目给出 V(t)=Aδ(t) 的脉冲近似，需结合电路拓扑与冲激输入分析指数衰减响应",
+        "答案不仅是定性判断，还包含具体衰减率 \\((R1+R2)/(CR1R2)\\)，通常涉及多步推导"
+      ],
+      "verifiability": [
+        "answer_type=short_text，答案形式较明确，可核查是否为指数衰减并带有 t>0/t<0 分段",
+        "answer_text 给出了可比对的解析结构：对 t>0 为 exp(-kt)，对 t<0 为 0",
+        "registry_passed=true 且 answer_present=true，样本资产完整，便于后续规则或符号级核验"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths contains a PIL image object string representation rather than a file path or URL",
+      "答案使用“propto”仅给出比例形式，幅值常数不可直接核定",
+      "题干未在文字中描述具体电路拓扑，核验时仍需依赖图片内容"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_c4a7f16440eea7039f066185",
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "42",
+    "created_at": "2026-04-03T22:06:00Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_1b9653dd2ad86cafec443aec",
+    "priority": 0.78,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题干、答案和主图像均存在，核心语义可恢复，不应 reject",
+      "题目强依赖配图中的电路拓扑，虽然图像已登记存在，但文字本身不足以独立支撑核验",
+      "答案仅给出比例形式而非完整幅值常数，降低了可核验性",
+      "存在元数据中的 image path 记录异常，虽不影响当前主图像存在，但需要后续跟进"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_c4a7f16440eea7039f066185",
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "42",
+    "created_at": "2026-04-03T22:06:00Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_c4a7f16440eea7039f066185",
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "problem_id": "prob_1b9653dd2ad86cafec443aec",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+    "normalized_answer_text": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Preserved the figure reference because the circuit topology is image-dependent.",
+      "Normalized minor punctuation spacing in the question text.",
+      "No choices were provided, so normalized_choice_map remains empty.",
+      "force_requires_image=true, so the sample is routed to multimodal_full."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-03T22:06:00Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "source_dataset": "SeePhys",
+    "source_split": "train[0:300]",
+    "source_problem_id": "42",
+    "subject": "物理",
+    "raw_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$ ?",
+    "raw_answer_text": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.82,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 42,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(305, 248)>"
+      ],
+      "extraction_notes": [
+        "image field contains a PIL image object string representation rather than a file path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "When $V(t)=A\\delta(t)$, use the relation $\\delta(t)=\\frac{1}{2\\pi}\\int_{-\\infty}^{\\infty}e^{i\\omega t}d\\omega$. The voltage drop across $R_{1}$ is written as $V_{1}=\\frac{A}{2\\pi}\\int_{-\\infty}^{\\infty}\\frac{R_{1}(R_{2}-\\frac{i}{\\omega C})}{R_{1}R_{2}-\\frac{i}{\\omega C}(R_{1}+R_{2})}e^{i\\omega t}d\\omega=\\frac{A}{2\\pi}\\int_{-\\infty}^{\\infty}\\frac{\\left(\\omega-\\frac{i}{R_{2}C}\\right)}{(\\omega-\\omega_{1})}e^{i\\omega t}d\\omega$, where $\\omega_{1}=i\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}$. Using the residue theorem, the solution is found to be $V_{1}\\propto \\exp\\left(i\\omega_{1}t\\right)=\\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$, with $V_{1}=0$ for $t<0$.",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-03T22:06:52Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和主图像均存在，核心语义可恢复，不应 reject",
+      "题目强依赖配图中的电路拓扑，虽然图像已登记存在，但文字本身不足以独立支撑核验",
+      "答案仅给出比例形式而非完整幅值常数，降低了可核验性",
+      "存在元数据中的 image path 记录异常，虽不影响当前主图像存在，但需要后续跟进"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths contains a PIL image object string representation rather than a file path or URL",
+      "答案使用“propto”仅给出比例形式，幅值常数不可直接核定",
+      "题干未在文字中描述具体电路拓扑，核验时仍需依赖图片内容"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_98bf927ace4622aa410f8caf",
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "42",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_1b9653dd2ad86cafec443aec/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_1b9653dd2ad86cafec443aec/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 305,
+        "height": 248
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.82
+    },
+    "created_at": "2026-04-03T22:06:52Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL image object string representation rather than a file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_21be0708a701385765aaca55",
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "42",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.78,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.82
+    },
+    "created_at": "2026-04-03T22:06:52Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题干、答案和主图像均存在，核心语义可恢复，不应 reject",
+      "题目强依赖配图中的电路拓扑，虽然图像已登记存在，但文字本身不足以独立支撑核验",
+      "答案仅给出比例形式而非完整幅值常数，降低了可核验性",
+      "存在元数据中的 image path 记录异常，虽不影响当前主图像存在，但需要后续跟进"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_c4a7f16440eea7039f066185",
+      "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-03T22:06:52Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_c4a7f16440eea7039f066185",
+    "problem_id": "prob_1b9653dd2ad86cafec443aec",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "42",
+    "normalized_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+    "normalized_answer_text": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "image_semantically_clear",
+      "question_answer_complete",
+      "solvable_and_verifiable"
+    ],
+    "created_at": "2026-04-03T22:06:52Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_c4a7f16440eea7039f066185",
+    "problem_id": "prob_1b9653dd2ad86cafec443aec",
+    "normalized_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+    "normalized_answer_text": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "An",
+        "canonical": "An",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "two",
+        "canonical": "two",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "V",
+        "canonical": "V",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "Fig",
+        "canonical": "Fig",
+        "variable_type": "label"
+      },
+      {
+        "original": "When",
+        "canonical": "When",
+        "variable_type": "label"
+      },
+      {
+        "original": "t",
+        "canonical": "t",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "very",
+        "canonical": "very",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "we",
+        "canonical": "we",
+        "variable_type": "label"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "time",
+        "canonical": "time",
+        "variable_type": "label"
+      },
+      {
+        "original": "drop",
+        "canonical": "drop",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig."
+      },
+      {
+        "segment_index": 2,
+        "text": "3.83."
+      },
+      {
+        "segment_index": 3,
+        "text": "When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$."
+      },
+      {
+        "segment_index": 4,
+        "text": "What is the time history of the potential drop across $R_{1}$?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 54,
+          "y": 36,
+          "width": 206,
+          "height": 150
+        },
+        "readability_score": 0.8146,
+        "contrast_score": 44.5081
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-03T22:06:52Z",
+    "normalization_notes": [
+      "Preserved the figure reference because the circuit topology is image-dependent.",
+      "Normalized minor punctuation spacing in the question text.",
+      "No choices were provided, so normalized_choice_map remains empty.",
+      "force_requires_image=true, so the sample is routed to multimodal_full."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_1b9653dd2ad86cafec443aec",
+    "source_dataset": "SeePhys",
+    "source_split": "train[0:300]",
+    "source_problem_id": "42",
+    "ingest_batch_id": "benchmarkallinone-seephys-000-300_20260403T200700Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "en",
+    "raw_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$ ?",
+    "normalized_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+    "raw_answer_text": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+    "normalized_answer_text": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "When $V(t)=A\\delta(t)$, use the relation $\\delta(t)=\\frac{1}{2\\pi}\\int_{-\\infty}^{\\infty}e^{i\\omega t}d\\omega$. The voltage drop across $R_{1}$ is written as $V_{1}=\\frac{A}{2\\pi}\\int_{-\\infty}^{\\infty}\\frac{R_{1}(R_{2}-\\frac{i}{\\omega C})}{R_{1}R_{2}-\\frac{i}{\\omega C}(R_{1}+R_{2})}e^{i\\omega t}d\\omega=\\frac{A}{2\\pi}\\int_{-\\infty}^{\\infty}\\frac{\\left(\\omega-\\frac{i}{R_{2}C}\\right)}{(\\omega-\\omega_{1})}e^{i\\omega t}d\\omega$, where $\\omega_{1}=i\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}$. Using the residue theorem, the solution is found to be $V_{1}\\propto \\exp\\left(i\\omega_{1}t\\right)=\\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$, with $V_{1}=0$ for $t<0$.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9785,
+    "multi_step_score": 0.5447,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "metadata.image_paths contains a PIL image object string representation rather than a file path or URL",
+      "metadata_image_path_irregular"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "image_semantically_clear",
+      "question_answer_complete",
+      "solvable_and_verifiable"
+    ],
+    "clean_decision_rationale": "The sample is complete and understandable, the circuit image is clear enough to support the topology, the expected answer is explicitly available, and alignment and solvability evidence show no serious failure. The metadata image-path irregularity is minor and does not reduce semantic usability.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-03T22:06:00Z",
+    "updated_at": "2026-04-03T22:06:52Z",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.82,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和主图像均存在，核心语义可恢复，不应 reject",
+      "题目强依赖配图中的电路拓扑，虽然图像已登记存在，但文字本身不足以独立支撑核验",
+      "答案仅给出比例形式而非完整幅值常数，降低了可核验性",
+      "存在元数据中的 image path 记录异常，虽不影响当前主图像存在，但需要后续跟进"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_d5bc03a21a30eb8cbc70c6fc",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[0:300]/42/question",
+      "storage_uri": "inline://prob_1b9653dd2ad86cafec443aec/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 330,
+      "width": null,
+      "height": null,
+      "sha256": "984e88b0e048b07f1c838a16781f89a0bf99570cea9522b68561039af7081bb9",
+      "perceptual_hash": null,
+      "source_text_snapshot": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$ ?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "An",
+          "canonical": "An",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "When",
+          "canonical": "When",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "asset_id": "asset_d3f01de46d7bf3664f5da023",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1b9653dd2ad86cafec443aec/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 329,
+      "width": null,
+      "height": null,
+      "sha256": "5a86214a3388a8f2da3a3b6b2cb0cfe7b7dfa68e8d15b56a8b34b85abd1b1909",
+      "perceptual_hash": null,
+      "source_text_snapshot": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$ ?",
+      "normalized_text_snapshot": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "An",
+          "canonical": "An",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "When",
+          "canonical": "When",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "asset_id": "asset_9c2ad4821d7f1f0ac9f4f358",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[0:300]/42/answer",
+      "storage_uri": "inline://prob_1b9653dd2ad86cafec443aec/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 99,
+      "width": null,
+      "height": null,
+      "sha256": "c9caeea15bf62faf10853c77be97162942017e88593af1f0057489e87bb44111",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "exp",
+          "canonical": "exp",
+          "variable_type": "label"
+        },
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "asset_id": "asset_23a032bf6d16a3a368b930db",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1b9653dd2ad86cafec443aec/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 99,
+      "width": null,
+      "height": null,
+      "sha256": "c9caeea15bf62faf10853c77be97162942017e88593af1f0057489e87bb44111",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+      "normalized_text_snapshot": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "exp",
+          "canonical": "exp",
+          "variable_type": "label"
+        },
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "asset_id": "asset_5f376152021b6d1e140d54c4",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/images/prob_1b9653dd2ad86cafec443aec_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 9946,
+      "width": 305,
+      "height": 248,
+      "sha256": "8e84866f572c3c9235204ae66f2308a8019c86b65db80d6e166ebbdcf8caa769",
+      "perceptual_hash": "ffcbc181cbe7ffff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2635.7852,
+      "readability_score": 0.8146,
+      "noise_score": 30.8584,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 54,
+        "y": 36,
+        "width": 206,
+        "height": 150
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains a PIL image object string representation rather than a file path or URL",
+        "metadata_image_path_irregular"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "asset_id": "asset_e7ed605af9071b40a452fdd2",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/crops/prob_1b9653dd2ad86cafec443aec_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 8990,
+      "width": 206,
+      "height": 150,
+      "sha256": "31a7f4b12dd26b875101817151e4ff9e72b0f18cea9e800c9328efed13ffba57",
+      "perceptual_hash": "df89e20079a5ffe3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2635.7852,
+      "readability_score": 0.8146,
+      "noise_score": 30.8584,
+      "cropped_from_asset_id": "asset_5f376152021b6d1e140d54c4",
+      "roi_bbox": {
+        "x": 54,
+        "y": 36,
+        "width": 206,
+        "height": 150
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "asset_id": "asset_dc234ea14c62d76d2ea55366",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_ce9391e3aff9eac7b8c06172",
+      "file_format": "txt",
+      "file_size_bytes": 329,
+      "width": null,
+      "height": null,
+      "sha256": "5a86214a3388a8f2da3a3b6b2cb0cfe7b7dfa68e8d15b56a8b34b85abd1b1909",
+      "perceptual_hash": null,
+      "source_text_snapshot": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$ ?",
+      "normalized_text_snapshot": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "An",
+          "canonical": "An",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "When",
+          "canonical": "When",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_1b9653dd2ad86cafec443aec",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "1",
+            "2"
+          ],
+          "unit_mentions": [
+            "A",
+            "V",
+            "g",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "3.83.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3.83"
+          ],
+          "unit_mentions": [],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$.",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0"
+          ],
+          "unit_mentions": [
+            "A",
+            "V",
+            "W",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "What is the time history of the potential drop across $R_{1}$?",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1"
+          ],
+          "unit_mentions": [
+            "W",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_1b9653dd2ad86cafec443aec_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "What is the time history of the potential drop across $R_{1}$?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "circuit",
+          "entity_category": "circuit",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "resistor",
+          "entity_category": "component",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "C",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "V",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "An",
+          "canonical": "An",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "When",
+          "canonical": "When",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "V",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig."
+        },
+        {
+          "segment_index": 2,
+          "text": "3.83."
+        },
+        {
+          "segment_index": 3,
+          "text": "When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$."
+        },
+        {
+          "segment_index": 4,
+          "text": "What is the time history of the potential drop across $R_{1}$?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-03T22:06:41Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_1b9653dd2ad86cafec443aec_1",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "circuit_diagram",
+        "aspect_ratio": 1.2298,
+        "dark_pixel_ratio": 0.0501,
+        "readability_score": 0.8146,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 305,
+            "height": 248
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 54,
+            "y": 36,
+            "width": 206,
+            "height": 150
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 54,
+            "y": 36,
+            "width": 103,
+            "height": 75
+          },
+          "salience": 0.4961
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 157,
+            "y": 36,
+            "width": 103,
+            "height": 75
+          },
+          "salience": 0.5017
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 54,
+            "y": 111,
+            "width": 103,
+            "height": 75
+          },
+          "salience": 0.436
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 157,
+            "y": 111,
+            "width": 103,
+            "height": 75
+          },
+          "salience": 0.4572
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9258,
+      "created_at": "2026-04-03T22:06:41Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_1b9653dd2ad86cafec443aec",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-03T22:06:48Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_b148697ffa7fd1bbdad70886",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "text_fact",
+      "canonical_value": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig.",
+      "surface_forms": [
+        "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d3f01de46d7bf3664f5da023"
+      ],
+      "evidence_refs": [
+        "asset_d3f01de46d7bf3664f5da023"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "1",
+          "2"
+        ],
+        "unit_mentions": [
+          "A",
+          "V",
+          "g",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,V,g,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_8391806203964ec5627660c2",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "text_fact",
+      "canonical_value": "3.83.",
+      "surface_forms": [
+        "3.83."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d3f01de46d7bf3664f5da023"
+      ],
+      "evidence_refs": [
+        "asset_d3f01de46d7bf3664f5da023"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "3.83.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "3.83"
+        ],
+        "unit_mentions": [],
+        "condition_role": "explicit"
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_064e7e4d23863545ad0c67dd",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "text_fact",
+      "canonical_value": "When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$.",
+      "surface_forms": [
+        "When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d3f01de46d7bf3664f5da023"
+      ],
+      "evidence_refs": [
+        "asset_d3f01de46d7bf3664f5da023"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$.",
+        "segment_index": 3,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "0"
+        ],
+        "unit_mentions": [
+          "A",
+          "V",
+          "W",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,V,W,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_e1107496f00aa572c2ebd953",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "target_slot",
+      "canonical_value": "What is the time history of the potential drop across $R_{1}$?",
+      "surface_forms": [
+        "What is the time history of the potential drop across $R_{1}$?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_d3f01de46d7bf3664f5da023"
+      ],
+      "evidence_refs": [
+        "asset_d3f01de46d7bf3664f5da023"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_1b9653dd2ad86cafec443aec_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "What is the time history of the potential drop across $R_{1}$?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_c9d460dd4e660cbb8e439202",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "answer_claim",
+      "canonical_value": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+      "surface_forms": [
+        "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_23a032bf6d16a3a368b930db"
+      ],
+      "evidence_refs": [
+        "asset_23a032bf6d16a3a368b930db"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_a85ef3036b89ce1c43d994b9",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 305,
+          "height": 248
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_52155d3810d768bbf1dd5cf3",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 54,
+          "y": 36,
+          "width": 206,
+          "height": 150
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_6f777fbc128d4013efd241d1",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 54,
+          "y": 36,
+          "width": 103,
+          "height": 75
+        },
+        "salience": 0.4961
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_180db9564561ecd11d7984be",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 157,
+          "y": 36,
+          "width": 103,
+          "height": 75
+        },
+        "salience": 0.5017
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_8518602b7d1311861dc24e03",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 54,
+          "y": 111,
+          "width": 103,
+          "height": 75
+        },
+        "salience": 0.436
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_9be61a29a957c65b4995e3e1",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 157,
+          "y": 111,
+          "width": 103,
+          "height": 75
+        },
+        "salience": 0.4572
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_e8b0b866c1c03e6bdd5fe13b",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "text_fact",
+      "canonical_value": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+      "surface_forms": [
+        "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_dc234ea14c62d76d2ea55366"
+      ],
+      "evidence_refs": [
+        "asset_dc234ea14c62d76d2ea55366"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_ce9391e3aff9eac7b8c06172",
+        "parent_problem_id": "prob_1b9653dd2ad86cafec443aec",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_1a8a234016fb62e893de81c4",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL image object string representation rather than a file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL image object string representation rather than a file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL image object string representation rather than a file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_f082e0b373582f29dacc3650",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_image_path_irregular",
+      "surface_forms": [
+        "metadata_image_path_irregular"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_image_path_irregular"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_bbd158471da205f399ff3447",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_1b9653dd2ad86cafec443aec",
+        "problem_id": "prob_1b9653dd2ad86cafec443aec",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-03T22:06:48Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "node_id": "node_f59a3490b40d78fae8048179",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "image_semantically_clear",
+          "question_answer_complete",
+          "solvable_and_verifiable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T22:06:52Z",
+      "updated_at": "2026-04-03T22:06:52Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_c4a7f16440eea7039f066185",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a246d322f4a1c1ca",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_d5bc03a21a30eb8cbc70c6fc",
+        "asset_d3f01de46d7bf3664f5da023",
+        "asset_9c2ad4821d7f1f0ac9f4f358",
+        "asset_23a032bf6d16a3a368b930db",
+        "asset_5f376152021b6d1e140d54c4",
+        "asset_e7ed605af9071b40a452fdd2",
+        "asset_dc234ea14c62d76d2ea55366"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 20
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 305,
+            "height": 248,
+            "blur_score": 2635.7852,
+            "contrast_score": 44.5081,
+            "noise_score": 30.8584,
+            "readability_score": 0.8146,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 54,
+              "y": 36,
+              "width": 206,
+              "height": 150
+            },
+            "perceptual_hash": "ffcbc181cbe7ffff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_c4a7f16440eea7039f066185",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_1b9653dd2ad86cafec443aec",
+        "question_type": "open",
+        "condition_count": 3,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_1b9653dd2ad86cafec443aec",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_target_clear",
+          "image_semantically_clear",
+          "jointly_understandable",
+          "question_text_clear"
+        ],
+        "rationale": "The question clearly asks for the time dependence of the voltage across R1 after an impulse input, the expected answer form is explicit, and the diagram is legible enough to understand the circuit topology involving V, R1, R2, and C.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains a PIL image object string representation rather than a file path or URL",
+        "metadata_image_path_irregular"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "image_semantically_clear",
+        "question_answer_complete",
+        "solvable_and_verifiable"
+      ],
+      "decision_rationale": "The sample is complete and understandable, the circuit image is clear enough to support the topology, the expected answer is explicitly available, and alignment and solvability evidence show no serious failure. The metadata image-path irregularity is minor and does not reduce semantic usability.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-03T22:06:52Z",
+      "finished_at": "2026-04-03T22:06:52Z",
+      "candidate_id": "cand_1b9653dd2ad86cafec443aec",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_c4a7f16440eea7039f066185",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "image_entity_refs": [
+        "visual_prob_1b9653dd2ad86cafec443aec_1::roi",
+        "visual_prob_1b9653dd2ad86cafec443aec_1::roi_top_left",
+        "visual_prob_1b9653dd2ad86cafec443aec_1::roi_top_right",
+        "visual_prob_1b9653dd2ad86cafec443aec_1::roi_bottom_left",
+        "visual_prob_1b9653dd2ad86cafec443aec_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_1b9653dd2ad86cafec443aec_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "circuit",
+          "image_ref": "visual_prob_1b9653dd2ad86cafec443aec_1::roi",
+          "relation": "grounds_circuit",
+          "confidence": 0.7814
+        },
+        {
+          "text_ref": "resistor",
+          "image_ref": "visual_prob_1b9653dd2ad86cafec443aec_1::roi",
+          "relation": "grounds_component",
+          "confidence": 0.7814
+        },
+        {
+          "text_ref": "C",
+          "image_ref": "visual_prob_1b9653dd2ad86cafec443aec_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7814
+        },
+        {
+          "text_ref": "V",
+          "image_ref": "visual_prob_1b9653dd2ad86cafec443aec_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7814
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_1b9653dd2ad86cafec443aec_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7814
+        },
+        {
+          "text_ref": "slot_prob_1b9653dd2ad86cafec443aec_1",
+          "image_ref": "visual_prob_1b9653dd2ad86cafec443aec_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7837
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-03T22:06:41Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_90860b0511022c91725b1d1d",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$ ?",
+      "after_value": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "audit_id": "audit_82c0ac1046ae3ba518322a24",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+      "after_value": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "audit_id": "audit_68092eeb50bc159a1e9e02ff",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "audit_id": "audit_f59a3490b40d78fae8048179",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T22:06:52Z"
+    },
+    {
+      "audit_id": "audit_ebd846c96c93a21df5e432f8",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "An",
+          "canonical": "An",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "When",
+          "canonical": "When",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "we",
+          "canonical": "we",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "drop",
+          "canonical": "drop",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T22:06:52Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_c4a7f16440eea7039f066185",
+      "problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "source_problem_id": "42",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_ce9391e3aff9eac7b8c06172",
+          "parent_problem_id": "prob_1b9653dd2ad86cafec443aec",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-03T22:06:52Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_ce9391e3aff9eac7b8c06172",
+      "parent_problem_id": "prob_1b9653dd2ad86cafec443aec",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "An electric circuit consists of two resistors (resistances $R_{1}$ and $R_{2}$), a single condenser (capacitor $C$) and a variable voltage source $V$ joined together as shown in Fig. 3.83. When $V(t)$ is a very sharp pulse at $t=0$, we approximate $V(t)=A\\delta(t)$. What is the time history of the potential drop across $R_{1}$?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$V_{1}\\propto \\exp\\left(-\\frac{R_{1}+R_{2}}{CR_{1}R_{2}}t\\right)$ for $t>0$ and $V_{1}=0$ for $t<0$",
+      "split_role": "single"
+    }
+  ]
+}

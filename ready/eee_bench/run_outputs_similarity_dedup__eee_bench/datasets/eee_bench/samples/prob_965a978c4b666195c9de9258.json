@@ -1,0 +1,2400 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_9e473adeaf950167facf29f6",
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "problem_id": "prob_965a978c4b666195c9de9258",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "12",
+    "raw_question_text": "Hint: Please answer the question requiring an integer answer and provide the final value, e.g., 1, 2, 3, at the end.\nQuestion: The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the <image> are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns",
+    "raw_answer_text": "6",
+    "choice_map": {},
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field is a PIL image object representation, not an image path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-03-31T17:30:41Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_965a978c4b666195c9de9258",
+    "image_manifest": [
+      {
+        "path": "outputs/eee_bench_batched_eval/0090_0110/run_a0f387b5b8e87233/datasets/eee_bench/artifacts/images/prob_965a978c4b666195c9de9258_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 384,
+        "height": 384,
+        "file_size": 55695
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 411,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 1
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_9e473adeaf950167facf29f6",
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "12",
+    "created_at": "2026-03-31T17:30:41Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_965a978c4b666195c9de9258",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly refers to 'the circuit shown in the image'",
+        "requires_image=true",
+        "text_dominant=false",
+        "image_manifest contains 1 existing image and registry_passed=true"
+      ],
+      "multi_step": [
+        "solving requires extracting circuit topology from the image, not just reading text",
+        "the task asks for the maximum propagation delay, which typically requires evaluating multiple signal paths and comparing them",
+        "multiple gate delays (XOR, AND, MUX) are given, indicating path-wise delay aggregation rather than a single direct lookup",
+        "exact topology is only in the image, so score is kept moderate-conservative rather than very high"
+      ],
+      "verifiability": [
+        "answer_type is numeric with a single provided answer '6'",
+        "the result can be checked by tracing circuit paths and summing stated gate delays",
+        "registry_passed=true and answer_present=true support clean downstream evaluation"
+      ]
+    },
+    "risk_flags": [
+      "circuit_topology_only_in_image",
+      "multi_step_assessment_limited_without_direct_image_inspection"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_9e473adeaf950167facf29f6",
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "12",
+    "created_at": "2026-03-31T17:30:41Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_965a978c4b666195c9de9258",
+    "priority": 0.92,
+    "decision": "keep",
+    "decision_reasons": [
+      "question text, primary image, and numeric answer are all present, so the core semantics are intact",
+      "registry passed with no recorded asset issues",
+      "high image dependency is acceptable here because the required circuit image exists",
+      "verifiability is strong due to a single numeric answer and checkable propagation-delay computation",
+      "multi-step reasoning demand is meaningful, which supports inclusion as a useful candidate"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_9e473adeaf950167facf29f6",
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "12",
+    "created_at": "2026-03-31T17:30:41Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_9e473adeaf950167facf29f6",
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "problem_id": "prob_965a978c4b666195c9de9258",
+    "dataset_name": "EEE-Bench",
+    "normalized_question_text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+    "normalized_answer_text": "6",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed answer-format hint as non-semantic wrapper.",
+      "Replaced the placeholder '<image>' with 'image' without adding circuit details.",
+      "Image is required because the question explicitly depends on the shown circuit diagram.",
+      "No options were provided, so normalized_choice_map is empty."
+    ],
+    "llm_used": true,
+    "created_at": "2026-03-31T17:30:41Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[90:110]",
+    "source_problem_id": "12",
+    "subject": "电气电子工程领域",
+    "raw_question_text": "Hint: Please answer the question requiring an integer answer and provide the final value, e.g., 1, 2, 3, at the end.\nQuestion: The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the <image> are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns",
+    "raw_answer_text": "6",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 12,
+      "image_paths": [],
+      "extraction_notes": [
+        "image field is a PIL image object representation, not an image path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "solution",
+      "image_field": "image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-03-31T17:31:47Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question text, primary image, and numeric answer are all present, so the core semantics are intact",
+      "registry passed with no recorded asset issues",
+      "high image dependency is acceptable here because the required circuit image exists",
+      "verifiability is strong due to a single numeric answer and checkable propagation-delay computation",
+      "multi-step reasoning demand is meaningful, which supports inclusion as a useful candidate"
+    ],
+    "collection_risk_flags": [
+      "circuit_topology_only_in_image",
+      "multi_step_assessment_limited_without_direct_image_inspection"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_bd04b9500db8a482cfba41c2",
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "12",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_965a978c4b666195c9de9258/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_965a978c4b666195c9de9258/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 384,
+        "height": 384
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-03-31T17:31:47Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_2023a8f9d978d7f5c1f3dc91",
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "12",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.92,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-03-31T17:31:47Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "question text, primary image, and numeric answer are all present, so the core semantics are intact",
+      "registry passed with no recorded asset issues",
+      "high image dependency is acceptable here because the required circuit image exists",
+      "verifiability is strong due to a single numeric answer and checkable propagation-delay computation",
+      "multi-step reasoning demand is meaningful, which supports inclusion as a useful candidate"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_9e473adeaf950167facf29f6",
+      "candidate_id": "cand_965a978c4b666195c9de9258",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "dataset_name": "EEE-Bench",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-03-31T17:31:47Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_9e473adeaf950167facf29f6",
+    "problem_id": "prob_965a978c4b666195c9de9258",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "12",
+    "normalized_question_text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+    "normalized_answer_text": "6",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review"
+    ],
+    "created_at": "2026-03-31T17:31:47Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_9e473adeaf950167facf29f6",
+    "problem_id": "prob_965a978c4b666195c9de9258",
+    "normalized_question_text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+    "normalized_answer_text": "6",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "XOR",
+        "canonical": "XOR",
+        "variable_type": "label"
+      },
+      {
+        "original": "gate",
+        "canonical": "gate",
+        "variable_type": "label"
+      },
+      {
+        "original": "AND",
+        "canonical": "AND",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "MUX",
+        "canonical": "MUX",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "ns",
+        "canonical": "ns",
+        "variable_type": "label"
+      },
+      {
+        "original": "If",
+        "canonical": "If",
+        "variable_type": "label"
+      },
+      {
+        "original": "all",
+        "canonical": "all",
+        "variable_type": "label"
+      },
+      {
+        "original": "P",
+        "canonical": "P",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "Q",
+        "canonical": "Q",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "R",
+        "canonical": "R",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "S",
+        "canonical": "S",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "T",
+        "canonical": "T",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "held",
+        "canonical": "held",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively."
+      },
+      {
+        "segment_index": 2,
+        "text": "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 7,
+          "y": 31,
+          "width": 366,
+          "height": 351
+        },
+        "readability_score": 0.8862,
+        "contrast_score": 52.885
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-03-31T17:31:47Z",
+    "normalization_notes": [
+      "Removed answer-format hint as non-semantic wrapper.",
+      "Replaced the placeholder '<image>' with 'image' without adding circuit details.",
+      "Image is required because the question explicitly depends on the shown circuit diagram.",
+      "No options were provided, so normalized_choice_map is empty."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_965a978c4b666195c9de9258",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[90:110]",
+    "source_problem_id": "12",
+    "ingest_batch_id": "benchmarkallinone-eee-bench-0090-0110_20260331T170907Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "电气电子工程领域"
+    ],
+    "language": "en",
+    "raw_question_text": "Hint: Please answer the question requiring an integer answer and provide the final value, e.g., 1, 2, 3, at the end.\nQuestion: The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the <image> are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns",
+    "normalized_question_text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+    "raw_answer_text": "6",
+    "normalized_answer_text": "6",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9616,
+    "multi_step_score": 0.4277,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review"
+    ],
+    "clean_decision_rationale": "The sample is understandable and complete: the question target is clear, the image is readable enough, the answer is available, and the rewritten open version is usable. However, the alignment record is marked risky with a noted conflict, so it should be reviewed before passing.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_965a978c4b666195c9de9258",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-03-31T17:30:41Z",
+    "updated_at": "2026-03-31T17:31:47Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question text, primary image, and numeric answer are all present, so the core semantics are intact",
+      "registry passed with no recorded asset issues",
+      "high image dependency is acceptable here because the required circuit image exists",
+      "verifiability is strong due to a single numeric answer and checkable propagation-delay computation",
+      "multi-step reasoning demand is meaningful, which supports inclusion as a useful candidate"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_0c902d76ed6f1f1609d78d6f",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://eee_bench/test[90:110]/12/question",
+      "storage_uri": "inline://prob_965a978c4b666195c9de9258/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 411,
+      "width": null,
+      "height": null,
+      "sha256": "39817422da828559ea99d98854529be32335880850a5cc081a3ada5fe281276d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring an integer answer and provide the final value, e.g., 1, 2, 3, at the end.\nQuestion: The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the <image> are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "XOR",
+          "canonical": "XOR",
+          "variable_type": "label"
+        },
+        {
+          "original": "gate",
+          "canonical": "gate",
+          "variable_type": "label"
+        },
+        {
+          "original": "AND",
+          "canonical": "AND",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "MUX",
+          "canonical": "MUX",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "ns",
+          "canonical": "ns",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Q",
+          "canonical": "Q",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "held",
+          "canonical": "held",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "asset_id": "asset_f5ab88537898c90c5818e265",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_965a978c4b666195c9de9258/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 283,
+      "width": null,
+      "height": null,
+      "sha256": "6b76c99f909886650a04e9f72f611d1c4be36b5e3504cdb3cad9b2c839668c8d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring an integer answer and provide the final value, e.g., 1, 2, 3, at the end.\nQuestion: The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the <image> are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns",
+      "normalized_text_snapshot": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "XOR",
+          "canonical": "XOR",
+          "variable_type": "label"
+        },
+        {
+          "original": "gate",
+          "canonical": "gate",
+          "variable_type": "label"
+        },
+        {
+          "original": "AND",
+          "canonical": "AND",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "MUX",
+          "canonical": "MUX",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "ns",
+          "canonical": "ns",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Q",
+          "canonical": "Q",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "held",
+          "canonical": "held",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "asset_id": "asset_02c8ba203c3e375aeaa693cb",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://eee_bench/test[90:110]/12/answer",
+      "storage_uri": "inline://prob_965a978c4b666195c9de9258/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+      "perceptual_hash": null,
+      "source_text_snapshot": "6",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "asset_id": "asset_545af53e839f08c19b5e3bbc",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_965a978c4b666195c9de9258/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+      "perceptual_hash": null,
+      "source_text_snapshot": "6",
+      "normalized_text_snapshot": "6",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "asset_id": "asset_e8f0f55e0a067587d23be765",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/eee_bench_batched_eval/0090_0110/run_a0f387b5b8e87233/datasets/eee_bench/artifacts/images/prob_965a978c4b666195c9de9258_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 55695,
+      "width": 384,
+      "height": 384,
+      "sha256": "140d4731488921194e18d8478a782a9313c0e8be1c70b8771847dfdb6856b107",
+      "perceptual_hash": "fdbb070c031fc903",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1983.601,
+      "readability_score": 0.8862,
+      "noise_score": 33.7889,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 7,
+        "y": 31,
+        "width": 366,
+        "height": 351
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "asset_id": "asset_7778ada602482f902e15a877",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/eee_bench_batched_eval/0090_0110/run_a0f387b5b8e87233/datasets/eee_bench/artifacts/crops/prob_965a978c4b666195c9de9258_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 53488,
+      "width": 366,
+      "height": 351,
+      "sha256": "44173dedb39b1006e414ca3b500143676248636d52d0ac8cb5d372cff83a874b",
+      "perceptual_hash": "fd036f16431fcd03",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1983.601,
+      "readability_score": 0.8862,
+      "noise_score": 33.7889,
+      "cropped_from_asset_id": "asset_e8f0f55e0a067587d23be765",
+      "roi_bbox": {
+        "x": 7,
+        "y": 31,
+        "width": 366,
+        "height": 351
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "asset_id": "asset_7546cc7d45c8bbfe4aecdee3",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_22b15eb30879f27308c40e2d",
+      "file_format": "txt",
+      "file_size_bytes": 283,
+      "width": null,
+      "height": null,
+      "sha256": "6b76c99f909886650a04e9f72f611d1c4be36b5e3504cdb3cad9b2c839668c8d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Hint: Please answer the question requiring an integer answer and provide the final value, e.g., 1, 2, 3, at the end.\nQuestion: The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the <image> are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns",
+      "normalized_text_snapshot": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "XOR",
+          "canonical": "XOR",
+          "variable_type": "label"
+        },
+        {
+          "original": "gate",
+          "canonical": "gate",
+          "variable_type": "label"
+        },
+        {
+          "original": "AND",
+          "canonical": "AND",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "MUX",
+          "canonical": "MUX",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "ns",
+          "canonical": "ns",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Q",
+          "canonical": "Q",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "held",
+          "canonical": "held",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_965a978c4b666195c9de9258",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "4",
+            "2",
+            "1"
+          ],
+          "unit_mentions": [
+            "A",
+            "N",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+          "segment_index": 2,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+          "segment_index": 2,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "4",
+            "2",
+            "1"
+          ],
+          "unit_mentions": [
+            "A",
+            "N",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_965a978c4b666195c9de9258_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "6",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "circuit",
+          "entity_category": "circuit",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "image",
+          "entity_category": "image",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "XOR",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AND",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "MUX",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "P",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "Q",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "R",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "S",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "T",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "XOR",
+          "canonical": "XOR",
+          "variable_type": "label"
+        },
+        {
+          "original": "gate",
+          "canonical": "gate",
+          "variable_type": "label"
+        },
+        {
+          "original": "AND",
+          "canonical": "AND",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "MUX",
+          "canonical": "MUX",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "ns",
+          "canonical": "ns",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Q",
+          "canonical": "Q",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "held",
+          "canonical": "held",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "N",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively."
+        },
+        {
+          "segment_index": 2,
+          "text": "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-03-31T17:31:26Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_965a978c4b666195c9de9258_1",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "circuit_diagram",
+        "aspect_ratio": 1.0,
+        "dark_pixel_ratio": 0.0986,
+        "readability_score": 0.8862,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 384,
+            "height": 384
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 7,
+            "y": 31,
+            "width": 366,
+            "height": 351
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 7,
+            "y": 31,
+            "width": 183,
+            "height": 175
+          },
+          "salience": 0.4758
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 190,
+            "y": 31,
+            "width": 183,
+            "height": 175
+          },
+          "salience": 0.4503
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 7,
+            "y": 206,
+            "width": 183,
+            "height": 176
+          },
+          "salience": 0.4899
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 190,
+            "y": 206,
+            "width": 183,
+            "height": 176
+          },
+          "salience": 0.4369
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9545,
+      "created_at": "2026-03-31T17:31:26Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_965a978c4b666195c9de9258",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-03-31T17:31:39Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_356431004ad3c349b2b0d0e7",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "text_fact",
+      "canonical_value": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.",
+      "surface_forms": [
+        "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_f5ab88537898c90c5818e265"
+      ],
+      "evidence_refs": [
+        "asset_f5ab88537898c90c5818e265"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "4",
+          "2",
+          "1"
+        ],
+        "unit_mentions": [
+          "A",
+          "N",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,N,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_1762ada366fafa1375bac559",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "text_fact",
+      "canonical_value": "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+      "surface_forms": [
+        "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_f5ab88537898c90c5818e265"
+      ],
+      "evidence_refs": [
+        "asset_f5ab88537898c90c5818e265"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+        "segment_index": 2,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_0f2f924d9f14c54b45b1bf1c",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "target_slot",
+      "canonical_value": "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+      "surface_forms": [
+        "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_f5ab88537898c90c5818e265"
+      ],
+      "evidence_refs": [
+        "asset_f5ab88537898c90c5818e265"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_965a978c4b666195c9de9258_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "If all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "6",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_90d1aceeb92e1637b4e04d85",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "answer_claim",
+      "canonical_value": "6",
+      "surface_forms": [
+        "6"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_545af53e839f08c19b5e3bbc"
+      ],
+      "evidence_refs": [
+        "asset_545af53e839f08c19b5e3bbc"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "6"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_c04404e41ae82aaf87cb6236",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 384,
+          "height": 384
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_7a5b7160b7354985f8cc929e",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 7,
+          "y": 31,
+          "width": 366,
+          "height": 351
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_1e05f48889419a4d1f7a5582",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 7,
+          "y": 31,
+          "width": 183,
+          "height": 175
+        },
+        "salience": 0.4758
+      },
+      "unit": null,
+      "confidence": 0.9545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_330bc007dd3048c83f91a354",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 190,
+          "y": 31,
+          "width": 183,
+          "height": 175
+        },
+        "salience": 0.4503
+      },
+      "unit": null,
+      "confidence": 0.9545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_a4f59840194ca73ca74ef0ce",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 7,
+          "y": 206,
+          "width": 183,
+          "height": 176
+        },
+        "salience": 0.4899
+      },
+      "unit": null,
+      "confidence": 0.9545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_f6a34b549706309273bee25b",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 190,
+          "y": 206,
+          "width": 183,
+          "height": 176
+        },
+        "salience": 0.4369
+      },
+      "unit": null,
+      "confidence": 0.9545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_86f4d067cf80756eb75a34d5",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "text_fact",
+      "canonical_value": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+      "surface_forms": [
+        "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_7546cc7d45c8bbfe4aecdee3"
+      ],
+      "evidence_refs": [
+        "asset_7546cc7d45c8bbfe4aecdee3"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_22b15eb30879f27308c40e2d",
+        "parent_problem_id": "prob_965a978c4b666195c9de9258",
+        "variant_index": 1,
+        "title": "EEE-Bench 开放题",
+        "rewritten_question_text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "6",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_6c8285dce428f88cc6710e82",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_965a978c4b666195c9de9258",
+        "problem_id": "prob_965a978c4b666195c9de9258",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-03-31T17:31:39Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "node_id": "node_9c9d20fff4da923e66a8eae2",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-03-31T17:31:47Z",
+      "updated_at": "2026-03-31T17:31:47Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_9e473adeaf950167facf29f6",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a0f387b5b8e87233",
+      "dataset_name": "EEE-Bench",
+      "input_asset_ids": [
+        "asset_0c902d76ed6f1f1609d78d6f",
+        "asset_f5ab88537898c90c5818e265",
+        "asset_02c8ba203c3e375aeaa693cb",
+        "asset_545af53e839f08c19b5e3bbc",
+        "asset_e8f0f55e0a067587d23be765",
+        "asset_7778ada602482f902e15a877",
+        "asset_7546cc7d45c8bbfe4aecdee3"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 20
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 384,
+            "height": 384,
+            "blur_score": 1983.601,
+            "contrast_score": 52.885,
+            "noise_score": 33.7889,
+            "readability_score": 0.8862,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 7,
+              "y": 31,
+              "width": 366,
+              "height": 351
+            },
+            "perceptual_hash": "fdbb070c031fc903"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_9e473adeaf950167facf29f6",
+        "coverage_score": 0.9,
+        "consistency_score": 0.82,
+        "alignment_status": "risky",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_965a978c4b666195c9de9258",
+        "question_type": "open",
+        "condition_count": 2,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_965a978c4b666195c9de9258",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_target_clear"
+        ],
+        "rationale": "The text clearly asks for the maximum propagation delay, and the image provides a legible circuit diagram with identifiable XOR, AND, and MUX blocks and input labels. The expected answer type is a numeric delay value, and the image-text pair is semantically understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review"
+      ],
+      "decision_rationale": "The sample is understandable and complete: the question target is clear, the image is readable enough, the answer is available, and the rewritten open version is usable. However, the alignment record is marked risky with a noted conflict, so it should be reviewed before passing.",
+      "review_ticket_id": "review_prob_965a978c4b666195c9de9258",
+      "operator_type": "system",
+      "started_at": "2026-03-31T17:31:47Z",
+      "finished_at": "2026-03-31T17:31:47Z",
+      "candidate_id": "cand_965a978c4b666195c9de9258",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_9e473adeaf950167facf29f6",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "image_entity_refs": [
+        "visual_prob_965a978c4b666195c9de9258_1::roi",
+        "visual_prob_965a978c4b666195c9de9258_1::roi_top_left",
+        "visual_prob_965a978c4b666195c9de9258_1::roi_top_right",
+        "visual_prob_965a978c4b666195c9de9258_1::roi_bottom_left",
+        "visual_prob_965a978c4b666195c9de9258_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_965a978c4b666195c9de9258_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "circuit",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_circuit",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "image",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_image",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "XOR",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "AND",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "MUX",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "P",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "Q",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "R",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "S",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "T",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7886
+        },
+        {
+          "text_ref": "slot_prob_965a978c4b666195c9de9258_1",
+          "image_ref": "visual_prob_965a978c4b666195c9de9258_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.79
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "visual_reference_density_mismatch",
+          "detail": "文本中的视觉锚点明显多于可识别视觉区域。",
+          "severity": "major",
+          "confidence": 0.72
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.82,
+      "alignment_status": "risky",
+      "created_at": "2026-03-31T17:31:26Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_3ddbd47a62872f7e112dcf60",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Hint: Please answer the question requiring an integer answer and provide the final value, e.g., 1, 2, 3, at the end.\nQuestion: The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the <image> are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns",
+      "after_value": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "audit_id": "audit_675a1ea13fc46f6e0c3f506f",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "6",
+      "after_value": "6",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "audit_id": "audit_6e19510e588e84fd36b5edc7",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "audit_id": "audit_9c9d20fff4da923e66a8eae2",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T17:31:47Z"
+    },
+    {
+      "audit_id": "audit_285a098ba73ac416603db3fe",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "XOR",
+          "canonical": "XOR",
+          "variable_type": "label"
+        },
+        {
+          "original": "gate",
+          "canonical": "gate",
+          "variable_type": "label"
+        },
+        {
+          "original": "AND",
+          "canonical": "AND",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "MUX",
+          "canonical": "MUX",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "ns",
+          "canonical": "ns",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Q",
+          "canonical": "Q",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "held",
+          "canonical": "held",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-03-31T17:31:47Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_9e473adeaf950167facf29f6",
+      "problem_id": "prob_965a978c4b666195c9de9258",
+      "source_problem_id": "12",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_22b15eb30879f27308c40e2d",
+          "parent_problem_id": "prob_965a978c4b666195c9de9258",
+          "variant_index": 1,
+          "title": "EEE-Bench 开放题",
+          "rewritten_question_text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "6",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-03-31T17:31:47Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_22b15eb30879f27308c40e2d",
+      "parent_problem_id": "prob_965a978c4b666195c9de9258",
+      "variant_index": 1,
+      "title": "EEE-Bench 开放题",
+      "rewritten_question_text": "The propagation delays of the XOR gate, AND gate, and multiplexer (MUX) in the circuit shown in the image are 4 ns, 2 ns, and 1 ns, respectively.\nIf all the inputs P, Q, R, S, and T are applied simultaneously and held constant, the maximum propagation delay of the circuit is ( ) ns.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "6",
+      "split_role": "single"
+    }
+  ]
+}

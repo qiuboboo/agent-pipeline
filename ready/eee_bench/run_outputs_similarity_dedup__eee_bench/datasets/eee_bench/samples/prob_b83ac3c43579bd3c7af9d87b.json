@@ -1,0 +1,1946 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_9b7cd4182b3c2ec4dc2a9f79",
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "1",
+    "raw_question_text": "The function shown in the <image> can be represented as",
+    "raw_answer_text": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+    "choice_map": {
+      "A": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "B": "\\( u(t) + \\frac{t}{T} u(t - T) - \\frac{t}{T} u(t - 2T) \\)",
+      "C": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t) \\)",
+      "D": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)"
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains a PIL image placeholder string, not a path or URL",
+      "options A and D have identical text",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-03T18:54:04Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+    "image_manifest": [
+      {
+        "path": "outputs/eee_bench_batched_eval/0480_0500/run_13dfca6a3585f690/datasets/eee_bench/artifacts/images/prob_b83ac3c43579bd3c7af9d87b_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 384,
+        "height": 384,
+        "file_size": 19254
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 55,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 81
+    },
+    "issues": [
+      "metadata.extraction_notes indicates the source image field contained a PIL image placeholder string rather than a path or URL.",
+      "metadata.image_paths is empty."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_9b7cd4182b3c2ec4dc2a9f79",
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "1",
+    "created_at": "2026-04-03T18:54:04Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+    "image_dependency_score": 0.94,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.86,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写明“shown in the figure”，且 `requires_image=true`。",
+        "`text_dominant=false`，说明关键信息主要不在文字中。",
+        "答案是在多个阶跃函数表达式中匹配图像波形，缺少图像难以完成判断。"
+      ],
+      "multi_step": [
+        "需要先从图中识别分段波形/区间变化，再转换为单位阶跃函数表达式。",
+        "选项包含平移项和斜坡项（如 `(t-T)/T`、`(t-2T)/T`），通常需要组合至少两段以上结构进行推理。",
+        "这是四选一匹配题，推理深度不是超长计算，但明显超过单步直接读取。"
+      ],
+      "verifiability": [
+        "`answer_present=true` 且答案为明确的符号表达式，结果形式清晰。",
+        "存在 `choices`，可通过选项匹配进行结果核验。",
+        "`registry_passed=true` 且图像资产存在，后续可结合图像和答案表达式做一致性检查。"
+      ]
+    },
+    "risk_flags": [
+      "asset registry issues note that the original image field was a PIL placeholder string rather than a path or URL.",
+      "choices A and D are identical, which may introduce annotation or evaluation ambiguity.",
+      "metadata.image_paths is empty."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_9b7cd4182b3c2ec4dc2a9f79",
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "1",
+    "created_at": "2026-04-03T18:54:04Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+    "priority": 0.81,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整，不符合 reject 条件。",
+      "该题对图像依赖高，但当前图像文件已落库且可用，结合题干与答案仍可进行后续核验。",
+      "verifiability_score 和综合质量信号较高，样本具备进入候选池的价值。",
+      "存在元数据来源异常和重复选项的风险提示，但这些更像后续清洗/核验问题，未达到否决核心语义的程度。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_9b7cd4182b3c2ec4dc2a9f79",
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "1",
+    "created_at": "2026-04-03T18:54:04Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_9b7cd4182b3c2ec4dc2a9f79",
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+    "dataset_name": "EEE-Bench",
+    "normalized_question_text": "The function shown in the figure can be represented as",
+    "normalized_answer_text": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+    "normalized_choice_map": {
+      "A": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "B": "\\( u(t) + \\frac{t}{T} u(t - T) - \\frac{t}{T} u(t - 2T) \\)",
+      "C": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t) \\)",
+      "D": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Replaced the `<image>` placeholder with a neutral figure reference.",
+      "Question remains image-dependent because it asks for the representation of the shown function."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-03T18:54:04Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[480:500]",
+    "source_problem_id": "1",
+    "subject": "电气电子工程领域",
+    "raw_question_text": "The function shown in the <image> can be represented as",
+    "raw_answer_text": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 1,
+      "image_paths": [],
+      "extraction_notes": [
+        "image field contains a PIL image placeholder string, not a path or URL",
+        "options A and D have identical text",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "solution",
+      "image_field": "image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-03T18:55:27Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.81,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整，不符合 reject 条件。",
+      "该题对图像依赖高，但当前图像文件已落库且可用，结合题干与答案仍可进行后续核验。",
+      "verifiability_score 和综合质量信号较高，样本具备进入候选池的价值。",
+      "存在元数据来源异常和重复选项的风险提示，但这些更像后续清洗/核验问题，未达到否决核心语义的程度。"
+    ],
+    "collection_risk_flags": [
+      "asset registry issues note that the original image field was a PIL placeholder string rather than a path or URL.",
+      "choices A and D are identical, which may introduce annotation or evaluation ambiguity.",
+      "metadata.image_paths is empty."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_c9c2be4d4181433c5f95dc0c",
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "1",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_b83ac3c43579bd3c7af9d87b/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_b83ac3c43579bd3c7af9d87b/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 384,
+        "height": 384
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-03T18:55:27Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes indicates the source image field contained a PIL image placeholder string rather than a path or URL.",
+      "metadata.image_paths is empty."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_5c0cc8ef1f0bce70381da1da",
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "1",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.81,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-03T18:55:27Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整，不符合 reject 条件。",
+      "该题对图像依赖高，但当前图像文件已落库且可用，结合题干与答案仍可进行后续核验。",
+      "verifiability_score 和综合质量信号较高，样本具备进入候选池的价值。",
+      "存在元数据来源异常和重复选项的风险提示，但这些更像后续清洗/核验问题，未达到否决核心语义的程度。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_9b7cd4182b3c2ec4dc2a9f79",
+      "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "dataset_name": "EEE-Bench",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-03T18:55:27Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_9b7cd4182b3c2ec4dc2a9f79",
+    "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "1",
+    "normalized_question_text": "The function shown in the figure can be represented as",
+    "normalized_answer_text": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_ok",
+      "rewrite_usable",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-03T18:55:27Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_9b7cd4182b3c2ec4dc2a9f79",
+    "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+    "normalized_question_text": "The function shown in the figure can be represented as",
+    "normalized_answer_text": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "can",
+        "canonical": "can",
+        "variable_type": "label"
+      },
+      {
+        "original": "be",
+        "canonical": "be",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "The function shown in the figure can be represented as"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 50,
+          "y": 7,
+          "width": 296,
+          "height": 328
+        },
+        "readability_score": 0.7472,
+        "contrast_score": 40.417
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-03T18:55:27Z",
+    "normalization_notes": [
+      "Replaced the `<image>` placeholder with a neutral figure reference.",
+      "Question remains image-dependent because it asks for the representation of the shown function."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[480:500]",
+    "source_problem_id": "1",
+    "ingest_batch_id": "benchmarkallinone-eee-bench-0480-0500_20260403T184911Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "电气电子工程领域"
+    ],
+    "language": "en",
+    "raw_question_text": "The function shown in the <image> can be represented as",
+    "normalized_question_text": "The function shown in the figure can be represented as",
+    "raw_answer_text": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+    "normalized_answer_text": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+    "answer_type": "text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9717,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "duplicate_answer_choices",
+      "metadata.extraction_notes indicates the source image field contained a PIL image placeholder string rather than a path or URL.",
+      "metadata.image_paths is empty."
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_ok",
+      "rewrite_usable",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable, the answer target is complete and verifiable, and the rewritten open question is usable. Minor issues like duplicate choices and image-path metadata do not materially block downstream annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-03T18:54:04Z",
+    "updated_at": "2026-04-03T18:55:27Z",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.81,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整，不符合 reject 条件。",
+      "该题对图像依赖高，但当前图像文件已落库且可用，结合题干与答案仍可进行后续核验。",
+      "verifiability_score 和综合质量信号较高，样本具备进入候选池的价值。",
+      "存在元数据来源异常和重复选项的风险提示，但这些更像后续清洗/核验问题，未达到否决核心语义的程度。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_8efbedbf9b56c40007511a8f",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://eee_bench/test[480:500]/1/question",
+      "storage_uri": "inline://prob_b83ac3c43579bd3c7af9d87b/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 55,
+      "width": null,
+      "height": null,
+      "sha256": "17a0576596bf8f758b4cabdfca824b511a9b703b13510bc1d48d5a2208db4ea1",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The function shown in the <image> can be represented as",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.5982,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "asset_id": "asset_1492dc0eacf6e4825891a013",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_b83ac3c43579bd3c7af9d87b/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 54,
+      "width": null,
+      "height": null,
+      "sha256": "65f3439a7333c2b075f639b8e8741d01e2cffdd49579ce53a0f019ed4dc5f310",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The function shown in the <image> can be represented as",
+      "normalized_text_snapshot": "The function shown in the figure can be represented as",
+      "text_completeness_score": 0.5982,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "asset_id": "asset_56dc80fe373db5039ad607ae",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://eee_bench/test[480:500]/1/answer",
+      "storage_uri": "inline://prob_b83ac3c43579bd3c7af9d87b/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 81,
+      "width": null,
+      "height": null,
+      "sha256": "238152e976cf4a0f992f19806df4d87c7f39636d407d6e919523e6bb20ff316d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "u",
+          "canonical": "u",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "asset_id": "asset_6519e9487db70c2054c49616",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_b83ac3c43579bd3c7af9d87b/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 81,
+      "width": null,
+      "height": null,
+      "sha256": "238152e976cf4a0f992f19806df4d87c7f39636d407d6e919523e6bb20ff316d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "normalized_text_snapshot": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "u",
+          "canonical": "u",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "asset_id": "asset_e20aad4428c03d64300a7fc7",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/eee_bench_batched_eval/0480_0500/run_13dfca6a3585f690/datasets/eee_bench/artifacts/images/prob_b83ac3c43579bd3c7af9d87b_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 19254,
+      "width": 384,
+      "height": 384,
+      "sha256": "0ed70441a42a4aff746ab0d98f2001d9d0fe4edcecac94b199a31381e84a3b9e",
+      "perceptual_hash": "9f9f8187a78083ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 324.7254,
+      "readability_score": 0.7472,
+      "noise_score": 18.8544,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 50,
+        "y": 7,
+        "width": 296,
+        "height": 328
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "duplicate_answer_choices",
+        "metadata.extraction_notes indicates the source image field contained a PIL image placeholder string rather than a path or URL.",
+        "metadata.image_paths is empty."
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "asset_id": "asset_740cad36378b23c97e798f7c",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/eee_bench_batched_eval/0480_0500/run_13dfca6a3585f690/datasets/eee_bench/artifacts/crops/prob_b83ac3c43579bd3c7af9d87b_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 17983,
+      "width": 296,
+      "height": 328,
+      "sha256": "418c051d07fb0c0d975318669bced3ce3a968fe7a5d6a0dbbe5f887ca09f725d",
+      "perceptual_hash": "bfff08a7a7af0033",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 324.7254,
+      "readability_score": 0.7472,
+      "noise_score": 18.8544,
+      "cropped_from_asset_id": "asset_e20aad4428c03d64300a7fc7",
+      "roi_bbox": {
+        "x": 50,
+        "y": 7,
+        "width": 296,
+        "height": 328
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "asset_id": "asset_d814fc9ef33dd0ce15b190ca",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_1a3456fe479b9f2516007fb6",
+      "file_format": "txt",
+      "file_size_bytes": 90,
+      "width": null,
+      "height": null,
+      "sha256": "49c2d016dd7afd743a040358d9fb973185074bcb9cfc6a4a14efa5e118f63c65",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The function shown in the <image> can be represented as",
+      "normalized_text_snapshot": "Write the expression for the function shown in the figure in terms of unit step functions.",
+      "text_completeness_score": 0.5982,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_b83ac3c43579bd3c7af9d87b",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "The function shown in the figure can be represented as",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "The function shown in the figure can be represented as",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_b83ac3c43579bd3c7af9d87b_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "text",
+          "target_text": "Write the expression for the function shown in the figure in terms of unit step functions.",
+          "expected_answer_type": "text",
+          "expected_answer": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "The function shown in the figure can be represented as"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-03T18:55:07Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_b83ac3c43579bd3c7af9d87b_1",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.0,
+        "dark_pixel_ratio": 0.056,
+        "readability_score": 0.7472,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 384,
+            "height": 384
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 50,
+            "y": 7,
+            "width": 296,
+            "height": 328
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 50,
+            "y": 7,
+            "width": 148,
+            "height": 164
+          },
+          "salience": 0.4378
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 198,
+            "y": 7,
+            "width": 148,
+            "height": 164
+          },
+          "salience": 0.3938
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 50,
+            "y": 171,
+            "width": 148,
+            "height": 164
+          },
+          "salience": 0.4853
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 198,
+            "y": 171,
+            "width": 148,
+            "height": 164
+          },
+          "salience": 0.4232
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8989,
+      "created_at": "2026-04-03T18:55:07Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_b83ac3c43579bd3c7af9d87b",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-03T18:55:21Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_f4c660a64ea26d24bbc88743",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "text_fact",
+      "canonical_value": "The function shown in the figure can be represented as",
+      "surface_forms": [
+        "The function shown in the figure can be represented as"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_1492dc0eacf6e4825891a013"
+      ],
+      "evidence_refs": [
+        "asset_1492dc0eacf6e4825891a013"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The function shown in the figure can be represented as",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_96683d70a0ecba7ba20f485f",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "target_slot",
+      "canonical_value": "Write the expression for the function shown in the figure in terms of unit step functions.",
+      "surface_forms": [
+        "Write the expression for the function shown in the figure in terms of unit step functions."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_1492dc0eacf6e4825891a013"
+      ],
+      "evidence_refs": [
+        "asset_1492dc0eacf6e4825891a013"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "slot_id": "slot_prob_b83ac3c43579bd3c7af9d87b_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "text",
+        "target_text": "Write the expression for the function shown in the figure in terms of unit step functions.",
+        "expected_answer_type": "text",
+        "expected_answer": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_12a6d81e2e4a799f9805f945",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "answer_claim",
+      "canonical_value": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "surface_forms": [
+        "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_6519e9487db70c2054c49616"
+      ],
+      "evidence_refs": [
+        "asset_6519e9487db70c2054c49616"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "answer": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_894a85707cbf7ab7f5104750",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 384,
+          "height": 384
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8989,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_973a62badeb02095b14ed369",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 50,
+          "y": 7,
+          "width": 296,
+          "height": 328
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8989,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_13aa65b1a8dfcd82191c59af",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 50,
+          "y": 7,
+          "width": 148,
+          "height": 164
+        },
+        "salience": 0.4378
+      },
+      "unit": null,
+      "confidence": 0.8989,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_d8e7a70bfa6bc17771fb1bff",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 198,
+          "y": 7,
+          "width": 148,
+          "height": 164
+        },
+        "salience": 0.3938
+      },
+      "unit": null,
+      "confidence": 0.8989,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_44ce7d11fa86f91baf591745",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 50,
+          "y": 171,
+          "width": 148,
+          "height": 164
+        },
+        "salience": 0.4853
+      },
+      "unit": null,
+      "confidence": 0.8989,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_04f232bd18c7ed0d9acf039c",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 198,
+          "y": 171,
+          "width": 148,
+          "height": 164
+        },
+        "salience": 0.4232
+      },
+      "unit": null,
+      "confidence": 0.8989,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_3e29145ff0d2da961539bef5",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "text_fact",
+      "canonical_value": "Write the expression for the function shown in the figure in terms of unit step functions.",
+      "surface_forms": [
+        "Write the expression for the function shown in the figure in terms of unit step functions."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_d814fc9ef33dd0ce15b190ca"
+      ],
+      "evidence_refs": [
+        "asset_d814fc9ef33dd0ce15b190ca"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_1a3456fe479b9f2516007fb6",
+        "parent_problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "Write the expression for the function shown in the figure in terms of unit step functions.",
+        "expected_answer_type": "text",
+        "expected_answer": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_ed5adc37796efd67f67f2b15",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "quality_signal",
+      "canonical_value": "duplicate_answer_choices",
+      "surface_forms": [
+        "duplicate_answer_choices"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "duplicate_answer_choices"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_9f6ada82a38e5b29189436bd",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes indicates the source image field contained a PIL image placeholder string rather than a path or URL.",
+      "surface_forms": [
+        "metadata.extraction_notes indicates the source image field contained a PIL image placeholder string rather than a path or URL."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes indicates the source image field contained a PIL image placeholder string rather than a path or URL."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_e28e565a51483a9c2f467823",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty.",
+      "surface_forms": [
+        "metadata.image_paths is empty."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_072b17ebb4e5da40efbc2150",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_b83ac3c43579bd3c7af9d87b",
+        "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-03T18:55:21Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "node_id": "node_92eeed41549bbcd1d3df3757",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_ok",
+          "rewrite_usable",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-03T18:55:27Z",
+      "updated_at": "2026-04-03T18:55:27Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_9b7cd4182b3c2ec4dc2a9f79",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_13dfca6a3585f690",
+      "dataset_name": "EEE-Bench",
+      "input_asset_ids": [
+        "asset_8efbedbf9b56c40007511a8f",
+        "asset_1492dc0eacf6e4825891a013",
+        "asset_56dc80fe373db5039ad607ae",
+        "asset_6519e9487db70c2054c49616",
+        "asset_e20aad4428c03d64300a7fc7",
+        "asset_740cad36378b23c97e798f7c",
+        "asset_d814fc9ef33dd0ce15b190ca"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 6
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 384,
+            "height": 384,
+            "blur_score": 324.7254,
+            "contrast_score": 40.417,
+            "noise_score": 18.8544,
+            "readability_score": 0.7472,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 50,
+              "y": 7,
+              "width": 296,
+              "height": 328
+            },
+            "perceptual_hash": "9f9f8187a78083ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_9b7cd4182b3c2ec4dc2a9f79",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_b83ac3c43579bd3c7af9d87b",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_b83ac3c43579bd3c7af9d87b",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The prompt is complete and the figure is semantically clear: the signal is 1 from 0 to T, drops to 0 at T, ramps to 1 by 2T, and stays at 1 afterward, so the expected step-function expression is understandable. The only minor issue is that two choices appear identical.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "duplicate_answer_choices",
+        "metadata.extraction_notes indicates the source image field contained a PIL image placeholder string rather than a path or URL.",
+        "metadata.image_paths is empty."
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_ok",
+        "rewrite_usable",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The sample is jointly understandable, the answer target is complete and verifiable, and the rewritten open question is usable. Minor issues like duplicate choices and image-path metadata do not materially block downstream annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-03T18:55:27Z",
+      "finished_at": "2026-04-03T18:55:27Z",
+      "candidate_id": "cand_b83ac3c43579bd3c7af9d87b",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_9b7cd4182b3c2ec4dc2a9f79",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "image_entity_refs": [
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1::roi",
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1::roi_top_left",
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1::roi_top_right",
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1::roi_bottom_left",
+        "visual_prob_b83ac3c43579bd3c7af9d87b_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_b83ac3c43579bd3c7af9d87b_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_b83ac3c43579bd3c7af9d87b_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7747
+        },
+        {
+          "text_ref": "slot_prob_b83ac3c43579bd3c7af9d87b_1",
+          "image_ref": "visual_prob_b83ac3c43579bd3c7af9d87b_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7778
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-03T18:55:07Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_20e12a33b266d4d0578f90a8",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "The function shown in the <image> can be represented as",
+      "after_value": "The function shown in the figure can be represented as",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "audit_id": "audit_932764d7cdd1ba22e01f632c",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "after_value": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "audit_id": "audit_375d388da242a016cb42a932",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "audit_id": "audit_92eeed41549bbcd1d3df3757",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T18:55:27Z"
+    },
+    {
+      "audit_id": "audit_86d652693b641e36fd83d4a5",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-03T18:55:27Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_9b7cd4182b3c2ec4dc2a9f79",
+      "problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "source_problem_id": "1",
+      "strategy": "blank_open",
+      "rationale": "Rewrites the multiple-choice prompt into a direct open-ended question while preserving the figure-based task and anchoring it to the correct expression.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_1a3456fe479b9f2516007fb6",
+          "parent_problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "Write the expression for the function shown in the figure in terms of unit step functions.",
+          "expected_answer_type": "text",
+          "expected_answer": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-03T18:55:27Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_1a3456fe479b9f2516007fb6",
+      "parent_problem_id": "prob_b83ac3c43579bd3c7af9d87b",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "Write the expression for the function shown in the figure in terms of unit step functions.",
+      "expected_answer_type": "text",
+      "expected_answer": "\\( u(t) - u(t - T) + \\frac{(t - T)}{T} u(t - T) - \\frac{(t - 2T)}{T} u(t - 2T) \\)",
+      "split_role": "single"
+    }
+  ]
+}

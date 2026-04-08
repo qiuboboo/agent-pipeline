@@ -1,0 +1,40 @@
+runtime:
+  sample_per_dataset: 1
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: outputs/physreason_full_1
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-physreason-full-1
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://cf.cuylerchen.uk/openai/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: responses
+
+datasets:
+  - key: physreason
+    display_name: PhysReason
+    subject: 物理
+    note: 强制走 PhysReason-full.zip fallback
+    source_kind: huggingface
+    source_locator: zhibei1204/PhysReason
+    split: full
+    question_fields:
+      - question
+      - problem
+      - query
+      - text
+    answer_fields:
+      - answer
+      - solution
+      - label
+    choice_fields:
+      - choices
+      - options
