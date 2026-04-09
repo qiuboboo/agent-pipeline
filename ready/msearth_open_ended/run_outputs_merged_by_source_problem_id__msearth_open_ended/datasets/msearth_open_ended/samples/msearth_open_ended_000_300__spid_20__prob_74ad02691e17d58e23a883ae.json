@@ -1,0 +1,1606 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_b890896329a61161b90729bb",
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "problem_id": "prob_74ad02691e17d58e23a883ae",
+    "dataset_name": "MSEarth Open Ended",
+    "source_problem_id": "20",
+    "raw_question_text": "Which historical district appears as a secondary hotspot?",
+    "raw_answer_text": "Asakusa",
+    "choice_map": {},
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "query",
+    "answer_field": "response",
+    "image_field": "image",
+    "choice_field": null,
+    "extraction_notes": [
+      "image字段是PIL.Image对象描述，不是可提取的图片路径或URL",
+      "query中包含Caption前缀，raw_question_text仅提取Question部分",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T17:51:29Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_74ad02691e17d58e23a883ae",
+    "image_manifest": [
+      {
+        "path": "outputs/msearth_open_ended_000_300/run_1ecdd5243c8e7f21/datasets/msearth_open_ended/artifacts/images/prob_74ad02691e17d58e23a883ae_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1437,
+        "height": 708,
+        "file_size": 950522
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 57,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 7
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_b890896329a61161b90729bb",
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "dataset_name": "MSEarth Open Ended",
+    "source_problem_id": "20",
+    "created_at": "2026-04-04T17:51:29Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_74ad02691e17d58e23a883ae",
+    "image_dependency_score": 0.94,
+    "multi_step_score": 0.42,
+    "verifiability_score": 0.88,
+    "score_evidence": {
+      "image_dependency": [
+        "题干询问“secondary hotspot”对应的历史街区，关键信息明显来自图像内容而非题面文本",
+        "requires_image=true 且 text_dominant=false，表明作答主要依赖视觉信息",
+        "asset_registry_record.registry_passed=true，且存在1张已登记图片，可支持该图像依赖判断"
+      ],
+      "multi_step": [
+        "需要先在图中识别“secondary hotspot”，再将该热点对应到具体历史街区名称",
+        "答案不是二选一或多选，属于开放短文本检索，通常包含定位+识别两个步骤",
+        "但题干较短，未显式包含复杂计算、条件链或多图联合推理，因此多步程度仅中等偏低"
+      ],
+      "verifiability": [
+        "answer_type=short_text，标准答案为明确字符串“Asakusa”，结果形式清晰",
+        "answer_present=true 且 answer_char_length=7，便于后续做精确或别名匹配核验",
+        "registry_passed=true，题目与答案资产完整，支持后续规则化检查"
+      ]
+    },
+    "risk_flags": [
+      "open_ended_short_text_alias_risk",
+      "requires_image",
+      "secondary_hotspot_definition_may_depend_on_visual_interpretation"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_b890896329a61161b90729bb",
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "dataset_name": "MSEarth Open Ended",
+    "source_problem_id": "20",
+    "created_at": "2026-04-04T17:51:29Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_74ad02691e17d58e23a883ae",
+    "priority": 0.86,
+    "decision": "keep",
+    "decision_reasons": [
+      "资产登记完整：题干、答案和图片均存在，且 registry_passed=true、issues 为空",
+      "图像依赖度高但已具备对应图片资产，可支撑核心语义恢复与作答",
+      "答案为明确短文本，verifiability_score=0.88，后续核验相对可行",
+      "虽存在别名风险和视觉解释风险，但不足以构成核心语义缺失"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_b890896329a61161b90729bb",
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "dataset_name": "MSEarth Open Ended",
+    "source_problem_id": "20",
+    "created_at": "2026-04-04T17:51:29Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_b890896329a61161b90729bb",
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "problem_id": "prob_74ad02691e17d58e23a883ae",
+    "dataset_name": "MSEarth Open Ended",
+    "normalized_question_text": "Which historical district appears as a secondary hotspot?",
+    "normalized_answer_text": "Asakusa",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Question is already concise and requires no text cleanup.",
+      "Answer text was preserved as provided.",
+      "Image dependence is explicit because identifying the secondary hotspot relies on the visual hotspot map.",
+      "force_requires_image=true, so multimodal processing is required."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T17:51:29Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "source_dataset": "MSEarth Open Ended",
+    "source_split": "train[0:300]",
+    "source_problem_id": "20",
+    "subject": "地球科学",
+    "raw_question_text": "Which historical district appears as a secondary hotspot?",
+    "raw_answer_text": "Asakusa",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.42,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 20,
+      "image_paths": [],
+      "extraction_notes": [
+        "image字段是PIL.Image对象描述，不是可提取的图片路径或URL",
+        "query中包含Caption前缀，raw_question_text仅提取Question部分",
+        "source_intake_agent"
+      ],
+      "question_field": "query",
+      "answer_field": "response",
+      "image_field": "image",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning_chain",
+      "reasoning_chain": "[\"Step 1: Observe the annotations in the right panel marking areas with statistically significant hotspots.\", \"Step 2: Note the label and marked region for Asakusa, a historical district, which shows significance at 1% or 5% levels.\", \"Step 3: Conclude that Asakusa is a secondary hotspot as it is not as large as the Tokyo Station region.\"]",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-04T17:52:21Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.86,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "资产登记完整：题干、答案和图片均存在，且 registry_passed=true、issues 为空",
+      "图像依赖度高但已具备对应图片资产，可支撑核心语义恢复与作答",
+      "答案为明确短文本，verifiability_score=0.88，后续核验相对可行",
+      "虽存在别名风险和视觉解释风险，但不足以构成核心语义缺失"
+    ],
+    "collection_risk_flags": [
+      "open_ended_short_text_alias_risk",
+      "requires_image",
+      "secondary_hotspot_definition_may_depend_on_visual_interpretation"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_fb7adf8630e6c8238cb210cd",
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "source_dataset": "MSEarth Open Ended",
+    "source_problem_id": "20",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_74ad02691e17d58e23a883ae/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_74ad02691e17d58e23a883ae/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1437,
+        "height": 708
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.42,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-04T17:52:21Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_4a7aff5e65f264eccd5f6045",
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "source_dataset": "MSEarth Open Ended",
+    "source_problem_id": "20",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.86,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.42,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-04T17:52:21Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "资产登记完整：题干、答案和图片均存在，且 registry_passed=true、issues 为空",
+      "图像依赖度高但已具备对应图片资产，可支撑核心语义恢复与作答",
+      "答案为明确短文本，verifiability_score=0.88，后续核验相对可行",
+      "虽存在别名风险和视觉解释风险，但不足以构成核心语义缺失"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_b890896329a61161b90729bb",
+      "candidate_id": "cand_74ad02691e17d58e23a883ae",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "dataset_name": "MSEarth Open Ended",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T17:52:21Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_b890896329a61161b90729bb",
+    "problem_id": "prob_74ad02691e17d58e23a883ae",
+    "source_dataset": "MSEarth Open Ended",
+    "source_problem_id": "20",
+    "normalized_question_text": "Which historical district appears as a secondary hotspot?",
+    "normalized_answer_text": "Asakusa",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "grounding_path_uncertain"
+    ],
+    "created_at": "2026-04-04T17:52:21Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_b890896329a61161b90729bb",
+    "problem_id": "prob_74ad02691e17d58e23a883ae",
+    "normalized_question_text": "Which historical district appears as a secondary hotspot?",
+    "normalized_answer_text": "Asakusa",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Which historical district appears as a secondary hotspot?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 11,
+          "y": 0,
+          "width": 1426,
+          "height": 691
+        },
+        "readability_score": 0.8909,
+        "contrast_score": 60.6877
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T17:52:21Z",
+    "normalization_notes": [
+      "Question is already concise and requires no text cleanup.",
+      "Answer text was preserved as provided.",
+      "Image dependence is explicit because identifying the secondary hotspot relies on the visual hotspot map.",
+      "force_requires_image=true, so multimodal processing is required."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_74ad02691e17d58e23a883ae",
+    "source_dataset": "MSEarth Open Ended",
+    "source_split": "train[0:300]",
+    "source_problem_id": "20",
+    "ingest_batch_id": "benchmarkallinone-msearth-open-ended-000-300_20260404T163430Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "地球科学"
+    ],
+    "language": "en",
+    "raw_question_text": "Which historical district appears as a secondary hotspot?",
+    "normalized_question_text": "Which historical district appears as a secondary hotspot?",
+    "raw_answer_text": "Asakusa",
+    "normalized_answer_text": "Asakusa",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "[\"Step 1: Observe the annotations in the right panel marking areas with statistically significant hotspots.\", \"Step 2: Note the label and marked region for Asakusa, a historical district, which shows significance at 1% or 5% levels.\", \"Step 3: Conclude that Asakusa is a secondary hotspot as it is not as large as the Tokyo Station region.\"]",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.8541,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 0.874,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "grounding_path_uncertain"
+    ],
+    "clean_decision_rationale": "The sample is understandable and appears answerable, with a complete question, complete answer, and strong image support for Asakusa. However, the very weak alignment/grounding signals create a non-fatal risk that the visual evidence path is not reliably established, so it should be reviewed rather than passed or rejected.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_74ad02691e17d58e23a883ae",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T17:51:29Z",
+    "updated_at": "2026-04-04T17:52:21Z",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.42,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.86,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "资产登记完整：题干、答案和图片均存在，且 registry_passed=true、issues 为空",
+      "图像依赖度高但已具备对应图片资产，可支撑核心语义恢复与作答",
+      "答案为明确短文本，verifiability_score=0.88，后续核验相对可行",
+      "虽存在别名风险和视觉解释风险，但不足以构成核心语义缺失"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_ff676b670505f5353f1e51bd",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://msearth_open_ended/train[0:300]/20/question",
+      "storage_uri": "inline://prob_74ad02691e17d58e23a883ae/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 57,
+      "width": null,
+      "height": null,
+      "sha256": "e2db9c74ae018d8e22cd66a6d103b7b5d8df2cf67c8b7d46c3cd9e7552112d72",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Which historical district appears as a secondary hotspot?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6009,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "asset_id": "asset_c39f17b2343ebac4d78bc4e5",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_74ad02691e17d58e23a883ae/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 57,
+      "width": null,
+      "height": null,
+      "sha256": "e2db9c74ae018d8e22cd66a6d103b7b5d8df2cf67c8b7d46c3cd9e7552112d72",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Which historical district appears as a secondary hotspot?",
+      "normalized_text_snapshot": "Which historical district appears as a secondary hotspot?",
+      "text_completeness_score": 0.6009,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "asset_id": "asset_9049cdab5015de186dd94062",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://msearth_open_ended/train[0:300]/20/answer",
+      "storage_uri": "inline://prob_74ad02691e17d58e23a883ae/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 7,
+      "width": null,
+      "height": null,
+      "sha256": "87e7447afdfc56a295a031de38b566bb5b7dd2991e4e0a7cf6a6ff744529a0ca",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Asakusa",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "asset_id": "asset_39606693477acc67d8e8dc90",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_74ad02691e17d58e23a883ae/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 7,
+      "width": null,
+      "height": null,
+      "sha256": "87e7447afdfc56a295a031de38b566bb5b7dd2991e4e0a7cf6a6ff744529a0ca",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Asakusa",
+      "normalized_text_snapshot": "Asakusa",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "asset_id": "asset_fd02e052e736fc7d3d6ec78f",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/msearth_open_ended_000_300/run_1ecdd5243c8e7f21/datasets/msearth_open_ended/artifacts/images/prob_74ad02691e17d58e23a883ae_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 950522,
+      "width": 1437,
+      "height": 708,
+      "sha256": "19710e4723819b1c5d109927ffa6bc8fd1e133d3e0adc0fec988dcb6dd77615a",
+      "perceptual_hash": "ffab01030303fbff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1631.2224,
+      "readability_score": 0.8909,
+      "noise_score": 21.6143,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 11,
+        "y": 0,
+        "width": 1426,
+        "height": 691
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "asset_id": "asset_1a99eb4bc616c406635d7bea",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/msearth_open_ended_000_300/run_1ecdd5243c8e7f21/datasets/msearth_open_ended/artifacts/crops/prob_74ad02691e17d58e23a883ae_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 949660,
+      "width": 1426,
+      "height": 691,
+      "sha256": "82cfd34770fe062f1e7a1f987ecdc912173b56de79abb6a082e69368ed00feb9",
+      "perceptual_hash": "ffab01030303fbff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1631.2224,
+      "readability_score": 0.8909,
+      "noise_score": 21.6143,
+      "cropped_from_asset_id": "asset_fd02e052e736fc7d3d6ec78f",
+      "roi_bbox": {
+        "x": 11,
+        "y": 0,
+        "width": 1426,
+        "height": 691
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "asset_id": "asset_7cc5418b24eb12fc288314e2",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_f2fe96fb4d2b6d07e2d20efa",
+      "file_format": "txt",
+      "file_size_bytes": 57,
+      "width": null,
+      "height": null,
+      "sha256": "e2db9c74ae018d8e22cd66a6d103b7b5d8df2cf67c8b7d46c3cd9e7552112d72",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Which historical district appears as a secondary hotspot?",
+      "normalized_text_snapshot": "Which historical district appears as a secondary hotspot?",
+      "text_completeness_score": 0.6009,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_74ad02691e17d58e23a883ae",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "question_type": "open",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Which historical district appears as a secondary hotspot?",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_74ad02691e17d58e23a883ae_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "Which historical district appears as a secondary hotspot?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "Asakusa",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "h",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Which historical district appears as a secondary hotspot?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T17:52:08Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_74ad02691e17d58e23a883ae_1",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 2.0297,
+        "dark_pixel_ratio": 0.441,
+        "readability_score": 0.8909,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1437,
+            "height": 708
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 11,
+            "y": 0,
+            "width": 1426,
+            "height": 691
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 11,
+            "y": 0,
+            "width": 713,
+            "height": 345
+          },
+          "salience": 0.8914
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 724,
+            "y": 0,
+            "width": 713,
+            "height": 345
+          },
+          "salience": 0.773
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 11,
+            "y": 345,
+            "width": 713,
+            "height": 346
+          },
+          "salience": 0.8128
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 724,
+            "y": 345,
+            "width": 713,
+            "height": 346
+          },
+          "salience": 0.7443
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9564,
+      "created_at": "2026-04-04T17:52:08Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_74ad02691e17d58e23a883ae",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": false,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "missing_grounded_visual_path"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 0.0
+      },
+      "solvability_score": 0.8,
+      "decision_hint": "reject",
+      "created_at": "2026-04-04T17:52:16Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_23435055f40934a790a07036",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "target_slot",
+      "canonical_value": "Which historical district appears as a secondary hotspot?",
+      "surface_forms": [
+        "Which historical district appears as a secondary hotspot?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_c39f17b2343ebac4d78bc4e5"
+      ],
+      "evidence_refs": [
+        "asset_c39f17b2343ebac4d78bc4e5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_74ad02691e17d58e23a883ae_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "Which historical district appears as a secondary hotspot?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "Asakusa",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_932292ed54aeef3db584b644",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "answer_claim",
+      "canonical_value": "Asakusa",
+      "surface_forms": [
+        "Asakusa"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_39606693477acc67d8e8dc90"
+      ],
+      "evidence_refs": [
+        "asset_39606693477acc67d8e8dc90"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "Asakusa"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_a43340c3d31aff00cb7683b6",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1437,
+          "height": 708
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9564,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_b5536f7cb3bf065c7d575157",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 11,
+          "y": 0,
+          "width": 1426,
+          "height": 691
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9564,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_c8caa2de1f116d5c348f0f51",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 11,
+          "y": 0,
+          "width": 713,
+          "height": 345
+        },
+        "salience": 0.8914
+      },
+      "unit": null,
+      "confidence": 0.9564,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_f9423872fd3088caf6612ae6",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 724,
+          "y": 0,
+          "width": 713,
+          "height": 345
+        },
+        "salience": 0.773
+      },
+      "unit": null,
+      "confidence": 0.9564,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_88abee5b1ed7ed2313b0cde8",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 11,
+          "y": 345,
+          "width": 713,
+          "height": 346
+        },
+        "salience": 0.8128
+      },
+      "unit": null,
+      "confidence": 0.9564,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_23d92ff9c616aed8e316036a",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 724,
+          "y": 345,
+          "width": 713,
+          "height": 346
+        },
+        "salience": 0.7443
+      },
+      "unit": null,
+      "confidence": 0.9564,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_abc005ada58d32800e9b7e32",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "text_fact",
+      "canonical_value": "Which historical district appears as a secondary hotspot?",
+      "surface_forms": [
+        "Which historical district appears as a secondary hotspot?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_7cc5418b24eb12fc288314e2"
+      ],
+      "evidence_refs": [
+        "asset_7cc5418b24eb12fc288314e2"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_f2fe96fb4d2b6d07e2d20efa",
+        "parent_problem_id": "prob_74ad02691e17d58e23a883ae",
+        "variant_index": 1,
+        "title": "MSEarth Open Ended 开放题",
+        "rewritten_question_text": "Which historical district appears as a secondary hotspot?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "Asakusa",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_d151c24d041362e3661d6e97",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_74ad02691e17d58e23a883ae",
+        "problem_id": "prob_74ad02691e17d58e23a883ae",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": false,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 0.0
+        },
+        "solvability_score": 0.8,
+        "decision_hint": "reject",
+        "created_at": "2026-04-04T17:52:16Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "node_id": "node_f363c31ad45d998047f9794b",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "grounding_path_uncertain"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T17:52:21Z",
+      "updated_at": "2026-04-04T17:52:21Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_b890896329a61161b90729bb",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_1ecdd5243c8e7f21",
+      "dataset_name": "MSEarth Open Ended",
+      "input_asset_ids": [
+        "asset_ff676b670505f5353f1e51bd",
+        "asset_c39f17b2343ebac4d78bc4e5",
+        "asset_9049cdab5015de186dd94062",
+        "asset_39606693477acc67d8e8dc90",
+        "asset_fd02e052e736fc7d3d6ec78f",
+        "asset_1a99eb4bc616c406635d7bea",
+        "asset_7cc5418b24eb12fc288314e2"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 2
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1437,
+            "height": 708,
+            "blur_score": 1631.2224,
+            "contrast_score": 60.6877,
+            "noise_score": 21.6143,
+            "readability_score": 0.8909,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 11,
+              "y": 0,
+              "width": 1426,
+              "height": 691
+            },
+            "perceptual_hash": "ffab01030303fbff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_b890896329a61161b90729bb",
+        "coverage_score": 0.18,
+        "consistency_score": 0.1,
+        "alignment_status": "bad",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_74ad02691e17d58e23a883ae",
+        "question_type": "open",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_74ad02691e17d58e23a883ae",
+        "solvability_score": 0.8,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_grounded_in_image",
+          "image_text_aligned",
+          "jointly_understandable"
+        ],
+        "rationale": "The question is clear and the image provides the needed evidence: the hotspot map explicitly labels several locations, including Asakusa, which appears as a secondary hotspot and matches the expected answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.8835,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "grounding_path_uncertain"
+      ],
+      "decision_rationale": "The sample is understandable and appears answerable, with a complete question, complete answer, and strong image support for Asakusa. However, the very weak alignment/grounding signals create a non-fatal risk that the visual evidence path is not reliably established, so it should be reviewed rather than passed or rejected.",
+      "review_ticket_id": "review_prob_74ad02691e17d58e23a883ae",
+      "operator_type": "system",
+      "started_at": "2026-04-04T17:52:21Z",
+      "finished_at": "2026-04-04T17:52:21Z",
+      "candidate_id": "cand_74ad02691e17d58e23a883ae",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_b890896329a61161b90729bb",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "image_entity_refs": [
+        "visual_prob_74ad02691e17d58e23a883ae_1::roi",
+        "visual_prob_74ad02691e17d58e23a883ae_1::roi_top_left",
+        "visual_prob_74ad02691e17d58e23a883ae_1::roi_top_right",
+        "visual_prob_74ad02691e17d58e23a883ae_1::roi_bottom_left",
+        "visual_prob_74ad02691e17d58e23a883ae_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_74ad02691e17d58e23a883ae_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.18,
+      "consistency_score": 0.1,
+      "alignment_status": "bad",
+      "created_at": "2026-04-04T17:52:08Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_812b2735803c7a980176c8f4",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Which historical district appears as a secondary hotspot?",
+      "after_value": "Which historical district appears as a secondary hotspot?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "audit_id": "audit_09c923f31ad1819b4d5d67ae",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "Asakusa",
+      "after_value": "Asakusa",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "audit_id": "audit_81029edb08f2fc1ae3c70d0f",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "audit_id": "audit_f363c31ad45d998047f9794b",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T17:52:21Z"
+    },
+    {
+      "audit_id": "audit_9ce8e3d6025cdcfc9ec6ccca",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T17:52:21Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_b890896329a61161b90729bb",
+      "problem_id": "prob_74ad02691e17d58e23a883ae",
+      "source_problem_id": "20",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_f2fe96fb4d2b6d07e2d20efa",
+          "parent_problem_id": "prob_74ad02691e17d58e23a883ae",
+          "variant_index": 1,
+          "title": "MSEarth Open Ended 开放题",
+          "rewritten_question_text": "Which historical district appears as a secondary hotspot?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "Asakusa",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-04T17:52:21Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_f2fe96fb4d2b6d07e2d20efa",
+      "parent_problem_id": "prob_74ad02691e17d58e23a883ae",
+      "variant_index": 1,
+      "title": "MSEarth Open Ended 开放题",
+      "rewritten_question_text": "Which historical district appears as a secondary hotspot?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "Asakusa",
+      "split_role": "single"
+    }
+  ]
+}

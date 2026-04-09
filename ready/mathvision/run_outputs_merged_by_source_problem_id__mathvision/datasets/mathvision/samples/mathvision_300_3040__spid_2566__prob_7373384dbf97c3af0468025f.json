@@ -1,0 +1,1822 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_85dcb050a061a8a5d76ef31f",
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "problem_id": "prob_7373384dbf97c3af0468025f",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2566",
+    "raw_question_text": "Consider this histogram of the scores for $81$ students taking a test:\n<image1>\n\nThe median is in the interval labeled",
+    "raw_answer_text": "70",
+    "choice_map": {},
+    "image_paths": [
+      "images/2566.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": null,
+    "extraction_notes": [
+      "题目明确依赖直方图图像判断中位数所在区间",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-08T05:04:22Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_7373384dbf97c3af0468025f",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_7373384dbf97c3af0468025f_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1104,
+        "height": 884,
+        "file_size": 68385
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 118,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_85dcb050a061a8a5d76ef31f",
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2566",
+    "created_at": "2026-04-08T05:04:22Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_7373384dbf97c3af0468025f",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.84,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式提到“this histogram”，核心信息来自直方图而非文字描述。",
+        "`requires_image=true` 且 `text_dominant=false`，说明解题主要依赖视觉内容。",
+        "需要从图中的区间/频数读取信息，文本本身不足以确定答案。"
+      ],
+      "multi_step": [
+        "要找 81 个学生成绩的中位数，通常需要先确定中位位置（第 41 个），再在直方图中做累计频数定位。",
+        "题目不是直接读单个数值，而是要结合统计概念（median）和图像读数。",
+        "答案为区间标签而非选择题，通常需要完成至少两步推断后才能得出。"
+      ],
+      "verifiability": [
+        "`answer_type` 为 numeric，答案形式较短且目标明确，便于核验。",
+        "若提供图像，可通过累计频数检查中位数所在区间，验证路径较清晰。",
+        "`registry_passed=true`，题目、答案和图像资产都已登记存在。",
+        "但题干说“interval labeled”，答案仅为 `70`，标签语义可能存在轻微歧义。"
+      ]
+    },
+    "risk_flags": [
+      "answer_label_semantics_may_be_ambiguous"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_85dcb050a061a8a5d76ef31f",
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2566",
+    "created_at": "2026-04-08T05:04:22Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_7373384dbf97c3af0468025f",
+    "priority": 0.88,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和图像资产齐全，`registry_passed=true`，核心语义支撑充分。",
+      "该题强依赖直方图，但主图已存在且可用于读取频数并定位中位数区间。",
+      "综合分较高：图像依赖明确、可验证性较强，适合进入候选池。",
+      "虽有 `answer_label_semantics_may_be_ambiguous` 风险，但属于标签语义轻微歧义，不影响样本核心可恢复性与整体保留价值。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_85dcb050a061a8a5d76ef31f",
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2566",
+    "created_at": "2026-04-08T05:04:22Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_85dcb050a061a8a5d76ef31f",
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "problem_id": "prob_7373384dbf97c3af0468025f",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+    "normalized_answer_text": "70",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder from the question text.",
+      "Question explicitly depends on interpreting the histogram, so image is required.",
+      "No answer choices were provided in the source."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-08T05:04:22Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2566",
+    "subject": "数学",
+    "raw_question_text": "Consider this histogram of the scores for $81$ students taking a test:\n<image1>\n\nThe median is in the interval labeled",
+    "raw_answer_text": "70",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 2265,
+      "image_paths": [
+        "images/2566.jpg"
+      ],
+      "extraction_notes": [
+        "题目明确依赖直方图图像判断中位数所在区间",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-08T05:05:34Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产齐全，`registry_passed=true`，核心语义支撑充分。",
+      "该题强依赖直方图，但主图已存在且可用于读取频数并定位中位数区间。",
+      "综合分较高：图像依赖明确、可验证性较强，适合进入候选池。",
+      "虽有 `answer_label_semantics_may_be_ambiguous` 风险，但属于标签语义轻微歧义，不影响样本核心可恢复性与整体保留价值。"
+    ],
+    "collection_risk_flags": [
+      "answer_label_semantics_may_be_ambiguous"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_c331ecca015d1347e60af1a9",
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2566",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_7373384dbf97c3af0468025f/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_7373384dbf97c3af0468025f/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1104,
+        "height": 884
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-08T05:05:34Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_9e37f66e5ed142e1e6c4a38c",
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2566",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.88,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-08T05:05:34Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和图像资产齐全，`registry_passed=true`，核心语义支撑充分。",
+      "该题强依赖直方图，但主图已存在且可用于读取频数并定位中位数区间。",
+      "综合分较高：图像依赖明确、可验证性较强，适合进入候选池。",
+      "虽有 `answer_label_semantics_may_be_ambiguous` 风险，但属于标签语义轻微歧义，不影响样本核心可恢复性与整体保留价值。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_85dcb050a061a8a5d76ef31f",
+      "candidate_id": "cand_7373384dbf97c3af0468025f",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-08T05:05:34Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_85dcb050a061a8a5d76ef31f",
+    "problem_id": "prob_7373384dbf97c3af0468025f",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2566",
+    "normalized_question_text": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+    "normalized_answer_text": "70",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "created_at": "2026-04-08T05:05:34Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_85dcb050a061a8a5d76ef31f",
+    "problem_id": "prob_7373384dbf97c3af0468025f",
+    "normalized_question_text": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+    "normalized_answer_text": "70",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "test",
+        "canonical": "test",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Consider this histogram of the scores for 81 students taking a test."
+      },
+      {
+        "segment_index": 2,
+        "text": "The median is in the interval labeled"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 24,
+          "y": 32,
+          "width": 1056,
+          "height": 816
+        },
+        "readability_score": 0.965,
+        "contrast_score": 55.039
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-08T05:05:34Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder from the question text.",
+      "Question explicitly depends on interpreting the histogram, so image is required.",
+      "No answer choices were provided in the source."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_7373384dbf97c3af0468025f",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2566",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260407T041348Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Consider this histogram of the scores for $81$ students taking a test:\n<image1>\n\nThe median is in the interval labeled",
+    "normalized_question_text": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+    "raw_answer_text": "70",
+    "normalized_answer_text": "70",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.8615,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 0.954,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "clean_decision_rationale": "The sample is understandable and appears semantically usable: the question and answer are complete, the histogram is clear, and the intended target is recoverable from the image. However, the alignment record is bad and the solvability module could not establish a grounded visual reasoning path, so it should be manually checked rather than passed automatically.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_7373384dbf97c3af0468025f",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-08T05:04:22Z",
+    "updated_at": "2026-04-08T05:05:34Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产齐全，`registry_passed=true`，核心语义支撑充分。",
+      "该题强依赖直方图，但主图已存在且可用于读取频数并定位中位数区间。",
+      "综合分较高：图像依赖明确、可验证性较强，适合进入候选池。",
+      "虽有 `answer_label_semantics_may_be_ambiguous` 风险，但属于标签语义轻微歧义，不影响样本核心可恢复性与整体保留价值。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_cc3075ac4b24342250283760",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/2566/question",
+      "storage_uri": "inline://prob_7373384dbf97c3af0468025f/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 118,
+      "width": null,
+      "height": null,
+      "sha256": "a2c3214a10c3b466ad3e702196c48b81e808e2af371de4cf1b08e712c5e981f0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Consider this histogram of the scores for $81$ students taking a test:\n<image1>\n\nThe median is in the interval labeled",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6446,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "test",
+          "canonical": "test",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "asset_id": "asset_8559405f30daa07b4a09bfe8",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_7373384dbf97c3af0468025f/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 106,
+      "width": null,
+      "height": null,
+      "sha256": "8a4276a391fba90e00c57494880e5f639ea97636f3202ecfb0fdc3ed09dd621e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Consider this histogram of the scores for $81$ students taking a test:\n<image1>\n\nThe median is in the interval labeled",
+      "normalized_text_snapshot": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+      "text_completeness_score": 0.6446,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "test",
+          "canonical": "test",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "asset_id": "asset_1da590b5a52b1f960d3af49f",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/2566/answer",
+      "storage_uri": "inline://prob_7373384dbf97c3af0468025f/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "ff5a1ae012afa5d4c889c50ad427aaf545d31a4fac04ffc1c4d03d403ba4250a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "70",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "asset_id": "asset_33c8ecb60417203dc6348ad6",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_7373384dbf97c3af0468025f/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "ff5a1ae012afa5d4c889c50ad427aaf545d31a4fac04ffc1c4d03d403ba4250a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "70",
+      "normalized_text_snapshot": "70",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "asset_id": "asset_08281e8182191001e0c1f248",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_7373384dbf97c3af0468025f_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 68385,
+      "width": 1104,
+      "height": 884,
+      "sha256": "137ff9232f2b2dc90bef03c45a3474479560feb818e14aff300af170d940d96c",
+      "perceptual_hash": "c3f7f3e3a3c18000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 5083.4224,
+      "readability_score": 0.965,
+      "noise_score": 36.4077,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 24,
+        "y": 32,
+        "width": 1056,
+        "height": 816
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "asset_id": "asset_d495254548f481cb9dcb51f8",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/crops/prob_7373384dbf97c3af0468025f_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 67035,
+      "width": 1056,
+      "height": 816,
+      "sha256": "6eb40904f05c5bc452c6c3955f907bd43846d1a07f44124385023b54b6a52917",
+      "perceptual_hash": "c3f7f3e3a3c18000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 5083.4224,
+      "readability_score": 0.965,
+      "noise_score": 36.4077,
+      "cropped_from_asset_id": "asset_08281e8182191001e0c1f248",
+      "roi_bbox": {
+        "x": 24,
+        "y": 32,
+        "width": 1056,
+        "height": 816
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "asset_id": "asset_a2aa183a8695645a92a84ab2",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_7f5c7f6eb94b6583c443368b",
+      "file_format": "txt",
+      "file_size_bytes": 106,
+      "width": null,
+      "height": null,
+      "sha256": "8a4276a391fba90e00c57494880e5f639ea97636f3202ecfb0fdc3ed09dd621e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Consider this histogram of the scores for $81$ students taking a test:\n<image1>\n\nThe median is in the interval labeled",
+      "normalized_text_snapshot": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+      "text_completeness_score": 0.6446,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "test",
+          "canonical": "test",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_7373384dbf97c3af0468025f",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "Consider this histogram of the scores for 81 students taking a test.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "81"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "81"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_7373384dbf97c3af0468025f_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "The median is in the interval labeled",
+          "expected_answer_type": "numeric",
+          "expected_answer": "70",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "test",
+          "canonical": "test",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Consider this histogram of the scores for 81 students taking a test."
+        },
+        {
+          "segment_index": 2,
+          "text": "The median is in the interval labeled"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-08T05:05:12Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_7373384dbf97c3af0468025f_1",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.2489,
+        "dark_pixel_ratio": 0.0505,
+        "readability_score": 0.965,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1104,
+            "height": 884
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 24,
+            "y": 32,
+            "width": 1056,
+            "height": 816
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 552,
+            "y": 32,
+            "width": 528,
+            "height": 408
+          },
+          "salience": 0.3993
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 440,
+            "width": 528,
+            "height": 408
+          },
+          "salience": 0.4306
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 552,
+            "y": 440,
+            "width": 528,
+            "height": 408
+          },
+          "salience": 0.4323
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.986,
+      "created_at": "2026-04-08T05:05:12Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_7373384dbf97c3af0468025f",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": false,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "missing_grounded_visual_path"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 0.0
+      },
+      "solvability_score": 0.8,
+      "decision_hint": "reject",
+      "created_at": "2026-04-08T05:05:23Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_d6fa00aa1cecd8a99aa0942d",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "text_fact",
+      "canonical_value": "Consider this histogram of the scores for 81 students taking a test.",
+      "surface_forms": [
+        "Consider this histogram of the scores for 81 students taking a test."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8559405f30daa07b4a09bfe8"
+      ],
+      "evidence_refs": [
+        "asset_8559405f30daa07b4a09bfe8"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Consider this histogram of the scores for 81 students taking a test.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "81"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_c0670e80876bf0d8bf1f090c",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "target_slot",
+      "canonical_value": "The median is in the interval labeled",
+      "surface_forms": [
+        "The median is in the interval labeled"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_8559405f30daa07b4a09bfe8"
+      ],
+      "evidence_refs": [
+        "asset_8559405f30daa07b4a09bfe8"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_7373384dbf97c3af0468025f_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "The median is in the interval labeled",
+        "expected_answer_type": "numeric",
+        "expected_answer": "70",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_09d895fac4f412700b99aa85",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "answer_claim",
+      "canonical_value": "70",
+      "surface_forms": [
+        "70"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_33c8ecb60417203dc6348ad6"
+      ],
+      "evidence_refs": [
+        "asset_33c8ecb60417203dc6348ad6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "70"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_4f2c48e21e9e40cdbe8614e1",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1104,
+          "height": 884
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.986,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_effb675edc13b90836d7451d",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 24,
+          "y": 32,
+          "width": 1056,
+          "height": 816
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.986,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_be702b266a588ecbbf9225c8",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 552,
+          "y": 32,
+          "width": 528,
+          "height": 408
+        },
+        "salience": 0.3993
+      },
+      "unit": null,
+      "confidence": 0.986,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_aeae622bf1e53c7fbce72630",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 440,
+          "width": 528,
+          "height": 408
+        },
+        "salience": 0.4306
+      },
+      "unit": null,
+      "confidence": 0.986,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_4247e78a2eba96fc88234ea6",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 552,
+          "y": 440,
+          "width": 528,
+          "height": 408
+        },
+        "salience": 0.4323
+      },
+      "unit": null,
+      "confidence": 0.986,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_d9bbbafde92d7e4eb07d9507",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "text_fact",
+      "canonical_value": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+      "surface_forms": [
+        "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_a2aa183a8695645a92a84ab2"
+      ],
+      "evidence_refs": [
+        "asset_a2aa183a8695645a92a84ab2"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_7f5c7f6eb94b6583c443368b",
+        "parent_problem_id": "prob_7373384dbf97c3af0468025f",
+        "variant_index": 1,
+        "title": "MathVision 开放题",
+        "rewritten_question_text": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+        "expected_answer_type": "numeric",
+        "expected_answer": "70",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_e0ccaaf2b12cd63e97e367ef",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_7373384dbf97c3af0468025f",
+        "problem_id": "prob_7373384dbf97c3af0468025f",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": false,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 0.0
+        },
+        "solvability_score": 0.8,
+        "decision_hint": "reject",
+        "created_at": "2026-04-08T05:05:23Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "node_id": "node_7d1b10c72502cb9a9a526fda",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "missing_grounded_visual_path"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T05:05:34Z",
+      "updated_at": "2026-04-08T05:05:34Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_85dcb050a061a8a5d76ef31f",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_72ab9b4332499938",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_cc3075ac4b24342250283760",
+        "asset_8559405f30daa07b4a09bfe8",
+        "asset_1da590b5a52b1f960d3af49f",
+        "asset_33c8ecb60417203dc6348ad6",
+        "asset_08281e8182191001e0c1f248",
+        "asset_d495254548f481cb9dcb51f8",
+        "asset_a2aa183a8695645a92a84ab2"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 9
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1104,
+            "height": 884,
+            "blur_score": 5083.4224,
+            "contrast_score": 55.039,
+            "noise_score": 36.4077,
+            "readability_score": 0.965,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 24,
+              "y": 32,
+              "width": 1056,
+              "height": 816
+            },
+            "perceptual_hash": "c3f7f3e3a3c18000"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_85dcb050a061a8a5d76ef31f",
+        "coverage_score": 0.18,
+        "consistency_score": 0.1,
+        "alignment_status": "bad",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_7373384dbf97c3af0468025f",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_7373384dbf97c3af0468025f",
+        "solvability_score": 0.8,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_answer_aligned"
+        ],
+        "rationale": "The question is complete and the histogram is clearly readable. The image is necessary to locate the median interval, and the provided answer 70 matches the interval containing the 41st of 81 students.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.9035,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "missing_grounded_visual_path"
+      ],
+      "decision_rationale": "The sample is understandable and appears semantically usable: the question and answer are complete, the histogram is clear, and the intended target is recoverable from the image. However, the alignment record is bad and the solvability module could not establish a grounded visual reasoning path, so it should be manually checked rather than passed automatically.",
+      "review_ticket_id": "review_prob_7373384dbf97c3af0468025f",
+      "operator_type": "system",
+      "started_at": "2026-04-08T05:05:34Z",
+      "finished_at": "2026-04-08T05:05:34Z",
+      "candidate_id": "cand_7373384dbf97c3af0468025f",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_85dcb050a061a8a5d76ef31f",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "image_entity_refs": [
+        "visual_prob_7373384dbf97c3af0468025f_1::roi",
+        "visual_prob_7373384dbf97c3af0468025f_1::roi_top_right",
+        "visual_prob_7373384dbf97c3af0468025f_1::roi_bottom_left",
+        "visual_prob_7373384dbf97c3af0468025f_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_7373384dbf97c3af0468025f_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.18,
+      "consistency_score": 0.1,
+      "alignment_status": "bad",
+      "created_at": "2026-04-08T05:05:12Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_7dd176873df3e656c0be243c",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Consider this histogram of the scores for $81$ students taking a test:\n<image1>\n\nThe median is in the interval labeled",
+      "after_value": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "audit_id": "audit_aed9607ac9be4798c6b7a06d",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "70",
+      "after_value": "70",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "audit_id": "audit_db3e1e7b64e30ec722df2b29",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "audit_id": "audit_7d1b10c72502cb9a9a526fda",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T05:05:34Z"
+    },
+    {
+      "audit_id": "audit_b3226893089409c2669861eb",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "test",
+          "canonical": "test",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T05:05:34Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_85dcb050a061a8a5d76ef31f",
+      "problem_id": "prob_7373384dbf97c3af0468025f",
+      "source_problem_id": "2566",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_7f5c7f6eb94b6583c443368b",
+          "parent_problem_id": "prob_7373384dbf97c3af0468025f",
+          "variant_index": 1,
+          "title": "MathVision 开放题",
+          "rewritten_question_text": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+          "expected_answer_type": "numeric",
+          "expected_answer": "70",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-08T05:05:34Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_7f5c7f6eb94b6583c443368b",
+      "parent_problem_id": "prob_7373384dbf97c3af0468025f",
+      "variant_index": 1,
+      "title": "MathVision 开放题",
+      "rewritten_question_text": "Consider this histogram of the scores for 81 students taking a test. The median is in the interval labeled",
+      "expected_answer_type": "numeric",
+      "expected_answer": "70",
+      "split_role": "single"
+    }
+  ]
+}

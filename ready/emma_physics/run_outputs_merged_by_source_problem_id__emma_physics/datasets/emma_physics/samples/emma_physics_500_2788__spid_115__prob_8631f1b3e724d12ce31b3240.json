@@ -1,0 +1,2382 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_f14fe769f5b4ab302562711b",
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "problem_id": "prob_8631f1b3e724d12ce31b3240",
+    "dataset_name": "EMMA-Physics",
+    "source_problem_id": "115",
+    "raw_question_text": "A billiard ball hits the side of a pool table at an angle \\( \\Theta \\) as shown in the top view above, and bounces away at the same angle, and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?\n\n<image_1><image_2>",
+    "raw_answer_text": "d",
+    "choice_map": {
+      "A": "a",
+      "B": "b",
+      "C": "c",
+      "D": "d",
+      "E": "e"
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image_1",
+    "choice_field": "options",
+    "extraction_notes": [
+      "题目中有 <image_1><image_2> 占位符，记录里对应的是 PIL.Image 对象描述，不是可提取的图片路径或 URL",
+      "选项字段仅提供 a-e，无法从记录中恢复更完整的选项文本",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T17:08:37Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_8631f1b3e724d12ce31b3240",
+    "image_manifest": [
+      {
+        "path": "outputs/emma_physics_500_2788/run_7bdbc409d7382470/datasets/emma_physics/artifacts/images/prob_8631f1b3e724d12ce31b3240_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1234,
+        "height": 498,
+        "file_size": 67239
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 272,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "metadata.image_paths is empty",
+      "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_f14fe769f5b4ab302562711b",
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "dataset_name": "EMMA-Physics",
+    "source_problem_id": "115",
+    "created_at": "2026-04-05T17:08:37Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_8631f1b3e724d12ce31b3240",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.62,
+    "verifiability_score": 0.83,
+    "score_evidence": {
+      "image_dependency": [
+        "题干明确写有 \"as shown in the top view\"，方向判断依赖图中的入射/反射路径与候选向量位置。",
+        "requires_image=true 且 text_dominant=false，说明图像不是辅助信息而是核心信息。",
+        "问题要求在 a-e 向量中选方向，若无图很难确定各选项对应的空间朝向。"
+      ],
+      "multi_step": [
+        "需要结合碰撞前后速度方向变化，先判断哪些动量分量改变、哪些保持不变，再确定净动量变化方向。",
+        "还需要把物理结论映射到图中的具体标注向量（a-e），属于图文联合推理。",
+        "虽然是单项选择，但并非纯识记，至少包含向量变化分析和选项定位两步。"
+      ],
+      "verifiability": [
+        "答案是单字符选择题答案（answer_text='d'），结果形式清晰，易于程序化核验。",
+        "题目基于标准反射与动量变化规律，解题过程具有较强规则性，可做后续一致性检查。",
+        "asset_registry_record.registry_passed=true，且图像与答案资产均已登记存在。",
+        "但登记中存在图片占位符与实际图片数量不一致的问题，降低了完全可靠核验性。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths is empty",
+      "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_f14fe769f5b4ab302562711b",
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "dataset_name": "EMMA-Physics",
+    "source_problem_id": "115",
+    "created_at": "2026-04-05T17:08:37Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_8631f1b3e724d12ce31b3240",
+    "priority": 0.74,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题干、答案和至少一张主图均已存在，仍保留了可恢复的核心语义支撑，不符合直接 reject 的条件。",
+      "该题图像依赖度很高，而登记中存在题干含两个图片占位符但仅提供一张图片的缺口，说明资产完整性不足。",
+      "answer 为明确的单选字符，且 registry_passed=true、verifiability_score 较高，样本仍具有后续核验和修复价值。",
+      "metadata.image_paths 为空与图片占位符数量不一致都会增加解析和对齐风险，因此优先级应低于完整样本。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_f14fe769f5b4ab302562711b",
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "dataset_name": "EMMA-Physics",
+    "source_problem_id": "115",
+    "created_at": "2026-04-05T17:08:37Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_f14fe769f5b4ab302562711b",
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "problem_id": "prob_8631f1b3e724d12ce31b3240",
+    "dataset_name": "EMMA-Physics",
+    "normalized_question_text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?",
+    "normalized_answer_text": "d",
+    "normalized_choice_map": {
+      "A": "a",
+      "B": "b",
+      "C": "c",
+      "D": "d",
+      "E": "e"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed inline image placeholder tokens as packaging noise.",
+      "Uppercased the answer label for consistency.",
+      "Question remains image-dependent because the referenced vector directions are shown visually."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T17:08:37Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "source_dataset": "EMMA-Physics",
+    "source_split": "test",
+    "source_problem_id": "115",
+    "subject": "物理",
+    "raw_question_text": "A billiard ball hits the side of a pool table at an angle \\( \\Theta \\) as shown in the top view above, and bounces away at the same angle, and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?\n\n<image_1><image_2>",
+    "raw_answer_text": "d",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.62,
+    "initial_verifiability_score": 0.83,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 115,
+      "image_paths": [],
+      "extraction_notes": [
+        "题目中有 <image_1><image_2> 占位符，记录里对应的是 PIL.Image 对象描述，不是可提取的图片路径或 URL",
+        "选项字段仅提供 a-e，无法从记录中恢复更完整的选项文本",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image_1",
+      "choice_field": "options",
+      "reasoning_chain_field": "pid",
+      "reasoning_chain": "phy_116",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-05T17:10:20Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.74,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和至少一张主图均已存在，仍保留了可恢复的核心语义支撑，不符合直接 reject 的条件。",
+      "该题图像依赖度很高，而登记中存在题干含两个图片占位符但仅提供一张图片的缺口，说明资产完整性不足。",
+      "answer 为明确的单选字符，且 registry_passed=true、verifiability_score 较高，样本仍具有后续核验和修复价值。",
+      "metadata.image_paths 为空与图片占位符数量不一致都会增加解析和对齐风险，因此优先级应低于完整样本。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths is empty",
+      "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_c7040b6a027997c523648ab6",
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "source_dataset": "EMMA-Physics",
+    "source_problem_id": "115",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_8631f1b3e724d12ce31b3240/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_8631f1b3e724d12ce31b3240/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1234,
+        "height": 498
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.62,
+      "initial_verifiability_score": 0.83
+    },
+    "created_at": "2026-04-05T17:10:20Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths is empty",
+      "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_eeb1132596bb6d76dc9beaf7",
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "source_dataset": "EMMA-Physics",
+    "source_problem_id": "115",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.74,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.62,
+      "initial_verifiability_score": 0.83
+    },
+    "created_at": "2026-04-05T17:10:20Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题干、答案和至少一张主图均已存在，仍保留了可恢复的核心语义支撑，不符合直接 reject 的条件。",
+      "该题图像依赖度很高，而登记中存在题干含两个图片占位符但仅提供一张图片的缺口，说明资产完整性不足。",
+      "answer 为明确的单选字符，且 registry_passed=true、verifiability_score 较高，样本仍具有后续核验和修复价值。",
+      "metadata.image_paths 为空与图片占位符数量不一致都会增加解析和对齐风险，因此优先级应低于完整样本。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_f14fe769f5b4ab302562711b",
+      "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "dataset_name": "EMMA-Physics",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T17:10:20Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_f14fe769f5b4ab302562711b",
+    "problem_id": "prob_8631f1b3e724d12ce31b3240",
+    "source_dataset": "EMMA-Physics",
+    "source_problem_id": "115",
+    "normalized_question_text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?",
+    "normalized_answer_text": "d",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "answer_option_visual_missing",
+      "choice_mapping_unavailable",
+      "placeholder_image_mismatch"
+    ],
+    "created_at": "2026-04-05T17:10:20Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_f14fe769f5b4ab302562711b",
+    "problem_id": "prob_8631f1b3e724d12ce31b3240",
+    "normalized_question_text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?",
+    "normalized_answer_text": "d",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "ball",
+        "canonical": "ball",
+        "variable_type": "label"
+      },
+      {
+        "original": "hits",
+        "canonical": "hits",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "side",
+        "canonical": "side",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "pool",
+        "canonical": "pool",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "an",
+        "canonical": "an",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "top",
+        "canonical": "top",
+        "variable_type": "label"
+      },
+      {
+        "original": "view",
+        "canonical": "view",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "away",
+        "canonical": "away",
+        "variable_type": "label"
+      },
+      {
+        "original": "same",
+        "canonical": "same",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "net",
+        "canonical": "net",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed."
+      },
+      {
+        "segment_index": 2,
+        "text": "Which vector indicates the direction of the net change in momentum of the billiard ball?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 86,
+          "y": 80,
+          "width": 1076,
+          "height": 388
+        },
+        "readability_score": 0.8927,
+        "contrast_score": 55.6082
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T17:10:20Z",
+    "normalization_notes": [
+      "Removed inline image placeholder tokens as packaging noise.",
+      "Uppercased the answer label for consistency.",
+      "Question remains image-dependent because the referenced vector directions are shown visually."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_8631f1b3e724d12ce31b3240",
+    "source_dataset": "EMMA-Physics",
+    "source_split": "test",
+    "source_problem_id": "115",
+    "ingest_batch_id": "benchmarkallinone-emma-500-2788_20260405T133210Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "en",
+    "raw_question_text": "A billiard ball hits the side of a pool table at an angle \\( \\Theta \\) as shown in the top view above, and bounces away at the same angle, and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?\n\n<image_1><image_2>",
+    "normalized_question_text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?",
+    "raw_answer_text": "d",
+    "normalized_answer_text": "d",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "phy_116",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9863,
+    "multi_step_score": 0.3647,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "choice_mapping_unavailable",
+      "metadata.image_paths is empty",
+      "missing_required_visual_context",
+      "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "answer_option_visual_missing",
+      "choice_mapping_unavailable",
+      "placeholder_image_mismatch"
+    ],
+    "clean_decision_rationale": "The collision diagram is clear enough to understand and solve the physics conceptually, and alignment/solvability are strong, but the missing visual answer-choice mapping means the labeled answer 'd' cannot be verified from the provided content alone. The sample still has recoverable semantic value as an open-ended direction-of-momentum-change task, so it should be reviewed rather than rejected.",
+    "review_priority": "normal",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "partial",
+    "agent_image_support_status": "uncertain_but_usable",
+    "agent_joint_understanding_status": "partially_understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T17:08:37Z",
+    "updated_at": "2026-04-05T17:10:20Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.62,
+    "initial_verifiability_score": 0.83,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.74,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和至少一张主图均已存在，仍保留了可恢复的核心语义支撑，不符合直接 reject 的条件。",
+      "该题图像依赖度很高，而登记中存在题干含两个图片占位符但仅提供一张图片的缺口，说明资产完整性不足。",
+      "answer 为明确的单选字符，且 registry_passed=true、verifiability_score 较高，样本仍具有后续核验和修复价值。",
+      "metadata.image_paths 为空与图片占位符数量不一致都会增加解析和对齐风险，因此优先级应低于完整样本。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_ea2225d53af80448f4f4101d",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://emma_physics/test/115/question",
+      "storage_uri": "inline://prob_8631f1b3e724d12ce31b3240/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 272,
+      "width": null,
+      "height": null,
+      "sha256": "c5fc08fcf1c9cab455e8b5f29e785cdbdfc08b57c826afad2a5320793e31e8e7",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A billiard ball hits the side of a pool table at an angle \\( \\Theta \\) as shown in the top view above, and bounces away at the same angle, and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?\n\n<image_1><image_2>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.767,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ball",
+          "canonical": "ball",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "pool",
+          "canonical": "pool",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "top",
+          "canonical": "top",
+          "variable_type": "label"
+        },
+        {
+          "original": "view",
+          "canonical": "view",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "away",
+          "canonical": "away",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "net",
+          "canonical": "net",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "asset_id": "asset_fa7df02bb6b121bdfb95ffca",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_8631f1b3e724d12ce31b3240/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 243,
+      "width": null,
+      "height": null,
+      "sha256": "e2641775926634a3ef9566df4b4517a76f5c3b240a6bc86e01577d4ba6e3ab82",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A billiard ball hits the side of a pool table at an angle \\( \\Theta \\) as shown in the top view above, and bounces away at the same angle, and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?\n\n<image_1><image_2>",
+      "normalized_text_snapshot": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?",
+      "text_completeness_score": 0.767,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ball",
+          "canonical": "ball",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "pool",
+          "canonical": "pool",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "top",
+          "canonical": "top",
+          "variable_type": "label"
+        },
+        {
+          "original": "view",
+          "canonical": "view",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "away",
+          "canonical": "away",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "net",
+          "canonical": "net",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "asset_id": "asset_11b0272efcd25066d3f3686e",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://emma_physics/test/115/answer",
+      "storage_uri": "inline://prob_8631f1b3e724d12ce31b3240/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4",
+      "perceptual_hash": null,
+      "source_text_snapshot": "d",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "asset_id": "asset_93b5bd1c526c2b31f4fd48da",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_8631f1b3e724d12ce31b3240/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "18ac3e7343f016890c510e93f935261169d9e3f565436429830faf0934f4f8e4",
+      "perceptual_hash": null,
+      "source_text_snapshot": "d",
+      "normalized_text_snapshot": "d",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "d",
+          "canonical": "d",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "asset_id": "asset_b80367a70768c9011d701a8f",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/emma_physics_500_2788/run_7bdbc409d7382470/datasets/emma_physics/artifacts/images/prob_8631f1b3e724d12ce31b3240_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 67239,
+      "width": 1234,
+      "height": 498,
+      "sha256": "53fa13c6e16cd02e25c1105b927d078d338098ef5d69d916b28d52882ad7c681",
+      "perceptual_hash": "ff87030303030387",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 747.6908,
+      "readability_score": 0.8927,
+      "noise_score": 20.3396,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 86,
+        "y": 80,
+        "width": 1076,
+        "height": 388
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "choice_mapping_unavailable",
+        "metadata.image_paths is empty",
+        "missing_required_visual_context",
+        "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "asset_id": "asset_22a17429615aa6af6cc1c547",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/emma_physics_500_2788/run_7bdbc409d7382470/datasets/emma_physics/artifacts/crops/prob_8631f1b3e724d12ce31b3240_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 65125,
+      "width": 1076,
+      "height": 388,
+      "sha256": "72206e5480318a52cbad8a582af8262d0ecd9286dbdcc117d08fe76a1cc40cd8",
+      "perceptual_hash": "0303030303030303",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 747.6908,
+      "readability_score": 0.8927,
+      "noise_score": 20.3396,
+      "cropped_from_asset_id": "asset_b80367a70768c9011d701a8f",
+      "roi_bbox": {
+        "x": 86,
+        "y": 80,
+        "width": 1076,
+        "height": 388
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "asset_id": "asset_41affb37629a772f8e55ac7d",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_2ffe16c6d588d5ecb2b2f3c4",
+      "file_format": "txt",
+      "file_size_bytes": 224,
+      "width": null,
+      "height": null,
+      "sha256": "7f98b479b6e227d98b95e837ade8439db56cc31ec98fe56e50ed4f3017002136",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A billiard ball hits the side of a pool table at an angle \\( \\Theta \\) as shown in the top view above, and bounces away at the same angle, and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?\n\n<image_1><image_2>",
+      "normalized_text_snapshot": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. In what direction is the net change in momentum of the billiard ball?",
+      "text_completeness_score": 0.767,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ball",
+          "canonical": "ball",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "pool",
+          "canonical": "pool",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "top",
+          "canonical": "top",
+          "variable_type": "label"
+        },
+        {
+          "original": "view",
+          "canonical": "view",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "away",
+          "canonical": "away",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "net",
+          "canonical": "net",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_8631f1b3e724d12ce31b3240",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which vector indicates the direction of the net change in momentum of the billiard ball?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_8631f1b3e724d12ce31b3240_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "In what direction is the net change in momentum of the billiard ball?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "d",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "table",
+          "entity_category": "table",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ball",
+          "canonical": "ball",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "pool",
+          "canonical": "pool",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "top",
+          "canonical": "top",
+          "variable_type": "label"
+        },
+        {
+          "original": "view",
+          "canonical": "view",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "away",
+          "canonical": "away",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "net",
+          "canonical": "net",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed."
+        },
+        {
+          "segment_index": 2,
+          "text": "Which vector indicates the direction of the net change in momentum of the billiard ball?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T17:09:45Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_8631f1b3e724d12ce31b3240_1",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 2.4779,
+        "dark_pixel_ratio": 0.4948,
+        "readability_score": 0.8927,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1234,
+            "height": 498
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 86,
+            "y": 80,
+            "width": 1076,
+            "height": 388
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 86,
+            "y": 80,
+            "width": 538,
+            "height": 194
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 624,
+            "y": 80,
+            "width": 538,
+            "height": 194
+          },
+          "salience": 0.8469
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 86,
+            "y": 274,
+            "width": 538,
+            "height": 194
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 624,
+            "y": 274,
+            "width": 538,
+            "height": 194
+          },
+          "salience": 0.7778
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9571,
+      "created_at": "2026-04-05T17:09:45Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_8631f1b3e724d12ce31b3240",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-05T17:10:10Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_e10be1d65f41362d174d82e3",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "text_fact",
+      "canonical_value": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed.",
+      "surface_forms": [
+        "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fa7df02bb6b121bdfb95ffca"
+      ],
+      "evidence_refs": [
+        "asset_fa7df02bb6b121bdfb95ffca"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_bbb38215b28904a411428e27",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "target_slot",
+      "canonical_value": "In what direction is the net change in momentum of the billiard ball?",
+      "surface_forms": [
+        "In what direction is the net change in momentum of the billiard ball?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_fa7df02bb6b121bdfb95ffca"
+      ],
+      "evidence_refs": [
+        "asset_fa7df02bb6b121bdfb95ffca"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_8631f1b3e724d12ce31b3240_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "In what direction is the net change in momentum of the billiard ball?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "d",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_d3f81ae06978aed9593d89db",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "answer_claim",
+      "canonical_value": "d",
+      "surface_forms": [
+        "d"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_93b5bd1c526c2b31f4fd48da"
+      ],
+      "evidence_refs": [
+        "asset_93b5bd1c526c2b31f4fd48da"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "d"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_d2a77812cb38f0e44fa0bc26",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1234,
+          "height": 498
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9571,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_365cac98f27a980d4d2ae875",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 86,
+          "y": 80,
+          "width": 1076,
+          "height": 388
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9571,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_a3f11e554f13849f59346ecc",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 86,
+          "y": 80,
+          "width": 538,
+          "height": 194
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9571,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_fbfe34c5ebbb9ad1a3d5d9a3",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 624,
+          "y": 80,
+          "width": 538,
+          "height": 194
+        },
+        "salience": 0.8469
+      },
+      "unit": null,
+      "confidence": 0.9571,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_f3d33f1fdb8b4299dff7dcfa",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 86,
+          "y": 274,
+          "width": 538,
+          "height": 194
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9571,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_4ddb3054f96a03a2153727a2",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 624,
+          "y": 274,
+          "width": 538,
+          "height": 194
+        },
+        "salience": 0.7778
+      },
+      "unit": null,
+      "confidence": 0.9571,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_dc084798e4ed767632afc6bb",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "text_fact",
+      "canonical_value": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. In what direction is the net change in momentum of the billiard ball?",
+      "surface_forms": [
+        "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. In what direction is the net change in momentum of the billiard ball?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_41affb37629a772f8e55ac7d"
+      ],
+      "evidence_refs": [
+        "asset_41affb37629a772f8e55ac7d"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_2ffe16c6d588d5ecb2b2f3c4",
+        "parent_problem_id": "prob_8631f1b3e724d12ce31b3240",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. In what direction is the net change in momentum of the billiard ball?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "d",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_20f8307b3eda7cd53869bd87",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "quality_signal",
+      "canonical_value": "choice_mapping_unavailable",
+      "surface_forms": [
+        "choice_mapping_unavailable"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "choice_mapping_unavailable"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_ad57c3d8a87f5d37ee2a5c3c",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty",
+      "surface_forms": [
+        "metadata.image_paths is empty"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_25242e79e302c9721f6bd81a",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "quality_signal",
+      "canonical_value": "missing_required_visual_context",
+      "surface_forms": [
+        "missing_required_visual_context"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "missing_required_visual_context"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_46ae83e8e17df5979b560e74",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "quality_signal",
+      "canonical_value": "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided",
+      "surface_forms": [
+        "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_b7fcf5596cf4c4faff232889",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_8631f1b3e724d12ce31b3240",
+        "problem_id": "prob_8631f1b3e724d12ce31b3240",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-05T17:10:10Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "node_id": "node_2395ffa58679cd42d330cc81",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "answer_option_visual_missing",
+          "choice_mapping_unavailable",
+          "placeholder_image_mismatch"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T17:10:20Z",
+      "updated_at": "2026-04-05T17:10:20Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_f14fe769f5b4ab302562711b",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_7bdbc409d7382470",
+      "dataset_name": "EMMA-Physics",
+      "input_asset_ids": [
+        "asset_ea2225d53af80448f4f4101d",
+        "asset_fa7df02bb6b121bdfb95ffca",
+        "asset_11b0272efcd25066d3f3686e",
+        "asset_93b5bd1c526c2b31f4fd48da",
+        "asset_b80367a70768c9011d701a8f",
+        "asset_22a17429615aa6af6cc1c547",
+        "asset_41affb37629a772f8e55ac7d"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 19
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.86,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1234,
+            "height": 498,
+            "blur_score": 747.6908,
+            "contrast_score": 55.6082,
+            "noise_score": 20.3396,
+            "readability_score": 0.8927,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 86,
+              "y": 80,
+              "width": 1076,
+              "height": 388
+            },
+            "perceptual_hash": "ff87030303030387"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_f14fe769f5b4ab302562711b",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_8631f1b3e724d12ce31b3240",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_8631f1b3e724d12ce31b3240",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "partial",
+        "image_support_status": "uncertain_but_usable",
+        "joint_understanding_status": "partially_understandable",
+        "reason_codes": [
+          "answer_option_visual_missing",
+          "main_diagram_clear",
+          "placeholder_image_mismatch"
+        ],
+        "rationale": "The pool-table diagram clearly shows the incoming and reflected paths, so the physics being asked is understandable, but the sample appears to be missing an additional image or visual answer-choice mapping. That means a reviewer can infer the intended momentum-change direction conceptually, yet cannot reliably connect it to the labeled choice 'd' from the provided content alone.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "choice_mapping_unavailable",
+        "metadata.image_paths is empty",
+        "missing_required_visual_context",
+        "question_text contains two image placeholders (<image_1><image_2>), but only one image path is provided"
+      ],
+      "clean_score": 0.9377,
+      "decision": "review",
+      "decision_reason_codes": [
+        "answer_option_visual_missing",
+        "choice_mapping_unavailable",
+        "placeholder_image_mismatch"
+      ],
+      "decision_rationale": "The collision diagram is clear enough to understand and solve the physics conceptually, and alignment/solvability are strong, but the missing visual answer-choice mapping means the labeled answer 'd' cannot be verified from the provided content alone. The sample still has recoverable semantic value as an open-ended direction-of-momentum-change task, so it should be reviewed rather than rejected.",
+      "review_ticket_id": "review_prob_8631f1b3e724d12ce31b3240",
+      "operator_type": "system",
+      "started_at": "2026-04-05T17:10:20Z",
+      "finished_at": "2026-04-05T17:10:20Z",
+      "candidate_id": "cand_8631f1b3e724d12ce31b3240",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_f14fe769f5b4ab302562711b",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "image_entity_refs": [
+        "visual_prob_8631f1b3e724d12ce31b3240_1::roi",
+        "visual_prob_8631f1b3e724d12ce31b3240_1::roi_top_left",
+        "visual_prob_8631f1b3e724d12ce31b3240_1::roi_top_right",
+        "visual_prob_8631f1b3e724d12ce31b3240_1::roi_bottom_left",
+        "visual_prob_8631f1b3e724d12ce31b3240_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_8631f1b3e724d12ce31b3240_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "table",
+          "image_ref": "visual_prob_8631f1b3e724d12ce31b3240_1::roi",
+          "relation": "grounds_table",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_8631f1b3e724d12ce31b3240_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_8631f1b3e724d12ce31b3240_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "slot_prob_8631f1b3e724d12ce31b3240_1",
+          "image_ref": "visual_prob_8631f1b3e724d12ce31b3240_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7906
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-05T17:09:45Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_16bbb39c7349fce6abb7342b",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "A billiard ball hits the side of a pool table at an angle \\( \\Theta \\) as shown in the top view above, and bounces away at the same angle, and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?\n\n<image_1><image_2>",
+      "after_value": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. Which vector indicates the direction of the net change in momentum of the billiard ball?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "audit_id": "audit_e333b9ae5abdd1ec1344d91c",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "d",
+      "after_value": "d",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "audit_id": "audit_335636640483b99de288df98",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "audit_id": "audit_2395ffa58679cd42d330cc81",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T17:10:20Z"
+    },
+    {
+      "audit_id": "audit_00fc67a4d9077586bed37915",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ball",
+          "canonical": "ball",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "side",
+          "canonical": "side",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "pool",
+          "canonical": "pool",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "top",
+          "canonical": "top",
+          "variable_type": "label"
+        },
+        {
+          "original": "view",
+          "canonical": "view",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "away",
+          "canonical": "away",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "net",
+          "canonical": "net",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T17:10:20Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_f14fe769f5b4ab302562711b",
+      "problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "source_problem_id": "115",
+      "strategy": "blank_open",
+      "rationale": "The multiple-choice labels are image-dependent, but the underlying physics yields a directly answerable open-ended question about the direction of the momentum change.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_2ffe16c6d588d5ecb2b2f3c4",
+          "parent_problem_id": "prob_8631f1b3e724d12ce31b3240",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. In what direction is the net change in momentum of the billiard ball?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "d",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-05T17:10:20Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_2ffe16c6d588d5ecb2b2f3c4",
+      "parent_problem_id": "prob_8631f1b3e724d12ce31b3240",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "A billiard ball hits the side of a pool table at an angle \\(\\Theta\\) as shown in the top view, and bounces away at the same angle and with the same speed. In what direction is the net change in momentum of the billiard ball?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "d",
+      "split_role": "single"
+    }
+  ]
+}

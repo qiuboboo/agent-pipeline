@@ -1,0 +1,2095 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_b48e16e97ede0da980b97378",
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "problem_id": "prob_b881be60253a84a783cac0ca",
+    "dataset_name": "MSEarth Open Ended",
+    "source_problem_id": "274",
+    "raw_question_text": "<image>Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+    "raw_answer_text": "LLNL",
+    "choice_map": {},
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "query",
+    "answer_field": "response",
+    "image_field": "image",
+    "choice_field": null,
+    "extraction_notes": [
+      "`image` 字段是 PIL.Image 对象描述，不是可直接提取的图片路径或 URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T22:19:00Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_b881be60253a84a783cac0ca",
+    "image_manifest": [
+      {
+        "path": "outputs/msearth_open_ended_000_300/run_1ecdd5243c8e7f21/datasets/msearth_open_ended/artifacts/images/prob_b881be60253a84a783cac0ca_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1029,
+        "height": 900,
+        "file_size": 1392085
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 367,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 4
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_b48e16e97ede0da980b97378",
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "dataset_name": "MSEarth Open Ended",
+    "source_problem_id": "274",
+    "created_at": "2026-04-04T22:19:00Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_b881be60253a84a783cac0ca",
+    "image_dependency_score": 0.35,
+    "multi_step_score": 0.15,
+    "verifiability_score": 0.92,
+    "score_evidence": {
+      "image_dependency": [
+        "字段标注 `requires_image=true` 且 `text_dominant=false`，说明样本被登记为依赖图像的地图题。",
+        "但题干 caption 中已直接出现 `LLNL-crane sonic anemometer site`，问题所问组织名可由文本线索直接抽取，不必真正读取图像内容。",
+        "图像主要提供地图位置与标注背景，而本题答案更像是对 caption 中缩写实体的识别。"
+      ],
+      "multi_step": [
+        "问题只需从 caption 中定位 `crane sonic anemometer site` 对应的组织，并读出 `LLNL`。",
+        "不需要显式计算、比较、空间推理或多条件组合。",
+        "虽有地图和多个标记点背景，但对得到答案本身帮助有限。"
+      ],
+      "verifiability": [
+        "`answer_type=short_text`，答案是简短组织缩写，目标形式明确。",
+        "`answer_present=true` 且标准答案为 `LLNL`，可直接做字符串级核验。",
+        "`registry_passed=true`，资产登记完整，无额外 issues，便于后续规则或人工复核。"
+      ]
+    },
+    "risk_flags": [
+      "caption_contains_answer_cue",
+      "image_requirement_may_be_overstated"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_b48e16e97ede0da980b97378",
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "dataset_name": "MSEarth Open Ended",
+    "source_problem_id": "274",
+    "created_at": "2026-04-04T22:19:00Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_b881be60253a84a783cac0ca",
+    "priority": 0.45,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "资产登记完整，题干、答案和图像都存在，核心语义可恢复，不应 reject。",
+      "初步打分显示可核验性高，但图像依赖度和多步性都偏低，样本区分度有限。",
+      "存在 `caption_contains_answer_cue` 风险，答案线索可能已在题干文本中直接给出。",
+      "存在 `image_requirement_may_be_overstated` 风险，作为图像题的代表性偏弱，适合进入候选池但降低优先级。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_b48e16e97ede0da980b97378",
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "dataset_name": "MSEarth Open Ended",
+    "source_problem_id": "274",
+    "created_at": "2026-04-04T22:19:00Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_b48e16e97ede0da980b97378",
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "problem_id": "prob_b881be60253a84a783cac0ca",
+    "dataset_name": "MSEarth Open Ended",
+    "normalized_question_text": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+    "normalized_answer_text": "LLNL",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading <image> placeholder.",
+      "Preserved the original caption and question semantics with minor punctuation cleanup.",
+      "Marked as image-required because force_requires_image is true."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T22:19:00Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "source_dataset": "MSEarth Open Ended",
+    "source_split": "train[0:300]",
+    "source_problem_id": "274",
+    "subject": "地球科学",
+    "raw_question_text": "<image>Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+    "raw_answer_text": "LLNL",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.35,
+    "initial_multi_solution_score": 0.15,
+    "initial_verifiability_score": 0.92,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 274,
+      "image_paths": [],
+      "extraction_notes": [
+        "`image` 字段是 PIL.Image 对象描述，不是可直接提取的图片路径或 URL",
+        "source_intake_agent"
+      ],
+      "question_field": "query",
+      "answer_field": "response",
+      "image_field": "image",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning_chain",
+      "reasoning_chain": "[\"Step 1: Observe the Figure, which shows the LLNL Sonic site north of the CBD.\", \"Step 2: Refer to the Caption to confirm the ownership (Lawrence Livermore National Laboratory).\", \"Step 3: The correct answer is LLNL, as this organization operates the site.\"]",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-04T22:20:01Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.45,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "资产登记完整，题干、答案和图像都存在，核心语义可恢复，不应 reject。",
+      "初步打分显示可核验性高，但图像依赖度和多步性都偏低，样本区分度有限。",
+      "存在 `caption_contains_answer_cue` 风险，答案线索可能已在题干文本中直接给出。",
+      "存在 `image_requirement_may_be_overstated` 风险，作为图像题的代表性偏弱，适合进入候选池但降低优先级。"
+    ],
+    "collection_risk_flags": [
+      "caption_contains_answer_cue",
+      "image_requirement_may_be_overstated"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_e34ed3905b150253c5d0ff7d",
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "source_dataset": "MSEarth Open Ended",
+    "source_problem_id": "274",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_b881be60253a84a783cac0ca/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_b881be60253a84a783cac0ca/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1029,
+        "height": 900
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.35,
+      "initial_multi_solution_score": 0.15,
+      "initial_verifiability_score": 0.92
+    },
+    "created_at": "2026-04-04T22:20:01Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_3f77aaed8cc7aa85dc847d2a",
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "source_dataset": "MSEarth Open Ended",
+    "source_problem_id": "274",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.45,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.35,
+      "initial_multi_solution_score": 0.15,
+      "initial_verifiability_score": 0.92
+    },
+    "created_at": "2026-04-04T22:20:01Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "资产登记完整，题干、答案和图像都存在，核心语义可恢复，不应 reject。",
+      "初步打分显示可核验性高，但图像依赖度和多步性都偏低，样本区分度有限。",
+      "存在 `caption_contains_answer_cue` 风险，答案线索可能已在题干文本中直接给出。",
+      "存在 `image_requirement_may_be_overstated` 风险，作为图像题的代表性偏弱，适合进入候选池但降低优先级。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_b48e16e97ede0da980b97378",
+      "candidate_id": "cand_b881be60253a84a783cac0ca",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "dataset_name": "MSEarth Open Ended",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T22:20:01Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_b48e16e97ede0da980b97378",
+    "problem_id": "prob_b881be60253a84a783cac0ca",
+    "source_dataset": "MSEarth Open Ended",
+    "source_problem_id": "274",
+    "normalized_question_text": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+    "normalized_answer_text": "LLNL",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_explicit_in_text",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-04T22:20:01Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_b48e16e97ede0da980b97378",
+    "problem_id": "prob_b881be60253a84a783cac0ca",
+    "normalized_question_text": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+    "normalized_answer_text": "LLNL",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "Map",
+        "canonical": "Map",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "CBD",
+        "canonical": "CBD",
+        "variable_type": "label"
+      },
+      {
+        "original": "City",
+        "canonical": "City",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "site",
+        "canonical": "site",
+        "variable_type": "label"
+      },
+      {
+        "original": "near",
+        "canonical": "near",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "red",
+        "canonical": "red",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "fast",
+        "canonical": "fast",
+        "variable_type": "label"
+      },
+      {
+        "original": "gas",
+        "canonical": "gas",
+        "variable_type": "label"
+      },
+      {
+        "original": "by",
+        "canonical": "by",
+        "variable_type": "label"
+      },
+      {
+        "original": "LLNL",
+        "canonical": "LLNL",
+        "variable_type": "label"
+      },
+      {
+        "original": "also",
+        "canonical": "also",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Caption:"
+      },
+      {
+        "segment_index": 2,
+        "text": "Map of the CBD of Oklahoma City."
+      },
+      {
+        "segment_index": 3,
+        "text": "The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number."
+      },
+      {
+        "segment_index": 4,
+        "text": "The location of the LLNL-crane sonic anemometer site is also shown."
+      },
+      {
+        "segment_index": 5,
+        "text": "Question:"
+      },
+      {
+        "segment_index": 6,
+        "text": "Which organization operates the crane sonic anemometer site?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 4,
+          "y": 6,
+          "width": 1022,
+          "height": 893
+        },
+        "readability_score": 0.7973,
+        "contrast_score": 42.192
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T22:20:01Z",
+    "normalization_notes": [
+      "Removed the leading <image> placeholder.",
+      "Preserved the original caption and question semantics with minor punctuation cleanup.",
+      "Marked as image-required because force_requires_image is true."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_b881be60253a84a783cac0ca",
+    "source_dataset": "MSEarth Open Ended",
+    "source_split": "train[0:300]",
+    "source_problem_id": "274",
+    "ingest_batch_id": "benchmarkallinone-msearth-open-ended-000-300_20260404T163430Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "地球科学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+    "normalized_question_text": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+    "raw_answer_text": "LLNL",
+    "normalized_answer_text": "LLNL",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "[\"Step 1: Observe the Figure, which shows the LLNL Sonic site north of the CBD.\", \"Step 2: Refer to the Caption to confirm the ownership (Lawrence Livermore National Laboratory).\", \"Step 3: The correct answer is LLNL, as this organization operates the site.\"]",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9647,
+    "multi_step_score": 0.3197,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_explicit_in_text",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The question and answer are complete and understandable, and the caption explicitly identifies the site as the LLNL-crane sonic anemometer site, making the target answer materially available even without relying on the image. Rewrite, alignment, and solvability evidence do not show a serious failure.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_b881be60253a84a783cac0ca",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T22:19:00Z",
+    "updated_at": "2026-04-04T22:20:01Z",
+    "initial_image_dependency_score": 0.35,
+    "initial_multi_solution_score": 0.15,
+    "initial_verifiability_score": 0.92,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.45,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "资产登记完整，题干、答案和图像都存在，核心语义可恢复，不应 reject。",
+      "初步打分显示可核验性高，但图像依赖度和多步性都偏低，样本区分度有限。",
+      "存在 `caption_contains_answer_cue` 风险，答案线索可能已在题干文本中直接给出。",
+      "存在 `image_requirement_may_be_overstated` 风险，作为图像题的代表性偏弱，适合进入候选池但降低优先级。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_fc1d6580e69e09b67a42cd8b",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://msearth_open_ended/train[0:300]/274/question",
+      "storage_uri": "inline://prob_b881be60253a84a783cac0ca/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 367,
+      "width": null,
+      "height": null,
+      "sha256": "c0e396699426148d36422eb63d210014cb3b02e6d35c7a7ddb989a5ac5426881",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.95,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Map",
+          "canonical": "Map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "CBD",
+          "canonical": "CBD",
+          "variable_type": "label"
+        },
+        {
+          "original": "City",
+          "canonical": "City",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "site",
+          "canonical": "site",
+          "variable_type": "label"
+        },
+        {
+          "original": "near",
+          "canonical": "near",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "fast",
+          "canonical": "fast",
+          "variable_type": "label"
+        },
+        {
+          "original": "gas",
+          "canonical": "gas",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "LLNL",
+          "canonical": "LLNL",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "asset_id": "asset_31860237f0609be3e0bbd448",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_b881be60253a84a783cac0ca/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 361,
+      "width": null,
+      "height": null,
+      "sha256": "dbf34a5198362a5a871f50bd36eb3102e9c4fd64c934e4732abfa426d239b100",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "normalized_text_snapshot": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "text_completeness_score": 0.95,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Map",
+          "canonical": "Map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "CBD",
+          "canonical": "CBD",
+          "variable_type": "label"
+        },
+        {
+          "original": "City",
+          "canonical": "City",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "site",
+          "canonical": "site",
+          "variable_type": "label"
+        },
+        {
+          "original": "near",
+          "canonical": "near",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "fast",
+          "canonical": "fast",
+          "variable_type": "label"
+        },
+        {
+          "original": "gas",
+          "canonical": "gas",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "LLNL",
+          "canonical": "LLNL",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "asset_id": "asset_f9212370e3224b440b16a74a",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://msearth_open_ended/train[0:300]/274/answer",
+      "storage_uri": "inline://prob_b881be60253a84a783cac0ca/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 4,
+      "width": null,
+      "height": null,
+      "sha256": "5a2297e00c3f20f21e19647ea294ca759a130f1dbc5b79554d979c8408e01f4d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "LLNL",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "LLNL",
+          "canonical": "LLNL",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "asset_id": "asset_529ac32b337e31a13cd13126",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_b881be60253a84a783cac0ca/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 4,
+      "width": null,
+      "height": null,
+      "sha256": "5a2297e00c3f20f21e19647ea294ca759a130f1dbc5b79554d979c8408e01f4d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "LLNL",
+      "normalized_text_snapshot": "LLNL",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "LLNL",
+          "canonical": "LLNL",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "asset_id": "asset_ac8015dc3238f9309755718d",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/msearth_open_ended_000_300/run_1ecdd5243c8e7f21/datasets/msearth_open_ended/artifacts/images/prob_b881be60253a84a783cac0ca_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 1392085,
+      "width": 1029,
+      "height": 900,
+      "sha256": "0b3d048b30a0a4c03dacc6cd9bb104c37e18555a77251d621f38ebef81b33ef4",
+      "perceptual_hash": "fed9fcccc020b911",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 548.6091,
+      "readability_score": 0.7973,
+      "noise_score": 18.1136,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 4,
+        "y": 6,
+        "width": 1022,
+        "height": 893
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "asset_id": "asset_4a60be2367cacf7819f33211",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_7f113d8e80af9cd3af3a75aa",
+      "file_format": "txt",
+      "file_size_bytes": 361,
+      "width": null,
+      "height": null,
+      "sha256": "dbf34a5198362a5a871f50bd36eb3102e9c4fd64c934e4732abfa426d239b100",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "normalized_text_snapshot": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "text_completeness_score": 0.95,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Map",
+          "canonical": "Map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "CBD",
+          "canonical": "CBD",
+          "variable_type": "label"
+        },
+        {
+          "original": "City",
+          "canonical": "City",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "site",
+          "canonical": "site",
+          "variable_type": "label"
+        },
+        {
+          "original": "near",
+          "canonical": "near",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "fast",
+          "canonical": "fast",
+          "variable_type": "label"
+        },
+        {
+          "original": "gas",
+          "canonical": "gas",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "LLNL",
+          "canonical": "LLNL",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_b881be60253a84a783cac0ca",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "question_type": "open",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Which organization operates the crane sonic anemometer site?",
+          "segment_index": 6,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_b881be60253a84a783cac0ca_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "Which organization operates the crane sonic anemometer site?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "LLNL",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "circle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "CBD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "Map",
+          "canonical": "Map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "CBD",
+          "canonical": "CBD",
+          "variable_type": "label"
+        },
+        {
+          "original": "City",
+          "canonical": "City",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "site",
+          "canonical": "site",
+          "variable_type": "label"
+        },
+        {
+          "original": "near",
+          "canonical": "near",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "fast",
+          "canonical": "fast",
+          "variable_type": "label"
+        },
+        {
+          "original": "gas",
+          "canonical": "gas",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "LLNL",
+          "canonical": "LLNL",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "N",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Caption:"
+        },
+        {
+          "segment_index": 2,
+          "text": "Map of the CBD of Oklahoma City."
+        },
+        {
+          "segment_index": 3,
+          "text": "The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number."
+        },
+        {
+          "segment_index": 4,
+          "text": "The location of the LLNL-crane sonic anemometer site is also shown."
+        },
+        {
+          "segment_index": 5,
+          "text": "Question:"
+        },
+        {
+          "segment_index": 6,
+          "text": "Which organization operates the crane sonic anemometer site?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T22:19:46Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_b881be60253a84a783cac0ca_1",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.1433,
+        "dark_pixel_ratio": 0.9831,
+        "readability_score": 0.7973,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1029,
+            "height": 900
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 4,
+            "y": 6,
+            "width": 1022,
+            "height": 893
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 4,
+            "y": 6,
+            "width": 511,
+            "height": 446
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 515,
+            "y": 6,
+            "width": 511,
+            "height": 446
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 4,
+            "y": 452,
+            "width": 511,
+            "height": 447
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 515,
+            "y": 452,
+            "width": 511,
+            "height": 447
+          },
+          "salience": 1.0
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9189,
+      "created_at": "2026-04-04T22:19:46Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_b881be60253a84a783cac0ca",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-04T22:19:56Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_e0284a55ad20f31371761c72",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "target_slot",
+      "canonical_value": "Which organization operates the crane sonic anemometer site?",
+      "surface_forms": [
+        "Which organization operates the crane sonic anemometer site?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_31860237f0609be3e0bbd448"
+      ],
+      "evidence_refs": [
+        "asset_31860237f0609be3e0bbd448"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_b881be60253a84a783cac0ca_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "Which organization operates the crane sonic anemometer site?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "LLNL",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_3f2d46fb946e0f3945f15f3c",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "answer_claim",
+      "canonical_value": "LLNL",
+      "surface_forms": [
+        "LLNL"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_529ac32b337e31a13cd13126"
+      ],
+      "evidence_refs": [
+        "asset_529ac32b337e31a13cd13126"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "LLNL"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_c7c2452b1a4a4220659c687c",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1029,
+          "height": 900
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9189,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_ee73008960f0a947eb3b2893",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 4,
+          "y": 6,
+          "width": 1022,
+          "height": 893
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9189,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_8b68756ce67ed1fe525dc2bb",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 4,
+          "y": 6,
+          "width": 511,
+          "height": 446
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9189,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_125b2f6635cc509849d79462",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 515,
+          "y": 6,
+          "width": 511,
+          "height": 446
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9189,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_42dc112c715026b20fe17408",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 4,
+          "y": 452,
+          "width": 511,
+          "height": 447
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9189,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_2d110147988297009a3773c5",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 515,
+          "y": 452,
+          "width": 511,
+          "height": 447
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9189,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_dd837d0a0d67094900d8e8cb",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "text_fact",
+      "canonical_value": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "surface_forms": [
+        "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_4a60be2367cacf7819f33211"
+      ],
+      "evidence_refs": [
+        "asset_4a60be2367cacf7819f33211"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_7f113d8e80af9cd3af3a75aa",
+        "parent_problem_id": "prob_b881be60253a84a783cac0ca",
+        "variant_index": 1,
+        "title": "MSEarth Open Ended 开放题",
+        "rewritten_question_text": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "LLNL",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_e0aeb12021620c101e2ec81d",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_b881be60253a84a783cac0ca",
+        "problem_id": "prob_b881be60253a84a783cac0ca",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-04T22:19:56Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "node_id": "node_3de36ee61a2eb5d18427efd6",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_acceptable",
+          "answer_explicit_in_text",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T22:20:01Z",
+      "updated_at": "2026-04-04T22:20:01Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_b48e16e97ede0da980b97378",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_1ecdd5243c8e7f21",
+      "dataset_name": "MSEarth Open Ended",
+      "input_asset_ids": [
+        "asset_fc1d6580e69e09b67a42cd8b",
+        "asset_31860237f0609be3e0bbd448",
+        "asset_f9212370e3224b440b16a74a",
+        "asset_529ac32b337e31a13cd13126",
+        "asset_ac8015dc3238f9309755718d",
+        "asset_4a60be2367cacf7819f33211"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 17
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1029,
+            "height": 900,
+            "blur_score": 548.6091,
+            "contrast_score": 42.192,
+            "noise_score": 18.1136,
+            "readability_score": 0.7973,
+            "crop_integrity_score": 0.78,
+            "roi_bbox": {
+              "x": 4,
+              "y": 6,
+              "width": 1022,
+              "height": 893
+            },
+            "perceptual_hash": "fed9fcccc020b911"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_b48e16e97ede0da980b97378",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_b881be60253a84a783cac0ca",
+        "question_type": "open",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_b881be60253a84a783cac0ca",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_explicit_in_text",
+          "jointly_understandable",
+          "question_clear"
+        ],
+        "rationale": "The caption itself explicitly identifies the site as the 'LLNL-crane sonic anemometer site,' so the organization operating it is clear even without relying on the map. The image is consistent and supportive but not necessary to understand the question or answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_acceptable",
+        "answer_explicit_in_text",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The question and answer are complete and understandable, and the caption explicitly identifies the site as the LLNL-crane sonic anemometer site, making the target answer materially available even without relying on the image. Rewrite, alignment, and solvability evidence do not show a serious failure.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-04T22:20:01Z",
+      "finished_at": "2026-04-04T22:20:01Z",
+      "candidate_id": "cand_b881be60253a84a783cac0ca",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_b48e16e97ede0da980b97378",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "image_entity_refs": [
+        "visual_prob_b881be60253a84a783cac0ca_1::roi",
+        "visual_prob_b881be60253a84a783cac0ca_1::roi_top_left",
+        "visual_prob_b881be60253a84a783cac0ca_1::roi_top_right",
+        "visual_prob_b881be60253a84a783cac0ca_1::roi_bottom_left",
+        "visual_prob_b881be60253a84a783cac0ca_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_b881be60253a84a783cac0ca_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "circle",
+          "image_ref": "visual_prob_b881be60253a84a783cac0ca_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7797
+        },
+        {
+          "text_ref": "CBD",
+          "image_ref": "visual_prob_b881be60253a84a783cac0ca_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7797
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-04T22:19:46Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_1ffcf887fb915d6405aae7b7",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "after_value": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "audit_id": "audit_f6e662caff2af19ac05fd989",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "LLNL",
+      "after_value": "LLNL",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "audit_id": "audit_7af9dec2d681fbfd5657f936",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "audit_id": "audit_3de36ee61a2eb5d18427efd6",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T22:20:01Z"
+    },
+    {
+      "audit_id": "audit_27d74d254c1c97c2ec4768ec",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "Map",
+          "canonical": "Map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "CBD",
+          "canonical": "CBD",
+          "variable_type": "label"
+        },
+        {
+          "original": "City",
+          "canonical": "City",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "site",
+          "canonical": "site",
+          "variable_type": "label"
+        },
+        {
+          "original": "near",
+          "canonical": "near",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "red",
+          "canonical": "red",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "fast",
+          "canonical": "fast",
+          "variable_type": "label"
+        },
+        {
+          "original": "gas",
+          "canonical": "gas",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "LLNL",
+          "canonical": "LLNL",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T22:20:01Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_b48e16e97ede0da980b97378",
+      "problem_id": "prob_b881be60253a84a783cac0ca",
+      "source_problem_id": "274",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_7f113d8e80af9cd3af3a75aa",
+          "parent_problem_id": "prob_b881be60253a84a783cac0ca",
+          "variant_index": 1,
+          "title": "MSEarth Open Ended 开放题",
+          "rewritten_question_text": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "LLNL",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-04T22:20:01Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_7f113d8e80af9cd3af3a75aa",
+      "parent_problem_id": "prob_b881be60253a84a783cac0ca",
+      "variant_index": 1,
+      "title": "MSEarth Open Ended 开放题",
+      "rewritten_question_text": "Caption:\nMap of the CBD of Oklahoma City. The release site near the botanical garden is marked in red and the location of fast-response tracer gas analyzers is indicated by yellow circles and the corresponding site number. The location of the LLNL-crane sonic anemometer site is also shown.\nQuestion:\nWhich organization operates the crane sonic anemometer site?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "LLNL",
+      "split_role": "single"
+    }
+  ]
+}

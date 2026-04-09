@@ -1,0 +1,2277 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_1dd62d592eb4364fe4aa1f47",
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "problem_id": "prob_989834d1df5a33511cc254f2",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2633",
+    "raw_question_text": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?\n\n<image1>",
+    "raw_answer_text": "$\\text{A}$",
+    "choice_map": {
+      "A": "$\\text{A}$",
+      "B": "$\\text{B}$",
+      "C": "$\\text{C}$",
+      "D": "$\\text{D}$",
+      "E": "$\\text{E}$"
+    },
+    "image_paths": [
+      "images/2633.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "选项字段仅包含 A-E 标签，实际图形选项内容依赖题图。",
+      "答案字段为选项字母，无法从记录中提取更具体的选项文本。",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-08T06:38:52Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_989834d1df5a33511cc254f2",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_989834d1df5a33511cc254f2_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1580,
+        "height": 440,
+        "file_size": 62919
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 329,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 10
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_1dd62d592eb4364fe4aa1f47",
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2633",
+    "created_at": "2026-04-08T06:38:52Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_989834d1df5a33511cc254f2",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.83,
+    "score_evidence": {
+      "image_dependency": [
+        "题干明确说 'One of these graphs shows...'，需要在图形选项中做判断。",
+        "输入字段 `requires_image=true` 且 `text_dominant=false`，说明关键信息主要来自图像而非纯文本。",
+        "asset registry 显示存在 1 张主图且 `registry_passed=true`，与图像依赖任务一致。"
+      ],
+      "multi_step": [
+        "需要结合两个速率信息：流入 20 mL/min、流出 18 mL/min，先得到净增加速率为 2 mL/min。",
+        "还需要区分 filling time 与 overflow time 两个阶段，推断体积图像应在装满后转为恒定而非继续上升。",
+        "最终还要把上述文字推断映射到若干图形选项之一，属于条件组合后的图文匹配。"
+      ],
+      "verifiability": [
+        "答案类型是明确的单项选择题，`answer_type`/`answer_manifest.answer_type` 都表明答案可规范化为选项。",
+        "题目过程有可检查的物理/函数特征：先线性上升，达到容量后保持恒定，因此可被规则或标注复核。",
+        "但最终判定依赖图像选项内容，纯文本下无法完全验证具体是 A-E 中哪一个，所以不打满分。"
+      ]
+    },
+    "risk_flags": [
+      "image_required",
+      "option_graph_mapping_needed"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_1dd62d592eb4364fe4aa1f47",
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2633",
+    "created_at": "2026-04-08T06:38:52Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_989834d1df5a33511cc254f2",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "资产完整：题干、答案和主图均存在，且 asset registry 无问题并通过校验。",
+      "综合信号较强：image_dependency_score=0.97、verifiability_score=0.83，说明该题核心语义可由现有资产支撑并可复核。",
+      "虽然题目依赖图像中的图形选项映射，但当前图像资产已存在，因此这属于可直接处理的样本而非缺失资产样本。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_1dd62d592eb4364fe4aa1f47",
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2633",
+    "created_at": "2026-04-08T06:38:52Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_1dd62d592eb4364fe4aa1f47",
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "problem_id": "prob_989834d1df5a33511cc254f2",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?",
+    "normalized_answer_text": "A",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the image placeholder marker from the question text as formatting noise.",
+      "Normalized LaTeX-wrapped answer and option labels to plain letter choices.",
+      "Question explicitly requires selecting among graphs, so image dependence is retained."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-08T06:38:52Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2633",
+    "subject": "数学",
+    "raw_question_text": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?\n\n<image1>",
+    "raw_answer_text": "$\\text{A}$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.83,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 2332,
+      "image_paths": [
+        "images/2633.jpg"
+      ],
+      "extraction_notes": [
+        "选项字段仅包含 A-E 标签，实际图形选项内容依赖题图。",
+        "答案字段为选项字母，无法从记录中提取更具体的选项文本。",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-08T06:41:07Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "资产完整：题干、答案和主图均存在，且 asset registry 无问题并通过校验。",
+      "综合信号较强：image_dependency_score=0.97、verifiability_score=0.83，说明该题核心语义可由现有资产支撑并可复核。",
+      "虽然题目依赖图像中的图形选项映射，但当前图像资产已存在，因此这属于可直接处理的样本而非缺失资产样本。"
+    ],
+    "collection_risk_flags": [
+      "image_required",
+      "option_graph_mapping_needed"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_d9d5adec129057b070c7dcd0",
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2633",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_989834d1df5a33511cc254f2/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_989834d1df5a33511cc254f2/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1580,
+        "height": 440
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.83
+    },
+    "created_at": "2026-04-08T06:41:07Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_15a7008eebc89fa145914fd1",
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2633",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.83
+    },
+    "created_at": "2026-04-08T06:41:07Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "资产完整：题干、答案和主图均存在，且 asset registry 无问题并通过校验。",
+      "综合信号较强：image_dependency_score=0.97、verifiability_score=0.83，说明该题核心语义可由现有资产支撑并可复核。",
+      "虽然题目依赖图像中的图形选项映射，但当前图像资产已存在，因此这属于可直接处理的样本而非缺失资产样本。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_1dd62d592eb4364fe4aa1f47",
+      "candidate_id": "cand_989834d1df5a33511cc254f2",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-08T06:41:07Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_1dd62d592eb4364fe4aa1f47",
+    "problem_id": "prob_989834d1df5a33511cc254f2",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2633",
+    "normalized_question_text": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?",
+    "normalized_answer_text": "A",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "rewrite_answer_mismatch"
+    ],
+    "created_at": "2026-04-08T06:41:07Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_1dd62d592eb4364fe4aa1f47",
+    "problem_id": "prob_989834d1df5a33511cc254f2",
+    "normalized_question_text": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?",
+    "normalized_answer_text": "A",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "so",
+        "canonical": "so",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "it",
+        "canonical": "it",
+        "variable_type": "label"
+      },
+      {
+        "original": "will",
+        "canonical": "will",
+        "variable_type": "label"
+      },
+      {
+        "original": "be",
+        "canonical": "be",
+        "variable_type": "label"
+      },
+      {
+        "original": "self",
+        "canonical": "self",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "rate",
+        "canonical": "rate",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "per",
+        "canonical": "per",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "One",
+        "canonical": "One",
+        "variable_type": "label"
+      },
+      {
+        "original": "time",
+        "canonical": "time",
+        "variable_type": "label"
+      },
+      {
+        "original": "into",
+        "canonical": "into",
+        "variable_type": "label"
+      },
+      {
+        "original": "one",
+        "canonical": "one",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "A birdbath is designed to overflow so that it will be self-cleaning."
+      },
+      {
+        "segment_index": 2,
+        "text": "Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute."
+      },
+      {
+        "segment_index": 3,
+        "text": "One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time."
+      },
+      {
+        "segment_index": 4,
+        "text": "Which one is it?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 40,
+          "y": 40,
+          "width": 1504,
+          "height": 360
+        },
+        "readability_score": 0.8997,
+        "contrast_score": 45.5299
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-08T06:41:07Z",
+    "normalization_notes": [
+      "Removed the image placeholder marker from the question text as formatting noise.",
+      "Normalized LaTeX-wrapped answer and option labels to plain letter choices.",
+      "Question explicitly requires selecting among graphs, so image dependence is retained."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_989834d1df5a33511cc254f2",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2633",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260407T041348Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?\n\n<image1>",
+    "normalized_question_text": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?",
+    "raw_answer_text": "$\\text{A}$",
+    "normalized_answer_text": "A",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.975,
+    "multi_step_score": 0.3557,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "rewrite_answer_mismatch"
+    ],
+    "clean_decision_rationale": "The original sample is understandable and solvable with clear image support, but the open rewrite asks for a descriptive explanation while the expected answer remains the option label \"A\", creating a non-fatal answer-format/alignment mismatch that should be checked before downstream annotation.",
+    "review_priority": "normal",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_989834d1df5a33511cc254f2",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-08T06:38:52Z",
+    "updated_at": "2026-04-08T06:41:07Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.83,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "资产完整：题干、答案和主图均存在，且 asset registry 无问题并通过校验。",
+      "综合信号较强：image_dependency_score=0.97、verifiability_score=0.83，说明该题核心语义可由现有资产支撑并可复核。",
+      "虽然题目依赖图像中的图形选项映射，但当前图像资产已存在，因此这属于可直接处理的样本而非缺失资产样本。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_34a74cdd80747a9d358c4f80",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/2633/question",
+      "storage_uri": "inline://prob_989834d1df5a33511cc254f2/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 329,
+      "width": null,
+      "height": null,
+      "sha256": "0303ee00fdf4b9e759d4b9db4132be078cfd051a3cef496718502ea3e6183c58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?\n\n<image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "self",
+          "canonical": "self",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "rate",
+          "canonical": "rate",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "One",
+          "canonical": "One",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "into",
+          "canonical": "into",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "asset_id": "asset_1e1b3d47acf4748a67c44bda",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_989834d1df5a33511cc254f2/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 319,
+      "width": null,
+      "height": null,
+      "sha256": "809d6302a3bb18e4f8c6173da23dafe0cf3fab8ad747704a964d7553852e8199",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?\n\n<image1>",
+      "normalized_text_snapshot": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "self",
+          "canonical": "self",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "rate",
+          "canonical": "rate",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "One",
+          "canonical": "One",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "into",
+          "canonical": "into",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "asset_id": "asset_85c2591577d5c9c864ccf8c5",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/2633/answer",
+      "storage_uri": "inline://prob_989834d1df5a33511cc254f2/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 10,
+      "width": null,
+      "height": null,
+      "sha256": "9707bea0fc06d9460cacd1e7ea4597237a6d469c470bcddde3aa1cfbcc270183",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\text{A}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "asset_id": "asset_2813d45eec8706bdfa609025",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_989834d1df5a33511cc254f2/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\text{A}$",
+      "normalized_text_snapshot": "A",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "asset_id": "asset_8ac6b58abea39d3defd9b6fd",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_989834d1df5a33511cc254f2_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 62919,
+      "width": 1580,
+      "height": 440,
+      "sha256": "0420d3b1a95a06d8fc87754a53ac46b07ec1ffe410e885226c1076660d87d63f",
+      "perceptual_hash": "fff105044000ffff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3948.2634,
+      "readability_score": 0.8997,
+      "noise_score": 28.9793,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 40,
+        "y": 40,
+        "width": 1504,
+        "height": 360
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "asset_id": "asset_8a9b51a88827ed50f442f267",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/crops/prob_989834d1df5a33511cc254f2_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 60941,
+      "width": 1504,
+      "height": 360,
+      "sha256": "086202348047034ceda7582948a11d0b5e3a6a58c4138ac59cc09fe0796c742f",
+      "perceptual_hash": "fbf3070c6e00ffff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3948.2634,
+      "readability_score": 0.8997,
+      "noise_score": 28.9793,
+      "cropped_from_asset_id": "asset_8ac6b58abea39d3defd9b6fd",
+      "roi_bbox": {
+        "x": 40,
+        "y": 40,
+        "width": 1504,
+        "height": 360
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "asset_id": "asset_36fe03634717b725aac11537",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_8ebf19fad3caafdf695858a1",
+      "file_format": "txt",
+      "file_size_bytes": 121,
+      "width": null,
+      "height": null,
+      "sha256": "1d47d9bb88fe1d230a8bbb6bcb3231e8291e075a0d489e898263af07486b3999",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?\n\n<image1>",
+      "normalized_text_snapshot": "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "self",
+          "canonical": "self",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "rate",
+          "canonical": "rate",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "One",
+          "canonical": "One",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "into",
+          "canonical": "into",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_989834d1df5a33511cc254f2",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "20",
+            "18"
+          ],
+          "unit_mentions": [
+            "W",
+            "h",
+            "m",
+            "min",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which one is it?",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_989834d1df5a33511cc254f2_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "A",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "graph",
+          "entity_category": "graph",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "self",
+          "canonical": "self",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "rate",
+          "canonical": "rate",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "One",
+          "canonical": "One",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "into",
+          "canonical": "into",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "min",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "A birdbath is designed to overflow so that it will be self-cleaning."
+        },
+        {
+          "segment_index": 2,
+          "text": "Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute."
+        },
+        {
+          "segment_index": 3,
+          "text": "One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time."
+        },
+        {
+          "segment_index": 4,
+          "text": "Which one is it?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-08T06:40:35Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_989834d1df5a33511cc254f2_1",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "chart_like",
+        "aspect_ratio": 3.5909,
+        "dark_pixel_ratio": 0.0343,
+        "readability_score": 0.8997,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1580,
+            "height": 440
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 40,
+            "y": 40,
+            "width": 1504,
+            "height": 360
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 40,
+            "y": 40,
+            "width": 752,
+            "height": 180
+          },
+          "salience": 0.3986
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 792,
+            "y": 40,
+            "width": 752,
+            "height": 180
+          },
+          "salience": 0.3901
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 40,
+            "y": 220,
+            "width": 752,
+            "height": 180
+          },
+          "salience": 0.3934
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 792,
+            "y": 220,
+            "width": 752,
+            "height": 180
+          },
+          "salience": 0.394
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9599,
+      "created_at": "2026-04-08T06:40:35Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_989834d1df5a33511cc254f2",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-08T06:40:56Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_5887a95aa41ca7084c60ed42",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "text_fact",
+      "canonical_value": "Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute.",
+      "surface_forms": [
+        "Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_1e1b3d47acf4748a67c44bda"
+      ],
+      "evidence_refs": [
+        "asset_1e1b3d47acf4748a67c44bda"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "20",
+          "18"
+        ],
+        "unit_mentions": [
+          "W",
+          "h",
+          "m",
+          "min",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "W,h,m,min,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_29ef38b8ce195db268ab3be7",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "target_slot",
+      "canonical_value": "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?",
+      "surface_forms": [
+        "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_1e1b3d47acf4748a67c44bda"
+      ],
+      "evidence_refs": [
+        "asset_1e1b3d47acf4748a67c44bda"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_989834d1df5a33511cc254f2_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "A",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_efb5aa8b31e7017b43bb0f29",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "answer_claim",
+      "canonical_value": "A",
+      "surface_forms": [
+        "A"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_2813d45eec8706bdfa609025"
+      ],
+      "evidence_refs": [
+        "asset_2813d45eec8706bdfa609025"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "A"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_c0939de74c9d304056df28a5",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1580,
+          "height": 440
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9599,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_defa18980aee70e5343f84a2",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 40,
+          "y": 40,
+          "width": 1504,
+          "height": 360
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9599,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_5da82b0af4dce52125cebb2e",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 40,
+          "y": 40,
+          "width": 752,
+          "height": 180
+        },
+        "salience": 0.3986
+      },
+      "unit": null,
+      "confidence": 0.9599,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_bd357b9dc06bd7ddcd1cccce",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 792,
+          "y": 40,
+          "width": 752,
+          "height": 180
+        },
+        "salience": 0.3901
+      },
+      "unit": null,
+      "confidence": 0.9599,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_5ead42d6330df1b3ef702ac0",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 40,
+          "y": 220,
+          "width": 752,
+          "height": 180
+        },
+        "salience": 0.3934
+      },
+      "unit": null,
+      "confidence": 0.9599,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_588237d7f0db3821494a7c32",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 792,
+          "y": 220,
+          "width": 752,
+          "height": 180
+        },
+        "salience": 0.394
+      },
+      "unit": null,
+      "confidence": 0.9599,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_9a5521f931c7d184598b9fe4",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "text_fact",
+      "canonical_value": "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?",
+      "surface_forms": [
+        "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_36fe03634717b725aac11537"
+      ],
+      "evidence_refs": [
+        "asset_36fe03634717b725aac11537"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_8ebf19fad3caafdf695858a1",
+        "parent_problem_id": "prob_989834d1df5a33511cc254f2",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "A",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_865de33189fa00bb3cf1d169",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_989834d1df5a33511cc254f2",
+        "problem_id": "prob_989834d1df5a33511cc254f2",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-08T06:40:56Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "node_id": "node_47295c88f692d227bd29860a",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "rewrite_answer_mismatch"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T06:41:07Z",
+      "updated_at": "2026-04-08T06:41:07Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_1dd62d592eb4364fe4aa1f47",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_72ab9b4332499938",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_34a74cdd80747a9d358c4f80",
+        "asset_1e1b3d47acf4748a67c44bda",
+        "asset_85c2591577d5c9c864ccf8c5",
+        "asset_2813d45eec8706bdfa609025",
+        "asset_8ac6b58abea39d3defd9b6fd",
+        "asset_8a9b51a88827ed50f442f267",
+        "asset_36fe03634717b725aac11537"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 20
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1580,
+            "height": 440,
+            "blur_score": 3948.2634,
+            "contrast_score": 45.5299,
+            "noise_score": 28.9793,
+            "readability_score": 0.8997,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 40,
+              "y": 40,
+              "width": 1504,
+              "height": 360
+            },
+            "perceptual_hash": "fff105044000ffff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_1dd62d592eb4364fe4aa1f47",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_989834d1df5a33511cc254f2",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_989834d1df5a33511cc254f2",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_text_clear"
+        ],
+        "rationale": "The question clearly asks the solver to choose which displayed graph matches a birdbath whose water volume rises during filling and then stays constant during overflow. The answer format is a multiple-choice option, and the image clearly shows the candidate graphs labeled A-E, so the text-image pair is semantically understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "rewrite_answer_mismatch"
+      ],
+      "decision_rationale": "The original sample is understandable and solvable with clear image support, but the open rewrite asks for a descriptive explanation while the expected answer remains the option label \"A\", creating a non-fatal answer-format/alignment mismatch that should be checked before downstream annotation.",
+      "review_ticket_id": "review_prob_989834d1df5a33511cc254f2",
+      "operator_type": "system",
+      "started_at": "2026-04-08T06:41:07Z",
+      "finished_at": "2026-04-08T06:41:07Z",
+      "candidate_id": "cand_989834d1df5a33511cc254f2",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_1dd62d592eb4364fe4aa1f47",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "image_entity_refs": [
+        "visual_prob_989834d1df5a33511cc254f2_1::roi",
+        "visual_prob_989834d1df5a33511cc254f2_1::roi_top_left",
+        "visual_prob_989834d1df5a33511cc254f2_1::roi_top_right",
+        "visual_prob_989834d1df5a33511cc254f2_1::roi_bottom_left",
+        "visual_prob_989834d1df5a33511cc254f2_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_989834d1df5a33511cc254f2_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "graph",
+          "image_ref": "visual_prob_989834d1df5a33511cc254f2_1::roi",
+          "relation": "grounds_graph",
+          "confidence": 0.79
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_989834d1df5a33511cc254f2_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.79
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-08T06:40:35Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_a4b0a95206d9b8afebbe0a46",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?\n\n<image1>",
+      "after_value": "A birdbath is designed to overflow so that it will be self-cleaning. Water flows in at the rate of 20 milliliters per minute and drains at the rate of 18 milliliters per minute. One of these graphs shows the volume of water in the birdbath during the filling time and continuing into the overflow time. Which one is it?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "audit_id": "audit_5af1cf75bdb507f152e448b6",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$\\text{A}$",
+      "after_value": "A",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "audit_id": "audit_22f2904b094b6ef744143b3c",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "audit_id": "audit_47295c88f692d227bd29860a",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T06:41:07Z"
+    },
+    {
+      "audit_id": "audit_70142155d0f4ed271c21adce",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "it",
+          "canonical": "it",
+          "variable_type": "label"
+        },
+        {
+          "original": "will",
+          "canonical": "will",
+          "variable_type": "label"
+        },
+        {
+          "original": "be",
+          "canonical": "be",
+          "variable_type": "label"
+        },
+        {
+          "original": "self",
+          "canonical": "self",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "rate",
+          "canonical": "rate",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "per",
+          "canonical": "per",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "One",
+          "canonical": "One",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "into",
+          "canonical": "into",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T06:41:07Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_1dd62d592eb4364fe4aa1f47",
+      "problem_id": "prob_989834d1df5a33511cc254f2",
+      "source_problem_id": "2633",
+      "strategy": "blank_open",
+      "rationale": "The original task selects a graph by letter only, but the underlying relationship is recoverable from the stem: the water volume increases at a net rate of 2 mL/min until the birdbath is full, then remains constant during overflow.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_8ebf19fad3caafdf695858a1",
+          "parent_problem_id": "prob_989834d1df5a33511cc254f2",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "A",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-08T06:41:07Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_8ebf19fad3caafdf695858a1",
+      "parent_problem_id": "prob_989834d1df5a33511cc254f2",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "How does the volume of water in the birdbath change over time from when filling begins until after it starts overflowing?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "A",
+      "split_role": "single"
+    }
+  ]
+}
