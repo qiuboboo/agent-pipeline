@@ -4,9 +4,9 @@
 - 候选来源：`docs/review/mm_math_A_bucket_candidates_2026-04-09.json`
 - 放行模板：`docs/review/review_release_template.md`
 - 当前执行策略：仅执行 **A档**，即 exact `clean_decision_reason_codes == ["alignment_requires_review"]`。
-- 执行结果（2026-04-09）：本页 `A档` 已执行 manual release，`人工接受状态=1`。相邻 `相邻_text_sufficient_桶` 仅保留观察，本次未执行。
-- 执行前汇总：`pass=159 / review=440 / reject=1`
-- 执行后汇总：`pass=276 / review=323 / reject=1`
+- 执行结果（2026-04-09）：本页 `A档` 已执行 manual release，`人工接受状态=1`。相邻 `adjacent text_sufficient bucket` 仅保留观察，本次未执行。
+- 执行前汇总：`pass=241 / review=656 / reject=3`
+- 执行后汇总：`pass=423 / review=474 / reject=3`
 - 放行 basis：alignment-only_review_gate_under_post-ready_waiver_policy_not_build-stage_auto-pass
 
 ## 分层规则
@@ -15,13 +15,13 @@
 仅纳入以下 exact reason 组合：
 - `alignment_requires_review`
 
-**A档数量：`117`**
+**A档数量：`182`**
 
-### 相邻_text_sufficient_桶：保留观察，本次不执行
+### adjacent text_sufficient bucket：保留观察，本次不执行
 仅纳入以下 exact reason 组合：
 - `alignment_requires_review + text_sufficient`
 
-**相邻_text_sufficient_桶 数量：`7`**
+**adjacent text_sufficient bucket 数量：`9`**
 
 ### 模板化口径（可复用）
 - 先构建 canonical ready，不在 `output -> ready` 里改状态。
@@ -152,8 +152,73 @@
 | 115 | `mm_math_300_600__spid_55192327.png__prob_873b0961d3b3c9e31c88f40c.json` | `train[300:600]` | `55192327.png` | `prob_873b0961d3b3c9e31c88f40c` | `cand_873b0961d3b3c9e31c88f40c` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
 | 116 | `mm_math_300_600__spid_55393326.png__prob_880b6b5fb0a10a979d1d96b6.json` | `train[300:600]` | `55393326.png` | `prob_880b6b5fb0a10a979d1d96b6` | `cand_880b6b5fb0a10a979d1d96b6` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
 | 117 | `mm_math_300_600__spid_55604325.png__prob_03764cffe20a0d3c609ec934.json` | `train[300:600]` | `55604325.png` | `prob_03764cffe20a0d3c609ec934` | `cand_03764cffe20a0d3c609ec934` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 118 | `mm_math_600_900__spid_50584152.png__prob_476642e90d08d3771c3aa186.json` | `train[600:900]` | `50584152.png` | `prob_476642e90d08d3771c3aa186` | `cand_476642e90d08d3771c3aa186` | `small_image, visual_evidence_weak` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 119 | `mm_math_600_900__spid_51352002.png__prob_57bea5f0b2e8e60e305c6f27.json` | `train[600:900]` | `51352002.png` | `prob_57bea5f0b2e8e60e305c6f27` | `cand_57bea5f0b2e8e60e305c6f27` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 120 | `mm_math_600_900__spid_51403188.png__prob_eb081d2f9bd56c355fda05c0.json` | `train[600:900]` | `51403188.png` | `prob_eb081d2f9bd56c355fda05c0` | `cand_eb081d2f9bd56c355fda05c0` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 121 | `mm_math_600_900__spid_51434958.png__prob_3213d0c7d53ea4a6bcdf968f.json` | `train[600:900]` | `51434958.png` | `prob_3213d0c7d53ea4a6bcdf968f` | `cand_3213d0c7d53ea4a6bcdf968f` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 122 | `mm_math_600_900__spid_51434998.png__prob_e4703a7d75549d8151edbfa7.json` | `train[600:900]` | `51434998.png` | `prob_e4703a7d75549d8151edbfa7` | `cand_e4703a7d75549d8151edbfa7` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 123 | `mm_math_600_900__spid_51457863.png__prob_c0a9fca8e6f0eac6cf5cd268.json` | `train[600:900]` | `51457863.png` | `prob_c0a9fca8e6f0eac6cf5cd268` | `cand_c0a9fca8e6f0eac6cf5cd268` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 124 | `mm_math_600_900__spid_51554733.png__prob_4f27defb4f07f60a84f37855.json` | `train[600:900]` | `51554733.png` | `prob_4f27defb4f07f60a84f37855` | `cand_4f27defb4f07f60a84f37855` | `small_image` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 125 | `mm_math_600_900__spid_51654777.png__prob_c0bbb932017cb6e4687b9a4d.json` | `train[600:900]` | `51654777.png` | `prob_c0bbb932017cb6e4687b9a4d` | `cand_c0bbb932017cb6e4687b9a4d` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 126 | `mm_math_600_900__spid_51806942.png__prob_219337ff2131d42a809bbd85.json` | `train[600:900]` | `51806942.png` | `prob_219337ff2131d42a809bbd85` | `cand_219337ff2131d42a809bbd85` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 127 | `mm_math_600_900__spid_51807170.png__prob_77d69127d949dd3a5f06da99.json` | `train[600:900]` | `51807170.png` | `prob_77d69127d949dd3a5f06da99` | `cand_77d69127d949dd3a5f06da99` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 128 | `mm_math_600_900__spid_51910248.png__prob_2ebe98acd232b6c55e2fc163.json` | `train[600:900]` | `51910248.png` | `prob_2ebe98acd232b6c55e2fc163` | `cand_2ebe98acd232b6c55e2fc163` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 129 | `mm_math_600_900__spid_52354640.png__prob_58b485137a6007eca5f59c3a.json` | `train[600:900]` | `52354640.png` | `prob_58b485137a6007eca5f59c3a` | `cand_58b485137a6007eca5f59c3a` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 130 | `mm_math_600_900__spid_52354873.png__prob_885a6687146b380e5f189b73.json` | `train[600:900]` | `52354873.png` | `prob_885a6687146b380e5f189b73` | `cand_885a6687146b380e5f189b73` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 131 | `mm_math_600_900__spid_52381887.png__prob_89e3d3cb74f7a1af156360e5.json` | `train[600:900]` | `52381887.png` | `prob_89e3d3cb74f7a1af156360e5` | `cand_89e3d3cb74f7a1af156360e5` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 132 | `mm_math_600_900__spid_52386504.png__prob_02148759540d351912231b5d.json` | `train[600:900]` | `52386504.png` | `prob_02148759540d351912231b5d` | `cand_02148759540d351912231b5d` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 133 | `mm_math_600_900__spid_52386627.png__prob_a0d38dfa1fd50c811ded2475.json` | `train[600:900]` | `52386627.png` | `prob_a0d38dfa1fd50c811ded2475` | `cand_a0d38dfa1fd50c811ded2475` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 134 | `mm_math_600_900__spid_52386771.png__prob_e1f32386b25f8b71c0025379.json` | `train[600:900]` | `52386771.png` | `prob_e1f32386b25f8b71c0025379` | `cand_e1f32386b25f8b71c0025379` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 135 | `mm_math_600_900__spid_52387151.png__prob_9be0c6c5ecea64d9dcc5aa4f.json` | `train[600:900]` | `52387151.png` | `prob_9be0c6c5ecea64d9dcc5aa4f` | `cand_9be0c6c5ecea64d9dcc5aa4f` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 136 | `mm_math_600_900__spid_52387190.png__prob_0f7ce7de23853523de0e0dff.json` | `train[600:900]` | `52387190.png` | `prob_0f7ce7de23853523de0e0dff` | `cand_0f7ce7de23853523de0e0dff` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 137 | `mm_math_600_900__spid_52395201.png__prob_babaf0349048ce395849002a.json` | `train[600:900]` | `52395201.png` | `prob_babaf0349048ce395849002a` | `cand_babaf0349048ce395849002a` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 138 | `mm_math_600_900__spid_52395347.png__prob_ac1caec0060a580fcb5036a0.json` | `train[600:900]` | `52395347.png` | `prob_ac1caec0060a580fcb5036a0` | `cand_ac1caec0060a580fcb5036a0` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 139 | `mm_math_600_900__spid_52395428.png__prob_d6fef2bf5aac32c7f596dc81.json` | `train[600:900]` | `52395428.png` | `prob_d6fef2bf5aac32c7f596dc81` | `cand_d6fef2bf5aac32c7f596dc81` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 140 | `mm_math_600_900__spid_52416277.png__prob_9aa398aeca88ad4fc7f0f643.json` | `train[600:900]` | `52416277.png` | `prob_9aa398aeca88ad4fc7f0f643` | `cand_9aa398aeca88ad4fc7f0f643` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 141 | `mm_math_600_900__spid_52423423.png__prob_0709db8471bda69f39334c56.json` | `train[600:900]` | `52423423.png` | `prob_0709db8471bda69f39334c56` | `cand_0709db8471bda69f39334c56` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 142 | `mm_math_600_900__spid_52513495.png__prob_2734927a9786f6e302e763eb.json` | `train[600:900]` | `52513495.png` | `prob_2734927a9786f6e302e763eb` | `cand_2734927a9786f6e302e763eb` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 143 | `mm_math_600_900__spid_52602477.png__prob_3742cf81367e70b957d04a6e.json` | `train[600:900]` | `52602477.png` | `prob_3742cf81367e70b957d04a6e` | `cand_3742cf81367e70b957d04a6e` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 144 | `mm_math_600_900__spid_52634468.png__prob_f311edc98c3ebaa8adeebdf0.json` | `train[600:900]` | `52634468.png` | `prob_f311edc98c3ebaa8adeebdf0` | `cand_f311edc98c3ebaa8adeebdf0` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 145 | `mm_math_600_900__spid_52634676.png__prob_18f0c228c48907c1ddd5b60e.json` | `train[600:900]` | `52634676.png` | `prob_18f0c228c48907c1ddd5b60e` | `cand_18f0c228c48907c1ddd5b60e` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 146 | `mm_math_600_900__spid_52836352.png__prob_5742fdbc2f612192c42b69f8.json` | `train[600:900]` | `52836352.png` | `prob_5742fdbc2f612192c42b69f8` | `cand_5742fdbc2f612192c42b69f8` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 147 | `mm_math_600_900__spid_52873807.png__prob_416e8905960bfce9377281be.json` | `train[600:900]` | `52873807.png` | `prob_416e8905960bfce9377281be` | `cand_416e8905960bfce9377281be` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 148 | `mm_math_600_900__spid_52873810.png__prob_df7f002c731a78d0840b8b8f.json` | `train[600:900]` | `52873810.png` | `prob_df7f002c731a78d0840b8b8f` | `cand_df7f002c731a78d0840b8b8f` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 149 | `mm_math_600_900__spid_52905589.png__prob_0c58938acae13221a458c0c7.json` | `train[600:900]` | `52905589.png` | `prob_0c58938acae13221a458c0c7` | `cand_0c58938acae13221a458c0c7` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 150 | `mm_math_600_900__spid_52905795.png__prob_df7c3803240ea6706d4e30f8.json` | `train[600:900]` | `52905795.png` | `prob_df7c3803240ea6706d4e30f8` | `cand_df7c3803240ea6706d4e30f8` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 151 | `mm_math_600_900__spid_52905802.png__prob_3442dfb10c57f480416d789a.json` | `train[600:900]` | `52905802.png` | `prob_3442dfb10c57f480416d789a` | `cand_3442dfb10c57f480416d789a` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 152 | `mm_math_600_900__spid_52905905.png__prob_dd86e217fe96c2db272ce473.json` | `train[600:900]` | `52905905.png` | `prob_dd86e217fe96c2db272ce473` | `cand_dd86e217fe96c2db272ce473` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 153 | `mm_math_600_900__spid_52907826.png__prob_30a4716a942a2c6a3342be5c.json` | `train[600:900]` | `52907826.png` | `prob_30a4716a942a2c6a3342be5c` | `cand_30a4716a942a2c6a3342be5c` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 154 | `mm_math_600_900__spid_52950518.png__prob_b6fad896546973edc11efd8b.json` | `train[600:900]` | `52950518.png` | `prob_b6fad896546973edc11efd8b` | `cand_b6fad896546973edc11efd8b` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 155 | `mm_math_600_900__spid_52950677.png__prob_43d097b04558061f90874ae1.json` | `train[600:900]` | `52950677.png` | `prob_43d097b04558061f90874ae1` | `cand_43d097b04558061f90874ae1` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 156 | `mm_math_600_900__spid_52978392.png__prob_26de31902d73fd37fd08a523.json` | `train[600:900]` | `52978392.png` | `prob_26de31902d73fd37fd08a523` | `cand_26de31902d73fd37fd08a523` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 157 | `mm_math_600_900__spid_52978712.png__prob_ef5798732fcc0b7e553c79a0.json` | `train[600:900]` | `52978712.png` | `prob_ef5798732fcc0b7e553c79a0` | `cand_ef5798732fcc0b7e553c79a0` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 158 | `mm_math_600_900__spid_52991478.png__prob_a9f6bc940257f14c319954b1.json` | `train[600:900]` | `52991478.png` | `prob_a9f6bc940257f14c319954b1` | `cand_a9f6bc940257f14c319954b1` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 159 | `mm_math_600_900__spid_53009847.png__prob_9e4b22faf20df05c63a7989a.json` | `train[600:900]` | `53009847.png` | `prob_9e4b22faf20df05c63a7989a` | `cand_9e4b22faf20df05c63a7989a` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 160 | `mm_math_600_900__spid_53033454.png__prob_a408a17378c154a09e28518f.json` | `train[600:900]` | `53033454.png` | `prob_a408a17378c154a09e28518f` | `cand_a408a17378c154a09e28518f` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 161 | `mm_math_600_900__spid_53044345.png__prob_bac9697cc02d820c8cfb1197.json` | `train[600:900]` | `53044345.png` | `prob_bac9697cc02d820c8cfb1197` | `cand_bac9697cc02d820c8cfb1197` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 162 | `mm_math_600_900__spid_53044375.png__prob_467234ac3c9e4a5d591a7a24.json` | `train[600:900]` | `53044375.png` | `prob_467234ac3c9e4a5d591a7a24` | `cand_467234ac3c9e4a5d591a7a24` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 163 | `mm_math_600_900__spid_53078877.png__prob_e584d5348aaa804a1d29e068.json` | `train[600:900]` | `53078877.png` | `prob_e584d5348aaa804a1d29e068` | `cand_e584d5348aaa804a1d29e068` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 164 | `mm_math_600_900__spid_53078880.png__prob_1cf97f1c99716502ce2f9c11.json` | `train[600:900]` | `53078880.png` | `prob_1cf97f1c99716502ce2f9c11` | `cand_1cf97f1c99716502ce2f9c11` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 165 | `mm_math_600_900__spid_53080323.png__prob_4f3a047d6d33f3e8a4d76e1f.json` | `train[600:900]` | `53080323.png` | `prob_4f3a047d6d33f3e8a4d76e1f` | `cand_4f3a047d6d33f3e8a4d76e1f` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 166 | `mm_math_600_900__spid_53080525.png__prob_6ac324044d9722ffc72caf3e.json` | `train[600:900]` | `53080525.png` | `prob_6ac324044d9722ffc72caf3e` | `cand_6ac324044d9722ffc72caf3e` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 167 | `mm_math_600_900__spid_53080709.png__prob_b0a96b77477237950f39b626.json` | `train[600:900]` | `53080709.png` | `prob_b0a96b77477237950f39b626` | `cand_b0a96b77477237950f39b626` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 168 | `mm_math_600_900__spid_53102105.png__prob_d664b85472516e8082035d90.json` | `train[600:900]` | `53102105.png` | `prob_d664b85472516e8082035d90` | `cand_d664b85472516e8082035d90` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 169 | `mm_math_600_900__spid_53102440.png__prob_99d43e2bdf5055d9146e7f49.json` | `train[600:900]` | `53102440.png` | `prob_99d43e2bdf5055d9146e7f49` | `cand_99d43e2bdf5055d9146e7f49` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 170 | `mm_math_600_900__spid_53105794.png__prob_9172218a9a11bd6938c1d691.json` | `train[600:900]` | `53105794.png` | `prob_9172218a9a11bd6938c1d691` | `cand_9172218a9a11bd6938c1d691` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 171 | `mm_math_600_900__spid_53106961.png__prob_0a527e38ecc91577b02fac10.json` | `train[600:900]` | `53106961.png` | `prob_0a527e38ecc91577b02fac10` | `cand_0a527e38ecc91577b02fac10` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 172 | `mm_math_600_900__spid_53110752.png__prob_52ed5a2a0aa08ceda66d8108.json` | `train[600:900]` | `53110752.png` | `prob_52ed5a2a0aa08ceda66d8108` | `cand_52ed5a2a0aa08ceda66d8108` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 173 | `mm_math_600_900__spid_53110836.png__prob_7556c849b2e562ea64b2e25e.json` | `train[600:900]` | `53110836.png` | `prob_7556c849b2e562ea64b2e25e` | `cand_7556c849b2e562ea64b2e25e` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 174 | `mm_math_600_900__spid_53110858.png__prob_b24082595b5458b843907049.json` | `train[600:900]` | `53110858.png` | `prob_b24082595b5458b843907049` | `cand_b24082595b5458b843907049` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 175 | `mm_math_600_900__spid_53124716.png__prob_060e1550c760e83bcd35f4ce.json` | `train[600:900]` | `53124716.png` | `prob_060e1550c760e83bcd35f4ce` | `cand_060e1550c760e83bcd35f4ce` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 176 | `mm_math_600_900__spid_55190294.png__prob_c29599d283537e799fbd7656.json` | `train[600:900]` | `55190294.png` | `prob_c29599d283537e799fbd7656` | `cand_c29599d283537e799fbd7656` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 177 | `mm_math_600_900__spid_55192328.png__prob_00736734c16ff7fb8ac47851.json` | `train[600:900]` | `55192328.png` | `prob_00736734c16ff7fb8ac47851` | `cand_00736734c16ff7fb8ac47851` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 178 | `mm_math_600_900__spid_55377877.png__prob_4b7620108269ab5cb38df688.json` | `train[600:900]` | `55377877.png` | `prob_4b7620108269ab5cb38df688` | `cand_4b7620108269ab5cb38df688` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 179 | `mm_math_600_900__spid_55426353.png__prob_e0a0239823f15707f5c5ced5.json` | `train[600:900]` | `55426353.png` | `prob_e0a0239823f15707f5c5ced5` | `cand_e0a0239823f15707f5c5ced5` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 180 | `mm_math_600_900__spid_55426603.png__prob_5ea1df9d0ef5bd67777c35d8.json` | `train[600:900]` | `55426603.png` | `prob_5ea1df9d0ef5bd67777c35d8` | `cand_5ea1df9d0ef5bd67777c35d8` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 181 | `mm_math_600_900__spid_55497749.png__prob_bf3293a50c7e72b73f2ea9c6.json` | `train[600:900]` | `55497749.png` | `prob_bf3293a50c7e72b73f2ea9c6` | `cand_bf3293a50c7e72b73f2ea9c6` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
+| 182 | `mm_math_600_900__spid_55604325.png__prob_0c17da31cec08d9d54358a85.json` | `train[600:900]` | `55604325.png` | `prob_0c17da31cec08d9d54358a85` | `cand_0c17da31cec08d9d54358a85` | `-` | 1 | alignment-only review gate；按 post-ready waiver policy 放行。 |
 
-## 相邻_text_sufficient_桶（本次未执行）
+## adjacent text_sufficient bucket（本次未执行）
 
 | # | file | source_split | source_problem_id | problem_id | candidate_id | quality_risk_flags | 人工接受状态 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -164,8 +229,10 @@
 | 5 | `mm_math_300_600__spid_52386464.png__prob_0711144ecd6e0a6c1c117981.json` | `train[300:600]` | `52386464.png` | `prob_0711144ecd6e0a6c1c117981` | `cand_0711144ecd6e0a6c1c117981` | `-` |  | 保留给下一轮；本次不与 strict A-bucket 混放。 |
 | 6 | `mm_math_300_600__spid_52386539.png__prob_b4377d29980995b8f4075009.json` | `train[300:600]` | `52386539.png` | `prob_b4377d29980995b8f4075009` | `cand_b4377d29980995b8f4075009` | `-` |  | 保留给下一轮；本次不与 strict A-bucket 混放。 |
 | 7 | `mm_math_300_600__spid_53043280.png__prob_77a347248c739ce7178338f5.json` | `train[300:600]` | `53043280.png` | `prob_77a347248c739ce7178338f5` | `cand_77a347248c739ce7178338f5` | `-` |  | 保留给下一轮；本次不与 strict A-bucket 混放。 |
+| 8 | `mm_math_600_900__spid_51351726.png__prob_8cc8b1b1de84d78ceb36d98a.json` | `train[600:900]` | `51351726.png` | `prob_8cc8b1b1de84d78ceb36d98a` | `cand_8cc8b1b1de84d78ceb36d98a` | `-` |  | 保留给下一轮；本次不与 strict A-bucket 混放。 |
+| 9 | `mm_math_600_900__spid_51444993.png__prob_e2400a38e7714aa6b2e82a61.json` | `train[600:900]` | `51444993.png` | `prob_e2400a38e7714aa6b2e82a61` | `cand_e2400a38e7714aa6b2e82a61` | `-` |  | 保留给下一轮；本次不与 strict A-bucket 混放。 |
 
 ## 说明
 
 - provenance 写回字段记录在样本内：`problem_main_record.release_reserved.manual_release_decision`、`clean_pool_entries[0].manual_override`、`cleaning_records[-1].manual_override`。
-- 本次 policy doc：`docs/review/mm_math_review_release_candidates_2026-04-09.md`
+- 本次 policy doc：`docs/review/review_release_template.md`

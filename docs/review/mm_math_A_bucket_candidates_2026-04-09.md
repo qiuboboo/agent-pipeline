@@ -1,11 +1,11 @@
 # mm_math A-bucket candidates (2026-04-09)
 
 - Basis: `ready/mm_math/run_outputs_merged_by_source_problem_id__mm_math`
-- Source package size: `600` samples total, `440` review
+- Source package size: `900` samples total, `656` review
 - Strict A-bucket definition: review samples whose `problem_main_record.clean_decision_reason_codes` is exactly `[`alignment_requires_review`]`
-- Strict A-bucket count: `117`
+- Strict A-bucket count: `182`
 - Adjacent bucket kept separate: exact `[`alignment_requires_review`, `text_sufficient`]`
-- Adjacent `text_sufficient` bucket count: `7`
+- Adjacent `text_sufficient` bucket count: `9`
 
 ## Strict A-bucket candidate list
 
@@ -128,6 +128,71 @@
 | 115 | `mm_math_300_600__spid_55192327.png__prob_873b0961d3b3c9e31c88f40c.json` | `train[300:600]` | `55192327.png` | `None` | `None` |
 | 116 | `mm_math_300_600__spid_55393326.png__prob_880b6b5fb0a10a979d1d96b6.json` | `train[300:600]` | `55393326.png` | `None` | `None` |
 | 117 | `mm_math_300_600__spid_55604325.png__prob_03764cffe20a0d3c609ec934.json` | `train[300:600]` | `55604325.png` | `None` | `None` |
+| 118 | `mm_math_600_900__spid_50584152.png__prob_476642e90d08d3771c3aa186.json` | `train[600:900]` | `50584152.png` | `None` | `None` |
+| 119 | `mm_math_600_900__spid_51352002.png__prob_57bea5f0b2e8e60e305c6f27.json` | `train[600:900]` | `51352002.png` | `None` | `None` |
+| 120 | `mm_math_600_900__spid_51403188.png__prob_eb081d2f9bd56c355fda05c0.json` | `train[600:900]` | `51403188.png` | `None` | `None` |
+| 121 | `mm_math_600_900__spid_51434958.png__prob_3213d0c7d53ea4a6bcdf968f.json` | `train[600:900]` | `51434958.png` | `None` | `None` |
+| 122 | `mm_math_600_900__spid_51434998.png__prob_e4703a7d75549d8151edbfa7.json` | `train[600:900]` | `51434998.png` | `None` | `None` |
+| 123 | `mm_math_600_900__spid_51457863.png__prob_c0a9fca8e6f0eac6cf5cd268.json` | `train[600:900]` | `51457863.png` | `None` | `None` |
+| 124 | `mm_math_600_900__spid_51554733.png__prob_4f27defb4f07f60a84f37855.json` | `train[600:900]` | `51554733.png` | `None` | `None` |
+| 125 | `mm_math_600_900__spid_51654777.png__prob_c0bbb932017cb6e4687b9a4d.json` | `train[600:900]` | `51654777.png` | `None` | `None` |
+| 126 | `mm_math_600_900__spid_51806942.png__prob_219337ff2131d42a809bbd85.json` | `train[600:900]` | `51806942.png` | `None` | `None` |
+| 127 | `mm_math_600_900__spid_51807170.png__prob_77d69127d949dd3a5f06da99.json` | `train[600:900]` | `51807170.png` | `None` | `None` |
+| 128 | `mm_math_600_900__spid_51910248.png__prob_2ebe98acd232b6c55e2fc163.json` | `train[600:900]` | `51910248.png` | `None` | `None` |
+| 129 | `mm_math_600_900__spid_52354640.png__prob_58b485137a6007eca5f59c3a.json` | `train[600:900]` | `52354640.png` | `None` | `None` |
+| 130 | `mm_math_600_900__spid_52354873.png__prob_885a6687146b380e5f189b73.json` | `train[600:900]` | `52354873.png` | `None` | `None` |
+| 131 | `mm_math_600_900__spid_52381887.png__prob_89e3d3cb74f7a1af156360e5.json` | `train[600:900]` | `52381887.png` | `None` | `None` |
+| 132 | `mm_math_600_900__spid_52386504.png__prob_02148759540d351912231b5d.json` | `train[600:900]` | `52386504.png` | `None` | `None` |
+| 133 | `mm_math_600_900__spid_52386627.png__prob_a0d38dfa1fd50c811ded2475.json` | `train[600:900]` | `52386627.png` | `None` | `None` |
+| 134 | `mm_math_600_900__spid_52386771.png__prob_e1f32386b25f8b71c0025379.json` | `train[600:900]` | `52386771.png` | `None` | `None` |
+| 135 | `mm_math_600_900__spid_52387151.png__prob_9be0c6c5ecea64d9dcc5aa4f.json` | `train[600:900]` | `52387151.png` | `None` | `None` |
+| 136 | `mm_math_600_900__spid_52387190.png__prob_0f7ce7de23853523de0e0dff.json` | `train[600:900]` | `52387190.png` | `None` | `None` |
+| 137 | `mm_math_600_900__spid_52395201.png__prob_babaf0349048ce395849002a.json` | `train[600:900]` | `52395201.png` | `None` | `None` |
+| 138 | `mm_math_600_900__spid_52395347.png__prob_ac1caec0060a580fcb5036a0.json` | `train[600:900]` | `52395347.png` | `None` | `None` |
+| 139 | `mm_math_600_900__spid_52395428.png__prob_d6fef2bf5aac32c7f596dc81.json` | `train[600:900]` | `52395428.png` | `None` | `None` |
+| 140 | `mm_math_600_900__spid_52416277.png__prob_9aa398aeca88ad4fc7f0f643.json` | `train[600:900]` | `52416277.png` | `None` | `None` |
+| 141 | `mm_math_600_900__spid_52423423.png__prob_0709db8471bda69f39334c56.json` | `train[600:900]` | `52423423.png` | `None` | `None` |
+| 142 | `mm_math_600_900__spid_52513495.png__prob_2734927a9786f6e302e763eb.json` | `train[600:900]` | `52513495.png` | `None` | `None` |
+| 143 | `mm_math_600_900__spid_52602477.png__prob_3742cf81367e70b957d04a6e.json` | `train[600:900]` | `52602477.png` | `None` | `None` |
+| 144 | `mm_math_600_900__spid_52634468.png__prob_f311edc98c3ebaa8adeebdf0.json` | `train[600:900]` | `52634468.png` | `None` | `None` |
+| 145 | `mm_math_600_900__spid_52634676.png__prob_18f0c228c48907c1ddd5b60e.json` | `train[600:900]` | `52634676.png` | `None` | `None` |
+| 146 | `mm_math_600_900__spid_52836352.png__prob_5742fdbc2f612192c42b69f8.json` | `train[600:900]` | `52836352.png` | `None` | `None` |
+| 147 | `mm_math_600_900__spid_52873807.png__prob_416e8905960bfce9377281be.json` | `train[600:900]` | `52873807.png` | `None` | `None` |
+| 148 | `mm_math_600_900__spid_52873810.png__prob_df7f002c731a78d0840b8b8f.json` | `train[600:900]` | `52873810.png` | `None` | `None` |
+| 149 | `mm_math_600_900__spid_52905589.png__prob_0c58938acae13221a458c0c7.json` | `train[600:900]` | `52905589.png` | `None` | `None` |
+| 150 | `mm_math_600_900__spid_52905795.png__prob_df7c3803240ea6706d4e30f8.json` | `train[600:900]` | `52905795.png` | `None` | `None` |
+| 151 | `mm_math_600_900__spid_52905802.png__prob_3442dfb10c57f480416d789a.json` | `train[600:900]` | `52905802.png` | `None` | `None` |
+| 152 | `mm_math_600_900__spid_52905905.png__prob_dd86e217fe96c2db272ce473.json` | `train[600:900]` | `52905905.png` | `None` | `None` |
+| 153 | `mm_math_600_900__spid_52907826.png__prob_30a4716a942a2c6a3342be5c.json` | `train[600:900]` | `52907826.png` | `None` | `None` |
+| 154 | `mm_math_600_900__spid_52950518.png__prob_b6fad896546973edc11efd8b.json` | `train[600:900]` | `52950518.png` | `None` | `None` |
+| 155 | `mm_math_600_900__spid_52950677.png__prob_43d097b04558061f90874ae1.json` | `train[600:900]` | `52950677.png` | `None` | `None` |
+| 156 | `mm_math_600_900__spid_52978392.png__prob_26de31902d73fd37fd08a523.json` | `train[600:900]` | `52978392.png` | `None` | `None` |
+| 157 | `mm_math_600_900__spid_52978712.png__prob_ef5798732fcc0b7e553c79a0.json` | `train[600:900]` | `52978712.png` | `None` | `None` |
+| 158 | `mm_math_600_900__spid_52991478.png__prob_a9f6bc940257f14c319954b1.json` | `train[600:900]` | `52991478.png` | `None` | `None` |
+| 159 | `mm_math_600_900__spid_53009847.png__prob_9e4b22faf20df05c63a7989a.json` | `train[600:900]` | `53009847.png` | `None` | `None` |
+| 160 | `mm_math_600_900__spid_53033454.png__prob_a408a17378c154a09e28518f.json` | `train[600:900]` | `53033454.png` | `None` | `None` |
+| 161 | `mm_math_600_900__spid_53044345.png__prob_bac9697cc02d820c8cfb1197.json` | `train[600:900]` | `53044345.png` | `None` | `None` |
+| 162 | `mm_math_600_900__spid_53044375.png__prob_467234ac3c9e4a5d591a7a24.json` | `train[600:900]` | `53044375.png` | `None` | `None` |
+| 163 | `mm_math_600_900__spid_53078877.png__prob_e584d5348aaa804a1d29e068.json` | `train[600:900]` | `53078877.png` | `None` | `None` |
+| 164 | `mm_math_600_900__spid_53078880.png__prob_1cf97f1c99716502ce2f9c11.json` | `train[600:900]` | `53078880.png` | `None` | `None` |
+| 165 | `mm_math_600_900__spid_53080323.png__prob_4f3a047d6d33f3e8a4d76e1f.json` | `train[600:900]` | `53080323.png` | `None` | `None` |
+| 166 | `mm_math_600_900__spid_53080525.png__prob_6ac324044d9722ffc72caf3e.json` | `train[600:900]` | `53080525.png` | `None` | `None` |
+| 167 | `mm_math_600_900__spid_53080709.png__prob_b0a96b77477237950f39b626.json` | `train[600:900]` | `53080709.png` | `None` | `None` |
+| 168 | `mm_math_600_900__spid_53102105.png__prob_d664b85472516e8082035d90.json` | `train[600:900]` | `53102105.png` | `None` | `None` |
+| 169 | `mm_math_600_900__spid_53102440.png__prob_99d43e2bdf5055d9146e7f49.json` | `train[600:900]` | `53102440.png` | `None` | `None` |
+| 170 | `mm_math_600_900__spid_53105794.png__prob_9172218a9a11bd6938c1d691.json` | `train[600:900]` | `53105794.png` | `None` | `None` |
+| 171 | `mm_math_600_900__spid_53106961.png__prob_0a527e38ecc91577b02fac10.json` | `train[600:900]` | `53106961.png` | `None` | `None` |
+| 172 | `mm_math_600_900__spid_53110752.png__prob_52ed5a2a0aa08ceda66d8108.json` | `train[600:900]` | `53110752.png` | `None` | `None` |
+| 173 | `mm_math_600_900__spid_53110836.png__prob_7556c849b2e562ea64b2e25e.json` | `train[600:900]` | `53110836.png` | `None` | `None` |
+| 174 | `mm_math_600_900__spid_53110858.png__prob_b24082595b5458b843907049.json` | `train[600:900]` | `53110858.png` | `None` | `None` |
+| 175 | `mm_math_600_900__spid_53124716.png__prob_060e1550c760e83bcd35f4ce.json` | `train[600:900]` | `53124716.png` | `None` | `None` |
+| 176 | `mm_math_600_900__spid_55190294.png__prob_c29599d283537e799fbd7656.json` | `train[600:900]` | `55190294.png` | `None` | `None` |
+| 177 | `mm_math_600_900__spid_55192328.png__prob_00736734c16ff7fb8ac47851.json` | `train[600:900]` | `55192328.png` | `None` | `None` |
+| 178 | `mm_math_600_900__spid_55377877.png__prob_4b7620108269ab5cb38df688.json` | `train[600:900]` | `55377877.png` | `None` | `None` |
+| 179 | `mm_math_600_900__spid_55426353.png__prob_e0a0239823f15707f5c5ced5.json` | `train[600:900]` | `55426353.png` | `None` | `None` |
+| 180 | `mm_math_600_900__spid_55426603.png__prob_5ea1df9d0ef5bd67777c35d8.json` | `train[600:900]` | `55426603.png` | `None` | `None` |
+| 181 | `mm_math_600_900__spid_55497749.png__prob_bf3293a50c7e72b73f2ea9c6.json` | `train[600:900]` | `55497749.png` | `None` | `None` |
+| 182 | `mm_math_600_900__spid_55604325.png__prob_0c17da31cec08d9d54358a85.json` | `train[600:900]` | `55604325.png` | `None` | `None` |
 
 ## Adjacent bucket: alignment_requires_review + text_sufficient
 
@@ -140,4 +205,6 @@
 | 5 | `mm_math_300_600__spid_52386464.png__prob_0711144ecd6e0a6c1c117981.json` | `train[300:600]` | `52386464.png` | `None` | `None` |
 | 6 | `mm_math_300_600__spid_52386539.png__prob_b4377d29980995b8f4075009.json` | `train[300:600]` | `52386539.png` | `None` | `None` |
 | 7 | `mm_math_300_600__spid_53043280.png__prob_77a347248c739ce7178338f5.json` | `train[300:600]` | `53043280.png` | `None` | `None` |
+| 8 | `mm_math_600_900__spid_51351726.png__prob_8cc8b1b1de84d78ceb36d98a.json` | `train[600:900]` | `51351726.png` | `None` | `None` |
+| 9 | `mm_math_600_900__spid_51444993.png__prob_e2400a38e7714aa6b2e82a61.json` | `train[600:900]` | `51444993.png` | `None` | `None` |
 
