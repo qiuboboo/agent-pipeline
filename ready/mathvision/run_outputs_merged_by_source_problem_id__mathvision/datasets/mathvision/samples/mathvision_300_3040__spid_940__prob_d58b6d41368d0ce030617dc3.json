@@ -1,0 +1,1967 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_e184045a4d01adf784659810",
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "problem_id": "prob_d58b6d41368d0ce030617dc3",
+    "dataset_name": "MathVision",
+    "source_problem_id": "940",
+    "raw_question_text": "In the square you can see the digits from 1 to 9 <image1>. A number is created by starting at the star, following the line and writing down the digits along the line while passing. For example, the line shown represents the number 42685 <image2>. Which of the following lines represents the largest number?\n<image3>",
+    "raw_answer_text": "E",
+    "choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "image_paths": [
+      "images/940.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "options field contains only option labels without option text",
+      "answer kept as option label because no fuller option text is present in the record",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-06T01:36:01Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_d58b6d41368d0ce030617dc3",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_d58b6d41368d0ce030617dc3_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1757,
+        "height": 1022,
+        "file_size": 290634
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 315,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_e184045a4d01adf784659810",
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "dataset_name": "MathVision",
+    "source_problem_id": "940",
+    "created_at": "2026-04-06T01:36:01Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_d58b6d41368d0ce030617dc3",
+    "image_dependency_score": 0.98,
+    "multi_step_score": 0.82,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly refers to a square with digits 1 to 9, a star, and multiple lines 'shown', which cannot be resolved from text alone",
+        "requires_image=true",
+        "text_dominant=false",
+        "the task depends on tracing visual line paths and reading digits encountered along those paths"
+      ],
+      "multi_step": [
+        "the prompt defines a construction rule: start at the star, follow a line, record digits passed, then interpret the result as a number",
+        "the solver must apply that rule to candidate lines and compare the resulting numbers to find the largest",
+        "there are 5 answer choices, implying evaluation/comparison across multiple visual candidates"
+      ],
+      "verifiability": [
+        "answer_type is option/choice with a single labeled answer 'E'",
+        "the underlying reasoning is objective: trace each line, derive digit sequences, and compare numeric values",
+        "asset_registry_record indicates registry_passed=true with image and answer both present",
+        "image metadata includes a readable image artifact (exists=true, format=png, width=1757, height=1022)"
+      ]
+    },
+    "risk_flags": [
+      "readability_score_below_0.8",
+      "visual_path_tracing_required"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_e184045a4d01adf784659810",
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "dataset_name": "MathVision",
+    "source_problem_id": "940",
+    "created_at": "2026-04-06T01:36:01Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_d58b6d41368d0ce030617dc3",
+    "priority": 0.84,
+    "decision": "keep",
+    "decision_reasons": [
+      "core assets are complete: question text, image, and answer are all present, and registry_passed is true",
+      "initial scoring is strong, with high image dependency, multi-step reasoning, and verifiability scores",
+      "the sample appears objectively checkable because it is a single-choice item with provided answer",
+      "risk flags are present for readability and visual path tracing, but they do not remove the core semantic support needed for collection"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_e184045a4d01adf784659810",
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "dataset_name": "MathVision",
+    "source_problem_id": "940",
+    "created_at": "2026-04-06T01:36:01Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_e184045a4d01adf784659810",
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "problem_id": "prob_d58b6d41368d0ce030617dc3",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "In the square you can see the digits from 1 to 9. A number is created by starting at the star, following the line, and writing down the digits along the line while passing. For example, the line shown represents the number 42685. Which of the following lines represents the largest number?",
+    "normalized_answer_text": "E",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed inline image placeholder tags while preserving the original question meaning.",
+      "Question explicitly depends on interpreting the diagrams and option lines, so image is required."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-06T01:36:01Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "940",
+    "subject": "数学",
+    "raw_question_text": "In the square you can see the digits from 1 to 9 <image1>. A number is created by starting at the star, following the line and writing down the digits along the line while passing. For example, the line shown represents the number 42685 <image2>. Which of the following lines represents the largest number?\n<image3>",
+    "raw_answer_text": "E",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 639,
+      "image_paths": [
+        "images/940.jpg"
+      ],
+      "extraction_notes": [
+        "options field contains only option labels without option text",
+        "answer kept as option label because no fuller option text is present in the record",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-06T01:37:23Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "core assets are complete: question text, image, and answer are all present, and registry_passed is true",
+      "initial scoring is strong, with high image dependency, multi-step reasoning, and verifiability scores",
+      "the sample appears objectively checkable because it is a single-choice item with provided answer",
+      "risk flags are present for readability and visual path tracing, but they do not remove the core semantic support needed for collection"
+    ],
+    "collection_risk_flags": [
+      "readability_score_below_0.8",
+      "visual_path_tracing_required"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_bba8b8cf0f0ca66c1d86300b",
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "source_dataset": "MathVision",
+    "source_problem_id": "940",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_d58b6d41368d0ce030617dc3/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_d58b6d41368d0ce030617dc3/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1757,
+        "height": 1022
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-06T01:37:23Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_5b9cfad28612ff958c1c24f7",
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "source_dataset": "MathVision",
+    "source_problem_id": "940",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.84,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-06T01:37:23Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "core assets are complete: question text, image, and answer are all present, and registry_passed is true",
+      "initial scoring is strong, with high image dependency, multi-step reasoning, and verifiability scores",
+      "the sample appears objectively checkable because it is a single-choice item with provided answer",
+      "risk flags are present for readability and visual path tracing, but they do not remove the core semantic support needed for collection"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_e184045a4d01adf784659810",
+      "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-06T01:37:23Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_e184045a4d01adf784659810",
+    "problem_id": "prob_d58b6d41368d0ce030617dc3",
+    "source_dataset": "MathVision",
+    "source_problem_id": "940",
+    "normalized_question_text": "In the square you can see the digits from 1 to 9. A number is created by starting at the star, following the line, and writing down the digits along the line while passing. For example, the line shown represents the number 42685. Which of the following lines represents the largest number?",
+    "normalized_answer_text": "E",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "correct_option_label_only",
+      "pure_image_choice_task",
+      "rewrite_variant_invalid"
+    ],
+    "created_at": "2026-04-06T01:37:23Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_e184045a4d01adf784659810",
+    "problem_id": "prob_d58b6d41368d0ce030617dc3",
+    "normalized_question_text": "In the square you can see the digits from 1 to 9. A number is created by starting at the star, following the line, and writing down the digits along the line while passing. For example, the line shown represents the number 42685. Which of the following lines represents the largest number?",
+    "normalized_answer_text": "E",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "you",
+        "canonical": "you",
+        "variable_type": "label"
+      },
+      {
+        "original": "can",
+        "canonical": "can",
+        "variable_type": "label"
+      },
+      {
+        "original": "see",
+        "canonical": "see",
+        "variable_type": "label"
+      },
+      {
+        "original": "from",
+        "canonical": "from",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "by",
+        "canonical": "by",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "star",
+        "canonical": "star",
+        "variable_type": "label"
+      },
+      {
+        "original": "line",
+        "canonical": "line",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "down",
+        "canonical": "down",
+        "variable_type": "label"
+      },
+      {
+        "original": "For",
+        "canonical": "For",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In the square you can see the digits from 1 to 9."
+      },
+      {
+        "segment_index": 2,
+        "text": "A number is created by starting at the star, following the line, and writing down the digits along the line while passing."
+      },
+      {
+        "segment_index": 3,
+        "text": "For example, the line shown represents the number 42685."
+      },
+      {
+        "segment_index": 4,
+        "text": "Which of the following lines represents the largest number?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1757,
+          "height": 984
+        },
+        "readability_score": 0.7642,
+        "contrast_score": 33.8396
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-06T01:37:23Z",
+    "normalization_notes": [
+      "Removed inline image placeholder tags while preserving the original question meaning.",
+      "Question explicitly depends on interpreting the diagrams and option lines, so image is required."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_d58b6d41368d0ce030617dc3",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "940",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "In the square you can see the digits from 1 to 9 <image1>. A number is created by starting at the star, following the line and writing down the digits along the line while passing. For example, the line shown represents the number 42685 <image2>. Which of the following lines represents the largest number?\n<image3>",
+    "normalized_question_text": "In the square you can see the digits from 1 to 9. A number is created by starting at the star, following the line, and writing down the digits along the line while passing. For example, the line shown represents the number 42685. Which of the following lines represents the largest number?",
+    "raw_answer_text": "E",
+    "normalized_answer_text": "E",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9614,
+    "multi_step_score": 0.365,
+    "verifiability_score": 0.906,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "correct_option_label_only",
+      "pure_image_choice_task",
+      "rewrite_variant_invalid"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable and appears solvable from the provided images, with a complete question and answer. However, the usable rewrite failed because the correct answer is only an option label tied to image-based choices, so it should be kept for manual review rather than passed or rejected.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-06T01:36:01Z",
+    "updated_at": "2026-04-06T01:37:23Z",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "core assets are complete: question text, image, and answer are all present, and registry_passed is true",
+      "initial scoring is strong, with high image dependency, multi-step reasoning, and verifiability scores",
+      "the sample appears objectively checkable because it is a single-choice item with provided answer",
+      "risk flags are present for readability and visual path tracing, but they do not remove the core semantic support needed for collection"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_c1321408c8aa536a04c0d2d4",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/940/question",
+      "storage_uri": "inline://prob_d58b6d41368d0ce030617dc3/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 315,
+      "width": null,
+      "height": null,
+      "sha256": "3d42c3d41855a99c1c7a245260cca1a11fcf305909a9eec4c3ea1a04c0068362",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In the square you can see the digits from 1 to 9 <image1>. A number is created by starting at the star, following the line and writing down the digits along the line while passing. For example, the line shown represents the number 42685 <image2>. Which of the following lines represents the largest number?\n<image3>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "you",
+          "canonical": "you",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "star",
+          "canonical": "star",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "down",
+          "canonical": "down",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "asset_id": "asset_06afa6445f0131b1dde71b02",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_d58b6d41368d0ce030617dc3/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 289,
+      "width": null,
+      "height": null,
+      "sha256": "09cce4ccc60b6a94b043c53e156aa462593b4e03b25ecd23bb7ecc8abf11a12b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In the square you can see the digits from 1 to 9 <image1>. A number is created by starting at the star, following the line and writing down the digits along the line while passing. For example, the line shown represents the number 42685 <image2>. Which of the following lines represents the largest number?\n<image3>",
+      "normalized_text_snapshot": "In the square you can see the digits from 1 to 9. A number is created by starting at the star, following the line, and writing down the digits along the line while passing. For example, the line shown represents the number 42685. Which of the following lines represents the largest number?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "you",
+          "canonical": "you",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "star",
+          "canonical": "star",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "down",
+          "canonical": "down",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "asset_id": "asset_75459c2ec33054413e06eaa6",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/940/answer",
+      "storage_uri": "inline://prob_d58b6d41368d0ce030617dc3/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "a9f51566bd6705f7ea6ad54bb9deb449f795582d6529a0e22207b8981233ec58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "E",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "asset_id": "asset_67583c5587ea7810c1d34c5f",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_d58b6d41368d0ce030617dc3/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "a9f51566bd6705f7ea6ad54bb9deb449f795582d6529a0e22207b8981233ec58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "E",
+      "normalized_text_snapshot": "E",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "asset_id": "asset_59dad7773a10ed4d906fffc2",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_d58b6d41368d0ce030617dc3_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 290634,
+      "width": 1757,
+      "height": 1022,
+      "sha256": "092f1ace0ecfbc322d2c642ace5d6b07568b70679ce3cdaa2387731020196265",
+      "perceptual_hash": "3fe7273fe73f3100",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1053.9037,
+      "readability_score": 0.7642,
+      "noise_score": 18.2316,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1757,
+        "height": 984
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "asset_id": "asset_0f04d31beef2d914440203fb",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_d58b6d41368d0ce030617dc3_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 289527,
+      "width": 1757,
+      "height": 984,
+      "sha256": "301a74435a3270f8764b13404ae96327897a78c4b234311cada75e80e4db07d6",
+      "perceptual_hash": "3fe7273fe72f3300",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1053.9037,
+      "readability_score": 0.7642,
+      "noise_score": 18.2316,
+      "cropped_from_asset_id": "asset_59dad7773a10ed4d906fffc2",
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1757,
+        "height": 984
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_d58b6d41368d0ce030617dc3",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "In the square you can see the digits from 1 to 9.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "9"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "For example, the line shown represents the number 42685.",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "42685"
+          ],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which of the following lines represents the largest number?",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_d58b6d41368d0ce030617dc3_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "Which of the following lines represents the largest number?",
+          "expected_answer_type": "unknown",
+          "expected_answer": "E",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "line",
+          "entity_category": "line",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "you",
+          "canonical": "you",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "star",
+          "canonical": "star",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "down",
+          "canonical": "down",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In the square you can see the digits from 1 to 9."
+        },
+        {
+          "segment_index": 2,
+          "text": "A number is created by starting at the star, following the line, and writing down the digits along the line while passing."
+        },
+        {
+          "segment_index": 3,
+          "text": "For example, the line shown represents the number 42685."
+        },
+        {
+          "segment_index": 4,
+          "text": "Which of the following lines represents the largest number?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-06T01:37:06Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_d58b6d41368d0ce030617dc3_1",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 1.7192,
+        "dark_pixel_ratio": 0.0371,
+        "readability_score": 0.7642,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1757,
+            "height": 1022
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 1757,
+            "height": 984
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 516,
+            "width": 878,
+            "height": 492
+          },
+          "salience": 0.4077
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 878,
+            "y": 516,
+            "width": 879,
+            "height": 492
+          },
+          "salience": 0.3985
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8757,
+      "created_at": "2026-04-06T01:37:06Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_d58b6d41368d0ce030617dc3",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-06T01:37:14Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_f104c3c882497980c6a8b12b",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "text_fact",
+      "canonical_value": "In the square you can see the digits from 1 to 9.",
+      "surface_forms": [
+        "In the square you can see the digits from 1 to 9."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_06afa6445f0131b1dde71b02"
+      ],
+      "evidence_refs": [
+        "asset_06afa6445f0131b1dde71b02"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "In the square you can see the digits from 1 to 9.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "9"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_fab8753175e064356d3e74d2",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "text_fact",
+      "canonical_value": "For example, the line shown represents the number 42685.",
+      "surface_forms": [
+        "For example, the line shown represents the number 42685."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_06afa6445f0131b1dde71b02"
+      ],
+      "evidence_refs": [
+        "asset_06afa6445f0131b1dde71b02"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "For example, the line shown represents the number 42685.",
+        "segment_index": 3,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "42685"
+        ],
+        "unit_mentions": [
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_448db90c44ddd2c6211ae5f8",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "target_slot",
+      "canonical_value": "Which of the following lines represents the largest number?",
+      "surface_forms": [
+        "Which of the following lines represents the largest number?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_06afa6445f0131b1dde71b02"
+      ],
+      "evidence_refs": [
+        "asset_06afa6445f0131b1dde71b02"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_d58b6d41368d0ce030617dc3_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "Which of the following lines represents the largest number?",
+        "expected_answer_type": "unknown",
+        "expected_answer": "E",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_f4293c34db7a997fe4a6f618",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "answer_claim",
+      "canonical_value": "E",
+      "surface_forms": [
+        "E"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_67583c5587ea7810c1d34c5f"
+      ],
+      "evidence_refs": [
+        "asset_67583c5587ea7810c1d34c5f"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "E"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_6c98986ce44c3b5ec03790ea",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1757,
+          "height": 1022
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8757,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_1d3bf68e52f060624f29ab5c",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1757,
+          "height": 984
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8757,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_163e99c2f12f105ee87de6d0",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 516,
+          "width": 878,
+          "height": 492
+        },
+        "salience": 0.4077
+      },
+      "unit": null,
+      "confidence": 0.8757,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_36a840c4cd328e3ce835bcd3",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 878,
+          "y": 516,
+          "width": 879,
+          "height": 492
+        },
+        "salience": 0.3985
+      },
+      "unit": null,
+      "confidence": 0.8757,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_64043a8e1a130e70aa75a192",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_d58b6d41368d0ce030617dc3",
+        "problem_id": "prob_d58b6d41368d0ce030617dc3",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-06T01:37:14Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "node_id": "node_d2994a28c445ef206f7e99ad",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "correct_option_label_only",
+          "pure_image_choice_task",
+          "rewrite_variant_invalid"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-06T01:37:23Z",
+      "updated_at": "2026-04-06T01:37:23Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_e184045a4d01adf784659810",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_c1321408c8aa536a04c0d2d4",
+        "asset_06afa6445f0131b1dde71b02",
+        "asset_75459c2ec33054413e06eaa6",
+        "asset_67583c5587ea7810c1d34c5f",
+        "asset_59dad7773a10ed4d906fffc2",
+        "asset_0f04d31beef2d914440203fb"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 17
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1757,
+            "height": 1022,
+            "blur_score": 1053.9037,
+            "contrast_score": 33.8396,
+            "noise_score": 18.2316,
+            "readability_score": 0.7642,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 24,
+              "width": 1757,
+              "height": 984
+            },
+            "perceptual_hash": "3fe7273fe73f3100"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_e184045a4d01adf784659810",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_d58b6d41368d0ce030617dc3",
+        "question_type": "multiple_choice",
+        "condition_count": 2,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_d58b6d41368d0ce030617dc3",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "image_option_index_only",
+          "correct_option_has_no_semantic_text",
+          "non_recoverable_without_option_images"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_available",
+          "jointly_understandable",
+          "question_text_clear",
+          "visual_example_and_options_readable"
+        ],
+        "rationale": "The text clearly states the task and expected answer format, and the image provides the necessary digit grid, example path, and answer options. The visual content is readable enough to understand how the number is formed and compare the choices.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.9053,
+      "decision": "review",
+      "decision_reason_codes": [
+        "correct_option_label_only",
+        "pure_image_choice_task",
+        "rewrite_variant_invalid"
+      ],
+      "decision_rationale": "The sample is jointly understandable and appears solvable from the provided images, with a complete question and answer. However, the usable rewrite failed because the correct answer is only an option label tied to image-based choices, so it should be kept for manual review rather than passed or rejected.",
+      "review_ticket_id": "review_prob_d58b6d41368d0ce030617dc3",
+      "operator_type": "system",
+      "started_at": "2026-04-06T01:37:23Z",
+      "finished_at": "2026-04-06T01:37:23Z",
+      "candidate_id": "cand_d58b6d41368d0ce030617dc3",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_e184045a4d01adf784659810",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "image_entity_refs": [
+        "visual_prob_d58b6d41368d0ce030617dc3_1::roi",
+        "visual_prob_d58b6d41368d0ce030617dc3_1::roi_bottom_left",
+        "visual_prob_d58b6d41368d0ce030617dc3_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_d58b6d41368d0ce030617dc3_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "line",
+          "image_ref": "visual_prob_d58b6d41368d0ce030617dc3_1::roi",
+          "relation": "grounds_line",
+          "confidence": 0.7689
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_d58b6d41368d0ce030617dc3_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7689
+        },
+        {
+          "text_ref": "slot_prob_d58b6d41368d0ce030617dc3_1",
+          "image_ref": "visual_prob_d58b6d41368d0ce030617dc3_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7727
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-06T01:37:06Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_f2c7429a0567fc642e093a79",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "In the square you can see the digits from 1 to 9 <image1>. A number is created by starting at the star, following the line and writing down the digits along the line while passing. For example, the line shown represents the number 42685 <image2>. Which of the following lines represents the largest number?\n<image3>",
+      "after_value": "In the square you can see the digits from 1 to 9. A number is created by starting at the star, following the line, and writing down the digits along the line while passing. For example, the line shown represents the number 42685. Which of the following lines represents the largest number?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "audit_id": "audit_efa9024f689c9ebd355c393f",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "E",
+      "after_value": "E",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "audit_id": "audit_0b9b3cb2fbcc9ea723323c27",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "audit_id": "audit_d2994a28c445ef206f7e99ad",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:37:23Z"
+    },
+    {
+      "audit_id": "audit_f7a0445510d7bc2e743078ca",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "you",
+          "canonical": "you",
+          "variable_type": "label"
+        },
+        {
+          "original": "can",
+          "canonical": "can",
+          "variable_type": "label"
+        },
+        {
+          "original": "see",
+          "canonical": "see",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "star",
+          "canonical": "star",
+          "variable_type": "label"
+        },
+        {
+          "original": "line",
+          "canonical": "line",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "down",
+          "canonical": "down",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-06T01:37:23Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_e184045a4d01adf784659810",
+      "problem_id": "prob_d58b6d41368d0ce030617dc3",
+      "source_problem_id": "940",
+      "strategy": "drop_image_index",
+      "rationale": "The answer choices are image-index labels for candidate lines, and the correct option text is only the label \"E\" without semantic content. Removing the options would make the task unrecoverable from the provided text alone.",
+      "discard_reason_codes": [
+        "image_option_index_only",
+        "correct_option_has_no_semantic_text",
+        "non_recoverable_without_option_images"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-06T01:37:23Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}

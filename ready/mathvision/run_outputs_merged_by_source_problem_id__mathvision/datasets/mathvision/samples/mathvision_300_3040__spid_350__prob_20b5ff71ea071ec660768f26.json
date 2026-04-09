@@ -1,0 +1,2261 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_c6bc9cf8209ff9201a0f8541",
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "problem_id": "prob_20b5ff71ea071ec660768f26",
+    "dataset_name": "MathVision",
+    "source_problem_id": "350",
+    "raw_question_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures beside. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place. Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\". Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\". Adam: \"Now I know too\". What is Carla's favorite figure?\n<image1>\n<image2>",
+    "raw_answer_text": "E",
+    "choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "image_paths": [
+      "images/350.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "options only contain labels without textual option content",
+      "answer is a label; no option text beyond the label itself is available in the record",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T14:02:09Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_20b5ff71ea071ec660768f26",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_20b5ff71ea071ec660768f26_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 1557,
+        "height": 655,
+        "file_size": 164101
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 512,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "metadata.image_paths differs from the top-level image_paths value.",
+      "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_c6bc9cf8209ff9201a0f8541",
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "dataset_name": "MathVision",
+    "source_problem_id": "350",
+    "created_at": "2026-04-05T14:02:09Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_20b5ff71ea071ec660768f26",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.88,
+    "verifiability_score": 0.78,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly asks to identify Carla's favorite figure 'amongst the figures shown'",
+        "requires_image=true",
+        "text_dominant=false",
+        "the reasoning depends on visual attributes (shape and color) assigned to candidate figures in the image"
+      ],
+      "multi_step": [
+        "the dialogue contains sequential knowledge statements from Adam and Bruna, requiring elimination across multiple rounds",
+        "solving needs combining at least two attributes mentioned in the prompt: shape known to Bruna and color known to Adam",
+        "the task is not direct lookup; it requires iterative logical filtering over the set of shown figures"
+      ],
+      "verifiability": [
+        "answer_manifest shows answer_present=true and answer_type=choice",
+        "the final answer is a single option label ('E'), which is easy to compare against a gold answer",
+        "registry_passed=true supports basic asset availability",
+        "verifiability is reduced because asset_registry_record lists image placeholder/path inconsistencies that may complicate exact reconstruction of the visual context"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths differs from the top-level image_paths value.",
+      "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_c6bc9cf8209ff9201a0f8541",
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "dataset_name": "MathVision",
+    "source_problem_id": "350",
+    "created_at": "2026-04-05T14:02:09Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_20b5ff71ea071ec660768f26",
+    "priority": 0.62,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Question text, one image, and the final choice answer are present, so the sample still retains recoverable core semantics.",
+      "The item is highly image-dependent, and the registry records an inconsistency: the question contains two image placeholders while only one top-level image path is provided.",
+      "Additional image-path mismatch metadata increases reconstruction risk, so it should not be prioritized as a clean keep.",
+      "Because core assets are not entirely missing, high-recall collection guidance favors low_priority over reject."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_c6bc9cf8209ff9201a0f8541",
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "dataset_name": "MathVision",
+    "source_problem_id": "350",
+    "created_at": "2026-04-05T14:02:09Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_c6bc9cf8209ff9201a0f8541",
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "problem_id": "prob_20b5ff71ea071ec660768f26",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place:\nAdam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\".\nBruna: \"At first I didn't know what Carla's favorite figure was, but now I know\".\nAdam: \"Now I know too\".\nWhat is Carla's favorite figure?",
+    "normalized_answer_text": "E",
+    "normalized_choice_map": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "D",
+      "E": "E"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed inline image placeholder tags from the question text.",
+      "Kept the original question semantics and dialogue unchanged aside from light formatting cleanup.",
+      "Image is required because identifying the favorite figure depends on the pictured shapes/colors and answer options.",
+      "Choice labels were preserved as provided without inferring visual descriptions."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T14:02:09Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "350",
+    "subject": "数学",
+    "raw_question_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures beside. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place. Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\". Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\". Adam: \"Now I know too\". What is Carla's favorite figure?\n<image1>\n<image2>",
+    "raw_answer_text": "E",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.88,
+    "initial_verifiability_score": 0.78,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 49,
+      "image_paths": [
+        "images/350.jpg"
+      ],
+      "extraction_notes": [
+        "options only contain labels without textual option content",
+        "answer is a label; no option text beyond the label itself is available in the record",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T14:05:04Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.62,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question text, one image, and the final choice answer are present, so the sample still retains recoverable core semantics.",
+      "The item is highly image-dependent, and the registry records an inconsistency: the question contains two image placeholders while only one top-level image path is provided.",
+      "Additional image-path mismatch metadata increases reconstruction risk, so it should not be prioritized as a clean keep.",
+      "Because core assets are not entirely missing, high-recall collection guidance favors low_priority over reject."
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths differs from the top-level image_paths value.",
+      "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_37a7cfe55023616b0624c096",
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "source_dataset": "MathVision",
+    "source_problem_id": "350",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_20b5ff71ea071ec660768f26/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_20b5ff71ea071ec660768f26/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 1557,
+        "height": 655
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.88,
+      "initial_verifiability_score": 0.78
+    },
+    "created_at": "2026-04-05T14:05:04Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths differs from the top-level image_paths value.",
+      "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_ec59690def9a9a3bd111f5d9",
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "source_dataset": "MathVision",
+    "source_problem_id": "350",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.62,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.88,
+      "initial_verifiability_score": 0.78
+    },
+    "created_at": "2026-04-05T14:05:04Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Question text, one image, and the final choice answer are present, so the sample still retains recoverable core semantics.",
+      "The item is highly image-dependent, and the registry records an inconsistency: the question contains two image placeholders while only one top-level image path is provided.",
+      "Additional image-path mismatch metadata increases reconstruction risk, so it should not be prioritized as a clean keep.",
+      "Because core assets are not entirely missing, high-recall collection guidance favors low_priority over reject."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_c6bc9cf8209ff9201a0f8541",
+      "candidate_id": "cand_20b5ff71ea071ec660768f26",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "dataset_name": "MathVision",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "drop_image_index",
+      "open_variant_count": 0,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T14:05:04Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_c6bc9cf8209ff9201a0f8541",
+    "problem_id": "prob_20b5ff71ea071ec660768f26",
+    "source_dataset": "MathVision",
+    "source_problem_id": "350",
+    "normalized_question_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place:\nAdam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\".\nBruna: \"At first I didn't know what Carla's favorite figure was, but now I know\".\nAdam: \"Now I know too\".\nWhat is Carla's favorite figure?",
+    "normalized_answer_text": "E",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 0,
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "image_placeholder_mismatch",
+      "pure_image_label_task",
+      "rewrite_unavailable"
+    ],
+    "created_at": "2026-04-05T14:05:04Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_c6bc9cf8209ff9201a0f8541",
+    "problem_id": "prob_20b5ff71ea071ec660768f26",
+    "normalized_question_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place:\nAdam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\".\nBruna: \"At first I didn't know what Carla's favorite figure was, but now I know\".\nAdam: \"Now I know too\".\nWhat is Carla's favorite figure?",
+    "normalized_answer_text": "E",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "Adam",
+        "canonical": "Adam",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "try",
+        "canonical": "try",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "out",
+        "canonical": "out",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "s",
+        "canonical": "s",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "told",
+        "canonical": "told",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "was",
+        "canonical": "was",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "I",
+        "canonical": "I",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "don",
+        "canonical": "don",
+        "variable_type": "label"
+      },
+      {
+        "original": "t",
+        "canonical": "t",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "know",
+        "canonical": "know",
+        "variable_type": "label"
+      },
+      {
+        "original": "At",
+        "canonical": "At",
+        "variable_type": "label"
+      },
+      {
+        "original": "didn",
+        "canonical": "didn",
+        "variable_type": "label"
+      },
+      {
+        "original": "but",
+        "canonical": "but",
+        "variable_type": "label"
+      },
+      {
+        "original": "now",
+        "canonical": "now",
+        "variable_type": "label"
+      },
+      {
+        "original": "Now",
+        "canonical": "Now",
+        "variable_type": "label"
+      },
+      {
+        "original": "too",
+        "canonical": "too",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown."
+      },
+      {
+        "segment_index": 2,
+        "text": "Adam knows that Carla told Bruna what the shape of the figure was."
+      },
+      {
+        "segment_index": 3,
+        "text": "Bruna knows that Carla told Adam what color the figure was."
+      },
+      {
+        "segment_index": 4,
+        "text": "The following conversation takes place:"
+      },
+      {
+        "segment_index": 5,
+        "text": "Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\"."
+      },
+      {
+        "segment_index": 6,
+        "text": "Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\"."
+      },
+      {
+        "segment_index": 7,
+        "text": "Adam: \"Now I know too\"."
+      },
+      {
+        "segment_index": 8,
+        "text": "What is Carla's favorite figure?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1557,
+          "height": 616
+        },
+        "readability_score": 0.7558,
+        "contrast_score": 35.9496
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T14:05:04Z",
+    "normalization_notes": [
+      "Removed inline image placeholder tags from the question text.",
+      "Kept the original question semantics and dialogue unchanged aside from light formatting cleanup.",
+      "Image is required because identifying the favorite figure depends on the pictured shapes/colors and answer options.",
+      "Choice labels were preserved as provided without inferring visual descriptions."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_20b5ff71ea071ec660768f26",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "350",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures beside. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place. Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\". Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\". Adam: \"Now I know too\". What is Carla's favorite figure?\n<image1>\n<image2>",
+    "normalized_question_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place:\nAdam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\".\nBruna: \"At first I didn't know what Carla's favorite figure was, but now I know\".\nAdam: \"Now I know too\".\nWhat is Carla's favorite figure?",
+    "raw_answer_text": "E",
+    "normalized_answer_text": "E",
+    "answer_type": "option",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9726,
+    "multi_step_score": 0.46,
+    "verifiability_score": 0.9172,
+    "quality_risk_flags": [
+      "image_placeholder_mismatch",
+      "metadata.image_paths differs from the top-level image_paths value.",
+      "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "image_placeholder_mismatch",
+      "pure_image_label_task",
+      "rewrite_unavailable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable and the required visual content appears available, with strong alignment and answer completeness. However, the rewrite stage could not produce a usable open-ended variant because the target is only an option label (\"E\"), and there is a minor image placeholder mismatch. Since this is still a recoverable pure-image multiple-choice task, review is preferred over rejection.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": false,
+    "release_reserved": {},
+    "rewrite_strategy": "drop_image_index",
+    "open_variant_count": 0,
+    "candidate_id": "cand_20b5ff71ea071ec660768f26",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 0.82,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T14:02:09Z",
+    "updated_at": "2026-04-05T14:05:04Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.88,
+    "initial_verifiability_score": 0.78,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.62,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question text, one image, and the final choice answer are present, so the sample still retains recoverable core semantics.",
+      "The item is highly image-dependent, and the registry records an inconsistency: the question contains two image placeholders while only one top-level image path is provided.",
+      "Additional image-path mismatch metadata increases reconstruction risk, so it should not be prioritized as a clean keep.",
+      "Because core assets are not entirely missing, high-recall collection guidance favors low_priority over reject."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_30cf61e91900c1d1a83e353d",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/350/question",
+      "storage_uri": "inline://prob_20b5ff71ea071ec660768f26/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 512,
+      "width": null,
+      "height": null,
+      "sha256": "d041a32698dec5d4c53696d8872a34d5f707efc09da4729256d04768ffad0979",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures beside. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place. Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\". Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\". Adam: \"Now I know too\". What is Carla's favorite figure?\n<image1>\n<image2>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Adam",
+          "canonical": "Adam",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "try",
+          "canonical": "try",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "out",
+          "canonical": "out",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "told",
+          "canonical": "told",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "I",
+          "canonical": "I",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "don",
+          "canonical": "don",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "know",
+          "canonical": "know",
+          "variable_type": "label"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "didn",
+          "canonical": "didn",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "now",
+          "canonical": "now",
+          "variable_type": "label"
+        },
+        {
+          "original": "Now",
+          "canonical": "Now",
+          "variable_type": "label"
+        },
+        {
+          "original": "too",
+          "canonical": "too",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "asset_id": "asset_38184af9ea8f3ad31205fc00",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_20b5ff71ea071ec660768f26/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 493,
+      "width": null,
+      "height": null,
+      "sha256": "6fed77df18b23882cdbc50ea16f658ad25798f547e4fac5a078366519f555fa1",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures beside. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place. Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\". Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\". Adam: \"Now I know too\". What is Carla's favorite figure?\n<image1>\n<image2>",
+      "normalized_text_snapshot": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place:\nAdam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\".\nBruna: \"At first I didn't know what Carla's favorite figure was, but now I know\".\nAdam: \"Now I know too\".\nWhat is Carla's favorite figure?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Adam",
+          "canonical": "Adam",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "try",
+          "canonical": "try",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "out",
+          "canonical": "out",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "told",
+          "canonical": "told",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "I",
+          "canonical": "I",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "don",
+          "canonical": "don",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "know",
+          "canonical": "know",
+          "variable_type": "label"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "didn",
+          "canonical": "didn",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "now",
+          "canonical": "now",
+          "variable_type": "label"
+        },
+        {
+          "original": "Now",
+          "canonical": "Now",
+          "variable_type": "label"
+        },
+        {
+          "original": "too",
+          "canonical": "too",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "asset_id": "asset_756154828d7fb33844e4793c",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/350/answer",
+      "storage_uri": "inline://prob_20b5ff71ea071ec660768f26/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "a9f51566bd6705f7ea6ad54bb9deb449f795582d6529a0e22207b8981233ec58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "E",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "asset_id": "asset_ae65ca81f32d2a2e08bf4574",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_20b5ff71ea071ec660768f26/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "a9f51566bd6705f7ea6ad54bb9deb449f795582d6529a0e22207b8981233ec58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "E",
+      "normalized_text_snapshot": "E",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "asset_id": "asset_1d572547886d712844e38a40",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_20b5ff71ea071ec660768f26_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 164101,
+      "width": 1557,
+      "height": 655,
+      "sha256": "30a9a2bc5afb12e48b2153af4099a16317fcb6af1c148e6ee87d783f48a7009d",
+      "perceptual_hash": "3fe7e7f7e7001f46",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 755.2145,
+      "readability_score": 0.7558,
+      "noise_score": 15.8314,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1557,
+        "height": 616
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "image_placeholder_mismatch",
+        "metadata.image_paths differs from the top-level image_paths value.",
+        "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "asset_id": "asset_c257a8f5342a1675f8b1cabd",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_20b5ff71ea071ec660768f26_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 162934,
+      "width": 1557,
+      "height": 616,
+      "sha256": "02557791c42bc965a9407cf7a38102a749bfdf8998fa73fe46aaa44b5577d7d3",
+      "perceptual_hash": "3fe7e7f7ef003f46",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 755.2145,
+      "readability_score": 0.7558,
+      "noise_score": 15.8314,
+      "cropped_from_asset_id": "asset_1d572547886d712844e38a40",
+      "roi_bbox": {
+        "x": 0,
+        "y": 24,
+        "width": 1557,
+        "height": 616
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_20b5ff71ea071ec660768f26",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "question_type": "multiple_choice",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Adam knows that Carla told Bruna what the shape of the figure was.",
+          "segment_index": 2,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Bruna knows that Carla told Adam what color the figure was.",
+          "segment_index": 3,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\".",
+          "segment_index": 5,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\".",
+          "segment_index": 6,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "What is Carla's favorite figure?",
+          "segment_index": 8,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_20b5ff71ea071ec660768f26_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "unknown",
+          "target_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown.",
+          "expected_answer_type": "unknown",
+          "expected_answer": "E",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "I",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "Adam",
+          "canonical": "Adam",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "try",
+          "canonical": "try",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "out",
+          "canonical": "out",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "told",
+          "canonical": "told",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "I",
+          "canonical": "I",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "don",
+          "canonical": "don",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "know",
+          "canonical": "know",
+          "variable_type": "label"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "didn",
+          "canonical": "didn",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "now",
+          "canonical": "now",
+          "variable_type": "label"
+        },
+        {
+          "original": "Now",
+          "canonical": "Now",
+          "variable_type": "label"
+        },
+        {
+          "original": "too",
+          "canonical": "too",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "N",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown."
+        },
+        {
+          "segment_index": 2,
+          "text": "Adam knows that Carla told Bruna what the shape of the figure was."
+        },
+        {
+          "segment_index": 3,
+          "text": "Bruna knows that Carla told Adam what color the figure was."
+        },
+        {
+          "segment_index": 4,
+          "text": "The following conversation takes place:"
+        },
+        {
+          "segment_index": 5,
+          "text": "Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\"."
+        },
+        {
+          "segment_index": 6,
+          "text": "Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\"."
+        },
+        {
+          "segment_index": 7,
+          "text": "Adam: \"Now I know too\"."
+        },
+        {
+          "segment_index": 8,
+          "text": "What is Carla's favorite figure?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T14:04:45Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_20b5ff71ea071ec660768f26_1",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 2.3771,
+        "dark_pixel_ratio": 0.0544,
+        "readability_score": 0.7558,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 1557,
+            "height": 655
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 1557,
+            "height": 616
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 24,
+            "width": 778,
+            "height": 308
+          },
+          "salience": 0.3991
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 332,
+            "width": 778,
+            "height": 308
+          },
+          "salience": 0.4442
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 778,
+            "y": 332,
+            "width": 779,
+            "height": 308
+          },
+          "salience": 0.3992
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9023,
+      "created_at": "2026-04-05T14:04:45Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_20b5ff71ea071ec660768f26",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": false,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "rewrite_variant_invalid"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 0.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 0.82,
+      "decision_hint": "reject",
+      "created_at": "2026-04-05T14:04:56Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_8b75ff7533a3d80820e880e9",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "target_slot",
+      "canonical_value": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown.",
+      "surface_forms": [
+        "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_38184af9ea8f3ad31205fc00"
+      ],
+      "evidence_refs": [
+        "asset_38184af9ea8f3ad31205fc00"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "unknown",
+      "normalized_value": {
+        "slot_id": "slot_prob_20b5ff71ea071ec660768f26_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "unknown",
+        "target_text": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown.",
+        "expected_answer_type": "unknown",
+        "expected_answer": "E",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_f00b763ba52ca48fddf04ddf",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "answer_claim",
+      "canonical_value": "E",
+      "surface_forms": [
+        "E"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_ae65ca81f32d2a2e08bf4574"
+      ],
+      "evidence_refs": [
+        "asset_ae65ca81f32d2a2e08bf4574"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "option",
+      "normalized_value": {
+        "answer": "E"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_8d56d30fbfd061f8db9d8aae",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1557,
+          "height": 655
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9023,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_4b4dd716b52e34a6158dd95e",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 1557,
+          "height": 616
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9023,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_4bc95160eae1f64ca92b2a34",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 24,
+          "width": 778,
+          "height": 308
+        },
+        "salience": 0.3991
+      },
+      "unit": null,
+      "confidence": 0.9023,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_1b8f4f24151fe11d7a513c0d",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 332,
+          "width": 778,
+          "height": 308
+        },
+        "salience": 0.4442
+      },
+      "unit": null,
+      "confidence": 0.9023,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_bd7c1bba3bac5c7ecbd05c65",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 778,
+          "y": 332,
+          "width": 779,
+          "height": 308
+        },
+        "salience": 0.3992
+      },
+      "unit": null,
+      "confidence": 0.9023,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_304baafe248c8c319569baf3",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "quality_signal",
+      "canonical_value": "image_placeholder_mismatch",
+      "surface_forms": [
+        "image_placeholder_mismatch"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "image_placeholder_mismatch"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_db627099b951a495a3a3ef8a",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths differs from the top-level image_paths value.",
+      "surface_forms": [
+        "metadata.image_paths differs from the top-level image_paths value."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths differs from the top-level image_paths value."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_47210c0d521fcb3d89176808",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "quality_signal",
+      "canonical_value": "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided.",
+      "surface_forms": [
+        "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_1927902ef71d35ade0a747ea",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_20b5ff71ea071ec660768f26",
+        "problem_id": "prob_20b5ff71ea071ec660768f26",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": false,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 0.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 0.82,
+        "decision_hint": "reject",
+        "created_at": "2026-04-05T14:04:56Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "node_id": "node_254bbf134ece302b049082e4",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "image_placeholder_mismatch",
+          "pure_image_label_task",
+          "rewrite_unavailable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:05:04Z",
+      "updated_at": "2026-04-05T14:05:04Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_c6bc9cf8209ff9201a0f8541",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_30cf61e91900c1d1a83e353d",
+        "asset_38184af9ea8f3ad31205fc00",
+        "asset_756154828d7fb33844e4793c",
+        "asset_ae65ca81f32d2a2e08bf4574",
+        "asset_1d572547886d712844e38a40",
+        "asset_c257a8f5342a1675f8b1cabd"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 23
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 1557,
+            "height": 655,
+            "blur_score": 755.2145,
+            "contrast_score": 35.9496,
+            "noise_score": 15.8314,
+            "readability_score": 0.7558,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 24,
+              "width": 1557,
+              "height": 616
+            },
+            "perceptual_hash": "3fe7e7f7e7001f46"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_c6bc9cf8209ff9201a0f8541",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_20b5ff71ea071ec660768f26",
+        "question_type": "multiple_choice",
+        "condition_count": 0,
+        "target_count": 6,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_20b5ff71ea071ec660768f26",
+        "solvability_score": 0.82,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "rewrite_variant_invalid"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "drop_image_index",
+        "variant_count": 0,
+        "discard_reason_codes": [
+          "pure_image_index_selection",
+          "correct_option_is_label_only"
+        ]
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_available",
+          "jointly_understandable",
+          "options_visually_identifiable"
+        ],
+        "rationale": "The puzzle text is complete and clearly asks for Carla's favorite figure based on color/shape logic. The provided composite image contains both the figure set and the answer options, and the shapes/colors are semantically readable enough to understand the task. Although the metadata mentions two placeholders with one image path, the single attached image still supplies the needed visual information.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "image_placeholder_mismatch",
+        "metadata.image_paths differs from the top-level image_paths value.",
+        "question_text contains two image placeholders ('<image1>' and '<image2>') but only one top-level image path is provided."
+      ],
+      "clean_score": 0.9151,
+      "decision": "review",
+      "decision_reason_codes": [
+        "image_placeholder_mismatch",
+        "pure_image_label_task",
+        "rewrite_unavailable"
+      ],
+      "decision_rationale": "The sample is jointly understandable and the required visual content appears available, with strong alignment and answer completeness. However, the rewrite stage could not produce a usable open-ended variant because the target is only an option label (\"E\"), and there is a minor image placeholder mismatch. Since this is still a recoverable pure-image multiple-choice task, review is preferred over rejection.",
+      "review_ticket_id": "review_prob_20b5ff71ea071ec660768f26",
+      "operator_type": "system",
+      "started_at": "2026-04-05T14:05:04Z",
+      "finished_at": "2026-04-05T14:05:04Z",
+      "candidate_id": "cand_20b5ff71ea071ec660768f26",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_c6bc9cf8209ff9201a0f8541",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "image_entity_refs": [
+        "visual_prob_20b5ff71ea071ec660768f26_1::roi",
+        "visual_prob_20b5ff71ea071ec660768f26_1::roi_top_left",
+        "visual_prob_20b5ff71ea071ec660768f26_1::roi_bottom_left",
+        "visual_prob_20b5ff71ea071ec660768f26_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_20b5ff71ea071ec660768f26_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_20b5ff71ea071ec660768f26_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7756
+        },
+        {
+          "text_ref": "I",
+          "image_ref": "visual_prob_20b5ff71ea071ec660768f26_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7756
+        },
+        {
+          "text_ref": "slot_prob_20b5ff71ea071ec660768f26_1",
+          "image_ref": "visual_prob_20b5ff71ea071ec660768f26_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7785
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-05T14:04:45Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_ffbd7c0f8eec7c71e5552696",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures beside. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place. Adam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\". Bruna: \"At first I didn't know what Carla's favorite figure was, but now I know\". Adam: \"Now I know too\". What is Carla's favorite figure?\n<image1>\n<image2>",
+      "after_value": "Adam and Bruna try to find out which is Carla's favorite figure, amongst the figures shown. Adam knows that Carla told Bruna what the shape of the figure was. Bruna knows that Carla told Adam what color the figure was. The following conversation takes place:\nAdam: \"I don't know what Carla's favorite figure is and I know that Bruna doesn't know either\".\nBruna: \"At first I didn't know what Carla's favorite figure was, but now I know\".\nAdam: \"Now I know too\".\nWhat is Carla's favorite figure?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "audit_id": "audit_3aaf0aa6c219031efd74ef73",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "E",
+      "after_value": "E",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "audit_id": "audit_de16e41d952eee141f01895a",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "drop_image_index",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "audit_id": "audit_254bbf134ece302b049082e4",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:05:04Z"
+    },
+    {
+      "audit_id": "audit_e9c5ac09fe4ea8af5f18fcd7",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "Adam",
+          "canonical": "Adam",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "try",
+          "canonical": "try",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "out",
+          "canonical": "out",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "told",
+          "canonical": "told",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "I",
+          "canonical": "I",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "don",
+          "canonical": "don",
+          "variable_type": "label"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "know",
+          "canonical": "know",
+          "variable_type": "label"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        },
+        {
+          "original": "didn",
+          "canonical": "didn",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "now",
+          "canonical": "now",
+          "variable_type": "label"
+        },
+        {
+          "original": "Now",
+          "canonical": "Now",
+          "variable_type": "label"
+        },
+        {
+          "original": "too",
+          "canonical": "too",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:05:04Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_c6bc9cf8209ff9201a0f8541",
+      "problem_id": "prob_20b5ff71ea071ec660768f26",
+      "source_problem_id": "350",
+      "strategy": "drop_image_index",
+      "rationale": "This is a pure figure-index selection task: the options are only labels (A-E) for shown figures, and the correct option text \"E\" does not provide semantic content that can be rewritten into an answerable open-ended question.",
+      "discard_reason_codes": [
+        "pure_image_index_selection",
+        "correct_option_is_label_only"
+      ],
+      "variant_count": 0,
+      "variants": [],
+      "created_at": "2026-04-05T14:05:04Z"
+    }
+  ],
+  "open_ended_problem_variants": []
+}
