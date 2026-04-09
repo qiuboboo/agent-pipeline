@@ -130,6 +130,16 @@ def sample_source_problem_id(sample: Dict[str, Any], sample_path: Path) -> str:
 def parse_output_dir(output_dir: Path, dataset_key_from_summary: str) -> Optional[OutputDirMatch]:
     output_name = output_dir.name
 
+    if dataset_key_from_summary == "emma_chemistry":
+        if output_name == "emma_chemistry_full" or re.fullmatch(r"emma_chemistry_validation_\d+", output_name):
+            return OutputDirMatch(
+                range_key="emma_chemistry",
+                dataset_key=dataset_key_from_summary,
+                range_start=0,
+                range_end=0,
+                source_kind="emma_chemistry",
+            )
+
     if dataset_key_from_summary == "eee_bench" and re.fullmatch(r"eee_bench_merged_\d+_\d+", output_name):
         return None
 
@@ -523,7 +533,10 @@ def status_counts(entries: List[CandidateSample]) -> Dict[str, int]:
             decision = latest.get("decision")
         if not decision:
             pm = sample.get("problem_main_record") or {}
-            decision = pm.get("decision") or pm.get("quality_decision")
+            decision = pm.get("decision") or pm.get("quality_decision") or pm.get("clean_decision")
+        if not decision:
+            clean_problem = sample.get("clean_problem_record") or {}
+            decision = clean_problem.get("decision") or clean_problem.get("quality_decision") or clean_problem.get("clean_decision")
         if not decision:
             counts["missing"] += 1
             continue

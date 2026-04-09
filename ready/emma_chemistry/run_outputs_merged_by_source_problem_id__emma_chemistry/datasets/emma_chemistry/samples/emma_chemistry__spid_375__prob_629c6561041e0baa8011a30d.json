@@ -1,0 +1,1853 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_4d96100fd9fda5352c92b31d",
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "problem_id": "prob_629c6561041e0baa8011a30d",
+    "dataset_name": "EMMA-Chemistry",
+    "source_problem_id": "375",
+    "raw_question_text": "<image_1> In the transition-state structure shown in the image, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown in the image.",
+    "raw_answer_text": "13",
+    "choice_map": {},
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image_1",
+    "choice_field": null,
+    "extraction_notes": [
+      "record contains an in-memory image placeholder in `image_1` but no concrete image path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-07T20:44:38Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_629c6561041e0baa8011a30d",
+    "image_manifest": [
+      {
+        "path": "outputs/emma_chemistry_full/run_98c1c89903499d3e/datasets/emma_chemistry/artifacts/images/prob_629c6561041e0baa8011a30d_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 264,
+        "height": 320,
+        "file_size": 16209
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 311,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.extraction_notes states there is no concrete image path or URL, which conflicts with the provided top-level image_paths entry",
+      "metadata.image_paths is empty while the top-level image_paths field contains an image path"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_4d96100fd9fda5352c92b31d",
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "dataset_name": "EMMA-Chemistry",
+    "source_problem_id": "375",
+    "created_at": "2026-04-07T20:44:38Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_629c6561041e0baa8011a30d",
+    "image_dependency_score": 0.98,
+    "multi_step_score": 0.56,
+    "verifiability_score": 0.87,
+    "score_evidence": {
+      "image_dependency": [
+        "题干明确写有“transition-state structure shown”，核心信息来自所示结构而非纯文本。",
+        "输入字段 `requires_image=true` 且 `text_dominant=false`，表明解题高度依赖图像。",
+        "需要识别化学结构中的键及多个组分，文本本身未提供可替代的结构细节。"
+      ],
+      "multi_step": [
+        "需要先从图中识别所有组分，再统计总键数，而不是直接读取单一属性。",
+        "题干要求同时计入 single/double/triple bonds，并排除 involving hydrogen 的键，存在至少两层筛选规则。",
+        "“Disregard arrows” 表明还需区分反应箭头与真实化学键，属于额外判别步骤。"
+      ],
+      "verifiability": [
+        "答案类型为 `numeric`，目标输出形式清晰，便于核验。",
+        "题目要求的是总键数，若图像可读，后续可通过人工或规则化重数统计进行复核。",
+        "`registry_passed=true`，且存在图像与答案记录，基本资产齐全。"
+      ]
+    },
+    "risk_flags": [
+      "asset registry issues include conflicting image-path metadata entries",
+      "small source image (264x320) may slightly increase ambiguity in fine bond counting"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_4d96100fd9fda5352c92b31d",
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "dataset_name": "EMMA-Chemistry",
+    "source_problem_id": "375",
+    "created_at": "2026-04-07T20:44:38Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_629c6561041e0baa8011a30d",
+    "priority": 0.79,
+    "decision": "keep",
+    "decision_reasons": [
+      "Question, answer, and primary image are all present, so the core semantic assets needed for recovery are available.",
+      "The sample is highly image-dependent, but an image file exists and the numeric answer is verifiable, which supports inclusion in the candidate pool.",
+      "Recorded issues are metadata inconsistencies about image paths rather than absence of the actual image asset.",
+      "The small image size introduces some ambiguity risk for fine bond counting, but it does not remove the core semantics or make the sample unrecoverable."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_4d96100fd9fda5352c92b31d",
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "dataset_name": "EMMA-Chemistry",
+    "source_problem_id": "375",
+    "created_at": "2026-04-07T20:44:38Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_4d96100fd9fda5352c92b31d",
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "problem_id": "prob_629c6561041e0baa8011a30d",
+    "dataset_name": "EMMA-Chemistry",
+    "normalized_question_text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+    "normalized_answer_text": "13",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder token as formatting noise.",
+      "Kept the question image-dependent because the bond count relies on the depicted transition-state structure.",
+      "No choices were provided, so the choice map remains empty."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-07T20:44:38Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "source_dataset": "EMMA-Chemistry",
+    "source_split": "test",
+    "source_problem_id": "375",
+    "subject": "化学",
+    "raw_question_text": "<image_1> In the transition-state structure shown in the image, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown in the image.",
+    "raw_answer_text": "13",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.56,
+    "initial_verifiability_score": 0.87,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "row_index": 375,
+      "image_paths": [],
+      "extraction_notes": [
+        "record contains an in-memory image placeholder in `image_1` but no concrete image path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image_1",
+      "choice_field": null,
+      "reasoning_chain_field": "pid",
+      "reasoning_chain": "chem_376",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-07T20:45:57Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.79,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question, answer, and primary image are all present, so the core semantic assets needed for recovery are available.",
+      "The sample is highly image-dependent, but an image file exists and the numeric answer is verifiable, which supports inclusion in the candidate pool.",
+      "Recorded issues are metadata inconsistencies about image paths rather than absence of the actual image asset.",
+      "The small image size introduces some ambiguity risk for fine bond counting, but it does not remove the core semantics or make the sample unrecoverable."
+    ],
+    "collection_risk_flags": [
+      "asset registry issues include conflicting image-path metadata entries",
+      "small source image (264x320) may slightly increase ambiguity in fine bond counting"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_2cc639faca068eb949b4e930",
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "source_dataset": "EMMA-Chemistry",
+    "source_problem_id": "375",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_629c6561041e0baa8011a30d/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_629c6561041e0baa8011a30d/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 264,
+        "height": 320
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.56,
+      "initial_verifiability_score": 0.87
+    },
+    "created_at": "2026-04-07T20:45:57Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes states there is no concrete image path or URL, which conflicts with the provided top-level image_paths entry",
+      "metadata.image_paths is empty while the top-level image_paths field contains an image path"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_7a56b1f7c3e5c792368a532d",
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "source_dataset": "EMMA-Chemistry",
+    "source_problem_id": "375",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.79,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.56,
+      "initial_verifiability_score": 0.87
+    },
+    "created_at": "2026-04-07T20:45:57Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Question, answer, and primary image are all present, so the core semantic assets needed for recovery are available.",
+      "The sample is highly image-dependent, but an image file exists and the numeric answer is verifiable, which supports inclusion in the candidate pool.",
+      "Recorded issues are metadata inconsistencies about image paths rather than absence of the actual image asset.",
+      "The small image size introduces some ambiguity risk for fine bond counting, but it does not remove the core semantics or make the sample unrecoverable."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_4d96100fd9fda5352c92b31d",
+      "candidate_id": "cand_629c6561041e0baa8011a30d",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "dataset_name": "EMMA-Chemistry",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-07T20:45:57Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_4d96100fd9fda5352c92b31d",
+    "problem_id": "prob_629c6561041e0baa8011a30d",
+    "source_dataset": "EMMA-Chemistry",
+    "source_problem_id": "375",
+    "normalized_question_text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+    "normalized_answer_text": "13",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "descriptive",
+    "open_variant_count": 1,
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "metadata_inconsistency"
+    ],
+    "created_at": "2026-04-07T20:45:57Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_4d96100fd9fda5352c92b31d",
+    "problem_id": "prob_629c6561041e0baa8011a30d",
+    "normalized_question_text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+    "normalized_answer_text": "13",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "but",
+        "canonical": "but",
+        "variable_type": "label"
+      },
+      {
+        "original": "Note",
+        "canonical": "Note",
+        "variable_type": "label"
+      },
+      {
+        "original": "all",
+        "canonical": "all",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen."
+      },
+      {
+        "segment_index": 2,
+        "text": "Note: Disregard arrows."
+      },
+      {
+        "segment_index": 3,
+        "text": "Consider all components present in the transition-state structure shown."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 3,
+          "y": 18,
+          "width": 253,
+          "height": 284
+        },
+        "readability_score": 0.8208,
+        "contrast_score": 42.9171
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-07T20:45:57Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder token as formatting noise.",
+      "Kept the question image-dependent because the bond count relies on the depicted transition-state structure.",
+      "No choices were provided, so the choice map remains empty."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_629c6561041e0baa8011a30d",
+    "source_dataset": "EMMA-Chemistry",
+    "source_split": "test",
+    "source_problem_id": "375",
+    "ingest_batch_id": "benchmarkallinone-emma-chemistry-full_20260407T045742Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "化学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image_1> In the transition-state structure shown in the image, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown in the image.",
+    "normalized_question_text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+    "raw_answer_text": "13",
+    "normalized_answer_text": "13",
+    "answer_type": "numeric",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "chem_376",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.8471,
+    "multi_step_score": 0.3697,
+    "verifiability_score": 0.954,
+    "quality_risk_flags": [
+      "metadata.extraction_notes states there is no concrete image path or URL, which conflicts with the provided top-level image_paths entry",
+      "metadata.image_paths is empty while the top-level image_paths field contains an image path",
+      "metadata_inconsistency"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "metadata_inconsistency"
+    ],
+    "clean_decision_rationale": "The sample is understandable and appears solvable from the provided transition-state image, with a complete question, usable rewrite, and a concrete numeric answer. However, the alignment evidence is weak due to inconsistent image-path/grounding metadata, so it retains semantic value but should be manually reviewed rather than passed automatically.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_629c6561041e0baa8011a30d",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-07T20:44:38Z",
+    "updated_at": "2026-04-07T20:45:57Z",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.56,
+    "initial_verifiability_score": 0.87,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.79,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question, answer, and primary image are all present, so the core semantic assets needed for recovery are available.",
+      "The sample is highly image-dependent, but an image file exists and the numeric answer is verifiable, which supports inclusion in the candidate pool.",
+      "Recorded issues are metadata inconsistencies about image paths rather than absence of the actual image asset.",
+      "The small image size introduces some ambiguity risk for fine bond counting, but it does not remove the core semantics or make the sample unrecoverable."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_fa5ca63354aaaa21e5f3b9be",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://emma_chemistry/test/375/question",
+      "storage_uri": "inline://prob_629c6561041e0baa8011a30d/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 311,
+      "width": null,
+      "height": null,
+      "sha256": "f733057f951833b26ff3854cf2c82ad2c312776c6fce8ab09af3669bf1ad1950",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image_1> In the transition-state structure shown in the image, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown in the image.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7955,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "Note",
+          "canonical": "Note",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "asset_id": "asset_de38cf084aa2efec904f87bd",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_629c6561041e0baa8011a30d/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 275,
+      "width": null,
+      "height": null,
+      "sha256": "50b12f57fe80af0b2d5ce931dbf54cf412dac881558cac5654dab0b77ef2f9c6",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image_1> In the transition-state structure shown in the image, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown in the image.",
+      "normalized_text_snapshot": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+      "text_completeness_score": 0.7955,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "Note",
+          "canonical": "Note",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "asset_id": "asset_5c9fa7b3c435057da8b25cff",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://emma_chemistry/test/375/answer",
+      "storage_uri": "inline://prob_629c6561041e0baa8011a30d/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278",
+      "perceptual_hash": null,
+      "source_text_snapshot": "13",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "asset_id": "asset_52d0a18b32dba565808c09db",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_629c6561041e0baa8011a30d/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278",
+      "perceptual_hash": null,
+      "source_text_snapshot": "13",
+      "normalized_text_snapshot": "13",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "asset_id": "asset_40f5bbb45bd9656f7584c26b",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/emma_chemistry_full/run_98c1c89903499d3e/datasets/emma_chemistry/artifacts/images/prob_629c6561041e0baa8011a30d_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 16209,
+      "width": 264,
+      "height": 320,
+      "sha256": "1d52f9ea96992fb21660fa9044446331eb3f273b0f2c398c7167691fbcd90613",
+      "perceptual_hash": "fbf9e0e2a75307e7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3544.8159,
+      "readability_score": 0.8208,
+      "noise_score": 30.1861,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 3,
+        "y": 18,
+        "width": 253,
+        "height": 284
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes states there is no concrete image path or URL, which conflicts with the provided top-level image_paths entry",
+        "metadata.image_paths is empty while the top-level image_paths field contains an image path",
+        "metadata_inconsistency"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "asset_id": "asset_8f2786440327664fad50d402",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/emma_chemistry_full/run_98c1c89903499d3e/datasets/emma_chemistry/artifacts/crops/prob_629c6561041e0baa8011a30d_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 15962,
+      "width": 253,
+      "height": 284,
+      "sha256": "c5b8302f5b0e8da118de976d64f453cbed9d59482ccc9b19e2fd1078b8db176e",
+      "perceptual_hash": "f9fde0e2e7135f27",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3544.8159,
+      "readability_score": 0.8208,
+      "noise_score": 30.1861,
+      "cropped_from_asset_id": "asset_40f5bbb45bd9656f7584c26b",
+      "roi_bbox": {
+        "x": 3,
+        "y": 18,
+        "width": 253,
+        "height": 284
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "asset_id": "asset_b6c2b62c88e585cd46a698cc",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_073eea3a09a05df6b76bfd0c",
+      "file_format": "txt",
+      "file_size_bytes": 275,
+      "width": null,
+      "height": null,
+      "sha256": "50b12f57fe80af0b2d5ce931dbf54cf412dac881558cac5654dab0b77ef2f9c6",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image_1> In the transition-state structure shown in the image, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown in the image.",
+      "normalized_text_snapshot": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+      "text_completeness_score": 0.7955,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "Note",
+          "canonical": "Note",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_629c6561041e0baa8011a30d",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "question_type": "descriptive",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Consider all components present in the transition-state structure shown.",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_629c6561041e0baa8011a30d_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Consider all components present in the transition-state structure shown.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "13",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "Note",
+          "canonical": "Note",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "N",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen."
+        },
+        {
+          "segment_index": 2,
+          "text": "Note: Disregard arrows."
+        },
+        {
+          "segment_index": 3,
+          "text": "Consider all components present in the transition-state structure shown."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-07T20:45:28Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_629c6561041e0baa8011a30d_1",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 0.825,
+        "dark_pixel_ratio": 0.0522,
+        "readability_score": 0.8208,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 264,
+            "height": 320
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 3,
+            "y": 18,
+            "width": 253,
+            "height": 284
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 129,
+            "y": 18,
+            "width": 127,
+            "height": 142
+          },
+          "salience": 0.4335
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 3,
+            "y": 160,
+            "width": 126,
+            "height": 142
+          },
+          "salience": 0.4313
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 129,
+            "y": 160,
+            "width": 127,
+            "height": 142
+          },
+          "salience": 0.3987
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9283,
+      "created_at": "2026-04-07T20:45:28Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_629c6561041e0baa8011a30d",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": false,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "missing_grounded_visual_path"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 0.0
+      },
+      "solvability_score": 0.8,
+      "decision_hint": "reject",
+      "created_at": "2026-04-07T20:45:37Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_2394806cdcaeb2c8cd06b912",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "target_slot",
+      "canonical_value": "Consider all components present in the transition-state structure shown.",
+      "surface_forms": [
+        "Consider all components present in the transition-state structure shown."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_de38cf084aa2efec904f87bd"
+      ],
+      "evidence_refs": [
+        "asset_de38cf084aa2efec904f87bd"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_629c6561041e0baa8011a30d_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Consider all components present in the transition-state structure shown.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "13",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_81f79fc4e0b111542286faba",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "answer_claim",
+      "canonical_value": "13",
+      "surface_forms": [
+        "13"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_52d0a18b32dba565808c09db"
+      ],
+      "evidence_refs": [
+        "asset_52d0a18b32dba565808c09db"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "13"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_fa2be636feb1a335918f4e56",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 264,
+          "height": 320
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9283,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_f97b98d3f33eb8a629d99053",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 3,
+          "y": 18,
+          "width": 253,
+          "height": 284
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9283,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_416023a0fc6362328fcae498",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 129,
+          "y": 18,
+          "width": 127,
+          "height": 142
+        },
+        "salience": 0.4335
+      },
+      "unit": null,
+      "confidence": 0.9283,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_1ca2bfa8ed31491b2b386eeb",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 3,
+          "y": 160,
+          "width": 126,
+          "height": 142
+        },
+        "salience": 0.4313
+      },
+      "unit": null,
+      "confidence": 0.9283,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_1c44b9c8d17bd336877d1eec",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 129,
+          "y": 160,
+          "width": 127,
+          "height": 142
+        },
+        "salience": 0.3987
+      },
+      "unit": null,
+      "confidence": 0.9283,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_c77788cb0f3c6de05ea849d8",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "text_fact",
+      "canonical_value": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+      "surface_forms": [
+        "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_b6c2b62c88e585cd46a698cc"
+      ],
+      "evidence_refs": [
+        "asset_b6c2b62c88e585cd46a698cc"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_073eea3a09a05df6b76bfd0c",
+        "parent_problem_id": "prob_629c6561041e0baa8011a30d",
+        "variant_index": 1,
+        "title": "EMMA-Chemistry 开放题",
+        "rewritten_question_text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "13",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_dff032ed73eb1150c0d80226",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states there is no concrete image path or URL, which conflicts with the provided top-level image_paths entry",
+      "surface_forms": [
+        "metadata.extraction_notes states there is no concrete image path or URL, which conflicts with the provided top-level image_paths entry"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states there is no concrete image path or URL, which conflicts with the provided top-level image_paths entry"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_12debe51f705c8935868eb89",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty while the top-level image_paths field contains an image path",
+      "surface_forms": [
+        "metadata.image_paths is empty while the top-level image_paths field contains an image path"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty while the top-level image_paths field contains an image path"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_18292bd50efdd3875c37b89d",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_inconsistency",
+      "surface_forms": [
+        "metadata_inconsistency"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_inconsistency"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_ee0a22390ce7628368f09220",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_629c6561041e0baa8011a30d",
+        "problem_id": "prob_629c6561041e0baa8011a30d",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": false,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 0.0
+        },
+        "solvability_score": 0.8,
+        "decision_hint": "reject",
+        "created_at": "2026-04-07T20:45:37Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "node_id": "node_f9ea4d8b002d8e42757e61c2",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "metadata_inconsistency"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T20:45:57Z",
+      "updated_at": "2026-04-07T20:45:57Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_4d96100fd9fda5352c92b31d",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_98c1c89903499d3e",
+      "dataset_name": "EMMA-Chemistry",
+      "input_asset_ids": [
+        "asset_fa5ca63354aaaa21e5f3b9be",
+        "asset_de38cf084aa2efec904f87bd",
+        "asset_5c9fa7b3c435057da8b25cff",
+        "asset_52d0a18b32dba565808c09db",
+        "asset_40f5bbb45bd9656f7584c26b",
+        "asset_8f2786440327664fad50d402",
+        "asset_b6c2b62c88e585cd46a698cc"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 8
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 264,
+            "height": 320,
+            "blur_score": 3544.8159,
+            "contrast_score": 42.9171,
+            "noise_score": 30.1861,
+            "readability_score": 0.8208,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 3,
+              "y": 18,
+              "width": 253,
+              "height": 284
+            },
+            "perceptual_hash": "fbf9e0e2a75307e7"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_4d96100fd9fda5352c92b31d",
+        "coverage_score": 0.18,
+        "consistency_score": 0.1,
+        "alignment_status": "bad",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_629c6561041e0baa8011a30d",
+        "question_type": "descriptive",
+        "condition_count": 0,
+        "target_count": 2,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_629c6561041e0baa8011a30d",
+        "solvability_score": 0.8,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for the total number of non-hydrogen bonds in the depicted transition-state structure, and the image is present and semantically legible enough to inspect the relevant atoms and bond types. A human annotator can understand both the task and the expected numeric answer format.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes states there is no concrete image path or URL, which conflicts with the provided top-level image_paths entry",
+        "metadata.image_paths is empty while the top-level image_paths field contains an image path",
+        "metadata_inconsistency"
+      ],
+      "clean_score": 0.9084,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "metadata_inconsistency"
+      ],
+      "decision_rationale": "The sample is understandable and appears solvable from the provided transition-state image, with a complete question, usable rewrite, and a concrete numeric answer. However, the alignment evidence is weak due to inconsistent image-path/grounding metadata, so it retains semantic value but should be manually reviewed rather than passed automatically.",
+      "review_ticket_id": "review_prob_629c6561041e0baa8011a30d",
+      "operator_type": "system",
+      "started_at": "2026-04-07T20:45:57Z",
+      "finished_at": "2026-04-07T20:45:57Z",
+      "candidate_id": "cand_629c6561041e0baa8011a30d",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_4d96100fd9fda5352c92b31d",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "image_entity_refs": [
+        "visual_prob_629c6561041e0baa8011a30d_1::roi",
+        "visual_prob_629c6561041e0baa8011a30d_1::roi_top_right",
+        "visual_prob_629c6561041e0baa8011a30d_1::roi_bottom_left",
+        "visual_prob_629c6561041e0baa8011a30d_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_629c6561041e0baa8011a30d_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.18,
+      "consistency_score": 0.1,
+      "alignment_status": "bad",
+      "created_at": "2026-04-07T20:45:28Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_90c263a97310235a48790353",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image_1> In the transition-state structure shown in the image, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown in the image.",
+      "after_value": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "audit_id": "audit_811e4b1c5a38e8b8527291c5",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "13",
+      "after_value": "13",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "audit_id": "audit_51ac2873c7db4404cb983f1d",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "audit_id": "audit_f9ea4d8b002d8e42757e61c2",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T20:45:57Z"
+    },
+    {
+      "audit_id": "audit_d6095e4738c87e363829412e",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "Note",
+          "canonical": "Note",
+          "variable_type": "label"
+        },
+        {
+          "original": "all",
+          "canonical": "all",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T20:45:57Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_4d96100fd9fda5352c92b31d",
+      "problem_id": "prob_629c6561041e0baa8011a30d",
+      "source_problem_id": "375",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_073eea3a09a05df6b76bfd0c",
+          "parent_problem_id": "prob_629c6561041e0baa8011a30d",
+          "variant_index": 1,
+          "title": "EMMA-Chemistry 开放题",
+          "rewritten_question_text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "13",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-07T20:45:57Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_073eea3a09a05df6b76bfd0c",
+      "parent_problem_id": "prob_629c6561041e0baa8011a30d",
+      "variant_index": 1,
+      "title": "EMMA-Chemistry 开放题",
+      "rewritten_question_text": "In the transition-state structure shown, calculate the total number of bonds in the structure, including single, double, and triple bonds but excluding those involving hydrogen.\n\nNote: Disregard arrows. Consider all components present in the transition-state structure shown.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "13",
+      "split_role": "single"
+    }
+  ]
+}
