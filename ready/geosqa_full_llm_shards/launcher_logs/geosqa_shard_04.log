@@ -1,0 +1,67 @@
+Traceback (most recent call last):
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/pipeline_clients.py", line 357, in chat_json
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/pipeline_clients.py", line 322, in read_stream_json_response
+    with urllib.request.urlopen(build_request(stream_payload, accept="text/event-stream"), timeout=self.config.timeout_seconds) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/urllib/request.py", line 215, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/urllib/request.py", line 515, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/urllib/request.py", line 532, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/urllib/request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/urllib/request.py", line 1373, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/urllib/request.py", line 1348, in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/http/client.py", line 1428, in getresponse
+    response.begin()
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/http/client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/.pyenv/versions/anaconda3-2024.10-1/lib/python3.12/http/client.py", line 300, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/a1234/benchmarkall/./benchmarkallinone/run_pipeline.py", line 11, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/multidataset_cleaning_pipeline.py", line 2588, in main
+    summary = pipeline.run()
+              ^^^^^^^^^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/multidataset_cleaning_pipeline.py", line 2491, in run
+    dataset_summaries.append(self.run_single_dataset(spec))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/multidataset_cleaning_pipeline.py", line 2521, in run_single_dataset
+    result = self.process_sample(spec, sample, image_dir, crop_dir)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/multidataset_cleaning_pipeline.py", line 2573, in process_sample
+    rewritten = rewrite_sample(self, spec, sample, preprocessed)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/pipeline_cleaning.py", line 1205, in rewrite_sample
+    rewrite_report = pipeline.rewrite_agent.rewrite(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/pipeline_rewrite.py", line 471, in rewrite
+    llm_result = self.call_json(
+                 ^^^^^^^^^^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/pipeline_rewrite.py", line 332, in call_json
+    result = super().call_json(payload)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/pipeline_rewrite.py", line 66, in call_json
+    result = self.client.chat_json(self.system_prompt, user_prompt, caller=self.__class__.__name__.lower())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/pipeline_clients.py", line 373, in chat_json
+    wait_before_retry(attempt, backoff, attempts)
+  File "/Users/a1234/benchmarkall/benchmarkallinone/benchmark/src/pipeline_clients.py", line 274, in wait_before_retry
+    time.sleep(base_backoff * delay_attempt)
+KeyboardInterrupt
