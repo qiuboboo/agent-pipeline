@@ -1,0 +1,2331 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_558086afcf10dbf2a5fb389b",
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "problem_id": "prob_62002132fc9fa47b119b7744",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53102443.png",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+    "raw_answer_text": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+    "choice_map": {},
+    "image_paths": [
+      "53102443.png"
+    ],
+    "force_requires_image": true,
+    "question_field": null,
+    "answer_field": null,
+    "image_field": null,
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent",
+      "hf_raw_mm_math_fallback"
+    ],
+    "created_at": "2026-04-08T10:51:38Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_62002132fc9fa47b119b7744",
+    "image_manifest": [
+      {
+        "path": "outputs/mm_math_300_600/run_2fb8ac71fb544848/datasets/mm_math/artifacts/images/prob_62002132fc9fa47b119b7744_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 238,
+        "height": 150,
+        "file_size": 3003
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 171,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "long_text",
+      "answer_char_length": 400
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_558086afcf10dbf2a5fb389b",
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53102443.png",
+    "created_at": "2026-04-08T10:51:38Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_62002132fc9fa47b119b7744",
+    "image_dependency_score": 0.34,
+    "multi_step_score": 0.76,
+    "verifiability_score": 0.87,
+    "score_evidence": {
+      "image_dependency": [
+        "题干含有“As shown in the figure”且 requires_image=true，说明样本被上游标记为依赖图形。",
+        "但题干文字已明确给出关键关系：AD 平分∠BAC，AB=4，AC=2，且已知△ACD面积，因此主要几何信息并非只存在于图片中。",
+        "asset_registry_record.registry_passed=true 且存在 1 张图片，但仅凭字段看不出必须读取图中额外标注才能作答，因此保守给中低分。"
+      ],
+      "multi_step": [
+        "解答至少包含多步推理：由角平分线上的点到角两边距离相等，推出对应高相等。",
+        "再由已知△ACD面积和 AC=2 计算高 DF=3，之后转用 AB=4 计算△ABD面积。",
+        "属于图形设定下的几何关系调用 + 面积公式计算，不是一步直接代入。"
+      ],
+      "verifiability": [
+        "目标答案是单一数值面积，结果形式清晰，可直接核验是否为 6。",
+        "给定解答过程中的关键中间量可检查：DF=3、DE=DF、面积公式分别作用于△ACD与△ABD。",
+        "asset_registry_record.registry_passed=true，question_present=true，answer_present=true，说明样本资产完整，便于后续验证。"
+      ]
+    },
+    "risk_flags": [
+      "answer_type_inconsistent: top-level answer_type=set but answer_manifest.answer_type=long_text",
+      "image_need_ambiguous: question references a figure, but textual information may already be sufficient to solve"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_558086afcf10dbf2a5fb389b",
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53102443.png",
+    "created_at": "2026-04-08T10:51:38Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_62002132fc9fa47b119b7744",
+    "priority": 0.64,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题目、答案和图片资产均存在，核心语义可恢复，不应 reject。",
+      "样本可验证性较高，且解答目标是明确数值结果，具备进入候选池的基础。",
+      "题干提及图形，但现有证据显示主要几何关系可能已在文字中给出，图像依赖程度存在歧义，需后续复核。",
+      "存在 answer_type 元数据不一致风险，虽不影响核心语义，但会降低登记优先级。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_558086afcf10dbf2a5fb389b",
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53102443.png",
+    "created_at": "2026-04-08T10:51:38Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_558086afcf10dbf2a5fb389b",
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "problem_id": "prob_62002132fc9fa47b119b7744",
+    "dataset_name": "MM-Math",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+    "normalized_answer_text": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "force_requires_image=true, so requires_image was kept true.",
+      "Question explicitly references the figure.",
+      "No choice options were provided."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-08T10:51:38Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "source_dataset": "MM-Math",
+    "source_split": "train[300:600]",
+    "source_problem_id": "53102443.png",
+    "subject": "数学",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+    "raw_answer_text": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.34,
+    "initial_multi_solution_score": 0.76,
+    "initial_verifiability_score": 0.87,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 23,
+      "image_paths": [
+        "53102443.png"
+      ],
+      "extraction_notes": [
+        "source_intake_agent",
+        "hf_raw_mm_math_fallback"
+      ],
+      "image_field": null
+    },
+    "created_at": "2026-04-08T10:52:56Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.64,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题目、答案和图片资产均存在，核心语义可恢复，不应 reject。",
+      "样本可验证性较高，且解答目标是明确数值结果，具备进入候选池的基础。",
+      "题干提及图形，但现有证据显示主要几何关系可能已在文字中给出，图像依赖程度存在歧义，需后续复核。",
+      "存在 answer_type 元数据不一致风险，虽不影响核心语义，但会降低登记优先级。"
+    ],
+    "collection_risk_flags": [
+      "answer_type_inconsistent: top-level answer_type=set but answer_manifest.answer_type=long_text",
+      "image_need_ambiguous: question references a figure, but textual information may already be sufficient to solve"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_7d1abe97f3ba0fc65627fd4f",
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53102443.png",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_62002132fc9fa47b119b7744/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_62002132fc9fa47b119b7744/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53102443.png",
+        "is_present": true,
+        "width": 238,
+        "height": 150
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.34,
+      "initial_multi_solution_score": 0.76,
+      "initial_verifiability_score": 0.87
+    },
+    "created_at": "2026-04-08T10:52:56Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_5d8b10410ddb8385f87e7999",
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53102443.png",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.64,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.34,
+      "initial_multi_solution_score": 0.76,
+      "initial_verifiability_score": 0.87
+    },
+    "created_at": "2026-04-08T10:52:56Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题目、答案和图片资产均存在，核心语义可恢复，不应 reject。",
+      "样本可验证性较高，且解答目标是明确数值结果，具备进入候选池的基础。",
+      "题干提及图形，但现有证据显示主要几何关系可能已在文字中给出，图像依赖程度存在歧义，需后续复核。",
+      "存在 answer_type 元数据不一致风险，虽不影响核心语义，但会降低登记优先级。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_558086afcf10dbf2a5fb389b",
+      "candidate_id": "cand_62002132fc9fa47b119b7744",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "dataset_name": "MM-Math",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-08T10:52:56Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_558086afcf10dbf2a5fb389b",
+    "problem_id": "prob_62002132fc9fa47b119b7744",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53102443.png",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+    "normalized_answer_text": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review"
+    ],
+    "created_at": "2026-04-08T10:52:56Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_558086afcf10dbf2a5fb389b",
+    "problem_id": "prob_62002132fc9fa47b119b7744",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+    "normalized_answer_text": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "ABC",
+        "canonical": "ABC",
+        "variable_type": "label"
+      },
+      {
+        "original": "AD",
+        "canonical": "AD",
+        "variable_type": "label"
+      },
+      {
+        "original": "BAC",
+        "canonical": "BAC",
+        "variable_type": "label"
+      },
+      {
+        "original": "AB",
+        "canonical": "AB",
+        "variable_type": "label"
+      },
+      {
+        "original": "AC",
+        "canonical": "AC",
+        "variable_type": "label"
+      },
+      {
+        "original": "If",
+        "canonical": "If",
+        "variable_type": "label"
+      },
+      {
+        "original": "area",
+        "canonical": "area",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "ACD",
+        "canonical": "ACD",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "ABD",
+        "canonical": "ABD",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$."
+      },
+      {
+        "segment_index": 2,
+        "text": "If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53102443.png",
+        "roi_bbox": {
+          "x": 14,
+          "y": 15,
+          "width": 209,
+          "height": 120
+        },
+        "readability_score": 0.7245,
+        "contrast_score": 29.6705
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-08T10:52:56Z",
+    "normalization_notes": [
+      "force_requires_image=true, so requires_image was kept true.",
+      "Question explicitly references the figure.",
+      "No choice options were provided."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_62002132fc9fa47b119b7744",
+    "source_dataset": "MM-Math",
+    "source_split": "train[300:600]",
+    "source_problem_id": "53102443.png",
+    "ingest_batch_id": "benchmarkallinone-mm-math-300-600_20260408T083335Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+    "raw_answer_text": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+    "normalized_answer_text": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+    "answer_type": "set",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9455,
+    "multi_step_score": 0.4097,
+    "verifiability_score": 0.9748,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review"
+    ],
+    "clean_decision_rationale": "The sample is understandable and complete: the question is intact, the diagram is clear enough, the solution provides a usable answer, and solvability is strong. However, the alignment record is explicitly marked risky with a noted conflict, so the sample should be reviewed for final text-image-answer consistency rather than passed automatically.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_62002132fc9fa47b119b7744",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-08T10:51:38Z",
+    "updated_at": "2026-04-08T10:52:56Z",
+    "initial_image_dependency_score": 0.34,
+    "initial_multi_solution_score": 0.76,
+    "initial_verifiability_score": 0.87,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.64,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题目、答案和图片资产均存在，核心语义可恢复，不应 reject。",
+      "样本可验证性较高，且解答目标是明确数值结果，具备进入候选池的基础。",
+      "题干提及图形，但现有证据显示主要几何关系可能已在文字中给出，图像依赖程度存在歧义，需后续复核。",
+      "存在 answer_type 元数据不一致风险，虽不影响核心语义，但会降低登记优先级。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_168567b0414a754be6adbece",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mm_math/train[300:600]/53102443.png/question",
+      "storage_uri": "inline://prob_62002132fc9fa47b119b7744/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 171,
+      "width": null,
+      "height": null,
+      "sha256": "62573e6dfa2f703ea9460566d8204520669b267b1e0625178466c51820ec2efa",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "ACD",
+          "canonical": "ACD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "asset_id": "asset_e27089161b5d47cfd65ec089",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_62002132fc9fa47b119b7744/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 171,
+      "width": null,
+      "height": null,
+      "sha256": "62573e6dfa2f703ea9460566d8204520669b267b1e0625178466c51820ec2efa",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "normalized_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "text_completeness_score": 0.7027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "ACD",
+          "canonical": "ACD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "asset_id": "asset_0b647e704c8bf1ba105ec103",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mm_math/train[300:600]/53102443.png/answer",
+      "storage_uri": "inline://prob_62002132fc9fa47b119b7744/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 400,
+      "width": null,
+      "height": null,
+      "sha256": "06d0b736cb4af78c7388ec3422e8570416f2d8e085a3322f41ea42990d100ea0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Draw",
+          "canonical": "Draw",
+          "variable_type": "label"
+        },
+        {
+          "original": "DE",
+          "canonical": "DE",
+          "variable_type": "label"
+        },
+        {
+          "original": "perp",
+          "canonical": "perp",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "DF",
+          "canonical": "DF",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        },
+        {
+          "original": "thus",
+          "canonical": "thus",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "ACD",
+          "canonical": "ACD",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "cdot",
+          "canonical": "cdot",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "asset_id": "asset_9951085d541d40aade57e242",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_62002132fc9fa47b119b7744/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 400,
+      "width": null,
+      "height": null,
+      "sha256": "06d0b736cb4af78c7388ec3422e8570416f2d8e085a3322f41ea42990d100ea0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+      "normalized_text_snapshot": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Draw",
+          "canonical": "Draw",
+          "variable_type": "label"
+        },
+        {
+          "original": "DE",
+          "canonical": "DE",
+          "variable_type": "label"
+        },
+        {
+          "original": "perp",
+          "canonical": "perp",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "DF",
+          "canonical": "DF",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        },
+        {
+          "original": "thus",
+          "canonical": "thus",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "ACD",
+          "canonical": "ACD",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "cdot",
+          "canonical": "cdot",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "asset_id": "asset_6490e8613b3fff7514631feb",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53102443.png",
+      "storage_uri": "outputs/mm_math_300_600/run_2fb8ac71fb544848/datasets/mm_math/artifacts/images/prob_62002132fc9fa47b119b7744_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 3003,
+      "width": 238,
+      "height": 150,
+      "sha256": "8c8259f50ed4a10f7934c4b38194bdcd52fc346a7a4294d8134cc5631c0a77a4",
+      "perceptual_hash": "fff9f1e1db92007f",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 5828.481,
+      "readability_score": 0.7245,
+      "noise_score": 25.8706,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 14,
+        "y": 15,
+        "width": 209,
+        "height": 120
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "asset_id": "asset_4555c1ff154b98d768997592",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mm_math_300_600/run_2fb8ac71fb544848/datasets/mm_math/artifacts/crops/prob_62002132fc9fa47b119b7744_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 2740,
+      "width": 209,
+      "height": 120,
+      "sha256": "65b90d340961f2cbf840c8921cf593bf0d6315ba595a3f7681f00572ace2d010",
+      "perceptual_hash": "fdf9f1eddaba0000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 5828.481,
+      "readability_score": 0.7245,
+      "noise_score": 25.8706,
+      "cropped_from_asset_id": "asset_6490e8613b3fff7514631feb",
+      "roi_bbox": {
+        "x": 14,
+        "y": 15,
+        "width": 209,
+        "height": 120
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "asset_id": "asset_3cd3d7f40e43dcd92cc3cf70",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_e05edd2af4b3d620718be9e9",
+      "file_format": "txt",
+      "file_size_bytes": 171,
+      "width": null,
+      "height": null,
+      "sha256": "62573e6dfa2f703ea9460566d8204520669b267b1e0625178466c51820ec2efa",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "normalized_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "text_completeness_score": 0.7027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "ACD",
+          "canonical": "ACD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_62002132fc9fa47b119b7744",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "4",
+            "2"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_62002132fc9fa47b119b7744_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "set",
+          "target_text": "If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+          "expected_answer_type": "set",
+          "expected_answer": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "triangle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "ABC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BAC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AB",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "ACD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "ABD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "ACD",
+          "canonical": "ACD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$."
+        },
+        {
+          "segment_index": 2,
+          "text": "If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-08T10:52:41Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_62002132fc9fa47b119b7744_1",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.5867,
+        "dark_pixel_ratio": 0.0289,
+        "readability_score": 0.7245,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 238,
+            "height": 150
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 14,
+            "y": 15,
+            "width": 209,
+            "height": 120
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 118,
+            "y": 15,
+            "width": 105,
+            "height": 60
+          },
+          "salience": 0.4029
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 14,
+            "y": 75,
+            "width": 104,
+            "height": 60
+          },
+          "salience": 0.3976
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 118,
+            "y": 75,
+            "width": 105,
+            "height": 60
+          },
+          "salience": 0.407
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8898,
+      "created_at": "2026-04-08T10:52:41Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_62002132fc9fa47b119b7744",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-08T10:52:48Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_8bd72760d40160934ff54069",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$.",
+      "surface_forms": [
+        "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_e27089161b5d47cfd65ec089"
+      ],
+      "evidence_refs": [
+        "asset_e27089161b5d47cfd65ec089"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "4",
+          "2"
+        ],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_6d72e3b19181223b9827d809",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "target_slot",
+      "canonical_value": "If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "surface_forms": [
+        "If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_e27089161b5d47cfd65ec089"
+      ],
+      "evidence_refs": [
+        "asset_e27089161b5d47cfd65ec089"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "slot_id": "slot_prob_62002132fc9fa47b119b7744_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "set",
+        "target_text": "If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+        "expected_answer_type": "set",
+        "expected_answer": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_ad27803f58df4b132eeddc37",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "answer_claim",
+      "canonical_value": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+      "surface_forms": [
+        "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9951085d541d40aade57e242"
+      ],
+      "evidence_refs": [
+        "asset_9951085d541d40aade57e242"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$."
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_6f38755c3976e8622db01939",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 238,
+          "height": 150
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8898,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_55e19c0c2f9c4bd3f180bd6d",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 14,
+          "y": 15,
+          "width": 209,
+          "height": 120
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8898,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_455bb36c3dde0d3ae8e697b7",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 118,
+          "y": 15,
+          "width": 105,
+          "height": 60
+        },
+        "salience": 0.4029
+      },
+      "unit": null,
+      "confidence": 0.8898,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_0dd8ef1916c814d351953fb6",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 14,
+          "y": 75,
+          "width": 104,
+          "height": 60
+        },
+        "salience": 0.3976
+      },
+      "unit": null,
+      "confidence": 0.8898,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_a7c25eedea903728bcb0196d",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 118,
+          "y": 75,
+          "width": 105,
+          "height": 60
+        },
+        "salience": 0.407
+      },
+      "unit": null,
+      "confidence": 0.8898,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_a4b798aca8b5bd8055b375c9",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "surface_forms": [
+        "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_3cd3d7f40e43dcd92cc3cf70"
+      ],
+      "evidence_refs": [
+        "asset_3cd3d7f40e43dcd92cc3cf70"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_e05edd2af4b3d620718be9e9",
+        "parent_problem_id": "prob_62002132fc9fa47b119b7744",
+        "variant_index": 1,
+        "title": "MM-Math 开放题",
+        "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+        "expected_answer_type": "set",
+        "expected_answer": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_671e7dde7b783a8b3fbb3994",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_62002132fc9fa47b119b7744",
+        "problem_id": "prob_62002132fc9fa47b119b7744",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-08T10:52:48Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "node_id": "node_5e1569e860f0814fbcbaaf13",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:52:56Z",
+      "updated_at": "2026-04-08T10:52:56Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_558086afcf10dbf2a5fb389b",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_2fb8ac71fb544848",
+      "dataset_name": "MM-Math",
+      "input_asset_ids": [
+        "asset_168567b0414a754be6adbece",
+        "asset_e27089161b5d47cfd65ec089",
+        "asset_0b647e704c8bf1ba105ec103",
+        "asset_9951085d541d40aade57e242",
+        "asset_6490e8613b3fff7514631feb",
+        "asset_4555c1ff154b98d768997592",
+        "asset_3cd3d7f40e43dcd92cc3cf70"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 15
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 238,
+            "height": 150,
+            "blur_score": 5828.481,
+            "contrast_score": 29.6705,
+            "noise_score": 25.8706,
+            "readability_score": 0.7245,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 14,
+              "y": 15,
+              "width": 209,
+              "height": 120
+            },
+            "perceptual_hash": "fff9f1e1db92007f"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_558086afcf10dbf2a5fb389b",
+        "coverage_score": 0.9,
+        "consistency_score": 0.82,
+        "alignment_status": "risky",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_62002132fc9fa47b119b7744",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_62002132fc9fa47b119b7744",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_explains_target",
+          "diagram_semantically_clear",
+          "jointly_understandable",
+          "question_text_complete"
+        ],
+        "rationale": "The problem statement is complete and asks for the area of triangle ABD given a standard angle-bisector geometry setup. The diagram clearly shows triangle ABC with D on BC and segment AD, which is sufficient visual support for the text. The provided solution is coherent and matches the intended answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.9954,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review"
+      ],
+      "decision_rationale": "The sample is understandable and complete: the question is intact, the diagram is clear enough, the solution provides a usable answer, and solvability is strong. However, the alignment record is explicitly marked risky with a noted conflict, so the sample should be reviewed for final text-image-answer consistency rather than passed automatically.",
+      "review_ticket_id": "review_prob_62002132fc9fa47b119b7744",
+      "operator_type": "system",
+      "started_at": "2026-04-08T10:52:56Z",
+      "finished_at": "2026-04-08T10:52:56Z",
+      "candidate_id": "cand_62002132fc9fa47b119b7744",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_558086afcf10dbf2a5fb389b",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "image_entity_refs": [
+        "visual_prob_62002132fc9fa47b119b7744_1::roi",
+        "visual_prob_62002132fc9fa47b119b7744_1::roi_top_right",
+        "visual_prob_62002132fc9fa47b119b7744_1::roi_bottom_left",
+        "visual_prob_62002132fc9fa47b119b7744_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_62002132fc9fa47b119b7744_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "triangle",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "ABC",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "AD",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "BAC",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "AB",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "AC",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "ACD",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "ABD",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7725
+        },
+        {
+          "text_ref": "slot_prob_62002132fc9fa47b119b7744_1",
+          "image_ref": "visual_prob_62002132fc9fa47b119b7744_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7758
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "visual_reference_density_mismatch",
+          "detail": "文本中的视觉锚点明显多于可识别视觉区域。",
+          "severity": "major",
+          "confidence": 0.72
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.82,
+      "alignment_status": "risky",
+      "created_at": "2026-04-08T10:52:41Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_5daff0cd73ce2f6da788b117",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "after_value": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "audit_id": "audit_f16f53bf16770a8e8e4ae4e2",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+      "after_value": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "audit_id": "audit_4706af0812e8e37069e0388d",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "audit_id": "audit_5e1569e860f0814fbcbaaf13",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:52:56Z"
+    },
+    {
+      "audit_id": "audit_0d403fc61d2b0a24758ac352",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "ACD",
+          "canonical": "ACD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:52:56Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_558086afcf10dbf2a5fb389b",
+      "problem_id": "prob_62002132fc9fa47b119b7744",
+      "source_problem_id": "53102443.png",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_e05edd2af4b3d620718be9e9",
+          "parent_problem_id": "prob_62002132fc9fa47b119b7744",
+          "variant_index": 1,
+          "title": "MM-Math 开放题",
+          "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+          "expected_answer_type": "set",
+          "expected_answer": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-08T10:52:56Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_e05edd2af4b3d620718be9e9",
+      "parent_problem_id": "prob_62002132fc9fa47b119b7744",
+      "variant_index": 1,
+      "title": "MM-Math 开放题",
+      "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, $AD$ bisects $\\angle BAC$, $AB=4$, $AC=2$. If the area of $\\triangle ACD$ is equal to $3$, what is the area of $\\triangle ABD$?",
+      "expected_answer_type": "set",
+      "expected_answer": "\\textbf{Solution:} Draw $DE \\perp AB$ at $E$ and $DF \\perp AC$ at $F$, as shown in the figure,\\\\\nsince $AD$ bisects $\\angle BAC$,\\\\\nthus $DE = DF$,\\\\\nsince the area of $\\triangle ACD$ = $\\frac{1}{2} \\cdot DF \\cdot AC = 3$,\\\\\nthus $DF = \\frac{2 \\times 3}{AC} = 3$,\\\\\nthus $DE = 3$.\\\\\nTherefore, the area of $\\triangle ABD$ = $\\frac{1}{2} \\cdot DE \\cdot AB = \\frac{1}{2} \\times 3 \\times 4 = \\boxed{6}$.",
+      "split_role": "single"
+    }
+  ]
+}
