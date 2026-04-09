@@ -1,0 +1,33 @@
+runtime:
+  sample_per_dataset: 20
+  sample_strategy: head
+  sample_concurrency: 2
+  shuffle_seed: 42
+  output_root: outputs/scemqa_parallel_20
+  cleaning_version: v3.1.0
+  batch_id_prefix: benchmarkallinone-scemqa-parallel-20
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://synai996.space/v1
+  api_key: 
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: scemqa
+    display_name: SCEMQA
+    subject: 数学、物理、生物、化学
+    note: SCEMQA 20 条双并发实验配置
+    source_kind: huggingface
+    source_locator: pkulium/scemqa
+    split: train
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [decoded_image, image, image_path, img_path, diagram]
+    choice_fields: [options, choices]
+    answer_index_base: 0

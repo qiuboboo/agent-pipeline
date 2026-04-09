@@ -1,0 +1,32 @@
+runtime:
+  sample_per_dataset: 500
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 2
+  output_root: benchmarkallinone/outputs/cmm_math_132_631_rerun_local
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-cmm-math-132-631-rerun-local
+  save_sample_bundle: true
+  git_cache_root: benchmarkallinone/outputs/repo_cache
+
+model:
+  base_url: http://9854399.xyz:8888/v1
+  api_key: ""
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+
+datasets:
+  - key: cmm_math
+    display_name: CMM-Math
+    subject: 数学
+    note: CMM-Math 从 fallback 起点 row_index=132 开始基于本地缓存重跑 500 条
+    source_kind: local_file
+    source_locator: benchmarkallinone/outputs/local_inputs/cmm_math_132_631_local.jsonl
+    split: local
+    question_fields: [question]
+    answer_fields: [answer, solution]
+    image_fields: [image]
+    choice_fields: [options, choices]
