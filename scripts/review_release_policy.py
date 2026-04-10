@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, Iterable, List
 
 import yaml
 
@@ -88,3 +88,17 @@ def get_dataset_root_from_policy(dataset_key: str, path: Path | None = None) -> 
     if not raw:
         return None
     return resolve_project_path(raw)
+
+
+def iter_dataset_roots(path: Path | None = None) -> Iterable[Path]:
+    seen: set[str] = set()
+    for _, dataset_policy in (get_review_release_datasets(path) or {}).items():
+        raw = dataset_policy.get("dataset_root")
+        if not raw:
+            continue
+        dataset_root = resolve_project_path(raw)
+        key = str(dataset_root.resolve()) if dataset_root.exists() else str(dataset_root)
+        if key in seen:
+            continue
+        seen.add(key)
+        yield dataset_root

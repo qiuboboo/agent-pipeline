@@ -206,6 +206,7 @@ python3 scripts/build_review_docs.py
 
 这一步现在会：
 - 优先从 `configs/review_release_policies.yaml` 解析数据集对应的 canonical `dataset_root`
+- `build_review_docs.py` 的数据集 package/root 映射也以这个统一 config 为主，不再依赖脚本内硬编码表
 - 在 `docs/review/<dataset>.md` 中附带该数据集当前已配置的 release bucket 摘要
 
 ### 8. 生成样本花名册 manifest（inventory / post-build）

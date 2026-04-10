@@ -7,24 +7,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
-from review_release_policy import format_reason_rule, get_dataset_policy, get_dataset_root_from_policy
+from review_release_policy import format_reason_rule, get_dataset_policy, iter_dataset_roots
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-READY_ROOT = PROJECT_ROOT / "ready"
 DOCS_ROOT = PROJECT_ROOT / "docs"
 MANIFESTS_DOCS_ROOT = DOCS_ROOT / "manifests"
 REVIEW_DOCS_ROOT = DOCS_ROOT / "review"
 ANALYSIS_DOCS_ROOT = DOCS_ROOT / "analysis"
-PREFERRED_DATASET_PACKAGES = {
-    "eee_bench": READY_ROOT / "eee_bench" / "run_merged_eee_bench_1000_2860_dedup" / "datasets" / "eee_bench",
-    "mathvision": READY_ROOT / "mathvision" / "run_merged_mathvision_300_3040_dedup" / "datasets" / "mathvision",
-    "emma_physics": READY_ROOT / "emma_physics" / "run_filtered_emma_physics_safe" / "datasets" / "emma_physics",
-    "multi_physics": READY_ROOT / "multi_physics" / "run_filtered_multi_physics_safe" / "datasets" / "multi_physics",
-    "physreason": READY_ROOT / "physreason" / "run_merged_physreason_0000_0300" / "datasets" / "physreason",
-    "msearth_open_ended": READY_ROOT / "msearth_open_ended" / "run_merged_msearth_open_ended_0000_0120_ler_reasoning_chain" / "datasets" / "msearth_open_ended",
-    "seephys": READY_ROOT / "seephys_000_300" / "datasets" / "seephys",
-    "mm_math": READY_ROOT / "mm_math_000_300" / "datasets" / "mm_math",
-}
 
 
 def read_json(path: Path) -> Dict[str, Any]:
@@ -60,21 +49,9 @@ def make_table(headers: List[str], rows: List[List[Any]]) -> str:
 
 
 def iter_ready_packages() -> Iterable[Path]:
-    seen = set()
-    for dataset_key in sorted(PREFERRED_DATASET_PACKAGES):
-        policy_root = get_dataset_root_from_policy(dataset_key)
-        if policy_root and (policy_root / "summary.json").exists():
-            resolved = policy_root.resolve()
-            if resolved not in seen:
-                seen.add(resolved)
-                yield policy_root
-            continue
-        dataset_root = PREFERRED_DATASET_PACKAGES[dataset_key]
+    for dataset_root in iter_dataset_roots():
         if (dataset_root / "summary.json").exists():
-            resolved = dataset_root.resolve()
-            if resolved not in seen:
-                seen.add(resolved)
-                yield dataset_root
+            yield dataset_root
 
 
 def pick_first_nonempty(*values: Any) -> str:
