@@ -16,7 +16,9 @@
 - `qjb_branch_landing_strategy_2026-04-10.md`
   - 基于当前真实 branch/worktree 状态，说明为什么索引清理与后续 policy 切换的正式落点应是 `qjb`，以及为什么 `temp/run-summary-only` 只应视为阶段性 docs 承载分支。
 - `qjb_docs_recovery_plan_2026-04-10.md`
-  - 说明如何把当前 `temp/run-summary-only` 上相对 `qjb` 多出来的 5 个 docs-only 提交，安全回收到现有 `/tmp/agent-pipeline-qjb-clean` worktree 里的 `qjb` 分支。
+  - 说明如何把当前 `temp/run-summary-only` 上相对 `qjb` 多出来的 docs-only 提交，安全回收到现有 `/tmp/agent-pipeline-qjb-clean` worktree 里的 `qjb` 分支。
+- `qjb_post_index_handoff_2026-04-10.md`
+  - 记录 `qjb` 在本地完成索引清理后的真实状态，并给出从当前本地状态继续推进到 `origin/qjb` 与三机切换的 handoff 顺序。
 
 ## 与当前 policy 直接相关的脚本
 - `../scripts/build_ready_from_outputs_content_dedup.py`
