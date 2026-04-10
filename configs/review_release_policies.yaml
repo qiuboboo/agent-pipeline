@@ -40,8 +40,27 @@ review_release:
 
     physreason:
       dataset_root: ready/physreason/run_merged_physreason_0000_0300/datasets/physreason
-      policy_doc: ""
-      release_buckets: {}
+      policy_doc: docs/review/physreason_A_release_decision_2026-04-11.md
+      release_buckets:
+        A:
+          enabled: true
+          candidate_key: strict_A_bucket_candidates
+          release_basis: exact alignment-only review bucket
+          pass_decision_reason_codes:
+            - alignment_requires_review
+            - manual_release_pass
+          selection:
+            match_mode: exact_set
+            decision_reason_codes:
+              - alignment_requires_review
+          adjacent_observation:
+            label: adjacent metadata_inconsistency bucket
+            candidate_key: adjacent_metadata_inconsistency_candidates
+            selection:
+              match_mode: exact_set
+              decision_reason_codes:
+                - alignment_requires_review
+                - metadata_inconsistency
 
     emma_physics:
       dataset_root: ready/emma_physics/run_filtered_emma_physics_safe/datasets/emma_physics
