@@ -174,24 +174,10 @@ README 至少要改这几条：
 
 ---
 
-## 5. Phase E：修改 `.gitignore`
+## 5. Phase E：核对并冻结 `.gitignore` 口径
 
 ### E1. 当前状态
-当前 `.gitignore` 只忽略了：
-
-```gitignore
-outputs/repo_cache/
-outputs/**/repo_cache/
-outputs/**/.git/
-__pycache__/
-*.pyc
-.DS_Store
-```
-
-这不够。
-
-### E2. 目标状态
-建议改成至少包含：
+当前仓库里的 `.gitignore` 已经覆盖了 `qjb` policy 需要的核心本地产物规则，包含：
 
 ```gitignore
 # local runtime artifacts
@@ -199,25 +185,48 @@ outputs/
 ready/
 ready_problem_exports/
 
-# caches / temp
+# nested runtime caches inside outputs
+outputs/repo_cache/
+outputs/**/repo_cache/
+outputs/**/.git/
+
+# python cache / logs
 __pycache__/
 *.pyc
 *.log
 .DS_Store
 ```
 
+也就是说，这一阶段的重点已经不是“补出第一版 ignore 规则”，而是：
+- 确认这套口径与 README / docs 一致
+- 不再回退到只忽略 `repo_cache` 的旧说法
+- 明确 `.gitignore` **不会自动取消已追踪文件**
+
+### E2. 本阶段结论
+当前 `.gitignore` 口径可直接视为 `qjb` policy 的目标状态：
+
+- `outputs/`、`ready/`、`ready_problem_exports/` 默认忽略
+- `__pycache__/`、`*.pyc`、`*.log` 默认忽略
+- nested cache / nested `.git` 仍显式忽略
+
 如需保留个别小样例，不要放在真实 `outputs/`、`ready/` 里；应迁到：
 - `examples/`
 - `fixtures/`
 
 ### E3. 修改原则
-- 只改 ignore 规则
-- 不在这一步删除任何真实文件
-- 不在这一步做索引清理
+这一阶段只做两件事：
+- 核对 `.gitignore` 与 README / docs 口径一致
+- 为下一阶段索引清理做好前置条件
+
+仍然**不要**在这一步：
+- 删除任何真实文件
+- 执行索引清理
+- 把“已忽略”误当成“已停止追踪”
 
 **验收标准**
-- 新生成的 outputs/ready 默认不会再进入 Git 视野
-- 日志文件不会再污染工作树
+- `.gitignore` 已与当前 policy 对齐
+- 文档不再保留“当前只忽略 `outputs/repo_cache/`”这类过时描述
+- 团队对“ignore 规则 != 取消追踪”这一点没有歧义
 
 ---
 
