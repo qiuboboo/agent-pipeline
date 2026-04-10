@@ -13,6 +13,8 @@
   - 把 policy 落成实际执行顺序：先文档与规则、再 `.gitignore`、再索引清理、再三机切换、最后重建验证。
 - `qjb_index_cleanup_preflight_2026-04-10.md`
   - 在真正执行 `git rm -r --cached outputs ready ready_problem_exports` 之前，单独列出执行前提、分支语义、预期 `git status` 变化、以及“取消追踪 != 删除本地文件”的检查点。
+- `qjb_branch_landing_strategy_2026-04-10.md`
+  - 基于当前真实 branch/worktree 状态，说明为什么索引清理与后续 policy 切换的正式落点应是 `qjb`，以及为什么 `temp/run-summary-only` 只应视为阶段性 docs 承载分支。
 
 ## 与当前 policy 直接相关的脚本
 - `../scripts/build_ready_from_outputs_content_dedup.py`
