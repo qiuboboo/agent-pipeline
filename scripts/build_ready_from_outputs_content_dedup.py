@@ -639,6 +639,52 @@ def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[Cand
     return summary
 
 
+def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[str, Dict[str, Any]]) -> None:
+    total_status_counts = {"pass": 0, "review": 0, "reject": 0, "other": 0, "missing": 0}
+    total_scanned_files = 0
+    total_duplicate_source_problem_id = 0
+    total_unique_files = 0
+    total_selected_samples = 0
+
+    datasets_payload: Dict[str, Dict[str, Any]] = {}
+    for dataset_key, summary in sorted(dataset_summaries.items()):
+        counts = summary.get("status_counts") or {}
+        for key in total_status_counts:
+            total_status_counts[key] += int(counts.get(key, 0))
+        total_scanned_files += int(summary.get("scanned_files", 0))
+        total_duplicate_source_problem_id += int(summary.get("duplicate_source_problem_id", 0))
+        total_unique_files += int(summary.get("unique_files", 0))
+        total_selected_samples += int(summary.get("selected_samples", 0))
+        datasets_payload[dataset_key] = {
+            "dataset_key": dataset_key,
+            "package_root": str(path.parent / dataset_key / f"{package_prefix}__{summary.get('selected_output_kind') or summary.get('dataset_key')}"),
+            "scanned_files": summary.get("scanned_files", 0),
+            "duplicate_source_problem_id": summary.get("duplicate_source_problem_id", 0),
+            "unique_files": summary.get("unique_files", 0),
+            "selected_samples": summary.get("selected_samples", 0),
+            "status_counts": counts,
+            "selection_validation": summary.get("selection_validation", {}),
+            "write_validation": summary.get("write_validation", {}),
+            "selected_output_kind": summary.get("selected_output_kind"),
+            "selected_output_kinds": summary.get("selected_output_kinds", []),
+            "dedup_rule": summary.get("dedup_rule"),
+        }
+
+    payload = {
+        "package_prefix": package_prefix,
+        "dataset_count": len(datasets_payload),
+        "totals": {
+            "scanned_files": total_scanned_files,
+            "duplicate_source_problem_id": total_duplicate_source_problem_id,
+            "unique_files": total_unique_files,
+            "selected_samples": total_selected_samples,
+            "status_counts": total_status_counts,
+        },
+        "datasets": datasets_payload,
+    }
+    write_json(path, payload)
+
+
 def main() -> None:
     args = parse_args()
     dataset_filter = set(args.dataset)
@@ -658,13 +704,17 @@ def main() -> None:
     if args.dry_run:
         return
 
+    dataset_summaries: Dict[str, Dict[str, Any]] = {}
     for dataset_key, entries in sorted(selected.items()):
         package_label = stats[dataset_key].get("package_dataset_label") or dataset_key
         package_name = f"{args.package_prefix}__{package_label}"
         package_root = READY_ROOT / dataset_key / package_name
         ensure_clean_dir(package_root)
         summary = write_ready_dataset(package_root=package_root, dataset_key=dataset_key, entries=entries, dataset_stats=stats[dataset_key])
+        dataset_summaries[dataset_key] = {**summary, "package_name": package_name, "package_root": package_root.as_posix()}
         print(f"[done] {dataset_key}: {summary['selected_samples']} -> {package_root}")
+
+    write_run_summary(READY_ROOT / "summary.json", args.package_prefix, dataset_summaries)
 
 
 if __name__ == "__main__":
