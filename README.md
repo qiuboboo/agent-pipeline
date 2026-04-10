@@ -143,6 +143,7 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key
 3. **post-ready / review-release 层**
    - `scripts/build_review_docs.py`
    - `scripts/apply_manual_review_release.py`
+   - `configs/review_release_policies.yaml`
    - 负责：在 canonical ready 已存在的前提下，生成 review 文档、执行 manual release、刷新台账
 
 4. **post-ready export 层**
@@ -154,14 +155,34 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key
 - `scripts/build_review_docs.py` **不是** build-ready 主链的一部分
 - 它当前依赖本机 `ready/`，并且对固定 canonical `ready/...` package 路径有较强硬编码依赖
 - 因此它应被视为 **ready downstream consumer**，不是“拉下仓库就能无前置直接运行的通用入口”
+- `scripts/apply_manual_review_release.py` 现在支持从 `configs/review_release_policies.yaml` 读取**统一的多数据集 release policy**，避免把每个数据集的 bucket 规则散落在脚本参数和临时文档里
 
 如需看完整边界说明，优先阅读：
 - `docs/qjb_script_boundary_audit_2026-04-10.md`
 
-### 7. 生成样本花名册 manifest（inventory / post-build）
+### 7.1 统一 review-release policy 配置（post-ready）
 ```bash
-python3 scripts/build_sample_manifest.py --outputs-root outputs --ready-root ready
+python3 scripts/apply_manual_review_release.py \
+  --policy-config configs/review_release_policies.yaml \
+  --dataset mm_math \
+  --candidate-json docs/review/mm_math_A_bucket_candidates_2026-04-09.json \
+  --release-bucket A \
+  --dry-run
 ```
+
+这一步会从 `configs/review_release_policies.yaml` 中解析：
+- 数据集对应的 canonical `dataset_root`
+- 当前 bucket 使用的 `candidate_key`
+- release basis / policy doc / pass 后写回的 reason codes
+- bucket 的 reason-code selection rule
+- 相邻观察 bucket（如 `adjacent_text_sufficient_candidates`）
+
+如果要正式执行，再补上 `--ledger-out ...`，去掉 `--dry-run`。
+
+当前建议：
+- 每个数据集的 review-release 策略都收口到这一个总配置里
+- 每个 bucket 明确写 `selection.match_mode + decision_reason_codes`
+- 脚本继续保留旧参数模式，保证向后兼容
 
 这个脚本**不是 build-ready 主链**，而是本机 `outputs/` / `ready/` 的统一盘点工具。
 
