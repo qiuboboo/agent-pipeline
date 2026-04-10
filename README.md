@@ -16,6 +16,7 @@
 
 相关文档入口：
 - `docs/output_to_ready_inventory_2026-04-10.md`
+- `docs/qjb_script_boundary_audit_2026-04-10.md`
 - `docs/qjb_branch_sync_plan_2026-04-10.md`
 - `docs/qjb_branch_execution_checklist_2026-04-10.md`
 
@@ -101,10 +102,12 @@ python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/def
 python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/local_file_example.yaml
 ```
 
-### 5. 从本地 outputs 构建 ready
+### 5. 从本地 outputs 构建 ready（canonical 主链）
 ```bash
 python3 scripts/build_ready_from_outputs_content_dedup.py --outputs-root outputs --ready-root ready
 ```
+
+这是当前 `qjb` policy 下的 **canonical `outputs -> ready` 主链入口**。
 
 默认会把当前机器本地 `outputs/` 中符合规则的结果，合并/去重后写到当前机器本地的 `ready/`。
 
@@ -117,10 +120,43 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --outputs-root outputs
 
 > 注意：`ready/` 现在被视为**本地派生产物**，不再作为 Git 同步对象。跨机器时请同步 `outputs/` 和代码版本，而不是同步 `ready/` 目录本身。
 
-### 6. 生成样本花名册 manifest
+### 6. 脚本边界：哪些是主链，哪些不是
+
+当前与 `qjb` local-artifact policy 最相关的脚本，建议按下面 4 层理解：
+
+1. **主构建链（canonical）**
+   - `scripts/build_ready_from_outputs_content_dedup.py`
+   - 负责：`outputs -> selection/merge/dedup -> ready`
+
+2. **盘点 / 覆盖 / 追踪层**
+   - `scripts/build_sample_manifest.py`
+   - `scripts/build_output_root_coverage.py`
+   - 负责：盘点本机 `outputs/` 与 `ready/` 的覆盖和对应关系
+
+3. **post-ready / review-release 层**
+   - `scripts/build_review_docs.py`
+   - `scripts/apply_manual_review_release.py`
+   - 负责：在 canonical ready 已存在的前提下，生成 review 文档、执行 manual release、刷新台账
+
+4. **post-ready export 层**
+   - `scripts/export_ready_to_problem_json.py`
+   - 负责：把本机已有 `ready/` 继续导出成 `ready_problem_exports/`
+
+其中需要特别注意的是：
+
+- `scripts/build_review_docs.py` **不是** build-ready 主链的一部分
+- 它当前依赖本机 `ready/`，并且对固定 canonical `ready/...` package 路径有较强硬编码依赖
+- 因此它应被视为 **ready downstream consumer**，不是“拉下仓库就能无前置直接运行的通用入口”
+
+如需看完整边界说明，优先阅读：
+- `docs/qjb_script_boundary_audit_2026-04-10.md`
+
+### 7. 生成样本花名册 manifest（inventory / post-build）
 ```bash
 python3 scripts/build_sample_manifest.py --outputs-root outputs --ready-root ready
 ```
+
+这个脚本**不是 build-ready 主链**，而是本机 `outputs/` / `ready/` 的统一盘点工具。
 
 默认会生成仓库根目录下的 `manifests/sample_roster.json`，用于统一登记每条样本的：
 - 当前状态（如 `pass/review/reject`）
@@ -162,10 +198,12 @@ manifest 里现在同时保留两种口径：
 
 这个摘要以后可以直接作为仓库内的当前结果口径；如 manifest 重建，以上数字也应同步更新。
 
-### 7. 导出 ready 数据为统一 problem JSON
+### 8. 导出 ready 数据为统一 problem JSON（post-ready export）
 ```bash
 python3 scripts/export_ready_to_problem_json.py --ready-root ready
 ```
+
+这一步属于 **post-ready export**，不是 `outputs -> ready` 主构建链的一部分。
 
 默认会导出到仓库根目录下的 `ready_problem_exports/`，作为当前机器本地从 `ready/` 派生出的下游导出结果。
 
