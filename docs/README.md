@@ -11,6 +11,8 @@
   - 定义 `qjb` 分支下三台机器的职责、Git 与本地产物的边界，以及为什么 `outputs/ready` 应本地化。
 - `qjb_branch_execution_checklist_2026-04-10.md`
   - 把 policy 落成实际执行顺序：先文档与规则、再 `.gitignore`、再索引清理、再三机切换、最后重建验证。
+- `qjb_index_cleanup_preflight_2026-04-10.md`
+  - 在真正执行 `git rm -r --cached outputs ready ready_problem_exports` 之前，单独列出执行前提、分支语义、预期 `git status` 变化、以及“取消追踪 != 删除本地文件”的检查点。
 
 ## 与当前 policy 直接相关的脚本
 - `../scripts/build_ready_from_outputs_content_dedup.py`
