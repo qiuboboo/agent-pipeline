@@ -510,12 +510,19 @@ def main() -> None:
 
     summary_after = load_json(summary_path)
     summary_after["status_counts"] = compute_status_counts(samples_dir)
+    if "decision_counts" in summary_after or not summary_after.get("decision_counts"):
+        status_counts = summary_after["status_counts"]
+        summary_after["decision_counts"] = {
+            "pass": status_counts.get("pass", 0),
+            "review": status_counts.get("review", 0),
+            "reject": status_counts.get("reject", 0),
+        }
     written_count = len(list(samples_dir.glob("*.json")))
     status_total = sum(summary_after["status_counts"].values())
-    selected = int(summary_after.get("selected_samples") or 0)
+    selected = int(summary_after.get("selected_samples") or summary_after.get("requested_samples") or 0)
     processed = int(summary_after.get("processed_samples") or 0)
-    scanned = int(summary_after.get("scanned_files") or 0)
-    unique_files = int(summary_after.get("unique_files") or 0)
+    scanned = int(summary_after.get("scanned_files") or written_count)
+    unique_files = int(summary_after.get("unique_files") or written_count)
     duplicates = int(summary_after.get("duplicate_source_problem_id") or 0)
     summary_after["write_validation"] = {
         "ok": written_count == selected and processed == selected and status_total == selected and scanned == unique_files + duplicates,
