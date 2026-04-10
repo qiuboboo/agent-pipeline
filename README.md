@@ -2,6 +2,23 @@
 
 `benchmarkallinone` 是对 `benchmark/` 与 `agent-pipeline-main/` 两套实现进行功能对齐、优势融合后的统一工程，目标是把大规模数据采集与清洗稳定跑通，并把输出直接组织成可进入标注阶段的结构化结果。
 
+## 当前仓库工作口径（qjb policy 草案）
+
+从 `qjb` 分支开始，仓库默认按下面这条边界工作：
+
+- **Git 负责同步**：代码、脚本、文档、规则、配置、必要的小型 plans/manifests
+- **机器本地负责持有**：`outputs/`、`ready/`、`ready_problem_exports/`
+- `ready/` 视为**本地派生产物**，默认通过本机脚本从本机 `outputs/` 重建
+- 跨机器同步 `outputs/` 时，使用 `rsync/scp/挂载目录/对象存储` 等 Git 之外的方式
+- 当前已知的 **最全 outputs 主源头** 应固定在一台机器上，其它机器按需补齐
+
+这意味着：后续仓库不再把 `outputs/`、`ready/` 当作需要随代码一起提交和分发的内容，而是把真正重要的部分收敛为 **构建规则 + 构建脚本 + 文档口径**。
+
+相关文档入口：
+- `docs/output_to_ready_inventory_2026-04-10.md`
+- `docs/qjb_branch_sync_plan_2026-04-10.md`
+- `docs/qjb_branch_execution_checklist_2026-04-10.md`
+
 ## 统一流程图
 
 ```mermaid
@@ -84,6 +101,22 @@ python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/def
 python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/local_file_example.yaml
 ```
 
+### 5. 从本地 outputs 构建 ready
+```bash
+python3 scripts/build_ready_from_outputs_content_dedup.py --outputs-root outputs --ready-root ready
+```
+
+默认会把当前机器本地 `outputs/` 中符合规则的结果，合并/去重后写到当前机器本地的 `ready/`。
+
+如需只构建某个数据集，可结合脚本参数指定数据集过滤条件（以脚本当前 help 为准）。构建完成后，应重点检查：
+
+- `datasets/<dataset>/summary.json`
+- `datasets/<dataset>/selection_manifest.json`
+- `selection_validation.ok = true`
+- `write_validation.ok = true`
+
+> 注意：`ready/` 现在被视为**本地派生产物**，不再作为 Git 同步对象。跨机器时请同步 `outputs/` 和代码版本，而不是同步 `ready/` 目录本身。
+
 ### 6. 生成样本花名册 manifest
 ```bash
 python3 scripts/build_sample_manifest.py --outputs-root outputs --ready-root ready
@@ -134,18 +167,21 @@ manifest 里现在同时保留两种口径：
 python3 scripts/export_ready_to_problem_json.py --ready-root ready
 ```
 
-默认会导出到仓库根目录下的 `ready_problem_exports/`，避免与运行时缓存和中间产物混在 `outputs/` 目录里。
+默认会导出到仓库根目录下的 `ready_problem_exports/`，作为当前机器本地从 `ready/` 派生出的下游导出结果。
 
 如需只导出某个 ready 包，可指定：
 ```bash
 python3 scripts/export_ready_to_problem_json.py --ready-root ready --dataset mm_math_000_300
 ```
 
-### outputs 保留规则
-- `outputs/repo_cache/` 及其嵌套 cache 目录继续视为运行缓存，不纳入版本控制。
-- 其余需要保留的 `outputs/` 运行结果应直接纳入 Git 跟踪，不再额外复制到 `outputs/ready_problem_exports/` 这类历史目录。
-- 超过 7 天、未进入 `ready/`、且未被文档或脚本引用的旧实验 / smoke / validation / debug 输出应及时清理。
-- `ready` 的标准导出位置固定为仓库根目录下的 `ready_problem_exports/`。
+> 注意：`ready_problem_exports/` 也属于**本地派生产物**，默认不应再纳入 Git 跟踪。
+
+### 本地产物管理规则
+- `outputs/`、`ready/`、`ready_problem_exports/` 都按**本地运行/派生产物**对待，不再作为仓库同步对象。
+- `outputs/repo_cache/` 及其嵌套 cache 目录继续视为运行缓存。
+- 跨机器共享时，优先同步 `outputs/`；`ready/` 默认在目标机器本地重建。
+- 如果确实需要保留示例数据，请放到 `examples/` 或 `fixtures/`，不要继续混在真实 `outputs/`、`ready/` 目录里。
+- 超过 7 天、未进入当前工作流、且未被文档或脚本引用的旧实验 / smoke / validation / debug 输出，应在确认后单独清理，但清理动作不应混入日常代码提交。
 
 ## 标注前就绪输出
 
