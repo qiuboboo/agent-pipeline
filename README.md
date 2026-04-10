@@ -184,24 +184,34 @@ python3 scripts/apply_manual_review_release.py \
 - 每个 bucket 明确写 `selection.match_mode + decision_reason_codes`
 - 脚本继续保留旧参数模式，保证向后兼容
 
-这个脚本**不是 build-ready 主链**，而是本机 `outputs/` / `ready/` 的统一盘点工具。
-
-默认会生成仓库根目录下的 `manifests/sample_roster.json`，用于统一登记每条样本的：
-- 当前状态（如 `pass/review/reject`）
-- 来源 run 目录
-- 是否已进入哪些 `ready/...` package
-- run / sample 级时间字段
-
-如需只看某个数据集，可指定：
+### 7.2 从统一 policy 配置导出 candidate buckets（post-ready）
 ```bash
-python3 scripts/build_sample_manifest.py --outputs-root outputs --ready-root ready --dataset eee_bench
+python3 scripts/export_review_release_candidates.py \
+  --policy-config configs/review_release_policies.yaml \
+  --dataset mm_math \
+  --release-bucket A \
+  --out docs/review/mm_math_A_bucket_candidates_config_generated.json
 ```
 
-manifest 里现在同时保留两种口径：
-- `records`：文件级明细；同一题如果出现在多个 source run，会保留多条，适合追来源、防误删。
-- `canonical_records`：按 `dataset_key + problem_id` 去重后的题目级口径，适合做统计、汇报和 merge 盘点。
+这个脚本会：
+- 从统一 policy config 读取数据集 `dataset_root`
+- 按 bucket 的 `selection` 规则导出 candidate json
+- 同时导出相邻 observation bucket（如果配置了）
+- 对已经执行过 manual release 的样本，优先从 provenance 中读取原始 `original_decision_reason_codes`，从而能复原 release 前 bucket
 
-### 当前 manifest 摘要
+### 7.3 基于统一 policy 配置刷新 review docs（post-ready）
+```bash
+python3 scripts/build_review_docs.py
+```
+
+这一步现在会：
+- 优先从 `configs/review_release_policies.yaml` 解析数据集对应的 canonical `dataset_root`
+- 在 `docs/review/<dataset>.md` 中附带该数据集当前已配置的 release bucket 摘要
+
+### 8. 生成样本花名册 manifest（inventory / post-build）
+```bash
+python3 scripts/build_sample_manifest.py --outputs-root outputs --ready-root ready
+```
 基于当前生成的 `manifests/sample_roster.json`：
 
 | 指标 | 当前值 |

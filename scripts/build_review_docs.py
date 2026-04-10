@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
+from review_release_policy import format_reason_rule, get_dataset_policy, get_dataset_root_from_policy
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 READY_ROOT = PROJECT_ROOT / "ready"
 DOCS_ROOT = PROJECT_ROOT / "docs"
@@ -58,9 +60,21 @@ def make_table(headers: List[str], rows: List[List[Any]]) -> str:
 
 
 def iter_ready_packages() -> Iterable[Path]:
-    for _, dataset_root in PREFERRED_DATASET_PACKAGES.items():
+    seen = set()
+    for dataset_key in sorted(PREFERRED_DATASET_PACKAGES):
+        policy_root = get_dataset_root_from_policy(dataset_key)
+        if policy_root and (policy_root / "summary.json").exists():
+            resolved = policy_root.resolve()
+            if resolved not in seen:
+                seen.add(resolved)
+                yield policy_root
+            continue
+        dataset_root = PREFERRED_DATASET_PACKAGES[dataset_key]
         if (dataset_root / "summary.json").exists():
-            yield dataset_root
+            resolved = dataset_root.resolve()
+            if resolved not in seen:
+                seen.add(resolved)
+                yield dataset_root
 
 
 def pick_first_nonempty(*values: Any) -> str:
@@ -179,7 +193,7 @@ def pick_image_markdown(dataset_root: Path, problem_id: str) -> str:
 def collect_samples(dataset_root: Path) -> List[Dict[str, Any]]:
     samples_dir = dataset_root / "samples"
     rows: List[Dict[str, Any]] = []
-    for sample_path in sorted(samples_dir.glob("prob_*.json")):
+    for sample_path in sorted(samples_dir.glob("*.json")):
         sample = read_json(sample_path)
         problem_main = sample.get("problem_main_record") or {}
         rewrite_reports = sample.get("rewrite_reports") or []
@@ -296,8 +310,12 @@ def describe_review_example(sample: Dict[str, Any]) -> str:
     return f"该样本同时触发了多个 review 原因：`{', '.join(reasons)}`，属于复合风险案例，不适合直接自动放行。"
 
 
+def pick_decision_counts(dataset_summary: Dict[str, Any]) -> Dict[str, Any]:
+    return dataset_summary.get("decision_counts") or dataset_summary.get("status_counts") or {}
+
+
 def summarize_dataset(dataset_summary: Dict[str, Any], review_reason_counter: Counter[str]) -> str:
-    counts = dataset_summary.get("decision_counts") or {}
+    counts = pick_decision_counts(dataset_summary)
     pass_count = counts.get("pass", 0)
     review_count = counts.get("review", 0)
     reject_count = counts.get("reject", 0)
@@ -314,7 +332,7 @@ def build_analysis_doc(dataset_root: Path) -> str:
     dataset_key = dataset_root.name
     package_root = dataset_root.parent.parent
     dataset_summary = read_json(dataset_root / "summary.json")
-    counts = dataset_summary.get("decision_counts") or {}
+    counts = pick_decision_counts(dataset_summary)
     strategy_counts = dataset_summary.get("rewrite_strategy_counts") or {}
     samples = collect_samples(dataset_root)
     pass_examples = pick_pass_examples(samples)
@@ -503,6 +521,30 @@ def build_manifest_doc(dataset_root: Path) -> str:
     return "\n".join(lines) + "\n"
 
 
+def build_policy_summary(dataset_key: str) -> List[str]:
+    dataset_policy = get_dataset_policy(dataset_key)
+    if not dataset_policy:
+        return []
+    release_buckets = dataset_policy.get("release_buckets") or {}
+    if not release_buckets:
+        return []
+
+    lines = ["## 已配置的 review-release policy", ""]
+    for bucket_key, bucket_cfg in sorted(release_buckets.items()):
+        selection = bucket_cfg.get("selection") or {}
+        lines.append(f"- `{bucket_key}` 桶：{format_reason_rule(selection)}")
+        release_basis = bucket_cfg.get("release_basis")
+        if release_basis:
+            lines.append(f"  - release_basis: `{release_basis}`")
+        adjacent = bucket_cfg.get("adjacent_observation") or {}
+        if adjacent:
+            adjacent_rule = format_reason_rule(adjacent.get("selection") or {})
+            adjacent_label = adjacent.get("label") or "adjacent bucket"
+            lines.append(f"  - adjacent: `{adjacent_label}` -> {adjacent_rule}")
+    lines.append("")
+    return lines
+
+
 def build_review_doc(dataset_root: Path) -> str:
     dataset_key = dataset_root.name
     package_root = dataset_root.parent.parent
@@ -523,7 +565,7 @@ def build_review_doc(dataset_root: Path) -> str:
         if sample["decision"] == "review"
     ]
 
-    counts = dataset_summary.get("decision_counts") or {}
+    counts = pick_decision_counts(dataset_summary)
     lines = [
         f"# {dataset_key} review 台账",
         "",
@@ -535,6 +577,7 @@ def build_review_doc(dataset_root: Path) -> str:
         "人工接受状态说明：`1=pass`，`0=reject`，空白表示未看。",
         "",
     ]
+    lines.extend(build_policy_summary(dataset_key))
     if sample_rows:
         lines.extend(
             [

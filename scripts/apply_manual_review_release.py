@@ -8,9 +8,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
-import yaml
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+from review_release_policy import (
+    PROJECT_ROOT,
+    format_reason_rule,
+    load_review_release_policy_config,
+    matches_selection,
+    normalize_reason_list,
+    resolve_project_path,
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -45,19 +50,6 @@ def dump_json(path: Path, data: Any) -> None:
         f.write("\n")
 
 
-def load_yaml(path: Path) -> Dict[str, Any]:
-    with path.open("r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
-    if not isinstance(data, dict):
-        raise ValueError(f"yaml root must be a mapping: {path}")
-    return data
-
-
-def resolve_project_path(raw: str | Path) -> Path:
-    path = raw if isinstance(raw, Path) else Path(raw)
-    return path if path.is_absolute() else PROJECT_ROOT / path
-
-
 def require_value(value: Any, message: str) -> Any:
     if value is None:
         raise ValueError(message)
@@ -67,13 +59,6 @@ def require_value(value: Any, message: str) -> Any:
         raise ValueError(message)
     return value
 
-
-def normalize_reason_list(value: Any) -> List[str]:
-    if isinstance(value, list):
-        return [str(x) for x in value]
-    if isinstance(value, str) and value.strip():
-        return [value.strip()]
-    return []
 
 
 def latest_decision(sample: Dict[str, Any]) -> str:
@@ -144,38 +129,6 @@ def pick_original_reason_codes(sample: Dict[str, Any]) -> List[str]:
 
     return pick_reason_codes(sample)
 
-
-def format_reason_rule(selection: Dict[str, Any] | None) -> str:
-    if not selection:
-        return "未配置 reason-code 匹配规则"
-    match_mode = str(selection.get("match_mode") or "exact_set")
-    expected = normalize_reason_list(selection.get("decision_reason_codes"))
-    encoded = json.dumps(expected, ensure_ascii=False)
-    if match_mode == "exact":
-        return f"exact `clean_decision_reason_codes == {encoded}`"
-    if match_mode == "exact_set":
-        return f"exact reason-code set == `{encoded}`"
-    if match_mode == "contains_all":
-        return f"contains all reason codes in `{encoded}`"
-    if match_mode == "any_of":
-        return f"contains any reason code in `{encoded}`"
-    return f"{match_mode} `{encoded}`"
-
-
-def matches_selection(actual: List[str], selection: Dict[str, Any] | None) -> bool:
-    if not selection:
-        return True
-    expected = normalize_reason_list(selection.get("decision_reason_codes"))
-    match_mode = str(selection.get("match_mode") or "exact_set")
-    if match_mode == "exact":
-        return actual == expected
-    if match_mode == "exact_set":
-        return len(actual) == len(expected) and sorted(actual) == sorted(expected)
-    if match_mode == "contains_all":
-        return set(expected).issubset(set(actual))
-    if match_mode == "any_of":
-        return bool(set(expected) & set(actual))
-    raise ValueError(f"unsupported match_mode: {match_mode}")
 
 
 def apply_release(
@@ -364,7 +317,7 @@ def resolve_runtime_config(args: argparse.Namespace) -> Dict[str, Any]:
     bucket_cfg: Dict[str, Any] = {}
     adjacent_cfg: Dict[str, Any] = {}
     if args.policy_config:
-        policy_root = load_yaml(resolve_project_path(args.policy_config))
+        policy_root = load_review_release_policy_config(resolve_project_path(args.policy_config))
         review_release = policy_root.get("review_release") or {}
         defaults = review_release.get("defaults") or {}
         datasets_cfg = review_release.get("datasets") or {}
