@@ -42,10 +42,11 @@
   - `c2b5de41 docs: clarify qjb README boundaries`
   - `36ca0b8e docs: sync qjb checklist with gitignore state`
   - `3e6c7711 docs: add qjb index cleanup preflight`
+  - `de738f6b docs: define qjb landing branch strategy`
 
 这说明：
 
-> 当前 `temp/run-summary-only` 不是另一条和 `qjb` 并行分叉很远的工作线；它本质上是**从 `qjb` 当前头部 `a1d7d197` 往前累积了 4 个 docs-only 增量 commit 的承载分支**。
+> 当前 `temp/run-summary-only` 不是另一条和 `qjb` 并行分叉很远的工作线；它本质上是**从 `qjb` 当前头部 `a1d7d197` 往前累积了 5 个 docs-only 增量 commit 的承载分支**。
 
 换句话说：
 
@@ -107,7 +108,7 @@
 
 当前更合理的顺序应是：
 
-1. 先把 `temp/run-summary-only` 上这 4 个 docs-only 增量回收到 `qjb`
+1. 先把 `temp/run-summary-only` 上这 5 个 docs-only 增量回收到 `qjb`
 2. 让 `qjb` 变成“已吸收最新 policy 文档状态”的正式承接分支
 3. 再在 `qjb` 上执行：
    ```bash
@@ -142,7 +143,7 @@
 
 因为当前关系非常干净：
 - `qjb` 停在 `a1d7d197`
-- `temp/run-summary-only` 只是多了 4 个 docs-only 提交
+- `temp/run-summary-only` 只是多了 5 个 docs-only 提交
 
 所以现在处理分支落点，成本是最低的。
 

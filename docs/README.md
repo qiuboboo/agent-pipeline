@@ -15,6 +15,8 @@
   - 在真正执行 `git rm -r --cached outputs ready ready_problem_exports` 之前，单独列出执行前提、分支语义、预期 `git status` 变化、以及“取消追踪 != 删除本地文件”的检查点。
 - `qjb_branch_landing_strategy_2026-04-10.md`
   - 基于当前真实 branch/worktree 状态，说明为什么索引清理与后续 policy 切换的正式落点应是 `qjb`，以及为什么 `temp/run-summary-only` 只应视为阶段性 docs 承载分支。
+- `qjb_docs_recovery_plan_2026-04-10.md`
+  - 说明如何把当前 `temp/run-summary-only` 上相对 `qjb` 多出来的 5 个 docs-only 提交，安全回收到现有 `/tmp/agent-pipeline-qjb-clean` worktree 里的 `qjb` 分支。
 
 ## 与当前 policy 直接相关的脚本
 - `../scripts/build_ready_from_outputs_content_dedup.py`
