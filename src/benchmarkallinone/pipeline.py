@@ -246,11 +246,11 @@ class PipelineConfig:
     sample_strategy: str = "head"
     shuffle_seed: int = 42
     sample_concurrency: int = 1
-    output_root: str = "benchmarkallinone/outputs/multidataset_cleaning"
+    output_root: str = "outputs/multidataset_cleaning"
     cleaning_version: str = "v3.1.0"
     batch_id_prefix: str = "benchmarkallinone-clean"
     save_sample_bundle: bool = True
-    git_cache_root: str = "benchmarkallinone/outputs/repo_cache"
+    git_cache_root: str = "outputs/repo_cache"
     resume: bool = False
     model: ModelConfig = field(default_factory=ModelConfig)
     datasets: List[DatasetSpec] = field(default_factory=list)

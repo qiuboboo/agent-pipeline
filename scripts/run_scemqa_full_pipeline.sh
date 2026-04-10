@@ -1,10 +1,10 @@
 #!/bin/zsh
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
-CONFIG_PATH="${SCEMQA_CONFIG_PATH:-./benchmarkallinone/configs/scemqa_parallel_20.yaml}"
+CONFIG_PATH="${SCEMQA_CONFIG_PATH:-./configs/scemqa_parallel_20.yaml}"
 BASE_URL="${OPENAI_BASE_URL:-https://synai996.space/v1}"
 MODEL_NAME="${OPENAI_MODEL:-gpt-5.4}"
 REASONING_EFFORT="${OPENAI_REASONING_EFFORT:-high}"
@@ -29,10 +29,10 @@ if [[ -z "$API_KEY" ]]; then
 fi
 
 echo "[SCEMQA] Installing dependencies..."
-python3 -m pip install -r ./benchmarkallinone/requirements.txt
+python3 -m pip install -r ./requirements.txt
 
 echo "[SCEMQA] Running full collection + cleaning pipeline..."
-python3 ./benchmarkallinone/run_pipeline.py \
+python3 ./run_pipeline.py \
   --config "$CONFIG_PATH" \
   --base-url "$BASE_URL" \
   --api-key "$API_KEY" \
@@ -46,7 +46,7 @@ import yaml
 
 config_path = Path(sys.argv[1])
 raw = yaml.safe_load(config_path.read_text(encoding='utf-8')) or {}
-print(raw.get('runtime', {}).get('output_root', 'benchmarkallinone/outputs/scemqa_parallel_20'))
+print(raw.get('runtime', {}).get('output_root', 'outputs/scemqa_parallel_20'))
 PY
 )"
 

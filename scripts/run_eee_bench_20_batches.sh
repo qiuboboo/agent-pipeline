@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
 CONFIG_PATH="${EEE_BENCH_BATCH_CONFIG:-./configs/eee_bench_20_batch.yaml}"
-OUTPUT_ROOT="${EEE_BENCH_BATCH_OUTPUT_ROOT:-benchmarkallinone/outputs/eee_bench_20_batches}"
+OUTPUT_ROOT="${EEE_BENCH_BATCH_OUTPUT_ROOT:-outputs/eee_bench_20_batches}"
 LOG_DIR="${EEE_BENCH_BATCH_LOG_DIR:-./logs}"
 BATCH_SIZE="${EEE_BENCH_BATCH_SIZE:-20}"
 START_OFFSET="${EEE_BENCH_START_OFFSET:-0}"

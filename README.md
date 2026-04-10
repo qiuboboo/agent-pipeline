@@ -64,29 +64,29 @@ problem_main_records / node_records / normalized_assets / open_ended_problem_var
 ## 项目结构
 
 ```text
-benchmarkallinone/
+.
 ├── configs/
-│   ├── default_multidataset.yaml
-│   └── local_file_example.yaml
+├── docs/
+├── manifests/
+├── plans/
 ├── prompts/
-│   ├── extract_unified_sample.md
-│   ├── extract_question_answer_image.md
-│   └── collection/
-├── run_pipeline.py
+├── scripts/
+├── src/benchmarkallinone/
 ├── requirements.txt
-└── src/benchmarkallinone/
-    ├── __init__.py
-    ├── __main__.py
-    ├── cleaning_semantics.py
-    ├── pipeline.py
-    └── semantics.py
+└── run_pipeline.py
 ```
+
+其中：
+
+- Python 包源码位于 `src/benchmarkallinone/`
+- 仓库级运行入口位于根目录 `run_pipeline.py`
+- `outputs/`、`ready/`、`ready_problem_exports/` 属于本地产物，不再作为仓库结构的一部分说明
 
 ## 运行方式
 
 ### 1. 安装依赖
 ```bash
-python3 -m pip install -r benchmarkallinone/requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 ### 2. 配置模型访问
@@ -94,12 +94,12 @@ python3 -m pip install -r benchmarkallinone/requirements.txt
 
 ### 3. 运行默认多数据集流程
 ```bash
-python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/default_multidataset.yaml
+python3 run_pipeline.py --config configs/default_multidataset.yaml
 ```
 
 ### 4. 运行本地文件示例
 ```bash
-python3 benchmarkallinone/run_pipeline.py --config benchmarkallinone/configs/local_file_example.yaml
+python3 run_pipeline.py --config configs/local_file_example.yaml
 ```
 
 ### 5. 从本地 outputs 构建 ready（canonical 主链）

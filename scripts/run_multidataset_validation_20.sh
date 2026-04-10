@@ -1,10 +1,10 @@
 #!/bin/zsh
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
-CONFIG_PATH="${MULTIDATASET_CONFIG_PATH:-./benchmarkallinone/configs/agent_multidataset_validation_20.yaml}"
+CONFIG_PATH="${MULTIDATASET_CONFIG_PATH:-./configs/agent_multidataset_validation_20.yaml}"
 BASE_URL="${OPENAI_BASE_URL:-https://synai996.space/v1}"
 MODEL_NAME="${OPENAI_MODEL:-gpt-5.4}"
 REASONING_EFFORT="${OPENAI_REASONING_EFFORT:-high}"
@@ -35,7 +35,7 @@ if [[ -z "$API_KEY" ]]; then
 fi
 
 echo "[MultiDataset20] Installing dependencies..."
-python3 -m pip install -r ./benchmarkallinone/requirements.txt
+python3 -m pip install -r ./requirements.txt
 
 OUTPUT_ROOT="$(python3 - "$CONFIG_PATH" <<'PY'
 import sys
@@ -43,7 +43,7 @@ from pathlib import Path
 import yaml
 config_path = Path(sys.argv[1])
 raw = yaml.safe_load(config_path.read_text(encoding='utf-8')) or {}
-print(raw.get('runtime', {}).get('output_root', 'benchmarkallinone/outputs/agent_multidataset_validation_20'))
+print(raw.get('runtime', {}).get('output_root', 'outputs/agent_multidataset_validation_20'))
 PY
 )"
 
@@ -56,7 +56,7 @@ echo "[MultiDataset20] Output root: $OUTPUT_ROOT"
 echo "[MultiDataset20] Live log: $LOG_FILE"
 echo "[MultiDataset20] Running full collection + cleaning pipeline..."
 
-PYTHONUNBUFFERED=1 python3 -u ./benchmarkallinone/run_pipeline.py \
+PYTHONUNBUFFERED=1 python3 -u ./run_pipeline.py \
   --config "$CONFIG_PATH" \
   --base-url "$BASE_URL" \
   --api-key "$API_KEY" \

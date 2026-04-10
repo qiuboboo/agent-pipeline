@@ -9,8 +9,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SRC_ROOT = PROJECT_ROOT / "benchmarkallinone" / "src"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SRC_ROOT = PROJECT_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
@@ -23,7 +23,7 @@ from benchmarkallinone.pipeline import (  # noqa: E402
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Audit run outputs with emphasis on pass samples.")
-    parser.add_argument("--config", default="benchmarkallinone/configs/agent_multidataset_validation_30.yaml")
+    parser.add_argument("--config", default="configs/agent_multidataset_validation_30.yaml")
     parser.add_argument("--run-dir", default="", help="Specific run directory. If omitted, use latest run under config output_root.")
     parser.add_argument("--include-non-pass", action="store_true", help="Audit all samples, not only pass samples.")
     return parser.parse_args()

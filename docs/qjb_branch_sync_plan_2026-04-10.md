@@ -49,7 +49,6 @@
 也就是：
 
 - `src/`
-- `benchmarkallinone/`
 - `scripts/`
 - `docs/`
 - `plans/`（若仍需要）
@@ -349,7 +348,6 @@ git rm -r --cached outputs ready ready_problem_exports
 为了让三机都能从本地 outputs 重建 ready，至少需要同步这些东西：
 
 ### 代码层
-- `benchmarkallinone/`
 - `src/`
 - `scripts/`
 
