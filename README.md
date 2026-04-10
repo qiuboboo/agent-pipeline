@@ -104,14 +104,21 @@ python3 run_pipeline.py --config configs/local_file_example.yaml
 
 ### 5. 从本地 outputs 构建 ready（canonical 主链）
 ```bash
-python3 scripts/build_ready_from_outputs_content_dedup.py --outputs-root outputs --ready-root ready
+python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key>
 ```
 
 这是当前 `qjb` policy 下的 **canonical `outputs -> ready` 主链入口**。
 
-默认会把当前机器本地 `outputs/` 中符合规则的结果，合并/去重后写到当前机器本地的 `ready/`。
+默认建议**按数据集逐个运行**，不要在这里直接跑全量。
 
-如需只构建某个数据集，可结合脚本参数指定数据集过滤条件（以脚本当前 help 为准）。构建完成后，应重点检查：
+如需只构建某个数据集，可结合脚本参数指定数据集过滤条件（建议使用 `--dataset <dataset_key>` 逐个跑）。脚本现在会输出轻量进度日志，至少包括：
+
+- 当前 dataset
+- 当前 range / run
+- 已扫描样本数
+- 写出进度
+
+构建完成后，应重点检查：
 
 - `datasets/<dataset>/summary.json`
 - `datasets/<dataset>/selection_manifest.json`

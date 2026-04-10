@@ -5,7 +5,9 @@ import argparse
 import json
 import re
 import shutil
+import sys
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
@@ -14,6 +16,8 @@ OUTPUTS_ROOT = PROJECT_ROOT / "outputs"
 READY_ROOT = PROJECT_ROOT / "ready"
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif"}
 RANGE_SUFFIX_RE = re.compile(r"^(?P<dataset>.+?)_(?P<start>\d+)_(?P<end>\d+)$")
+PROGRESS_SAMPLE_INTERVAL = 200
+PROGRESS_WRITE_INTERVAL = 200
 
 
 @dataclass(frozen=True)
@@ -65,6 +69,11 @@ def read_json(path: Path) -> Dict[str, Any]:
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def log_progress(message: str) -> None:
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    print(f"[{timestamp}] {message}", file=sys.stderr, flush=True)
 
 
 def pick_first_nonempty(*values: Any) -> str:
@@ -229,17 +238,31 @@ def discover_run_dataset_roots(output_globs: List[str]) -> Iterable[Tuple[Path, 
 
 
 def iter_candidate_samples(dataset_filter: set[str], output_globs: List[str]) -> Iterable[CandidateSample]:
+    scanned_files = 0
+    scanned_roots = 0
     for output_dir, run_dir, dataset_root, dataset_key, range_key, range_start, range_end, source_kind in discover_run_dataset_roots(output_globs):
         if dataset_filter and dataset_key not in dataset_filter:
             continue
         samples_dir = dataset_root / "samples"
         if not samples_dir.exists():
             continue
-        for sample_path in sorted(samples_dir.glob("prob_*.json")):
+        sample_paths = sorted(samples_dir.glob("prob_*.json"))
+        scanned_roots += 1
+        log_progress(
+            f"scan-root dataset={dataset_key} range={range_key} run={run_dir.name} "
+            f"files={len(sample_paths)} output={output_dir.name} root_index={scanned_roots}"
+        )
+        for sample_path in sample_paths:
             try:
                 sample = read_json(sample_path)
             except Exception:
                 continue
+            scanned_files += 1
+            if scanned_files == 1 or scanned_files % PROGRESS_SAMPLE_INTERVAL == 0:
+                log_progress(
+                    f"scan-progress scanned_files={scanned_files} dataset={dataset_key} "
+                    f"range={range_key} run={run_dir.name}"
+                )
             yield CandidateSample(
                 dataset_key=dataset_key,
                 output_dir=output_dir,
@@ -261,6 +284,10 @@ def group_by_dataset_and_range(dataset_filter: set[str], output_globs: List[str]
     grouped: Dict[str, Dict[str, List[CandidateSample]]] = {}
     for entry in iter_candidate_samples(dataset_filter, output_globs):
         grouped.setdefault(entry.dataset_key, {}).setdefault(entry.range_key, []).append(entry)
+    log_progress(
+        f"grouped datasets={len(grouped)} ranges={sum(len(ranges) for ranges in grouped.values())} "
+        f"dataset_keys={','.join(sorted(grouped)) or 'none'}"
+    )
     return grouped
 
 
@@ -322,7 +349,15 @@ def build_selected_samples(dataset_filter: set[str], output_globs: List[str]) ->
         policy = build_policy_for_dataset(dataset_key, original_ranges)
         ranges = filter_ranges_by_policy(original_ranges, policy["selected_output_kind"])
         if not ranges:
+            log_progress(f"select-skip dataset={dataset_key} reason=no_ranges_after_policy")
             continue
+
+        candidate_count = sum(len(entries) for entries in ranges.values())
+        run_count = len({entry.run_dir.as_posix() for entries in ranges.values() for entry in entries})
+        log_progress(
+            f"select-start dataset={dataset_key} ranges={len(ranges)} runs={run_count} "
+            f"candidate_samples={candidate_count} dedup_rule={policy['dedup_rule']}"
+        )
 
         accepted_all: List[CandidateSample] = []
         dataset_scanned = 0
@@ -357,13 +392,26 @@ def build_selected_samples(dataset_filter: set[str], output_globs: List[str]) ->
                     "skipped_existing_source_problem_id": 0,
                     "runs_newest_to_oldest": sorted(range_runs.keys(), key=lambda k: run_sort_key(range_runs[k]), reverse=True),
                 }
+                log_progress(
+                    f"select-range dataset={dataset_key} range={range_key} runs={len(range_runs)} "
+                    f"candidate_samples={len(range_entries)} mode=global_physreason"
+                )
 
             run_keys = sorted(by_run.keys(), key=lambda k: run_sort_key(run_lookup[k]), reverse=True)
-            for run_key in run_keys:
+            for run_index, run_key in enumerate(run_keys, start=1):
+                log_progress(
+                    f"select-run dataset={dataset_key} run={Path(run_key).name} "
+                    f"run_index={run_index}/{len(run_keys)} candidate_samples={len(by_run[run_key])}"
+                )
                 for entry in sorted(by_run[run_key], key=sample_sort_key, reverse=True):
                     range_summary = range_summary_map[entry.range_key]
                     range_summary["scanned_files"] += 1
                     dataset_scanned += 1
+                    if dataset_scanned == 1 or dataset_scanned % PROGRESS_SAMPLE_INTERVAL == 0:
+                        log_progress(
+                            f"select-progress dataset={dataset_key} scanned={dataset_scanned} "
+                            f"kept={len(accepted_all)} skipped={dataset_skipped} current_run={Path(run_key).name}"
+                        )
                     if entry.source_problem_id in seen_source_problem_ids:
                         range_summary["skipped_existing_source_problem_id"] += 1
                         dataset_skipped += 1
@@ -389,12 +437,25 @@ def build_selected_samples(dataset_filter: set[str], output_globs: List[str]) ->
                 range_kept = 0
                 range_skipped = 0
                 kept_run_order: List[str] = []
+                log_progress(
+                    f"select-range dataset={dataset_key} range={range_key} runs={len(run_keys)} "
+                    f"candidate_samples={len(range_entries)}"
+                )
 
-                for run_key in run_keys:
+                for run_index, run_key in enumerate(run_keys, start=1):
                     kept_run_order.append(run_key)
+                    log_progress(
+                        f"select-run dataset={dataset_key} range={range_key} run={Path(run_key).name} "
+                        f"run_index={run_index}/{len(run_keys)} candidate_samples={len(by_run[run_key])}"
+                    )
                     for entry in sorted(by_run[run_key], key=sample_sort_key, reverse=True):
                         range_scanned += 1
                         dataset_scanned += 1
+                        if dataset_scanned == 1 or dataset_scanned % PROGRESS_SAMPLE_INTERVAL == 0:
+                            log_progress(
+                                f"select-progress dataset={dataset_key} scanned={dataset_scanned} "
+                                f"kept={len(accepted_all)} skipped={dataset_skipped} current_range={range_key} current_run={Path(run_key).name}"
+                            )
                         if entry.source_problem_id in seen_source_problem_ids:
                             range_skipped += 1
                             dataset_skipped += 1
@@ -431,6 +492,10 @@ def build_selected_samples(dataset_filter: set[str], output_globs: List[str]) ->
             "selected_output_kinds": sorted({entry.source_kind for entry in accepted_all}),
             "package_dataset_label": policy["package_dataset_label"],
         }
+        log_progress(
+            f"select-done dataset={dataset_key} selected={len(accepted_all)} scanned={dataset_scanned} "
+            f"duplicate_source_problem_id={dataset_skipped}"
+        )
 
     return selected, stats
 
@@ -556,13 +621,15 @@ def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[Cand
     artifact_images_out = dataset_out / "artifacts" / "images"
     artifact_crops_out = dataset_out / "artifacts" / "crops"
 
+    log_progress(f"write-start dataset={dataset_key} package_root={package_root} samples={len(entries)}")
+
     source_runs = set()
     source_outputs = set()
     kept_problem_ids: List[str] = []
     kept_source_problem_ids: List[str] = []
     kept_samples: List[Dict[str, Any]] = []
 
-    for entry in entries:
+    for index, entry in enumerate(entries, start=1):
         target_name = f"{entry.range_key}__spid_{entry.source_problem_id}__{entry.problem_id}.json"
         target_sample = samples_out / target_name
         shutil.copy2(entry.sample_path, target_sample)
@@ -593,6 +660,10 @@ def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[Cand
             else:
                 dst = dataset_out / rel
             copy_tree_if_exists(asset_path, dst)
+        if index == 1 or index % PROGRESS_WRITE_INTERVAL == 0 or index == len(entries):
+            log_progress(
+                f"write-progress dataset={dataset_key} copied={index}/{len(entries)} current_sample={target_name}"
+            )
 
     counts = status_counts(entries)
     selection_validation = validate_selection(entries, dataset_stats)
@@ -636,6 +707,10 @@ def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[Cand
         raise RuntimeError(
             f"validation failed for {dataset_key}: selection_ok={selection_validation['ok']} write_ok={write_validation['ok']}"
         )
+    log_progress(
+        f"write-done dataset={dataset_key} selected={summary['selected_samples']} pass={counts['pass']} "
+        f"review={counts['review']} reject={counts['reject']}"
+    )
     return summary
 
 
@@ -688,7 +763,12 @@ def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[s
 def main() -> None:
     args = parse_args()
     dataset_filter = set(args.dataset)
+    log_progress(
+        f"start dry_run={args.dry_run} datasets={','.join(sorted(dataset_filter)) or 'ALL'} "
+        f"output_globs={','.join(args.output_glob) or '*'} package_prefix={args.package_prefix}"
+    )
     selected, stats = build_selected_samples(dataset_filter=dataset_filter, output_globs=args.output_glob)
+    log_progress(f"selection-finished datasets={len(selected)}")
 
     manifest = {
         key: {
@@ -702,6 +782,7 @@ def main() -> None:
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
 
     if args.dry_run:
+        log_progress("dry-run complete")
         return
 
     dataset_summaries: Dict[str, Dict[str, Any]] = {}
@@ -709,12 +790,14 @@ def main() -> None:
         package_label = stats[dataset_key].get("package_dataset_label") or dataset_key
         package_name = f"{args.package_prefix}__{package_label}"
         package_root = READY_ROOT / dataset_key / package_name
+        log_progress(f"package-start dataset={dataset_key} package_name={package_name}")
         ensure_clean_dir(package_root)
         summary = write_ready_dataset(package_root=package_root, dataset_key=dataset_key, entries=entries, dataset_stats=stats[dataset_key])
         dataset_summaries[dataset_key] = {**summary, "package_name": package_name, "package_root": package_root.as_posix()}
         print(f"[done] {dataset_key}: {summary['selected_samples']} -> {package_root}")
 
     write_run_summary(READY_ROOT / "summary.json", args.package_prefix, dataset_summaries)
+    log_progress(f"summary-written path={READY_ROOT / 'summary.json'} datasets={len(dataset_summaries)}")
 
 
 if __name__ == "__main__":
