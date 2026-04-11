@@ -149,12 +149,7 @@ def parse_output_dir(output_dir: Path, dataset_key_from_summary: str) -> Optiona
                 source_kind="emma_chemistry",
             )
 
-    if dataset_key_from_summary == "eee_bench" and re.fullmatch(r"eee_bench_merged_\d+_\d+", output_name):
-        return None
-
     if dataset_key_from_summary == "physreason":
-        if re.fullmatch(r"physreason_batched_eval_rerun_\d+_\d+", output_name):
-            return None
         m = re.fullmatch(r"physreason_full_(?P<start>\d+)_(?P<end>\d+)", output_name)
         if m:
             return OutputDirMatch(
@@ -196,7 +191,17 @@ def parse_output_dir(output_dir: Path, dataset_key_from_summary: str) -> Optiona
             range_end=int(m.group("end")),
             source_kind="standard",
         )
+
+    if dataset_key_from_summary in output_name:
+        return OutputDirMatch(
+            range_key=output_name,
+            dataset_key=dataset_key_from_summary,
+            range_start=0,
+            range_end=0,
+            source_kind="contains_dataset_name",
+        )
     return None
+
 
 
 def discover_run_dataset_roots(output_globs: List[str]) -> Iterable[Tuple[Path, Path, Path, str, str, int, int, str]]:
