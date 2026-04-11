@@ -192,13 +192,14 @@ def parse_output_dir(output_dir: Path, dataset_key_from_summary: str) -> Optiona
             source_kind="standard",
         )
 
-    if dataset_key_from_summary in output_name:
+    token_pattern = re.compile(rf"(?:^|_){re.escape(dataset_key_from_summary)}(?:_|$)")
+    if token_pattern.search(output_name):
         return OutputDirMatch(
             range_key=output_name,
             dataset_key=dataset_key_from_summary,
             range_start=0,
             range_end=0,
-            source_kind="contains_dataset_name",
+            source_kind="contains_dataset_token",
         )
     return None
 
@@ -313,9 +314,11 @@ def build_policy_for_dataset(dataset_key: str, ranges: Dict[str, List[CandidateS
     policy = {
         "available_output_kinds": available_output_kinds,
         "selected_output_kind": None,
+        "allowed_output_dirs": [],
+        "blocked_output_dirs": [],
         "package_dataset_label": dataset_key,
         "dedup_rule": "latest_to_oldest_within_range_by_source_problem_id_then_merge_ranges",
-        "selection_rule": "Use only outputs folders whose names contain dataset_key_start_end (prefix/suffix allowed). For each such range folder, scan runs newest to oldest; keep the first sample for each source_problem_id; after finishing each range, merge all ranges together.",
+        "selection_rule": "Use outputs folders whose names either match dataset_key_start_end (prefix/suffix allowed) or contain the dataset key as a standalone underscore-delimited token. For each matched range folder, scan runs newest to oldest; keep the first sample for each source_problem_id; after finishing each range, merge all ranges together.",
     }
     if dataset_key == "physreason":
         if "physreason_full" in available_output_kinds:
@@ -331,15 +334,62 @@ def build_policy_for_dataset(dataset_key: str, ranges: Dict[str, List[CandidateS
                 package_dataset_label="physreason_merged",
                 selection_rule="Use only documented adopted physreason_merged_* outputs. Do not mix them with physreason_batched_eval_rerun_* provenance roots.",
             )
+    elif dataset_key == "phyx":
+        preferred = ["phyx_029_528_rerun", "phyx_029_528", "phyx_000_500"]
+        available_names = {entry.output_dir.name for entries in ranges.values() for entry in entries}
+        chosen_primary = next((name for name in preferred if name in available_names), None)
+        allowed = []
+        if chosen_primary:
+            allowed.append(chosen_primary)
+        if "phyx_529_1528_rerun" in available_names:
+            allowed.append("phyx_529_1528_rerun")
+        if allowed:
+            policy.update(
+                allowed_output_dirs=allowed,
+                selection_rule=(
+                    "Use only the canonical PhyX families: keep one primary 0-500 package "
+                    f"({', '.join(allowed[:1])}) plus phyx_529_1528_rerun when present. "
+                    "Exclude duplicate alias packages such as phyx_000_500 / phyx_029_528 / phyx_029_528_rerun from being combined together."
+                ),
+            )
+    elif dataset_key == "sciverse":
+        available_names = {entry.output_dir.name for entries in ranges.values() for entry in entries}
+        allowed = []
+        if "sciverse_000_500" in available_names:
+            allowed.append("sciverse_000_500")
+        elif "sciverse_500" in available_names:
+            allowed.append("sciverse_500")
+        if "sciverse_500_end_rerun" in available_names:
+            allowed.append("sciverse_500_end_rerun")
+        blocked = []
+        if "sciverse_000_500" in available_names and "sciverse_500" in available_names:
+            blocked.append("sciverse_500")
+        if allowed or blocked:
+            policy.update(
+                allowed_output_dirs=allowed,
+                blocked_output_dirs=blocked,
+                selection_rule="Use sciverse_000_500 as the canonical first-half package when present, pair it with sciverse_500_end_rerun for the tail rerun, and drop the duplicate alias package sciverse_500 when sciverse_000_500 already exists.",
+            )
     return policy
 
 
-def filter_ranges_by_policy(ranges: Dict[str, List[CandidateSample]], selected_output_kind: Optional[str]) -> Dict[str, List[CandidateSample]]:
-    if not selected_output_kind:
-        return ranges
+def filter_ranges_by_policy(
+    ranges: Dict[str, List[CandidateSample]],
+    selected_output_kind: Optional[str],
+    allowed_output_dirs: List[str],
+    blocked_output_dirs: List[str],
+) -> Dict[str, List[CandidateSample]]:
+    allowed_output_dir_set = set(allowed_output_dirs)
+    blocked_output_dir_set = set(blocked_output_dirs)
     filtered: Dict[str, List[CandidateSample]] = {}
     for range_key, entries in ranges.items():
-        kept_entries = [entry for entry in entries if entry.source_kind == selected_output_kind]
+        kept_entries = entries
+        if selected_output_kind:
+            kept_entries = [entry for entry in kept_entries if entry.source_kind == selected_output_kind]
+        if allowed_output_dir_set:
+            kept_entries = [entry for entry in kept_entries if entry.output_dir.name in allowed_output_dir_set]
+        if blocked_output_dir_set:
+            kept_entries = [entry for entry in kept_entries if entry.output_dir.name not in blocked_output_dir_set]
         if kept_entries:
             filtered[range_key] = kept_entries
     return filtered
@@ -352,7 +402,12 @@ def build_selected_samples(dataset_filter: set[str], output_globs: List[str]) ->
 
     for dataset_key, original_ranges in grouped.items():
         policy = build_policy_for_dataset(dataset_key, original_ranges)
-        ranges = filter_ranges_by_policy(original_ranges, policy["selected_output_kind"])
+        ranges = filter_ranges_by_policy(
+            original_ranges,
+            policy["selected_output_kind"],
+            policy.get("allowed_output_dirs", []),
+            policy.get("blocked_output_dirs", []),
+        )
         if not ranges:
             log_progress(f"select-skip dataset={dataset_key} reason=no_ranges_after_policy")
             continue
