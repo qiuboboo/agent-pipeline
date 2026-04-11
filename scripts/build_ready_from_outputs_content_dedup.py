@@ -179,6 +179,24 @@ def parse_output_dir(output_dir: Path, dataset_key_from_summary: str) -> Optiona
                 source_kind="physreason_merged",
             )
 
+    if dataset_key_from_summary == "scemqa":
+        if output_name == "candidate_200_remote":
+            return OutputDirMatch(
+                range_key=output_name,
+                dataset_key=dataset_key_from_summary,
+                range_start=0,
+                range_end=0,
+                source_kind="scemqa_candidate_remote",
+            )
+        if output_name == "scemqa_single_sample":
+            return OutputDirMatch(
+                range_key=output_name,
+                dataset_key=dataset_key_from_summary,
+                range_start=0,
+                range_end=0,
+                source_kind="scemqa_single_sample",
+            )
+
     pattern = re.compile(
         rf"(?:^|_)(?P<dataset>{re.escape(dataset_key_from_summary)})_(?P<start>\d+)_(?P<end>\d+)(?:_|$)"
     )
@@ -351,6 +369,20 @@ def build_policy_for_dataset(dataset_key: str, ranges: Dict[str, List[CandidateS
                     f"({', '.join(allowed[:1])}) plus phyx_529_1528_rerun when present. "
                     "Exclude duplicate alias packages such as phyx_000_500 / phyx_029_528 / phyx_029_528_rerun from being combined together."
                 ),
+            )
+    elif dataset_key == "scemqa":
+        available_names = {entry.output_dir.name for entries in ranges.values() for entry in entries}
+        allowed = []
+        blocked = []
+        if "candidate_200_remote" in available_names:
+            allowed.append("candidate_200_remote")
+        if "scemqa_single_sample" in available_names:
+            blocked.append("scemqa_single_sample")
+        if allowed or blocked:
+            policy.update(
+                allowed_output_dirs=allowed,
+                blocked_output_dirs=blocked,
+                selection_rule="Use candidate_200_remote as the canonical SCEMQA source package and exclude scemqa_single_sample debug/probe outputs from ready assembly.",
             )
     elif dataset_key == "sciverse":
         available_names = {entry.output_dir.name for entries in ranges.values() for entry in entries}
