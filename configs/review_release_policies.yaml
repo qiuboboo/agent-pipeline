@@ -68,9 +68,31 @@ review_release:
       release_buckets: {}
 
     multi_physics:
-      dataset_root: ready/multi_physics/run_filtered_multi_physics_safe/datasets/multi_physics
-      policy_doc: ""
-      release_buckets: {}
+      dataset_root: ready/multi_physics/run_outputs_merged_by_source_problem_id__multi_physics/datasets/multi_physics
+      policy_doc: docs/review/multi_physics_A_release_decision_2026-04-11.md
+      release_buckets:
+        A:
+          enabled: true
+          candidate_key: strict_A_bucket_candidates
+          release_basis: exact alignment+missing_grounded_visual_path review bucket
+          pass_decision_reason_codes:
+            - alignment_requires_review
+            - missing_grounded_visual_path
+            - manual_release_pass
+          selection:
+            match_mode: exact_set
+            decision_reason_codes:
+              - alignment_requires_review
+              - missing_grounded_visual_path
+          adjacent_observation:
+            label: adjacent split_variant bucket
+            candidate_key: adjacent_split_variant_candidates
+            selection:
+              match_mode: exact_set
+              decision_reason_codes:
+                - alignment_requires_review
+                - missing_grounded_visual_path
+                - split_variant_needs_review
 
     msearth_open_ended:
       dataset_root: ready/msearth_open_ended/run_merged_msearth_open_ended_0000_0120_ler_reasoning_chain/datasets/msearth_open_ended
