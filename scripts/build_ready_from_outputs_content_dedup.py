@@ -140,6 +140,55 @@ def sample_source_problem_id(sample: Dict[str, Any], sample_path: Path) -> str:
     return value or sample_problem_id(sample, sample_path)
 
 
+def sample_subject(sample: Dict[str, Any]) -> str:
+    problem_main = sample.get("problem_main_record") or {}
+    clean_problem = sample.get("clean_problem_record") or {}
+    normalization = sample.get("normalization_record") or {}
+    candidate = sample.get("candidate_problem_record") or {}
+    source = sample.get("source_intake_record") or {}
+    value = pick_first_nonempty(
+        problem_main.get("subject"),
+        clean_problem.get("subject"),
+        normalization.get("subject"),
+        candidate.get("subject"),
+        source.get("subject"),
+        problem_main.get("category"),
+        clean_problem.get("category"),
+        normalization.get("category"),
+        candidate.get("category"),
+        source.get("category"),
+    )
+    return value.strip()
+
+
+def normalized_subject_slug(value: str) -> str:
+    text = (value or "").strip().lower()
+    aliases = {
+        "math": "math",
+        "mathematics": "math",
+        "数学": "math",
+        "physics": "physics",
+        "物理": "physics",
+        "biology": "biology",
+        "bio": "biology",
+        "生物": "biology",
+        "chemistry": "chemistry",
+        "chem": "chemistry",
+        "化学": "chemistry",
+    }
+    return aliases.get(text, re.sub(r"[^a-z0-9]+", "_", text).strip("_"))
+
+
+def split_dataset_key_by_subject(dataset_key: str, sample: Dict[str, Any]) -> str:
+    if dataset_key != "sciverse":
+        return dataset_key
+    subject = sample_subject(sample)
+    subject_slug = normalized_subject_slug(subject)
+    if not subject_slug:
+        return dataset_key
+    return f"{dataset_key}_{subject_slug}"
+
+
 def parse_output_dir(output_dir: Path, dataset_key_from_summary: str) -> Optional[OutputDirMatch]:
     output_name = output_dir.name
 
@@ -611,7 +660,64 @@ def build_selected_samples(dataset_filter: set[str], output_globs: List[str]) ->
             f"duplicate_source_problem_id={dataset_skipped}"
         )
 
+    selected, stats = split_selected_by_subject(selected, stats)
     return selected, stats
+
+
+def split_selected_by_subject(
+    selected: Dict[str, List[CandidateSample]],
+    stats: Dict[str, Dict[str, Any]],
+) -> Tuple[Dict[str, List[CandidateSample]], Dict[str, Dict[str, Any]]]:
+    remapped_selected: Dict[str, List[CandidateSample]] = {}
+    remapped_stats: Dict[str, Dict[str, Any]] = {}
+
+    for dataset_key, entries in selected.items():
+        if dataset_key != "sciverse":
+            remapped_selected[dataset_key] = entries
+            remapped_stats[dataset_key] = stats[dataset_key]
+            continue
+
+        buckets: Dict[str, List[CandidateSample]] = {}
+        bucket_ranges: Dict[str, Dict[str, Dict[str, Any]]] = {}
+        for entry in entries:
+            split_key = split_dataset_key_by_subject(dataset_key, entry.sample)
+            buckets.setdefault(split_key, []).append(entry)
+            bucket_ranges.setdefault(split_key, {})
+            range_info = bucket_ranges[split_key].setdefault(
+                entry.range_key,
+                {
+                    "range_key": entry.range_key,
+                    "range_start": entry.range_start,
+                    "range_end": entry.range_end,
+                    "scanned_files": 0,
+                    "kept_unique_source_problem_ids": 0,
+                    "skipped_existing_source_problem_id": 0,
+                    "runs_newest_to_oldest": [],
+                },
+            )
+            range_info["kept_unique_source_problem_ids"] += 1
+            run_key = entry.run_dir.as_posix()
+            if run_key not in range_info["runs_newest_to_oldest"]:
+                range_info["runs_newest_to_oldest"].append(run_key)
+
+        for split_key, split_entries in buckets.items():
+            split_entries = sorted(split_entries, key=lambda e: (e.range_start, e.range_end, e.run_dir.as_posix(), e.sample_path.as_posix()))
+            remapped_selected[split_key] = split_entries
+            parent_stats = stats[dataset_key]
+            remapped_stats[split_key] = {
+                **parent_stats,
+                "dataset_key": split_key,
+                "scanned_files": len(split_entries),
+                "duplicate_source_problem_id": 0,
+                "unique_files": len(split_entries),
+                "ranges": sorted(bucket_ranges[split_key].values(), key=lambda item: (item["range_start"], item["range_end"], item["range_key"])),
+                "package_dataset_label": split_key,
+                "selection_rule": parent_stats.get("selection_rule", "") + f" Then split selected samples by subject into {split_key}.",
+            }
+            log_progress(f"subject-split dataset={dataset_key} split_dataset={split_key} samples={len(split_entries)}")
+
+    return remapped_selected, remapped_stats
+
 
 
 def validate_selection(entries: List[CandidateSample], dataset_stats: Dict[str, Any]) -> Dict[str, Any]:
