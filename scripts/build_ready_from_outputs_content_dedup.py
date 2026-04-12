@@ -713,6 +713,58 @@ def pick_reason_codes(sample: Dict[str, Any]) -> List[str]:
     )
 
 
+def load_explicit_release_index(dataset_key: str, policy_config: Path, disabled: bool) -> Dict[str, Dict[str, Any]]:
+    if disabled:
+        return {}
+    dataset_policy = get_dataset_policy(dataset_key, policy_config)
+    release_buckets = dataset_policy.get("release_buckets") or {}
+    docs_root = PROJECT_ROOT / "docs" / "review"
+    index: Dict[str, Dict[str, Any]] = {}
+
+    for bucket_key, bucket_cfg in sorted(release_buckets.items()):
+        if not bucket_cfg or not bucket_cfg.get("enabled", True):
+            continue
+        if bucket_cfg.get("selection") is not None:
+            continue
+        candidate_key = str(bucket_cfg.get("candidate_key") or f"{bucket_key}_candidates")
+        patterns = [
+            f"*{candidate_key}*.json",
+            f"*{bucket_key}_bucket_candidates*.json",
+            f"*{bucket_key}*candidates*.json",
+        ]
+        candidate_json_path = None
+        for pattern in patterns:
+            matches = sorted(docs_root.glob(pattern))
+            if matches:
+                candidate_json_path = matches[-1]
+                break
+        if candidate_json_path is None:
+            continue
+        data = read_json(candidate_json_path)
+        rows = data.get(candidate_key) or []
+        if not isinstance(rows, list):
+            rows = []
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            problem_id = str(row.get("problem_id") or "")
+            source_problem_id = str(row.get("source_problem_id") or "")
+            if not problem_id and not source_problem_id:
+                continue
+            payload = {
+                "bucket_key": bucket_key,
+                "candidate_key": candidate_key,
+                "candidate_json": candidate_json_path.as_posix(),
+                "release_basis": str(bucket_cfg.get("release_basis") or ""),
+                "selection_notes": str(bucket_cfg.get("selection_notes") or ""),
+            }
+            if problem_id:
+                index[f"problem_id:{problem_id}"] = payload
+            if source_problem_id:
+                index[f"source_problem_id:{source_problem_id}"] = payload
+    return index
+
+
 def build_release_gate(dataset_key: str, policy_config: Path, disabled: bool) -> Dict[str, Any]:
     if disabled:
         return {"enabled": False, "dataset_key": dataset_key, "release_buckets": []}
@@ -746,7 +798,7 @@ def build_release_gate(dataset_key: str, policy_config: Path, disabled: bool) ->
     }
 
 
-def classify_entry_for_ready(entry: CandidateSample, release_gate: Dict[str, Any]) -> Dict[str, Any]:
+def classify_entry_for_ready(entry: CandidateSample, release_gate: Dict[str, Any], explicit_release_index: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
     decision = pick_clean_decision(entry.sample)
     reason_codes = pick_reason_codes(entry.sample)
     if decision == "pass":
@@ -760,8 +812,25 @@ def classify_entry_for_ready(entry: CandidateSample, release_gate: Dict[str, Any
             "selection_notes": "",
             "released_from_review": False,
             "drop_reason": "",
+            "release_mode": "original_pass",
+            "candidate_json": "",
         }
     if decision == "review" and release_gate.get("enabled"):
+        explicit_hit = explicit_release_index.get(f"problem_id:{entry.problem_id}") or explicit_release_index.get(f"source_problem_id:{entry.source_problem_id}")
+        if explicit_hit:
+            return {
+                "include": True,
+                "final_decision": "pass",
+                "source_decision": decision,
+                "source_reason_codes": reason_codes,
+                "release_bucket": str(explicit_hit.get("bucket_key") or ""),
+                "release_basis": str(explicit_hit.get("release_basis") or ""),
+                "selection_notes": str(explicit_hit.get("selection_notes") or ""),
+                "released_from_review": True,
+                "drop_reason": "",
+                "release_mode": "explicit_candidate_subset",
+                "candidate_json": str(explicit_hit.get("candidate_json") or ""),
+            }
         for bucket in release_gate.get("release_buckets") or []:
             if matches_rule(reason_codes, str(bucket.get("rule_type") or "structured_selection"), bucket.get("selection")):
                 return {
@@ -774,6 +843,8 @@ def classify_entry_for_ready(entry: CandidateSample, release_gate: Dict[str, Any
                     "selection_notes": str(bucket.get("selection_notes") or ""),
                     "released_from_review": True,
                     "drop_reason": "",
+                    "release_mode": "structured_selection",
+                    "candidate_json": "",
                 }
     return {
         "include": False,
@@ -785,6 +856,8 @@ def classify_entry_for_ready(entry: CandidateSample, release_gate: Dict[str, Any
         "selection_notes": "",
         "released_from_review": False,
         "drop_reason": "filtered_non_pass_or_unreleased_review",
+        "release_mode": "not_selected",
+        "candidate_json": "",
     }
 
 
@@ -805,6 +878,7 @@ def build_selection_manifest(
     dataset_stats: Dict[str, Any],
     *,
     release_gate: Dict[str, Any],
+    explicit_release_index: Dict[str, Dict[str, Any]],
 ) -> Tuple[Dict[str, Any], List[CandidateSample], Dict[str, int], Dict[str, int]]:
     kept_problem_ids: List[str] = []
     kept_source_problem_ids: List[str] = []
@@ -814,7 +888,7 @@ def build_selection_manifest(
     selected_entries: List[CandidateSample] = []
 
     for entry in entries:
-        release_info = classify_entry_for_ready(entry, release_gate)
+        release_info = classify_entry_for_ready(entry, release_gate, explicit_release_index)
         base_row = {
             "problem_id": entry.problem_id,
             "source_problem_id": entry.source_problem_id,
@@ -831,6 +905,8 @@ def build_selection_manifest(
             "release_bucket": release_info["release_bucket"],
             "release_basis": release_info["release_basis"],
             "selection_notes": release_info["selection_notes"],
+            "release_mode": release_info["release_mode"],
+            "candidate_json": release_info["candidate_json"],
             "final_decision_for_ready": release_info["final_decision"],
         }
         if release_info["include"]:
@@ -866,6 +942,7 @@ def build_selection_manifest(
             "enabled": bool(release_gate.get("enabled")),
             "policy_config": release_gate.get("policy_config", ""),
             "structured_release_buckets": [bucket.get("bucket_key") for bucket in (release_gate.get("release_buckets") or [])],
+            "explicit_release_candidate_count": len(explicit_release_index),
             "counts": release_counts,
         },
     }
@@ -879,6 +956,7 @@ def write_ready_dataset(
     dataset_stats: Dict[str, Any],
     *,
     release_gate: Dict[str, Any],
+    explicit_release_index: Dict[str, Dict[str, Any]],
 ) -> Dict[str, Any]:
     dataset_out = package_root / "datasets" / dataset_key
     samples_out = dataset_out / "samples"
@@ -897,6 +975,7 @@ def write_ready_dataset(
         entries,
         dataset_stats,
         release_gate=release_gate,
+        explicit_release_index=explicit_release_index,
     )
     write_json(dataset_out / "selection_manifest.json", selection_manifest)
 
@@ -1051,12 +1130,18 @@ def main() -> None:
             policy_config=resolve_project_path(args.release_policy_config),
             disabled=args.disable_review_release,
         )
+        explicit_release_index = load_explicit_release_index(
+            dataset_key=dataset_key,
+            policy_config=resolve_project_path(args.release_policy_config),
+            disabled=args.disable_review_release,
+        )
         summary = write_ready_dataset(
             package_root=package_root,
             dataset_key=dataset_key,
             entries=entries,
             dataset_stats=stats[dataset_key],
             release_gate=release_gate,
+            explicit_release_index=explicit_release_index,
         )
         dataset_summaries[dataset_key] = {**summary, "package_name": package_name, "package_root": package_root.as_posix()}
         print(f"[done] {dataset_key}: {summary['selected_samples']} -> {package_root}")
