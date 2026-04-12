@@ -245,6 +245,22 @@ python3 scripts/build_review_docs.py --dataset multi_physics --skip-analysis --s
 - 改 policy / candidate-json 后，优先按数据集定向刷新
 - 不要每次顺手全量跑一遍 docs，除非确实要做全仓库重建
 
+### 7.4 最小 smoke / regression 检查（推荐）
+```bash
+bash scripts/smoke_review_release_runtime.sh
+```
+
+这个脚本固定检查三类代表性 bucket：
+- `mm_math.A`：structured_selection，可从 ready 自动 export
+- `seephys.A1`：explicit_candidate_subset，必须拒绝 auto-export，但 dry-run 应能正常解析 curated candidate-json
+- `multi_physics.B2`：explicit_candidate_subset，dry-run 应显示完整的 `quality_risk_flags` 口径说明
+
+通过标准不是“所有命令都成功”，而是：
+- 该成功的成功
+- 该拒绝的拒绝，而且错误信息正确
+
+因此它适合作为这次 unified review-release runtime 的最小回归入口。
+
 ### 8. 生成样本花名册 manifest（inventory / post-build）
 ```bash
 python3 scripts/build_sample_manifest.py --outputs-root outputs --ready-root ready
