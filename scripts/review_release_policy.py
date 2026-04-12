@@ -90,6 +90,82 @@ def get_dataset_root_from_policy(dataset_key: str, path: Path | None = None) -> 
     return resolve_project_path(raw)
 
 
+def infer_rule_type(rule_cfg: Dict[str, Any] | None) -> str:
+    cfg = rule_cfg or {}
+    if cfg.get("rule_type"):
+        return str(cfg.get("rule_type"))
+    if cfg.get("selection"):
+        return "structured_selection"
+    if cfg.get("selection_notes") or cfg.get("candidate_key"):
+        return "explicit_candidate_subset"
+    return "structured_selection"
+
+
+def normalize_bucket_rule(
+    dataset_cfg: Dict[str, Any],
+    bucket_key: str,
+    *,
+    defaults: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    defaults = defaults or {}
+    bucket_cfg = (dataset_cfg.get("release_buckets") or {}).get(bucket_key) or {}
+    if not bucket_cfg:
+        review_rules = dataset_cfg.get("review_release_rules") or {}
+        explicit_rules = dataset_cfg.get("explicit_release_rules") or {}
+        bucket_cfg = review_rules.get(bucket_key) or explicit_rules.get(bucket_key) or {}
+    if not bucket_cfg:
+        return {}
+
+    adjacent_cfg = bucket_cfg.get("adjacent_observation") or {}
+    rule_type = infer_rule_type(bucket_cfg)
+    adjacent_rule_type = infer_rule_type(adjacent_cfg) if adjacent_cfg else ""
+
+    return {
+        "bucket_key": bucket_key,
+        "enabled": bucket_cfg.get("enabled", True),
+        "rule_type": rule_type,
+        "candidate_key": str(bucket_cfg.get("candidate_key") or f"{bucket_key}_candidates"),
+        "selection": bucket_cfg.get("selection") or None,
+        "selection_notes": str(bucket_cfg.get("selection_notes") or ""),
+        "policy_doc": str(bucket_cfg.get("policy_doc") or dataset_cfg.get("policy_doc") or ""),
+        "release_basis": str(bucket_cfg.get("release_basis") or ""),
+        "approved_via": str(bucket_cfg.get("approved_via") or dataset_cfg.get("approved_via") or defaults.get("approved_via") or "user_confirmed_chat_policy"),
+        "pass_decision_reason_codes": normalize_reason_list(bucket_cfg.get("pass_decision_reason_codes")),
+        "adjacent_key": str(adjacent_cfg.get("candidate_key") or ""),
+        "adjacent_label": str(adjacent_cfg.get("label") or defaults.get("adjacent_label") or "adjacent bucket"),
+        "adjacent_rule_type": adjacent_rule_type,
+        "adjacent_selection": adjacent_cfg.get("selection") or None,
+        "adjacent_selection_notes": str(adjacent_cfg.get("selection_notes") or ""),
+    }
+
+
+def format_rule_summary(rule_type: str, selection: Dict[str, Any] | None, selection_notes: str = "") -> str:
+    if rule_type == "explicit_candidate_subset":
+        return selection_notes or "explicit candidate-json subset"
+    return format_reason_rule(selection)
+
+
+def matches_rule(actual: List[str], rule_type: str, selection: Dict[str, Any] | None) -> bool:
+    if rule_type == "explicit_candidate_subset":
+        return True
+    return matches_selection(actual, selection)
+
+
+def get_release_bucket_runtime(dataset_key: str, bucket_key: str, path: Path | None = None) -> Dict[str, Any]:
+    policy_root = load_review_release_policy_config(path)
+    review_release = policy_root.get("review_release") or {}
+    defaults = review_release.get("defaults") or {}
+    dataset_cfg = (review_release.get("datasets") or {}).get(dataset_key) or {}
+    if not dataset_cfg:
+        return {}
+    runtime = normalize_bucket_rule(dataset_cfg, bucket_key, defaults=defaults)
+    if not runtime:
+        return {}
+    runtime["dataset_key"] = dataset_key
+    runtime["dataset_root"] = resolve_project_path(dataset_cfg.get("dataset_root")) if dataset_cfg.get("dataset_root") else None
+    return runtime
+
+
 def iter_dataset_roots(path: Path | None = None) -> Iterable[Path]:
     seen: set[str] = set()
     for _, dataset_policy in (get_review_release_datasets(path) or {}).items():

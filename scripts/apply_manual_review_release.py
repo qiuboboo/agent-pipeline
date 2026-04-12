@@ -11,8 +11,10 @@ from typing import Any, Dict, List
 from review_release_policy import (
     PROJECT_ROOT,
     format_reason_rule,
+    format_rule_summary,
+    get_release_bucket_runtime,
     load_review_release_policy_config,
-    matches_selection,
+    matches_rule,
     normalize_reason_list,
     resolve_project_path,
 )
@@ -320,38 +322,39 @@ def resolve_runtime_config(args: argparse.Namespace) -> Dict[str, Any]:
         policy_root = load_review_release_policy_config(resolve_project_path(args.policy_config))
         review_release = policy_root.get("review_release") or {}
         defaults = review_release.get("defaults") or {}
-        datasets_cfg = review_release.get("datasets") or {}
         dataset_key = require_value(args.dataset, "--dataset is required when using --policy-config")
-        dataset_cfg = datasets_cfg.get(dataset_key) or {}
-        if not dataset_cfg:
-            raise ValueError(f"dataset policy not found in config: {dataset_key}")
-        bucket_cfg = (dataset_cfg.get("release_buckets") or {}).get(args.release_bucket) or {}
-        if not bucket_cfg:
+        runtime_cfg = get_release_bucket_runtime(dataset_key, args.release_bucket, resolve_project_path(args.policy_config))
+        if not runtime_cfg:
             raise ValueError(f"release bucket policy not found: dataset={dataset_key}, bucket={args.release_bucket}")
-        if bucket_cfg.get("enabled") is False:
+        if runtime_cfg.get("enabled") is False:
             raise ValueError(f"release bucket is disabled: dataset={dataset_key}, bucket={args.release_bucket}")
-        adjacent_cfg = bucket_cfg.get("adjacent_observation") or {}
+        dataset_cfg = (review_release.get("datasets") or {}).get(dataset_key) or {}
     else:
         dataset_key = args.dataset or ""
+        defaults = {}
+        runtime_cfg = {}
+        dataset_cfg = {}
 
     dataset_root_raw = args.dataset_root or dataset_cfg.get("dataset_root")
-    candidate_key = args.candidate_key or bucket_cfg.get("candidate_key")
-    policy_doc = args.policy_doc or bucket_cfg.get("policy_doc") or dataset_cfg.get("policy_doc")
-    release_basis = args.release_basis or bucket_cfg.get("release_basis")
+    candidate_key = args.candidate_key or runtime_cfg.get("candidate_key")
+    policy_doc = args.policy_doc or runtime_cfg.get("policy_doc") or dataset_cfg.get("policy_doc")
+    release_basis = args.release_basis or runtime_cfg.get("release_basis")
     decision_reason_codes = normalize_reason_list(args.decision_reason_codes) or normalize_reason_list(
-        bucket_cfg.get("pass_decision_reason_codes")
+        runtime_cfg.get("pass_decision_reason_codes")
     )
     approved_via = (
         args.approved_via
-        or bucket_cfg.get("approved_via")
+        or runtime_cfg.get("approved_via")
         or dataset_cfg.get("approved_via")
         or defaults.get("approved_via")
         or "user_confirmed_chat_policy"
     )
-    adjacent_key = args.adjacent_key or adjacent_cfg.get("candidate_key") or ""
-    adjacent_label = args.adjacent_label or adjacent_cfg.get("label") or defaults.get("adjacent_label") or "adjacent bucket"
-    selection = bucket_cfg.get("selection") or None
-    adjacent_selection = adjacent_cfg.get("selection") or None
+    adjacent_key = args.adjacent_key or runtime_cfg.get("adjacent_key") or ""
+    adjacent_label = args.adjacent_label or runtime_cfg.get("adjacent_label") or defaults.get("adjacent_label") or "adjacent bucket"
+    selection = runtime_cfg.get("selection") or None
+    adjacent_selection = runtime_cfg.get("adjacent_selection") or None
+    rule_type = str(runtime_cfg.get("rule_type") or ("structured_selection" if selection else "explicit_candidate_subset"))
+    adjacent_rule_type = str(runtime_cfg.get("adjacent_rule_type") or ("structured_selection" if adjacent_selection else "explicit_candidate_subset"))
 
     require_value(dataset_root_raw, "missing dataset root: pass --dataset-root or configure dataset_root in --policy-config")
     require_value(candidate_key, "missing candidate key: pass --candidate-key or configure candidate_key in --policy-config")
@@ -388,6 +391,8 @@ def resolve_runtime_config(args: argparse.Namespace) -> Dict[str, Any]:
         "adjacent_label": adjacent_label,
         "selection": selection,
         "adjacent_selection": adjacent_selection,
+        "rule_type": rule_type,
+        "adjacent_rule_type": adjacent_rule_type,
         "policy_config": args.policy_config or "",
     }
 
@@ -397,6 +402,7 @@ def resolve_candidate_rows(
     rows: List[Dict[str, Any]],
     samples_dir: Path,
     selection: Dict[str, Any] | None,
+    rule_type: str,
     label: str,
 ) -> List[Dict[str, Any]]:
     resolved: List[Dict[str, Any]] = []
@@ -415,7 +421,7 @@ def resolve_candidate_rows(
         resolved_row["sample_path"] = sample_path.as_posix()
         resolved_row["current_decision"] = latest_decision(sample)
         resolved_row["sample"] = sample
-        if selection and not matches_selection(actual_reason_codes, selection):
+        if selection and rule_type != "explicit_candidate_subset" and not matches_rule(actual_reason_codes, rule_type, selection):
             mismatches.append(
                 {
                     "file": row.get("file"),
@@ -449,12 +455,14 @@ def main() -> None:
         rows=main_rows,
         samples_dir=samples_dir,
         selection=runtime["selection"],
+        rule_type=runtime["rule_type"],
         label="main",
     )
     resolved_adjacent_rows = resolve_candidate_rows(
         rows=adjacent_rows,
         samples_dir=samples_dir,
         selection=runtime["adjacent_selection"],
+        rule_type=runtime["adjacent_rule_type"],
         label="adjacent",
     )
 
@@ -475,8 +483,8 @@ def main() -> None:
                     "decision_reason_codes": runtime["decision_reason_codes"],
                     "policy_doc": runtime["policy_doc"],
                     "policy_config": runtime["policy_config"],
-                    "selection_rule": format_reason_rule(runtime["selection"]),
-                    "adjacent_rule": format_reason_rule(runtime["adjacent_selection"]) if runtime["adjacent_selection"] else "",
+                    "selection_rule": format_rule_summary(runtime["rule_type"], runtime["selection"], runtime.get("selection_notes", "")),
+                    "adjacent_rule": format_rule_summary(runtime["adjacent_rule_type"], runtime["adjacent_selection"], runtime.get("adjacent_selection_notes", "")) if runtime["adjacent_key"] else "",
                 },
                 ensure_ascii=False,
                 indent=2,
@@ -550,8 +558,8 @@ def main() -> None:
         adjacent_candidates=[{k: v for k, v in row.items() if k != "sample"} for row in resolved_adjacent_rows],
         adjacent_label=runtime["adjacent_label"],
         policy_doc=runtime["policy_doc"],
-        main_rule=format_reason_rule(runtime["selection"]),
-        adjacent_rule=format_reason_rule(runtime["adjacent_selection"]),
+        main_rule=format_rule_summary(runtime["rule_type"], runtime["selection"], runtime.get("selection_notes", "")),
+        adjacent_rule=format_rule_summary(runtime["adjacent_rule_type"], runtime["adjacent_selection"], runtime.get("adjacent_selection_notes", "")),
         now_iso=now_iso,
     )
 

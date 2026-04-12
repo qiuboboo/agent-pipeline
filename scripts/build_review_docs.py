@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
-from review_release_policy import format_reason_rule, get_dataset_policy, iter_dataset_roots
+from review_release_policy import format_rule_summary, get_dataset_policy, iter_dataset_roots, normalize_bucket_rule, load_review_release_policy_config
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DOCS_ROOT = PROJECT_ROOT / "docs"
@@ -499,7 +499,10 @@ def build_manifest_doc(dataset_root: Path) -> str:
 
 
 def build_policy_summary(dataset_key: str) -> List[str]:
-    dataset_policy = get_dataset_policy(dataset_key)
+    policy_root = load_review_release_policy_config()
+    review_release = policy_root.get("review_release") or {}
+    defaults = review_release.get("defaults") or {}
+    dataset_policy = (review_release.get("datasets") or {}).get(dataset_key) or {}
     if not dataset_policy:
         return []
     release_buckets = dataset_policy.get("release_buckets") or {}
@@ -507,16 +510,24 @@ def build_policy_summary(dataset_key: str) -> List[str]:
         return []
 
     lines = ["## 已配置的 review-release policy", ""]
-    for bucket_key, bucket_cfg in sorted(release_buckets.items()):
-        selection = bucket_cfg.get("selection") or {}
-        lines.append(f"- `{bucket_key}` 桶：{format_reason_rule(selection)}")
-        release_basis = bucket_cfg.get("release_basis")
+    for bucket_key in sorted(release_buckets.keys()):
+        rule = normalize_bucket_rule(dataset_policy, bucket_key, defaults=defaults)
+        if not rule:
+            continue
+        lines.append(
+            f"- `{bucket_key}` 桶：{format_rule_summary(rule.get('rule_type', 'structured_selection'), rule.get('selection'), rule.get('selection_notes', ''))}"
+        )
+        release_basis = rule.get("release_basis")
         if release_basis:
             lines.append(f"  - release_basis: `{release_basis}`")
-        adjacent = bucket_cfg.get("adjacent_observation") or {}
-        if adjacent:
-            adjacent_rule = format_reason_rule(adjacent.get("selection") or {})
-            adjacent_label = adjacent.get("label") or "adjacent bucket"
+        adjacent_key = rule.get("adjacent_key") or ""
+        if adjacent_key:
+            adjacent_label = rule.get("adjacent_label") or "adjacent bucket"
+            adjacent_rule = format_rule_summary(
+                rule.get("adjacent_rule_type", "structured_selection"),
+                rule.get("adjacent_selection"),
+                rule.get("adjacent_selection_notes", ""),
+            )
             lines.append(f"  - adjacent: `{adjacent_label}` -> {adjacent_rule}")
     lines.append("")
     return lines

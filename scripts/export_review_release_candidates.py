@@ -7,9 +7,10 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 from review_release_policy import (
-    format_reason_rule,
+    format_rule_summary,
     get_dataset_policy,
-    matches_selection,
+    get_release_bucket_runtime,
+    matches_rule,
     normalize_reason_list,
     resolve_project_path,
 )
@@ -119,7 +120,7 @@ def pick_quality_risk_flags(sample: Dict[str, Any]) -> List[str]:
     return []
 
 
-def export_bucket(dataset_root: Path, selection: Dict[str, Any]) -> List[Dict[str, Any]]:
+def export_bucket(dataset_root: Path, selection: Dict[str, Any] | None, *, rule_type: str = "structured_selection") -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     samples_dir = dataset_root / "samples"
     for sample_path in sorted(samples_dir.glob("*.json")):
@@ -128,7 +129,7 @@ def export_bucket(dataset_root: Path, selection: Dict[str, Any]) -> List[Dict[st
         reason_codes = pick_original_reason_codes(sample)
         if current_decision != "review" and not reason_codes:
             continue
-        if not matches_selection(reason_codes, selection):
+        if not matches_rule(reason_codes, rule_type, selection):
             continue
         pm = sample.get("problem_main_record") or {}
         rows.append(
@@ -151,33 +152,49 @@ def main() -> None:
     dataset_policy = get_dataset_policy(args.dataset, policy_path)
     if not dataset_policy:
         raise ValueError(f"dataset policy not found: {args.dataset}")
-    dataset_root_raw = dataset_policy.get("dataset_root")
-    if not dataset_root_raw:
-        raise ValueError(f"dataset_root not configured for dataset: {args.dataset}")
-    dataset_root = resolve_project_path(dataset_root_raw)
 
-    bucket_cfg = (dataset_policy.get("release_buckets") or {}).get(args.release_bucket) or {}
-    if not bucket_cfg:
+    runtime = get_release_bucket_runtime(args.dataset, args.release_bucket, policy_path)
+    if not runtime:
         raise ValueError(f"release bucket policy not found: dataset={args.dataset}, bucket={args.release_bucket}")
+    dataset_root = runtime.get("dataset_root")
+    if not dataset_root:
+        raise ValueError(f"dataset_root not configured for dataset: {args.dataset}")
 
-    selection = bucket_cfg.get("selection") or {}
-    candidate_key = str(bucket_cfg.get("candidate_key") or f"{args.release_bucket}_candidates")
-    adjacent_cfg = bucket_cfg.get("adjacent_observation") or {}
-    adjacent_selection = adjacent_cfg.get("selection") or None
-    adjacent_key = str(adjacent_cfg.get("candidate_key") or "")
+    selection = runtime.get("selection") or None
+    candidate_key = str(runtime.get("candidate_key") or f"{args.release_bucket}_candidates")
+    adjacent_selection = runtime.get("adjacent_selection") or None
+    adjacent_key = str(runtime.get("adjacent_key") or "")
 
-    main_rows = export_bucket(dataset_root, selection)
-    adjacent_rows = export_bucket(dataset_root, adjacent_selection) if adjacent_key and adjacent_selection else []
+    main_rule_type = str(runtime.get("rule_type") or "structured_selection")
+    adjacent_rule_type = str(runtime.get("adjacent_rule_type") or "structured_selection")
+    if main_rule_type == "explicit_candidate_subset":
+        raise ValueError(
+            f"release bucket {args.dataset}.{args.release_bucket} is an explicit candidate-json subset; "
+            "do not auto-export from ready. Reuse or hand-maintain the curated candidate-json file instead."
+        )
+    if adjacent_key and adjacent_rule_type == "explicit_candidate_subset":
+        adjacent_rows = []
+    else:
+        adjacent_rows = export_bucket(dataset_root, adjacent_selection, rule_type=adjacent_rule_type) if adjacent_key else []
+
+    main_rows = export_bucket(dataset_root, selection, rule_type=main_rule_type)
 
     payload: Dict[str, Any] = {
         "dataset": args.dataset,
         "canonical_ready_package": dataset_root.as_posix(),
-        f"{args.release_bucket}_bucket_rule": format_reason_rule(selection),
+        "release_bucket": args.release_bucket,
+        "release_basis": runtime.get("release_basis") or "",
+        "selection_rule": format_rule_summary(str(runtime.get("rule_type") or "structured_selection"), selection, str(runtime.get("selection_notes") or "")),
         f"{args.release_bucket}_bucket_count": len(main_rows),
         candidate_key: main_rows,
     }
     if adjacent_key:
-        payload["adjacent_bucket_rule"] = format_reason_rule(adjacent_selection)
+        payload["adjacent_observation_label"] = runtime.get("adjacent_label") or "adjacent bucket"
+        payload["adjacent_bucket_rule"] = format_rule_summary(
+            str(runtime.get("adjacent_rule_type") or "structured_selection"),
+            adjacent_selection,
+            str(runtime.get("adjacent_selection_notes") or ""),
+        )
         payload["adjacent_bucket_count"] = len(adjacent_rows)
         payload[adjacent_key] = adjacent_rows
 
