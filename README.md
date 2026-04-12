@@ -109,6 +109,16 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key
 
 这是当前 `qjb` policy 下的 **canonical `outputs -> ready` 主链入口**。
 
+当前该脚本内部按两阶段执行，但仍保持**单脚本入口**：
+
+1. **outputs -> dedup selection manifest**
+   - 先按 `source_problem_id` 去重，形成当前数据集的 canonical 非重复样本集合
+   - 在 `datasets/<dataset>/selection_manifest.json` 中记录保留样本、丢弃样本、来源 run/output、原始 decision/reason codes、以及 review-release 选择结果
+
+2. **selection manifest -> ready**
+   - 再严格按这个 selection manifest 写出 ready
+   - ready 中只保留：原始 `pass` + 命中 review-release 规则后被放行的 `review`
+
 默认建议**按数据集逐个运行**，不要在这里直接跑全量。
 
 如需只构建某个数据集，可结合脚本参数指定数据集过滤条件（建议使用 `--dataset <dataset_key>` 逐个跑）。脚本现在会输出轻量进度日志，至少包括：
@@ -124,6 +134,8 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key
 - `datasets/<dataset>/selection_manifest.json`
 - `selection_validation.ok = true`
 - `write_validation.ok = true`
+- `status_counts.pass` 是否等于你预期的 `pass + released review`
+- `original_status_counts_before_release_gate` 与 `release_gate.counts` 是否符合当前放行口径
 
 > 注意：`ready/` 现在被视为**本地派生产物**，不再作为 Git 同步对象。跨机器时请同步 `outputs/` 和代码版本，而不是同步 `ready/` 目录本身。
 

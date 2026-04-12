@@ -11,6 +11,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+from review_release_policy import get_dataset_policy, matches_rule, normalize_reason_list, resolve_project_path
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 OUTPUTS_ROOT = PROJECT_ROOT / "outputs"
 READY_ROOT = PROJECT_ROOT / "ready"
@@ -58,6 +60,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-glob", action="append", default=[], help="Optional output folder glob relative to outputs/.")
     parser.add_argument("--package-prefix", default="run_outputs_merged_by_source_problem_id", help="Prefix for generated ready package directories.")
     parser.add_argument("--dry-run", action="store_true", help="Analyze and print manifest only; do not write ready output.")
+    parser.add_argument("--release-policy-config", default="configs/review_release_policies.yaml", help="Unified review release policy config used to allow review buckets into ready.")
+    parser.add_argument("--disable-review-release", action="store_true", help="Disable review-release gating and keep only clean_decision=pass samples in ready.")
     return parser.parse_args()
 
 
@@ -679,33 +683,203 @@ def collect_related_assets(dataset_root: Path, problem_id: str) -> List[Path]:
     return paths
 
 
-def status_counts(entries: List[CandidateSample]) -> Dict[str, int]:
+def pick_clean_decision(sample: Dict[str, Any]) -> str:
+    cleaning = sample.get("cleaning_records") or []
+    decision = None
+    if cleaning and isinstance(cleaning, list):
+        latest = cleaning[-1] or {}
+        decision = latest.get("decision")
+    if not decision:
+        pm = sample.get("problem_main_record") or {}
+        decision = pm.get("decision") or pm.get("quality_decision") or pm.get("clean_decision")
+    if not decision:
+        clean_problem = sample.get("clean_problem_record") or {}
+        decision = clean_problem.get("decision") or clean_problem.get("quality_decision") or clean_problem.get("clean_decision")
+    if not decision:
+        return "missing"
+    normalized = str(decision).strip().lower()
+    return normalized if normalized else "missing"
+
+
+def pick_reason_codes(sample: Dict[str, Any]) -> List[str]:
+    pm = sample.get("problem_main_record") or {}
+    clean_problem = sample.get("clean_problem_record") or {}
+    cleaning_records = sample.get("cleaning_records") or []
+    latest_cleaning = cleaning_records[-1] if cleaning_records else {}
+    return (
+        normalize_reason_list(pm.get("clean_decision_reason_codes"))
+        or normalize_reason_list(clean_problem.get("decision_reason_codes"))
+        or normalize_reason_list(latest_cleaning.get("decision_reason_codes"))
+    )
+
+
+def build_release_gate(dataset_key: str, policy_config: Path, disabled: bool) -> Dict[str, Any]:
+    if disabled:
+        return {"enabled": False, "dataset_key": dataset_key, "release_buckets": []}
+    dataset_policy = get_dataset_policy(dataset_key, policy_config)
+    release_buckets = []
+    for bucket_key, bucket_cfg in sorted((dataset_policy.get("release_buckets") or {}).items()):
+        if not bucket_cfg or not bucket_cfg.get("enabled", True):
+            continue
+        selection = bucket_cfg.get("selection") or None
+        candidate_key = str(bucket_cfg.get("candidate_key") or f"{bucket_key}_candidates")
+        selection_notes = str(bucket_cfg.get("selection_notes") or "")
+        rule_type = "structured_selection" if selection else "explicit_candidate_subset"
+        if rule_type != "structured_selection":
+            continue
+        release_buckets.append(
+            {
+                "bucket_key": bucket_key,
+                "candidate_key": candidate_key,
+                "selection": selection,
+                "rule_type": rule_type,
+                "selection_notes": selection_notes,
+                "release_basis": str(bucket_cfg.get("release_basis") or ""),
+                "pass_decision_reason_codes": normalize_reason_list(bucket_cfg.get("pass_decision_reason_codes")),
+            }
+        )
+    return {
+        "enabled": True,
+        "dataset_key": dataset_key,
+        "policy_config": policy_config.as_posix(),
+        "release_buckets": release_buckets,
+    }
+
+
+def classify_entry_for_ready(entry: CandidateSample, release_gate: Dict[str, Any]) -> Dict[str, Any]:
+    decision = pick_clean_decision(entry.sample)
+    reason_codes = pick_reason_codes(entry.sample)
+    if decision == "pass":
+        return {
+            "include": True,
+            "final_decision": "pass",
+            "source_decision": decision,
+            "source_reason_codes": reason_codes,
+            "release_bucket": "",
+            "release_basis": "",
+            "selection_notes": "",
+            "released_from_review": False,
+            "drop_reason": "",
+        }
+    if decision == "review" and release_gate.get("enabled"):
+        for bucket in release_gate.get("release_buckets") or []:
+            if matches_rule(reason_codes, str(bucket.get("rule_type") or "structured_selection"), bucket.get("selection")):
+                return {
+                    "include": True,
+                    "final_decision": "pass",
+                    "source_decision": decision,
+                    "source_reason_codes": reason_codes,
+                    "release_bucket": str(bucket.get("bucket_key") or ""),
+                    "release_basis": str(bucket.get("release_basis") or ""),
+                    "selection_notes": str(bucket.get("selection_notes") or ""),
+                    "released_from_review": True,
+                    "drop_reason": "",
+                }
+    return {
+        "include": False,
+        "final_decision": decision,
+        "source_decision": decision,
+        "source_reason_codes": reason_codes,
+        "release_bucket": "",
+        "release_basis": "",
+        "selection_notes": "",
+        "released_from_review": False,
+        "drop_reason": "filtered_non_pass_or_unreleased_review",
+    }
+
+
+def pick_clean_decision_counts(entries: List[CandidateSample]) -> Dict[str, int]:
     counts = {"pass": 0, "review": 0, "reject": 0, "other": 0, "missing": 0}
     for entry in entries:
-        sample = entry.sample
-        cleaning = sample.get("cleaning_records") or []
-        decision = None
-        if cleaning and isinstance(cleaning, list):
-            latest = cleaning[-1] or {}
-            decision = latest.get("decision")
-        if not decision:
-            pm = sample.get("problem_main_record") or {}
-            decision = pm.get("decision") or pm.get("quality_decision") or pm.get("clean_decision")
-        if not decision:
-            clean_problem = sample.get("clean_problem_record") or {}
-            decision = clean_problem.get("decision") or clean_problem.get("quality_decision") or clean_problem.get("clean_decision")
-        if not decision:
-            counts["missing"] += 1
-            continue
-        decision = str(decision).strip().lower()
-        if decision in counts and decision not in {"other", "missing"}:
+        decision = pick_clean_decision(entry.sample)
+        if decision in counts:
             counts[decision] += 1
         else:
             counts["other"] += 1
     return counts
 
 
-def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[CandidateSample], dataset_stats: Dict[str, Any]) -> Dict[str, Any]:
+def build_selection_manifest(
+    dataset_key: str,
+    entries: List[CandidateSample],
+    dataset_stats: Dict[str, Any],
+    *,
+    release_gate: Dict[str, Any],
+) -> Tuple[Dict[str, Any], List[CandidateSample], Dict[str, int], Dict[str, int]]:
+    kept_problem_ids: List[str] = []
+    kept_source_problem_ids: List[str] = []
+    kept_samples: List[Dict[str, Any]] = []
+    dropped_samples: List[Dict[str, Any]] = []
+    release_counts: Dict[str, int] = {"pass_original": 0, "released_review": 0, "dropped_review": 0, "dropped_reject": 0, "dropped_other": 0}
+    selected_entries: List[CandidateSample] = []
+
+    for entry in entries:
+        release_info = classify_entry_for_ready(entry, release_gate)
+        base_row = {
+            "problem_id": entry.problem_id,
+            "source_problem_id": entry.source_problem_id,
+            "range_key": entry.range_key,
+            "original_sample_filename": entry.sample_path.name,
+            "source_output_dir": entry.output_dir.as_posix(),
+            "source_run": entry.run_dir.as_posix(),
+            "source_dataset_root": entry.dataset_root.as_posix(),
+            "source_sample_path": entry.sample_path.as_posix(),
+            "source_kind": entry.source_kind,
+            "source_decision": release_info["source_decision"],
+            "source_reason_codes": release_info["source_reason_codes"],
+            "released_from_review": release_info["released_from_review"],
+            "release_bucket": release_info["release_bucket"],
+            "release_basis": release_info["release_basis"],
+            "selection_notes": release_info["selection_notes"],
+            "final_decision_for_ready": release_info["final_decision"],
+        }
+        if release_info["include"]:
+            selected_entries.append(entry)
+            kept_samples.append(base_row)
+            kept_problem_ids.append(entry.problem_id)
+            kept_source_problem_ids.append(entry.source_problem_id)
+            if release_info["released_from_review"]:
+                release_counts["released_review"] += 1
+            else:
+                release_counts["pass_original"] += 1
+        else:
+            dropped_samples.append({**base_row, "drop_reason": release_info["drop_reason"]})
+            if release_info["source_decision"] == "review":
+                release_counts["dropped_review"] += 1
+            elif release_info["source_decision"] == "reject":
+                release_counts["dropped_reject"] += 1
+            else:
+                release_counts["dropped_other"] += 1
+
+    manifest = {
+        "dataset_key": dataset_key,
+        "selection_rule": dataset_stats.get(
+            "selection_rule",
+            "Use only outputs folders whose names contain dataset_key_start_end (prefix/suffix allowed). For each such range folder, scan runs newest to oldest; keep the first sample for each source_problem_id; after finishing each range, merge all ranges together.",
+        ),
+        "kept_problem_ids": kept_problem_ids,
+        "kept_source_problem_ids": kept_source_problem_ids,
+        "kept_samples": kept_samples,
+        "dropped_samples": dropped_samples,
+        "ranges": dataset_stats["ranges"],
+        "release_gate": {
+            "enabled": bool(release_gate.get("enabled")),
+            "policy_config": release_gate.get("policy_config", ""),
+            "structured_release_buckets": [bucket.get("bucket_key") for bucket in (release_gate.get("release_buckets") or [])],
+            "counts": release_counts,
+        },
+    }
+    return manifest, selected_entries, release_counts, pick_clean_decision_counts(entries)
+
+
+def write_ready_dataset(
+    package_root: Path,
+    dataset_key: str,
+    entries: List[CandidateSample],
+    dataset_stats: Dict[str, Any],
+    *,
+    release_gate: Dict[str, Any],
+) -> Dict[str, Any]:
     dataset_out = package_root / "datasets" / dataset_key
     samples_out = dataset_out / "samples"
     ensure_clean_dir(samples_out)
@@ -717,32 +891,25 @@ def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[Cand
 
     source_runs = set()
     source_outputs = set()
-    kept_problem_ids: List[str] = []
-    kept_source_problem_ids: List[str] = []
-    kept_samples: List[Dict[str, Any]] = []
 
-    for index, entry in enumerate(entries, start=1):
+    selection_manifest, selected_entries, release_counts, original_counts = build_selection_manifest(
+        dataset_key,
+        entries,
+        dataset_stats,
+        release_gate=release_gate,
+    )
+    write_json(dataset_out / "selection_manifest.json", selection_manifest)
+
+    for index, entry in enumerate(selected_entries, start=1):
         target_name = f"{entry.range_key}__spid_{entry.source_problem_id}__{entry.problem_id}.json"
         target_sample = samples_out / target_name
         shutil.copy2(entry.sample_path, target_sample)
         source_runs.add(entry.run_dir.as_posix())
         source_outputs.add(entry.output_dir.as_posix())
-        kept_problem_ids.append(entry.problem_id)
-        kept_source_problem_ids.append(entry.source_problem_id)
-        kept_samples.append(
-            {
-                "problem_id": entry.problem_id,
-                "source_problem_id": entry.source_problem_id,
-                "range_key": entry.range_key,
-                "sample_path": target_sample.relative_to(package_root).as_posix(),
-                "original_sample_filename": entry.sample_path.name,
-                "source_output_dir": entry.output_dir.as_posix(),
-                "source_run": entry.run_dir.as_posix(),
-                "source_dataset_root": entry.dataset_root.as_posix(),
-                "source_sample_path": entry.sample_path.as_posix(),
-                "source_kind": entry.source_kind,
-            }
-        )
+        for row in selection_manifest["kept_samples"]:
+            if row["problem_id"] == entry.problem_id and row["source_sample_path"] == entry.sample_path.as_posix():
+                row["sample_path"] = target_sample.relative_to(package_root).as_posix()
+                break
         for asset_path in collect_related_assets(entry.dataset_root, entry.problem_id):
             rel = asset_path.relative_to(entry.dataset_root)
             if rel.parts[:2] == ("artifacts", "images"):
@@ -752,22 +919,25 @@ def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[Cand
             else:
                 dst = dataset_out / rel
             copy_tree_if_exists(asset_path, dst)
-        if index == 1 or index % PROGRESS_WRITE_INTERVAL == 0 or index == len(entries):
+        if index == 1 or index % PROGRESS_WRITE_INTERVAL == 0 or index == len(selected_entries):
             log_progress(
-                f"write-progress dataset={dataset_key} copied={index}/{len(entries)} current_sample={target_name}"
+                f"write-progress dataset={dataset_key} copied={index}/{len(selected_entries)} current_sample={target_name}"
             )
 
-    counts = status_counts(entries)
+    counts = {"pass": len(selected_entries), "review": 0, "reject": 0, "other": 0, "missing": 0}
     selection_validation = validate_selection(entries, dataset_stats)
     summary = {
         "dataset_key": dataset_key,
-        "processed_samples": len(entries),
-        "selected_samples": len(entries),
+        "processed_samples": len(selected_entries),
+        "selected_samples": len(selected_entries),
+        "input_selected_samples_before_release_gate": len(entries),
         "dedup_rule": dataset_stats.get("dedup_rule", "latest_to_oldest_within_range_by_source_problem_id_then_merge_ranges"),
         "scanned_files": dataset_stats["scanned_files"],
         "duplicate_source_problem_id": dataset_stats["duplicate_source_problem_id"],
         "unique_files": dataset_stats["unique_files"],
         "status_counts": counts,
+        "original_status_counts_before_release_gate": original_counts,
+        "release_gate": selection_manifest["release_gate"],
         "source_runs": sorted(source_runs),
         "source_output_dirs": sorted(source_outputs),
         "available_output_kinds": dataset_stats.get("available_output_kinds", []),
@@ -777,20 +947,6 @@ def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[Cand
         "selection_validation": selection_validation,
     }
     write_json(dataset_out / "summary.json", summary)
-    write_json(
-        dataset_out / "selection_manifest.json",
-        {
-            "dataset_key": dataset_key,
-            "selection_rule": dataset_stats.get(
-                "selection_rule",
-                "Use only outputs folders whose names contain dataset_key_start_end (prefix/suffix allowed). For each such range folder, scan runs newest to oldest; keep the first sample for each source_problem_id; after finishing each range, merge all ranges together.",
-            ),
-            "kept_problem_ids": kept_problem_ids,
-            "kept_source_problem_ids": kept_source_problem_ids,
-            "kept_samples": kept_samples,
-            "ranges": dataset_stats["ranges"],
-        },
-    )
     write_validation = validate_written_dataset(package_root, dataset_key, summary)
     summary["write_validation"] = write_validation
     write_json(dataset_out / "summary.json", summary)
@@ -801,13 +957,14 @@ def write_ready_dataset(package_root: Path, dataset_key: str, entries: List[Cand
         )
     log_progress(
         f"write-done dataset={dataset_key} selected={summary['selected_samples']} pass={counts['pass']} "
-        f"review={counts['review']} reject={counts['reject']}"
+        f"released_review={release_counts['released_review']} dropped_review={release_counts['dropped_review']} reject={original_counts['reject']}"
     )
     return summary
 
 
 def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[str, Dict[str, Any]]) -> None:
     total_status_counts = {"pass": 0, "review": 0, "reject": 0, "other": 0, "missing": 0}
+    total_original_status_counts = {"pass": 0, "review": 0, "reject": 0, "other": 0, "missing": 0}
     total_scanned_files = 0
     total_duplicate_source_problem_id = 0
     total_unique_files = 0
@@ -816,8 +973,10 @@ def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[s
     datasets_payload: Dict[str, Dict[str, Any]] = {}
     for dataset_key, summary in sorted(dataset_summaries.items()):
         counts = summary.get("status_counts") or {}
+        original_counts = summary.get("original_status_counts_before_release_gate") or {}
         for key in total_status_counts:
             total_status_counts[key] += int(counts.get(key, 0))
+            total_original_status_counts[key] += int(original_counts.get(key, 0))
         total_scanned_files += int(summary.get("scanned_files", 0))
         total_duplicate_source_problem_id += int(summary.get("duplicate_source_problem_id", 0))
         total_unique_files += int(summary.get("unique_files", 0))
@@ -830,8 +989,10 @@ def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[s
             "unique_files": summary.get("unique_files", 0),
             "selected_samples": summary.get("selected_samples", 0),
             "status_counts": counts,
+            "original_status_counts_before_release_gate": original_counts,
             "selection_validation": summary.get("selection_validation", {}),
             "write_validation": summary.get("write_validation", {}),
+            "release_gate": summary.get("release_gate", {}),
             "selected_output_kind": summary.get("selected_output_kind"),
             "selected_output_kinds": summary.get("selected_output_kinds", []),
             "dedup_rule": summary.get("dedup_rule"),
@@ -846,6 +1007,7 @@ def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[s
             "unique_files": total_unique_files,
             "selected_samples": total_selected_samples,
             "status_counts": total_status_counts,
+            "original_status_counts_before_release_gate": total_original_status_counts,
         },
         "datasets": datasets_payload,
     }
@@ -884,7 +1046,18 @@ def main() -> None:
         package_root = READY_ROOT / dataset_key / package_name
         log_progress(f"package-start dataset={dataset_key} package_name={package_name}")
         ensure_clean_dir(package_root)
-        summary = write_ready_dataset(package_root=package_root, dataset_key=dataset_key, entries=entries, dataset_stats=stats[dataset_key])
+        release_gate = build_release_gate(
+            dataset_key=dataset_key,
+            policy_config=resolve_project_path(args.release_policy_config),
+            disabled=args.disable_review_release,
+        )
+        summary = write_ready_dataset(
+            package_root=package_root,
+            dataset_key=dataset_key,
+            entries=entries,
+            dataset_stats=stats[dataset_key],
+            release_gate=release_gate,
+        )
         dataset_summaries[dataset_key] = {**summary, "package_name": package_name, "package_root": package_root.as_posix()}
         print(f"[done] {dataset_key}: {summary['selected_samples']} -> {package_root}")
 
