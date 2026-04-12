@@ -650,9 +650,8 @@ def validate_selection(entries: List[CandidateSample], dataset_stats: Dict[str, 
     }
 
 
-def validate_written_dataset(package_root: Path, dataset_key: str, summary: Dict[str, Any]) -> Dict[str, Any]:
-    dataset_out = package_root / "datasets" / dataset_key
-    samples_out = dataset_out / "samples"
+def validate_written_dataset(dataset_root: Path, dataset_key: str, summary: Dict[str, Any]) -> Dict[str, Any]:
+    samples_out = dataset_root / "samples"
     written_sample_files = sorted(samples_out.glob("*.json"))
     counts = summary.get("status_counts") or {}
     status_total = sum(int(counts.get(k, 0)) for k in ["pass", "review", "reject", "other", "missing"])
@@ -676,14 +675,30 @@ def ensure_clean_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
 
-def copy_tree_if_exists(src: Path, dst: Path) -> None:
-    if not src.exists():
+def canonical_sample_prefix(dataset_key: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", dataset_key.lower()) or "sample"
+
+
+def canonical_sample_id(dataset_key: str, index: int) -> str:
+    return f"{canonical_sample_prefix(dataset_key)}{index:05d}"
+
+
+def rewrite_sample_asset_paths(sample: Any, replacements: Dict[str, str]) -> Any:
+    if isinstance(sample, dict):
+        return {key: rewrite_sample_asset_paths(value, replacements) for key, value in sample.items()}
+    if isinstance(sample, list):
+        return [rewrite_sample_asset_paths(value, replacements) for value in sample]
+    if isinstance(sample, str):
+        normalized = sample.replace("\\", "/")
+        return replacements.get(normalized, sample)
+    return sample
+
+
+def copy_file(src: Path, dst: Path) -> None:
+    if not src.exists() or not src.is_file():
         return
-    if src.is_dir():
-        shutil.copytree(src, dst, dirs_exist_ok=True)
-    else:
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, dst)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dst)
 
 
 def collect_related_assets(dataset_root: Path, problem_id: str) -> List[Path]:
@@ -968,7 +983,7 @@ def build_selection_manifest(
 
 
 def write_ready_dataset(
-    package_root: Path,
+    dataset_root: Path,
     dataset_key: str,
     entries: List[CandidateSample],
     dataset_stats: Dict[str, Any],
@@ -976,14 +991,15 @@ def write_ready_dataset(
     release_gate: Dict[str, Any],
     explicit_release_index: Dict[str, Dict[str, Any]],
 ) -> Dict[str, Any]:
-    dataset_out = package_root / "datasets" / dataset_key
-    samples_out = dataset_out / "samples"
+    samples_out = dataset_root / "samples"
     ensure_clean_dir(samples_out)
 
-    artifact_images_out = dataset_out / "artifacts" / "images"
-    artifact_crops_out = dataset_out / "artifacts" / "crops"
+    artifact_images_out = dataset_root / "artifacts" / "images"
+    artifact_crops_out = dataset_root / "artifacts" / "crops"
+    ensure_clean_dir(artifact_images_out)
+    ensure_clean_dir(artifact_crops_out)
 
-    log_progress(f"write-start dataset={dataset_key} package_root={package_root} samples={len(entries)}")
+    log_progress(f"write-start dataset={dataset_key} dataset_root={dataset_root} samples={len(entries)}")
 
     source_runs = set()
     source_outputs = set()
@@ -995,31 +1011,67 @@ def write_ready_dataset(
         release_gate=release_gate,
         explicit_release_index=explicit_release_index,
     )
-    write_json(dataset_out / "selection_manifest.json", selection_manifest)
 
-    for index, entry in enumerate(selected_entries, start=1):
-        target_name = f"{entry.range_key}__spid_{entry.source_problem_id}__{entry.problem_id}.json"
+    for index, entry in enumerate(selected_entries):
+        canonical_id = canonical_sample_id(dataset_key, index)
+        target_name = f"{canonical_id}.json"
         target_sample = samples_out / target_name
-        shutil.copy2(entry.sample_path, target_sample)
+        source_sample = read_json(entry.sample_path)
+        replacements: Dict[str, str] = {}
+        image_rel_paths: List[str] = []
+        crop_rel_paths: List[str] = []
+
+        for asset_path in collect_related_assets(entry.dataset_root, entry.problem_id):
+            rel = asset_path.relative_to(entry.dataset_root)
+            rel_posix = rel.as_posix()
+            ext = asset_path.suffix.lower() or ".png"
+            if rel.parts[:2] == ("artifacts", "images"):
+                dst = artifact_images_out / f"{canonical_id}{ext}"
+                image_rel_paths.append(dst.relative_to(dataset_root).as_posix())
+            elif rel.parts[:2] == ("artifacts", "crops"):
+                dst = artifact_crops_out / f"{canonical_id}{ext}"
+                crop_rel_paths.append(dst.relative_to(dataset_root).as_posix())
+            else:
+                continue
+            copy_file(asset_path, dst)
+            new_rel = dst.relative_to(dataset_root).as_posix()
+            replacements[rel_posix] = new_rel
+            replacements[asset_path.as_posix()] = new_rel
+            replacements[asset_path.name] = new_rel
+            if len(rel.parts) > 1:
+                replacements[Path(*rel.parts[1:]).as_posix()] = new_rel
+
+        rewritten_sample = rewrite_sample_asset_paths(source_sample, replacements)
+        rewritten_sample["canonical_sample_id"] = canonical_id
+        rewritten_sample["canonical_sample_index"] = index
+        rewritten_sample["canonical_dataset_key"] = dataset_key
+        rewritten_sample["sample_path"] = target_sample.relative_to(dataset_root).as_posix()
+        if image_rel_paths:
+            rewritten_sample["image_path"] = image_rel_paths[0]
+            rewritten_sample["images"] = image_rel_paths
+        if crop_rel_paths:
+            rewritten_sample["crop_path"] = crop_rel_paths[0]
+            rewritten_sample["crops"] = crop_rel_paths
+        write_json(target_sample, rewritten_sample)
+
         source_runs.add(entry.run_dir.as_posix())
         source_outputs.add(entry.output_dir.as_posix())
         for row in selection_manifest["kept_samples"]:
             if row["problem_id"] == entry.problem_id and row["source_sample_path"] == entry.sample_path.as_posix():
-                row["sample_path"] = target_sample.relative_to(package_root).as_posix()
+                row["canonical_sample_id"] = canonical_id
+                row["canonical_sample_index"] = index
+                row["sample_path"] = target_sample.relative_to(dataset_root).as_posix()
+                row["image_path"] = image_rel_paths[0] if image_rel_paths else ""
+                row["crop_path"] = crop_rel_paths[0] if crop_rel_paths else ""
+                row["image_paths"] = image_rel_paths
+                row["crop_paths"] = crop_rel_paths
                 break
-        for asset_path in collect_related_assets(entry.dataset_root, entry.problem_id):
-            rel = asset_path.relative_to(entry.dataset_root)
-            if rel.parts[:2] == ("artifacts", "images"):
-                dst = artifact_images_out / Path(*rel.parts[2:])
-            elif rel.parts[:2] == ("artifacts", "crops"):
-                dst = artifact_crops_out / Path(*rel.parts[2:])
-            else:
-                dst = dataset_out / rel
-            copy_tree_if_exists(asset_path, dst)
-        if index == 1 or index % PROGRESS_WRITE_INTERVAL == 0 or index == len(selected_entries):
+        if index == 0 or (index + 1) % PROGRESS_WRITE_INTERVAL == 0 or index + 1 == len(selected_entries):
             log_progress(
-                f"write-progress dataset={dataset_key} copied={index}/{len(selected_entries)} current_sample={target_name}"
+                f"write-progress dataset={dataset_key} copied={index + 1}/{len(selected_entries)} current_sample={target_name}"
             )
+
+    write_json(dataset_root / "selection_manifest.json", selection_manifest)
 
     counts = {
         "pass": int(release_counts["pass_original"] + release_counts["released_review"]),
@@ -1031,6 +1083,7 @@ def write_ready_dataset(
     selection_validation = validate_selection(entries, dataset_stats)
     summary = {
         "dataset_key": dataset_key,
+        "dataset_root": dataset_root.as_posix(),
         "processed_samples": len(selected_entries),
         "selected_samples": len(selected_entries),
         "input_selected_samples_before_release_gate": len(entries),
@@ -1049,10 +1102,10 @@ def write_ready_dataset(
         "ranges": dataset_stats["ranges"],
         "selection_validation": selection_validation,
     }
-    write_json(dataset_out / "summary.json", summary)
-    write_validation = validate_written_dataset(package_root, dataset_key, summary)
+    write_json(dataset_root / "summary.json", summary)
+    write_validation = validate_written_dataset(dataset_root, dataset_key, summary)
     summary["write_validation"] = write_validation
-    write_json(dataset_out / "summary.json", summary)
+    write_json(dataset_root / "summary.json", summary)
 
     if not selection_validation["ok"] or not write_validation["ok"]:
         raise RuntimeError(
@@ -1065,7 +1118,7 @@ def write_ready_dataset(
     return summary
 
 
-def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[str, Dict[str, Any]]) -> None:
+def write_run_summary(path: Path, dataset_summaries: Dict[str, Dict[str, Any]]) -> None:
     total_status_counts = {"pass": 0, "review": 0, "reject": 0, "other": 0, "missing": 0}
     total_original_status_counts = {"pass": 0, "review": 0, "reject": 0, "other": 0, "missing": 0}
     total_scanned_files = 0
@@ -1086,7 +1139,7 @@ def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[s
         total_selected_samples += int(summary.get("selected_samples", 0))
         datasets_payload[dataset_key] = {
             "dataset_key": dataset_key,
-            "package_root": str(path.parent / dataset_key / f"{package_prefix}__{summary.get('selected_output_kind') or summary.get('dataset_key')}"),
+            "dataset_root": summary.get("dataset_root", str(path.parent / dataset_key)),
             "scanned_files": summary.get("scanned_files", 0),
             "duplicate_source_problem_id": summary.get("duplicate_source_problem_id", 0),
             "unique_files": summary.get("unique_files", 0),
@@ -1102,7 +1155,7 @@ def write_run_summary(path: Path, package_prefix: str, dataset_summaries: Dict[s
         }
 
     payload = {
-        "package_prefix": package_prefix,
+        "package_prefix": "flat_ready_dataset_root",
         "dataset_count": len(datasets_payload),
         "totals": {
             "scanned_files": total_scanned_files,
@@ -1144,11 +1197,9 @@ def main() -> None:
 
     dataset_summaries: Dict[str, Dict[str, Any]] = {}
     for dataset_key, entries in sorted(selected.items()):
-        package_label = stats[dataset_key].get("package_dataset_label") or dataset_key
-        package_name = f"{args.package_prefix}__{package_label}"
-        package_root = READY_ROOT / dataset_key / package_name
-        log_progress(f"package-start dataset={dataset_key} package_name={package_name}")
-        ensure_clean_dir(package_root)
+        dataset_root = READY_ROOT / dataset_key
+        log_progress(f"package-start dataset={dataset_key} dataset_root={dataset_root}")
+        ensure_clean_dir(dataset_root)
         release_gate = build_release_gate(
             dataset_key=dataset_key,
             policy_config=resolve_project_path(args.release_policy_config),
@@ -1160,17 +1211,17 @@ def main() -> None:
             disabled=args.disable_review_release,
         )
         summary = write_ready_dataset(
-            package_root=package_root,
+            dataset_root=dataset_root,
             dataset_key=dataset_key,
             entries=entries,
             dataset_stats=stats[dataset_key],
             release_gate=release_gate,
             explicit_release_index=explicit_release_index,
         )
-        dataset_summaries[dataset_key] = {**summary, "package_name": package_name, "package_root": package_root.as_posix()}
-        print(f"[done] {dataset_key}: {summary['selected_samples']} -> {package_root}")
+        dataset_summaries[dataset_key] = {**summary, "dataset_root": dataset_root.as_posix()}
+        print(f"[done] {dataset_key}: {summary['selected_samples']} -> {dataset_root}")
 
-    write_run_summary(READY_ROOT / "summary.json", args.package_prefix, dataset_summaries)
+    write_run_summary(READY_ROOT / "summary.json", dataset_summaries)
     log_progress(f"summary-written path={READY_ROOT / 'summary.json'} datasets={len(dataset_summaries)}")
 
 

@@ -57,21 +57,14 @@ def to_posix_relative(path: Path, start: Path) -> str:
 
 
 def discover_dataset_roots(ready_root: Path, package_filter: str) -> List[Path]:
-    best_roots: Dict[Tuple[str, str], Tuple[int, Path]] = {}
-    for summary_path in sorted(ready_root.glob("**/datasets/*/summary.json")):
+    roots: List[Path] = []
+    for summary_path in sorted(ready_root.glob("*/summary.json")):
         dataset_root = summary_path.parent
-        rel = dataset_root.relative_to(ready_root)
-        if package_filter and rel.parts[0] != package_filter:
-            continue
-        package_name = rel.parts[0]
         dataset_key = dataset_root.name
-        summary = read_json(summary_path)
-        processed_samples = int(summary.get("processed_samples") or 0)
-        dedupe_key = (package_name, dataset_key)
-        current = best_roots.get(dedupe_key)
-        if current is None or processed_samples > current[0]:
-            best_roots[dedupe_key] = (processed_samples, dataset_root)
-    return [item[1] for item in sorted(best_roots.values(), key=lambda entry: entry[1].as_posix())]
+        if package_filter and dataset_key != package_filter:
+            continue
+        roots.append(dataset_root)
+    return roots
 
 
 def build_record_index(records_path: Path, key: str) -> Dict[str, Dict[str, Any]]:
@@ -99,7 +92,7 @@ def build_sample_index(samples_dir: Path) -> Dict[str, Dict[str, Any]]:
     index: Dict[str, Dict[str, Any]] = {}
     if not samples_dir.exists():
         return index
-    for sample_path in sorted(samples_dir.glob("prob_*.json")):
+    for sample_path in sorted(samples_dir.glob("*.json")):
         sample = read_json(sample_path)
         problem_main = sample.get("problem_main_record") or {}
         problem_id = str(problem_main.get("problem_id") or sample_path.stem)
