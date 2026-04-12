@@ -93,6 +93,36 @@ review_release:
                 - alignment_requires_review
                 - missing_grounded_visual_path
                 - split_variant_needs_review
+        B1:
+          enabled: true
+          candidate_key: strict_B1_bucket_candidates
+          policy_doc: docs/review/multi_physics_B1_release_decision_2026-04-11.md
+          release_basis: exact alignment+missing_grounded_visual_path+split_variant_needs_review bucket with no quality_risk_flags
+          pass_decision_reason_codes:
+            - alignment_requires_review
+            - missing_grounded_visual_path
+            - split_variant_needs_review
+            - manual_release_pass
+          selection_notes: "explicit candidate-json subset: exact same reason-code set with quality_risk_flags == []"
+          adjacent_observation:
+            label: adjacent other-risk split_variant bucket
+            candidate_key: adjacent_other_risk_split_variant_candidates
+            selection_notes: "explicit candidate-json subset: same reason-code set but quality_risk_flags is non-empty"
+        B2:
+          enabled: true
+          candidate_key: strict_B2_bucket_candidates
+          policy_doc: docs/review/multi_physics_B2_release_decision_2026-04-11.md
+          release_basis: exact alignment+missing_grounded_visual_path+split_variant_needs_review bucket with only low_resolution risk
+          pass_decision_reason_codes:
+            - alignment_requires_review
+            - missing_grounded_visual_path
+            - split_variant_needs_review
+            - manual_release_pass
+          selection_notes: "explicit candidate-json subset: exact same reason-code set with quality_risk_flags == [\"low_resolution\"]"
+          adjacent_observation:
+            label: adjacent other-risk split_variant bucket
+            candidate_key: adjacent_other_risk_split_variant_candidates
+            selection_notes: "explicit candidate-json subset: same reason-code set but quality_risk_flags != [\"low_resolution\"]"
 
     msearth_open_ended:
       dataset_root: ready/msearth_open_ended/run_merged_msearth_open_ended_0000_0120_ler_reasoning_chain/datasets/msearth_open_ended
@@ -110,7 +140,7 @@ review_release:
           pass_decision_reason_codes:
             - alignment_requires_review
             - manual_release_pass
-          selection_notes: explicit candidate-json subset from alignment_requires_review samples; do not treat as unified build-stage or exact-set policy
+          selection_notes: "explicit candidate-json subset from alignment_requires_review samples; do not treat as unified build-stage or exact-set policy"
           adjacent_observation:
             label: alignment borderline visual-semantics sample
             candidate_key: adjacent_alignment_borderline_candidates
