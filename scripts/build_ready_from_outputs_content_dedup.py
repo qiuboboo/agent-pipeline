@@ -180,7 +180,7 @@ def normalized_subject_slug(value: str) -> str:
 
 
 def split_dataset_key_by_subject(dataset_key: str, sample: Dict[str, Any]) -> str:
-    if dataset_key != "sciverse":
+    if dataset_key not in {"scemqa", "sciverse"}:
         return dataset_key
     subject = sample_subject(sample)
     subject_slug = normalized_subject_slug(subject)
@@ -672,7 +672,7 @@ def split_selected_by_subject(
     remapped_stats: Dict[str, Dict[str, Any]] = {}
 
     for dataset_key, entries in selected.items():
-        if dataset_key != "sciverse":
+        if dataset_key not in {"scemqa", "sciverse"}:
             remapped_selected[dataset_key] = entries
             remapped_stats[dataset_key] = stats[dataset_key]
             continue
