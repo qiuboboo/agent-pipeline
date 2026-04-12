@@ -1003,7 +1003,13 @@ def write_ready_dataset(
                 f"write-progress dataset={dataset_key} copied={index}/{len(selected_entries)} current_sample={target_name}"
             )
 
-    counts = {"pass": len(selected_entries), "review": 0, "reject": 0, "other": 0, "missing": 0}
+    counts = {
+        "pass": int(release_counts["pass_original"] + release_counts["released_review"]),
+        "review": 0,
+        "reject": 0,
+        "other": 0,
+        "missing": 0,
+    }
     selection_validation = validate_selection(entries, dataset_stats)
     summary = {
         "dataset_key": dataset_key,
