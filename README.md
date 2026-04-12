@@ -174,15 +174,27 @@ python3 scripts/apply_manual_review_release.py \
 - 数据集对应的 canonical `dataset_root`
 - 当前 bucket 使用的 `candidate_key`
 - release basis / policy doc / pass 后写回的 reason codes
-- bucket 的 reason-code selection rule
+- bucket runtime 类型：`structured_selection` 或 `explicit_candidate_subset`
 - 相邻观察 bucket（如 `adjacent_text_sufficient_candidates`）
+
+当前统一支持两类 bucket：
+
+1. **structured_selection**
+   - 适用于可以稳定表达为结构化规则的桶
+   - 例如：`match_mode: exact_set + decision_reason_codes: [...]`
+   - 典型例子：`mm_math.A`
+
+2. **explicit_candidate_subset**
+   - 适用于无法稳定还原为通用 matcher、仍需沿用人工维护 candidate-json 的桶
+   - 配置上通常只写：`candidate_key + release_basis + policy_doc + selection_notes`
+   - 典型例子：`seephys.A1`、`multi_physics.B1/B2`
 
 如果要正式执行，再补上 `--ledger-out ...`，去掉 `--dry-run`。
 
 当前建议：
 - 每个数据集的 review-release 策略都收口到这一个总配置里
-- 每个 bucket 明确写 `selection.match_mode + decision_reason_codes`
-- 对像 `seephys.A1` 这种**无法稳定抽象成 exact/predicate 规则**、只能保留人工审查口径的桶，允许仅配置 `candidate_key + release_basis + policy_doc + selection_notes`，继续走 explicit candidate-json subset
+- 能结构化表达的桶，优先写成 `selection.match_mode + decision_reason_codes`
+- 无法稳定抽象的桶，明确标为 explicit candidate-json subset，并在 `selection_notes` 里写清楚人工口径
 - 脚本继续保留旧参数模式，保证向后兼容
 
 ### 7.2 从统一 policy 配置导出 candidate buckets（post-ready）
@@ -196,19 +208,42 @@ python3 scripts/export_review_release_candidates.py \
 
 这个脚本会：
 - 从统一 policy config 读取数据集 `dataset_root`
-- 按 bucket 的 `selection` 规则导出 candidate json
+- 对 `structured_selection` bucket，按 `selection` 规则从 ready 自动导出 candidate json
 - 同时导出相邻 observation bucket（如果配置了）
 - 对已经执行过 manual release 的样本，优先从 provenance 中读取原始 `original_decision_reason_codes`，从而能复原 release 前 bucket
 
+需要特别注意：
+- 对 `explicit_candidate_subset` bucket，**脚本现在会拒绝自动导出**
+- 原因是这类桶本质上依赖人工维护的 candidate-json 子集，不能假装从 ready 稳定重建
+- 此时应继续复用或手工维护已有的 curated candidate-json 文件，而不是让 exporter 产出一个“看起来能用、实际口径变了”的伪结果
+
 ### 7.3 基于统一 policy 配置刷新 review docs（post-ready）
+全量刷新：
 ```bash
 python3 scripts/build_review_docs.py
 ```
 
+定向轻量刷新（推荐）：
+```bash
+python3 scripts/build_review_docs.py --dataset seephys --skip-analysis --skip-manifest
+python3 scripts/build_review_docs.py --dataset multi_physics --skip-analysis --skip-manifest
+```
+
 这一步现在会：
 - 优先从 `configs/review_release_policies.yaml` 解析数据集对应的 canonical `dataset_root`
-- `build_review_docs.py` 的数据集 package/root 映射也以这个统一 config 为主，不再依赖脚本内硬编码表
+- `build_review_docs.py` 的数据集 package/root 映射以统一 config 为主，不再依赖脚本内硬编码表
 - 在 `docs/review/<dataset>.md` 中附带该数据集当前已配置的 release bucket 摘要
+- 对 explicit bucket，优先展示 `selection_notes`，避免误显示成“未配置规则”
+
+参数说明：
+- `--dataset <dataset_key>`：只刷新指定数据集，可重复传多次
+- `--skip-review`：跳过 review 台账生成
+- `--skip-analysis`：跳过 analysis 文档生成
+- `--skip-manifest`：跳过 manifest 文档生成
+
+默认建议：
+- 改 policy / candidate-json 后，优先按数据集定向刷新
+- 不要每次顺手全量跑一遍 docs，除非确实要做全仓库重建
 
 ### 8. 生成样本花名册 manifest（inventory / post-build）
 ```bash
