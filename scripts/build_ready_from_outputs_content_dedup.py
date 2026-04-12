@@ -385,17 +385,26 @@ def build_policy_for_dataset(dataset_key: str, ranges: Dict[str, List[CandidateS
             )
     elif dataset_key == "scemqa":
         available_names = {entry.output_dir.name for entries in ranges.values() for entry in entries}
+        standard_ranges = sorted(name for name in available_names if re.fullmatch(r"scemqa_\d+_\d+", name))
         allowed = []
         blocked = []
-        if "candidate_200_remote" in available_names:
+        if standard_ranges:
+            allowed.extend(standard_ranges)
+            if "candidate_200_remote" in available_names:
+                blocked.append("candidate_200_remote")
+        elif "candidate_200_remote" in available_names:
             allowed.append("candidate_200_remote")
         if "scemqa_single_sample" in available_names:
             blocked.append("scemqa_single_sample")
         if allowed or blocked:
+            selection_rule = (
+                "Use standard scemqa_<start>_<end> output roots as the canonical SCEMQA source package when present; "
+                "fall back to candidate_200_remote only when no standard range outputs exist; always exclude scemqa_single_sample debug/probe outputs from ready assembly."
+            )
             policy.update(
                 allowed_output_dirs=allowed,
                 blocked_output_dirs=blocked,
-                selection_rule="Use candidate_200_remote as the canonical SCEMQA source package and exclude scemqa_single_sample debug/probe outputs from ready assembly.",
+                selection_rule=selection_rule,
             )
     elif dataset_key == "sciverse":
         available_names = {entry.output_dir.name for entries in ranges.values() for entry in entries}
