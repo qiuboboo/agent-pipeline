@@ -184,6 +184,15 @@ def parse_output_dir(output_dir: Path, dataset_key_from_summary: str) -> Optiona
             )
 
     if dataset_key_from_summary == "scemqa":
+        standard_match = re.fullmatch(r"scemqa_(?P<start>\d+)_(?P<end>\d+)", output_name)
+        if standard_match:
+            return OutputDirMatch(
+                range_key=output_name,
+                dataset_key=dataset_key_from_summary,
+                range_start=int(standard_match.group("start")),
+                range_end=int(standard_match.group("end")),
+                source_kind="standard",
+            )
         if output_name == "candidate_200_remote":
             return OutputDirMatch(
                 range_key=output_name,
