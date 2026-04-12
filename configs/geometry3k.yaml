@@ -1,0 +1,32 @@
+runtime:
+  sample_per_dataset: 300
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 1
+  output_root: outputs/geometry3k_000_300
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-geometry3k-000-300
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://cf.cuylerchen.uk/openai/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: responses
+
+datasets:
+  - key: geometry3k
+    display_name: Geometry3K
+    subject: 数学
+    note: Geometry3K，默认使用 Hugging Face test split 前 300 条
+    source_kind: huggingface
+    source_locator: hiyouga/geometry3k
+    split: test[0:300]
+    question_fields: [question, text, problem, query]
+    answer_fields: [answer, solution, label]
+    image_fields: [images, image, decoded_image]
+    metadata_fields: [diagram_logic_forms, choices, data_split, source_problem_id, img_cat, compact_choices]
