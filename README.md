@@ -139,4 +139,4 @@ python run_pipeline.py --config configs/local_file_example.yaml
 - `docs/pipeline初步设计.md` 保留在活跃 `docs/`
 - qjb / 剑波模块化实现不删除，统一归档
 - `ready/` 统一改为“数据集名字 + 范围”命名
-- 活跃主线优先采用 `ler-reasoning-chain-msearth` 的代码与文档状态
+- 活跃主线优先采用 `ler-reasoning-chain-msearth` 的代码与文档状态# pipeline2
