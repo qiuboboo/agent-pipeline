@@ -391,6 +391,8 @@ def resolve_runtime_config(args: argparse.Namespace) -> Dict[str, Any]:
         "adjacent_label": adjacent_label,
         "selection": selection,
         "adjacent_selection": adjacent_selection,
+        "selection_notes": str(runtime_cfg.get("selection_notes") or ""),
+        "adjacent_selection_notes": str(runtime_cfg.get("adjacent_selection_notes") or ""),
         "rule_type": rule_type,
         "adjacent_rule_type": adjacent_rule_type,
         "policy_config": args.policy_config or "",
