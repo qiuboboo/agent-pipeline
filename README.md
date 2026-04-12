@@ -182,6 +182,7 @@ python3 scripts/apply_manual_review_release.py \
 当前建议：
 - 每个数据集的 review-release 策略都收口到这一个总配置里
 - 每个 bucket 明确写 `selection.match_mode + decision_reason_codes`
+- 对像 `seephys.A1` 这种**无法稳定抽象成 exact/predicate 规则**、只能保留人工审查口径的桶，允许仅配置 `candidate_key + release_basis + policy_doc + selection_notes`，继续走 explicit candidate-json subset
 - 脚本继续保留旧参数模式，保证向后兼容
 
 ### 7.2 从统一 policy 配置导出 candidate buckets（post-ready）
