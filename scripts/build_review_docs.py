@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import json
 from collections import Counter
 from datetime import datetime, timezone
@@ -48,10 +49,28 @@ def make_table(headers: List[str], rows: List[List[Any]]) -> str:
     return "\n".join(parts)
 
 
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Build review/analysis/manifest docs from canonical ready packages.")
+    p.add_argument("--dataset", action="append", dest="datasets", help="Only build docs for the given dataset key; can be repeated")
+    p.add_argument("--skip-review", action="store_true", help="Skip review ledger doc generation")
+    p.add_argument("--skip-analysis", action="store_true", help="Skip analysis doc generation")
+    p.add_argument("--skip-manifest", action="store_true", help="Skip manifest doc generation")
+    return p.parse_args()
+
+
 def iter_ready_packages() -> Iterable[Path]:
     for dataset_root in iter_dataset_roots():
         if (dataset_root / "summary.json").exists():
             yield dataset_root
+
+
+def iter_ready_packages_filtered(dataset_keys: List[str] | None = None) -> Iterable[Path]:
+    wanted = {key for key in (dataset_keys or []) if key}
+    for dataset_root in iter_ready_packages():
+        dataset_key = dataset_root.name
+        if wanted and dataset_key not in wanted:
+            continue
+        yield dataset_root
 
 
 def pick_first_nonempty(*values: Any) -> str:
@@ -582,26 +601,30 @@ def build_review_doc(dataset_root: Path) -> str:
 
 
 def main() -> None:
+    args = parse_args()
     generated = []
-    for dataset_root in iter_ready_packages():
+    for dataset_root in iter_ready_packages_filtered(args.datasets):
         dataset_key = dataset_root.name
         dataset_summary = read_json(dataset_root / "summary.json")
         dedupe = dataset_summary.get("dedupe") or {}
 
-        review_doc = build_review_doc(dataset_root)
-        review_path = REVIEW_DOCS_ROOT / f"{dataset_key}.md"
-        write_text(review_path, review_doc)
-
-        analysis_doc = build_analysis_doc(dataset_root)
-        analysis_path = ANALYSIS_DOCS_ROOT / f"{dataset_key}.md"
-        write_text(analysis_path, analysis_doc)
-
         generated_item = {
             "dataset_key": dataset_key,
-            "review_doc": review_path.relative_to(PROJECT_ROOT).as_posix(),
-            "analysis_doc": analysis_path.relative_to(PROJECT_ROOT).as_posix(),
         }
-        if dedupe:
+
+        if not args.skip_review:
+            review_doc = build_review_doc(dataset_root)
+            review_path = REVIEW_DOCS_ROOT / f"{dataset_key}.md"
+            write_text(review_path, review_doc)
+            generated_item["review_doc"] = review_path.relative_to(PROJECT_ROOT).as_posix()
+
+        if not args.skip_analysis:
+            analysis_doc = build_analysis_doc(dataset_root)
+            analysis_path = ANALYSIS_DOCS_ROOT / f"{dataset_key}.md"
+            write_text(analysis_path, analysis_doc)
+            generated_item["analysis_doc"] = analysis_path.relative_to(PROJECT_ROOT).as_posix()
+
+        if not args.skip_manifest and dedupe:
             manifest_doc = build_manifest_doc(dataset_root)
             manifest_path = MANIFESTS_DOCS_ROOT / f"{dataset_key}.md"
             write_text(manifest_path, manifest_doc)

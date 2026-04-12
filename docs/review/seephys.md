@@ -1,11 +1,17 @@
 # seephys review 台账
 
-- 生成时间：`2026-04-07T10:10:11Z`
+- 生成时间：`2026-04-12T05:20:39Z`
 - ready 包：`ready/seephys_000_300`
 - review 样本数：`56`
 - 自动结果分布：`pass=243 / review=56 / reject=1`
 
 人工接受状态说明：`1=pass`，`0=reject`，空白表示未看。
+
+## 已配置的 review-release policy
+
+- `A1` 桶：explicit candidate-json subset from alignment_requires_review samples; do not treat as unified build-stage or exact-set policy
+  - release_basis: `hand-curated alignment metadata/image-reference misfire subset`
+  - adjacent: `alignment borderline visual-semantics sample` -> explicit candidate-json subset
 
 | problem_id | source_problem_id | 自动结果 | 人工接受状态 | 原题原文 | 改写内容 | 图片简略图 | 备注 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
