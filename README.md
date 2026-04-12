@@ -113,16 +113,10 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key
 
 1. **outputs -> dedup selection manifest**
    - 先按 `source_problem_id` 去重，形成当前数据集的 canonical 非重复样本集合
-   - 在 `ready/<dataset>/selection_manifest.json` 中记录保留样本、丢弃样本、来源 run/output、原始 decision/reason codes、以及 review-release 选择结果
+   - 在 `datasets/<dataset>/selection_manifest.json` 中记录保留样本、丢弃样本、来源 run/output、原始 decision/reason codes、以及 review-release 选择结果
 
 2. **selection manifest -> ready**
    - 再严格按这个 selection manifest 写出 ready
-   - 当前 flat ready 数据集结构为：
-     - `ready/<dataset>/summary.json`
-     - `ready/<dataset>/selection_manifest.json`
-     - `ready/<dataset>/samples/*.json`
-     - `ready/<dataset>/artifacts/images/*`
-     - `ready/<dataset>/artifacts/crops/*`
    - ready 中只保留：原始 `pass` + 命中 review-release 规则后被放行的 `review`
 
 默认建议**按数据集逐个运行**，不要在这里直接跑全量。
@@ -136,8 +130,8 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key
 
 构建完成后，应重点检查：
 
-- `ready/<dataset>/summary.json`
-- `ready/<dataset>/selection_manifest.json`
+- `datasets/<dataset>/summary.json`
+- `datasets/<dataset>/selection_manifest.json`
 - `selection_validation.ok = true`
 - `write_validation.ok = true`
 - `status_counts.pass` 是否等于你预期的 `pass + released review`
@@ -171,7 +165,7 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key
 其中需要特别注意的是：
 
 - `scripts/build_review_docs.py` **不是** build-ready 主链的一部分
-- 它当前依赖本机 `ready/`，并以 flat dataset root（`ready/<dataset>/summary.json`）为主，必要时才回退兼容历史嵌套 ready 结构
+- 它当前依赖本机 `ready/`，并且对固定 canonical `ready/...` package 路径有较强硬编码依赖
 - 因此它应被视为 **ready downstream consumer**，不是“拉下仓库就能无前置直接运行的通用入口”
 - `scripts/apply_manual_review_release.py` 现在支持从 `configs/review_release_policies.yaml` 读取**统一的多数据集 release policy**，避免把每个数据集的 bucket 规则散落在脚本参数和临时文档里
 
