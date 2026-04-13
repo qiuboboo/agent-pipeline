@@ -695,6 +695,7 @@ def split_selected_by_subject(
                     "runs_newest_to_oldest": [],
                 },
             )
+            range_info["scanned_files"] += 1
             range_info["kept_unique_source_problem_ids"] += 1
             run_key = entry.run_dir.as_posix()
             if run_key not in range_info["runs_newest_to_oldest"]:
