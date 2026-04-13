@@ -1,0 +1,1748 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_7a8667b2fce3b7fb1d8475e3",
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "problem_id": "prob_15dbd470131ca0b19ad960b1",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "753",
+    "raw_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$ ，质量为 $M$ ，劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕着过其端点 $O$ ，与绳长方向垂直的轴，以伸直的状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$ 。",
+    "raw_answer_text": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(207, 232)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images 字段中给出的是 PIL 图像对象字符串表示，不是实际文件路径或 URL",
+      "question 中含有“如图所示”，且记录含 vision_relevance=essential，判定为明显依赖图像",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-09T14:25:58Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_15dbd470131ca0b19ad960b1",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_15dbd470131ca0b19ad960b1_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 207,
+        "height": 232,
+        "file_size": 14592
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 122,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 83
+    },
+    "issues": [
+      "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_7a8667b2fce3b7fb1d8475e3",
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "753",
+    "created_at": "2026-04-09T14:25:58Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_15dbd470131ca0b19ad960b1",
+    "image_dependency_score": 0.86,
+    "multi_step_score": 0.8,
+    "verifiability_score": 0.84,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写有“如图所示”，且 `requires_image=true`。",
+        "`text_dominant=false`，上游标注说明该题不是纯文本主导。",
+        "虽然题干已描述转轴与绳方向垂直、绕端点旋转，但图像仍可能用于明确空间构型，因此图像依赖较高但非满分。"
+      ],
+      "multi_step": [
+        "题目要求由旋转稳态求弹性绳伸长后的长度，通常需要把连续介质受力、向心效应与弹性关系联立，不是单步代入。",
+        "答案为非线性解析式 `L=[tan(s)/s]L0`，表明求解过程大概率涉及微分方程或积分后的多步推导。",
+        "`answer_type=short_text` 且无选项，说明需要独立构造推导而非简单识别。"
+      ],
+      "verifiability": [
+        "给出了明确的闭式公式答案，最终结果形式清晰，可与标准表达式做符号比对。",
+        "`answer_present=true`、`registry_passed=true`，基本素材齐备。",
+        "答案是数学短文本，虽可核验，但存在等价变形与排版差异，因此可验证性高但不取满分。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。",
+      "short_text 数学公式答案可能存在符号等价变形，自动核验需做表达式归一化。"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_7a8667b2fce3b7fb1d8475e3",
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "753",
+    "created_at": "2026-04-09T14:25:58Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_15dbd470131ca0b19ad960b1",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整。",
+      "初步评分较高：图像依赖、多步性和可验证性都处于较高水平，具备进入候选池价值。",
+      "已记录的风险主要是元数据中的 image_paths 表示异常与公式等价归一化问题，不构成核心资产缺失。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_7a8667b2fce3b7fb1d8475e3",
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "753",
+    "created_at": "2026-04-09T14:25:58Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_7a8667b2fce3b7fb1d8475e3",
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "problem_id": "prob_15dbd470131ca0b19ad960b1",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+    "normalized_answer_text": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "规范化了中文标点与排版空格。",
+      "题干显式引用“如图所示”，且 `force_requires_image=true`，保留为依赖图像样本。"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-09T14:25:58Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "753",
+    "subject": "物理",
+    "raw_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$ ，质量为 $M$ ，劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕着过其端点 $O$ ，与绳长方向垂直的轴，以伸直的状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$ 。",
+    "raw_answer_text": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.86,
+    "initial_multi_solution_score": 0.8,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 753,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(207, 232)>"
+      ],
+      "extraction_notes": [
+        "images 字段中给出的是 PIL 图像对象字符串表示，不是实际文件路径或 URL",
+        "question 中含有“如图所示”，且记录含 vision_relevance=essential，判定为明显依赖图像",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "绳旋转时因有离心趋势，各小段均会伸长，各小段两侧张力之和为其提供圆运动向心力。如题解图1所示，分别以不动端$O$和$O^{\\prime}$为原点，沿着伸直静绳长度方向设置$x$坐标轴，绳长$L_{0}$，质量线密度记为常量$\\lambda_{0}$；沿着伸直动绳长度方向设置$x^{\\prime}$坐标轴，绳长$L$，质量线密度记为变量$\\lambda(x^{\\prime})$。静绳中的$x \\sim x+\\mathrm{d}x$段对应动绳中的$x^{\\prime}+\\mathrm{d}x^{\\prime}$段，伸长量记为$\\mathrm{d}\\xi$，杨氏模量记为常量$E$，两端张力分别为$T(x^{\\prime})$、$T(x^{\\prime}+\\mathrm{d}x^{\\prime})$，如题解图2所示。将绳的截面积设为常量$S$，由\n$$\n\\begin{aligned}\nE &= \\frac{T(x^{\\prime})}{S} \\bigg/ \\frac{\\mathrm{d}\\xi}{\\mathrm{d}x}, \\\\\n\\lambda_{0} \\mathrm{d}x &= \\mathrm{d}M = \\lambda(x^{\\prime}) \\mathrm{d}x^{\\prime}, \\\\\n\\mathrm{d}x^{\\prime} &= \\mathrm{d}x + \\mathrm{d}\\xi,\n\\end{aligned}\n\\Rightarrow \\frac{\\mathrm{d}\\xi}{\\mathrm{d}x} = \\frac{\\lambda_{0}}{\\lambda(x^{\\prime})} - 1.\n$$\n\n得\n$$\n\\begin{aligned}\nT(x^{\\prime}) &= ES \\cdot \\frac{\\mathrm{d}\\xi}{\\mathrm{d}x} = \\left[\\frac{\\lambda_{0}}{\\lambda(x^{\\prime})} - 1\\right] ES, \\\\\n\\mathrm{d}T &= T(x^{\\prime}+\\mathrm{d}x^{\\prime}) - T(x^{\\prime}) = -\\frac{\\lambda_{0}}{\\lambda^{2}(x^{\\prime})} ES \\mathrm{d}\\lambda.\n\\end{aligned}\n$$\n\n与向心力公式\n$$\n-\\mathrm{d}T = \\lambda(x^{\\prime}) \\mathrm{d}x^{\\prime} \\cdot \\omega^{2}x^{\\prime}\n$$\n\n联立得\n$$\n\\begin{aligned}\n\\frac{\\lambda_{0}}{\\lambda^{2}(x^{\\prime})} ES \\mathrm{d}\\lambda &= \\lambda(x^{\\prime}) \\omega^{2}x^{\\prime} \\mathrm{d}x^{\\prime}, \\\\\n\\Rightarrow \\int_{\\lambda_{0}}^{\\lambda(x^{\\prime})} \\frac{\\lambda_{0} \\mathrm{d}\\lambda}{\\lambda^{3}(x^{\\prime})} &= \\int_{0}^{x^{\\prime}} \\frac{\\omega^{2}}{ES} x^{\\prime} \\mathrm{d}x^{\\prime}, \\\\\n\\Rightarrow \\frac{\\lambda_{0}}{2}\\left(\\frac{1}{\\lambda^{2}(x^{\\prime})} - \\frac{1}{\\lambda_{0}^{2}}\\right) &= \\frac{1}{2} \\frac{\\omega^{2}}{ES}(x^{\\prime 2}).\n\\end{aligned}\n$$\n\n将\n$$\nk = ES/L_{0}, \\quad \\Rightarrow ES = kL_{0} \\quad \\text{和} \\quad \\lambda_{0} = M/L_{0}\n$$\n\n代入，得\n$$\n\\begin{aligned}\n\\frac{\\lambda_{0}^{2}}{\\lambda^{2}(x^{\\prime})} - 1 &= \\frac{M\\omega^{2}}{kL_{0}^{2}}(L^{2} - x^{\\prime 2}), \\\\\n\\Rightarrow \\lambda(x^{\\prime}) &= \\frac{\\lambda_{0}}{\\sqrt{\\frac{M\\omega^{2}}{kL_{0}^{2}}(L^{2} - x^{\\prime 2}) + 1}} = \\frac{M}{L_{0}\\sqrt{\\frac{M\\omega^{2}}{kL_{0}^{2}}(L^{2} - x^{\\prime 2}) + 1}},\n\\end{aligned}\n$$\n\n结合\n$$\nM = \\int_{0}^{L} \\lambda(x^{\\prime}) \\mathrm{d}x^{\\prime}\n$$\n\n可得\n$$\n\\begin{aligned}\nM &= \\frac{M}{\\sqrt{\\frac{M}{k}}\\omega} \\int_{0}^{L} \\frac{\\mathrm{d}x^{\\prime}}{\\sqrt{(L^{2} - x^{\\prime 2}) + \\frac{kL_{0}^{2}}{M\\omega^{2}}}}, \\\\\n\\Rightarrow \\int_{0}^{L} \\frac{\\mathrm{d}x^{\\prime}}{\\sqrt{L^{2} + \\frac{kL_{0}^{2}}{M\\omega^{2}} - x^{\\prime 2}}} &= \\sqrt{\\frac{M}{k}}\\omega, \\\\\n\\Rightarrow \\arcsin\\frac{L}{\\sqrt{L^{2} + \\frac{kL_{0}^{2}}{M\\omega^{2}}}} &= \\sqrt{\\frac{M}{k}}\\omega, \\\\\n\\Rightarrow \\sin\\sqrt{\\frac{M}{k}}\\omega &= \\frac{L}{\\sqrt{L^{2} + \\frac{kL_{0}^{2}}{M\\omega^{2}}}}, \\\\\n\\Rightarrow \\tan\\sqrt{\\frac{M}{k}}\\omega &= \\frac{L}{\\sqrt{\\frac{k}{M}}\\frac{L_{0}}{\\omega}}, \\\\\n\\Rightarrow L &= \\left[\\frac{\\tan\\sqrt{\\frac{M}{k}}\\omega}{\\sqrt{\\frac{M}{k}}\\omega}\\right] L_{0}.\n\\end{aligned}\n$$\n\n$$\n\\theta^{\\prime} = \\begin{cases}\n\\theta - \\phi & (\\theta > \\phi), \\\\\n\\phi - \\theta & (\\theta < \\phi),\n\\end{cases}\n$$\n\n题解图中只画出了$\\theta > \\phi$的情况。同样要求\n$$\nv = \\sqrt{g^{\\prime}l/\\cos\\theta^{\\prime}} \\cdot \\sin\\theta^{\\prime}.\n$$\n\n(4)、(1)式联立，可得\n$$\ng^{\\prime}\\sin^{2}\\theta^{\\prime}/\\cos\\theta^{\\prime} = g\\sin^{2}\\theta/\\cos\\theta,\n$$\n\n(3)、(2)式联立，可得\n$$\n\\begin{aligned}\n\\cos\\theta^{\\prime} &= \\cos(\\theta - \\phi) = \\cos(\\phi - \\theta) = \\cos\\theta\\cos\\phi + \\sin\\theta\\sin\\phi \\\\\n&= \\frac{g}{\\sqrt{g^{2} + a^{2}}}\\cos\\theta + \\frac{a}{\\sqrt{g^{2} + a^{2}}}\\sin\\theta.\n\\end{aligned}\n$$",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-09T14:27:16Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整。",
+      "初步评分较高：图像依赖、多步性和可验证性都处于较高水平，具备进入候选池价值。",
+      "已记录的风险主要是元数据中的 image_paths 表示异常与公式等价归一化问题，不构成核心资产缺失。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。",
+      "short_text 数学公式答案可能存在符号等价变形，自动核验需做表达式归一化。"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_f404278eab9ec991c257b441",
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "753",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_15dbd470131ca0b19ad960b1/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_15dbd470131ca0b19ad960b1/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 207,
+        "height": 232
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.86,
+      "initial_multi_solution_score": 0.8,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-09T14:27:16Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_5ce7a389ecfffc00dd7b3a77",
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "753",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.86,
+      "initial_multi_solution_score": 0.8,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-09T14:27:16Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整。",
+      "初步评分较高：图像依赖、多步性和可验证性都处于较高水平，具备进入候选池价值。",
+      "已记录的风险主要是元数据中的 image_paths 表示异常与公式等价归一化问题，不构成核心资产缺失。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_7a8667b2fce3b7fb1d8475e3",
+      "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-09T14:27:16Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_7a8667b2fce3b7fb1d8475e3",
+    "problem_id": "prob_15dbd470131ca0b19ad960b1",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "753",
+    "normalized_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+    "normalized_answer_text": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "answer_available",
+      "rewrite_usable",
+      "text_sufficient"
+    ],
+    "created_at": "2026-04-09T14:27:16Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_7a8667b2fce3b7fb1d8475e3",
+    "problem_id": "prob_15dbd470131ca0b19ad960b1",
+    "normalized_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+    "normalized_answer_text": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "M",
+        "canonical": "M",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "k",
+        "canonical": "k",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "O",
+        "canonical": "O",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "L",
+        "canonical": "L",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 25,
+          "y": 25,
+          "width": 159,
+          "height": 182
+        },
+        "readability_score": 0.6912,
+        "contrast_score": 23.6807
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-09T14:27:16Z",
+    "normalization_notes": [
+      "规范化了中文标点与排版空格。",
+      "题干显式引用“如图所示”，且 `force_requires_image=true`，保留为依赖图像样本。"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_15dbd470131ca0b19ad960b1",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "753",
+    "ingest_batch_id": "benchmarkallinone-seephys-600-2000_20260408T142422Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$ ，质量为 $M$ ，劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕着过其端点 $O$ ，与绳长方向垂直的轴，以伸直的状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$ 。",
+    "normalized_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+    "raw_answer_text": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+    "normalized_answer_text": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "绳旋转时因有离心趋势，各小段均会伸长，各小段两侧张力之和为其提供圆运动向心力。如题解图1所示，分别以不动端$O$和$O^{\\prime}$为原点，沿着伸直静绳长度方向设置$x$坐标轴，绳长$L_{0}$，质量线密度记为常量$\\lambda_{0}$；沿着伸直动绳长度方向设置$x^{\\prime}$坐标轴，绳长$L$，质量线密度记为变量$\\lambda(x^{\\prime})$。静绳中的$x \\sim x+\\mathrm{d}x$段对应动绳中的$x^{\\prime}+\\mathrm{d}x^{\\prime}$段，伸长量记为$\\mathrm{d}\\xi$，杨氏模量记为常量$E$，两端张力分别为$T(x^{\\prime})$、$T(x^{\\prime}+\\mathrm{d}x^{\\prime})$，如题解图2所示。将绳的截面积设为常量$S$，由\n$$\n\\begin{aligned}\nE &= \\frac{T(x^{\\prime})}{S} \\bigg/ \\frac{\\mathrm{d}\\xi}{\\mathrm{d}x}, \\\\\n\\lambda_{0} \\mathrm{d}x &= \\mathrm{d}M = \\lambda(x^{\\prime}) \\mathrm{d}x^{\\prime}, \\\\\n\\mathrm{d}x^{\\prime} &= \\mathrm{d}x + \\mathrm{d}\\xi,\n\\end{aligned}\n\\Rightarrow \\frac{\\mathrm{d}\\xi}{\\mathrm{d}x} = \\frac{\\lambda_{0}}{\\lambda(x^{\\prime})} - 1.\n$$\n\n得\n$$\n\\begin{aligned}\nT(x^{\\prime}) &= ES \\cdot \\frac{\\mathrm{d}\\xi}{\\mathrm{d}x} = \\left[\\frac{\\lambda_{0}}{\\lambda(x^{\\prime})} - 1\\right] ES, \\\\\n\\mathrm{d}T &= T(x^{\\prime}+\\mathrm{d}x^{\\prime}) - T(x^{\\prime}) = -\\frac{\\lambda_{0}}{\\lambda^{2}(x^{\\prime})} ES \\mathrm{d}\\lambda.\n\\end{aligned}\n$$\n\n与向心力公式\n$$\n-\\mathrm{d}T = \\lambda(x^{\\prime}) \\mathrm{d}x^{\\prime} \\cdot \\omega^{2}x^{\\prime}\n$$\n\n联立得\n$$\n\\begin{aligned}\n\\frac{\\lambda_{0}}{\\lambda^{2}(x^{\\prime})} ES \\mathrm{d}\\lambda &= \\lambda(x^{\\prime}) \\omega^{2}x^{\\prime} \\mathrm{d}x^{\\prime}, \\\\\n\\Rightarrow \\int_{\\lambda_{0}}^{\\lambda(x^{\\prime})} \\frac{\\lambda_{0} \\mathrm{d}\\lambda}{\\lambda^{3}(x^{\\prime})} &= \\int_{0}^{x^{\\prime}} \\frac{\\omega^{2}}{ES} x^{\\prime} \\mathrm{d}x^{\\prime}, \\\\\n\\Rightarrow \\frac{\\lambda_{0}}{2}\\left(\\frac{1}{\\lambda^{2}(x^{\\prime})} - \\frac{1}{\\lambda_{0}^{2}}\\right) &= \\frac{1}{2} \\frac{\\omega^{2}}{ES}(x^{\\prime 2}).\n\\end{aligned}\n$$\n\n将\n$$\nk = ES/L_{0}, \\quad \\Rightarrow ES = kL_{0} \\quad \\text{和} \\quad \\lambda_{0} = M/L_{0}\n$$\n\n代入，得\n$$\n\\begin{aligned}\n\\frac{\\lambda_{0}^{2}}{\\lambda^{2}(x^{\\prime})} - 1 &= \\frac{M\\omega^{2}}{kL_{0}^{2}}(L^{2} - x^{\\prime 2}), \\\\\n\\Rightarrow \\lambda(x^{\\prime}) &= \\frac{\\lambda_{0}}{\\sqrt{\\frac{M\\omega^{2}}{kL_{0}^{2}}(L^{2} - x^{\\prime 2}) + 1}} = \\frac{M}{L_{0}\\sqrt{\\frac{M\\omega^{2}}{kL_{0}^{2}}(L^{2} - x^{\\prime 2}) + 1}},\n\\end{aligned}\n$$\n\n结合\n$$\nM = \\int_{0}^{L} \\lambda(x^{\\prime}) \\mathrm{d}x^{\\prime}\n$$\n\n可得\n$$\n\\begin{aligned}\nM &= \\frac{M}{\\sqrt{\\frac{M}{k}}\\omega} \\int_{0}^{L} \\frac{\\mathrm{d}x^{\\prime}}{\\sqrt{(L^{2} - x^{\\prime 2}) + \\frac{kL_{0}^{2}}{M\\omega^{2}}}}, \\\\\n\\Rightarrow \\int_{0}^{L} \\frac{\\mathrm{d}x^{\\prime}}{\\sqrt{L^{2} + \\frac{kL_{0}^{2}}{M\\omega^{2}} - x^{\\prime 2}}} &= \\sqrt{\\frac{M}{k}}\\omega, \\\\\n\\Rightarrow \\arcsin\\frac{L}{\\sqrt{L^{2} + \\frac{kL_{0}^{2}}{M\\omega^{2}}}} &= \\sqrt{\\frac{M}{k}}\\omega, \\\\\n\\Rightarrow \\sin\\sqrt{\\frac{M}{k}}\\omega &= \\frac{L}{\\sqrt{L^{2} + \\frac{kL_{0}^{2}}{M\\omega^{2}}}}, \\\\\n\\Rightarrow \\tan\\sqrt{\\frac{M}{k}}\\omega &= \\frac{L}{\\sqrt{\\frac{k}{M}}\\frac{L_{0}}{\\omega}}, \\\\\n\\Rightarrow L &= \\left[\\frac{\\tan\\sqrt{\\frac{M}{k}}\\omega}{\\sqrt{\\frac{M}{k}}\\omega}\\right] L_{0}.\n\\end{aligned}\n$$\n\n$$\n\\theta^{\\prime} = \\begin{cases}\n\\theta - \\phi & (\\theta > \\phi), \\\\\n\\phi - \\theta & (\\theta < \\phi),\n\\end{cases}\n$$\n\n题解图中只画出了$\\theta > \\phi$的情况。同样要求\n$$\nv = \\sqrt{g^{\\prime}l/\\cos\\theta^{\\prime}} \\cdot \\sin\\theta^{\\prime}.\n$$\n\n(4)、(1)式联立，可得\n$$\ng^{\\prime}\\sin^{2}\\theta^{\\prime}/\\cos\\theta^{\\prime} = g\\sin^{2}\\theta/\\cos\\theta,\n$$\n\n(3)、(2)式联立，可得\n$$\n\\begin{aligned}\n\\cos\\theta^{\\prime} &= \\cos(\\theta - \\phi) = \\cos(\\phi - \\theta) = \\cos\\theta\\cos\\phi + \\sin\\theta\\sin\\phi \\\\\n&= \\frac{g}{\\sqrt{g^{2} + a^{2}}}\\cos\\theta + \\frac{a}{\\sqrt{g^{2} + a^{2}}}\\sin\\theta.\n\\end{aligned}\n$$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9541,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "answer_available",
+      "rewrite_usable",
+      "text_sufficient"
+    ],
+    "clean_decision_rationale": "The problem and answer are complete and understandable from text alone, the rewrite is usable as-is, and alignment/solvability signals do not indicate a serious semantic failure. The image metadata issue is non-blocking because the diagram is not needed to annotate this sample.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-09T14:25:58Z",
+    "updated_at": "2026-04-09T14:27:16Z",
+    "initial_image_dependency_score": 0.86,
+    "initial_multi_solution_score": 0.8,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整。",
+      "初步评分较高：图像依赖、多步性和可验证性都处于较高水平，具备进入候选池价值。",
+      "已记录的风险主要是元数据中的 image_paths 表示异常与公式等价归一化问题，不构成核心资产缺失。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_17f4cce4dc14f15a372b13f6",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[600:2000]/753/question",
+      "storage_uri": "inline://prob_15dbd470131ca0b19ad960b1/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 288,
+      "width": null,
+      "height": null,
+      "sha256": "3cac517756628d2a44019c846142178a27ed99d98126a3ab008aebf86df91e73",
+      "perceptual_hash": null,
+      "source_text_snapshot": "不考虑重力作用，一根自由长度为 $L_{0}$ ，质量为 $M$ ，劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕着过其端点 $O$ ，与绳长方向垂直的轴，以伸直的状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$ 。",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6545,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "asset_id": "asset_a8397ff6b8c69939456d436b",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_15dbd470131ca0b19ad960b1/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 279,
+      "width": null,
+      "height": null,
+      "sha256": "6eb741e8838412e04fb46807914d3a4eabb48a740e5bb50d2e8d7ecea2b05835",
+      "perceptual_hash": null,
+      "source_text_snapshot": "不考虑重力作用，一根自由长度为 $L_{0}$ ，质量为 $M$ ，劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕着过其端点 $O$ ，与绳长方向垂直的轴，以伸直的状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$ 。",
+      "normalized_text_snapshot": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+      "text_completeness_score": 0.6545,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "asset_id": "asset_64ea137e4721c358fa1ba9c0",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[600:2000]/753/answer",
+      "storage_uri": "inline://prob_15dbd470131ca0b19ad960b1/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 83,
+      "width": null,
+      "height": null,
+      "sha256": "590fb933fb84b1766923b445bb4af704beda691acc827b3b5b3299c790c8590c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "tan",
+          "canonical": "tan",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "asset_id": "asset_7faee1fdff5c73647eee4404",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_15dbd470131ca0b19ad960b1/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 83,
+      "width": null,
+      "height": null,
+      "sha256": "590fb933fb84b1766923b445bb4af704beda691acc827b3b5b3299c790c8590c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+      "normalized_text_snapshot": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "tan",
+          "canonical": "tan",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "asset_id": "asset_e1dc8b12ad1b66ad539f5311",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_15dbd470131ca0b19ad960b1_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 14592,
+      "width": 207,
+      "height": 232,
+      "sha256": "d647e6742cef3fb81e04d24425795bfc143fe719ab1288916d8225fe8a395cc4",
+      "perceptual_hash": "ff8f9f8181bf9fff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1565.2114,
+      "readability_score": 0.6912,
+      "noise_score": 17.3016,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 25,
+        "y": 25,
+        "width": 159,
+        "height": 182
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "asset_id": "asset_d30d9c85aaa6148283e01118",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/crops/prob_15dbd470131ca0b19ad960b1_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 12339,
+      "width": 159,
+      "height": 182,
+      "sha256": "6aa90f78dd83104393580b09649e74aa9d0b7dfaa3b2b04d8524c9a2c38b536a",
+      "perceptual_hash": "9f1fbf81003fbfbf",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1565.2114,
+      "readability_score": 0.6912,
+      "noise_score": 17.3016,
+      "cropped_from_asset_id": "asset_e1dc8b12ad1b66ad539f5311",
+      "roi_bbox": {
+        "x": 25,
+        "y": 25,
+        "width": 159,
+        "height": 182
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "asset_id": "asset_685619c3138e285fa693840f",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_6bd559b561caef2e1c76a983",
+      "file_format": "txt",
+      "file_size_bytes": 279,
+      "width": null,
+      "height": null,
+      "sha256": "6eb741e8838412e04fb46807914d3a4eabb48a740e5bb50d2e8d7ecea2b05835",
+      "perceptual_hash": null,
+      "source_text_snapshot": "不考虑重力作用，一根自由长度为 $L_{0}$ ，质量为 $M$ ，劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕着过其端点 $O$ ，与绳长方向垂直的轴，以伸直的状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$ 。",
+      "normalized_text_snapshot": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+      "text_completeness_score": 0.6545,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_15dbd470131ca0b19ad960b1",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0"
+          ],
+          "unit_mentions": [
+            "g",
+            "m"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0"
+          ],
+          "unit_mentions": [
+            "g",
+            "m"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_15dbd470131ca0b19ad960b1_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "M",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "O",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "L",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-09T14:27:00Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_15dbd470131ca0b19ad960b1_1",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 0.8922,
+        "dark_pixel_ratio": 0.0292,
+        "readability_score": 0.6912,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 207,
+            "height": 232
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 25,
+            "y": 25,
+            "width": 159,
+            "height": 182
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 25,
+            "y": 25,
+            "width": 79,
+            "height": 91
+          },
+          "salience": 0.4311
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 25,
+            "y": 116,
+            "width": 79,
+            "height": 91
+          },
+          "salience": 0.4072
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8465,
+      "created_at": "2026-04-09T14:27:00Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_15dbd470131ca0b19ad960b1",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-09T14:27:08Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_d533c54e36f5f1c51d863a22",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "text_fact",
+      "canonical_value": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+      "surface_forms": [
+        "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_a8397ff6b8c69939456d436b"
+      ],
+      "evidence_refs": [
+        "asset_a8397ff6b8c69939456d436b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "0"
+        ],
+        "unit_mentions": [
+          "g",
+          "m"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,m",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_081ca32b76ccbae5fea19c6a",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "target_slot",
+      "canonical_value": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+      "surface_forms": [
+        "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_a8397ff6b8c69939456d436b"
+      ],
+      "evidence_refs": [
+        "asset_a8397ff6b8c69939456d436b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_15dbd470131ca0b19ad960b1_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_b0f5917ff0457a5091f4dd1a",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "answer_claim",
+      "canonical_value": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+      "surface_forms": [
+        "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_7faee1fdff5c73647eee4404"
+      ],
+      "evidence_refs": [
+        "asset_7faee1fdff5c73647eee4404"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_8faaa60caa4ec858d6fe3cd6",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 207,
+          "height": 232
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8465,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_022284d7e2f30e49ee8b7e7b",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 25,
+          "y": 25,
+          "width": 159,
+          "height": 182
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8465,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_9a35a1f8eb1d94db3db194ba",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 25,
+          "y": 25,
+          "width": 79,
+          "height": 91
+        },
+        "salience": 0.4311
+      },
+      "unit": null,
+      "confidence": 0.8465,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_f0a294b7e2cf8565c1111169",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 25,
+          "y": 116,
+          "width": 79,
+          "height": 91
+        },
+        "salience": 0.4072
+      },
+      "unit": null,
+      "confidence": 0.8465,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_028346705a00d806224f747c",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "text_fact",
+      "canonical_value": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+      "surface_forms": [
+        "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_685619c3138e285fa693840f"
+      ],
+      "evidence_refs": [
+        "asset_685619c3138e285fa693840f"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_6bd559b561caef2e1c76a983",
+        "parent_problem_id": "prob_15dbd470131ca0b19ad960b1",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_00d8a37f4af4fcf41bd89f59",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。",
+      "surface_forms": [
+        "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_5bbeccd45f7cefeb3bd5d4d4",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_15dbd470131ca0b19ad960b1",
+        "problem_id": "prob_15dbd470131ca0b19ad960b1",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-09T14:27:08Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "node_id": "node_3cbd395cccf32489369d9b74",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "answer_available",
+          "rewrite_usable",
+          "text_sufficient"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:27:16Z",
+      "updated_at": "2026-04-09T14:27:16Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_7a8667b2fce3b7fb1d8475e3",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_6811add513b82e34",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_17f4cce4dc14f15a372b13f6",
+        "asset_a8397ff6b8c69939456d436b",
+        "asset_64ea137e4721c358fa1ba9c0",
+        "asset_7faee1fdff5c73647eee4404",
+        "asset_e1dc8b12ad1b66ad539f5311",
+        "asset_d30d9c85aaa6148283e01118",
+        "asset_685619c3138e285fa693840f"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 4
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 207,
+            "height": 232,
+            "blur_score": 1565.2114,
+            "contrast_score": 23.6807,
+            "noise_score": 17.3016,
+            "readability_score": 0.6912,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 25,
+              "y": 25,
+              "width": 159,
+              "height": 182
+            },
+            "perceptual_hash": "ff8f9f8181bf9fff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_7a8667b2fce3b7fb1d8475e3",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_15dbd470131ca0b19ad960b1",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_15dbd470131ca0b19ad960b1",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "diagram_consistent",
+          "jointly_understandable",
+          "text_sufficient"
+        ],
+        "rationale": "题干完整说明了弹性绳的物理条件、旋转方式和所求量，答案也明确给出绳长表达式。配图只是简单示意端点、转轴与绳方向，和文字一致，但即使不依赖图片也能理解题意。",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths 中记录的是 PIL 图像对象字符串表示，不是实际文件路径或 URL。"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "answer_available",
+        "rewrite_usable",
+        "text_sufficient"
+      ],
+      "decision_rationale": "The problem and answer are complete and understandable from text alone, the rewrite is usable as-is, and alignment/solvability signals do not indicate a serious semantic failure. The image metadata issue is non-blocking because the diagram is not needed to annotate this sample.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-09T14:27:16Z",
+      "finished_at": "2026-04-09T14:27:16Z",
+      "candidate_id": "cand_15dbd470131ca0b19ad960b1",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_7a8667b2fce3b7fb1d8475e3",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "image_entity_refs": [
+        "visual_prob_15dbd470131ca0b19ad960b1_1::roi",
+        "visual_prob_15dbd470131ca0b19ad960b1_1::roi_top_left",
+        "visual_prob_15dbd470131ca0b19ad960b1_1::roi_bottom_left"
+      ],
+      "text_span_refs": [
+        "asset_prob_15dbd470131ca0b19ad960b1_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "M",
+          "image_ref": "visual_prob_15dbd470131ca0b19ad960b1_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7616
+        },
+        {
+          "text_ref": "O",
+          "image_ref": "visual_prob_15dbd470131ca0b19ad960b1_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7616
+        },
+        {
+          "text_ref": "L",
+          "image_ref": "visual_prob_15dbd470131ca0b19ad960b1_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7616
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-09T14:27:00Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_ae85374015d872915f95da5e",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "不考虑重力作用，一根自由长度为 $L_{0}$ ，质量为 $M$ ，劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕着过其端点 $O$ ，与绳长方向垂直的轴，以伸直的状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$ 。",
+      "after_value": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "audit_id": "audit_a90eef322977c0176ac310ab",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+      "after_value": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "audit_id": "audit_ae98ca3a2982fc1bc7b8018b",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "audit_id": "audit_3cbd395cccf32489369d9b74",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:27:16Z"
+    },
+    {
+      "audit_id": "audit_fc34b9b1ae13bcdcdf6fb21c",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:27:16Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_7a8667b2fce3b7fb1d8475e3",
+      "problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "source_problem_id": "753",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_6bd559b561caef2e1c76a983",
+          "parent_problem_id": "prob_15dbd470131ca0b19ad960b1",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-09T14:27:16Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_6bd559b561caef2e1c76a983",
+      "parent_problem_id": "prob_15dbd470131ca0b19ad960b1",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "不考虑重力作用，一根自由长度为 $L_{0}$、质量为 $M$、劲度系数为 $k$ 的均匀弹性绳，以角速度 $\\omega$ 绕过其端点 $O$ 且与绳长方向垂直的轴，以伸直状态稳定地匀速旋转，如图所示。试求旋转状态中的绳长 $L$。",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$$L=\\left[\\tan \\sqrt{\\frac{M}{k}} \\omega / \\sqrt{\\frac{M}{k}} \\omega\\right] L_{0}$$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "seephys00546",
+  "canonical_sample_index": 546,
+  "canonical_dataset_key": "seephys",
+  "sample_path": "samples/seephys00546.json",
+  "image_path": "artifacts/images/seephys00546.png",
+  "images": [
+    "artifacts/images/seephys00546.png"
+  ],
+  "crop_path": "artifacts/crops/seephys00546.png",
+  "crops": [
+    "artifacts/crops/seephys00546.png"
+  ]
+}

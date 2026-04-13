@@ -1,0 +1,1748 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_c69ce93354aaa6c4fd544a26",
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "858",
+    "raw_question_text": "如图所示，金属杆 $A B$ 以 $3 \\mathrm{~m} / \\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A ，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+    "raw_answer_text": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGB size=(318, 366)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images 字段提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。",
+      "fallback.image_paths 中还有另一种 PIL 图像对象字符串表示，但原始记录 images 字段仅明确包含 1 条。",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-09T16:52:17Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_1c66c19d8ac64e358f715ab8_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 318,
+        "height": 366,
+        "file_size": 20009
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 120,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 27
+    },
+    "issues": [
+      "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_c69ce93354aaa6c4fd544a26",
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "858",
+    "created_at": "2026-04-09T16:52:17Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.89,
+    "score_evidence": {
+      "image_dependency": [
+        "题干明确写有“如图所示”，且金属杆长度与相对长直导线的位置“如图所示”，关键几何信息不在纯文本中。",
+        "字段 `requires_image=true` 且 `text_dominant=false`，说明解题主要依赖图像而非文字。",
+        "答案为含对数项的解析式，通常对应从图中读取两端到导线距离后进行积分，几何关系高度依赖示意图。"
+      ],
+      "multi_step": [
+        "需要结合电流导线磁场分布与导体切割磁感线的感应电动势模型，不是单一步代入。",
+        "题目涉及从图中提取杆长和相对位置，再对非均匀磁场沿杆积分或等价计算，至少包含图像读取+物理推导两步。",
+        "答案形式为 `\\frac{3\\mu_0}{\\pi}\\ln{11}`，出现对数结构，表明通常需要由空间几何边界导出积分结果。"
+      ],
+      "verifiability": [
+        "`answer_type=short_text`，标准答案是明确的封闭形式表达式，便于规则化比对或符号等价校验。",
+        "题目物理过程较规范，可通过已知公式 `B=\\mu_0 I/(2\\pi r)` 与感应电动势积分独立复核。",
+        "`registry_passed=true`，且答案已登记存在，说明样本基本可用。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。",
+      "题干未文本化给出完整几何尺寸，若图像解析失败将显著影响求解与核验。"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_c69ce93354aaa6c4fd544a26",
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "858",
+    "created_at": "2026-04-09T16:52:17Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+    "priority": 0.82,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像均已登记存在，核心语义资产齐全。",
+      "该题虽强依赖图像，但 `image_manifest` 中主图文件存在，可支撑几何信息恢复与求解。",
+      "`registry_passed=true` 且答案为可核验的短文本解析式，样本整体可用性较高。",
+      "当前主要风险是 `metadata.image_paths` 字段异常，而不是核心资产缺失，因此不宜降为 reject。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_c69ce93354aaa6c4fd544a26",
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "858",
+    "created_at": "2026-04-09T16:52:17Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_c69ce93354aaa6c4fd544a26",
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+    "normalized_answer_text": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "题干显式依赖图示中的长度与相对位置信息，需保留为多模态清洗路径。",
+      "清理了原题中的多余空格并规范了公式内的排版，未改动题意与答案语义。"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-09T16:52:17Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "858",
+    "subject": "物理",
+    "raw_question_text": "如图所示，金属杆 $A B$ 以 $3 \\mathrm{~m} / \\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A ，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+    "raw_answer_text": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.89,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 858,
+      "image_paths": [
+        "<PIL.Image mode=RGB size=(318, 366)>"
+      ],
+      "extraction_notes": [
+        "images 字段提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。",
+        "fallback.image_paths 中还有另一种 PIL 图像对象字符串表示，但原始记录 images 字段仅明确包含 1 条。",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "\\( \\frac{3{\\mu }_{0}}{\\pi }\\ln {11}",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-09T16:53:39Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.82,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像均已登记存在，核心语义资产齐全。",
+      "该题虽强依赖图像，但 `image_manifest` 中主图文件存在，可支撑几何信息恢复与求解。",
+      "`registry_passed=true` 且答案为可核验的短文本解析式，样本整体可用性较高。",
+      "当前主要风险是 `metadata.image_paths` 字段异常，而不是核心资产缺失，因此不宜降为 reject。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。",
+      "题干未文本化给出完整几何尺寸，若图像解析失败将显著影响求解与核验。"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_5386e9a4949abc4ec4a729e4",
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "858",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_1c66c19d8ac64e358f715ab8/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_1c66c19d8ac64e358f715ab8/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 318,
+        "height": 366
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.89
+    },
+    "created_at": "2026-04-09T16:53:39Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_7a9853165b565112f302cd00",
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "858",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.82,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.89
+    },
+    "created_at": "2026-04-09T16:53:39Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像均已登记存在，核心语义资产齐全。",
+      "该题虽强依赖图像，但 `image_manifest` 中主图文件存在，可支撑几何信息恢复与求解。",
+      "`registry_passed=true` 且答案为可核验的短文本解析式，样本整体可用性较高。",
+      "当前主要风险是 `metadata.image_paths` 字段异常，而不是核心资产缺失，因此不宜降为 reject。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_c69ce93354aaa6c4fd544a26",
+      "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-09T16:53:39Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_c69ce93354aaa6c4fd544a26",
+    "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "858",
+    "normalized_question_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+    "normalized_answer_text": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "multimodal_sample_usable",
+      "question_answer_complete",
+      "rewrite_usable",
+      "solvable_and_aligned"
+    ],
+    "created_at": "2026-04-09T16:53:39Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_c69ce93354aaa6c4fd544a26",
+    "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+    "normalized_question_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+    "normalized_answer_text": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "AB",
+        "canonical": "AB",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "s",
+        "canonical": "s",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 30,
+          "y": 14,
+          "width": 263,
+          "height": 335
+        },
+        "readability_score": 0.6236,
+        "contrast_score": 14.6557
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-09T16:53:39Z",
+    "normalization_notes": [
+      "题干显式依赖图示中的长度与相对位置信息，需保留为多模态清洗路径。",
+      "清理了原题中的多余空格并规范了公式内的排版，未改动题意与答案语义。"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "858",
+    "ingest_batch_id": "benchmarkallinone-seephys-600-2000_20260408T142422Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "如图所示，金属杆 $A B$ 以 $3 \\mathrm{~m} / \\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A ，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+    "normalized_question_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+    "raw_answer_text": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+    "normalized_answer_text": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "\\( \\frac{3{\\mu }_{0}}{\\pi }\\ln {11}",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9474,
+    "multi_step_score": 0.3107,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "multimodal_sample_usable",
+      "question_answer_complete",
+      "rewrite_usable",
+      "solvable_and_aligned"
+    ],
+    "clean_decision_rationale": "The sample is semantically complete and understandable, the image is clear enough to support the required geometry, the rewritten open form is usable, and alignment/solvability evidence shows no serious failure. The metadata note about image path formatting does not materially block annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-09T16:52:17Z",
+    "updated_at": "2026-04-09T16:53:39Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.89,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.82,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像均已登记存在，核心语义资产齐全。",
+      "该题虽强依赖图像，但 `image_manifest` 中主图文件存在，可支撑几何信息恢复与求解。",
+      "`registry_passed=true` 且答案为可核验的短文本解析式，样本整体可用性较高。",
+      "当前主要风险是 `metadata.image_paths` 字段异常，而不是核心资产缺失，因此不宜降为 reject。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_1720c9d6bccdb8fe7ec6618a",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[600:2000]/858/question",
+      "storage_uri": "inline://prob_1c66c19d8ac64e358f715ab8/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 258,
+      "width": null,
+      "height": null,
+      "sha256": "c4bf1cd0e2ada54f7df16ee386338dcea34d889c32e0c2980fe7e5299ba152b9",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，金属杆 $A B$ 以 $3 \\mathrm{~m} / \\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A ，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6536,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "asset_id": "asset_9df67c22f1a19861f7fd22da",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1c66c19d8ac64e358f715ab8/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 254,
+      "width": null,
+      "height": null,
+      "sha256": "5de7165fa2f2cd829fb89912943845d338543aa748bbd1a1d329375b96ebad22",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，金属杆 $A B$ 以 $3 \\mathrm{~m} / \\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A ，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "normalized_text_snapshot": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "text_completeness_score": 0.6536,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "asset_id": "asset_244cdab2fdf2ff5306c001c4",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[600:2000]/858/answer",
+      "storage_uri": "inline://prob_1c66c19d8ac64e358f715ab8/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 27,
+      "width": null,
+      "height": null,
+      "sha256": "9d1197872f0605df7b92d2b571c3bbd704cb993617a36f1ba127af3e81645d1a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "pi",
+          "canonical": "pi",
+          "variable_type": "label"
+        },
+        {
+          "original": "ln",
+          "canonical": "ln",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "asset_id": "asset_c1f8544f6c75de6996e2f65a",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1c66c19d8ac64e358f715ab8/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 27,
+      "width": null,
+      "height": null,
+      "sha256": "9d1197872f0605df7b92d2b571c3bbd704cb993617a36f1ba127af3e81645d1a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+      "normalized_text_snapshot": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "pi",
+          "canonical": "pi",
+          "variable_type": "label"
+        },
+        {
+          "original": "ln",
+          "canonical": "ln",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "asset_id": "asset_5c2ef42f262772228715bc03",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_1c66c19d8ac64e358f715ab8_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 20009,
+      "width": 318,
+      "height": 366,
+      "sha256": "c5d2b7650f8b82032bbf673011cdcad353bf03b8cbe26d7f8962a40d38aa404f",
+      "perceptual_hash": "bfbfbf9381bfbfe7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 343.895,
+      "readability_score": 0.6236,
+      "noise_score": 9.4065,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 30,
+        "y": 14,
+        "width": 263,
+        "height": 335
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "asset_id": "asset_2a7385da9b54d7e5d84432f2",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/crops/prob_1c66c19d8ac64e358f715ab8_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 19241,
+      "width": 263,
+      "height": 335,
+      "sha256": "ec45b14dde9c5523ce6a111137772c4e3eb7c9257026cb0eb4852687ffcbd156",
+      "perceptual_hash": "3f3f3f33003f3fe7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 343.895,
+      "readability_score": 0.6236,
+      "noise_score": 9.4065,
+      "cropped_from_asset_id": "asset_5c2ef42f262772228715bc03",
+      "roi_bbox": {
+        "x": 30,
+        "y": 14,
+        "width": 263,
+        "height": 335
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "asset_id": "asset_8ac05c7e65894293a48c06fa",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_af15e84bac02f1c622aa0d45",
+      "file_format": "txt",
+      "file_size_bytes": 254,
+      "width": null,
+      "height": null,
+      "sha256": "5de7165fa2f2cd829fb89912943845d338543aa748bbd1a1d329375b96ebad22",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，金属杆 $A B$ 以 $3 \\mathrm{~m} / \\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A ，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "normalized_text_snapshot": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "text_completeness_score": 0.6536,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_1c66c19d8ac64e358f715ab8",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3",
+            "2"
+          ],
+          "unit_mentions": [
+            "A",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3",
+            "2"
+          ],
+          "unit_mentions": [
+            "A",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_1c66c19d8ac64e358f715ab8_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "AB",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-09T16:53:10Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_1c66c19d8ac64e358f715ab8_1",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 0.8689,
+        "dark_pixel_ratio": 0.0573,
+        "readability_score": 0.6236,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 318,
+            "height": 366
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 30,
+            "y": 14,
+            "width": 263,
+            "height": 335
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 30,
+            "y": 14,
+            "width": 131,
+            "height": 167
+          },
+          "salience": 0.4675
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 30,
+            "y": 181,
+            "width": 131,
+            "height": 168
+          },
+          "salience": 0.4674
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 161,
+            "y": 181,
+            "width": 132,
+            "height": 168
+          },
+          "salience": 0.3928
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8494,
+      "created_at": "2026-04-09T16:53:10Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_1c66c19d8ac64e358f715ab8",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-09T16:53:28Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_b55e59a5614c0e42065bb2b0",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "text_fact",
+      "canonical_value": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "surface_forms": [
+        "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9df67c22f1a19861f7fd22da"
+      ],
+      "evidence_refs": [
+        "asset_9df67c22f1a19861f7fd22da"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "3",
+          "2"
+        ],
+        "unit_mentions": [
+          "A",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_cd41ffba13d020671a382d87",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "target_slot",
+      "canonical_value": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "surface_forms": [
+        "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_9df67c22f1a19861f7fd22da"
+      ],
+      "evidence_refs": [
+        "asset_9df67c22f1a19861f7fd22da"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_1c66c19d8ac64e358f715ab8_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_b7836232826e03134bf3e74b",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "answer_claim",
+      "canonical_value": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+      "surface_forms": [
+        "$\\frac{3\\mu_0}{\\pi}\\ln{11}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_c1f8544f6c75de6996e2f65a"
+      ],
+      "evidence_refs": [
+        "asset_c1f8544f6c75de6996e2f65a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_2bffcfd32bc5e00f89ac63b3",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 318,
+          "height": 366
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8494,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_8c93a26ebe997745eb813dd1",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 30,
+          "y": 14,
+          "width": 263,
+          "height": 335
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8494,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_b7ae27933f20813c710776c5",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 30,
+          "y": 14,
+          "width": 131,
+          "height": 167
+        },
+        "salience": 0.4675
+      },
+      "unit": null,
+      "confidence": 0.8494,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_340ae1dc60453e5ae40ea030",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 30,
+          "y": 181,
+          "width": 131,
+          "height": 168
+        },
+        "salience": 0.4674
+      },
+      "unit": null,
+      "confidence": 0.8494,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_8e6cdc02adf7b4a23e0474a2",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 161,
+          "y": 181,
+          "width": 132,
+          "height": 168
+        },
+        "salience": 0.3928
+      },
+      "unit": null,
+      "confidence": 0.8494,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_e48a12382a5b66e0894e4f8c",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "text_fact",
+      "canonical_value": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "surface_forms": [
+        "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_8ac05c7e65894293a48c06fa"
+      ],
+      "evidence_refs": [
+        "asset_8ac05c7e65894293a48c06fa"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_af15e84bac02f1c622aa0d45",
+        "parent_problem_id": "prob_1c66c19d8ac64e358f715ab8",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_45266d0e4156af0d65de9a9c",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。",
+      "surface_forms": [
+        "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_adcd07562d4321df0eef5dcb",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_1c66c19d8ac64e358f715ab8",
+        "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-09T16:53:28Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "node_id": "node_5f6a5b50a641935323cf13c0",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "multimodal_sample_usable",
+          "question_answer_complete",
+          "rewrite_usable",
+          "solvable_and_aligned"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T16:53:39Z",
+      "updated_at": "2026-04-09T16:53:39Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_c69ce93354aaa6c4fd544a26",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_6811add513b82e34",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_1720c9d6bccdb8fe7ec6618a",
+        "asset_9df67c22f1a19861f7fd22da",
+        "asset_244cdab2fdf2ff5306c001c4",
+        "asset_c1f8544f6c75de6996e2f65a",
+        "asset_5c2ef42f262772228715bc03",
+        "asset_2a7385da9b54d7e5d84432f2",
+        "asset_8ac05c7e65894293a48c06fa"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 3
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 318,
+            "height": 366,
+            "blur_score": 343.895,
+            "contrast_score": 14.6557,
+            "noise_score": 9.4065,
+            "readability_score": 0.6236,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 30,
+              "y": 14,
+              "width": 263,
+              "height": 335
+            },
+            "perceptual_hash": "bfbfbf9381bfbfe7"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_c69ce93354aaa6c4fd544a26",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_1c66c19d8ac64e358f715ab8",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_1c66c19d8ac64e358f715ab8",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_text_clear"
+        ],
+        "rationale": "题干完整，要求求出金属杆在长直导线磁场中运动时的感应电动势。图片清楚给出了导线与金属杆的相对位置、0.1 m 的最近距离、1.0 m 的杆长以及运动方向，因此题目与标准答案都具有明确语义。",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths 提供的是 PIL 图像对象字符串表示，不是文件路径或 URL。"
+      ],
+      "clean_score": 0.9908,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "multimodal_sample_usable",
+        "question_answer_complete",
+        "rewrite_usable",
+        "solvable_and_aligned"
+      ],
+      "decision_rationale": "The sample is semantically complete and understandable, the image is clear enough to support the required geometry, the rewritten open form is usable, and alignment/solvability evidence shows no serious failure. The metadata note about image path formatting does not materially block annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-09T16:53:39Z",
+      "finished_at": "2026-04-09T16:53:39Z",
+      "candidate_id": "cand_1c66c19d8ac64e358f715ab8",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_c69ce93354aaa6c4fd544a26",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "image_entity_refs": [
+        "visual_prob_1c66c19d8ac64e358f715ab8_1::roi",
+        "visual_prob_1c66c19d8ac64e358f715ab8_1::roi_top_left",
+        "visual_prob_1c66c19d8ac64e358f715ab8_1::roi_bottom_left",
+        "visual_prob_1c66c19d8ac64e358f715ab8_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_1c66c19d8ac64e358f715ab8_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "AB",
+          "image_ref": "visual_prob_1c66c19d8ac64e358f715ab8_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7624
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_1c66c19d8ac64e358f715ab8_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7624
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-09T16:53:10Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_3f678ca2b9699f521ce94fd3",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "如图所示，金属杆 $A B$ 以 $3 \\mathrm{~m} / \\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A ，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "after_value": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "audit_id": "audit_45a920e994f7de204639db49",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+      "after_value": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "audit_id": "audit_7bdc9b7ad4d3a7d07bd981b6",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "audit_id": "audit_5f6a5b50a641935323cf13c0",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T16:53:39Z"
+    },
+    {
+      "audit_id": "audit_f95ffad529ec18e06efe9d11",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T16:53:39Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_c69ce93354aaa6c4fd544a26",
+      "problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "source_problem_id": "858",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_af15e84bac02f1c622aa0d45",
+          "parent_problem_id": "prob_1c66c19d8ac64e358f715ab8",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-09T16:53:39Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_af15e84bac02f1c622aa0d45",
+      "parent_problem_id": "prob_1c66c19d8ac64e358f715ab8",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "如图所示，金属杆 $AB$ 以 $3\\ \\mathrm{m}/\\mathrm{s}$ 的速度匀速平行于一长直导线移动，此导线通有电流 2 A，金属杆的长度及与直导线的相对位置如图所示，则此杆中的感应电动势的大小为 $\\qquad$。",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$\\frac{3\\mu_0}{\\pi}\\ln{11}$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "seephys00572",
+  "canonical_sample_index": 572,
+  "canonical_dataset_key": "seephys",
+  "sample_path": "samples/seephys00572.json",
+  "image_path": "artifacts/images/seephys00572.png",
+  "images": [
+    "artifacts/images/seephys00572.png"
+  ],
+  "crop_path": "artifacts/crops/seephys00572.png",
+  "crops": [
+    "artifacts/crops/seephys00572.png"
+  ]
+}

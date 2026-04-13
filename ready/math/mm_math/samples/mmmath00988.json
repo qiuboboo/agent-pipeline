@@ -1,0 +1,2536 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_be5b5b5aa6fb07d6e0ee02cb",
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "problem_id": "prob_f39b942e276b2a0f9d930494",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53210764.png",
+    "raw_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+    "raw_answer_text": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$.",
+    "choice_map": {},
+    "image_paths": [
+      "53210764.png"
+    ],
+    "force_requires_image": true,
+    "question_field": null,
+    "answer_field": null,
+    "image_field": null,
+    "choice_field": null,
+    "extraction_notes": [
+      "answer field contains a full solution rather than an isolated final answer",
+      "source_intake_agent",
+      "hf_raw_mm_math_fallback"
+    ],
+    "created_at": "2026-04-10T18:51:16Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_f39b942e276b2a0f9d930494",
+    "image_manifest": [
+      {
+        "path": "outputs/mm_math_1500_2100/run_33490190d5de4f1b/datasets/mm_math/artifacts/images/prob_f39b942e276b2a0f9d930494_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 863,
+        "height": 73,
+        "file_size": 5428
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 208,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "long_text",
+      "answer_char_length": 351
+    },
+    "issues": [
+      "answer_text contains a full solution rather than an isolated final answer",
+      "metadata.image_field is null"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_be5b5b5aa6fb07d6e0ee02cb",
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53210764.png",
+    "created_at": "2026-04-10T18:51:16Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_f39b942e276b2a0f9d930494",
+    "image_dependency_score": 0.52,
+    "multi_step_score": 0.64,
+    "verifiability_score": 0.84,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写有“As shown in the figure”且 `requires_image=true`，说明样本登记上被视为依赖图像。",
+        "但题干同时用文字给出了 `AB=16`、`C` 在 `AB` 上、`M` 是 `AB` 中点、`N` 是 `AC` 中点、`MN=3`，核心关系基本已文本化。",
+        "图像尺寸为 863x73，像是线段示意图而非复杂图表，视觉信息可能主要用于点位顺序确认而不是提供额外数值。"
+      ],
+      "multi_step": [
+        "求解至少需要组合多个条件：先用中点关系确定 `AM=8` 和 `AN=AC/2`，再利用线段关系把 `MN=3` 转成方程。",
+        "这是几何线段关系题，不是单步直接读数，需要建立位置关系后再计算 `AC`。",
+        "给定答案也展示了中间量设元和线段分解，表明存在明确的多步推理链。"
+      ],
+      "verifiability": [
+        "目标答案是单一数值长度，最终结果应为明确的数字，便于规则核验。",
+        "题干中的已知量和约束较清晰，可以通过坐标法或线段中点关系独立复算。",
+        "`registry_passed=true`、题目和答案均存在，有利于后续核验。",
+        "但 `answer_text` 是完整解答而非孤立最终答案，会增加抽取最终值时的轻微噪声。"
+      ]
+    },
+    "risk_flags": [
+      "answer_text contains a full solution rather than an isolated final answer",
+      "metadata.image_field is null"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_be5b5b5aa6fb07d6e0ee02cb",
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53210764.png",
+    "created_at": "2026-04-10T18:51:16Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_f39b942e276b2a0f9d930494",
+    "priority": 0.82,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和图像资产均存在，核心语义支撑完整，不属于应拒绝样本。",
+      "虽然题干提到依赖图像，但关键条件如线段长度与中点关系已基本文本化，样本可恢复性强。",
+      "综合评分显示可验证性较高且具备明确数值结论，适合进入候选池。",
+      "现有风险主要是答案为完整解答、以及元数据中的 image_field 为空，属于可后处理问题，不构成核心语义缺失。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_be5b5b5aa6fb07d6e0ee02cb",
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53210764.png",
+    "created_at": "2026-04-10T18:51:16Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_be5b5b5aa6fb07d6e0ee02cb",
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "problem_id": "prob_f39b942e276b2a0f9d930494",
+    "dataset_name": "MM-Math",
+    "normalized_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+    "normalized_answer_text": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "force_requires_image=true, so the sample is routed to multimodal_full",
+      "Kept the original question wording because it explicitly references the figure",
+      "Removed only the trailing period outside the final boxed answer for answer-text formatting consistency"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-10T18:51:16Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "source_dataset": "MM-Math",
+    "source_split": "train[1500:2100]",
+    "source_problem_id": "53210764.png",
+    "subject": "数学",
+    "raw_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+    "raw_answer_text": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.52,
+    "initial_multi_solution_score": 0.64,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 545,
+      "image_paths": [
+        "53210764.png"
+      ],
+      "extraction_notes": [
+        "answer field contains a full solution rather than an isolated final answer",
+        "source_intake_agent",
+        "hf_raw_mm_math_fallback"
+      ],
+      "image_field": null
+    },
+    "created_at": "2026-04-10T18:52:56Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.82,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均存在，核心语义支撑完整，不属于应拒绝样本。",
+      "虽然题干提到依赖图像，但关键条件如线段长度与中点关系已基本文本化，样本可恢复性强。",
+      "综合评分显示可验证性较高且具备明确数值结论，适合进入候选池。",
+      "现有风险主要是答案为完整解答、以及元数据中的 image_field 为空，属于可后处理问题，不构成核心语义缺失。"
+    ],
+    "collection_risk_flags": [
+      "answer_text contains a full solution rather than an isolated final answer",
+      "metadata.image_field is null"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_97b1058160d9d75241a475cf",
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53210764.png",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_f39b942e276b2a0f9d930494/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_f39b942e276b2a0f9d930494/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53210764.png",
+        "is_present": true,
+        "width": 863,
+        "height": 73
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.52,
+      "initial_multi_solution_score": 0.64,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-10T18:52:56Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "answer_text contains a full solution rather than an isolated final answer",
+      "metadata.image_field is null"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_1fdb303f589b72879dba44e0",
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53210764.png",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.82,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.52,
+      "initial_multi_solution_score": 0.64,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-10T18:52:56Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和图像资产均存在，核心语义支撑完整，不属于应拒绝样本。",
+      "虽然题干提到依赖图像，但关键条件如线段长度与中点关系已基本文本化，样本可恢复性强。",
+      "综合评分显示可验证性较高且具备明确数值结论，适合进入候选池。",
+      "现有风险主要是答案为完整解答、以及元数据中的 image_field 为空，属于可后处理问题，不构成核心语义缺失。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_be5b5b5aa6fb07d6e0ee02cb",
+      "candidate_id": "cand_f39b942e276b2a0f9d930494",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "dataset_name": "MM-Math",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-10T18:52:56Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_be5b5b5aa6fb07d6e0ee02cb",
+    "problem_id": "prob_f39b942e276b2a0f9d930494",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53210764.png",
+    "normalized_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+    "normalized_answer_text": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_signal_present",
+      "image_optional_for_reasoning",
+      "text_semantics_clear"
+    ],
+    "created_at": "2026-04-10T18:52:56Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_be5b5b5aa6fb07d6e0ee02cb",
+    "problem_id": "prob_f39b942e276b2a0f9d930494",
+    "normalized_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+    "normalized_answer_text": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "AB",
+        "canonical": "AB",
+        "variable_type": "label"
+      },
+      {
+        "original": "text",
+        "canonical": "text",
+        "variable_type": "label"
+      },
+      {
+        "original": "cm",
+        "canonical": "cm",
+        "variable_type": "label"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "M",
+        "canonical": "M",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "N",
+        "canonical": "N",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "AC",
+        "canonical": "AC",
+        "variable_type": "label"
+      },
+      {
+        "original": "If",
+        "canonical": "If",
+        "variable_type": "label"
+      },
+      {
+        "original": "MN",
+        "canonical": "MN",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "As shown in the figure, segment $AB=16\\, \\text{cm}$."
+      },
+      {
+        "segment_index": 2,
+        "text": "A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$."
+      },
+      {
+        "segment_index": 3,
+        "text": "If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53210764.png",
+        "roi_bbox": {
+          "x": 3,
+          "y": 3,
+          "width": 858,
+          "height": 68
+        },
+        "readability_score": 0.8285,
+        "contrast_score": 64.6369
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-10T18:52:56Z",
+    "normalization_notes": [
+      "force_requires_image=true, so the sample is routed to multimodal_full",
+      "Kept the original question wording because it explicitly references the figure",
+      "Removed only the trailing period outside the final boxed answer for answer-text formatting consistency"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_f39b942e276b2a0f9d930494",
+    "source_dataset": "MM-Math",
+    "source_split": "train[1500:2100]",
+    "source_problem_id": "53210764.png",
+    "ingest_batch_id": "benchmarkallinone-mm-math-1500-2100_20260410T031527Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+    "normalized_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+    "raw_answer_text": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$.",
+    "normalized_answer_text": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+    "answer_type": "set",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9798,
+    "multi_step_score": 0.4097,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "answer_contains_full_solution",
+      "answer_text contains a full solution rather than an isolated final answer",
+      "metadata.image_field is null"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_signal_present",
+      "image_optional_for_reasoning",
+      "text_semantics_clear"
+    ],
+    "clean_decision_rationale": "The sample is fully understandable from text alone, the target quantity is explicit, and the answer materially provides the final result (10) even though it includes a full solution. Alignment and solvability evidence are strong, and the missing image metadata does not block semantic usability here.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_f39b942e276b2a0f9d930494",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-10T18:51:16Z",
+    "updated_at": "2026-04-10T18:52:56Z",
+    "initial_image_dependency_score": 0.52,
+    "initial_multi_solution_score": 0.64,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.82,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均存在，核心语义支撑完整，不属于应拒绝样本。",
+      "虽然题干提到依赖图像，但关键条件如线段长度与中点关系已基本文本化，样本可恢复性强。",
+      "综合评分显示可验证性较高且具备明确数值结论，适合进入候选池。",
+      "现有风险主要是答案为完整解答、以及元数据中的 image_field 为空，属于可后处理问题，不构成核心语义缺失。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_7839d05f7af108d214b79bf8",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mm_math/train[1500:2100]/53210764.png/question",
+      "storage_uri": "inline://prob_f39b942e276b2a0f9d930494/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 208,
+      "width": null,
+      "height": null,
+      "sha256": "7afa2b94b6596f4351d62a89525133acf4d6c8b7ca0b4e02ed57308858dc4f77",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7357,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "MN",
+          "canonical": "MN",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "asset_id": "asset_12f93591c889fa8f02bf0fed",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_f39b942e276b2a0f9d930494/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 208,
+      "width": null,
+      "height": null,
+      "sha256": "7afa2b94b6596f4351d62a89525133acf4d6c8b7ca0b4e02ed57308858dc4f77",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "normalized_text_snapshot": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "text_completeness_score": 0.7357,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "MN",
+          "canonical": "MN",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "asset_id": "asset_b73b8b4cdf511dab21ecd9c0",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mm_math/train[1500:2100]/53210764.png/answer",
+      "storage_uri": "inline://prob_f39b942e276b2a0f9d930494/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 351,
+      "width": null,
+      "height": null,
+      "sha256": "38d09887b164cbd6ffc1ac21fb03de8a337e215ff792ebcf920d6fce256a61f1",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "CM",
+          "canonical": "CM",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CN",
+          "canonical": "CN",
+          "variable_type": "label"
+        },
+        {
+          "original": "MN",
+          "canonical": "MN",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AM",
+          "canonical": "AM",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "AN",
+          "canonical": "AN",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "asset_id": "asset_51d1bb824fd866b2276fb34f",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_f39b942e276b2a0f9d930494/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 350,
+      "width": null,
+      "height": null,
+      "sha256": "9eee6fe4a7327839f1789922409c6e5c10f78d86ca26b2dc2b710b7e56fdbba8",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$.",
+      "normalized_text_snapshot": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "CM",
+          "canonical": "CM",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "CN",
+          "canonical": "CN",
+          "variable_type": "label"
+        },
+        {
+          "original": "MN",
+          "canonical": "MN",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AM",
+          "canonical": "AM",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "AN",
+          "canonical": "AN",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "asset_id": "asset_a9b6fa947bcc709a6a5fdeb9",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53210764.png",
+      "storage_uri": "outputs/mm_math_1500_2100/run_33490190d5de4f1b/datasets/mm_math/artifacts/images/prob_f39b942e276b2a0f9d930494_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 5428,
+      "width": 863,
+      "height": 73,
+      "sha256": "ab64f15ac23f5ab1b4e966b52924a9cbed69a6c3abd117245d787923d0a74c52",
+      "perceptual_hash": "ff00fffff7f6f7f7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4518.8457,
+      "readability_score": 0.8285,
+      "noise_score": 37.1201,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 3,
+        "y": 3,
+        "width": 858,
+        "height": 68
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "answer_contains_full_solution",
+        "answer_text contains a full solution rather than an isolated final answer",
+        "metadata.image_field is null"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "asset_id": "asset_aae9c91f8936195220af64b3",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mm_math_1500_2100/run_33490190d5de4f1b/datasets/mm_math/artifacts/crops/prob_f39b942e276b2a0f9d930494_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 5364,
+      "width": 858,
+      "height": 68,
+      "sha256": "144b570c6ffedbd93b4aff3a3d6cf82e4e4b2078b231ba5a80f4c7f505d30a8a",
+      "perceptual_hash": "4200fffffff7f7f7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4518.8457,
+      "readability_score": 0.8285,
+      "noise_score": 37.1201,
+      "cropped_from_asset_id": "asset_a9b6fa947bcc709a6a5fdeb9",
+      "roi_bbox": {
+        "x": 3,
+        "y": 3,
+        "width": 858,
+        "height": 68
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "asset_id": "asset_13cfd6f2a4a919694f8761dd",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_9dd8bf40f49d6e27457f4824",
+      "file_format": "txt",
+      "file_size_bytes": 208,
+      "width": null,
+      "height": null,
+      "sha256": "7afa2b94b6596f4351d62a89525133acf4d6c8b7ca0b4e02ed57308858dc4f77",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "normalized_text_snapshot": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "text_completeness_score": 0.7357,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "MN",
+          "canonical": "MN",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_f39b942e276b2a0f9d930494",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "As shown in the figure, segment $AB=16\\, \\text{cm}$.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "16"
+          ],
+          "unit_mentions": [
+            "A",
+            "cm",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3"
+          ],
+          "unit_mentions": [
+            "A",
+            "N",
+            "cm",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_f39b942e276b2a0f9d930494_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "set",
+          "target_text": "If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+          "expected_answer_type": "set",
+          "expected_answer": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "point",
+          "entity_category": "point",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AB",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "C",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "M",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "N",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "MN",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "MN",
+          "canonical": "MN",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "N",
+        "cm",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "As shown in the figure, segment $AB=16\\, \\text{cm}$."
+        },
+        {
+          "segment_index": 2,
+          "text": "A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$."
+        },
+        {
+          "segment_index": 3,
+          "text": "If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-10T18:52:31Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_f39b942e276b2a0f9d930494_1",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 11.8219,
+        "dark_pixel_ratio": 0.095,
+        "readability_score": 0.8285,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 863,
+            "height": 73
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 3,
+            "y": 3,
+            "width": 858,
+            "height": 68
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 3,
+            "y": 3,
+            "width": 429,
+            "height": 34
+          },
+          "salience": 0.484
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 432,
+            "y": 3,
+            "width": 429,
+            "height": 34
+          },
+          "salience": 0.4933
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 3,
+            "y": 37,
+            "width": 429,
+            "height": 34
+          },
+          "salience": 0.4071
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 432,
+            "y": 37,
+            "width": 429,
+            "height": 34
+          },
+          "salience": 0.426
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9314,
+      "created_at": "2026-04-10T18:52:31Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_f39b942e276b2a0f9d930494",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-10T18:52:44Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_beeb85f7ae634d4279a64230",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, segment $AB=16\\, \\text{cm}$.",
+      "surface_forms": [
+        "As shown in the figure, segment $AB=16\\, \\text{cm}$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_12f93591c889fa8f02bf0fed"
+      ],
+      "evidence_refs": [
+        "asset_12f93591c889fa8f02bf0fed"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "As shown in the figure, segment $AB=16\\, \\text{cm}$.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "16"
+        ],
+        "unit_mentions": [
+          "A",
+          "cm",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,cm,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_f46d6cf37ca590ce18aa3821",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "target_slot",
+      "canonical_value": "If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "surface_forms": [
+        "If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_12f93591c889fa8f02bf0fed"
+      ],
+      "evidence_refs": [
+        "asset_12f93591c889fa8f02bf0fed"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "slot_id": "slot_prob_f39b942e276b2a0f9d930494_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "set",
+        "target_text": "If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+        "expected_answer_type": "set",
+        "expected_answer": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_6cf4ce9dd2796f612f34d252",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "answer_claim",
+      "canonical_value": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+      "surface_forms": [
+        "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_51d1bb824fd866b2276fb34f"
+      ],
+      "evidence_refs": [
+        "asset_51d1bb824fd866b2276fb34f"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_01b0dfa3c980d3c80ec33f9b",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 863,
+          "height": 73
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9314,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_0ff1c61108f1631eff959196",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 3,
+          "y": 3,
+          "width": 858,
+          "height": 68
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9314,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_c82a97f92803d93b6ff081d6",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 3,
+          "y": 3,
+          "width": 429,
+          "height": 34
+        },
+        "salience": 0.484
+      },
+      "unit": null,
+      "confidence": 0.9314,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_e09822a0226b0e4c826e6029",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 432,
+          "y": 3,
+          "width": 429,
+          "height": 34
+        },
+        "salience": 0.4933
+      },
+      "unit": null,
+      "confidence": 0.9314,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_a7888929cf32106467191080",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 3,
+          "y": 37,
+          "width": 429,
+          "height": 34
+        },
+        "salience": 0.4071
+      },
+      "unit": null,
+      "confidence": 0.9314,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_bad85bb9a85916ae9f7b2894",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 432,
+          "y": 37,
+          "width": 429,
+          "height": 34
+        },
+        "salience": 0.426
+      },
+      "unit": null,
+      "confidence": 0.9314,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_710bef8782ef940d808c50c4",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "surface_forms": [
+        "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_13cfd6f2a4a919694f8761dd"
+      ],
+      "evidence_refs": [
+        "asset_13cfd6f2a4a919694f8761dd"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_9dd8bf40f49d6e27457f4824",
+        "parent_problem_id": "prob_f39b942e276b2a0f9d930494",
+        "variant_index": 1,
+        "title": "MM-Math 开放题",
+        "rewritten_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+        "expected_answer_type": "set",
+        "expected_answer": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_acf96b2c4386ef3c7f55c075",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "quality_signal",
+      "canonical_value": "answer_contains_full_solution",
+      "surface_forms": [
+        "answer_contains_full_solution"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "answer_contains_full_solution"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_f5d6201e8a7549a59deca3da",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "quality_signal",
+      "canonical_value": "answer_text contains a full solution rather than an isolated final answer",
+      "surface_forms": [
+        "answer_text contains a full solution rather than an isolated final answer"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "answer_text contains a full solution rather than an isolated final answer"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_32c8f2f17f5372228a3885ef",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_field is null",
+      "surface_forms": [
+        "metadata.image_field is null"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_field is null"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_8a6ce16a14a15ff8be2365b3",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_f39b942e276b2a0f9d930494",
+        "problem_id": "prob_f39b942e276b2a0f9d930494",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-10T18:52:44Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "node_id": "node_798cff790e4e6b353ad0237c",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_signal_present",
+          "image_optional_for_reasoning",
+          "text_semantics_clear"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T18:52:56Z",
+      "updated_at": "2026-04-10T18:52:56Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_be5b5b5aa6fb07d6e0ee02cb",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_33490190d5de4f1b",
+      "dataset_name": "MM-Math",
+      "input_asset_ids": [
+        "asset_7839d05f7af108d214b79bf8",
+        "asset_12f93591c889fa8f02bf0fed",
+        "asset_b73b8b4cdf511dab21ecd9c0",
+        "asset_51d1bb824fd866b2276fb34f",
+        "asset_a9b6fa947bcc709a6a5fdeb9",
+        "asset_aae9c91f8936195220af64b3",
+        "asset_13cfd6f2a4a919694f8761dd"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 17
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.93,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 863,
+            "height": 73,
+            "blur_score": 4518.8457,
+            "contrast_score": 64.6369,
+            "noise_score": 37.1201,
+            "readability_score": 0.8285,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 3,
+              "y": 3,
+              "width": 858,
+              "height": 68
+            },
+            "perceptual_hash": "ff00fffff7f6f7f7"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_be5b5b5aa6fb07d6e0ee02cb",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_f39b942e276b2a0f9d930494",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_f39b942e276b2a0f9d930494",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_signal_present",
+          "image_optional_for_reasoning",
+          "text_semantics_clear"
+        ],
+        "rationale": "The math problem is fully understandable from the text: AB is given, M and N are defined as midpoints, and MN is provided, so AC can be derived even without relying on the diagram. The image is clear and consistent with the text, but it is not strictly necessary to understand the task or expected answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "answer_contains_full_solution",
+        "answer_text contains a full solution rather than an isolated final answer",
+        "metadata.image_field is null"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_signal_present",
+        "image_optional_for_reasoning",
+        "text_semantics_clear"
+      ],
+      "decision_rationale": "The sample is fully understandable from text alone, the target quantity is explicit, and the answer materially provides the final result (10) even though it includes a full solution. Alignment and solvability evidence are strong, and the missing image metadata does not block semantic usability here.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-10T18:52:56Z",
+      "finished_at": "2026-04-10T18:52:56Z",
+      "candidate_id": "cand_f39b942e276b2a0f9d930494",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_be5b5b5aa6fb07d6e0ee02cb",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "image_entity_refs": [
+        "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+        "visual_prob_f39b942e276b2a0f9d930494_1::roi_top_left",
+        "visual_prob_f39b942e276b2a0f9d930494_1::roi_top_right",
+        "visual_prob_f39b942e276b2a0f9d930494_1::roi_bottom_left",
+        "visual_prob_f39b942e276b2a0f9d930494_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_f39b942e276b2a0f9d930494_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "point",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_point",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "AB",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "C",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "M",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "N",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "AC",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "MN",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7829
+        },
+        {
+          "text_ref": "slot_prob_f39b942e276b2a0f9d930494_1",
+          "image_ref": "visual_prob_f39b942e276b2a0f9d930494_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7849
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-10T18:52:31Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_d73253b93f71e3aeff6dfd62",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "after_value": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "audit_id": "audit_db94d5d10388b62efec70fef",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$.",
+      "after_value": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "audit_id": "audit_e3a4f091bbee4a3af38d5908",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "audit_id": "audit_798cff790e4e6b353ad0237c",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T18:52:56Z"
+    },
+    {
+      "audit_id": "audit_3f7820517e30afc3ffd21ba7",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "M",
+          "canonical": "M",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "MN",
+          "canonical": "MN",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T18:52:56Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_be5b5b5aa6fb07d6e0ee02cb",
+      "problem_id": "prob_f39b942e276b2a0f9d930494",
+      "source_problem_id": "53210764.png",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_9dd8bf40f49d6e27457f4824",
+          "parent_problem_id": "prob_f39b942e276b2a0f9d930494",
+          "variant_index": 1,
+          "title": "MM-Math 开放题",
+          "rewritten_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+          "expected_answer_type": "set",
+          "expected_answer": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-10T18:52:56Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_9dd8bf40f49d6e27457f4824",
+      "parent_problem_id": "prob_f39b942e276b2a0f9d930494",
+      "variant_index": 1,
+      "title": "MM-Math 开放题",
+      "rewritten_question_text": "As shown in the figure, segment $AB=16\\, \\text{cm}$. A point $C$ is taken on $AB$, where $M$ is the midpoint of $AB$ and $N$ is the midpoint of $AC$. If $MN=3\\, \\text{cm}$, what is the length of segment $AC$?",
+      "expected_answer_type": "set",
+      "expected_answer": "\\textbf{Solution:} Let $CM = a$, and $CN = CM + MN = a + 3$, \\\\\nSince $M$ is the midpoint of $AB$, and $N$ is the midpoint of $AC$, \\\\\nTherefore, $AM = \\frac{1}{2}AB = \\frac{1}{2} \\times 16 = 8$, and $AN = CN = a + 3$, \\\\\nSince $AM = AN + MN = 8$, this implies $a + 3 + 3 = 8$, \\\\\nTherefore, $a = 2$, \\\\\nTherefore, $AC = AM + CM = 8 + 2 = \\boxed{10}$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "mmmath00988",
+  "canonical_sample_index": 988,
+  "canonical_dataset_key": "mm_math",
+  "sample_path": "samples/mmmath00988.json",
+  "image_path": "artifacts/images/mmmath00988.png",
+  "images": [
+    "artifacts/images/mmmath00988.png"
+  ],
+  "crop_path": "artifacts/crops/mmmath00988.png",
+  "crops": [
+    "artifacts/crops/mmmath00988.png"
+  ]
+}

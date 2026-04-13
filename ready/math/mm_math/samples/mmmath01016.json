@@ -1,0 +1,2338 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_54f78b3345db8a23b8266e8f",
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "problem_id": "prob_0e1072f4481ccef0bab28f79",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53639827.png",
+    "raw_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+    "raw_answer_text": "\\textbf{Solution:} Since quadrilateral ABCD is a parallelogram, \\\\\nit follows that $AO = CO$, \\\\\nsince point E is the midpoint of CB, \\\\\nthus OE is the median of $\\triangle ABC$, \\\\\ntherefore $AB = 2OE$, \\\\\nsince $OE = 6\\,cm$, \\\\\nit follows that $AB = \\boxed{12cm}$.",
+    "choice_map": {},
+    "image_paths": [
+      "53639827.png"
+    ],
+    "force_requires_image": true,
+    "question_field": null,
+    "answer_field": null,
+    "image_field": null,
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent",
+      "hf_raw_mm_math_fallback"
+    ],
+    "created_at": "2026-04-11T14:50:34Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_0e1072f4481ccef0bab28f79",
+    "image_manifest": [
+      {
+        "path": "outputs/mm_math_2100_2700/run_c00609b7ac346a51/datasets/mm_math/artifacts/images/prob_0e1072f4481ccef0bab28f79_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 178,
+        "height": 97,
+        "file_size": 2955
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 180,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "long_text",
+      "answer_char_length": 266
+    },
+    "issues": [
+      "metadata.image_field is null"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_54f78b3345db8a23b8266e8f",
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53639827.png",
+    "created_at": "2026-04-11T14:50:34Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_0e1072f4481ccef0bab28f79",
+    "image_dependency_score": 0.62,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.93,
+    "score_evidence": {
+      "image_dependency": [
+        "题干以“As shown in the figure”开头，且 `requires_image=true`、`text_dominant=false`，说明样本被上游标记为依赖图像。",
+        "但关键几何关系已在文字中给出：平行四边形、对角线交点、E 为 BC 中点，因此并非完全只能靠图像读取信息。",
+        "存在 1 张已登记图片且 `registry_passed=true`，说明图像资产可用，但图片尺寸较小（178x97）也降低了复杂视觉读取的证据强度。"
+      ],
+      "multi_step": [
+        "求解需要结合至少两个几何条件：平行四边形对角线互相平分，以及 E 是 BC 的中点。",
+        "从 O、E 与边 AB 的关系推出长度，通常需要经过中点/向量/相似或平移性质的多步推导，不是直接读图或单步代入。",
+        "`multi_solution_policy.should_push_multi_solution_agent=true` 提示该题具备一定多解挖掘潜力，但仅凭输入仍应保持中高分而非极高分。"
+      ],
+      "verifiability": [
+        "标准答案是明确的数值型短答案 `12 cm`，最终结果格式清晰，便于规则校验。",
+        "题目条件封闭，几何关系确定，存在稳定的解析过程，可通过坐标法或几何性质复核。",
+        "`answer_present=true` 且 `registry_passed=true`，有利于后续自动核验。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_field is null",
+      "top-level answer_type is short_text but asset_registry_record.answer_manifest.answer_type is long_text"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_54f78b3345db8a23b8266e8f",
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53639827.png",
+    "created_at": "2026-04-11T14:50:34Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_0e1072f4481ccef0bab28f79",
+    "priority": 0.84,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和图像资产均已存在，核心语义支撑完整，不属于信息不足样本。",
+      "综合打分较好，尤其 verifiability_score=0.93，且答案为明确数值结果，便于后续校验。",
+      "虽然题目依赖图像，但登记记录显示图片可用，且文字中已包含部分关键几何关系，样本仍具备较强可恢复性。",
+      "当前风险主要是元数据层面的 `metadata.image_field is null` 和答案类型不一致，并未直接破坏题目主体内容。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_54f78b3345db8a23b8266e8f",
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53639827.png",
+    "created_at": "2026-04-11T14:50:34Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_54f78b3345db8a23b8266e8f",
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "problem_id": "prob_0e1072f4481ccef0bab28f79",
+    "dataset_name": "MM-Math",
+    "normalized_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+    "normalized_answer_text": "12 cm",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Retained the original question wording because it explicitly references the figure.",
+      "Extracted the final answer value from the worked solution and normalized spacing/units.",
+      "Set requires_image=true and cleaning_path=multimodal_full because force_requires_image is true."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-11T14:50:34Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "source_dataset": "MM-Math",
+    "source_split": "train[2100:2700]",
+    "source_problem_id": "53639827.png",
+    "subject": "数学",
+    "raw_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+    "raw_answer_text": "\\textbf{Solution:} Since quadrilateral ABCD is a parallelogram, \\\\\nit follows that $AO = CO$, \\\\\nsince point E is the midpoint of CB, \\\\\nthus OE is the median of $\\triangle ABC$, \\\\\ntherefore $AB = 2OE$, \\\\\nsince $OE = 6\\,cm$, \\\\\nit follows that $AB = \\boxed{12cm}$.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.62,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.93,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 460,
+      "image_paths": [
+        "53639827.png"
+      ],
+      "extraction_notes": [
+        "source_intake_agent",
+        "hf_raw_mm_math_fallback"
+      ],
+      "image_field": null
+    },
+    "created_at": "2026-04-11T14:51:53Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已存在，核心语义支撑完整，不属于信息不足样本。",
+      "综合打分较好，尤其 verifiability_score=0.93，且答案为明确数值结果，便于后续校验。",
+      "虽然题目依赖图像，但登记记录显示图片可用，且文字中已包含部分关键几何关系，样本仍具备较强可恢复性。",
+      "当前风险主要是元数据层面的 `metadata.image_field is null` 和答案类型不一致，并未直接破坏题目主体内容。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_field is null",
+      "top-level answer_type is short_text but asset_registry_record.answer_manifest.answer_type is long_text"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_9d53fa4247aa490889770084",
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53639827.png",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_0e1072f4481ccef0bab28f79/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_0e1072f4481ccef0bab28f79/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53639827.png",
+        "is_present": true,
+        "width": 178,
+        "height": 97
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.62,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.93
+    },
+    "created_at": "2026-04-11T14:51:53Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_field is null"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_ea582f2b25eae9b5ae301e22",
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53639827.png",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.84,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.62,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.93
+    },
+    "created_at": "2026-04-11T14:51:53Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和图像资产均已存在，核心语义支撑完整，不属于信息不足样本。",
+      "综合打分较好，尤其 verifiability_score=0.93，且答案为明确数值结果，便于后续校验。",
+      "虽然题目依赖图像，但登记记录显示图片可用，且文字中已包含部分关键几何关系，样本仍具备较强可恢复性。",
+      "当前风险主要是元数据层面的 `metadata.image_field is null` 和答案类型不一致，并未直接破坏题目主体内容。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_54f78b3345db8a23b8266e8f",
+      "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "dataset_name": "MM-Math",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-11T14:51:53Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_54f78b3345db8a23b8266e8f",
+    "problem_id": "prob_0e1072f4481ccef0bab28f79",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53639827.png",
+    "normalized_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+    "normalized_answer_text": "12cm",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-11T14:51:53Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_54f78b3345db8a23b8266e8f",
+    "problem_id": "prob_0e1072f4481ccef0bab28f79",
+    "normalized_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+    "normalized_answer_text": "12cm",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "ABCD",
+        "canonical": "ABCD",
+        "variable_type": "label"
+      },
+      {
+        "original": "AC",
+        "canonical": "AC",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "BD",
+        "canonical": "BD",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "O",
+        "canonical": "O",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "E",
+        "canonical": "E",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "BC",
+        "canonical": "BC",
+        "variable_type": "label"
+      },
+      {
+        "original": "If",
+        "canonical": "If",
+        "variable_type": "label"
+      },
+      {
+        "original": "OE",
+        "canonical": "OE",
+        "variable_type": "label"
+      },
+      {
+        "original": "cm",
+        "canonical": "cm",
+        "variable_type": "label"
+      },
+      {
+        "original": "AB",
+        "canonical": "AB",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$."
+      },
+      {
+        "segment_index": 2,
+        "text": "If $OE = 6\\,cm$, what is the length of $AB$?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53639827.png",
+        "roi_bbox": {
+          "x": 0,
+          "y": 2,
+          "width": 177,
+          "height": 89
+        },
+        "readability_score": 0.6946,
+        "contrast_score": 44.2211
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-11T14:51:53Z",
+    "normalization_notes": [
+      "Retained the original question wording because it explicitly references the figure.",
+      "Extracted the final answer value from the worked solution and normalized spacing/units.",
+      "Set requires_image=true and cleaning_path=multimodal_full because force_requires_image is true."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_0e1072f4481ccef0bab28f79",
+    "source_dataset": "MM-Math",
+    "source_split": "train[2100:2700]",
+    "source_problem_id": "53639827.png",
+    "ingest_batch_id": "benchmarkallinone-mm-math-2100-2700_20260411T021519Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+    "normalized_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+    "raw_answer_text": "\\textbf{Solution:} Since quadrilateral ABCD is a parallelogram, \\\\\nit follows that $AO = CO$, \\\\\nsince point E is the midpoint of CB, \\\\\nthus OE is the median of $\\triangle ABC$, \\\\\ntherefore $AB = 2OE$, \\\\\nsince $OE = 6\\,cm$, \\\\\nit follows that $AB = \\boxed{12cm}$.",
+    "normalized_answer_text": "12 cm",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9665,
+    "multi_step_score": 0.4007,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "metadata.image_field is null",
+      "metadata_image_missing_field",
+      "visual_evidence_weak"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The problem and solution are complete, the rewritten open variant is usable, and the geometry relation needed to derive the answer is clearly supported by the text and diagram despite minor visual/metadata weakness.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-11T14:50:34Z",
+    "updated_at": "2026-04-11T14:51:53Z",
+    "initial_image_dependency_score": 0.62,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.93,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已存在，核心语义支撑完整，不属于信息不足样本。",
+      "综合打分较好，尤其 verifiability_score=0.93，且答案为明确数值结果，便于后续校验。",
+      "虽然题目依赖图像，但登记记录显示图片可用，且文字中已包含部分关键几何关系，样本仍具备较强可恢复性。",
+      "当前风险主要是元数据层面的 `metadata.image_field is null` 和答案类型不一致，并未直接破坏题目主体内容。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_e734559eaec2231640e96e6d",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mm_math/train[2100:2700]/53639827.png/question",
+      "storage_uri": "inline://prob_0e1072f4481ccef0bab28f79/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 180,
+      "width": null,
+      "height": null,
+      "sha256": "124ef1405959728e9a8032e0ffebf4ffd4648cb10dc291a7a1d80cd7d44d617e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7107,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "OE",
+          "canonical": "OE",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "asset_id": "asset_ed2717ccc4f81eea5f3157af",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_0e1072f4481ccef0bab28f79/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 180,
+      "width": null,
+      "height": null,
+      "sha256": "124ef1405959728e9a8032e0ffebf4ffd4648cb10dc291a7a1d80cd7d44d617e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "normalized_text_snapshot": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "text_completeness_score": 0.7107,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "OE",
+          "canonical": "OE",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "asset_id": "asset_f7e6462325b39c5fa07e22d3",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mm_math/train[2100:2700]/53639827.png/answer",
+      "storage_uri": "inline://prob_0e1072f4481ccef0bab28f79/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 266,
+      "width": null,
+      "height": null,
+      "sha256": "0bd1589d134f0dc925d2525bf4ef098a163655de07afe60f10b6f3227ba5baed",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Since quadrilateral ABCD is a parallelogram, \\\\\nit follows that $AO = CO$, \\\\\nsince point E is the midpoint of CB, \\\\\nthus OE is the median of $\\triangle ABC$, \\\\\ntherefore $AB = 2OE$, \\\\\nsince $OE = 6\\,cm$, \\\\\nit follows that $AB = \\boxed{12cm}$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "asset_id": "asset_228107093ae533c65f421b80",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_0e1072f4481ccef0bab28f79/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 5,
+      "width": null,
+      "height": null,
+      "sha256": "7904c58c7645b735bc5b08581d5754a3dda5112dc87f29af065fca75881aa1ee",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Since quadrilateral ABCD is a parallelogram, \\\\\nit follows that $AO = CO$, \\\\\nsince point E is the midpoint of CB, \\\\\nthus OE is the median of $\\triangle ABC$, \\\\\ntherefore $AB = 2OE$, \\\\\nsince $OE = 6\\,cm$, \\\\\nit follows that $AB = \\boxed{12cm}$.",
+      "normalized_text_snapshot": "12 cm",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "asset_id": "asset_824730befd250674aa10076d",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53639827.png",
+      "storage_uri": "outputs/mm_math_2100_2700/run_c00609b7ac346a51/datasets/mm_math/artifacts/images/prob_0e1072f4481ccef0bab28f79_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 2955,
+      "width": 178,
+      "height": 97,
+      "sha256": "5aaebc354e5b66625a45c6665d6d1b8f7ecc3cf8fd0af8e60d51bbef303f608c",
+      "perceptual_hash": "c0c8e7a5cf3303df",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 10817.9697,
+      "readability_score": 0.6946,
+      "noise_score": 36.588,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 2,
+        "width": 177,
+        "height": 89
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_field is null",
+        "metadata_image_missing_field",
+        "visual_evidence_weak"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "asset_id": "asset_226040d45a48315083152a73",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mm_math_2100_2700/run_c00609b7ac346a51/datasets/mm_math/artifacts/crops/prob_0e1072f4481ccef0bab28f79_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 2918,
+      "width": 177,
+      "height": 89,
+      "sha256": "26eef6a0f1a43f4ea71770ef1275363d72c53fdd6dd3dcdf8be52bdbae54d09e",
+      "perceptual_hash": "c0dce3a7cfbb03db",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 10817.9697,
+      "readability_score": 0.6946,
+      "noise_score": 36.588,
+      "cropped_from_asset_id": "asset_824730befd250674aa10076d",
+      "roi_bbox": {
+        "x": 0,
+        "y": 2,
+        "width": 177,
+        "height": 89
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "asset_id": "asset_35b03e5ddb35450eecf6bc84",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_d9970b69036418093d12a01e",
+      "file_format": "txt",
+      "file_size_bytes": 180,
+      "width": null,
+      "height": null,
+      "sha256": "124ef1405959728e9a8032e0ffebf4ffd4648cb10dc291a7a1d80cd7d44d617e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "normalized_text_snapshot": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "text_completeness_score": 0.7107,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "OE",
+          "canonical": "OE",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_0e1072f4481ccef0bab28f79",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "If $OE = 6\\,cm$, what is the length of $AB$?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "6"
+          ],
+          "unit_mentions": [
+            "A",
+            "cm",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_0e1072f4481ccef0bab28f79_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "If $OE = 6\\,cm$, what is the length of $AB$?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "12 cm",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "point",
+          "entity_category": "point",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "O",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "E",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "OE",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AB",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "OE",
+          "canonical": "OE",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "cm",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$."
+        },
+        {
+          "segment_index": 2,
+          "text": "If $OE = 6\\,cm$, what is the length of $AB$?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-11T14:51:30Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_0e1072f4481ccef0bab28f79_1",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.8351,
+        "dark_pixel_ratio": 0.0913,
+        "readability_score": 0.6946,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 178,
+            "height": 97
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 2,
+            "width": 177,
+            "height": 89
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 2,
+            "width": 88,
+            "height": 44
+          },
+          "salience": 0.4254
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 88,
+            "y": 2,
+            "width": 89,
+            "height": 44
+          },
+          "salience": 0.4795
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 46,
+            "width": 88,
+            "height": 45
+          },
+          "salience": 0.4854
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 88,
+            "y": 46,
+            "width": 89,
+            "height": 45
+          },
+          "salience": 0.4104
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8778,
+      "created_at": "2026-04-11T14:51:30Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_0e1072f4481ccef0bab28f79",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-11T14:51:39Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_91d732b5458d38712762580a",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$.",
+      "surface_forms": [
+        "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_ed2717ccc4f81eea5f3157af"
+      ],
+      "evidence_refs": [
+        "asset_ed2717ccc4f81eea5f3157af"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_d5059625f6d6e574cc7eca65",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "target_slot",
+      "canonical_value": "If $OE = 6\\,cm$, what is the length of $AB$?",
+      "surface_forms": [
+        "If $OE = 6\\,cm$, what is the length of $AB$?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_ed2717ccc4f81eea5f3157af"
+      ],
+      "evidence_refs": [
+        "asset_ed2717ccc4f81eea5f3157af"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_0e1072f4481ccef0bab28f79_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "If $OE = 6\\,cm$, what is the length of $AB$?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "12 cm",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_991e1a349e30e383f79ec64e",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "answer_claim",
+      "canonical_value": "12 cm",
+      "surface_forms": [
+        "12 cm"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_228107093ae533c65f421b80"
+      ],
+      "evidence_refs": [
+        "asset_228107093ae533c65f421b80"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "12 cm"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_03f6a27b3b0a4e91fe78e137",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 178,
+          "height": 97
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8778,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_7e289efb974f1295916b4471",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 2,
+          "width": 177,
+          "height": 89
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8778,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_a9f93547d8fecabc32d1ab8e",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 2,
+          "width": 88,
+          "height": 44
+        },
+        "salience": 0.4254
+      },
+      "unit": null,
+      "confidence": 0.8778,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_6ba009aed30731199c119b5e",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 88,
+          "y": 2,
+          "width": 89,
+          "height": 44
+        },
+        "salience": 0.4795
+      },
+      "unit": null,
+      "confidence": 0.8778,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_4b1006cf373430ddb45912cc",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 46,
+          "width": 88,
+          "height": 45
+        },
+        "salience": 0.4854
+      },
+      "unit": null,
+      "confidence": 0.8778,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_0e5deec6a74fa4623000d07a",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 88,
+          "y": 46,
+          "width": 89,
+          "height": 45
+        },
+        "salience": 0.4104
+      },
+      "unit": null,
+      "confidence": 0.8778,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_080295fa52ea42a579dd1af4",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "surface_forms": [
+        "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_35b03e5ddb35450eecf6bc84"
+      ],
+      "evidence_refs": [
+        "asset_35b03e5ddb35450eecf6bc84"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_d9970b69036418093d12a01e",
+        "parent_problem_id": "prob_0e1072f4481ccef0bab28f79",
+        "variant_index": 1,
+        "title": "MM-Math 开放题",
+        "rewritten_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "12 cm",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_9c079a16d90cfd56776fc844",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_field is null",
+      "surface_forms": [
+        "metadata.image_field is null"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_field is null"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_b3dd51c124017834505556f5",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_image_missing_field",
+      "surface_forms": [
+        "metadata_image_missing_field"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_image_missing_field"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_b5bff1fb54b6a85c9c5c6d69",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "quality_signal",
+      "canonical_value": "visual_evidence_weak",
+      "surface_forms": [
+        "visual_evidence_weak"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "visual_evidence_weak"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_8058eefab290c51cb12332b0",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_0e1072f4481ccef0bab28f79",
+        "problem_id": "prob_0e1072f4481ccef0bab28f79",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-11T14:51:39Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "node_id": "node_b5b6a346f4726e7ad71dcb56",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T14:51:53Z",
+      "updated_at": "2026-04-11T14:51:53Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_54f78b3345db8a23b8266e8f",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_c00609b7ac346a51",
+      "dataset_name": "MM-Math",
+      "input_asset_ids": [
+        "asset_e734559eaec2231640e96e6d",
+        "asset_ed2717ccc4f81eea5f3157af",
+        "asset_f7e6462325b39c5fa07e22d3",
+        "asset_228107093ae533c65f421b80",
+        "asset_824730befd250674aa10076d",
+        "asset_226040d45a48315083152a73",
+        "asset_35b03e5ddb35450eecf6bc84"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 17
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.92,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 178,
+            "height": 97,
+            "blur_score": 10817.9697,
+            "contrast_score": 44.2211,
+            "noise_score": 36.588,
+            "readability_score": 0.6946,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 2,
+              "width": 177,
+              "height": 89
+            },
+            "perceptual_hash": "c0c8e7a5cf3303df"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_54f78b3345db8a23b8266e8f",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_0e1072f4481ccef0bab28f79",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_0e1072f4481ccef0bab28f79",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "diagram_semantics_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text fully states the geometry problem and expected numeric answer, and the diagram, though small, clearly shows a parallelogram with diagonals intersecting at O and E marked as the midpoint on BC. The image is needed for the geometric configuration, but it is still semantically usable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_field is null",
+        "metadata_image_missing_field",
+        "visual_evidence_weak"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The problem and solution are complete, the rewritten open variant is usable, and the geometry relation needed to derive the answer is clearly supported by the text and diagram despite minor visual/metadata weakness.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-11T14:51:53Z",
+      "finished_at": "2026-04-11T14:51:53Z",
+      "candidate_id": "cand_0e1072f4481ccef0bab28f79",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_54f78b3345db8a23b8266e8f",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "image_entity_refs": [
+        "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+        "visual_prob_0e1072f4481ccef0bab28f79_1::roi_top_left",
+        "visual_prob_0e1072f4481ccef0bab28f79_1::roi_top_right",
+        "visual_prob_0e1072f4481ccef0bab28f79_1::roi_bottom_left",
+        "visual_prob_0e1072f4481ccef0bab28f79_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_0e1072f4481ccef0bab28f79_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "point",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_point",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "AC",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "BD",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "O",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "E",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "BC",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "OE",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "AB",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7695
+        },
+        {
+          "text_ref": "slot_prob_0e1072f4481ccef0bab28f79_1",
+          "image_ref": "visual_prob_0e1072f4481ccef0bab28f79_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7731
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-11T14:51:30Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_696687b26e1ab7f9af80a10f",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "after_value": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "audit_id": "audit_8e9168793c3c45bc433e7cb6",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "\\textbf{Solution:} Since quadrilateral ABCD is a parallelogram, \\\\\nit follows that $AO = CO$, \\\\\nsince point E is the midpoint of CB, \\\\\nthus OE is the median of $\\triangle ABC$, \\\\\ntherefore $AB = 2OE$, \\\\\nsince $OE = 6\\,cm$, \\\\\nit follows that $AB = \\boxed{12cm}$.",
+      "after_value": "12 cm",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "audit_id": "audit_9310865b2af774b798f4d60e",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "audit_id": "audit_b5b6a346f4726e7ad71dcb56",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T14:51:53Z"
+    },
+    {
+      "audit_id": "audit_2d4f0ae18200c8f399b42740",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "OE",
+          "canonical": "OE",
+          "variable_type": "label"
+        },
+        {
+          "original": "cm",
+          "canonical": "cm",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T14:51:53Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_54f78b3345db8a23b8266e8f",
+      "problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "source_problem_id": "53639827.png",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_d9970b69036418093d12a01e",
+          "parent_problem_id": "prob_0e1072f4481ccef0bab28f79",
+          "variant_index": 1,
+          "title": "MM-Math 开放题",
+          "rewritten_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "12 cm",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-11T14:51:53Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_d9970b69036418093d12a01e",
+      "parent_problem_id": "prob_0e1072f4481ccef0bab28f79",
+      "variant_index": 1,
+      "title": "MM-Math 开放题",
+      "rewritten_question_text": "As shown in the figure, in parallelogram $ABCD$, diagonals $AC$ and $BD$ intersect at point $O$, and point $E$ is the midpoint of $BC$. If $OE = 6\\,cm$, what is the length of $AB$?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "12 cm",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "mmmath01016",
+  "canonical_sample_index": 1016,
+  "canonical_dataset_key": "mm_math",
+  "sample_path": "samples/mmmath01016.json",
+  "image_path": "artifacts/images/mmmath01016.png",
+  "images": [
+    "artifacts/images/mmmath01016.png"
+  ],
+  "crop_path": "artifacts/crops/mmmath01016.png",
+  "crops": [
+    "artifacts/crops/mmmath01016.png"
+  ]
+}

@@ -1,0 +1,1711 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_b6e779d3782d790ae6e4a705",
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "problem_id": "prob_1082fbd6820c61cae123e1f0",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "734",
+    "raw_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$ 。设 $S^{\\prime}$ 以匀速 $v$沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$ 。",
+    "raw_answer_text": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right) P_{0}$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(232, 154)>",
+      "<PIL.PngImagePlugin.PngImageFile image mode=RGBA size=232x154 at 0x7DD7E8815BD0>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "题干含“如图所示”，按明显图像依赖处理",
+      "images/image_paths 字段中的值是 PIL 对象字符串表示，不是实际文件路径或 URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-09T13:59:43Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_1082fbd6820c61cae123e1f0",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_1082fbd6820c61cae123e1f0_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 232,
+        "height": 154,
+        "file_size": 23516
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 113,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 46
+    },
+    "issues": [
+      "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_b6e779d3782d790ae6e4a705",
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "734",
+    "created_at": "2026-04-09T13:59:43Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_1082fbd6820c61cae123e1f0",
+    "image_dependency_score": 0.88,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.93,
+    "score_evidence": {
+      "image_dependency": [
+        "题干以“如图所示”开头，且 `requires_image=true`、`text_dominant=false`，说明样本被上游标记为明显依赖图示。",
+        "题目涉及光束、反射体法线方向与相对运动方向，属于空间/几何关系表达，图像可显著补足布局信息。",
+        "资产登记中存在 1 张有效图片且 `registry_passed=true`，支持该题确有可用图像载体。"
+      ],
+      "multi_step": [
+        "要求从移动全反射体下的入射光功率推到反射后被光源接收的功率，通常需要组合相对运动、反射条件与功率/频率变化，不是单步代入。",
+        "答案是含 `beta` 的比值公式 `((1+beta)/(1-beta))P0`，表明解法涉及至少两层关系联立，而非直接读图或单一公式摘取。",
+        "题干给出多个物理对象与条件（平行光、全反射、沿法线匀速靠近），具备较明显的多条件推理特征。"
+      ],
+      "verifiability": [
+        "答案类型为 `short_text`，且给出明确封闭形式公式，结果边界清晰，便于规则或符号方式核验。",
+        "题目变量少（`P0`、`beta`/`v`），目标量唯一（`P`），后续可检查量纲、极限情形如 `beta->0` 是否回到 `P0`。",
+        "`answer_present=true` 且 `registry_passed=true`，基础数据完整，利于做结果级与过程级验证。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs",
+      "未直接提供图像内容本身，图像依赖程度虽高但仍主要依据字段标注与题干措辞保守判断"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_b6e779d3782d790ae6e4a705",
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "734",
+    "created_at": "2026-04-09T13:59:43Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_1082fbd6820c61cae123e1f0",
+    "priority": 0.91,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和1张有效图片均已登记且 `registry_passed=true`，核心语义资产完整。",
+      "初步评分较高：图像依赖 0.88、多步推理 0.74、可验证性 0.93，样本质量与价值较好。",
+      "虽存在 `metadata.image_paths` 记录异常，但 `image_manifest` 中已有实际存在的图片文件，问题未影响核心资产可用性。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_b6e779d3782d790ae6e4a705",
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "734",
+    "created_at": "2026-04-09T13:59:43Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_b6e779d3782d790ae6e4a705",
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "problem_id": "prob_1082fbd6820c61cae123e1f0",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+    "normalized_answer_text": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "题干显式依赖配图中的光路与运动方向关系。",
+      "清理了少量中英文间距与标点格式，未改动原始语义。",
+      "无选项，保留空选项映射。"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-09T13:59:43Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "734",
+    "subject": "物理",
+    "raw_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$ 。设 $S^{\\prime}$ 以匀速 $v$沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$ 。",
+    "raw_answer_text": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right) P_{0}$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.88,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.93,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 734,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(232, 154)>",
+        "<PIL.PngImagePlugin.PngImageFile image mode=RGBA size=232x154 at 0x7DD7E8815BD0>"
+      ],
+      "extraction_notes": [
+        "题干含“如图所示”，按明显图像依赖处理",
+        "images/image_paths 字段中的值是 PIL 对象字符串表示，不是实际文件路径或 URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "解 设置随光源的 $S$ 系和随反射体的 $S^{\\prime}$ 系。光源在 $S$ 系中单位时间内发出的第 $i$ 种光子的频率和光子数分别记为 $\nu_{0}$ 和 $n_{0}$ ，则有\n$$\nP_{0}=\\sum_{i} n_{0 i} h \nu_{0 i} .\n$$\n\n反射体因多普勒效应，接收到的和反射出去的光子频率同为\n$$\n\nu_{i}^{\\prime}=\\sqrt{\\frac{1+\\beta}{1-\\beta}} \nu_{0 i}, \\beta=\\frac{v}{c},\n$$\n同样由于多普勒效应，光源 $S$ 接收到的光子频率为\n$$\n\nu_{i}=\\sqrt{\\frac{1+\\beta}{1-\\beta}} \nu_{i}^{\\prime}=\\frac{1+\\beta}{1-\\beta^{0}}{ }^{0 i} .\n$$\n\n考虑到光源 $S$ 的 1 个本征单位时间折合成 $S^{\\prime}$ 系的 $1 / \\sqrt{1-\\beta^{2}}$ 个单位时间，$S^{\\prime}$ 系认为光源在 $S^{\\prime}$ 系的 1 个单位时间内发出的光子数应为\n$$\nn_{0 i}^{\\prime}=\\sqrt{1-\\beta^{2}} n_{0 i} \\text {. }\n$$\n$S^{\\prime}$ 系中的观察者还认为 $S$ 边运动边发射光子，$S^{\\prime}$ 系中单位时间内由 $S$ 发出的 $n_{0}^{\\prime}$ 个光子都应在题解图中画斜线的区域内，它们可在而后的\n$$\n\\Delta t^{\\prime}=\\frac{c-v}{c} \\times \\text { 单位时间 }\n$$\n\n内全部到达 $S^{\\prime}$ 。故在 $S^{\\prime}$ 系中单位时间内到达反射体，接着又被反射回去的光子数应为\n$$\nn_{0 i}^{\\prime \\prime}=\\frac{n_{0 i}^{\\prime} \\times \\text { 单位时间 }}{\\Delta t^{\\prime}}=\\frac{c}{c-v} \\sqrt{1-\\beta^{2}} n_{0 i}=\\sqrt{\\frac{1+\\beta}{1-\\beta}} n_{0 i} \\text {, }\n$$\n\n对 $S$ 系中的观察者，反射体以速度 $v$ 朝 $S$ 运动，同理，$S$ 在单位时间接收到的光子数为\n$$\nn_{i}=\\sqrt{\\frac{1+\\beta}{1-\\beta}} n_{0 i}^{\\prime \\prime}=\\frac{1+\\beta}{1-\\beta^{20 i}} .\n$$\n\n综合上述两个方面因素，$S$ 接收到的光功率为\n$$\nP=\\sum_{i} n_{i} h \nu_{i}=\\left(\\sum_{i} n_{0 i} h \nu_{0 i}\\right)\\left(\\frac{1+\\beta}{1-\\beta}\\right)^{2},\n$$\n\n即\n$$\nP=\\left(\\frac{1+\\beta}{1-\\beta}\\right) P_{0} .\n$$\n$S$ 接收到的反射光功率大于发射出去的光功率，一方面是因为反射体受到光压作用，为维持反射体的匀速运动，外力必须作功，此功转化为反射光的能量。另一方面是因为 $S$的接收时间间隔短于 $S$ 的反射时间间隔，",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-09T14:00:55Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.91,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和1张有效图片均已登记且 `registry_passed=true`，核心语义资产完整。",
+      "初步评分较高：图像依赖 0.88、多步推理 0.74、可验证性 0.93，样本质量与价值较好。",
+      "虽存在 `metadata.image_paths` 记录异常，但 `image_manifest` 中已有实际存在的图片文件，问题未影响核心资产可用性。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs",
+      "未直接提供图像内容本身，图像依赖程度虽高但仍主要依据字段标注与题干措辞保守判断"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_5d9bfa4b3a0dd22285df1bb4",
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "734",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_1082fbd6820c61cae123e1f0/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_1082fbd6820c61cae123e1f0/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 232,
+        "height": 154
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.88,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.93
+    },
+    "created_at": "2026-04-09T14:00:55Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_a945f693b2cf6c99968ee515",
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "734",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.91,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.88,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.93
+    },
+    "created_at": "2026-04-09T14:00:55Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和1张有效图片均已登记且 `registry_passed=true`，核心语义资产完整。",
+      "初步评分较高：图像依赖 0.88、多步推理 0.74、可验证性 0.93，样本质量与价值较好。",
+      "虽存在 `metadata.image_paths` 记录异常，但 `image_manifest` 中已有实际存在的图片文件，问题未影响核心资产可用性。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_b6e779d3782d790ae6e4a705",
+      "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-09T14:00:55Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_b6e779d3782d790ae6e4a705",
+    "problem_id": "prob_1082fbd6820c61cae123e1f0",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "734",
+    "normalized_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+    "normalized_answer_text": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-09T14:00:55Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_b6e779d3782d790ae6e4a705",
+    "problem_id": "prob_1082fbd6820c61cae123e1f0",
+    "normalized_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+    "normalized_answer_text": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "S",
+        "canonical": "S",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "v",
+        "canonical": "v",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "P",
+        "canonical": "P",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 9,
+          "y": 5,
+          "width": 219,
+          "height": 135
+        },
+        "readability_score": 0.7352,
+        "contrast_score": 32.6797
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-09T14:00:55Z",
+    "normalization_notes": [
+      "题干显式依赖配图中的光路与运动方向关系。",
+      "清理了少量中英文间距与标点格式，未改动原始语义。",
+      "无选项，保留空选项映射。"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_1082fbd6820c61cae123e1f0",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "734",
+    "ingest_batch_id": "benchmarkallinone-seephys-600-2000_20260408T142422Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$ 。设 $S^{\\prime}$ 以匀速 $v$沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$ 。",
+    "normalized_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+    "raw_answer_text": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right) P_{0}$",
+    "normalized_answer_text": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "解 设置随光源的 $S$ 系和随反射体的 $S^{\\prime}$ 系。光源在 $S$ 系中单位时间内发出的第 $i$ 种光子的频率和光子数分别记为 $\nu_{0}$ 和 $n_{0}$ ，则有\n$$\nP_{0}=\\sum_{i} n_{0 i} h \nu_{0 i} .\n$$\n\n反射体因多普勒效应，接收到的和反射出去的光子频率同为\n$$\n\nu_{i}^{\\prime}=\\sqrt{\\frac{1+\\beta}{1-\\beta}} \nu_{0 i}, \\beta=\\frac{v}{c},\n$$\n同样由于多普勒效应，光源 $S$ 接收到的光子频率为\n$$\n\nu_{i}=\\sqrt{\\frac{1+\\beta}{1-\\beta}} \nu_{i}^{\\prime}=\\frac{1+\\beta}{1-\\beta^{0}}{ }^{0 i} .\n$$\n\n考虑到光源 $S$ 的 1 个本征单位时间折合成 $S^{\\prime}$ 系的 $1 / \\sqrt{1-\\beta^{2}}$ 个单位时间，$S^{\\prime}$ 系认为光源在 $S^{\\prime}$ 系的 1 个单位时间内发出的光子数应为\n$$\nn_{0 i}^{\\prime}=\\sqrt{1-\\beta^{2}} n_{0 i} \\text {. }\n$$\n$S^{\\prime}$ 系中的观察者还认为 $S$ 边运动边发射光子，$S^{\\prime}$ 系中单位时间内由 $S$ 发出的 $n_{0}^{\\prime}$ 个光子都应在题解图中画斜线的区域内，它们可在而后的\n$$\n\\Delta t^{\\prime}=\\frac{c-v}{c} \\times \\text { 单位时间 }\n$$\n\n内全部到达 $S^{\\prime}$ 。故在 $S^{\\prime}$ 系中单位时间内到达反射体，接着又被反射回去的光子数应为\n$$\nn_{0 i}^{\\prime \\prime}=\\frac{n_{0 i}^{\\prime} \\times \\text { 单位时间 }}{\\Delta t^{\\prime}}=\\frac{c}{c-v} \\sqrt{1-\\beta^{2}} n_{0 i}=\\sqrt{\\frac{1+\\beta}{1-\\beta}} n_{0 i} \\text {, }\n$$\n\n对 $S$ 系中的观察者，反射体以速度 $v$ 朝 $S$ 运动，同理，$S$ 在单位时间接收到的光子数为\n$$\nn_{i}=\\sqrt{\\frac{1+\\beta}{1-\\beta}} n_{0 i}^{\\prime \\prime}=\\frac{1+\\beta}{1-\\beta^{20 i}} .\n$$\n\n综合上述两个方面因素，$S$ 接收到的光功率为\n$$\nP=\\sum_{i} n_{i} h \nu_{i}=\\left(\\sum_{i} n_{0 i} h \nu_{0 i}\\right)\\left(\\frac{1+\\beta}{1-\\beta}\\right)^{2},\n$$\n\n即\n$$\nP=\\left(\\frac{1+\\beta}{1-\\beta}\\right) P_{0} .\n$$\n$S$ 接收到的反射光功率大于发射出去的光功率，一方面是因为反射体受到光压作用，为维持反射体的匀速运动，外力必须作功，此功转化为反射光的能量。另一方面是因为 $S$的接收时间间隔短于 $S$ 的反射时间间隔，",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9585,
+    "multi_step_score": 0.3197,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "low_resolution_image",
+      "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "题干与答案完整，图文能够共同支持题意理解，重写结果可直接用于标注。虽有低分辨率图像和元数据路径异常等软风险，但未影响样本的语义可用性，也未显示出实质性的对齐或可解性失败。",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-09T13:59:43Z",
+    "updated_at": "2026-04-09T14:00:55Z",
+    "initial_image_dependency_score": 0.88,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.93,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.91,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和1张有效图片均已登记且 `registry_passed=true`，核心语义资产完整。",
+      "初步评分较高：图像依赖 0.88、多步推理 0.74、可验证性 0.93，样本质量与价值较好。",
+      "虽存在 `metadata.image_paths` 记录异常，但 `image_manifest` 中已有实际存在的图片文件，问题未影响核心资产可用性。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_7c8de08e07391d0a1795494b",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[600:2000]/734/question",
+      "storage_uri": "inline://prob_1082fbd6820c61cae123e1f0/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 217,
+      "width": null,
+      "height": null,
+      "sha256": "f9ced855ecb0049decdb91500e36fff52c5687e62c175dd676f8822591a0146e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$ 。设 $S^{\\prime}$ 以匀速 $v$沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$ 。",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.65,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "asset_id": "asset_e003f58c88b580556c17e3df",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1082fbd6820c61cae123e1f0/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 216,
+      "width": null,
+      "height": null,
+      "sha256": "310d65e243277434bab9f938334a32d42c59e46c276ece7c41aff0aa6ea3ffbc",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$ 。设 $S^{\\prime}$ 以匀速 $v$沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$ 。",
+      "normalized_text_snapshot": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+      "text_completeness_score": 0.65,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "asset_id": "asset_2d6885d8f4b96519bbfad851",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[600:2000]/734/answer",
+      "storage_uri": "inline://prob_1082fbd6820c61cae123e1f0/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 46,
+      "width": null,
+      "height": null,
+      "sha256": "2825c4e8224d3bd6b53e8354b57557fc929fcdbf4c8200f06d303959b0e5ed0d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right) P_{0}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "beta",
+          "canonical": "beta",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "asset_id": "asset_6a3e45b1a33911eb48b62a18",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1082fbd6820c61cae123e1f0/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 45,
+      "width": null,
+      "height": null,
+      "sha256": "cbcd0b70ce1e04bb7c0e808a82c23a9481efb58ad010894ad5cb53cf55343fc4",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right) P_{0}$",
+      "normalized_text_snapshot": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "beta",
+          "canonical": "beta",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "asset_id": "asset_2e324eb43e3b2b6730bd57a9",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_1082fbd6820c61cae123e1f0_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 23516,
+      "width": 232,
+      "height": 154,
+      "sha256": "74c930d6837da1534621c83b4da87d16d7da7d2174ed434cc70173afbffa4762",
+      "perceptual_hash": "7f7f7f3918387fff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2826.4868,
+      "readability_score": 0.7352,
+      "noise_score": 24.0416,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 9,
+        "y": 5,
+        "width": 219,
+        "height": 135
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "low_resolution_image",
+        "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "asset_id": "asset_6a149ead22c92850155c92a5",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/crops/prob_1082fbd6820c61cae123e1f0_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 21371,
+      "width": 219,
+      "height": 135,
+      "sha256": "d50e72ff08fadc7be310f956f1d39ec3ff93e8d64a20ac2bfdd5a0d4685d28a7",
+      "perceptual_hash": "7f7f7f7918187f7f",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2826.4868,
+      "readability_score": 0.7352,
+      "noise_score": 24.0416,
+      "cropped_from_asset_id": "asset_2e324eb43e3b2b6730bd57a9",
+      "roi_bbox": {
+        "x": 9,
+        "y": 5,
+        "width": 219,
+        "height": 135
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "asset_id": "asset_21ed5b6eec80023453273bae",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_8ef46bc6a181df880e52d5da",
+      "file_format": "txt",
+      "file_size_bytes": 216,
+      "width": null,
+      "height": null,
+      "sha256": "310d65e243277434bab9f938334a32d42c59e46c276ece7c41aff0aa6ea3ffbc",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$ 。设 $S^{\\prime}$ 以匀速 $v$沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$ 。",
+      "normalized_text_snapshot": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+      "text_completeness_score": 0.65,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_1082fbd6820c61cae123e1f0",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0"
+          ],
+          "unit_mentions": [
+            "m"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0"
+          ],
+          "unit_mentions": [
+            "m"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_1082fbd6820c61cae123e1f0_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "S",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "P",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-09T14:00:36Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_1082fbd6820c61cae123e1f0_1",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.5065,
+        "dark_pixel_ratio": 0.0508,
+        "readability_score": 0.7352,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 232,
+            "height": 154
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 9,
+            "y": 5,
+            "width": 219,
+            "height": 135
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 9,
+            "y": 72,
+            "width": 109,
+            "height": 68
+          },
+          "salience": 0.4358
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 118,
+            "y": 72,
+            "width": 110,
+            "height": 68
+          },
+          "salience": 0.4394
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8641,
+      "created_at": "2026-04-09T14:00:36Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_1082fbd6820c61cae123e1f0",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-09T14:00:46Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_dfce0ec7d9314d82bf7698cb",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "text_fact",
+      "canonical_value": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+      "surface_forms": [
+        "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_e003f58c88b580556c17e3df"
+      ],
+      "evidence_refs": [
+        "asset_e003f58c88b580556c17e3df"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "0"
+        ],
+        "unit_mentions": [
+          "m"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "m",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_fa84d46da6c1b9372d141a42",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "target_slot",
+      "canonical_value": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+      "surface_forms": [
+        "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_e003f58c88b580556c17e3df"
+      ],
+      "evidence_refs": [
+        "asset_e003f58c88b580556c17e3df"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_1082fbd6820c61cae123e1f0_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_aaf020afb8e7ceb67b38813a",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "answer_claim",
+      "canonical_value": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+      "surface_forms": [
+        "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_6a3e45b1a33911eb48b62a18"
+      ],
+      "evidence_refs": [
+        "asset_6a3e45b1a33911eb48b62a18"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_dfdfcefa50321d6fa3ae87a3",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 232,
+          "height": 154
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8641,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_2f4255fb5cfa7c4e8d979055",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 9,
+          "y": 5,
+          "width": 219,
+          "height": 135
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8641,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_e6ca5789ea05319a89f941d0",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 9,
+          "y": 72,
+          "width": 109,
+          "height": 68
+        },
+        "salience": 0.4358
+      },
+      "unit": null,
+      "confidence": 0.8641,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_62a4e11049907ec3dc0e147c",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 118,
+          "y": 72,
+          "width": 110,
+          "height": 68
+        },
+        "salience": 0.4394
+      },
+      "unit": null,
+      "confidence": 0.8641,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_333990e05a779174293516ee",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "text_fact",
+      "canonical_value": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+      "surface_forms": [
+        "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_21ed5b6eec80023453273bae"
+      ],
+      "evidence_refs": [
+        "asset_21ed5b6eec80023453273bae"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_8ef46bc6a181df880e52d5da",
+        "parent_problem_id": "prob_1082fbd6820c61cae123e1f0",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_fdaba1d7752d371ae5504e7b",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "quality_signal",
+      "canonical_value": "low_resolution_image",
+      "surface_forms": [
+        "low_resolution_image"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "low_resolution_image"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_6dc542af681ad29680181d1c",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs",
+      "surface_forms": [
+        "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_14bd0bedef73f17483e39e59",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_1082fbd6820c61cae123e1f0",
+        "problem_id": "prob_1082fbd6820c61cae123e1f0",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-09T14:00:46Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "node_id": "node_5e7c708cf32e3a365c67a6ea",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_acceptable",
+          "answer_available",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T14:00:55Z",
+      "updated_at": "2026-04-09T14:00:55Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_b6e779d3782d790ae6e4a705",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_6811add513b82e34",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_7c8de08e07391d0a1795494b",
+        "asset_e003f58c88b580556c17e3df",
+        "asset_2d6885d8f4b96519bbfad851",
+        "asset_6a3e45b1a33911eb48b62a18",
+        "asset_2e324eb43e3b2b6730bd57a9",
+        "asset_6a149ead22c92850155c92a5",
+        "asset_21ed5b6eec80023453273bae"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 3
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 232,
+            "height": 154,
+            "blur_score": 2826.4868,
+            "contrast_score": 32.6797,
+            "noise_score": 24.0416,
+            "readability_score": 0.7352,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 9,
+              "y": 5,
+              "width": 219,
+              "height": 135
+            },
+            "perceptual_hash": "7f7f7f3918387fff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_b6e779d3782d790ae6e4a705",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_1082fbd6820c61cae123e1f0",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_1082fbd6820c61cae123e1f0",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_given",
+          "image_semantically_clear",
+          "jointly_understandable",
+          "question_text_clear"
+        ],
+        "rationale": "题干完整，求解目标明确，答案形式明确。配图虽小，但能清楚表达光源S、全反射体S'、平行光束方向以及反射体沿法线朝S运动的几何关系，足以支持理解题意。",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "low_resolution_image",
+        "metadata.image_paths contains PIL object string representations rather than actual file paths or URLs"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_acceptable",
+        "answer_available",
+        "semantically_usable"
+      ],
+      "decision_rationale": "题干与答案完整，图文能够共同支持题意理解，重写结果可直接用于标注。虽有低分辨率图像和元数据路径异常等软风险，但未影响样本的语义可用性，也未显示出实质性的对齐或可解性失败。",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-09T14:00:55Z",
+      "finished_at": "2026-04-09T14:00:55Z",
+      "candidate_id": "cand_1082fbd6820c61cae123e1f0",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_b6e779d3782d790ae6e4a705",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "image_entity_refs": [
+        "visual_prob_1082fbd6820c61cae123e1f0_1::roi",
+        "visual_prob_1082fbd6820c61cae123e1f0_1::roi_bottom_left",
+        "visual_prob_1082fbd6820c61cae123e1f0_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_1082fbd6820c61cae123e1f0_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "S",
+          "image_ref": "visual_prob_1082fbd6820c61cae123e1f0_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.766
+        },
+        {
+          "text_ref": "P",
+          "image_ref": "visual_prob_1082fbd6820c61cae123e1f0_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.766
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-09T14:00:36Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_ce9a7ebd8ab9677379f13511",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$ 。设 $S^{\\prime}$ 以匀速 $v$沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$ 。",
+      "after_value": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "audit_id": "audit_32d901db1a9a028ab67d318d",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right) P_{0}$",
+      "after_value": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "audit_id": "audit_a1e9ffe58d7081ecf199671f",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "audit_id": "audit_5e7c708cf32e3a365c67a6ea",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:00:55Z"
+    },
+    {
+      "audit_id": "audit_dd83831aef2534a87a1b77cc",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "v",
+          "canonical": "v",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "P",
+          "canonical": "P",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T14:00:55Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_b6e779d3782d790ae6e4a705",
+      "problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "source_problem_id": "734",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_8ef46bc6a181df880e52d5da",
+          "parent_problem_id": "prob_1082fbd6820c61cae123e1f0",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-09T14:00:55Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_8ef46bc6a181df880e52d5da",
+      "parent_problem_id": "prob_1082fbd6820c61cae123e1f0",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "如图所示，光源 $S$ 向全反射体 $S^{\\prime}$ 发射一束平行光，发光功率为 $P_{0}$。设 $S^{\\prime}$ 以匀速 $v$ 沿其法线方向朝 $S$ 运动，试求 $S$ 接收到的反射光功率 $P$。",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$P=\\left(\\frac{1+\\beta}{1-\\beta}\\right)P_{0}$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "seephys00523",
+  "canonical_sample_index": 523,
+  "canonical_dataset_key": "seephys",
+  "sample_path": "samples/seephys00523.json",
+  "image_path": "artifacts/images/seephys00523.png",
+  "images": [
+    "artifacts/images/seephys00523.png"
+  ],
+  "crop_path": "artifacts/crops/seephys00523.png",
+  "crops": [
+    "artifacts/crops/seephys00523.png"
+  ]
+}

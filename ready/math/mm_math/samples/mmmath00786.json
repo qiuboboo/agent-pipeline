@@ -1,0 +1,2120 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_8fe7e2e2af7237ee1c55b342",
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "51010334.png",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+    "raw_answer_text": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$.",
+    "choice_map": {},
+    "image_paths": [
+      "51010334.png"
+    ],
+    "force_requires_image": true,
+    "question_field": null,
+    "answer_field": null,
+    "image_field": null,
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent",
+      "hf_raw_mm_math_fallback"
+    ],
+    "created_at": "2026-04-10T14:29:00Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+    "image_manifest": [
+      {
+        "path": "outputs/mm_math_1500_2100/run_33490190d5de4f1b/datasets/mm_math/artifacts/images/prob_3f6a4fc08f07b9efda54a40c_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 174,
+        "height": 128,
+        "file_size": 1991
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 147,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "long_text",
+      "answer_char_length": 373
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_8fe7e2e2af7237ee1c55b342",
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "51010334.png",
+    "created_at": "2026-04-10T14:29:00Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+    "image_dependency_score": 0.78,
+    "multi_step_score": 0.82,
+    "verifiability_score": 0.86,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写有“As shown in the figure”，且 `requires_image=true`、`text_dominant=false`。",
+        "仅凭文字可列出三角函数条件，但 `sin C = 3/5` 对应锐角或钝角两种可能，图形很可能用于限定几何构型。",
+        "解答依赖高线落在线段 `BC` 内部并取 `CH=4`、`BH=AH` 的图形关系，说明图片对消歧有实际作用。"
+      ],
+      "multi_step": [
+        "求解包含多步几何推理：由 `sin C` 求高 `AH`，再由勾股求 `CH`，由 `cos B` 求角 `B=45°`，再得 `BH=AH`，最后合成底边并求面积。",
+        "不是单一代入计算，而是需要结合三角函数、直角三角形关系和面积公式。",
+        "答案文本本身展示了清晰的链式推导，符合多步题特征。"
+      ],
+      "verifiability": [
+        "最终答案是明确数值 `21/2`，可直接核验。",
+        "中间步骤 `AH=3`、`CH=4`、`B=45°`、`BC=7` 都可逐步检查，过程评测可行。",
+        "`asset_registry_record.registry_passed=true`，且题干、答案、图像资产均已登记存在。"
+      ]
+    },
+    "risk_flags": [
+      "sinC_has_acute_obtuse_ambiguity_without_figure",
+      "solution_depends_on_specific_geometric_configuration"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_8fe7e2e2af7237ee1c55b342",
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "51010334.png",
+    "created_at": "2026-04-10T14:29:00Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+    "priority": 0.91,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和图像资产均已存在且登记通过，核心语义支撑完整。",
+      "初步评分较高，图像依赖性、多步性和可验证性都较强，适合进入候选池。",
+      "虽然该题存在依赖图形消歧的风险提示，但当前图像资产可用，因此不构成降级或拒绝的充分理由。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_8fe7e2e2af7237ee1c55b342",
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "51010334.png",
+    "created_at": "2026-04-10T14:29:00Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_8fe7e2e2af7237ee1c55b342",
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+    "dataset_name": "MM-Math",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+    "normalized_answer_text": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "force_requires_image=true, so the sample is routed to multimodal cleaning.",
+      "No valid answer choices were provided.",
+      "Used fallback-consistent normalization because the prompt explicitly references the figure."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-10T14:29:00Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "source_dataset": "MM-Math",
+    "source_split": "train[1500:2100]",
+    "source_problem_id": "51010334.png",
+    "subject": "数学",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+    "raw_answer_text": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.78,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 350,
+      "image_paths": [
+        "51010334.png"
+      ],
+      "extraction_notes": [
+        "source_intake_agent",
+        "hf_raw_mm_math_fallback"
+      ],
+      "image_field": null
+    },
+    "created_at": "2026-04-10T14:30:21Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.91,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已存在且登记通过，核心语义支撑完整。",
+      "初步评分较高，图像依赖性、多步性和可验证性都较强，适合进入候选池。",
+      "虽然该题存在依赖图形消歧的风险提示，但当前图像资产可用，因此不构成降级或拒绝的充分理由。"
+    ],
+    "collection_risk_flags": [
+      "sinC_has_acute_obtuse_ambiguity_without_figure",
+      "solution_depends_on_specific_geometric_configuration"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_d28c71bd495ded1f568819bd",
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "51010334.png",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_3f6a4fc08f07b9efda54a40c/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_3f6a4fc08f07b9efda54a40c/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/51010334.png",
+        "is_present": true,
+        "width": 174,
+        "height": 128
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.78,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-10T14:30:21Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_33a908d558b85f5766811c09",
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "51010334.png",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.91,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.78,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-10T14:30:21Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和图像资产均已存在且登记通过，核心语义支撑完整。",
+      "初步评分较高，图像依赖性、多步性和可验证性都较强，适合进入候选池。",
+      "虽然该题存在依赖图形消歧的风险提示，但当前图像资产可用，因此不构成降级或拒绝的充分理由。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_8fe7e2e2af7237ee1c55b342",
+      "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "dataset_name": "MM-Math",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-10T14:30:21Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_8fe7e2e2af7237ee1c55b342",
+    "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "51010334.png",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+    "normalized_answer_text": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "answer_complete",
+      "solvable",
+      "text_sufficient"
+    ],
+    "created_at": "2026-04-10T14:30:21Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_8fe7e2e2af7237ee1c55b342",
+    "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+    "normalized_answer_text": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "ABC",
+        "canonical": "ABC",
+        "variable_type": "label"
+      },
+      {
+        "original": "cos",
+        "canonical": "cos",
+        "variable_type": "label"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "frac",
+        "canonical": "frac",
+        "variable_type": "label"
+      },
+      {
+        "original": "sqrt",
+        "canonical": "sqrt",
+        "variable_type": "label"
+      },
+      {
+        "original": "sin",
+        "canonical": "sin",
+        "variable_type": "label"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "AC",
+        "canonical": "AC",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "area",
+        "canonical": "area",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/51010334.png",
+        "roi_bbox": {
+          "x": 5,
+          "y": 7,
+          "width": 165,
+          "height": 112
+        },
+        "readability_score": 0.7137,
+        "contrast_score": 29.1128
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-10T14:30:21Z",
+    "normalization_notes": [
+      "force_requires_image=true, so the sample is routed to multimodal cleaning.",
+      "No valid answer choices were provided.",
+      "Used fallback-consistent normalization because the prompt explicitly references the figure."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+    "source_dataset": "MM-Math",
+    "source_split": "train[1500:2100]",
+    "source_problem_id": "51010334.png",
+    "ingest_batch_id": "benchmarkallinone-mm-math-1500-2100_20260410T031527Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+    "raw_answer_text": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$.",
+    "normalized_answer_text": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+    "answer_type": "set",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9444,
+    "multi_step_score": 0.3287,
+    "verifiability_score": 0.9748,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "answer_complete",
+      "solvable",
+      "text_sufficient"
+    ],
+    "clean_decision_rationale": "The sample is semantically complete and understandable from text alone, the answer is fully available, and the rewrite is usable. Although alignment is marked risky, the image is not needed for solving this problem, so the risk is non-blocking for downstream annotation.",
+    "review_priority": "high",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-10T14:29:00Z",
+    "updated_at": "2026-04-10T14:30:21Z",
+    "initial_image_dependency_score": 0.78,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.91,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已存在且登记通过，核心语义支撑完整。",
+      "初步评分较高，图像依赖性、多步性和可验证性都较强，适合进入候选池。",
+      "虽然该题存在依赖图形消歧的风险提示，但当前图像资产可用，因此不构成降级或拒绝的充分理由。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_effcb1365712a8c54fe18838",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mm_math/train[1500:2100]/51010334.png/question",
+      "storage_uri": "inline://prob_3f6a4fc08f07b9efda54a40c/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 147,
+      "width": null,
+      "height": null,
+      "sha256": "d073c1a1b9731e557341dcffe25e83967061c9d9bf4c579feb49d3fd5871c3b7",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6813,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "asset_id": "asset_bd82640a51126e9a9a4f1b43",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_3f6a4fc08f07b9efda54a40c/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 147,
+      "width": null,
+      "height": null,
+      "sha256": "d073c1a1b9731e557341dcffe25e83967061c9d9bf4c579feb49d3fd5871c3b7",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "normalized_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "text_completeness_score": 0.6813,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "asset_id": "asset_c37eae55aa418d3c5b2b8dde",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mm_math/train[1500:2100]/51010334.png/answer",
+      "storage_uri": "inline://prob_3f6a4fc08f07b9efda54a40c/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 373,
+      "width": null,
+      "height": null,
+      "sha256": "9cb3e1748d9fd3e9727bb1b9e9ce85dbc642f68cfe1b62cde1f225373d099f8b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "AH",
+          "canonical": "AH",
+          "variable_type": "label"
+        },
+        {
+          "original": "perp",
+          "canonical": "perp",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "CH",
+          "canonical": "CH",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "circ",
+          "canonical": "circ",
+          "variable_type": "label"
+        },
+        {
+          "original": "BH",
+          "canonical": "BH",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "asset_id": "asset_d9229cc91a9543b587456912",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_3f6a4fc08f07b9efda54a40c/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 372,
+      "width": null,
+      "height": null,
+      "sha256": "c83b018f9ac3de594088d9f2216f6e007307d5702b0b4aef2ed3d830bf7afb74",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$.",
+      "normalized_text_snapshot": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "AH",
+          "canonical": "AH",
+          "variable_type": "label"
+        },
+        {
+          "original": "perp",
+          "canonical": "perp",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "CH",
+          "canonical": "CH",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "circ",
+          "canonical": "circ",
+          "variable_type": "label"
+        },
+        {
+          "original": "BH",
+          "canonical": "BH",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "asset_id": "asset_a069129adf594402a6f02fb8",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/51010334.png",
+      "storage_uri": "outputs/mm_math_1500_2100/run_33490190d5de4f1b/datasets/mm_math/artifacts/images/prob_3f6a4fc08f07b9efda54a40c_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 1991,
+      "width": 174,
+      "height": 128,
+      "sha256": "6d2271e5d05411c85f79de0135a5b54b0c4bcd9164255984a77a535c36970c2f",
+      "perceptual_hash": "efefc7d3bbbd007e",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 5721.6753,
+      "readability_score": 0.7137,
+      "noise_score": 24.6125,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 5,
+        "y": 7,
+        "width": 165,
+        "height": 112
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "asset_id": "asset_be0368cdbed5ea59635abc17",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mm_math_1500_2100/run_33490190d5de4f1b/datasets/mm_math/artifacts/crops/prob_3f6a4fc08f07b9efda54a40c_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 1882,
+      "width": 165,
+      "height": 112,
+      "sha256": "86092be8a5655836c981255a6d0bc8a06e80c6b43d09b79d8c3b8b254c26d5e0",
+      "perceptual_hash": "efefc7d3bbbd0000",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 5721.6753,
+      "readability_score": 0.7137,
+      "noise_score": 24.6125,
+      "cropped_from_asset_id": "asset_a069129adf594402a6f02fb8",
+      "roi_bbox": {
+        "x": 5,
+        "y": 7,
+        "width": 165,
+        "height": 112
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "asset_id": "asset_f30951602c62122eb9bc1f90",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_cffd04aefa8985504b824a91",
+      "file_format": "txt",
+      "file_size_bytes": 147,
+      "width": null,
+      "height": null,
+      "sha256": "d073c1a1b9731e557341dcffe25e83967061c9d9bf4c579feb49d3fd5871c3b7",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "normalized_text_snapshot": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "text_completeness_score": 0.6813,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_3f6a4fc08f07b9efda54a40c",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "question_type": "open",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "2",
+            "2",
+            "3",
+            "5",
+            "5"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_3f6a4fc08f07b9efda54a40c_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "set",
+          "target_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+          "expected_answer_type": "set",
+          "expected_answer": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "triangle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "ABC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "B",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "C",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-10T14:29:55Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_3f6a4fc08f07b9efda54a40c_1",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.3594,
+        "dark_pixel_ratio": 0.0363,
+        "readability_score": 0.7137,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 174,
+            "height": 128
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 5,
+            "y": 7,
+            "width": 165,
+            "height": 112
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 5,
+            "y": 63,
+            "width": 82,
+            "height": 56
+          },
+          "salience": 0.4071
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 87,
+            "y": 63,
+            "width": 83,
+            "height": 56
+          },
+          "salience": 0.4115
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8555,
+      "created_at": "2026-04-10T14:29:55Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_3f6a4fc08f07b9efda54a40c",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-10T14:30:07Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_acfb655b255a36693a1dc25e",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "target_slot",
+      "canonical_value": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "surface_forms": [
+        "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_bd82640a51126e9a9a4f1b43"
+      ],
+      "evidence_refs": [
+        "asset_bd82640a51126e9a9a4f1b43"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "slot_id": "slot_prob_3f6a4fc08f07b9efda54a40c_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "set",
+        "target_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+        "expected_answer_type": "set",
+        "expected_answer": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "node_id": "node_550e9faceb0b5af5d880b2f4",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "answer_claim",
+      "canonical_value": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+      "surface_forms": [
+        "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d9229cc91a9543b587456912"
+      ],
+      "evidence_refs": [
+        "asset_d9229cc91a9543b587456912"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "node_id": "node_cdd7cb8032e603a46e9e6241",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 174,
+          "height": 128
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8555,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "node_id": "node_2bae2ef8a26751de58eda035",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 5,
+          "y": 7,
+          "width": 165,
+          "height": 112
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8555,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "node_id": "node_aefef81d451ea589b375f305",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 5,
+          "y": 63,
+          "width": 82,
+          "height": 56
+        },
+        "salience": 0.4071
+      },
+      "unit": null,
+      "confidence": 0.8555,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "node_id": "node_8d6132b5b3f83faeaba41dcc",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 87,
+          "y": 63,
+          "width": 83,
+          "height": 56
+        },
+        "salience": 0.4115
+      },
+      "unit": null,
+      "confidence": 0.8555,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "node_id": "node_7951a780e68f788b5af8fd07",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "surface_forms": [
+        "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_f30951602c62122eb9bc1f90"
+      ],
+      "evidence_refs": [
+        "asset_f30951602c62122eb9bc1f90"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_cffd04aefa8985504b824a91",
+        "parent_problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+        "variant_index": 1,
+        "title": "MM-Math 开放题",
+        "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+        "expected_answer_type": "set",
+        "expected_answer": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "node_id": "node_c172ee0da6e8621e05570f88",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_3f6a4fc08f07b9efda54a40c",
+        "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-10T14:30:07Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "node_id": "node_363159109a1d0ea135b13a85",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "answer_complete",
+          "solvable",
+          "text_sufficient"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-10T14:30:21Z",
+      "updated_at": "2026-04-10T14:30:21Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_8fe7e2e2af7237ee1c55b342",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_33490190d5de4f1b",
+      "dataset_name": "MM-Math",
+      "input_asset_ids": [
+        "asset_effcb1365712a8c54fe18838",
+        "asset_bd82640a51126e9a9a4f1b43",
+        "asset_c37eae55aa418d3c5b2b8dde",
+        "asset_d9229cc91a9543b587456912",
+        "asset_a069129adf594402a6f02fb8",
+        "asset_be0368cdbed5ea59635abc17",
+        "asset_f30951602c62122eb9bc1f90"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 15
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 174,
+            "height": 128,
+            "blur_score": 5721.6753,
+            "contrast_score": 29.1128,
+            "noise_score": 24.6125,
+            "readability_score": 0.7137,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 5,
+              "y": 7,
+              "width": 165,
+              "height": 112
+            },
+            "perceptual_hash": "efefc7d3bbbd007e"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_8fe7e2e2af7237ee1c55b342",
+        "coverage_score": 0.9,
+        "consistency_score": 0.82,
+        "alignment_status": "risky",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_3f6a4fc08f07b9efda54a40c",
+        "question_type": "open",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_3f6a4fc08f07b9efda54a40c",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "jointly_understandable",
+          "text_sufficient"
+        ],
+        "rationale": "The math problem is semantically complete from the text alone: it specifies the triangle, the given trigonometric values, a side length, and asks for the area. The image is a simple labeled triangle that matches the text but does not add essential information.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.9969,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "answer_complete",
+        "solvable",
+        "text_sufficient"
+      ],
+      "decision_rationale": "The sample is semantically complete and understandable from text alone, the answer is fully available, and the rewrite is usable. Although alignment is marked risky, the image is not needed for solving this problem, so the risk is non-blocking for downstream annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-10T14:30:21Z",
+      "finished_at": "2026-04-10T14:30:21Z",
+      "candidate_id": "cand_3f6a4fc08f07b9efda54a40c",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_8fe7e2e2af7237ee1c55b342",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "image_entity_refs": [
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi_bottom_left",
+        "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_3f6a4fc08f07b9efda54a40c_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7639
+        },
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7639
+        },
+        {
+          "text_ref": "triangle",
+          "image_ref": "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7639
+        },
+        {
+          "text_ref": "ABC",
+          "image_ref": "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7639
+        },
+        {
+          "text_ref": "B",
+          "image_ref": "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7639
+        },
+        {
+          "text_ref": "C",
+          "image_ref": "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7639
+        },
+        {
+          "text_ref": "AC",
+          "image_ref": "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7639
+        },
+        {
+          "text_ref": "slot_prob_3f6a4fc08f07b9efda54a40c_1",
+          "image_ref": "visual_prob_3f6a4fc08f07b9efda54a40c_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7682
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "visual_reference_density_mismatch",
+          "detail": "文本中的视觉锚点明显多于可识别视觉区域。",
+          "severity": "major",
+          "confidence": 0.72
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.82,
+      "alignment_status": "risky",
+      "created_at": "2026-04-10T14:29:55Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_461be3416ec2c5a0a9253179",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "after_value": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "audit_id": "audit_2b0a7e5dcdc9928a6e5da30a",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$.",
+      "after_value": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "audit_id": "audit_e01764eeec64e504bddccc8f",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "audit_id": "audit_363159109a1d0ea135b13a85",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T14:30:21Z"
+    },
+    {
+      "audit_id": "audit_a67e29a6cabd90aebb7cfd9e",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "sqrt",
+          "canonical": "sqrt",
+          "variable_type": "label"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "AC",
+          "canonical": "AC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-10T14:30:21Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_8fe7e2e2af7237ee1c55b342",
+      "problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "source_problem_id": "51010334.png",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_cffd04aefa8985504b824a91",
+          "parent_problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+          "variant_index": 1,
+          "title": "MM-Math 开放题",
+          "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+          "expected_answer_type": "set",
+          "expected_answer": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-10T14:30:21Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_cffd04aefa8985504b824a91",
+      "parent_problem_id": "prob_3f6a4fc08f07b9efda54a40c",
+      "variant_index": 1,
+      "title": "MM-Math 开放题",
+      "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, $\\cos B = \\frac{\\sqrt{2}}{2}$, $\\sin C = \\frac{3}{5}$, and $AC=5$, what is the area of $\\triangle ABC$?",
+      "expected_answer_type": "set",
+      "expected_answer": "\\textbf{Solution:} Let $AH\\perp BC$,\\\\\nthen $AH=AC\\sin C=5\\times\\frac{3}{5}=3$,\\\\\n$\\therefore$ $CH=\\sqrt{AC^{2}-AH^{2}}=4$,\\\\\n$\\because$ $\\cos B=\\frac{\\sqrt{2}}{2}$,\\\\\n$\\therefore$ $\\angle B=45^\\circ$,\\\\\n$\\therefore$ $BH=AH=3$,\\\\\n$\\therefore$ $BC=BH+CH=3+4=7$,\\\\\n$\\therefore$ $S_{\\triangle ABC}=\\frac{1}{2}\\times BC\\times AH=\\frac{1}{2}\\times7\\times3=\\boxed{\\frac{21}{2}}$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "mmmath00786",
+  "canonical_sample_index": 786,
+  "canonical_dataset_key": "mm_math",
+  "sample_path": "samples/mmmath00786.json",
+  "image_path": "artifacts/images/mmmath00786.png",
+  "images": [
+    "artifacts/images/mmmath00786.png"
+  ],
+  "crop_path": "artifacts/crops/mmmath00786.png",
+  "crops": [
+    "artifacts/crops/mmmath00786.png"
+  ]
+}

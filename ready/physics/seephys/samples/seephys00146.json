@@ -1,0 +1,3283 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_5018efd6e89560f296ba4f47",
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "problem_id": "prob_ad155b53fab91657c1658b9d",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "258",
+    "raw_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+    "raw_answer_text": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(272, 155)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "question references \"Fig. 1.93\" and record marks vision_relevance as essential",
+      "image field contains a PIL object string placeholder rather than a file path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-04T02:02:02Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_ad155b53fab91657c1658b9d",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/images/prob_ad155b53fab91657c1658b9d_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 272,
+        "height": 155,
+        "file_size": 11510
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 531,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 131
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_5018efd6e89560f296ba4f47",
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "258",
+    "created_at": "2026-04-04T02:02:02Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_ad155b53fab91657c1658b9d",
+    "image_dependency_score": 0.68,
+    "multi_step_score": 0.79,
+    "verifiability_score": 0.88,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式引用“Fig. 1.93”，且上游标注 `requires_image=true`、`text_dominant=false`。",
+        "但题干已用文字完整描述了长弹簧-小球链、单个特殊质量点、传播方向与提示形式，图像更像结构示意而非唯一信息源。",
+        "资产登记显示有 1 张配图且 `registry_passed=true`，说明图像资源存在，但从文本字段看并非完全无法脱离图像作答。"
+      ],
+      "multi_step": [
+        "要求从入射/反射/透射波的分段试探解出发，联立边界条件求出反射振幅比，再转成反射概率，属于明确的多步推导。",
+        "题干提示 `x_n=Ae^{ikan}+Be^{-ikan}` 与 `x_n=Ce^{ikan}`，表明需要分别处理缺陷点两侧并做匹配，而非单步读取。",
+        "最终答案是含三角函数与质量比的解析式，通常需要色散关系或离散振动方程配合代数化简。"
+      ],
+      "verifiability": [
+        "答案类型为 `short_text`，且给出了单一明确的解析表达式 `|B/A|^2=...`，目标形式清晰。",
+        "该类物理题可通过符号推导、等价变形检查或极限情形（如 `m0 -> m`、`ka` 特定值）进行核验，可验证性较高。",
+        "不过解析式可能存在等价改写、符号约定或三角恒等变形，因此不是满分可验证。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL",
+      "题干虽引用图像，但从文本看主要物理设定已较完整，图像依赖度可能被上游 `requires_image` 标注高估"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_5018efd6e89560f296ba4f47",
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "258",
+    "created_at": "2026-04-04T02:02:02Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_ad155b53fab91657c1658b9d",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和配图均已存在，核心语义资产完整，满足进入候选池的基本条件。",
+      "初步评分较高：multi_step_score=0.79、verifiability_score=0.88，具备较好的推导价值和可校验性。",
+      "虽存在 `metadata.image_paths` 为 PIL 占位字符串的元数据问题，但实际 `image_manifest` 显示图片文件存在且 `registry_passed=true`，不构成核心语义缺失。",
+      "题干虽引用图像，但评分证据表明文本已较完整描述物理设定，因此该样本可用性较强，不宜仅因元数据瑕疵降为低优先级。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_5018efd6e89560f296ba4f47",
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "258",
+    "created_at": "2026-04-04T02:02:02Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_5018efd6e89560f296ba4f47",
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "problem_id": "prob_ad155b53fab91657c1658b9d",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+    "normalized_answer_text": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Preserved the original physics statement and hint with only field-level normalization.",
+      "Marked as image-required because `force_requires_image=true`.",
+      "No answer or option content was inferred or expanded."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-04T02:02:02Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "source_dataset": "SeePhys",
+    "source_split": "train[0:300]",
+    "source_problem_id": "258",
+    "subject": "物理",
+    "raw_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+    "raw_answer_text": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.68,
+    "initial_multi_solution_score": 0.79,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 258,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(272, 155)>"
+      ],
+      "extraction_notes": [
+        "question references \"Fig. 1.93\" and record marks vision_relevance as essential",
+        "image field contains a PIL object string placeholder rather than a file path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "Using the trial solution\\newline $x_{n}=(A e^{ika n}+B e^{-ika n})e^{-i\\omega t}$ for $n \\leq 0$ and $x_{n}=C e^{i(ka n-\\omega t)}$ for $n \\geq 0$,\\newline we find from continuity at $n=0$ that $C=A+B$. Substituting into the equation of motion for the $n=0$ bead,\\newline $\\ddot{x}_{0}=-\\frac{K}{m_{0}}(2x_{0}-x_{1}-x_{-1})$,\\newline leads to\\newline $\\frac{\\omega^{2} m_{0}}{K}(A+B)=2(A+B)-(A+B)e^{ika}-A e^{-ika}-B e^{ika}$.\\newline Solving this for $A$ in terms of $B$ gives\\newline $A=\\left[\\frac{m_{0}}{m-m_{0}}-\\frac{m}{m-m_{0}}\\frac{1-e^{ika}}{1-\\cos(ka)}\\right]B=\\left\\{-1+\\frac{i m \\sin(ka)}{(m-m_{0})[1-\\cos(ka)]}\\right\\}B$.\\newline Hence, the reflection probability is\\newline $\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$.",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-04T02:03:07Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和配图均已存在，核心语义资产完整，满足进入候选池的基本条件。",
+      "初步评分较高：multi_step_score=0.79、verifiability_score=0.88，具备较好的推导价值和可校验性。",
+      "虽存在 `metadata.image_paths` 为 PIL 占位字符串的元数据问题，但实际 `image_manifest` 显示图片文件存在且 `registry_passed=true`，不构成核心语义缺失。",
+      "题干虽引用图像，但评分证据表明文本已较完整描述物理设定，因此该样本可用性较强，不宜仅因元数据瑕疵降为低优先级。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL",
+      "题干虽引用图像，但从文本看主要物理设定已较完整，图像依赖度可能被上游 `requires_image` 标注高估"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_8bd52fb1dda66e8964fd13d1",
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "258",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_ad155b53fab91657c1658b9d/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_ad155b53fab91657c1658b9d/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 272,
+        "height": 155
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.68,
+      "initial_multi_solution_score": 0.79,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-04T02:03:07Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_f3d52783cda95dbcb406b602",
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "258",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.68,
+      "initial_multi_solution_score": 0.79,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-04T02:03:07Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和配图均已存在，核心语义资产完整，满足进入候选池的基本条件。",
+      "初步评分较高：multi_step_score=0.79、verifiability_score=0.88，具备较好的推导价值和可校验性。",
+      "虽存在 `metadata.image_paths` 为 PIL 占位字符串的元数据问题，但实际 `image_manifest` 显示图片文件存在且 `registry_passed=true`，不构成核心语义缺失。",
+      "题干虽引用图像，但评分证据表明文本已较完整描述物理设定，因此该样本可用性较强，不宜仅因元数据瑕疵降为低优先级。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_5018efd6e89560f296ba4f47",
+      "candidate_id": "cand_ad155b53fab91657c1658b9d",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-04T02:03:07Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_5018efd6e89560f296ba4f47",
+    "problem_id": "prob_ad155b53fab91657c1658b9d",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "258",
+    "normalized_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+    "normalized_answer_text": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "text_sufficient"
+    ],
+    "created_at": "2026-04-04T02:03:07Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_5018efd6e89560f296ba4f47",
+    "problem_id": "prob_ad155b53fab91657c1658b9d",
+    "normalized_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+    "normalized_answer_text": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "Take",
+        "canonical": "Take",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "very",
+        "canonical": "very",
+        "variable_type": "label"
+      },
+      {
+        "original": "long",
+        "canonical": "long",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "by",
+        "canonical": "by",
+        "variable_type": "label"
+      },
+      {
+        "original": "K",
+        "canonical": "K",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "Fig",
+        "canonical": "Fig",
+        "variable_type": "label"
+      },
+      {
+        "original": "Each",
+        "canonical": "Each",
+        "variable_type": "label"
+      },
+      {
+        "original": "bead",
+        "canonical": "bead",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "free",
+        "canonical": "free",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "x",
+        "canonical": "x",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "All",
+        "canonical": "All",
+        "variable_type": "label"
+      },
+      {
+        "original": "have",
+        "canonical": "have",
+        "variable_type": "label"
+      },
+      {
+        "original": "mass",
+        "canonical": "mass",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "one",
+        "canonical": "one",
+        "variable_type": "label"
+      },
+      {
+        "original": "has",
+        "canonical": "has",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "For",
+        "canonical": "For",
+        "variable_type": "label"
+      },
+      {
+        "original": "wave",
+        "canonical": "wave",
+        "variable_type": "label"
+      },
+      {
+        "original": "k",
+        "canonical": "k",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "when",
+        "canonical": "when",
+        "variable_type": "label"
+      },
+      {
+        "original": "hits",
+        "canonical": "hits",
+        "variable_type": "label"
+      },
+      {
+        "original": "Hint",
+        "canonical": "Hint",
+        "variable_type": "label"
+      },
+      {
+        "original": "part",
+        "canonical": "part",
+        "variable_type": "label"
+      },
+      {
+        "original": "b",
+        "canonical": "b",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "Try",
+        "canonical": "Try",
+        "variable_type": "label"
+      },
+      {
+        "original": "form",
+        "canonical": "form",
+        "variable_type": "label"
+      },
+      {
+        "original": "n",
+        "canonical": "n",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "e",
+        "canonical": "e",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "i",
+        "canonical": "i",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig."
+      },
+      {
+        "segment_index": 2,
+        "text": "1.93."
+      },
+      {
+        "segment_index": 3,
+        "text": "Each bead is free to oscillate along the $x$ direction."
+      },
+      {
+        "segment_index": 4,
+        "text": "All beads have mass $m$ except for one which has mass $m_{0}<m$."
+      },
+      {
+        "segment_index": 5,
+        "text": "The mass of the spring is negligibly small."
+      },
+      {
+        "segment_index": 6,
+        "text": "For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead?"
+      },
+      {
+        "segment_index": 7,
+        "text": "Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 64,
+          "y": 30,
+          "width": 176,
+          "height": 120
+        },
+        "readability_score": 0.7009,
+        "contrast_score": 35.24
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-04T02:03:07Z",
+    "normalization_notes": [
+      "Preserved the original physics statement and hint with only field-level normalization.",
+      "Marked as image-required because `force_requires_image=true`.",
+      "No answer or option content was inferred or expanded."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_ad155b53fab91657c1658b9d",
+    "source_dataset": "SeePhys",
+    "source_split": "train[0:300]",
+    "source_problem_id": "258",
+    "ingest_batch_id": "benchmarkallinone-seephys-000-300_20260403T200700Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "en",
+    "raw_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+    "normalized_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+    "raw_answer_text": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+    "normalized_answer_text": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "Using the trial solution\\newline $x_{n}=(A e^{ika n}+B e^{-ika n})e^{-i\\omega t}$ for $n \\leq 0$ and $x_{n}=C e^{i(ka n-\\omega t)}$ for $n \\geq 0$,\\newline we find from continuity at $n=0$ that $C=A+B$. Substituting into the equation of motion for the $n=0$ bead,\\newline $\\ddot{x}_{0}=-\\frac{K}{m_{0}}(2x_{0}-x_{1}-x_{-1})$,\\newline leads to\\newline $\\frac{\\omega^{2} m_{0}}{K}(A+B)=2(A+B)-(A+B)e^{ika}-A e^{-ika}-B e^{ika}$.\\newline Solving this for $A$ in terms of $B$ gives\\newline $A=\\left[\\frac{m_{0}}{m-m_{0}}-\\frac{m}{m-m_{0}}\\frac{1-e^{ika}}{1-\\cos(ka)}\\right]B=\\left\\{-1+\\frac{i m \\sin(ka)}{(m-m_{0})[1-\\cos(ka)]}\\right\\}B$.\\newline Hence, the reflection probability is\\newline $\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9671,
+    "multi_step_score": 0.6127,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "figure_reference_mismatch",
+      "image_metadata_placeholder",
+      "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "text_sufficient"
+    ],
+    "clean_decision_rationale": "The question and answer are complete and understandable from text alone, the rewritten variant is usable, and alignment/solvability signals are strong. Minor figure-reference and image-metadata issues do not materially affect downstream annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_ad155b53fab91657c1658b9d",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-04T02:02:02Z",
+    "updated_at": "2026-04-04T02:03:07Z",
+    "initial_image_dependency_score": 0.68,
+    "initial_multi_solution_score": 0.79,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和配图均已存在，核心语义资产完整，满足进入候选池的基本条件。",
+      "初步评分较高：multi_step_score=0.79、verifiability_score=0.88，具备较好的推导价值和可校验性。",
+      "虽存在 `metadata.image_paths` 为 PIL 占位字符串的元数据问题，但实际 `image_manifest` 显示图片文件存在且 `registry_passed=true`，不构成核心语义缺失。",
+      "题干虽引用图像，但评分证据表明文本已较完整描述物理设定，因此该样本可用性较强，不宜仅因元数据瑕疵降为低优先级。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_02378a5fb3906e2817bfc4a3",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[0:300]/258/question",
+      "storage_uri": "inline://prob_ad155b53fab91657c1658b9d/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 531,
+      "width": null,
+      "height": null,
+      "sha256": "fac140c51dace28b375eed0708f8b3b11391a7ae9eae57c90bf662095eea7944",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Take",
+          "canonical": "Take",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "long",
+          "canonical": "long",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "bead",
+          "canonical": "bead",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "free",
+          "canonical": "free",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "All",
+          "canonical": "All",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "wave",
+          "canonical": "wave",
+          "variable_type": "label"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "Hint",
+          "canonical": "Hint",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        },
+        {
+          "original": "b",
+          "canonical": "b",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Try",
+          "canonical": "Try",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "n",
+          "canonical": "n",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "e",
+          "canonical": "e",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "i",
+          "canonical": "i",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "asset_id": "asset_208dac9e3526c4792d44cf1b",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_ad155b53fab91657c1658b9d/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 531,
+      "width": null,
+      "height": null,
+      "sha256": "fac140c51dace28b375eed0708f8b3b11391a7ae9eae57c90bf662095eea7944",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "normalized_text_snapshot": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Take",
+          "canonical": "Take",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "long",
+          "canonical": "long",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "bead",
+          "canonical": "bead",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "free",
+          "canonical": "free",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "All",
+          "canonical": "All",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "wave",
+          "canonical": "wave",
+          "variable_type": "label"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "Hint",
+          "canonical": "Hint",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        },
+        {
+          "original": "b",
+          "canonical": "b",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Try",
+          "canonical": "Try",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "n",
+          "canonical": "n",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "e",
+          "canonical": "e",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "i",
+          "canonical": "i",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "asset_id": "asset_489c33ffa761bfdfd707be87",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[0:300]/258/answer",
+      "storage_uri": "inline://prob_ad155b53fab91657c1658b9d/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 131,
+      "width": null,
+      "height": null,
+      "sha256": "e5cc316701ffc9a1ef7d2802839aad12a319e7239df156a83c5342088dc8e5e2",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "ka",
+          "canonical": "ka",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "asset_id": "asset_2b5d6785f9a460f82aaf84de",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_ad155b53fab91657c1658b9d/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 131,
+      "width": null,
+      "height": null,
+      "sha256": "e5cc316701ffc9a1ef7d2802839aad12a319e7239df156a83c5342088dc8e5e2",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+      "normalized_text_snapshot": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "sin",
+          "canonical": "sin",
+          "variable_type": "label"
+        },
+        {
+          "original": "ka",
+          "canonical": "ka",
+          "variable_type": "label"
+        },
+        {
+          "original": "cos",
+          "canonical": "cos",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "asset_id": "asset_29dd404aab05be756c19383d",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/images/prob_ad155b53fab91657c1658b9d_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 11510,
+      "width": 272,
+      "height": 155,
+      "sha256": "cc83600b7574064faef8f6f17ca0f4632b9d1cbe1b90b4a49d2cb7115a578ece",
+      "perceptual_hash": "ffffdfdfc1c1ffe7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1156.468,
+      "readability_score": 0.7009,
+      "noise_score": 21.9434,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 64,
+        "y": 30,
+        "width": 176,
+        "height": 120
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "figure_reference_mismatch",
+        "image_metadata_placeholder",
+        "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "asset_id": "asset_9d862693171d94df1dadaad7",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_000_300/run_a246d322f4a1c1ca/datasets/seephys/artifacts/crops/prob_ad155b53fab91657c1658b9d_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 10913,
+      "width": 176,
+      "height": 120,
+      "sha256": "a896d8217de9816b00a902d8edbc5f4fc1089136a79b799f2929de1d3b6bb8ff",
+      "perceptual_hash": "7fff7f03007fffc7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1156.468,
+      "readability_score": 0.7009,
+      "noise_score": 21.9434,
+      "cropped_from_asset_id": "asset_29dd404aab05be756c19383d",
+      "roi_bbox": {
+        "x": 64,
+        "y": 30,
+        "width": 176,
+        "height": 120
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "asset_id": "asset_759852d03903f943d64b6310",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_9a7aab6717fd26ca124a3559",
+      "file_format": "txt",
+      "file_size_bytes": 531,
+      "width": null,
+      "height": null,
+      "sha256": "fac140c51dace28b375eed0708f8b3b11391a7ae9eae57c90bf662095eea7944",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "normalized_text_snapshot": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Take",
+          "canonical": "Take",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "long",
+          "canonical": "long",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "bead",
+          "canonical": "bead",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "free",
+          "canonical": "free",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "All",
+          "canonical": "All",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "wave",
+          "canonical": "wave",
+          "variable_type": "label"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "Hint",
+          "canonical": "Hint",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        },
+        {
+          "original": "b",
+          "canonical": "b",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Try",
+          "canonical": "Try",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "n",
+          "canonical": "n",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "e",
+          "canonical": "e",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "i",
+          "canonical": "i",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_ad155b53fab91657c1658b9d",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "1.93.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1.93"
+          ],
+          "unit_mentions": [],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+          "segment_index": 7,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0",
+            "0"
+          ],
+          "unit_mentions": [
+            "A",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "All beads have mass $m$ except for one which has mass $m_{0}<m$.",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0"
+          ],
+          "unit_mentions": [
+            "A",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead?",
+          "segment_index": 6,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_ad155b53fab91657c1658b9d_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "K",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "B",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "C",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "Take",
+          "canonical": "Take",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "long",
+          "canonical": "long",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "bead",
+          "canonical": "bead",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "free",
+          "canonical": "free",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "All",
+          "canonical": "All",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "wave",
+          "canonical": "wave",
+          "variable_type": "label"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "Hint",
+          "canonical": "Hint",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        },
+        {
+          "original": "b",
+          "canonical": "b",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Try",
+          "canonical": "Try",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "n",
+          "canonical": "n",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "e",
+          "canonical": "e",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "i",
+          "canonical": "i",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig."
+        },
+        {
+          "segment_index": 2,
+          "text": "1.93."
+        },
+        {
+          "segment_index": 3,
+          "text": "Each bead is free to oscillate along the $x$ direction."
+        },
+        {
+          "segment_index": 4,
+          "text": "All beads have mass $m$ except for one which has mass $m_{0}<m$."
+        },
+        {
+          "segment_index": 5,
+          "text": "The mass of the spring is negligibly small."
+        },
+        {
+          "segment_index": 6,
+          "text": "For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead?"
+        },
+        {
+          "segment_index": 7,
+          "text": "Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-04T02:02:52Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_ad155b53fab91657c1658b9d_1",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 1.7548,
+        "dark_pixel_ratio": 0.0568,
+        "readability_score": 0.7009,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 272,
+            "height": 155
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 64,
+            "y": 30,
+            "width": 176,
+            "height": 120
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 64,
+            "y": 30,
+            "width": 88,
+            "height": 60
+          },
+          "salience": 0.4562
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 152,
+            "y": 30,
+            "width": 88,
+            "height": 60
+          },
+          "salience": 0.404
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 64,
+            "y": 90,
+            "width": 88,
+            "height": 60
+          },
+          "salience": 0.5241
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 152,
+            "y": 90,
+            "width": 88,
+            "height": 60
+          },
+          "salience": 0.4695
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8804,
+      "created_at": "2026-04-04T02:02:52Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_ad155b53fab91657c1658b9d",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-04T02:03:02Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_01cb87ebe699727a8f944354",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "text_fact",
+      "canonical_value": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig.",
+      "surface_forms": [
+        "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_208dac9e3526c4792d44cf1b"
+      ],
+      "evidence_refs": [
+        "asset_208dac9e3526c4792d44cf1b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_7854daec0389a365aaa73f57",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "text_fact",
+      "canonical_value": "1.93.",
+      "surface_forms": [
+        "1.93."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_208dac9e3526c4792d44cf1b"
+      ],
+      "evidence_refs": [
+        "asset_208dac9e3526c4792d44cf1b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "1.93.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1.93"
+        ],
+        "unit_mentions": [],
+        "condition_role": "explicit"
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_bed69204128b83075521e98a",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "text_fact",
+      "canonical_value": "Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "surface_forms": [
+        "Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_208dac9e3526c4792d44cf1b"
+      ],
+      "evidence_refs": [
+        "asset_208dac9e3526c4792d44cf1b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+        "segment_index": 7,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "0",
+          "0"
+        ],
+        "unit_mentions": [
+          "A",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_70faa9e118b3f7b18304c93b",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "target_slot",
+      "canonical_value": "For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead?",
+      "surface_forms": [
+        "For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_208dac9e3526c4792d44cf1b"
+      ],
+      "evidence_refs": [
+        "asset_208dac9e3526c4792d44cf1b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_ad155b53fab91657c1658b9d_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_93f3cf2093f7b7551464b11e",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "answer_claim",
+      "canonical_value": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+      "surface_forms": [
+        "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_2b5d6785f9a460f82aaf84de"
+      ],
+      "evidence_refs": [
+        "asset_2b5d6785f9a460f82aaf84de"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_e86340fc1f54a08e5b9cbdae",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 272,
+          "height": 155
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8804,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_ec7015d5002cc4af5c2c3ebd",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 64,
+          "y": 30,
+          "width": 176,
+          "height": 120
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8804,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_20b1edc530acc90a6c880aba",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 64,
+          "y": 30,
+          "width": 88,
+          "height": 60
+        },
+        "salience": 0.4562
+      },
+      "unit": null,
+      "confidence": 0.8804,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_28f7db967caa4bac0f74ff97",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 152,
+          "y": 30,
+          "width": 88,
+          "height": 60
+        },
+        "salience": 0.404
+      },
+      "unit": null,
+      "confidence": 0.8804,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_c8c8507e22e4b6612c0cbf4b",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 64,
+          "y": 90,
+          "width": 88,
+          "height": 60
+        },
+        "salience": 0.5241
+      },
+      "unit": null,
+      "confidence": 0.8804,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_c3680df5ba95908954ae562c",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 152,
+          "y": 90,
+          "width": 88,
+          "height": 60
+        },
+        "salience": 0.4695
+      },
+      "unit": null,
+      "confidence": 0.8804,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_d607a907b166e1caacd42208",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "text_fact",
+      "canonical_value": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "surface_forms": [
+        "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_759852d03903f943d64b6310"
+      ],
+      "evidence_refs": [
+        "asset_759852d03903f943d64b6310"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_9a7aab6717fd26ca124a3559",
+        "parent_problem_id": "prob_ad155b53fab91657c1658b9d",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_d409b22343560da77ceb76a0",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "quality_signal",
+      "canonical_value": "figure_reference_mismatch",
+      "surface_forms": [
+        "figure_reference_mismatch"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "figure_reference_mismatch"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_92598142964dee41c9f06bb4",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "quality_signal",
+      "canonical_value": "image_metadata_placeholder",
+      "surface_forms": [
+        "image_metadata_placeholder"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "image_metadata_placeholder"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_31f467db05941488cec211d5",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_bdb2971bddec72d283402b6c",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_ad155b53fab91657c1658b9d",
+        "problem_id": "prob_ad155b53fab91657c1658b9d",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-04T02:03:02Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "node_id": "node_dd1d758c30e7613af04e5c9d",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "text_sufficient"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-04T02:03:07Z",
+      "updated_at": "2026-04-04T02:03:07Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_5018efd6e89560f296ba4f47",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a246d322f4a1c1ca",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_02378a5fb3906e2817bfc4a3",
+        "asset_208dac9e3526c4792d44cf1b",
+        "asset_489c33ffa761bfdfd707be87",
+        "asset_2b5d6785f9a460f82aaf84de",
+        "asset_29dd404aab05be756c19383d",
+        "asset_9d862693171d94df1dadaad7",
+        "asset_759852d03903f943d64b6310"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 42
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.91,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 272,
+            "height": 155,
+            "blur_score": 1156.468,
+            "contrast_score": 35.24,
+            "noise_score": 21.9434,
+            "readability_score": 0.7009,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 64,
+              "y": 30,
+              "width": 176,
+              "height": 120
+            },
+            "perceptual_hash": "ffffdfdfc1c1ffe7"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_5018efd6e89560f296ba4f47",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_ad155b53fab91657c1658b9d",
+        "question_type": "open",
+        "condition_count": 3,
+        "target_count": 2,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_ad155b53fab91657c1658b9d",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "question_and_answer_clear",
+          "text_sufficient"
+        ],
+        "rationale": "The problem statement clearly describes the physical setup, asks for the reflection probability, and provides a specific formula as the expected answer. The image is only a simple illustrative chain diagram and is not necessary to understand the task; there is a minor risk because the referenced figure number does not match the shown caption and the image metadata looks imperfect.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "figure_reference_mismatch",
+        "image_metadata_placeholder",
+        "metadata.image_paths contains a PIL object string placeholder rather than a file path or URL"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "text_sufficient"
+      ],
+      "decision_rationale": "The question and answer are complete and understandable from text alone, the rewritten variant is usable, and alignment/solvability signals are strong. Minor figure-reference and image-metadata issues do not materially affect downstream annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-04T02:03:07Z",
+      "finished_at": "2026-04-04T02:03:07Z",
+      "candidate_id": "cand_ad155b53fab91657c1658b9d",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_5018efd6e89560f296ba4f47",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "image_entity_refs": [
+        "visual_prob_ad155b53fab91657c1658b9d_1::roi",
+        "visual_prob_ad155b53fab91657c1658b9d_1::roi_top_left",
+        "visual_prob_ad155b53fab91657c1658b9d_1::roi_top_right",
+        "visual_prob_ad155b53fab91657c1658b9d_1::roi_bottom_left",
+        "visual_prob_ad155b53fab91657c1658b9d_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_ad155b53fab91657c1658b9d_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "K",
+          "image_ref": "visual_prob_ad155b53fab91657c1658b9d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7701
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_ad155b53fab91657c1658b9d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7701
+        },
+        {
+          "text_ref": "B",
+          "image_ref": "visual_prob_ad155b53fab91657c1658b9d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7701
+        },
+        {
+          "text_ref": "C",
+          "image_ref": "visual_prob_ad155b53fab91657c1658b9d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7701
+        },
+        {
+          "text_ref": "slot_prob_ad155b53fab91657c1658b9d_1",
+          "image_ref": "visual_prob_ad155b53fab91657c1658b9d_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7737
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-04T02:02:52Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_9b91bb1c56785ccef89b2759",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "after_value": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "audit_id": "audit_95e33331605f34b59c123ada",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+      "after_value": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "audit_id": "audit_3df407f77dac6f23b7c6d057",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "audit_id": "audit_dd1d758c30e7613af04e5c9d",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T02:03:07Z"
+    },
+    {
+      "audit_id": "audit_001e25b826b0146924c56d46",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "Take",
+          "canonical": "Take",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "very",
+          "canonical": "very",
+          "variable_type": "label"
+        },
+        {
+          "original": "long",
+          "canonical": "long",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "Fig",
+          "canonical": "Fig",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "bead",
+          "canonical": "bead",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "free",
+          "canonical": "free",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "All",
+          "canonical": "All",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "mass",
+          "canonical": "mass",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "For",
+          "canonical": "For",
+          "variable_type": "label"
+        },
+        {
+          "original": "wave",
+          "canonical": "wave",
+          "variable_type": "label"
+        },
+        {
+          "original": "k",
+          "canonical": "k",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "when",
+          "canonical": "when",
+          "variable_type": "label"
+        },
+        {
+          "original": "hits",
+          "canonical": "hits",
+          "variable_type": "label"
+        },
+        {
+          "original": "Hint",
+          "canonical": "Hint",
+          "variable_type": "label"
+        },
+        {
+          "original": "part",
+          "canonical": "part",
+          "variable_type": "label"
+        },
+        {
+          "original": "b",
+          "canonical": "b",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "Try",
+          "canonical": "Try",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "n",
+          "canonical": "n",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "e",
+          "canonical": "e",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "i",
+          "canonical": "i",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-04T02:03:07Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_5018efd6e89560f296ba4f47",
+      "problem_id": "prob_ad155b53fab91657c1658b9d",
+      "source_problem_id": "258",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_9a7aab6717fd26ca124a3559",
+          "parent_problem_id": "prob_ad155b53fab91657c1658b9d",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-04T02:03:07Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_9a7aab6717fd26ca124a3559",
+      "parent_problem_id": "prob_ad155b53fab91657c1658b9d",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "Take a very long chain of beads connected by identical springs of spring constant $K$ and equilibrium length $a$, as shown in Fig. 1.93. Each bead is free to oscillate along the $x$ direction. All beads have mass $m$ except for one which has mass $m_{0}<m$. The mass of the spring is negligibly small. For a wave of wave vector $k$, what is the reflection probability when the wave hits the special bead? Hint for part (b): Try a solution of the form $x_{n}=A e^{i k a n}+B e^{-i k a n}$ for $n<0$, $x_{n}=C e^{i k a n}$ for $n>0$.",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$\\left|\\frac{B}{A}\\right|^{2}=\\left\\{1+\\left(\\frac{m}{m-m_{0}}\\right)^{2}\\left[\\frac{\\sin(ka)}{1-\\cos(ka)}\\right]^{2}\\right\\}^{-1}$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "seephys00146",
+  "canonical_sample_index": 146,
+  "canonical_dataset_key": "seephys",
+  "sample_path": "samples/seephys00146.json",
+  "image_path": "artifacts/images/seephys00146.png",
+  "images": [
+    "artifacts/images/seephys00146.png"
+  ],
+  "crop_path": "artifacts/crops/seephys00146.png",
+  "crops": [
+    "artifacts/crops/seephys00146.png"
+  ]
+}

@@ -1,0 +1,1851 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_0450ff4a5f7849a325789baf",
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "problem_id": "prob_08c2b09b8314bed546c73724",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "783",
+    "raw_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K 。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+} . t \\geqslant 0^{+}$时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}$ 和 $I_{3}$ 的流向。导出任意 $t=0^{+}$时刻的 $I_{1}(t)$ 。",
+    "raw_answer_text": "$$ I_{1}(t)=\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}\\right]$$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(311, 302)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains a PIL object string representation rather than a concrete file path or URL",
+      "force_requires_image set to true based on '图示的电路中' and the record's vision_relevance='essential'",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-09T15:09:29Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_08c2b09b8314bed546c73724",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_08c2b09b8314bed546c73724_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 311,
+        "height": 302,
+        "file_size": 60725
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 186,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 154
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_0450ff4a5f7849a325789baf",
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "783",
+    "created_at": "2026-04-09T15:09:29Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_08c2b09b8314bed546c73724",
+    "image_dependency_score": 0.94,
+    "multi_step_score": 0.82,
+    "verifiability_score": 0.76,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly says '图示的电路中' and refers to current directions '按图中虚线所示方向', so the setup depends on the diagram",
+        "requires_image=true",
+        "text_dominant=false",
+        "asset_registry_record.image_manifest shows 1 existing image asset"
+      ],
+      "multi_step": [
+        "question asks to derive a time-dependent current expression I1(t), not just read a value",
+        "answer_text is a nontrivial analytic formula with resistance combinations and an exponential term",
+        "the problem mentions initial conditions at t=0^- and t=0^+, which indicates transient-process reasoning across multiple conditions"
+      ],
+      "verifiability": [
+        "answer_type is short_text and answer_present=true",
+        "answer_text gives an explicit closed-form expression for I1(t), which is more checkable than free-form explanation",
+        "registry_passed=true, so core assets and text/answer registration succeeded",
+        "verification may still require symbolic equivalence handling because the answer is a formula rather than a simple numeric result"
+      ]
+    },
+    "risk_flags": [
+      "answer_text includes symbol 'A' without a definition in the provided fields",
+      "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_0450ff4a5f7849a325789baf",
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "783",
+    "created_at": "2026-04-09T15:09:29Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_08c2b09b8314bed546c73724",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像资产均已存在，且 `registry_passed=true`，核心语义支撑完整",
+      "该题明显依赖电路图，但 `image_manifest` 中已有可用图片，因此关键依赖未缺失",
+      "初步打分显示图像依赖高、多步推导特征明显、答案可校验性较强，整体候选价值较高",
+      "虽存在 `metadata.image_paths` 记录异常及答案中符号定义风险，但这些更像元数据/解析层问题，未达到缺失核心语义的程度"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_0450ff4a5f7849a325789baf",
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "783",
+    "created_at": "2026-04-09T15:09:29Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_0450ff4a5f7849a325789baf",
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "problem_id": "prob_08c2b09b8314bed546c73724",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+    "normalized_answer_text": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "移除了轻微空格与标点噪声，保留原题意与公式语义",
+      "题干显式依赖图示电路与电流方向定义",
+      "force_requires_image=true，因此保留为图像依赖样本"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-09T15:09:29Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "783",
+    "subject": "物理",
+    "raw_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K 。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+} . t \\geqslant 0^{+}$时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}$ 和 $I_{3}$ 的流向。导出任意 $t=0^{+}$时刻的 $I_{1}(t)$ 。",
+    "raw_answer_text": "$$ I_{1}(t)=\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}\\right]$$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.76,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 783,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(311, 302)>"
+      ],
+      "extraction_notes": [
+        "image field contains a PIL object string representation rather than a concrete file path or URL",
+        "force_requires_image set to true based on '图示的电路中' and the record's vision_relevance='essential'",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "由\n$$\n\\begin{array}{l}\n\\varepsilon=I_{1} R_{1}+I_{2} R_{2}, \nI_{1}=I_{2}+I_{3}+I_{C}, \\quad \\Rightarrow \\quad \\varepsilon=I_{2}\\left(R_{1}+R_{2}\\right)+I_{3} R_{1}+I_{C} R_{1}, \nI_{3} R_{3}=I_{2} R_{2}, \\quad \\Rightarrow \\quad \\varepsilon=\\frac{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}{R_{3}} I_{2}+I_{C} R_{1}, \nI_{2} R_{2}=Q / C, \\quad \\Rightarrow \\quad \\varepsilon=\\frac{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}{C R_{2} R_{3}} Q+I_{C} R_{1}, \nI_{C}=\\mathrm{d} Q / \\mathrm{d} t, \\quad \\Rightarrow \\quad \\varepsilon=\\frac{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}{C R_{2} R_{3}} Q+R_{1} \\frac{\\mathrm{~d} Q}{\\mathrm{~d} t},\n\\end{array}\n$$\n\n得\n$$\n\\frac{\\mathrm{d} Q}{\\mathrm{~d} t}=-(A Q-B), \\quad\\left\\{\\begin{array}{l}\nA=\\frac{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}{C R_{1} R_{2} R_{3}}, \nB=\\varepsilon / R_{1} .\n\\end{array}\\right.\n$$\n$Q(t)$ 的求解：\n$$\n\\int_{Q(0^{+})}^{Q(t)} \\frac{\\mathrm{d} Q}{A Q-B}=\\int_{0^{+}}^{t}-\\mathrm{d} t, \\Rightarrow \\frac{1}{A} \\ln \\frac{A Q-B}{A Q(0^{+})-B}=-t,\n$$\n\n得\n$$\n\\begin{array}{c}\nQ(t)=\\left[Q(0^{+})-\\frac{B}{A}\\right] \\mathrm{e}^{-A t}+\\frac{B}{A} \n\\Rightarrow \\quad Q(t)=\\frac{R_{2}}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}} C \\varepsilon\\left(\\frac{R_{1} R_{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}+R_{3}\\right) .\n\\end{array}\n$$\n$I_{2}(t), I_{3}(t)$ 的求解：\n$$\n\\begin{array}{c}\nI_{2}=Q / C R_{2} \\Rightarrow I_{2}(t)=\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left(\\frac{R_{1} R_{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}+R_{3}\\right), \nI_{3}=\\frac{R_{2}}{R_{3}} I_{2}, \\quad \\Rightarrow \\quad I_{3}(t)=\\frac{R_{2} \\varepsilon}{R_{3}\\left(R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}\\right)}\\left(\\frac{R_{1} R_{2}}{R_{1}+R_{2}} \\mathrm{e}^{-\\alpha}+R_{3}\\right) .\n\\end{array}\n$$\n$I_{C}(t), I_{1}(t)$ 的求解：\n$$\n\\begin{aligned}\nI_{C}=\\frac{\\mathrm{d} Q}{\\mathrm{~d} t}, & \\Rightarrow I_{C}(t)=\\frac{-R_{2} \\varepsilon}{R_{3}\\left(R_{1}+R_{2}\\right)} \\mathrm{e}^{-A}, \nI_{1}=I_{2}+I_{3}+I_{C}, \\quad \\Rightarrow \\quad I_{1}(t) & =\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}\\right] .\n\\end{aligned}\n$$",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-09T15:11:20Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均已存在，且 `registry_passed=true`，核心语义支撑完整",
+      "该题明显依赖电路图，但 `image_manifest` 中已有可用图片，因此关键依赖未缺失",
+      "初步打分显示图像依赖高、多步推导特征明显、答案可校验性较强，整体候选价值较高",
+      "虽存在 `metadata.image_paths` 记录异常及答案中符号定义风险，但这些更像元数据/解析层问题，未达到缺失核心语义的程度"
+    ],
+    "collection_risk_flags": [
+      "answer_text includes symbol 'A' without a definition in the provided fields",
+      "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_68c0d8b41e26f9c29c02bca7",
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "783",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_08c2b09b8314bed546c73724/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_08c2b09b8314bed546c73724/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 311,
+        "height": 302
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.76
+    },
+    "created_at": "2026-04-09T15:11:20Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_e257a84309ffe976c794768a",
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "783",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.76
+    },
+    "created_at": "2026-04-09T15:11:20Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像资产均已存在，且 `registry_passed=true`，核心语义支撑完整",
+      "该题明显依赖电路图，但 `image_manifest` 中已有可用图片，因此关键依赖未缺失",
+      "初步打分显示图像依赖高、多步推导特征明显、答案可校验性较强，整体候选价值较高",
+      "虽存在 `metadata.image_paths` 记录异常及答案中符号定义风险，但这些更像元数据/解析层问题，未达到缺失核心语义的程度"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_0450ff4a5f7849a325789baf",
+      "candidate_id": "cand_08c2b09b8314bed546c73724",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-09T15:11:20Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_0450ff4a5f7849a325789baf",
+    "problem_id": "prob_08c2b09b8314bed546c73724",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "783",
+    "normalized_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+    "normalized_answer_text": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-09T15:11:20Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_0450ff4a5f7849a325789baf",
+    "problem_id": "prob_08c2b09b8314bed546c73724",
+    "normalized_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+    "normalized_answer_text": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "t",
+        "canonical": "t",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "K",
+        "canonical": "K",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 32,
+          "y": 0,
+          "width": 269,
+          "height": 302
+        },
+        "readability_score": 0.7396,
+        "contrast_score": 35.2459
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-09T15:11:20Z",
+    "normalization_notes": [
+      "移除了轻微空格与标点噪声，保留原题意与公式语义",
+      "题干显式依赖图示电路与电流方向定义",
+      "force_requires_image=true，因此保留为图像依赖样本"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_08c2b09b8314bed546c73724",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "783",
+    "ingest_batch_id": "benchmarkallinone-seephys-600-2000_20260408T142422Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K 。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+} . t \\geqslant 0^{+}$时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}$ 和 $I_{3}$ 的流向。导出任意 $t=0^{+}$时刻的 $I_{1}(t)$ 。",
+    "normalized_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+    "raw_answer_text": "$$ I_{1}(t)=\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}\\right]$$",
+    "normalized_answer_text": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "由\n$$\n\\begin{array}{l}\n\\varepsilon=I_{1} R_{1}+I_{2} R_{2}, \nI_{1}=I_{2}+I_{3}+I_{C}, \\quad \\Rightarrow \\quad \\varepsilon=I_{2}\\left(R_{1}+R_{2}\\right)+I_{3} R_{1}+I_{C} R_{1}, \nI_{3} R_{3}=I_{2} R_{2}, \\quad \\Rightarrow \\quad \\varepsilon=\\frac{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}{R_{3}} I_{2}+I_{C} R_{1}, \nI_{2} R_{2}=Q / C, \\quad \\Rightarrow \\quad \\varepsilon=\\frac{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}{C R_{2} R_{3}} Q+I_{C} R_{1}, \nI_{C}=\\mathrm{d} Q / \\mathrm{d} t, \\quad \\Rightarrow \\quad \\varepsilon=\\frac{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}{C R_{2} R_{3}} Q+R_{1} \\frac{\\mathrm{~d} Q}{\\mathrm{~d} t},\n\\end{array}\n$$\n\n得\n$$\n\\frac{\\mathrm{d} Q}{\\mathrm{~d} t}=-(A Q-B), \\quad\\left\\{\\begin{array}{l}\nA=\\frac{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}{C R_{1} R_{2} R_{3}}, \nB=\\varepsilon / R_{1} .\n\\end{array}\\right.\n$$\n$Q(t)$ 的求解：\n$$\n\\int_{Q(0^{+})}^{Q(t)} \\frac{\\mathrm{d} Q}{A Q-B}=\\int_{0^{+}}^{t}-\\mathrm{d} t, \\Rightarrow \\frac{1}{A} \\ln \\frac{A Q-B}{A Q(0^{+})-B}=-t,\n$$\n\n得\n$$\n\\begin{array}{c}\nQ(t)=\\left[Q(0^{+})-\\frac{B}{A}\\right] \\mathrm{e}^{-A t}+\\frac{B}{A} \n\\Rightarrow \\quad Q(t)=\\frac{R_{2}}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}} C \\varepsilon\\left(\\frac{R_{1} R_{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}+R_{3}\\right) .\n\\end{array}\n$$\n$I_{2}(t), I_{3}(t)$ 的求解：\n$$\n\\begin{array}{c}\nI_{2}=Q / C R_{2} \\Rightarrow I_{2}(t)=\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left(\\frac{R_{1} R_{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}+R_{3}\\right), \nI_{3}=\\frac{R_{2}}{R_{3}} I_{2}, \\quad \\Rightarrow \\quad I_{3}(t)=\\frac{R_{2} \\varepsilon}{R_{3}\\left(R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}\\right)}\\left(\\frac{R_{1} R_{2}}{R_{1}+R_{2}} \\mathrm{e}^{-\\alpha}+R_{3}\\right) .\n\\end{array}\n$$\n$I_{C}(t), I_{1}(t)$ 的求解：\n$$\n\\begin{aligned}\nI_{C}=\\frac{\\mathrm{d} Q}{\\mathrm{~d} t}, & \\Rightarrow I_{C}(t)=\\frac{-R_{2} \\varepsilon}{R_{3}\\left(R_{1}+R_{2}\\right)} \\mathrm{e}^{-A}, \nI_{1}=I_{2}+I_{3}+I_{C}, \\quad \\Rightarrow \\quad I_{1}(t) & =\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}\\right] .\n\\end{aligned}\n$$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.959,
+    "multi_step_score": 0.4187,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The circuit problem is jointly understandable, the image is clear enough for the required topology, the target answer is fully available, and rewrite/alignment/solvability evidence indicates the sample is usable for annotation. The metadata image-path anomaly is non-blocking and does not prevent semantic use of the sample.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_08c2b09b8314bed546c73724",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-09T15:09:29Z",
+    "updated_at": "2026-04-09T15:11:20Z",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.76,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均已存在，且 `registry_passed=true`，核心语义支撑完整",
+      "该题明显依赖电路图，但 `image_manifest` 中已有可用图片，因此关键依赖未缺失",
+      "初步打分显示图像依赖高、多步推导特征明显、答案可校验性较强，整体候选价值较高",
+      "虽存在 `metadata.image_paths` 记录异常及答案中符号定义风险，但这些更像元数据/解析层问题，未达到缺失核心语义的程度"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_84beeb773f82e8dbdba655ca",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[600:2000]/783/question",
+      "storage_uri": "inline://prob_08c2b09b8314bed546c73724/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 340,
+      "width": null,
+      "height": null,
+      "sha256": "919b8ef480e901e420451b552515244040d2aae0f5c6a3d19e05ac1b0fe720d0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K 。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+} . t \\geqslant 0^{+}$时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}$ 和 $I_{3}$ 的流向。导出任意 $t=0^{+}$时刻的 $I_{1}(t)$ 。",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7205,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "asset_id": "asset_6ba41519411327e8ce3de868",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_08c2b09b8314bed546c73724/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 345,
+      "width": null,
+      "height": null,
+      "sha256": "b8f1159c24f2eeb317d1b109b9e4cb2b38e9de5d6c83620c59368d62a3098d52",
+      "perceptual_hash": null,
+      "source_text_snapshot": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K 。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+} . t \\geqslant 0^{+}$时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}$ 和 $I_{3}$ 的流向。导出任意 $t=0^{+}$时刻的 $I_{1}(t)$ 。",
+      "normalized_text_snapshot": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+      "text_completeness_score": 0.7205,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "asset_id": "asset_5e723c9a19d6f2466e56fa44",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[600:2000]/783/answer",
+      "storage_uri": "inline://prob_08c2b09b8314bed546c73724/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 154,
+      "width": null,
+      "height": null,
+      "sha256": "c2550c4a9000a6273940a97b8ec729cf61d9dd055b42cba8b6396e63a0d78ceb",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$$ I_{1}(t)=\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}\\right]$$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "e",
+          "canonical": "e",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "asset_id": "asset_92bd7c9a18f719799ece75cc",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_08c2b09b8314bed546c73724/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 148,
+      "width": null,
+      "height": null,
+      "sha256": "e8e0d9f75ed19124a0a29537c74df86b12b2133a766212f10b0a121a4d5f4d10",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$$ I_{1}(t)=\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}\\right]$$",
+      "normalized_text_snapshot": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "left",
+          "canonical": "left",
+          "variable_type": "label"
+        },
+        {
+          "original": "e",
+          "canonical": "e",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "At",
+          "canonical": "At",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "asset_id": "asset_0fa2ce3d01accc97a5adc725",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_08c2b09b8314bed546c73724_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 60725,
+      "width": 311,
+      "height": 302,
+      "sha256": "9c44cdbd7b7c5fa94a49120ee0bf3ac0fded31f9820ccd7322138ecb93bd9b6f",
+      "perceptual_hash": "c78ff3c084c4f3b3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3099.9844,
+      "readability_score": 0.7396,
+      "noise_score": 27.5899,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 32,
+        "y": 0,
+        "width": 269,
+        "height": 302
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "asset_id": "asset_622e28d3de286a00520f6366",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/crops/prob_08c2b09b8314bed546c73724_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 58493,
+      "width": 269,
+      "height": 302,
+      "sha256": "d2ae74cf7440bf08c765f4125b49cd1eefa4f2b5cc943ecda80f99fc16752847",
+      "perceptual_hash": "cfcff3d454d4f3f7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3099.9844,
+      "readability_score": 0.7396,
+      "noise_score": 27.5899,
+      "cropped_from_asset_id": "asset_0fa2ce3d01accc97a5adc725",
+      "roi_bbox": {
+        "x": 32,
+        "y": 0,
+        "width": 269,
+        "height": 302
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "asset_id": "asset_296053ae7a55f7bb172652ab",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_82dc58ccdd62c54520d9bb2e",
+      "file_format": "txt",
+      "file_size_bytes": 345,
+      "width": null,
+      "height": null,
+      "sha256": "b8f1159c24f2eeb317d1b109b9e4cb2b38e9de5d6c83620c59368d62a3098d52",
+      "perceptual_hash": null,
+      "source_text_snapshot": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K 。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+} . t \\geqslant 0^{+}$时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}$ 和 $I_{3}$ 的流向。导出任意 $t=0^{+}$时刻的 $I_{1}(t)$ 。",
+      "normalized_text_snapshot": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+      "text_completeness_score": 0.7205,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_08c2b09b8314bed546c73724",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "1",
+            "2",
+            "3",
+            "0",
+            "1"
+          ],
+          "unit_mentions": [
+            "g",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "1",
+            "2",
+            "3",
+            "0",
+            "1"
+          ],
+          "unit_mentions": [
+            "g",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_08c2b09b8314bed546c73724_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "K",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "C",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-09T15:11:01Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_08c2b09b8314bed546c73724_1",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.0298,
+        "dark_pixel_ratio": 0.0566,
+        "readability_score": 0.7396,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 311,
+            "height": 302
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 32,
+            "y": 0,
+            "width": 269,
+            "height": 302
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 32,
+            "y": 0,
+            "width": 134,
+            "height": 151
+          },
+          "salience": 0.4151
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 166,
+            "y": 0,
+            "width": 135,
+            "height": 151
+          },
+          "salience": 0.4037
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 32,
+            "y": 151,
+            "width": 134,
+            "height": 151
+          },
+          "salience": 0.4165
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 166,
+            "y": 151,
+            "width": 135,
+            "height": 151
+          },
+          "salience": 0.4266
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8958,
+      "created_at": "2026-04-09T15:11:01Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_08c2b09b8314bed546c73724",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-09T15:11:12Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_4f467a431d59e3cc3b79b047",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "text_fact",
+      "canonical_value": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+      "surface_forms": [
+        "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_6ba41519411327e8ce3de868"
+      ],
+      "evidence_refs": [
+        "asset_6ba41519411327e8ce3de868"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "2",
+          "3",
+          "0",
+          "1"
+        ],
+        "unit_mentions": [
+          "g",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_1521b92e82230ba013ee4172",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "target_slot",
+      "canonical_value": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+      "surface_forms": [
+        "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_6ba41519411327e8ce3de868"
+      ],
+      "evidence_refs": [
+        "asset_6ba41519411327e8ce3de868"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_08c2b09b8314bed546c73724_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_40e4e0c17aa3374aea447557",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "answer_claim",
+      "canonical_value": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+      "surface_forms": [
+        "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_92bd7c9a18f719799ece75cc"
+      ],
+      "evidence_refs": [
+        "asset_92bd7c9a18f719799ece75cc"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_153db4e1e02fe94bb0200583",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 311,
+          "height": 302
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8958,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_4ad7b7eb0f503bffc489e8df",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 32,
+          "y": 0,
+          "width": 269,
+          "height": 302
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8958,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_60b49b7a56c674ef90dfc599",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 32,
+          "y": 0,
+          "width": 134,
+          "height": 151
+        },
+        "salience": 0.4151
+      },
+      "unit": null,
+      "confidence": 0.8958,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_bd25ede3eeb212c9d109d8f4",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 166,
+          "y": 0,
+          "width": 135,
+          "height": 151
+        },
+        "salience": 0.4037
+      },
+      "unit": null,
+      "confidence": 0.8958,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_19a4ab4654bc40f059a3a519",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 32,
+          "y": 151,
+          "width": 134,
+          "height": 151
+        },
+        "salience": 0.4165
+      },
+      "unit": null,
+      "confidence": 0.8958,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_3f5fb17853ef32db7012e0e1",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 166,
+          "y": 151,
+          "width": 135,
+          "height": 151
+        },
+        "salience": 0.4266
+      },
+      "unit": null,
+      "confidence": 0.8958,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_a7b58a9cedf48d599dd97533",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "text_fact",
+      "canonical_value": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+      "surface_forms": [
+        "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_296053ae7a55f7bb172652ab"
+      ],
+      "evidence_refs": [
+        "asset_296053ae7a55f7bb172652ab"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_82dc58ccdd62c54520d9bb2e",
+        "parent_problem_id": "prob_08c2b09b8314bed546c73724",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_c5c90cafc5e8da2bf170bc46",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_5218c873329788baa3ec5327",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_08c2b09b8314bed546c73724",
+        "problem_id": "prob_08c2b09b8314bed546c73724",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-09T15:11:12Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "node_id": "node_40aba24479be940f7e8ca810",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_acceptable",
+          "answer_available",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T15:11:20Z",
+      "updated_at": "2026-04-09T15:11:20Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_0450ff4a5f7849a325789baf",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_6811add513b82e34",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_84beeb773f82e8dbdba655ca",
+        "asset_6ba41519411327e8ce3de868",
+        "asset_5e723c9a19d6f2466e56fa44",
+        "asset_92bd7c9a18f719799ece75cc",
+        "asset_0fa2ce3d01accc97a5adc725",
+        "asset_622e28d3de286a00520f6366",
+        "asset_296053ae7a55f7bb172652ab"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 3
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 311,
+            "height": 302,
+            "blur_score": 3099.9844,
+            "contrast_score": 35.2459,
+            "noise_score": 27.5899,
+            "readability_score": 0.7396,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 32,
+              "y": 0,
+              "width": 269,
+              "height": 302
+            },
+            "perceptual_hash": "c78ff3c084c4f3b3"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_0450ff4a5f7849a325789baf",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_08c2b09b8314bed546c73724",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_08c2b09b8314bed546c73724",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_semantics_complete"
+        ],
+        "rationale": "The text clearly states the circuit condition before and after closing switch K, defines the current directions, and asks for the derivation of I1(t). The image is necessary and provides a readable circuit topology with R1, R2, R3, capacitor C, source, nodes A/B, and switch K, so the intended physics problem and expected answer are understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains a PIL object string representation instead of a concrete file path or URL"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_acceptable",
+        "answer_available",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The circuit problem is jointly understandable, the image is clear enough for the required topology, the target answer is fully available, and rewrite/alignment/solvability evidence indicates the sample is usable for annotation. The metadata image-path anomaly is non-blocking and does not prevent semantic use of the sample.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-09T15:11:20Z",
+      "finished_at": "2026-04-09T15:11:20Z",
+      "candidate_id": "cand_08c2b09b8314bed546c73724",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_0450ff4a5f7849a325789baf",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "image_entity_refs": [
+        "visual_prob_08c2b09b8314bed546c73724_1::roi",
+        "visual_prob_08c2b09b8314bed546c73724_1::roi_top_left",
+        "visual_prob_08c2b09b8314bed546c73724_1::roi_top_right",
+        "visual_prob_08c2b09b8314bed546c73724_1::roi_bottom_left",
+        "visual_prob_08c2b09b8314bed546c73724_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_08c2b09b8314bed546c73724_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "K",
+          "image_ref": "visual_prob_08c2b09b8314bed546c73724_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.774
+        },
+        {
+          "text_ref": "C",
+          "image_ref": "visual_prob_08c2b09b8314bed546c73724_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.774
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-09T15:11:01Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_7a2b548c82664490065ae300",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K 。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+} . t \\geqslant 0^{+}$时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}$ 和 $I_{3}$ 的流向。导出任意 $t=0^{+}$时刻的 $I_{1}(t)$ 。",
+      "after_value": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "audit_id": "audit_da72d6601ed944f05300b03a",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$$ I_{1}(t)=\\frac{\\varepsilon}{R_{1} R_{2}+R_{2} R_{3}+R_{3} R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}} \\mathrm{e}^{-A t}\\right]$$",
+      "after_value": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "audit_id": "audit_bf6ff8d6dda57e9d2fae24dc",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "audit_id": "audit_40aba24479be940f7e8ca810",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T15:11:20Z"
+    },
+    {
+      "audit_id": "audit_75a21b193d855dbe461836e1",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "K",
+          "canonical": "K",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T15:11:20Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_0450ff4a5f7849a325789baf",
+      "problem_id": "prob_08c2b09b8314bed546c73724",
+      "source_problem_id": "783",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_82dc58ccdd62c54520d9bb2e",
+          "parent_problem_id": "prob_08c2b09b8314bed546c73724",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-09T15:11:20Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_82dc58ccdd62c54520d9bb2e",
+      "parent_problem_id": "prob_08c2b09b8314bed546c73724",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "图示的电路中，$t<0$ 时，电容器充电过程已完成。$t=0$ 时，接通电键 K。将接通前瞬间时刻记为 $t=0^{-}$，接通后瞬间时刻记为 $t=0^{+}$。$t\\geqslant 0^{+}$ 时，按图中虚线所示方向设定各路电流 $I_{1}, I_{2}, I_{C}, I_{3}$ 的流向。导出任意 $t\\geqslant 0^{+}$ 时刻的 $I_{1}(t)$。",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$$I_{1}(t)=\\frac{\\varepsilon}{R_{1}R_{2}+R_{2}R_{3}+R_{3}R_{1}}\\left[\\left(R_{2}+R_{3}\\right)-\\frac{R_{2}^{2}}{R_{1}+R_{2}}\\mathrm{e}^{-At}\\right]$$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "seephys00497",
+  "canonical_sample_index": 497,
+  "canonical_dataset_key": "seephys",
+  "sample_path": "samples/seephys00497.json",
+  "image_path": "artifacts/images/seephys00497.png",
+  "images": [
+    "artifacts/images/seephys00497.png"
+  ],
+  "crop_path": "artifacts/crops/seephys00497.png",
+  "crops": [
+    "artifacts/crops/seephys00497.png"
+  ]
+}

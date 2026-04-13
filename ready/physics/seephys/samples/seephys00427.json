@@ -1,0 +1,1749 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_b5339dbb7e58e32b3dcce0cf",
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "problem_id": "prob_d044b3a699a34739ec083afa",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "221",
+    "raw_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$ 。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8－3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+    "raw_answer_text": "$18\\ \\mathrm{V}$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(296, 233)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images 字段提供的是 PIL 图像对象字符串表示，不是文件路径或 URL",
+      "题干明确提到“图中 U_ab”，且记录中 vision_relevance 为 essential",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-07T15:58:06Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_d044b3a699a34739ec083afa",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_300_600/run_2722711fc3c56f3a/datasets/seephys/artifacts/images/prob_d044b3a699a34739ec083afa_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 296,
+        "height": 233,
+        "file_size": 17511
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 175,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 16
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL object string representation rather than a file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_b5339dbb7e58e32b3dcce0cf",
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "221",
+    "created_at": "2026-04-07T15:58:06Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_d044b3a699a34739ec083afa",
+    "image_dependency_score": 0.72,
+    "multi_step_score": 0.69,
+    "verifiability_score": 0.91,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式提到“习题 8-3 图中 U_ab”，存在对配图符号与情境的引用。",
+        "输入标注 `requires_image=true` 且 `text_dominant=false`，说明上游认为图像不是可忽略背景。",
+        "但题干同时给出了关键数值信息（200 A、导电率、10 m、两脚间 0.6 m），仅凭文字也可能完成求解，因此不打满分。"
+      ],
+      "multi_step": [
+        "求解需先建立触地点周围地表电势/电位分布，再计算相距 0.6 m 两点的电势差，不是单步代入。",
+        "题目结合物理情境、给定参数与几何位置（距触地点 10 m、跨步间距 0.6 m），至少涉及两步条件组合。",
+        "答案为数值型短答，但题干并未直接给公式，通常需要推导或调用模型后再计算。"
+      ],
+      "verifiability": [
+        "标准答案是明确的短文本数值 `18 V`，目标输出形式清晰。",
+        "题目给出了完整的已知量，若采用标准模型可复算并核对数值，便于规则或程序验证。",
+        "`asset_registry_record.registry_passed=true`，且 `answer_present=true`、`answer_type=short_text`，上游登记完整性较好。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths contains a PIL object string representation rather than a file path or URL",
+      "图像是否为严格必需存在一定歧义：题干已包含大部分可计算信息"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_b5339dbb7e58e32b3dcce0cf",
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "221",
+    "created_at": "2026-04-07T15:58:06Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_d044b3a699a34739ec083afa",
+    "priority": 0.84,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像均已登记且可用，核心语义资产完整。",
+      "综合评分较高，尤其答案可验证性强（短文本数值答案明确），适合进入候选池。",
+      "虽存在 metadata.image_paths 记录格式问题，但 image_manifest 中已有可用图像文件，问题不影响核心内容恢复。",
+      "图像依赖存在一定歧义，但题干已提供大部分关键数值信息，不构成语义缺失或拒收理由。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_b5339dbb7e58e32b3dcce0cf",
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "221",
+    "created_at": "2026-04-07T15:58:06Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_b5339dbb7e58e32b3dcce0cf",
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "problem_id": "prob_d044b3a699a34739ec083afa",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+    "normalized_answer_text": "$18\\ \\mathrm{V}$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "保留题干原意，仅统一标点与图号连接符格式。",
+      "题干显式引用图中 $U_{ab}$，且 force_requires_image=true，因此标记为依赖图像并走 multimodal_full。"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-07T15:58:06Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "source_dataset": "SeePhys",
+    "source_split": "train[300:600]",
+    "source_problem_id": "221",
+    "subject": "物理",
+    "raw_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$ 。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8－3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+    "raw_answer_text": "$18\\ \\mathrm{V}$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.72,
+    "initial_multi_solution_score": 0.69,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 221,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(296, 233)>"
+      ],
+      "extraction_notes": [
+        "images 字段提供的是 PIL 图像对象字符串表示，不是文件路径或 URL",
+        "题干明确提到“图中 U_ab”，且记录中 vision_relevance 为 essential",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "距离触地点 $r_{a}=10\\ \\mathrm{~m}$ 处的跨步电压为\\n\\[\\nU_{2}=\\frac{200}{2 \\pi \\gamma}\\left(\\frac{1}{10}-\\frac{1}{10.6}\\right)\\ \\mathrm{V}=18\\ \\mathrm{V}\\n\\]",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-07T15:59:35Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像均已登记且可用，核心语义资产完整。",
+      "综合评分较高，尤其答案可验证性强（短文本数值答案明确），适合进入候选池。",
+      "虽存在 metadata.image_paths 记录格式问题，但 image_manifest 中已有可用图像文件，问题不影响核心内容恢复。",
+      "图像依赖存在一定歧义，但题干已提供大部分关键数值信息，不构成语义缺失或拒收理由。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths contains a PIL object string representation rather than a file path or URL",
+      "图像是否为严格必需存在一定歧义：题干已包含大部分可计算信息"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_6ffdd9d6a26e389f0fb88391",
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "221",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_d044b3a699a34739ec083afa/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_d044b3a699a34739ec083afa/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 296,
+        "height": 233
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.72,
+      "initial_multi_solution_score": 0.69,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-07T15:59:35Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL object string representation rather than a file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_ce771237b59979442c2833e0",
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "221",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.84,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.72,
+      "initial_multi_solution_score": 0.69,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-07T15:59:35Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像均已登记且可用，核心语义资产完整。",
+      "综合评分较高，尤其答案可验证性强（短文本数值答案明确），适合进入候选池。",
+      "虽存在 metadata.image_paths 记录格式问题，但 image_manifest 中已有可用图像文件，问题不影响核心内容恢复。",
+      "图像依赖存在一定歧义，但题干已提供大部分关键数值信息，不构成语义缺失或拒收理由。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_b5339dbb7e58e32b3dcce0cf",
+      "candidate_id": "cand_d044b3a699a34739ec083afa",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-07T15:59:35Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_b5339dbb7e58e32b3dcce0cf",
+    "problem_id": "prob_d044b3a699a34739ec083afa",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "221",
+    "normalized_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10m 处的跨步电压。",
+    "normalized_answer_text": "$18\\ \\mathrm{V}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_acceptable",
+      "question_answer_complete",
+      "rewrite_usable"
+    ],
+    "created_at": "2026-04-07T15:59:35Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_b5339dbb7e58e32b3dcce0cf",
+    "problem_id": "prob_d044b3a699a34739ec083afa",
+    "normalized_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10m 处的跨步电压。",
+    "normalized_answer_text": "$18\\ \\mathrm{V}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "S",
+        "canonical": "S",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "ab",
+        "canonical": "ab",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "一高压输电线被风吹断，一端触及地面，从而使 200A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10m 处的跨步电压。"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 17,
+          "y": 25,
+          "width": 200,
+          "height": 195
+        },
+        "readability_score": 0.6363,
+        "contrast_score": 19.2114
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-07T15:59:35Z",
+    "normalization_notes": [
+      "保留题干原意，仅统一标点与图号连接符格式。",
+      "题干显式引用图中 $U_{ab}$，且 force_requires_image=true，因此标记为依赖图像并走 multimodal_full。"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_d044b3a699a34739ec083afa",
+    "source_dataset": "SeePhys",
+    "source_split": "train[300:600]",
+    "source_problem_id": "221",
+    "ingest_batch_id": "benchmarkallinone-seephys-300-600_20260407T093609Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$ 。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8－3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+    "normalized_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+    "raw_answer_text": "$18\\ \\mathrm{V}$",
+    "normalized_answer_text": "$18\\ \\mathrm{V}$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "距离触地点 $r_{a}=10\\ \\mathrm{~m}$ 处的跨步电压为\\n\\[\\nU_{2}=\\frac{200}{2 \\pi \\gamma}\\left(\\frac{1}{10}-\\frac{1}{10.6}\\right)\\ \\mathrm{V}=18\\ \\mathrm{V}\\n\\]",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9486,
+    "multi_step_score": 0.3467,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "metadata.image_paths contains a PIL object string representation rather than a file path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_acceptable",
+      "question_answer_complete",
+      "rewrite_usable"
+    ],
+    "clean_decision_rationale": "题干与答案完整，改写保持原意且可直接用于标注；图文联合可理解，求解路径和答案信号明确。虽有元数据中的图片路径格式提示，但不影响样本的语义可用性。",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_d044b3a699a34739ec083afa",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-07T15:58:06Z",
+    "updated_at": "2026-04-07T15:59:35Z",
+    "initial_image_dependency_score": 0.72,
+    "initial_multi_solution_score": 0.69,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像均已登记且可用，核心语义资产完整。",
+      "综合评分较高，尤其答案可验证性强（短文本数值答案明确），适合进入候选池。",
+      "虽存在 metadata.image_paths 记录格式问题，但 image_manifest 中已有可用图像文件，问题不影响核心内容恢复。",
+      "图像依赖存在一定歧义，但题干已提供大部分关键数值信息，不构成语义缺失或拒收理由。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_c217ac883e4dc396bec31eac",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[300:600]/221/question",
+      "storage_uri": "inline://prob_d044b3a699a34739ec083afa/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 361,
+      "width": null,
+      "height": null,
+      "sha256": "5dfe2e674df5df0c59b9d7856bd0fc8621e9065a5f7e719422c746f4d199e5f1",
+      "perceptual_hash": null,
+      "source_text_snapshot": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$ 。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8－3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7054,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ab",
+          "canonical": "ab",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "asset_id": "asset_647d00bb09c984ee2e076e92",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_d044b3a699a34739ec083afa/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 358,
+      "width": null,
+      "height": null,
+      "sha256": "247f19a6324cd442ae365a3046076e0062371de46bb8b759d1346cae1674570a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$ 。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8－3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "normalized_text_snapshot": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "text_completeness_score": 0.7054,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ab",
+          "canonical": "ab",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "asset_id": "asset_1e4e3ebe696de1a8a3b3ec8d",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[300:600]/221/answer",
+      "storage_uri": "inline://prob_d044b3a699a34739ec083afa/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 16,
+      "width": null,
+      "height": null,
+      "sha256": "1cf4ab21225647869d4997b6c05ac6bd4a9302202cc7e25d645cbe03d500e578",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$18\\ \\mathrm{V}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "asset_id": "asset_467f47085c7121426eb95b58",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_d044b3a699a34739ec083afa/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 16,
+      "width": null,
+      "height": null,
+      "sha256": "1cf4ab21225647869d4997b6c05ac6bd4a9302202cc7e25d645cbe03d500e578",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$18\\ \\mathrm{V}$",
+      "normalized_text_snapshot": "$18\\ \\mathrm{V}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "asset_id": "asset_0644108d77d08df2b80b220b",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_300_600/run_2722711fc3c56f3a/datasets/seephys/artifacts/images/prob_d044b3a699a34739ec083afa_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 17511,
+      "width": 296,
+      "height": 233,
+      "sha256": "d75ded23c81dd65283fc3507d66d27ab51e412d2fc53d33b4f1e09577d8f0a41",
+      "perceptual_hash": "ffefe7a703c7efc7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 603.5391,
+      "readability_score": 0.6363,
+      "noise_score": 12.4437,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 17,
+        "y": 25,
+        "width": 200,
+        "height": 195
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains a PIL object string representation rather than a file path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "asset_id": "asset_6231417928ebee53f09b224a",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_300_600/run_2722711fc3c56f3a/datasets/seephys/artifacts/crops/prob_d044b3a699a34739ec083afa_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 16533,
+      "width": 200,
+      "height": 195,
+      "sha256": "c74982dd9c9f7b1b146c3fcd7e3575d2972f924574feb92e592164df54cb88b6",
+      "perceptual_hash": "f3f3f31300e1f7c3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 603.5391,
+      "readability_score": 0.6363,
+      "noise_score": 12.4437,
+      "cropped_from_asset_id": "asset_0644108d77d08df2b80b220b",
+      "roi_bbox": {
+        "x": 17,
+        "y": 25,
+        "width": 200,
+        "height": 195
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "asset_id": "asset_2cac0a5bbf9935152657ac32",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_be38c5f37a7ba435186572f2",
+      "file_format": "txt",
+      "file_size_bytes": 358,
+      "width": null,
+      "height": null,
+      "sha256": "247f19a6324cd442ae365a3046076e0062371de46bb8b759d1346cae1674570a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$ 。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8－3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "normalized_text_snapshot": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "text_completeness_score": 0.7054,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ab",
+          "canonical": "ab",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_d044b3a699a34739ec083afa",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "一高压输电线被风吹断，一端触及地面，从而使 200A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10m 处的跨步电压。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "200",
+            "1.0",
+            "10",
+            "-2",
+            "0.6",
+            "8",
+            "-3",
+            "10"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "mm",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "200",
+            "1.0",
+            "10",
+            "-2",
+            "0.6",
+            "8",
+            "-3",
+            "10"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "mm",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_d044b3a699a34739ec083afa_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$18\\ \\mathrm{V}$",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "S",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ab",
+          "canonical": "ab",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "V",
+        "g",
+        "h",
+        "m",
+        "mm",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "一高压输电线被风吹断，一端触及地面，从而使 200A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10m 处的跨步电压。"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-07T15:59:16Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_d044b3a699a34739ec083afa_1",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.2704,
+        "dark_pixel_ratio": 0.0537,
+        "readability_score": 0.6363,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 296,
+            "height": 233
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 17,
+            "y": 25,
+            "width": 200,
+            "height": 195
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 117,
+            "y": 25,
+            "width": 100,
+            "height": 97
+          },
+          "salience": 0.4254
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 17,
+            "y": 122,
+            "width": 100,
+            "height": 98
+          },
+          "salience": 0.4643
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 117,
+            "y": 122,
+            "width": 100,
+            "height": 98
+          },
+          "salience": 0.5298
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8545,
+      "created_at": "2026-04-07T15:59:16Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_d044b3a699a34739ec083afa",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-07T15:59:24Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_1f995da823d7174996d44114",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "text_fact",
+      "canonical_value": "一高压输电线被风吹断，一端触及地面，从而使 200A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10m 处的跨步电压。",
+      "surface_forms": [
+        "一高压输电线被风吹断，一端触及地面，从而使 200A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10m 处的跨步电压。"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_647d00bb09c984ee2e076e92"
+      ],
+      "evidence_refs": [
+        "asset_647d00bb09c984ee2e076e92"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "一高压输电线被风吹断，一端触及地面，从而使 200A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10m 处的跨步电压。",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "200",
+          "1.0",
+          "10",
+          "-2",
+          "0.6",
+          "8",
+          "-3",
+          "10"
+        ],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "mm",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,mm,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_9c8e9e1c85e46925cc0840b6",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "target_slot",
+      "canonical_value": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "surface_forms": [
+        "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_647d00bb09c984ee2e076e92"
+      ],
+      "evidence_refs": [
+        "asset_647d00bb09c984ee2e076e92"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_d044b3a699a34739ec083afa_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$18\\ \\mathrm{V}$",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_b7253237c8440fb89842f207",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "answer_claim",
+      "canonical_value": "$18\\ \\mathrm{V}$",
+      "surface_forms": [
+        "$18\\ \\mathrm{V}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_467f47085c7121426eb95b58"
+      ],
+      "evidence_refs": [
+        "asset_467f47085c7121426eb95b58"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$18\\ \\mathrm{V}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_81c11baa60f58b44d0273594",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 296,
+          "height": 233
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_1970119d6cc66b599ca9a78d",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 17,
+          "y": 25,
+          "width": 200,
+          "height": 195
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_81db4ebe6bef6cff1269d9cc",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 117,
+          "y": 25,
+          "width": 100,
+          "height": 97
+        },
+        "salience": 0.4254
+      },
+      "unit": null,
+      "confidence": 0.8545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_39a37460b37638c1564bf4d6",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 17,
+          "y": 122,
+          "width": 100,
+          "height": 98
+        },
+        "salience": 0.4643
+      },
+      "unit": null,
+      "confidence": 0.8545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_9b38b097a11c8a324947eff8",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 117,
+          "y": 122,
+          "width": 100,
+          "height": 98
+        },
+        "salience": 0.5298
+      },
+      "unit": null,
+      "confidence": 0.8545,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_74cd5835f5cbd9d8324b347f",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "text_fact",
+      "canonical_value": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "surface_forms": [
+        "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_2cac0a5bbf9935152657ac32"
+      ],
+      "evidence_refs": [
+        "asset_2cac0a5bbf9935152657ac32"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_be38c5f37a7ba435186572f2",
+        "parent_problem_id": "prob_d044b3a699a34739ec083afa",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$18\\ \\mathrm{V}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_9c9713d79824d86295175644",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL object string representation rather than a file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL object string representation rather than a file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL object string representation rather than a file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_23958ee6bd8138612cc5bba9",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_d044b3a699a34739ec083afa",
+        "problem_id": "prob_d044b3a699a34739ec083afa",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-07T15:59:24Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "node_id": "node_acb9bbb8fc4eb28c086cd70f",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_acceptable",
+          "question_answer_complete",
+          "rewrite_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T15:59:35Z",
+      "updated_at": "2026-04-07T15:59:35Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_b5339dbb7e58e32b3dcce0cf",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_2722711fc3c56f3a",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_c217ac883e4dc396bec31eac",
+        "asset_647d00bb09c984ee2e076e92",
+        "asset_1e4e3ebe696de1a8a3b3ec8d",
+        "asset_467f47085c7121426eb95b58",
+        "asset_0644108d77d08df2b80b220b",
+        "asset_6231417928ebee53f09b224a",
+        "asset_2cac0a5bbf9935152657ac32"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 3
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 296,
+            "height": 233,
+            "blur_score": 603.5391,
+            "contrast_score": 19.2114,
+            "noise_score": 12.4437,
+            "readability_score": 0.6363,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 17,
+              "y": 25,
+              "width": 200,
+              "height": 195
+            },
+            "perceptual_hash": "ffefe7a703c7efc7"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_b5339dbb7e58e32b3dcce0cf",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_d044b3a699a34739ec083afa",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_d044b3a699a34739ec083afa",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "jointly_understandable"
+        ],
+        "rationale": "题干完整说明了物理情境、已知量、所求量和答案形式；配图清楚展示了输电线触地点及地面电流扩散、两脚位置 a/b 所对应的跨步电压情境，图文能够共同支持理解该题。",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains a PIL object string representation rather than a file path or URL"
+      ],
+      "clean_score": 0.9982,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_acceptable",
+        "question_answer_complete",
+        "rewrite_usable"
+      ],
+      "decision_rationale": "题干与答案完整，改写保持原意且可直接用于标注；图文联合可理解，求解路径和答案信号明确。虽有元数据中的图片路径格式提示，但不影响样本的语义可用性。",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-07T15:59:35Z",
+      "finished_at": "2026-04-07T15:59:35Z",
+      "candidate_id": "cand_d044b3a699a34739ec083afa",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_b5339dbb7e58e32b3dcce0cf",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "image_entity_refs": [
+        "visual_prob_d044b3a699a34739ec083afa_1::roi",
+        "visual_prob_d044b3a699a34739ec083afa_1::roi_top_right",
+        "visual_prob_d044b3a699a34739ec083afa_1::roi_bottom_left",
+        "visual_prob_d044b3a699a34739ec083afa_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_d044b3a699a34739ec083afa_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_d044b3a699a34739ec083afa_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7636
+        },
+        {
+          "text_ref": "S",
+          "image_ref": "visual_prob_d044b3a699a34739ec083afa_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7636
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-07T15:59:16Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_6ffcecf6d4cf229548cf7126",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$ 。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8－3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "after_value": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "audit_id": "audit_4374a725b612c281c67501d8",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$18\\ \\mathrm{V}$",
+      "after_value": "$18\\ \\mathrm{V}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "audit_id": "audit_edd61f773760351fb32823a7",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "audit_id": "audit_acb9bbb8fc4eb28c086cd70f",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T15:59:35Z"
+    },
+    {
+      "audit_id": "audit_1b0cdb949a152b72a4c18fcb",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "ab",
+          "canonical": "ab",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T15:59:35Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_b5339dbb7e58e32b3dcce0cf",
+      "problem_id": "prob_d044b3a699a34739ec083afa",
+      "source_problem_id": "221",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_be38c5f37a7ba435186572f2",
+          "parent_problem_id": "prob_d044b3a699a34739ec083afa",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$18\\ \\mathrm{V}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-07T15:59:35Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_be38c5f37a7ba435186572f2",
+      "parent_problem_id": "prob_d044b3a699a34739ec083afa",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "一高压输电线被风吹断，一端触及地面，从而使 200 A 的电流流入地内。设地面为水平，土地的电导率 $\\gamma=1.0\\times10^{-2} \\mathrm{~S}/\\mathrm{m}$。当一人走近输电线的触地端，两脚间（约 0.6 m）的电压称为跨步电压（即习题 8-3 图中 $U_{ab}$）。求距离触地点 10 m 处的跨步电压。",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$18\\ \\mathrm{V}$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "seephys00427",
+  "canonical_sample_index": 427,
+  "canonical_dataset_key": "seephys",
+  "sample_path": "samples/seephys00427.json",
+  "image_path": "artifacts/images/seephys00427.png",
+  "images": [
+    "artifacts/images/seephys00427.png"
+  ],
+  "crop_path": "artifacts/crops/seephys00427.png",
+  "crops": [
+    "artifacts/crops/seephys00427.png"
+  ]
+}

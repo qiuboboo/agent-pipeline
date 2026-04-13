@@ -1,0 +1,2378 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_3e9bee849e00c168dd7a3f40",
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "problem_id": "prob_07b859fede7a05ac3afdf52d",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53009848.png",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, it is known that points D, E, and F are the midpoints of sides BC, AD, and CE, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+    "raw_answer_text": "\\textbf{Solution:} Given that point D is the midpoint of BC, and the area of $\\triangle ABC$ is 4,\\\\\nit follows that the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2}\\times$ the area of $\\triangle ABC = \\frac{1}{2}\\times4=2$,\\\\\nGiven that point E is the midpoint of AD,\\\\\nit follows that the area of $\\triangle BDE = \\frac{1}{2}\\times$ the area of $\\triangle ABD = \\frac{1}{2}\\times2=1$, and the area of $\\triangle CDE = \\frac{1}{2}\\times$ the area of $\\triangle ADC = \\frac{1}{2}\\times2=1$,\\\\\ntherefore, the area of $\\triangle BEC = $ the area of $\\triangle BED + \\triangle CDE = 2$,\\\\\nGiven that point F is the midpoint of CE,\\\\\nit follows that the area of $\\triangle BEF = \\frac{1}{2}\\times$the area of $\\triangle BEC = \\frac{1}{2}\\times2 = \\boxed{1}$.",
+    "choice_map": {},
+    "image_paths": [
+      "53009848.png"
+    ],
+    "force_requires_image": true,
+    "question_field": null,
+    "answer_field": null,
+    "image_field": null,
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent",
+      "hf_raw_mm_math_fallback"
+    ],
+    "created_at": "2026-04-11T06:03:46Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_07b859fede7a05ac3afdf52d",
+    "image_manifest": [
+      {
+        "path": "outputs/mm_math_2100_2700/run_c00609b7ac346a51/datasets/mm_math/artifacts/images/prob_07b859fede7a05ac3afdf52d_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 391,
+        "height": 293,
+        "file_size": 12984
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 211,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "long_text",
+      "answer_char_length": 762
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_3e9bee849e00c168dd7a3f40",
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53009848.png",
+    "created_at": "2026-04-11T06:03:46Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_07b859fede7a05ac3afdf52d",
+    "image_dependency_score": 0.72,
+    "multi_step_score": 0.82,
+    "verifiability_score": 0.94,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写有“As shown in the figure”，且 requires_image=true、text_dominant=false。",
+        "问题属于几何场景，涉及三角形内多点位置与中点关系，带有明显空间/图形语境。",
+        "但从题干文本本身已给出 D、E、F 的中点定义和已知面积，解题信息基本可由文字重建，因此不过度打满分。"
+      ],
+      "multi_step": [
+        "标准解答包含连续多次面积二分：先由 D 为 BC 中点，再由 E 为 AD 中点，再由 F 为 CE 中点。",
+        "需要组合多个中点条件并在不同三角形之间传递面积关系，不是单步直接读取或代入。",
+        "metadata 中 multi_solution_policy 为 aggressive，说明上游认为该类题有一定多步/多解挖掘潜力。"
+      ],
+      "verifiability": [
+        "目标答案是明确的数值面积，最终结果唯一且易于核验。",
+        "answer_text 给出了完整推导链，可逐步检查每次面积减半是否合法。",
+        "asset_registry_record 中 registry_passed=true，题面与答案资产齐全，便于后续规则或程序化复核。"
+      ]
+    },
+    "risk_flags": [
+      "diagram_dependency_ambiguous"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_3e9bee849e00c168dd7a3f40",
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53009848.png",
+    "created_at": "2026-04-11T06:03:46Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_07b859fede7a05ac3afdf52d",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "资产完整：题干、答案与主图均存在，且 asset registry 无 issues、registry_passed=true。",
+      "初步打分整体较高：multi_step_score=0.82、verifiability_score=0.94，说明题目有较好的推理价值且结果易核验。",
+      "虽有 diagram_dependency_ambiguous 风险，但评分证据表明关键中点关系和已知面积可由文字重建，核心语义并未缺失。",
+      "当前没有显示出导致核心语义不可恢复的缺口，符合进入候选池的条件。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_3e9bee849e00c168dd7a3f40",
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "dataset_name": "MM-Math",
+    "source_problem_id": "53009848.png",
+    "created_at": "2026-04-11T06:03:46Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_3e9bee849e00c168dd7a3f40",
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "problem_id": "prob_07b859fede7a05ac3afdf52d",
+    "dataset_name": "MM-Math",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+    "normalized_answer_text": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Preserved the original math content while removing presentation markup and line-break noise from the answer.",
+      "Marked as image-dependent because `force_requires_image` is true and the question explicitly references the figure."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-11T06:03:46Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "source_dataset": "MM-Math",
+    "source_split": "train[2100:2700]",
+    "source_problem_id": "53009848.png",
+    "subject": "数学",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, it is known that points D, E, and F are the midpoints of sides BC, AD, and CE, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+    "raw_answer_text": "\\textbf{Solution:} Given that point D is the midpoint of BC, and the area of $\\triangle ABC$ is 4,\\\\\nit follows that the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2}\\times$ the area of $\\triangle ABC = \\frac{1}{2}\\times4=2$,\\\\\nGiven that point E is the midpoint of AD,\\\\\nit follows that the area of $\\triangle BDE = \\frac{1}{2}\\times$ the area of $\\triangle ABD = \\frac{1}{2}\\times2=1$, and the area of $\\triangle CDE = \\frac{1}{2}\\times$ the area of $\\triangle ADC = \\frac{1}{2}\\times2=1$,\\\\\ntherefore, the area of $\\triangle BEC = $ the area of $\\triangle BED + \\triangle CDE = 2$,\\\\\nGiven that point F is the midpoint of CE,\\\\\nit follows that the area of $\\triangle BEF = \\frac{1}{2}\\times$the area of $\\triangle BEC = \\frac{1}{2}\\times2 = \\boxed{1}$.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.72,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.94,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 79,
+      "image_paths": [
+        "53009848.png"
+      ],
+      "extraction_notes": [
+        "source_intake_agent",
+        "hf_raw_mm_math_fallback"
+      ],
+      "image_field": null
+    },
+    "created_at": "2026-04-11T06:05:06Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "资产完整：题干、答案与主图均存在，且 asset registry 无 issues、registry_passed=true。",
+      "初步打分整体较高：multi_step_score=0.82、verifiability_score=0.94，说明题目有较好的推理价值且结果易核验。",
+      "虽有 diagram_dependency_ambiguous 风险，但评分证据表明关键中点关系和已知面积可由文字重建，核心语义并未缺失。",
+      "当前没有显示出导致核心语义不可恢复的缺口，符合进入候选池的条件。"
+    ],
+    "collection_risk_flags": [
+      "diagram_dependency_ambiguous"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_c7519b146ec0c83f815a5f15",
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53009848.png",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_07b859fede7a05ac3afdf52d/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_07b859fede7a05ac3afdf52d/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53009848.png",
+        "is_present": true,
+        "width": 391,
+        "height": 293
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.72,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.94
+    },
+    "created_at": "2026-04-11T06:05:06Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_e210d137ff408756ef3a79ac",
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53009848.png",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.72,
+      "initial_multi_solution_score": 0.82,
+      "initial_verifiability_score": 0.94
+    },
+    "created_at": "2026-04-11T06:05:06Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "资产完整：题干、答案与主图均存在，且 asset registry 无 issues、registry_passed=true。",
+      "初步打分整体较高：multi_step_score=0.82、verifiability_score=0.94，说明题目有较好的推理价值且结果易核验。",
+      "虽有 diagram_dependency_ambiguous 风险，但评分证据表明关键中点关系和已知面积可由文字重建，核心语义并未缺失。",
+      "当前没有显示出导致核心语义不可恢复的缺口，符合进入候选池的条件。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_3e9bee849e00c168dd7a3f40",
+      "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "dataset_name": "MM-Math",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-11T06:05:06Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_3e9bee849e00c168dd7a3f40",
+    "problem_id": "prob_07b859fede7a05ac3afdf52d",
+    "source_dataset": "MM-Math",
+    "source_problem_id": "53009848.png",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+    "normalized_answer_text": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review"
+    ],
+    "created_at": "2026-04-11T06:05:06Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_3e9bee849e00c168dd7a3f40",
+    "problem_id": "prob_07b859fede7a05ac3afdf52d",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+    "normalized_answer_text": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "ABC",
+        "canonical": "ABC",
+        "variable_type": "label"
+      },
+      {
+        "original": "D",
+        "canonical": "D",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "E",
+        "canonical": "E",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "F",
+        "canonical": "F",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "BC",
+        "canonical": "BC",
+        "variable_type": "label"
+      },
+      {
+        "original": "AD",
+        "canonical": "AD",
+        "variable_type": "label"
+      },
+      {
+        "original": "CE",
+        "canonical": "CE",
+        "variable_type": "label"
+      },
+      {
+        "original": "area",
+        "canonical": "area",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "BEF",
+        "canonical": "BEF",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4."
+      },
+      {
+        "segment_index": 2,
+        "text": "What is the area of $\\triangle BEF$?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53009848.png",
+        "roi_bbox": {
+          "x": 3,
+          "y": 3,
+          "width": 386,
+          "height": 287
+        },
+        "readability_score": 0.8935,
+        "contrast_score": 58.6252
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-11T06:05:06Z",
+    "normalization_notes": [
+      "Preserved the original math content while removing presentation markup and line-break noise from the answer.",
+      "Marked as image-dependent because `force_requires_image` is true and the question explicitly references the figure."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_07b859fede7a05ac3afdf52d",
+    "source_dataset": "MM-Math",
+    "source_split": "train[2100:2700]",
+    "source_problem_id": "53009848.png",
+    "ingest_batch_id": "benchmarkallinone-mm-math-2100-2700_20260411T021519Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "As shown in the figure, in $\\triangle ABC$, it is known that points D, E, and F are the midpoints of sides BC, AD, and CE, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+    "normalized_question_text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+    "raw_answer_text": "\\textbf{Solution:} Given that point D is the midpoint of BC, and the area of $\\triangle ABC$ is 4,\\\\\nit follows that the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2}\\times$ the area of $\\triangle ABC = \\frac{1}{2}\\times4=2$,\\\\\nGiven that point E is the midpoint of AD,\\\\\nit follows that the area of $\\triangle BDE = \\frac{1}{2}\\times$ the area of $\\triangle ABD = \\frac{1}{2}\\times2=1$, and the area of $\\triangle CDE = \\frac{1}{2}\\times$ the area of $\\triangle ADC = \\frac{1}{2}\\times2=1$,\\\\\ntherefore, the area of $\\triangle BEC = $ the area of $\\triangle BED + \\triangle CDE = 2$,\\\\\nGiven that point F is the midpoint of CE,\\\\\nit follows that the area of $\\triangle BEF = \\frac{1}{2}\\times$the area of $\\triangle BEC = \\frac{1}{2}\\times2 = \\boxed{1}$.",
+    "normalized_answer_text": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+    "answer_type": "set",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9624,
+    "multi_step_score": 0.3467,
+    "verifiability_score": 0.9748,
+    "quality_risk_flags": [],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review"
+    ],
+    "clean_decision_rationale": "The sample is complete, understandable, and solvable, with clear image support and a usable rewritten question/answer, but the alignment record is flagged as risky with a noted conflict, so it retains semantic value but warrants human review rather than an automatic pass.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "risky",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-11T06:03:46Z",
+    "updated_at": "2026-04-11T06:05:06Z",
+    "initial_image_dependency_score": 0.72,
+    "initial_multi_solution_score": 0.82,
+    "initial_verifiability_score": 0.94,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "资产完整：题干、答案与主图均存在，且 asset registry 无 issues、registry_passed=true。",
+      "初步打分整体较高：multi_step_score=0.82、verifiability_score=0.94，说明题目有较好的推理价值且结果易核验。",
+      "虽有 diagram_dependency_ambiguous 风险，但评分证据表明关键中点关系和已知面积可由文字重建，核心语义并未缺失。",
+      "当前没有显示出导致核心语义不可恢复的缺口，符合进入候选池的条件。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_a2d2add4230982578defbfce",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mm_math/train[2100:2700]/53009848.png/question",
+      "storage_uri": "inline://prob_07b859fede7a05ac3afdf52d/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 211,
+      "width": null,
+      "height": null,
+      "sha256": "975d190a7ed871eb57848a0ed2f7278b4c5c312af7d621da5d2d6244e19be3fa",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, it is known that points D, E, and F are the midpoints of sides BC, AD, and CE, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7232,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "CE",
+          "canonical": "CE",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEF",
+          "canonical": "BEF",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "asset_id": "asset_be4f5c15d276023c7eb35446",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_07b859fede7a05ac3afdf52d/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 194,
+      "width": null,
+      "height": null,
+      "sha256": "2038bb3b19542117070be8612e65f9d5c33378b069f0b4ba46a250723fb530c0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, it is known that points D, E, and F are the midpoints of sides BC, AD, and CE, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "normalized_text_snapshot": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "text_completeness_score": 0.7232,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "CE",
+          "canonical": "CE",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEF",
+          "canonical": "BEF",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "asset_id": "asset_b8f4cc8876daf3dc3f6c4c43",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mm_math/train[2100:2700]/53009848.png/answer",
+      "storage_uri": "inline://prob_07b859fede7a05ac3afdf52d/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 762,
+      "width": null,
+      "height": null,
+      "sha256": "2be549bb035a67c670dcc1ee2662da410d35695be5c35f63ca764f57e534de1b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Given that point D is the midpoint of BC, and the area of $\\triangle ABC$ is 4,\\\\\nit follows that the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2}\\times$ the area of $\\triangle ABC = \\frac{1}{2}\\times4=2$,\\\\\nGiven that point E is the midpoint of AD,\\\\\nit follows that the area of $\\triangle BDE = \\frac{1}{2}\\times$ the area of $\\triangle ABD = \\frac{1}{2}\\times2=1$, and the area of $\\triangle CDE = \\frac{1}{2}\\times$ the area of $\\triangle ADC = \\frac{1}{2}\\times2=1$,\\\\\ntherefore, the area of $\\triangle BEC = $ the area of $\\triangle BED + \\triangle CDE = 2$,\\\\\nGiven that point F is the midpoint of CE,\\\\\nit follows that the area of $\\triangle BEF = \\frac{1}{2}\\times$the area of $\\triangle BEC = \\frac{1}{2}\\times2 = \\boxed{1}$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        },
+        {
+          "original": "ADC",
+          "canonical": "ADC",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BDE",
+          "canonical": "BDE",
+          "variable_type": "label"
+        },
+        {
+          "original": "CDE",
+          "canonical": "CDE",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEC",
+          "canonical": "BEC",
+          "variable_type": "label"
+        },
+        {
+          "original": "BED",
+          "canonical": "BED",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "CE",
+          "canonical": "CE",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEF",
+          "canonical": "BEF",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "asset_id": "asset_4eabfee8d3498d53b781c02e",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_07b859fede7a05ac3afdf52d/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 496,
+      "width": null,
+      "height": null,
+      "sha256": "e9a8c58ff444544616bdad61059c98cd33147d0c852f909e2aede89dcc742a80",
+      "perceptual_hash": null,
+      "source_text_snapshot": "\\textbf{Solution:} Given that point D is the midpoint of BC, and the area of $\\triangle ABC$ is 4,\\\\\nit follows that the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2}\\times$ the area of $\\triangle ABC = \\frac{1}{2}\\times4=2$,\\\\\nGiven that point E is the midpoint of AD,\\\\\nit follows that the area of $\\triangle BDE = \\frac{1}{2}\\times$ the area of $\\triangle ABD = \\frac{1}{2}\\times2=1$, and the area of $\\triangle CDE = \\frac{1}{2}\\times$ the area of $\\triangle ADC = \\frac{1}{2}\\times2=1$,\\\\\ntherefore, the area of $\\triangle BEC = $ the area of $\\triangle BED + \\triangle CDE = 2$,\\\\\nGiven that point F is the midpoint of CE,\\\\\nit follows that the area of $\\triangle BEF = \\frac{1}{2}\\times$the area of $\\triangle BEC = \\frac{1}{2}\\times2 = \\boxed{1}$.",
+      "normalized_text_snapshot": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABD",
+          "canonical": "ABD",
+          "variable_type": "label"
+        },
+        {
+          "original": "ADC",
+          "canonical": "ADC",
+          "variable_type": "label"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BDE",
+          "canonical": "BDE",
+          "variable_type": "label"
+        },
+        {
+          "original": "CDE",
+          "canonical": "CDE",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEC",
+          "canonical": "BEC",
+          "variable_type": "label"
+        },
+        {
+          "original": "BED",
+          "canonical": "BED",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "CE",
+          "canonical": "CE",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEF",
+          "canonical": "BEF",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "asset_id": "asset_63dc21e875dc7ed889c56b16",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/hf_raw/mm_math/MM_Math/53009848.png",
+      "storage_uri": "outputs/mm_math_2100_2700/run_c00609b7ac346a51/datasets/mm_math/artifacts/images/prob_07b859fede7a05ac3afdf52d_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 12984,
+      "width": 391,
+      "height": 293,
+      "sha256": "20881c1e5b9546b984ceca3dce4f80888de6bbe2746b0350a3e2453db1846cbf",
+      "perceptual_hash": "fbf3f3e7e1c10466",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3226.3826,
+      "readability_score": 0.8935,
+      "noise_score": 33.8264,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 3,
+        "y": 3,
+        "width": 386,
+        "height": 287
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "asset_id": "asset_b31f908a95af8c295e26e6ac",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mm_math_2100_2700/run_c00609b7ac346a51/datasets/mm_math/artifacts/crops/prob_07b859fede7a05ac3afdf52d_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 12936,
+      "width": 386,
+      "height": 287,
+      "sha256": "884bc5df0f6e9a3e7c7f9743dace3f02acbe5bbf1793c72b4014c9b5e40480ab",
+      "perceptual_hash": "fbf3f3e7e1c10466",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3226.3826,
+      "readability_score": 0.8935,
+      "noise_score": 33.8264,
+      "cropped_from_asset_id": "asset_63dc21e875dc7ed889c56b16",
+      "roi_bbox": {
+        "x": 3,
+        "y": 3,
+        "width": 386,
+        "height": 287
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "asset_id": "asset_4bba19ab5f1bb037742febc3",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_b800c7ae34f1a46b0d080246",
+      "file_format": "txt",
+      "file_size_bytes": 194,
+      "width": null,
+      "height": null,
+      "sha256": "2038bb3b19542117070be8612e65f9d5c33378b069f0b4ba46a250723fb530c0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "As shown in the figure, in $\\triangle ABC$, it is known that points D, E, and F are the midpoints of sides BC, AD, and CE, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "normalized_text_snapshot": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "text_completeness_score": 0.7232,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "CE",
+          "canonical": "CE",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEF",
+          "canonical": "BEF",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_07b859fede7a05ac3afdf52d",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "4"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "What is the area of $\\triangle BEF$?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_07b859fede7a05ac3afdf52d_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "set",
+          "target_text": "What is the area of $\\triangle BEF$?",
+          "expected_answer_type": "set",
+          "expected_answer": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "point",
+          "entity_category": "point",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "triangle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "ABC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "D",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "E",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "F",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "AD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "CE",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BEF",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "CE",
+          "canonical": "CE",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEF",
+          "canonical": "BEF",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4."
+        },
+        {
+          "segment_index": 2,
+          "text": "What is the area of $\\triangle BEF$?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-11T06:04:51Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_07b859fede7a05ac3afdf52d_1",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.3345,
+        "dark_pixel_ratio": 0.1225,
+        "readability_score": 0.8935,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 391,
+            "height": 293
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 3,
+            "y": 3,
+            "width": 386,
+            "height": 287
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 196,
+            "y": 3,
+            "width": 193,
+            "height": 143
+          },
+          "salience": 0.4073
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 3,
+            "y": 146,
+            "width": 193,
+            "height": 144
+          },
+          "salience": 0.5662
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 196,
+            "y": 146,
+            "width": 193,
+            "height": 144
+          },
+          "salience": 0.5683
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9574,
+      "created_at": "2026-04-11T06:04:51Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_07b859fede7a05ac3afdf52d",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-11T06:04:59Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_701c8a7c96d197e8d1c02c57",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4.",
+      "surface_forms": [
+        "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_be4f5c15d276023c7eb35446"
+      ],
+      "evidence_refs": [
+        "asset_be4f5c15d276023c7eb35446"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "4"
+        ],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_fbdc492d0d14551747304824",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "target_slot",
+      "canonical_value": "What is the area of $\\triangle BEF$?",
+      "surface_forms": [
+        "What is the area of $\\triangle BEF$?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_be4f5c15d276023c7eb35446"
+      ],
+      "evidence_refs": [
+        "asset_be4f5c15d276023c7eb35446"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "slot_id": "slot_prob_07b859fede7a05ac3afdf52d_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "set",
+        "target_text": "What is the area of $\\triangle BEF$?",
+        "expected_answer_type": "set",
+        "expected_answer": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_35ac00a612ab5a48c8b596e9",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "answer_claim",
+      "canonical_value": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+      "surface_forms": [
+        "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_4eabfee8d3498d53b781c02e"
+      ],
+      "evidence_refs": [
+        "asset_4eabfee8d3498d53b781c02e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$."
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_1e4196759e053a72132460d9",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 391,
+          "height": 293
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9574,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_4878907ab3dd7cdde8406d89",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 3,
+          "y": 3,
+          "width": 386,
+          "height": 287
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9574,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_a871654ea645b1c1a5904733",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 196,
+          "y": 3,
+          "width": 193,
+          "height": 143
+        },
+        "salience": 0.4073
+      },
+      "unit": null,
+      "confidence": 0.9574,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_3b6844d0c0986a3208978581",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 3,
+          "y": 146,
+          "width": 193,
+          "height": 144
+        },
+        "salience": 0.5662
+      },
+      "unit": null,
+      "confidence": 0.9574,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_52b0043cb0e7c7322476cc03",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 196,
+          "y": 146,
+          "width": 193,
+          "height": 144
+        },
+        "salience": 0.5683
+      },
+      "unit": null,
+      "confidence": 0.9574,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_2b3e12b572c4889f4bcf1924",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "text_fact",
+      "canonical_value": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "surface_forms": [
+        "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_4bba19ab5f1bb037742febc3"
+      ],
+      "evidence_refs": [
+        "asset_4bba19ab5f1bb037742febc3"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_b800c7ae34f1a46b0d080246",
+        "parent_problem_id": "prob_07b859fede7a05ac3afdf52d",
+        "variant_index": 1,
+        "title": "MM-Math 开放题",
+        "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+        "expected_answer_type": "set",
+        "expected_answer": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_e21e081bac73a3cd45b795a5",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_07b859fede7a05ac3afdf52d",
+        "problem_id": "prob_07b859fede7a05ac3afdf52d",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-11T06:04:59Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "node_id": "node_cce7c30419c0ee6613927ba3",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T06:05:06Z",
+      "updated_at": "2026-04-11T06:05:06Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_3e9bee849e00c168dd7a3f40",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_c00609b7ac346a51",
+      "dataset_name": "MM-Math",
+      "input_asset_ids": [
+        "asset_a2d2add4230982578defbfce",
+        "asset_be4f5c15d276023c7eb35446",
+        "asset_b8f4cc8876daf3dc3f6c4c43",
+        "asset_4eabfee8d3498d53b781c02e",
+        "asset_63dc21e875dc7ed889c56b16",
+        "asset_b31f908a95af8c295e26e6ac",
+        "asset_4bba19ab5f1bb037742febc3"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 16
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 391,
+            "height": 293,
+            "blur_score": 3226.3826,
+            "contrast_score": 58.6252,
+            "noise_score": 33.8264,
+            "readability_score": 0.8935,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 3,
+              "y": 3,
+              "width": 386,
+              "height": 287
+            },
+            "perceptual_hash": "fbf3f3e7e1c10466"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_3e9bee849e00c168dd7a3f40",
+        "coverage_score": 0.9,
+        "consistency_score": 0.82,
+        "alignment_status": "risky",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_07b859fede7a05ac3afdf52d",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_07b859fede7a05ac3afdf52d",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "diagram_labels_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The problem statement clearly specifies the midpoint relationships and asks for the area of triangle BEF, and the diagram clearly shows the labeled points and geometric configuration needed to interpret the setup.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review"
+      ],
+      "decision_rationale": "The sample is complete, understandable, and solvable, with clear image support and a usable rewritten question/answer, but the alignment record is flagged as risky with a noted conflict, so it retains semantic value but warrants human review rather than an automatic pass.",
+      "review_ticket_id": "review_prob_07b859fede7a05ac3afdf52d",
+      "operator_type": "system",
+      "started_at": "2026-04-11T06:05:06Z",
+      "finished_at": "2026-04-11T06:05:06Z",
+      "candidate_id": "cand_07b859fede7a05ac3afdf52d",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_3e9bee849e00c168dd7a3f40",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "image_entity_refs": [
+        "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+        "visual_prob_07b859fede7a05ac3afdf52d_1::roi_top_right",
+        "visual_prob_07b859fede7a05ac3afdf52d_1::roi_bottom_left",
+        "visual_prob_07b859fede7a05ac3afdf52d_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_07b859fede7a05ac3afdf52d_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "point",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_point",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "triangle",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "ABC",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "D",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "E",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "F",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "BC",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "AD",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "CE",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "BEF",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7893
+        },
+        {
+          "text_ref": "slot_prob_07b859fede7a05ac3afdf52d_1",
+          "image_ref": "visual_prob_07b859fede7a05ac3afdf52d_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7906
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "visual_reference_density_mismatch",
+          "detail": "文本中的视觉锚点明显多于可识别视觉区域。",
+          "severity": "major",
+          "confidence": 0.72
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.82,
+      "alignment_status": "risky",
+      "created_at": "2026-04-11T06:04:51Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_4bc814c36f9121d64a30b925",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "As shown in the figure, in $\\triangle ABC$, it is known that points D, E, and F are the midpoints of sides BC, AD, and CE, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "after_value": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "audit_id": "audit_825d40eeefbf55a2b513c5d6",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "\\textbf{Solution:} Given that point D is the midpoint of BC, and the area of $\\triangle ABC$ is 4,\\\\\nit follows that the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2}\\times$ the area of $\\triangle ABC = \\frac{1}{2}\\times4=2$,\\\\\nGiven that point E is the midpoint of AD,\\\\\nit follows that the area of $\\triangle BDE = \\frac{1}{2}\\times$ the area of $\\triangle ABD = \\frac{1}{2}\\times2=1$, and the area of $\\triangle CDE = \\frac{1}{2}\\times$ the area of $\\triangle ADC = \\frac{1}{2}\\times2=1$,\\\\\ntherefore, the area of $\\triangle BEC = $ the area of $\\triangle BED + \\triangle CDE = 2$,\\\\\nGiven that point F is the midpoint of CE,\\\\\nit follows that the area of $\\triangle BEF = \\frac{1}{2}\\times$the area of $\\triangle BEC = \\frac{1}{2}\\times2 = \\boxed{1}$.",
+      "after_value": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "audit_id": "audit_509503edc6e81779405d8378",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "audit_id": "audit_cce7c30419c0ee6613927ba3",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T06:05:06Z"
+    },
+    {
+      "audit_id": "audit_acd462d531cf4f2a2da45001",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "D",
+          "canonical": "D",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "F",
+          "canonical": "F",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "AD",
+          "canonical": "AD",
+          "variable_type": "label"
+        },
+        {
+          "original": "CE",
+          "canonical": "CE",
+          "variable_type": "label"
+        },
+        {
+          "original": "area",
+          "canonical": "area",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "BEF",
+          "canonical": "BEF",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T06:05:06Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_3e9bee849e00c168dd7a3f40",
+      "problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "source_problem_id": "53009848.png",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_b800c7ae34f1a46b0d080246",
+          "parent_problem_id": "prob_07b859fede7a05ac3afdf52d",
+          "variant_index": 1,
+          "title": "MM-Math 开放题",
+          "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+          "expected_answer_type": "set",
+          "expected_answer": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-11T06:05:06Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_b800c7ae34f1a46b0d080246",
+      "parent_problem_id": "prob_07b859fede7a05ac3afdf52d",
+      "variant_index": 1,
+      "title": "MM-Math 开放题",
+      "rewritten_question_text": "As shown in the figure, in $\\triangle ABC$, points D, E, and F are the midpoints of $BC$, $AD$, and $CE$, respectively, and the area of $\\triangle ABC$ is 4. What is the area of $\\triangle BEF$?",
+      "expected_answer_type": "set",
+      "expected_answer": "Given that point D is the midpoint of $BC$ and the area of $\\triangle ABC$ is 4, the area of $\\triangle ABD = \\triangle ADC = \\frac{1}{2} \\times 4 = 2$. Given that point E is the midpoint of $AD$, the area of $\\triangle BDE = \\frac{1}{2} \\times 2 = 1$, and the area of $\\triangle CDE = \\frac{1}{2} \\times 2 = 1$. Therefore, the area of $\\triangle BEC = \\triangle BED + \\triangle CDE = 2$. Given that point F is the midpoint of $CE$, the area of $\\triangle BEF = \\frac{1}{2} \\times 2 = \\boxed{1}$.",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "mmmath01010",
+  "canonical_sample_index": 1010,
+  "canonical_dataset_key": "mm_math",
+  "sample_path": "samples/mmmath01010.json",
+  "image_path": "artifacts/images/mmmath01010.png",
+  "images": [
+    "artifacts/images/mmmath01010.png"
+  ],
+  "crop_path": "artifacts/crops/mmmath01010.png",
+  "crops": [
+    "artifacts/crops/mmmath01010.png"
+  ]
+}

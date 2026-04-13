@@ -1,0 +1,2354 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_3c38b5ffeb278cc091bde655",
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "117",
+    "raw_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。如电图 3.18.1 所示，取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+    "raw_answer_text": "$-0.035 \\mathrm{~m}$",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(308, 377)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images 字段中提供的是 PIL 图像对象字符串表示，不是实际图片路径或 URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-08T23:15:18Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+    "image_manifest": [
+      {
+        "path": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_07f89a069fa4bdca5cd18a65_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 308,
+        "height": 377,
+        "file_size": 35481
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 436,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 20
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_3c38b5ffeb278cc091bde655",
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "117",
+    "created_at": "2026-04-08T23:15:18Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+    "image_dependency_score": 0.84,
+    "multi_step_score": 0.86,
+    "verifiability_score": 0.91,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写有“如电图 3.18.1 所示”，并引用线框边、磁场区域边界等空间关系。",
+        "输入字段 `requires_image=true` 且 `text_dominant=false`，上游已标记为非文本主导。",
+        "虽然题干给出不少几何与坐标描述，但仍依赖图示来明确初始构型与方向关系。"
+      ],
+      "multi_step": [
+        "题目给出质量、自感、边长、磁场宽度、初速度、时刻等多个物理量，不是单步读取即可作答。",
+        "要求求某时刻 `bc` 边位置，通常需要结合电磁感应与运动过程进行推导或分段分析。",
+        "答案不是选择题，且题干长度较长，表明需要综合条件计算而非直接识别。"
+      ],
+      "verifiability": [
+        "`answer_type` 为 `short_text`，标准答案是单一数值 `-0.035 m`，结果形式明确。",
+        "该类物理题可通过建立方程、代入参数并核对单位与符号来复核答案。",
+        "`asset_registry_record.registry_passed=true`，且题干与答案均已登记存在，基础可核验条件较好。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_3c38b5ffeb278cc091bde655",
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "117",
+    "created_at": "2026-04-08T23:15:18Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+    "priority": 0.93,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像资产均已登记存在，核心语义支撑完整。",
+      "初步打分较高：图像依赖、多步推理和可核验性都强，具备进入候选池的价值。",
+      "当前风险主要是 metadata.image_paths 的元数据格式异常，但已有可用图像文件，不构成核心语义缺失。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_3c38b5ffeb278cc091bde655",
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "dataset_name": "SeePhys",
+    "source_problem_id": "117",
+    "created_at": "2026-04-08T23:15:18Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_3c38b5ffeb278cc091bde655",
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+    "dataset_name": "SeePhys",
+    "normalized_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+    "normalized_answer_text": "$-0.035 \\mathrm{~m}$",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "删除了重复出现的“如电图3.18.1所示”冗余表述，保留题目原始语义。",
+      "题干显式依赖示意图且 `force_requires_image=true`，因此标记为 requires_image=true。",
+      "原题无选项，normalized_choice_map 保持为空对象。"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-08T23:15:18Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "117",
+    "subject": "物理",
+    "raw_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。如电图 3.18.1 所示，取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+    "raw_answer_text": "$-0.035 \\mathrm{~m}$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.84,
+    "initial_multi_solution_score": 0.86,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "balanced",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集保留多解潜力评估，但不默认强推多解 agent。",
+    "metadata": {
+      "row_index": 117,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(308, 377)>"
+      ],
+      "extraction_notes": [
+        "images 字段中提供的是 PIL 图像对象字符串表示，不是实际图片路径或 URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": "reasoning",
+      "reasoning_chain": "$$\nx_c = -4\\left(\\frac{\\pi}{36} - \\frac{\\pi}{40}\\right) = -0.035 \\text{ m}\n$$",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-08T23:16:39Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.93,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均已登记存在，核心语义支撑完整。",
+      "初步打分较高：图像依赖、多步推理和可核验性都强，具备进入候选池的价值。",
+      "当前风险主要是 metadata.image_paths 的元数据格式异常，但已有可用图像文件，不构成核心语义缺失。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_5ec38d59c9309208ed75ad61",
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "117",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_07f89a069fa4bdca5cd18a65/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_07f89a069fa4bdca5cd18a65/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 308,
+        "height": 377
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.84,
+      "initial_multi_solution_score": 0.86,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-08T23:16:39Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_3d1e63a0a7d7f4e718bf7ac5",
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "117",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.93,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "balanced",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.84,
+      "initial_multi_solution_score": 0.86,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-08T23:16:39Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像资产均已登记存在，核心语义支撑完整。",
+      "初步打分较高：图像依赖、多步推理和可核验性都强，具备进入候选池的价值。",
+      "当前风险主要是 metadata.image_paths 的元数据格式异常，但已有可用图像文件，不构成核心语义缺失。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_3c38b5ffeb278cc091bde655",
+      "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "dataset_name": "SeePhys",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-08T23:16:39Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_3c38b5ffeb278cc091bde655",
+    "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+    "source_dataset": "SeePhys",
+    "source_problem_id": "117",
+    "normalized_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+    "normalized_answer_text": "$-0.035 \\mathrm{~m}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_complete",
+      "nonblocking_metadata_issue",
+      "question_complete"
+    ],
+    "created_at": "2026-04-08T23:16:38Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_3c38b5ffeb278cc091bde655",
+    "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+    "normalized_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+    "normalized_answer_text": "$-0.035 \\mathrm{~m}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "l",
+        "canonical": "l",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "text",
+        "canonical": "text",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "g",
+        "canonical": "g",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "L",
+        "canonical": "L",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "V",
+        "canonical": "V",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "cdot",
+        "canonical": "cdot",
+        "variable_type": "label"
+      },
+      {
+        "original": "s",
+        "canonical": "s",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "t",
+        "canonical": "t",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "bc",
+        "canonical": "bc",
+        "variable_type": "label"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "T",
+        "canonical": "T",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "O",
+        "canonical": "O",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "x",
+        "canonical": "x",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "frac",
+        "canonical": "frac",
+        "variable_type": "label"
+      },
+      {
+        "original": "pi",
+        "canonical": "pi",
+        "variable_type": "label"
+      },
+      {
+        "original": "c",
+        "canonical": "c",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 48,
+          "y": 41,
+          "width": 244,
+          "height": 329
+        },
+        "readability_score": 0.7735,
+        "contrast_score": 39.5915
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-08T23:16:38Z",
+    "normalization_notes": [
+      "删除了重复出现的“如电图3.18.1所示”冗余表述，保留题目原始语义。",
+      "题干显式依赖示意图且 `force_requires_image=true`，因此标记为 requires_image=true。",
+      "原题无选项，normalized_choice_map 保持为空对象。"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+    "source_dataset": "SeePhys",
+    "source_split": "train[600:2000]",
+    "source_problem_id": "117",
+    "ingest_batch_id": "benchmarkallinone-seephys-600-2000_20260408T142422Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。如电图 3.18.1 所示，取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+    "normalized_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+    "raw_answer_text": "$-0.035 \\mathrm{~m}$",
+    "normalized_answer_text": "$-0.035 \\mathrm{~m}$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "$$\nx_c = -4\\left(\\frac{\\pi}{36} - \\frac{\\pi}{40}\\right) = -0.035 \\text{ m}\n$$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9624,
+    "multi_step_score": 0.4187,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "image_metadata_path_issue",
+      "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_complete",
+      "nonblocking_metadata_issue",
+      "question_complete"
+    ],
+    "clean_decision_rationale": "The sample is semantically complete and understandable: the physics setup, target quantity, and answer are all present, the rewrite is usable, and alignment/solvability indicate no serious failure. The only issue is a metadata image-path problem, which does not materially block annotation because the text and diagram evidence remain clear enough.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-08T23:15:18Z",
+    "updated_at": "2026-04-08T23:16:39Z",
+    "initial_image_dependency_score": 0.84,
+    "initial_multi_solution_score": 0.86,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "balanced",
+    "collection_priority_score": 0.93,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均已登记存在，核心语义支撑完整。",
+      "初步打分较高：图像依赖、多步推理和可核验性都强，具备进入候选池的价值。",
+      "当前风险主要是 metadata.image_paths 的元数据格式异常，但已有可用图像文件，不构成核心语义缺失。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_9b8881ade2708cbc20394fd5",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://seephys/train[600:2000]/117/question",
+      "storage_uri": "inline://prob_07f89a069fa4bdca5cd18a65/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 748,
+      "width": null,
+      "height": null,
+      "sha256": "4bea35cc0f1b52495873bddd996e8bcafd85265ec6d914a2deb55b1d48debdce",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。如电图 3.18.1 所示，取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "l",
+          "canonical": "l",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cdot",
+          "canonical": "cdot",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "bc",
+          "canonical": "bc",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "pi",
+          "canonical": "pi",
+          "variable_type": "label"
+        },
+        {
+          "original": "c",
+          "canonical": "c",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "asset_id": "asset_694598b4bba4c1b1e4e8e4a1",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_07f89a069fa4bdca5cd18a65/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 722,
+      "width": null,
+      "height": null,
+      "sha256": "e205322c5024aa9b8d7c703788d555c0e189872029cda52fef242129a7ab3920",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。如电图 3.18.1 所示，取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "normalized_text_snapshot": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "l",
+          "canonical": "l",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cdot",
+          "canonical": "cdot",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "bc",
+          "canonical": "bc",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "pi",
+          "canonical": "pi",
+          "variable_type": "label"
+        },
+        {
+          "original": "c",
+          "canonical": "c",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "asset_id": "asset_7a931e40e86b499040f65926",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://seephys/train[600:2000]/117/answer",
+      "storage_uri": "inline://prob_07f89a069fa4bdca5cd18a65/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 20,
+      "width": null,
+      "height": null,
+      "sha256": "e2160200622f4729535216ec67200025cc5e8ae801d8784bfc4ae4453f7b8adc",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$-0.035 \\mathrm{~m}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "asset_id": "asset_32414d99a86a01629d808868",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_07f89a069fa4bdca5cd18a65/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 20,
+      "width": null,
+      "height": null,
+      "sha256": "e2160200622f4729535216ec67200025cc5e8ae801d8784bfc4ae4453f7b8adc",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$-0.035 \\mathrm{~m}$",
+      "normalized_text_snapshot": "$-0.035 \\mathrm{~m}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "asset_id": "asset_4483e6e6142f43155e3a33f1",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/images/prob_07f89a069fa4bdca5cd18a65_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 35481,
+      "width": 308,
+      "height": 377,
+      "sha256": "760875b0d5c76f34954daa198f4e115d0c5bbc26e646e505cea7630d6d6a7c41",
+      "perceptual_hash": "fff9b9b991f890c3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1064.9025,
+      "readability_score": 0.7735,
+      "noise_score": 24.5913,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 48,
+        "y": 41,
+        "width": 244,
+        "height": 329
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "image_metadata_path_issue",
+        "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "asset_id": "asset_04134dedab5176eb09a218e2",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/seephys_600_2000/run_6811add513b82e34/datasets/seephys/artifacts/crops/prob_07f89a069fa4bdca5cd18a65_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 34151,
+      "width": 244,
+      "height": 329,
+      "sha256": "3aec1b4ea07e9020359aa203d923a44a29461c3dce4e7dc78508c19934603229",
+      "perceptual_hash": "f971797371f870c3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1064.9025,
+      "readability_score": 0.7735,
+      "noise_score": 24.5913,
+      "cropped_from_asset_id": "asset_4483e6e6142f43155e3a33f1",
+      "roi_bbox": {
+        "x": 48,
+        "y": 41,
+        "width": 244,
+        "height": 329
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "asset_id": "asset_747504331bbcfc19926905ca",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_9f96598f0a7fad28e95d7089",
+      "file_format": "txt",
+      "file_size_bytes": 722,
+      "width": null,
+      "height": null,
+      "sha256": "e205322c5024aa9b8d7c703788d555c0e189872029cda52fef242129a7ab3920",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。如电图 3.18.1 所示，取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "normalized_text_snapshot": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "l",
+          "canonical": "l",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cdot",
+          "canonical": "cdot",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "bc",
+          "canonical": "bc",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "pi",
+          "canonical": "pi",
+          "variable_type": "label"
+        },
+        {
+          "original": "c",
+          "canonical": "c",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_07f89a069fa4bdca5cd18a65",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3.18",
+            ".1",
+            "0.8",
+            "100",
+            "10",
+            "-3",
+            "0",
+            "0.2",
+            "0.5",
+            "0",
+            "0",
+            "0",
+            "4",
+            "36"
+          ],
+          "unit_mentions": [
+            "A",
+            "V",
+            "g",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3.18",
+            ".1",
+            "0.8",
+            "100",
+            "10",
+            "-3",
+            "0",
+            "0.2",
+            "0.5",
+            "0",
+            "0",
+            "0",
+            "4",
+            "36"
+          ],
+          "unit_mentions": [
+            "A",
+            "V",
+            "g",
+            "m",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_07f89a069fa4bdca5cd18a65_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$-0.035 \\mathrm{~m}$",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "L",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "V",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "B",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "T",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "O",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "l",
+          "canonical": "l",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cdot",
+          "canonical": "cdot",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "bc",
+          "canonical": "bc",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "pi",
+          "canonical": "pi",
+          "variable_type": "label"
+        },
+        {
+          "original": "c",
+          "canonical": "c",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "V",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-08T23:16:21Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_07f89a069fa4bdca5cd18a65_1",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 0.817,
+        "dark_pixel_ratio": 0.0812,
+        "readability_score": 0.7735,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 308,
+            "height": 377
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 48,
+            "y": 41,
+            "width": 244,
+            "height": 329
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 48,
+            "y": 41,
+            "width": 122,
+            "height": 164
+          },
+          "salience": 0.3985
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 170,
+            "y": 41,
+            "width": 122,
+            "height": 164
+          },
+          "salience": 0.4925
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 48,
+            "y": 205,
+            "width": 122,
+            "height": 165
+          },
+          "salience": 0.4499
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 170,
+            "y": 205,
+            "width": 122,
+            "height": 165
+          },
+          "salience": 0.5289
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9094,
+      "created_at": "2026-04-08T23:16:21Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_07f89a069fa4bdca5cd18a65",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-08T23:16:29Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_a62f35aa33055a68aa2c16dc",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "text_fact",
+      "canonical_value": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "surface_forms": [
+        "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_694598b4bba4c1b1e4e8e4a1"
+      ],
+      "evidence_refs": [
+        "asset_694598b4bba4c1b1e4e8e4a1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "3.18",
+          ".1",
+          "0.8",
+          "100",
+          "10",
+          "-3",
+          "0",
+          "0.2",
+          "0.5",
+          "0",
+          "0",
+          "0",
+          "4",
+          "36"
+        ],
+        "unit_mentions": [
+          "A",
+          "V",
+          "g",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,V,g,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_92e40a37be1b198d4b6a3e72",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "target_slot",
+      "canonical_value": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "surface_forms": [
+        "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_694598b4bba4c1b1e4e8e4a1"
+      ],
+      "evidence_refs": [
+        "asset_694598b4bba4c1b1e4e8e4a1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_07f89a069fa4bdca5cd18a65_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$-0.035 \\mathrm{~m}$",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_84b9f68caa277d732bbc8a04",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "answer_claim",
+      "canonical_value": "$-0.035 \\mathrm{~m}$",
+      "surface_forms": [
+        "$-0.035 \\mathrm{~m}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_32414d99a86a01629d808868"
+      ],
+      "evidence_refs": [
+        "asset_32414d99a86a01629d808868"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$-0.035 \\mathrm{~m}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_b97253ac331b22ce711a2f58",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 308,
+          "height": 377
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9094,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_048b79007a645a86d09b0c95",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 48,
+          "y": 41,
+          "width": 244,
+          "height": 329
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9094,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_ebeab00873a3aabc0857ab89",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 48,
+          "y": 41,
+          "width": 122,
+          "height": 164
+        },
+        "salience": 0.3985
+      },
+      "unit": null,
+      "confidence": 0.9094,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_25463c3e46776d16c4dcf180",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 170,
+          "y": 41,
+          "width": 122,
+          "height": 164
+        },
+        "salience": 0.4925
+      },
+      "unit": null,
+      "confidence": 0.9094,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_960f86dce2194398629df2ae",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 48,
+          "y": 205,
+          "width": 122,
+          "height": 165
+        },
+        "salience": 0.4499
+      },
+      "unit": null,
+      "confidence": 0.9094,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_c1a70e06387cea0b7f02e016",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 170,
+          "y": 205,
+          "width": 122,
+          "height": 165
+        },
+        "salience": 0.5289
+      },
+      "unit": null,
+      "confidence": 0.9094,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_252cb354e9ab26965f5c1b9b",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "text_fact",
+      "canonical_value": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "surface_forms": [
+        "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_747504331bbcfc19926905ca"
+      ],
+      "evidence_refs": [
+        "asset_747504331bbcfc19926905ca"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_9f96598f0a7fad28e95d7089",
+        "parent_problem_id": "prob_07f89a069fa4bdca5cd18a65",
+        "variant_index": 1,
+        "title": "SeePhys 开放题",
+        "rewritten_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$-0.035 \\mathrm{~m}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_ce5b4a13db210e67880a9db8",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "quality_signal",
+      "canonical_value": "image_metadata_path_issue",
+      "surface_forms": [
+        "image_metadata_path_issue"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "image_metadata_path_issue"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_5b835312ccc1bbbdd60cfe9e",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_8f53548996e6107ec43f404d",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_07f89a069fa4bdca5cd18a65",
+        "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-08T23:16:29Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "node_id": "node_27f3d9c9440e7fcfdd0aa444",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_complete",
+          "nonblocking_metadata_issue",
+          "question_complete"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T23:16:39Z",
+      "updated_at": "2026-04-08T23:16:39Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_3c38b5ffeb278cc091bde655",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_6811add513b82e34",
+      "dataset_name": "SeePhys",
+      "input_asset_ids": [
+        "asset_9b8881ade2708cbc20394fd5",
+        "asset_694598b4bba4c1b1e4e8e4a1",
+        "asset_7a931e40e86b499040f65926",
+        "asset_32414d99a86a01629d808868",
+        "asset_4483e6e6142f43155e3a33f1",
+        "asset_04134dedab5176eb09a218e2",
+        "asset_747504331bbcfc19926905ca"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 18
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 308,
+            "height": 377,
+            "blur_score": 1064.9025,
+            "contrast_score": 39.5915,
+            "noise_score": 24.5913,
+            "readability_score": 0.7735,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 48,
+              "y": 41,
+              "width": 244,
+              "height": 329
+            },
+            "perceptual_hash": "fff9b9b991f890c3"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_3c38b5ffeb278cc091bde655",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_07f89a069fa4bdca5cd18a65",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_07f89a069fa4bdca5cd18a65",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "diagram_confirms_geometry_and_coordinates",
+          "question_target_is_explicit",
+          "text_describes_physics_setup_clearly"
+        ],
+        "rationale": "The problem statement fully specifies the physical setup, parameters, coordinate definition, and asks explicitly for the position of edge bc at a given time. The diagram is simple but semantically clear and matches the text, helping confirm the square frame, magnetic-field strip, motion direction, and x-axis orientation.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "image_metadata_path_issue",
+        "metadata.image_paths contains a PIL image object string representation rather than an actual image path or URL"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_complete",
+        "nonblocking_metadata_issue",
+        "question_complete"
+      ],
+      "decision_rationale": "The sample is semantically complete and understandable: the physics setup, target quantity, and answer are all present, the rewrite is usable, and alignment/solvability indicate no serious failure. The only issue is a metadata image-path problem, which does not materially block annotation because the text and diagram evidence remain clear enough.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-08T23:16:39Z",
+      "finished_at": "2026-04-08T23:16:39Z",
+      "candidate_id": "cand_07f89a069fa4bdca5cd18a65",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_3c38b5ffeb278cc091bde655",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "image_entity_refs": [
+        "visual_prob_07f89a069fa4bdca5cd18a65_1::roi",
+        "visual_prob_07f89a069fa4bdca5cd18a65_1::roi_top_left",
+        "visual_prob_07f89a069fa4bdca5cd18a65_1::roi_top_right",
+        "visual_prob_07f89a069fa4bdca5cd18a65_1::roi_bottom_left",
+        "visual_prob_07f89a069fa4bdca5cd18a65_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_07f89a069fa4bdca5cd18a65_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "L",
+          "image_ref": "visual_prob_07f89a069fa4bdca5cd18a65_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7773
+        },
+        {
+          "text_ref": "V",
+          "image_ref": "visual_prob_07f89a069fa4bdca5cd18a65_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7773
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_07f89a069fa4bdca5cd18a65_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7773
+        },
+        {
+          "text_ref": "B",
+          "image_ref": "visual_prob_07f89a069fa4bdca5cd18a65_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7773
+        },
+        {
+          "text_ref": "T",
+          "image_ref": "visual_prob_07f89a069fa4bdca5cd18a65_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7773
+        },
+        {
+          "text_ref": "O",
+          "image_ref": "visual_prob_07f89a069fa4bdca5cd18a65_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7773
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-08T23:16:21Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_f73a7adb67192ab64ca206d6",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。如电图 3.18.1 所示，取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "after_value": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "audit_id": "audit_7474f91b591b53d1a7419350",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$-0.035 \\mathrm{~m}$",
+      "after_value": "$-0.035 \\mathrm{~m}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "audit_id": "audit_c2fdd325ff454a5f190737e2",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "audit_id": "audit_27f3d9c9440e7fcfdd0aa444",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T23:16:39Z"
+    },
+    {
+      "audit_id": "audit_b8b285b0375a97514eda40bf",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "l",
+          "canonical": "l",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "text",
+          "canonical": "text",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "g",
+          "canonical": "g",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "L",
+          "canonical": "L",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "V",
+          "canonical": "V",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "cdot",
+          "canonical": "cdot",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "t",
+          "canonical": "t",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "bc",
+          "canonical": "bc",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "T",
+          "canonical": "T",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "O",
+          "canonical": "O",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        },
+        {
+          "original": "pi",
+          "canonical": "pi",
+          "variable_type": "label"
+        },
+        {
+          "original": "c",
+          "canonical": "c",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T23:16:39Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_3c38b5ffeb278cc091bde655",
+      "problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "source_problem_id": "117",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_9f96598f0a7fad28e95d7089",
+          "parent_problem_id": "prob_07f89a069fa4bdca5cd18a65",
+          "variant_index": 1,
+          "title": "SeePhys 开放题",
+          "rewritten_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$-0.035 \\mathrm{~m}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-08T23:16:39Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_9f96598f0a7fad28e95d7089",
+      "parent_problem_id": "prob_07f89a069fa4bdca5cd18a65",
+      "variant_index": 1,
+      "title": "SeePhys 开放题",
+      "rewritten_question_text": "如电图 3.18.1 所示，在光滑的水平面上，有边长为 $l=0.8 \\text{ m}$ 的正方形导线框，其质量 $m=100 \\text{ g}$，自感 $L=10^{-3} \\text{ V} \\cdot \\text{s} / \\text{A}$，电阻可忽略不计。在 $t=0$ 时，线框右侧 $bc$ 边所在位置刚好是匀强磁场区域的左边界，磁场区域的宽度为 $s=0.2 \\text{ m}$，$\\boldsymbol{B}$ 的方向垂直纸面（即水平面）向里，$B=0.5 \\text{ T}$。取 $t=0$ 时 $bc$ 边所在位置为坐标原点 $O$，取 $x$ 轴与 $bc$ 边垂直。导线框以沿 $x$ 轴正方向的初速 $v_{0}$ 运动，忽略空气阻力。设 $v_{0}=4 \\text{ m}/\\text{s}$，试求 $t=\\frac{\\pi}{36} \\text{ s}$ 时刻，$bc$ 边所在的位置 $x_{c}$。",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$-0.035 \\mathrm{~m}$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "seephys00496",
+  "canonical_sample_index": 496,
+  "canonical_dataset_key": "seephys",
+  "sample_path": "samples/seephys00496.json",
+  "image_path": "artifacts/images/seephys00496.png",
+  "images": [
+    "artifacts/images/seephys00496.png"
+  ],
+  "crop_path": "artifacts/crops/seephys00496.png",
+  "crops": [
+    "artifacts/crops/seephys00496.png"
+  ]
+}
