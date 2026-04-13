@@ -150,13 +150,13 @@ def sample_subject(sample: Dict[str, Any]) -> str:
         problem_main.get("subject"),
         clean_problem.get("subject"),
         normalization.get("subject"),
-        candidate.get("subject"),
         source.get("subject"),
+        candidate.get("subject"),
         problem_main.get("category"),
         clean_problem.get("category"),
         normalization.get("category"),
-        candidate.get("category"),
         source.get("category"),
+        candidate.get("category"),
     )
     return value.strip()
 
