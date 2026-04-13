@@ -681,6 +681,14 @@ def split_selected_by_subject(
         bucket_ranges: Dict[str, Dict[str, Dict[str, Any]]] = {}
         for entry in entries:
             split_key = split_dataset_key_by_subject(dataset_key, entry.sample)
+            if dataset_key == "scemqa" and entry.range_key == "scemqa_300_840":
+                subject_value = sample_subject(entry.sample)
+                log_progress(
+                    "subject-debug "
+                    f"dataset={dataset_key} range={entry.range_key} "
+                    f"source_problem_id={entry.source_problem_id} "
+                    f"subject={subject_value!r} split_key={split_key}"
+                )
             buckets.setdefault(split_key, []).append(entry)
             bucket_ranges.setdefault(split_key, {})
             range_info = bucket_ranges[split_key].setdefault(
