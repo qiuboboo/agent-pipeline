@@ -1,0 +1,38 @@
+paths:
+  ready_root: ready
+  output_root: pipeline2/outputs_smoke
+  checkpoint_db_path: pipeline2/runtime/pipeline_langgraph_smoke.sqlite
+
+runtime:
+  include_manual_review: true
+  max_problems: 1
+  max_problem_workers: 1
+  max_images_per_problem: 2
+  save_runtime_snapshots: false
+  save_problem_bundles: true
+  enable_trace_patch_writes: true
+
+thresholds:
+  method_score_thresholds: [0.33, 0.67]
+  novelty_total_threshold: 0.55
+  novelty_required_threshold: 0.50
+
+models:
+  primary:
+    name: primary
+    base_url: ${ANNOTATION_API_BASE_URL}
+    api_key: ${ANNOTATION_API_KEY}
+    model: ${ANNOTATION_MODEL}
+    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
+    temperature: 0.1
+    timeout_seconds: 60
+    enabled: true
+  fallback:
+    name: fallback
+    base_url: ${ANNOTATION_FALLBACK_BASE_URL}
+    api_key: ${ANNOTATION_FALLBACK_API_KEY}
+    model: ${ANNOTATION_MODEL}
+    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
+    temperature: 0.1
+    timeout_seconds: 60
+    enabled: true
