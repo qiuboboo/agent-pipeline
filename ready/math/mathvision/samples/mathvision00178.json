@@ -1,0 +1,2192 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_dc9430f75ad85c17956c9d09",
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+    "dataset_name": "MathVision",
+    "source_problem_id": "631",
+    "raw_question_text": "Amelia built a crown using 10 copies of this piece <image1>. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?\n<image2>",
+    "raw_answer_text": "1",
+    "choice_map": {},
+    "image_paths": [
+      "images/631.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": null,
+    "extraction_notes": [
+      "question text contains image placeholders <image1> and <image2> without separate explicit path mappings",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T19:37:11Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_0c054ac81d40a0eca66d4d07_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 469,
+        "height": 678,
+        "file_size": 179327
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 262,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "question text contains image placeholders without separate explicit path mappings",
+      "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_dc9430f75ad85c17956c9d09",
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "dataset_name": "MathVision",
+    "source_problem_id": "631",
+    "created_at": "2026-04-05T19:37:11Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.83,
+    "score_evidence": {
+      "image_dependency": [
+        "question explicitly refers to 'the piece shown' and 'the picture'",
+        "target is 'the colored triangle', which is a visual reference not recoverable from text alone",
+        "requires_image=true and text_dominant=false",
+        "image asset exists and registry_passed=true"
+      ],
+      "multi_step": [
+        "problem involves 10 copies of a piece joined under a matching constraint ('sides in contact had the same number')",
+        "solver must use the visible arrangement in the picture ('four parts are visible') together with the repeated-piece rule",
+        "this suggests combining multiple conditions and visual/spatial reasoning rather than a single direct lookup"
+      ],
+      "verifiability": [
+        "answer_text is a single numeric value ('1') with answer_type numeric/number",
+        "the task appears to ask for one specific triangle value, so the expected output format is clear",
+        "a correct solution could in principle be checked against the image and matching-side rule",
+        "verifiability is reduced somewhat by asset issues about image placeholders and path mappings"
+      ]
+    },
+    "risk_flags": [
+      "question text contains image placeholders without separate explicit path mappings",
+      "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_dc9430f75ad85c17956c9d09",
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "dataset_name": "MathVision",
+    "source_problem_id": "631",
+    "created_at": "2026-04-05T19:37:11Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+    "priority": 0.61,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Question, at least one image, and a numeric answer are present, so the sample still retains recoverable core semantics.",
+      "The problem is highly image-dependent, but the asset record has a mismatch: the question references two image placeholders while only one image path is provided.",
+      "Because the missing asset mapping may impair faithful reconstruction, it should not be prioritized as a clean keep.",
+      "Under high-recall collection rules, the available text/image/answer support low_priority rather than reject."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_dc9430f75ad85c17956c9d09",
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "dataset_name": "MathVision",
+    "source_problem_id": "631",
+    "created_at": "2026-04-05T19:37:11Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_dc9430f75ad85c17956c9d09",
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+    "normalized_answer_text": "1",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed image placeholder tags from the question text.",
+      "Question explicitly depends on the shown piece and crown diagram, so image is required.",
+      "No answer or option content was altered."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T19:37:11Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "631",
+    "subject": "数学",
+    "raw_question_text": "Amelia built a crown using 10 copies of this piece <image1>. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?\n<image2>",
+    "raw_answer_text": "1",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.83,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 330,
+      "image_paths": [
+        "images/631.jpg"
+      ],
+      "extraction_notes": [
+        "question text contains image placeholders <image1> and <image2> without separate explicit path mappings",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T19:38:16Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.61,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question, at least one image, and a numeric answer are present, so the sample still retains recoverable core semantics.",
+      "The problem is highly image-dependent, but the asset record has a mismatch: the question references two image placeholders while only one image path is provided.",
+      "Because the missing asset mapping may impair faithful reconstruction, it should not be prioritized as a clean keep.",
+      "Under high-recall collection rules, the available text/image/answer support low_priority rather than reject."
+    ],
+    "collection_risk_flags": [
+      "question text contains image placeholders without separate explicit path mappings",
+      "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_3631fc3787ca0fa2d0d26cfc",
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "source_dataset": "MathVision",
+    "source_problem_id": "631",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_0c054ac81d40a0eca66d4d07/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_0c054ac81d40a0eca66d4d07/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 469,
+        "height": 678
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.83
+    },
+    "created_at": "2026-04-05T19:38:16Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "question text contains image placeholders without separate explicit path mappings",
+      "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_09444044fec6852d5bf4ef6e",
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "source_dataset": "MathVision",
+    "source_problem_id": "631",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.61,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.83
+    },
+    "created_at": "2026-04-05T19:38:16Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Question, at least one image, and a numeric answer are present, so the sample still retains recoverable core semantics.",
+      "The problem is highly image-dependent, but the asset record has a mismatch: the question references two image placeholders while only one image path is provided.",
+      "Because the missing asset mapping may impair faithful reconstruction, it should not be prioritized as a clean keep.",
+      "Under high-recall collection rules, the available text/image/answer support low_priority rather than reject."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_dc9430f75ad85c17956c9d09",
+      "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "dataset_name": "MathVision",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T19:38:16Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_dc9430f75ad85c17956c9d09",
+    "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+    "source_dataset": "MathVision",
+    "source_problem_id": "631",
+    "normalized_question_text": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+    "normalized_answer_text": "1",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "image_support_clear",
+      "question_answer_complete",
+      "solvable_and_aligned"
+    ],
+    "created_at": "2026-04-05T19:38:16Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_dc9430f75ad85c17956c9d09",
+    "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+    "normalized_question_text": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+    "normalized_answer_text": "1",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "were",
+        "canonical": "were",
+        "variable_type": "label"
+      },
+      {
+        "original": "so",
+        "canonical": "so",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "had",
+        "canonical": "had",
+        "variable_type": "label"
+      },
+      {
+        "original": "same",
+        "canonical": "same",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "four",
+        "canonical": "four",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Amelia built a crown using 10 copies of the piece shown."
+      },
+      {
+        "segment_index": 2,
+        "text": "The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible."
+      },
+      {
+        "segment_index": 3,
+        "text": "What is the number that appears in the colored triangle?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 8,
+          "width": 469,
+          "height": 664
+        },
+        "readability_score": 0.8345,
+        "contrast_score": 46.6695
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T19:38:16Z",
+    "normalization_notes": [
+      "Removed image placeholder tags from the question text.",
+      "Question explicitly depends on the shown piece and crown diagram, so image is required.",
+      "No answer or option content was altered."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "631",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Amelia built a crown using 10 copies of this piece <image1>. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?\n<image2>",
+    "normalized_question_text": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+    "raw_answer_text": "1",
+    "normalized_answer_text": "1",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9685,
+    "multi_step_score": 0.3467,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "multiple_image_placeholders_but_single_combined_image",
+      "question text contains image placeholders without separate explicit path mappings",
+      "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "image_support_clear",
+      "question_answer_complete",
+      "solvable_and_aligned"
+    ],
+    "clean_decision_rationale": "The sample is understandable, the required visual information is present in the combined figure, the target region is identifiable, and the expected numeric answer is available. Minor placeholder formatting risk does not materially affect usability.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T19:37:11Z",
+    "updated_at": "2026-04-05T19:38:16Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.83,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.61,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question, at least one image, and a numeric answer are present, so the sample still retains recoverable core semantics.",
+      "The problem is highly image-dependent, but the asset record has a mismatch: the question references two image placeholders while only one image path is provided.",
+      "Because the missing asset mapping may impair faithful reconstruction, it should not be prioritized as a clean keep.",
+      "Under high-recall collection rules, the available text/image/answer support low_priority rather than reject."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_7455b429b51e8c92f2601dd3",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/631/question",
+      "storage_uri": "inline://prob_0c054ac81d40a0eca66d4d07/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 262,
+      "width": null,
+      "height": null,
+      "sha256": "af03259f391b57a12b476b6d9898ce0e25e87caafefc8afcd127fe4de8aa5222",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Amelia built a crown using 10 copies of this piece <image1>. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?\n<image2>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7723,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "asset_id": "asset_e93871c5b4fb365339636fcb",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_0c054ac81d40a0eca66d4d07/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 249,
+      "width": null,
+      "height": null,
+      "sha256": "750068d0f89c15a97c18a6ad747fe68a37f250c9d0a561ebab96777b806b1442",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Amelia built a crown using 10 copies of this piece <image1>. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?\n<image2>",
+      "normalized_text_snapshot": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+      "text_completeness_score": 0.7723,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "asset_id": "asset_a47767b52785ea191d88f155",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/631/answer",
+      "storage_uri": "inline://prob_0c054ac81d40a0eca66d4d07/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "1",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "asset_id": "asset_63248568f41cfed749e9ef87",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_0c054ac81d40a0eca66d4d07/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "1",
+      "normalized_text_snapshot": "1",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "asset_id": "asset_3e8a55bdd508c0cfe397cbe7",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_0c054ac81d40a0eca66d4d07_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 179327,
+      "width": 469,
+      "height": 678,
+      "sha256": "a1ea80ae5e9103228e29a652f2daa4fdd65764279f6ba04d6f9777caaf065e3d",
+      "perceptual_hash": "e7e7ff8399bc81c3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2208.3384,
+      "readability_score": 0.8345,
+      "noise_score": 27.0819,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 8,
+        "width": 469,
+        "height": 664
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "multiple_image_placeholders_but_single_combined_image",
+        "question text contains image placeholders without separate explicit path mappings",
+        "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "asset_id": "asset_d58d6b92fe9ffd711b880dce",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_0c054ac81d40a0eca66d4d07_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 178186,
+      "width": 469,
+      "height": 664,
+      "sha256": "c3c6b3a287cfbbb6a086f31e8dbf7c9f8acba3153eb43ef7d034e94f9f2cd64b",
+      "perceptual_hash": "e7e7ff8399bc81c3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2208.3384,
+      "readability_score": 0.8345,
+      "noise_score": 27.0819,
+      "cropped_from_asset_id": "asset_3e8a55bdd508c0cfe397cbe7",
+      "roi_bbox": {
+        "x": 0,
+        "y": 8,
+        "width": 469,
+        "height": 664
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "asset_id": "asset_19620b9d2058471bb0ac3e58",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_a32049c26fb4f5545cd04892",
+      "file_format": "txt",
+      "file_size_bytes": 249,
+      "width": null,
+      "height": null,
+      "sha256": "750068d0f89c15a97c18a6ad747fe68a37f250c9d0a561ebab96777b806b1442",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Amelia built a crown using 10 copies of this piece <image1>. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?\n<image2>",
+      "normalized_text_snapshot": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+      "text_completeness_score": 0.7723,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_0c054ac81d40a0eca66d4d07",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "Amelia built a crown using 10 copies of the piece shown.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "10"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "What is the number that appears in the colored triangle?",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_0c054ac81d40a0eca66d4d07_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "What is the number that appears in the colored triangle?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "1",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "triangle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Amelia built a crown using 10 copies of the piece shown."
+        },
+        {
+          "segment_index": 2,
+          "text": "The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible."
+        },
+        {
+          "segment_index": 3,
+          "text": "What is the number that appears in the colored triangle?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T19:37:58Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_0c054ac81d40a0eca66d4d07_1",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 0.6917,
+        "dark_pixel_ratio": 0.1555,
+        "readability_score": 0.8345,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 469,
+            "height": 678
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 8,
+            "width": 469,
+            "height": 664
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 8,
+            "width": 234,
+            "height": 332
+          },
+          "salience": 0.4722
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 234,
+            "y": 8,
+            "width": 235,
+            "height": 332
+          },
+          "salience": 0.4208
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 340,
+            "width": 234,
+            "height": 332
+          },
+          "salience": 0.538
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 234,
+            "y": 340,
+            "width": 235,
+            "height": 332
+          },
+          "salience": 0.6042
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9338,
+      "created_at": "2026-04-05T19:37:58Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_0c054ac81d40a0eca66d4d07",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-05T19:38:09Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_17db61e161920281a25a0df9",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "text_fact",
+      "canonical_value": "Amelia built a crown using 10 copies of the piece shown.",
+      "surface_forms": [
+        "Amelia built a crown using 10 copies of the piece shown."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_e93871c5b4fb365339636fcb"
+      ],
+      "evidence_refs": [
+        "asset_e93871c5b4fb365339636fcb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Amelia built a crown using 10 copies of the piece shown.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "10"
+        ],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_9d6ca04ce25f81a32720ed55",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "target_slot",
+      "canonical_value": "What is the number that appears in the colored triangle?",
+      "surface_forms": [
+        "What is the number that appears in the colored triangle?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_e93871c5b4fb365339636fcb"
+      ],
+      "evidence_refs": [
+        "asset_e93871c5b4fb365339636fcb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_0c054ac81d40a0eca66d4d07_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "What is the number that appears in the colored triangle?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "1",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_931700ad4df06d446d5ca7af",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "answer_claim",
+      "canonical_value": "1",
+      "surface_forms": [
+        "1"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_63248568f41cfed749e9ef87"
+      ],
+      "evidence_refs": [
+        "asset_63248568f41cfed749e9ef87"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "1"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_e64d104a57b751ede062865b",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 469,
+          "height": 678
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9338,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_7379332bdb55f775afd911f3",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 8,
+          "width": 469,
+          "height": 664
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9338,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_16a1853ab39641243a62a346",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 8,
+          "width": 234,
+          "height": 332
+        },
+        "salience": 0.4722
+      },
+      "unit": null,
+      "confidence": 0.9338,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_4c506c4c12788c9266859777",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 234,
+          "y": 8,
+          "width": 235,
+          "height": 332
+        },
+        "salience": 0.4208
+      },
+      "unit": null,
+      "confidence": 0.9338,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_7ec7818166439b157043336e",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 340,
+          "width": 234,
+          "height": 332
+        },
+        "salience": 0.538
+      },
+      "unit": null,
+      "confidence": 0.9338,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_95fbad45e49609e2616cb105",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 234,
+          "y": 340,
+          "width": 235,
+          "height": 332
+        },
+        "salience": 0.6042
+      },
+      "unit": null,
+      "confidence": 0.9338,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_87975576625784e0debe9283",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "text_fact",
+      "canonical_value": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+      "surface_forms": [
+        "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_19620b9d2058471bb0ac3e58"
+      ],
+      "evidence_refs": [
+        "asset_19620b9d2058471bb0ac3e58"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_a32049c26fb4f5545cd04892",
+        "parent_problem_id": "prob_0c054ac81d40a0eca66d4d07",
+        "variant_index": 1,
+        "title": "MathVision 开放题",
+        "rewritten_question_text": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "1",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_59d479e905c57413e5db484a",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "quality_signal",
+      "canonical_value": "multiple_image_placeholders_but_single_combined_image",
+      "surface_forms": [
+        "multiple_image_placeholders_but_single_combined_image"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "multiple_image_placeholders_but_single_combined_image"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_a2e756aaa8ba8411269d0134",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "quality_signal",
+      "canonical_value": "question text contains image placeholders without separate explicit path mappings",
+      "surface_forms": [
+        "question text contains image placeholders without separate explicit path mappings"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "question text contains image placeholders without separate explicit path mappings"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_b15d675f2ef06067f0adf000",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "quality_signal",
+      "canonical_value": "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided",
+      "surface_forms": [
+        "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_6d2df38e59520d55c5a77497",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_0c054ac81d40a0eca66d4d07",
+        "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-05T19:38:09Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "node_id": "node_50272a6aabb0ba4a16b4021b",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "image_support_clear",
+          "question_answer_complete",
+          "solvable_and_aligned"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T19:38:16Z",
+      "updated_at": "2026-04-05T19:38:16Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_dc9430f75ad85c17956c9d09",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_7455b429b51e8c92f2601dd3",
+        "asset_e93871c5b4fb365339636fcb",
+        "asset_a47767b52785ea191d88f155",
+        "asset_63248568f41cfed749e9ef87",
+        "asset_3e8a55bdd508c0cfe397cbe7",
+        "asset_d58d6b92fe9ffd711b880dce",
+        "asset_19620b9d2058471bb0ac3e58"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 14
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 469,
+            "height": 678,
+            "blur_score": 2208.3384,
+            "contrast_score": 46.6695,
+            "noise_score": 27.0819,
+            "readability_score": 0.8345,
+            "crop_integrity_score": 0.56,
+            "roi_bbox": {
+              "x": 0,
+              "y": 8,
+              "width": 469,
+              "height": 664
+            },
+            "perceptual_hash": "e7e7ff8399bc81c3"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_dc9430f75ad85c17956c9d09",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_0c054ac81d40a0eca66d4d07",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_0c054ac81d40a0eca66d4d07",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "diagram_semantics_clear",
+          "image_required_and_present",
+          "target_region_identifiable"
+        ],
+        "rationale": "The text clearly asks for the number in the colored triangle of a crown made from repeated numbered pieces. The provided image includes both the reference piece and the crown configuration in a single combined figure, and the colored target triangle is identifiable. A human annotator can understand the task and expected numeric answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "multiple_image_placeholders_but_single_combined_image",
+        "question text contains image placeholders without separate explicit path mappings",
+        "question_text contains two image placeholders (<image1> and <image2>) but only one image path is provided"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "image_support_clear",
+        "question_answer_complete",
+        "solvable_and_aligned"
+      ],
+      "decision_rationale": "The sample is understandable, the required visual information is present in the combined figure, the target region is identifiable, and the expected numeric answer is available. Minor placeholder formatting risk does not materially affect usability.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-05T19:38:16Z",
+      "finished_at": "2026-04-05T19:38:16Z",
+      "candidate_id": "cand_0c054ac81d40a0eca66d4d07",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_dc9430f75ad85c17956c9d09",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "image_entity_refs": [
+        "visual_prob_0c054ac81d40a0eca66d4d07_1::roi",
+        "visual_prob_0c054ac81d40a0eca66d4d07_1::roi_top_left",
+        "visual_prob_0c054ac81d40a0eca66d4d07_1::roi_top_right",
+        "visual_prob_0c054ac81d40a0eca66d4d07_1::roi_bottom_left",
+        "visual_prob_0c054ac81d40a0eca66d4d07_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_0c054ac81d40a0eca66d4d07_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_0c054ac81d40a0eca66d4d07_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7834
+        },
+        {
+          "text_ref": "triangle",
+          "image_ref": "visual_prob_0c054ac81d40a0eca66d4d07_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7834
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-05T19:37:58Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_479e6b1666c0e6560b346658",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Amelia built a crown using 10 copies of this piece <image1>. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?\n<image2>",
+      "after_value": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "audit_id": "audit_c321d46ec483afd3f3b9f74c",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "1",
+      "after_value": "1",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "audit_id": "audit_d734d8891243b5aa0f3e64a4",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "audit_id": "audit_50272a6aabb0ba4a16b4021b",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:38:16Z"
+    },
+    {
+      "audit_id": "audit_70f03bf151dbacb12a0ec548",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "so",
+          "canonical": "so",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "same",
+          "canonical": "same",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "four",
+          "canonical": "four",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T19:38:16Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_dc9430f75ad85c17956c9d09",
+      "problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "source_problem_id": "631",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_a32049c26fb4f5545cd04892",
+          "parent_problem_id": "prob_0c054ac81d40a0eca66d4d07",
+          "variant_index": 1,
+          "title": "MathVision 开放题",
+          "rewritten_question_text": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "1",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-05T19:38:16Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_a32049c26fb4f5545cd04892",
+      "parent_problem_id": "prob_0c054ac81d40a0eca66d4d07",
+      "variant_index": 1,
+      "title": "MathVision 开放题",
+      "rewritten_question_text": "Amelia built a crown using 10 copies of the piece shown. The parts were joined together so that the sides in contact had the same number, as shown in the picture, where four parts are visible. What is the number that appears in the colored triangle?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "1",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "mathvision00178",
+  "canonical_sample_index": 178,
+  "canonical_dataset_key": "mathvision",
+  "sample_path": "samples/mathvision00178.json",
+  "image_path": "artifacts/images/mathvision00178.png",
+  "images": [
+    "artifacts/images/mathvision00178.png"
+  ],
+  "crop_path": "artifacts/crops/mathvision00178.png",
+  "crops": [
+    "artifacts/crops/mathvision00178.png"
+  ]
+}

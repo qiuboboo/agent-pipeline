@@ -1,0 +1,1846 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_6fb2e3a480443fe0e7d0fcb4",
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "problem_id": "prob_eff51df9879154a86427199b",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "148",
+    "raw_question_text": "<image>In the figure, $m∠8 = 96$ and $m∠12 = 42$. Find the measure of $\\angle 9$.",
+    "raw_answer_text": "84",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(434, 293)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images字段中提供的是PIL图像对象字符串表示，不是实际图片路径或URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T20:29:57Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_eff51df9879154a86427199b",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_eff51df9879154a86427199b_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 434,
+        "height": 293,
+        "file_size": 18604
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 81,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_6fb2e3a480443fe0e7d0fcb4",
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "148",
+    "created_at": "2026-04-12T20:29:57Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_eff51df9879154a86427199b",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.62,
+    "verifiability_score": 0.89,
+    "score_evidence": {
+      "image_dependency": [
+        "Question explicitly says \"In the figure,\" indicating the diagram is needed.",
+        "Input field `requires_image` is true.",
+        "Input field `text_dominant` is false, so the text alone is unlikely to determine the answer.",
+        "Asset registry shows one existing PNG image with acceptable readability metadata."
+      ],
+      "multi_step": [
+        "The task gives two known angle measures (`m∠8 = 96` and `m∠12 = 42`) and asks for a different angle (`∠9`), which suggests combining at least two geometric relations.",
+        "This is a geometry diagram problem from `Geometry3K`, a setting that commonly requires chained angle reasoning.",
+        "The question text is short and does not specify the needed relations in words, so the reasoning likely depends on diagram-based intermediate steps.",
+        "Score kept moderate rather than very high because the exact number of reasoning steps is not explicit from the provided fields alone."
+      ],
+      "verifiability": [
+        "Answer type is numeric, which is straightforward to check against a solved result.",
+        "`answer_present` is true and the provided answer text is `84`.",
+        "`registry_passed` is true, so the core assets appear available for downstream checking.",
+        "A geometry angle-finding problem with a single numeric target is generally amenable to rule-based or symbolic verification once the diagram relations are recovered."
+      ]
+    },
+    "risk_flags": [
+      "Diagram structure is not described in the text, so scoring of reasoning depth is partly inferred from task type rather than explicit textual evidence",
+      "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_6fb2e3a480443fe0e7d0fcb4",
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "148",
+    "created_at": "2026-04-12T20:29:57Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_eff51df9879154a86427199b",
+    "priority": 0.92,
+    "decision": "keep",
+    "decision_reasons": [
+      "Question text, answer, and the primary diagram are all present, so the core semantic assets needed to recover and solve the problem are available.",
+      "Initial scoring indicates strong image dependency and high verifiability, which fits a usable geometry sample with a checkable numeric answer.",
+      "The metadata.image_paths issue is a registry metadata defect, but it does not block use here because the image manifest records an existing PNG asset.",
+      "There is no evidence that the sample lacks core semantic support, so it should enter the candidate pool rather than be downgraded or rejected."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_6fb2e3a480443fe0e7d0fcb4",
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "148",
+    "created_at": "2026-04-12T20:29:57Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_6fb2e3a480443fe0e7d0fcb4",
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "problem_id": "prob_eff51df9879154a86427199b",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+    "normalized_answer_text": "84",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading image placeholder token.",
+      "Preserved the original geometry prompt and labeled-angle references.",
+      "Marked as image-required because the question explicitly depends on the figure and force_requires_image is true."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T20:29:57Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "148",
+    "subject": "数学",
+    "raw_question_text": "<image>In the figure, $m∠8 = 96$ and $m∠12 = 42$. Find the measure of $\\angle 9$.",
+    "raw_answer_text": "84",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.62,
+    "initial_verifiability_score": 0.89,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 148,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(434, 293)>"
+      ],
+      "extraction_notes": [
+        "images字段中提供的是PIL图像对象字符串表示，不是实际图片路径或URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T20:31:07Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question text, answer, and the primary diagram are all present, so the core semantic assets needed to recover and solve the problem are available.",
+      "Initial scoring indicates strong image dependency and high verifiability, which fits a usable geometry sample with a checkable numeric answer.",
+      "The metadata.image_paths issue is a registry metadata defect, but it does not block use here because the image manifest records an existing PNG asset.",
+      "There is no evidence that the sample lacks core semantic support, so it should enter the candidate pool rather than be downgraded or rejected."
+    ],
+    "collection_risk_flags": [
+      "Diagram structure is not described in the text, so scoring of reasoning depth is partly inferred from task type rather than explicit textual evidence",
+      "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_8e0130311edb0880f9e7a3d0",
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "148",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_eff51df9879154a86427199b/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_eff51df9879154a86427199b/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 434,
+        "height": 293
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.62,
+      "initial_verifiability_score": 0.89
+    },
+    "created_at": "2026-04-12T20:31:07Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_c2f40ea63a53bec8614d1469",
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "148",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.92,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.62,
+      "initial_verifiability_score": 0.89
+    },
+    "created_at": "2026-04-12T20:31:07Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Question text, answer, and the primary diagram are all present, so the core semantic assets needed to recover and solve the problem are available.",
+      "Initial scoring indicates strong image dependency and high verifiability, which fits a usable geometry sample with a checkable numeric answer.",
+      "The metadata.image_paths issue is a registry metadata defect, but it does not block use here because the image manifest records an existing PNG asset.",
+      "There is no evidence that the sample lacks core semantic support, so it should enter the candidate pool rather than be downgraded or rejected."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_6fb2e3a480443fe0e7d0fcb4",
+      "candidate_id": "cand_eff51df9879154a86427199b",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T20:31:07Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_6fb2e3a480443fe0e7d0fcb4",
+    "problem_id": "prob_eff51df9879154a86427199b",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "148",
+    "normalized_question_text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+    "normalized_answer_text": "84",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "image_required_and_clear",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-12T20:31:07Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_6fb2e3a480443fe0e7d0fcb4",
+    "problem_id": "prob_eff51df9879154a86427199b",
+    "normalized_question_text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+    "normalized_answer_text": "84",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find the measure of $\\angle 9$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 24,
+          "y": 16,
+          "width": 391,
+          "height": 268
+        },
+        "readability_score": 0.7984,
+        "contrast_score": 40.655
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T20:31:07Z",
+    "normalization_notes": [
+      "Removed the leading image placeholder token.",
+      "Preserved the original geometry prompt and labeled-angle references.",
+      "Marked as image-required because the question explicitly depends on the figure and force_requires_image is true."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_eff51df9879154a86427199b",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "148",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-000-900_20260412T151456Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>In the figure, $m∠8 = 96$ and $m∠12 = 42$. Find the measure of $\\angle 9$.",
+    "normalized_question_text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+    "raw_answer_text": "84",
+    "normalized_answer_text": "84",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9768,
+    "multi_step_score": 0.3647,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "image_required_and_clear",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The sample is complete and jointly understandable: the geometry question, diagram, and numeric answer are all available, the rewrite is usable, and alignment and solvability evidence show no serious failure. The metadata path issue is non-semantic and does not block annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_eff51df9879154a86427199b",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T20:29:57Z",
+    "updated_at": "2026-04-12T20:31:07Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.62,
+    "initial_verifiability_score": 0.89,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question text, answer, and the primary diagram are all present, so the core semantic assets needed to recover and solve the problem are available.",
+      "Initial scoring indicates strong image dependency and high verifiability, which fits a usable geometry sample with a checkable numeric answer.",
+      "The metadata.image_paths issue is a registry metadata defect, but it does not block use here because the image manifest records an existing PNG asset.",
+      "There is no evidence that the sample lacks core semantic support, so it should enter the candidate pool rather than be downgraded or rejected."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_33da04f5261c10b48aa98e3d",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[0:900]/148/question",
+      "storage_uri": "inline://prob_eff51df9879154a86427199b/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 85,
+      "width": null,
+      "height": null,
+      "sha256": "2663c1bf7a5bb585b0dc3a630c10e1c5011d0a7656916642cb36d15378dddd5a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In the figure, $m∠8 = 96$ and $m∠12 = 42$. Find the measure of $\\angle 9$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6268,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "asset_id": "asset_687777a298910fcab7e089ec",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_eff51df9879154a86427199b/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 86,
+      "width": null,
+      "height": null,
+      "sha256": "da5379296f7e1eb3e2b998b7a65ca95509d237e98688c110959fbfcbf38c4c27",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In the figure, $m∠8 = 96$ and $m∠12 = 42$. Find the measure of $\\angle 9$.",
+      "normalized_text_snapshot": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+      "text_completeness_score": 0.6268,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "asset_id": "asset_bcdec2ac7600caa133962c9b",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[0:900]/148/answer",
+      "storage_uri": "inline://prob_eff51df9879154a86427199b/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "44c8031cb036a7350d8b9b8603af662a4b9cdbd2f96e8d5de5af435c9c35da69",
+      "perceptual_hash": null,
+      "source_text_snapshot": "84",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "asset_id": "asset_a10f82f90660d03795214161",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_eff51df9879154a86427199b/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "44c8031cb036a7350d8b9b8603af662a4b9cdbd2f96e8d5de5af435c9c35da69",
+      "perceptual_hash": null,
+      "source_text_snapshot": "84",
+      "normalized_text_snapshot": "84",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "asset_id": "asset_f251c6cdd8534dbf020794e4",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_eff51df9879154a86427199b_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 18604,
+      "width": 434,
+      "height": 293,
+      "sha256": "595a05aad96f4bdc7035fbf82a57b446087fd4e2dee55d2ddda357d9df98dcce",
+      "perceptual_hash": "ffdf80d3c300d7ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1813.7898,
+      "readability_score": 0.7984,
+      "noise_score": 26.3912,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 24,
+        "y": 16,
+        "width": 391,
+        "height": 268
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "asset_id": "asset_8ff18f8b717e32b0a5ba6db6",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/crops/prob_eff51df9879154a86427199b_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 18275,
+      "width": 391,
+      "height": 268,
+      "sha256": "5b8c6e3e7e9dd02598b14fe78fa355fdf376920a9145469ab620a5dd9f50be0c",
+      "perceptual_hash": "fddb00dbd300d7f7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1813.7898,
+      "readability_score": 0.7984,
+      "noise_score": 26.3912,
+      "cropped_from_asset_id": "asset_f251c6cdd8534dbf020794e4",
+      "roi_bbox": {
+        "x": 24,
+        "y": 16,
+        "width": 391,
+        "height": 268
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "asset_id": "asset_eb983d21af017425e92122da",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_cc8284ba8d008d2a910fa7d4",
+      "file_format": "txt",
+      "file_size_bytes": 86,
+      "width": null,
+      "height": null,
+      "sha256": "da5379296f7e1eb3e2b998b7a65ca95509d237e98688c110959fbfcbf38c4c27",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In the figure, $m∠8 = 96$ and $m∠12 = 42$. Find the measure of $\\angle 9$.",
+      "normalized_text_snapshot": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+      "text_completeness_score": 0.6268,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_eff51df9879154a86427199b",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "8",
+            "96",
+            "12",
+            "42"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find the measure of $\\angle 9$.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "9"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_eff51df9879154a86427199b_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find the measure of $\\angle 9$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "84",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find the measure of $\\angle 9$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T20:30:47Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_eff51df9879154a86427199b_1",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.4812,
+        "dark_pixel_ratio": 0.0645,
+        "readability_score": 0.7984,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 434,
+            "height": 293
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 24,
+            "y": 16,
+            "width": 391,
+            "height": 268
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 16,
+            "width": 195,
+            "height": 134
+          },
+          "salience": 0.4179
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 219,
+            "y": 16,
+            "width": 196,
+            "height": 134
+          },
+          "salience": 0.42
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 150,
+            "width": 195,
+            "height": 134
+          },
+          "salience": 0.4395
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 219,
+            "y": 150,
+            "width": 196,
+            "height": 134
+          },
+          "salience": 0.4355
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9194,
+      "created_at": "2026-04-12T20:30:47Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_eff51df9879154a86427199b",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T20:30:57Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_434e65c04cfc6e39d83bba58",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "text_fact",
+      "canonical_value": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$.",
+      "surface_forms": [
+        "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_687777a298910fcab7e089ec"
+      ],
+      "evidence_refs": [
+        "asset_687777a298910fcab7e089ec"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [
+          "8",
+          "96",
+          "12",
+          "42"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_bbb0eee78c07c4d8303c82a8",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "target_slot",
+      "canonical_value": "Find the measure of $\\angle 9$.",
+      "surface_forms": [
+        "Find the measure of $\\angle 9$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_687777a298910fcab7e089ec"
+      ],
+      "evidence_refs": [
+        "asset_687777a298910fcab7e089ec"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_eff51df9879154a86427199b_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find the measure of $\\angle 9$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "84",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_c50ddc5bbe161517628176aa",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "answer_claim",
+      "canonical_value": "84",
+      "surface_forms": [
+        "84"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_a10f82f90660d03795214161"
+      ],
+      "evidence_refs": [
+        "asset_a10f82f90660d03795214161"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "84"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_3066235c5762f4a6bb7101ae",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 434,
+          "height": 293
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9194,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_85a886c4c5e3b20b1ed56b78",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 24,
+          "y": 16,
+          "width": 391,
+          "height": 268
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9194,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_44dcbbaea69fa4c3f29eb5bc",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 16,
+          "width": 195,
+          "height": 134
+        },
+        "salience": 0.4179
+      },
+      "unit": null,
+      "confidence": 0.9194,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_353d79f916376f1198f721e3",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 219,
+          "y": 16,
+          "width": 196,
+          "height": 134
+        },
+        "salience": 0.42
+      },
+      "unit": null,
+      "confidence": 0.9194,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_4883dd9232574cf00cc1a4b8",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 150,
+          "width": 195,
+          "height": 134
+        },
+        "salience": 0.4395
+      },
+      "unit": null,
+      "confidence": 0.9194,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_9befea670ce03d37ebc55bcf",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_eff51df9879154a86427199b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 219,
+          "y": 150,
+          "width": 196,
+          "height": 134
+        },
+        "salience": 0.4355
+      },
+      "unit": null,
+      "confidence": 0.9194,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_e226a0acb57dc7e7205ba053",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "text_fact",
+      "canonical_value": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+      "surface_forms": [
+        "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_eb983d21af017425e92122da"
+      ],
+      "evidence_refs": [
+        "asset_eb983d21af017425e92122da"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_cc8284ba8d008d2a910fa7d4",
+        "parent_problem_id": "prob_eff51df9879154a86427199b",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "84",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_c82f90bd43b28689e486226e",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_2ad9ca805b952953d8b0958d",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_eff51df9879154a86427199b",
+        "problem_id": "prob_eff51df9879154a86427199b",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T20:30:57Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "node_id": "node_bb10167709a06addf79d7134",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "image_required_and_clear",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:31:07Z",
+      "updated_at": "2026-04-12T20:31:07Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_6fb2e3a480443fe0e7d0fcb4",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_b396994bd2367a1c",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_33da04f5261c10b48aa98e3d",
+        "asset_687777a298910fcab7e089ec",
+        "asset_bcdec2ac7600caa133962c9b",
+        "asset_a10f82f90660d03795214161",
+        "asset_f251c6cdd8534dbf020794e4",
+        "asset_8ff18f8b717e32b0a5ba6db6",
+        "asset_eb983d21af017425e92122da"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 5
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 434,
+            "height": 293,
+            "blur_score": 1813.7898,
+            "contrast_score": 40.655,
+            "noise_score": 26.3912,
+            "readability_score": 0.7984,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 24,
+              "y": 16,
+              "width": 391,
+              "height": 268
+            },
+            "perceptual_hash": "ffdf80d3c300d7ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_6fb2e3a480443fe0e7d0fcb4",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_eff51df9879154a86427199b",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_eff51df9879154a86427199b",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for the measure of angle 9 given two other angle measures, and the diagram is present and semantically readable with labeled angles 1-16. The image is necessary for interpreting the angle relationships, and it is clear enough for a human annotator to understand the task and expected numeric answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains a PIL object string representation instead of an actual image path or URL"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "image_required_and_clear",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The sample is complete and jointly understandable: the geometry question, diagram, and numeric answer are all available, the rewrite is usable, and alignment and solvability evidence show no serious failure. The metadata path issue is non-semantic and does not block annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T20:31:07Z",
+      "finished_at": "2026-04-12T20:31:07Z",
+      "candidate_id": "cand_eff51df9879154a86427199b",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_6fb2e3a480443fe0e7d0fcb4",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "image_entity_refs": [
+        "visual_prob_eff51df9879154a86427199b_1::roi",
+        "visual_prob_eff51df9879154a86427199b_1::roi_top_left",
+        "visual_prob_eff51df9879154a86427199b_1::roi_top_right",
+        "visual_prob_eff51df9879154a86427199b_1::roi_bottom_left",
+        "visual_prob_eff51df9879154a86427199b_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_eff51df9879154a86427199b_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_eff51df9879154a86427199b_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7799
+        },
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_eff51df9879154a86427199b_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7799
+        },
+        {
+          "text_ref": "slot_prob_eff51df9879154a86427199b_1",
+          "image_ref": "visual_prob_eff51df9879154a86427199b_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7823
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T20:30:47Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_6dde749cbd51cea7e16eddf8",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>In the figure, $m∠8 = 96$ and $m∠12 = 42$. Find the measure of $\\angle 9$.",
+      "after_value": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "audit_id": "audit_86b4f83437579e9f6998fdd9",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "84",
+      "after_value": "84",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "audit_id": "audit_ed55a311e9b20e3c2fbaab8e",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "audit_id": "audit_bb10167709a06addf79d7134",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:31:07Z"
+    },
+    {
+      "audit_id": "audit_2f8fe7eaafab2da6ebccbe3c",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:31:07Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_6fb2e3a480443fe0e7d0fcb4",
+      "problem_id": "prob_eff51df9879154a86427199b",
+      "source_problem_id": "148",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_cc8284ba8d008d2a910fa7d4",
+          "parent_problem_id": "prob_eff51df9879154a86427199b",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "84",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T20:31:07Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_cc8284ba8d008d2a910fa7d4",
+      "parent_problem_id": "prob_eff51df9879154a86427199b",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "In the figure, $m\\angle 8 = 96$ and $m\\angle 12 = 42$. Find the measure of $\\angle 9$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "84",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00495",
+  "canonical_sample_index": 495,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00495.json",
+  "image_path": "artifacts/images/geometry3k00495.png",
+  "images": [
+    "artifacts/images/geometry3k00495.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00495.png",
+  "crops": [
+    "artifacts/crops/geometry3k00495.png"
+  ]
+}

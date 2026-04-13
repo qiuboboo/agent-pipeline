@@ -1,0 +1,1895 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_d9cb26613ca358e0302a3e32",
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "problem_id": "prob_4b083e7fc344527c57864485",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "461",
+    "raw_question_text": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，OM=R/2。下列判断中正确的是( )",
+    "raw_answer_text": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+    "choice_map": {
+      "A": "$m_A<m_B$",
+      "B": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "C": "若增大小球A的质量$m_A$，$\\mathrm{θ}$角会增大"
+    },
+    "image_paths": [
+      "../Data/2/96_0.png"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "picture",
+    "choice_field": null,
+    "extraction_notes": [
+      "题干中仅显式出现A、B、C三个选项，但analysis提到了选项D，原记录中的题目选项可能不完整",
+      "答案字段为选项字母B，已按题干中的选项映射提取为对应选项文本",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-09T07:41:43Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_4b083e7fc344527c57864485",
+    "image_manifest": [
+      {
+        "path": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/images/prob_4b083e7fc344527c57864485_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 130,
+        "height": 123,
+        "file_size": 4444
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 129,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 23
+    },
+    "issues": [
+      "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D",
+      "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_d9cb26613ca358e0302a3e32",
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "461",
+    "created_at": "2026-04-09T07:41:43Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_4b083e7fc344527c57864485",
+    "image_dependency_score": 0.93,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.74,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写有“最终静止在图示位置不动”，关键空间位置依赖示意图。",
+        "requires_image=true 且 text_dominant=false，表明题目不是纯文本可完整还原。",
+        "题目涉及球壳、轻杆、两端小球、竖直半径与杆交点 M 等几何关系，通常需要结合图像判断受力与角度。"
+      ],
+      "multi_step": [
+        "这是静力学选择题，需结合几何位置关系与受力平衡/力矩平衡，不像单步事实提取。",
+        "选项同时涉及质量比较、支持力表达式、参数变化对角度的影响，解题通常需要多条件联立判断。",
+        "题干给出 OM=R/2 等定量几何信息，暗示需要从图形关系推到物理结论，具备图文联合推理特征。"
+      ],
+      "verifiability": [
+        "answer_text 给出了明确命题“球体内壁对A球的支持力为N_A=2m_Ag”，答案形式清晰。",
+        "choices 中存在与 answer_text 对应的显式选项 B，可做答案匹配核验。",
+        "但 asset_registry_record.issues 指出原始选项可能不完整，且题干是选择题而样本字段存在不一致，这降低了可验证性的稳健性。"
+      ]
+    },
+    "risk_flags": [
+      "answer_type in sample is short_text while answer_manifest.answer_type is choice, indicating schema inconsistency",
+      "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D",
+      "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_d9cb26613ca358e0302a3e32",
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "461",
+    "created_at": "2026-04-09T07:41:43Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_4b083e7fc344527c57864485",
+    "priority": 0.78,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题干、图像和答案资产均存在，核心语义未缺失，不宜直接 reject",
+      "该题对图像依赖高，当前主图可用，仍具备恢复题意与推理链的基础",
+      "但这是选择题，显式选项文本不完整，且存在可能缺少 D 选项的记录，影响样本完整性",
+      "answer_manifest 与样本中的 answer_type 存在不一致，降低了答案核验的稳健性",
+      "综合来看样本仍可恢复，但需要后续补齐选项与字段一致性后再提升优先级"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_d9cb26613ca358e0302a3e32",
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "461",
+    "created_at": "2026-04-09T07:41:43Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_d9cb26613ca358e0302a3e32",
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "problem_id": "prob_4b083e7fc344527c57864485",
+    "dataset_name": "Multi-Physics",
+    "normalized_question_text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+    "normalized_answer_text": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+    "normalized_choice_map": {
+      "A": "$m_A<m_B$",
+      "B": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "C": "若增大小球A的质量$m_A$，$\\mathrm{θ}$角会增大"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "rule_based_normalization"
+    ],
+    "llm_used": false,
+    "created_at": "2026-04-09T07:41:43Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "source_dataset": "Multi-Physics",
+    "source_split": "repo_discovered",
+    "source_problem_id": "461",
+    "subject": "物理",
+    "raw_question_text": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，OM=R/2。下列判断中正确的是( )",
+    "raw_answer_text": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.93,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.74,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "data_file": "outputs/repo_cache/multi_physics/Data/2.json",
+      "image_paths": [
+        "../Data/2/96_0.png"
+      ],
+      "extraction_notes": [
+        "题干中仅显式出现A、B、C三个选项，但analysis提到了选项D，原记录中的题目选项可能不完整",
+        "答案字段为选项字母B，已按题干中的选项映射提取为对应选项文本",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "picture",
+      "choice_field": null
+    },
+    "created_at": "2026-04-09T07:43:43Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、图像和答案资产均存在，核心语义未缺失，不宜直接 reject",
+      "该题对图像依赖高，当前主图可用，仍具备恢复题意与推理链的基础",
+      "但这是选择题，显式选项文本不完整，且存在可能缺少 D 选项的记录，影响样本完整性",
+      "answer_manifest 与样本中的 answer_type 存在不一致，降低了答案核验的稳健性",
+      "综合来看样本仍可恢复，但需要后续补齐选项与字段一致性后再提升优先级"
+    ],
+    "collection_risk_flags": [
+      "answer_type in sample is short_text while answer_manifest.answer_type is choice, indicating schema inconsistency",
+      "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D",
+      "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_5798d1a8632f36269a537cb4",
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "461",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_4b083e7fc344527c57864485/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_4b083e7fc344527c57864485/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/96_0.png",
+        "is_present": true,
+        "width": 130,
+        "height": 123
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.93,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.74
+    },
+    "created_at": "2026-04-09T07:43:43Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D",
+      "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_9b890520bbf07ae0c491e1c8",
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "461",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.78,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.93,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.74
+    },
+    "created_at": "2026-04-09T07:43:43Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题干、图像和答案资产均存在，核心语义未缺失，不宜直接 reject",
+      "该题对图像依赖高，当前主图可用，仍具备恢复题意与推理链的基础",
+      "但这是选择题，显式选项文本不完整，且存在可能缺少 D 选项的记录，影响样本完整性",
+      "answer_manifest 与样本中的 answer_type 存在不一致，降低了答案核验的稳健性",
+      "综合来看样本仍可恢复，但需要后续补齐选项与字段一致性后再提升优先级"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_d9cb26613ca358e0302a3e32",
+      "candidate_id": "cand_4b083e7fc344527c57864485",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "dataset_name": "Multi-Physics",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-09T07:43:43Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_d9cb26613ca358e0302a3e32",
+    "problem_id": "prob_4b083e7fc344527c57864485",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "461",
+    "normalized_question_text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+    "normalized_answer_text": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "answer_available",
+      "multimodal_consistent",
+      "rewrite_usable"
+    ],
+    "created_at": "2026-04-09T07:43:43Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_d9cb26613ca358e0302a3e32",
+    "problem_id": "prob_4b083e7fc344527c57864485",
+    "normalized_question_text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+    "normalized_answer_text": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "OM",
+        "canonical": "OM",
+        "variable_type": "label"
+      },
+      {
+        "original": "R",
+        "canonical": "R",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/96_0.png",
+        "roi_bbox": {
+          "x": 7,
+          "y": 6,
+          "width": 116,
+          "height": 114
+        },
+        "readability_score": 0.8321,
+        "contrast_score": 59.9206
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-09T07:43:43Z",
+    "normalization_notes": [
+      "rule_based_normalization"
+    ],
+    "normalization_llm_used": false
+  },
+  "problem_main_record": {
+    "problem_id": "prob_4b083e7fc344527c57864485",
+    "source_dataset": "Multi-Physics",
+    "source_split": "repo_discovered",
+    "source_problem_id": "461",
+    "ingest_batch_id": "benchmarkallinone-multi-physics-500-1412_20260408T142155Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，OM=R/2。下列判断中正确的是( )",
+    "normalized_question_text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+    "raw_answer_text": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+    "normalized_answer_text": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9682,
+    "multi_step_score": 0.3377,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D",
+      "possible_incomplete_choice_list",
+      "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "answer_available",
+      "multimodal_consistent",
+      "rewrite_usable"
+    ],
+    "clean_decision_rationale": "The sample is semantically clear, the image-supported geometry is usable, and the rewritten open question directly targets the provided answer `N_A=2m_Ag`. Although the original multiple-choice options may be incomplete, that does not materially block downstream annotation for the rewritten variant.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_4b083e7fc344527c57864485",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-09T07:41:43Z",
+    "updated_at": "2026-04-09T07:43:43Z",
+    "initial_image_dependency_score": 0.93,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.74,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、图像和答案资产均存在，核心语义未缺失，不宜直接 reject",
+      "该题对图像依赖高，当前主图可用，仍具备恢复题意与推理链的基础",
+      "但这是选择题，显式选项文本不完整，且存在可能缺少 D 选项的记录，影响样本完整性",
+      "answer_manifest 与样本中的 answer_type 存在不一致，降低了答案核验的稳健性",
+      "综合来看样本仍可恢复，但需要后续补齐选项与字段一致性后再提升优先级"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_ea3eb3a96742dec788022572",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://multi_physics/repo_discovered/461/question",
+      "storage_uri": "inline://prob_4b083e7fc344527c57864485/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 327,
+      "width": null,
+      "height": null,
+      "sha256": "fa461e2f533ca420411bb0ca21a8349bbc1e0fd29fc3721ecd6718e7f41fdc91",
+      "perceptual_hash": null,
+      "source_text_snapshot": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，OM=R/2。下列判断中正确的是( )",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6652,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "OM",
+          "canonical": "OM",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "asset_id": "asset_71ea3bd39a2d94bb92832253",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_4b083e7fc344527c57864485/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 317,
+      "width": null,
+      "height": null,
+      "sha256": "9a3826543366bd0f6ec96dd8cc940ed01ac5daad395e98d1554dcbaebd6109af",
+      "perceptual_hash": null,
+      "source_text_snapshot": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，OM=R/2。下列判断中正确的是( )",
+      "normalized_text_snapshot": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+      "text_completeness_score": 0.6652,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "OM",
+          "canonical": "OM",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "asset_id": "asset_6cfa181294dfb4eed3002484",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://multi_physics/repo_discovered/461/answer",
+      "storage_uri": "inline://prob_4b083e7fc344527c57864485/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 45,
+      "width": null,
+      "height": null,
+      "sha256": "257736a6a4a6a78efe7254215e805789026f73fd31fbc3c9289fbdd6b85c6ed3",
+      "perceptual_hash": null,
+      "source_text_snapshot": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "asset_id": "asset_b2a55468b4ff8d1ecded36c5",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_4b083e7fc344527c57864485/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 45,
+      "width": null,
+      "height": null,
+      "sha256": "257736a6a4a6a78efe7254215e805789026f73fd31fbc3c9289fbdd6b85c6ed3",
+      "perceptual_hash": null,
+      "source_text_snapshot": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "normalized_text_snapshot": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "asset_id": "asset_fbafc58264050ee8328d5c69",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/96_0.png",
+      "storage_uri": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/images/prob_4b083e7fc344527c57864485_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 4444,
+      "width": 130,
+      "height": 123,
+      "sha256": "f51b0a61d645ea5310b560c31e3b3286f47c78611d274d5a58aec8469fe6594c",
+      "perceptual_hash": "c3bd7e7e6c2085c3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 8530.3896,
+      "readability_score": 0.8321,
+      "noise_score": 45.0076,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 7,
+        "y": 6,
+        "width": 116,
+        "height": 114
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D",
+        "possible_incomplete_choice_list",
+        "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "asset_id": "asset_1f2a7c6dc76f2d6261dd1b3b",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/crops/prob_4b083e7fc344527c57864485_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 4324,
+      "width": 116,
+      "height": 114,
+      "sha256": "dec5b9a132850e2baf5669bbdd10a19b3125532dec43e6ba5ed78667709ea8c0",
+      "perceptual_hash": "c1bc7e7e6e608581",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 8530.3896,
+      "readability_score": 0.8321,
+      "noise_score": 45.0076,
+      "cropped_from_asset_id": "asset_fbafc58264050ee8328d5c69",
+      "roi_bbox": {
+        "x": 7,
+        "y": 6,
+        "width": 116,
+        "height": 114
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "asset_id": "asset_caa781a034bfdf5596eb17e7",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_b802657cd9c0babc68b74d59",
+      "file_format": "txt",
+      "file_size_bytes": 339,
+      "width": null,
+      "height": null,
+      "sha256": "7faefebf387f19178c33eb96173e1b5ec73acdfb2d6b2bbd525e1ff30a0f788e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，OM=R/2。下列判断中正确的是( )",
+      "normalized_text_snapshot": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。",
+      "text_completeness_score": 0.6652,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "OM",
+          "canonical": "OM",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_4b083e7fc344527c57864485",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2"
+          ],
+          "unit_mentions": [
+            "A",
+            "m"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2"
+          ],
+          "unit_mentions": [
+            "A",
+            "m"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_4b083e7fc344527c57864485_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "B",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "OM",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "R",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "OM",
+          "canonical": "OM",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "N",
+        "g",
+        "m"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-09T07:43:06Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_4b083e7fc344527c57864485_1",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.0569,
+        "dark_pixel_ratio": 0.1114,
+        "readability_score": 0.8321,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 130,
+            "height": 123
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 7,
+            "y": 6,
+            "width": 116,
+            "height": 114
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 7,
+            "y": 6,
+            "width": 58,
+            "height": 57
+          },
+          "salience": 0.4338
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 65,
+            "y": 6,
+            "width": 58,
+            "height": 57
+          },
+          "salience": 0.4404
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 7,
+            "y": 63,
+            "width": 58,
+            "height": 57
+          },
+          "salience": 0.5366
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 65,
+            "y": 63,
+            "width": 58,
+            "height": 57
+          },
+          "salience": 0.5282
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9328,
+      "created_at": "2026-04-09T07:43:06Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_4b083e7fc344527c57864485",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-09T07:43:32Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_4c572e24dd3cb0c5f71d522e",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "text_fact",
+      "canonical_value": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+      "surface_forms": [
+        "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_71ea3bd39a2d94bb92832253"
+      ],
+      "evidence_refs": [
+        "asset_71ea3bd39a2d94bb92832253"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "2"
+        ],
+        "unit_mentions": [
+          "A",
+          "m"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,m",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_91d90f142242700e88105cf3",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "target_slot",
+      "canonical_value": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。",
+      "surface_forms": [
+        "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_71ea3bd39a2d94bb92832253"
+      ],
+      "evidence_refs": [
+        "asset_71ea3bd39a2d94bb92832253"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_4b083e7fc344527c57864485_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_48b8f6a7eea0d0b60119a10f",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "answer_claim",
+      "canonical_value": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "surface_forms": [
+        "球体内壁对A球的支持力为$N_A=2m_Ag$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_b2a55468b4ff8d1ecded36c5"
+      ],
+      "evidence_refs": [
+        "asset_b2a55468b4ff8d1ecded36c5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "球体内壁对A球的支持力为$N_A=2m_Ag$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_b896d29804aa200a5b70c1ec",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 130,
+          "height": 123
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9328,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_cffce04bdfbbc6cf91107ba6",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 7,
+          "y": 6,
+          "width": 116,
+          "height": 114
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9328,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_4667e0e006b9d9293e589380",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 7,
+          "y": 6,
+          "width": 58,
+          "height": 57
+        },
+        "salience": 0.4338
+      },
+      "unit": null,
+      "confidence": 0.9328,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_b4a13578ecd7dc41a4424295",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 65,
+          "y": 6,
+          "width": 58,
+          "height": 57
+        },
+        "salience": 0.4404
+      },
+      "unit": null,
+      "confidence": 0.9328,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_0879a43a6b9a15266a124be0",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 7,
+          "y": 63,
+          "width": 58,
+          "height": 57
+        },
+        "salience": 0.5366
+      },
+      "unit": null,
+      "confidence": 0.9328,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_df078da49c4f9500387297cb",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 65,
+          "y": 63,
+          "width": 58,
+          "height": 57
+        },
+        "salience": 0.5282
+      },
+      "unit": null,
+      "confidence": 0.9328,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_48a7f302d79e2ed42cb7da42",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "text_fact",
+      "canonical_value": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。",
+      "surface_forms": [
+        "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_caa781a034bfdf5596eb17e7"
+      ],
+      "evidence_refs": [
+        "asset_caa781a034bfdf5596eb17e7"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_b802657cd9c0babc68b74d59",
+        "parent_problem_id": "prob_4b083e7fc344527c57864485",
+        "variant_index": 1,
+        "title": "Multi-Physics 开放题",
+        "rewritten_question_text": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。",
+        "expected_answer_type": "short_text",
+        "expected_answer": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_726d4c29bf5e79a548d93655",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D",
+      "surface_forms": [
+        "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_9b7c166072b5511bb6626a84",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "quality_signal",
+      "canonical_value": "possible_incomplete_choice_list",
+      "surface_forms": [
+        "possible_incomplete_choice_list"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "possible_incomplete_choice_list"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_70d61c6ba92ad6e56e1289a9",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "quality_signal",
+      "canonical_value": "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null",
+      "surface_forms": [
+        "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_88c4807a171f773ea0b608d1",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_4b083e7fc344527c57864485",
+        "problem_id": "prob_4b083e7fc344527c57864485",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-09T07:43:32Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "node_id": "node_0941fef00aacdb9654c52440",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "answer_available",
+          "multimodal_consistent",
+          "rewrite_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T07:43:43Z",
+      "updated_at": "2026-04-09T07:43:43Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_d9cb26613ca358e0302a3e32",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_db31e0002acdd125",
+      "dataset_name": "Multi-Physics",
+      "input_asset_ids": [
+        "asset_ea3eb3a96742dec788022572",
+        "asset_71ea3bd39a2d94bb92832253",
+        "asset_6cfa181294dfb4eed3002484",
+        "asset_b2a55468b4ff8d1ecded36c5",
+        "asset_fbafc58264050ee8328d5c69",
+        "asset_1f2a7c6dc76f2d6261dd1b3b",
+        "asset_caa781a034bfdf5596eb17e7"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 4
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.84,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 130,
+            "height": 123,
+            "blur_score": 8530.3896,
+            "contrast_score": 59.9206,
+            "noise_score": 45.0076,
+            "readability_score": 0.8321,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 7,
+              "y": 6,
+              "width": 116,
+              "height": 114
+            },
+            "perceptual_hash": "c3bd7e7e6c2085c3"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_d9cb26613ca358e0302a3e32",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_4b083e7fc344527c57864485",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_4b083e7fc344527c57864485",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "core_question_and_answer_are_clear",
+          "image_needed_and_present"
+        ],
+        "rationale": "The problem statement clearly describes the physical setup, asks for the correct option, and provides a specific answer choice text that matches one listed option. The diagram is small but semantically usable: it shows the sphere, endpoints A/B, center O, rod position, M, and angle theta, which are enough to understand the geometry. There is some risk that the original option list may have been incomplete, but the sample remains materially understandable for annotation or review.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes states the original options may be incomplete: only A/B/C are explicit while analysis mentioned a possible option D",
+        "possible_incomplete_choice_list",
+        "question_text asks for a choice answer (\"下列判断中正确的是( )\"), but explicit option texts are not provided in the sample and metadata.choice_field is null"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "answer_available",
+        "multimodal_consistent",
+        "rewrite_usable"
+      ],
+      "decision_rationale": "The sample is semantically clear, the image-supported geometry is usable, and the rewritten open question directly targets the provided answer `N_A=2m_Ag`. Although the original multiple-choice options may be incomplete, that does not materially block downstream annotation for the rewritten variant.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-09T07:43:43Z",
+      "finished_at": "2026-04-09T07:43:43Z",
+      "candidate_id": "cand_4b083e7fc344527c57864485",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_d9cb26613ca358e0302a3e32",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "image_entity_refs": [
+        "visual_prob_4b083e7fc344527c57864485_1::roi",
+        "visual_prob_4b083e7fc344527c57864485_1::roi_top_left",
+        "visual_prob_4b083e7fc344527c57864485_1::roi_top_right",
+        "visual_prob_4b083e7fc344527c57864485_1::roi_bottom_left",
+        "visual_prob_4b083e7fc344527c57864485_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_4b083e7fc344527c57864485_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_4b083e7fc344527c57864485_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7832
+        },
+        {
+          "text_ref": "B",
+          "image_ref": "visual_prob_4b083e7fc344527c57864485_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7832
+        },
+        {
+          "text_ref": "OM",
+          "image_ref": "visual_prob_4b083e7fc344527c57864485_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7832
+        },
+        {
+          "text_ref": "R",
+          "image_ref": "visual_prob_4b083e7fc344527c57864485_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7832
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-09T07:43:06Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_b2b719f1b1fa4f900617f8d2",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，OM=R/2。下列判断中正确的是( )",
+      "after_value": "内壁光滑的球体壳半径为R,一长度小于直径的轻杆两端固定质量分别为$m_{A}$、 $m_{B}$的小球A、B。将轻杆置于球体内部后,最终静止在图示位置不动,球心O与杆在同一竖直面内,过球心O竖直向下的半径与杆的交点为M,OM=R/2。下列判断中正确的是( )",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "audit_id": "audit_f64a058927dda1aadf653ffb",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "after_value": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "audit_id": "audit_f980896f2fb9951b58646913",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "audit_id": "audit_0941fef00aacdb9654c52440",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T07:43:43Z"
+    },
+    {
+      "audit_id": "audit_496cef29683b4580cd6709a6",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "OM",
+          "canonical": "OM",
+          "variable_type": "label"
+        },
+        {
+          "original": "R",
+          "canonical": "R",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T07:43:43Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_d9cb26613ca358e0302a3e32",
+      "problem_id": "prob_4b083e7fc344527c57864485",
+      "source_problem_id": "461",
+      "strategy": "blank_open",
+      "rationale": "依据正确选项的具体命题，将选择题改写为直接求A球所受支持力的开放题。",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_b802657cd9c0babc68b74d59",
+          "parent_problem_id": "prob_4b083e7fc344527c57864485",
+          "variant_index": 1,
+          "title": "Multi-Physics 开放题",
+          "rewritten_question_text": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。",
+          "expected_answer_type": "short_text",
+          "expected_answer": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-09T07:43:43Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_b802657cd9c0babc68b74d59",
+      "parent_problem_id": "prob_4b083e7fc344527c57864485",
+      "variant_index": 1,
+      "title": "Multi-Physics 开放题",
+      "rewritten_question_text": "内壁光滑的球体壳半径为R，一长度小于直径的轻杆两端固定质量分别为$m_A$、$m_B$的小球A、B。将轻杆置于球体内部后，最终静止在图示位置不动，球心O与杆在同一竖直面内，过球心O竖直向下的半径与杆的交点为M，且$OM=R/2$。求球体内壁对A球的支持力$N_A$。",
+      "expected_answer_type": "short_text",
+      "expected_answer": "球体内壁对A球的支持力为$N_A=2m_Ag$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "multiphysics00310",
+  "canonical_sample_index": 310,
+  "canonical_dataset_key": "multi_physics",
+  "sample_path": "samples/multiphysics00310.json",
+  "image_path": "artifacts/images/multiphysics00310.png",
+  "images": [
+    "artifacts/images/multiphysics00310.png"
+  ],
+  "crop_path": "artifacts/crops/multiphysics00310.png",
+  "crops": [
+    "artifacts/crops/multiphysics00310.png"
+  ]
+}

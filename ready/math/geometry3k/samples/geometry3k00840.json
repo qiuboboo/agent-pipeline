@@ -1,0 +1,1671 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_1d5a1f05a5151e6a01c2465e",
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "412",
+    "raw_question_text": "<image>If $m \\angle 2=70-4 x$ and $m \\angle 5=18 x-8,$ find $m \\angle 5$",
+    "raw_answer_text": "28",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(373, 169)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image 字段中是 PIL 对象字符串表示，不是实际文件路径或 URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T13:16:56Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_e6e8b00fa0ec73d257351e6e_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 373,
+        "height": 169,
+        "file_size": 7160
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 72,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_1d5a1f05a5151e6a01c2465e",
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "412",
+    "created_at": "2026-04-12T13:16:56Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+    "image_dependency_score": 0.93,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.86,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image` is true.",
+        "`text_dominant` is false.",
+        "The question only gives expressions for `angle 2` and `angle 5`; the needed relation between these labeled angles is not stated in text, so it likely comes from the diagram.",
+        "Asset registry shows one existing image file, consistent with diagram-based geometry."
+      ],
+      "multi_step": [
+        "Solving likely requires identifying the geometric relation between `angle 2` and `angle 5` from the diagram, then forming an equation.",
+        "After finding the relation, the solver must solve for `x` and then substitute to compute `m angle 5`, which is more than one step.",
+        "The item is from `Geometry3K`, a geometry dataset where labeled-angle diagram reasoning is common.",
+        "`should_push_multi_solution_agent` is true, which weakly supports nontrivial reasoning potential, though this is not direct proof of complexity."
+      ],
+      "verifiability": [
+        "`answer_type` is numeric and `answer_text` is `28`, so the final output format is precise.",
+        "The algebraic result can be checked once the diagram-implied angle relation is identified.",
+        "`registry_passed` is true, and both question and answer are present in the asset registry.",
+        "The image readability score is moderate (`0.6044`), so the visual evidence may be usable for downstream checking."
+      ]
+    },
+    "risk_flags": [
+      "Diagram relation between `angle 2` and `angle 5` is not explicit in the text, so scoring depends on the registered image being usable.",
+      "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_1d5a1f05a5151e6a01c2465e",
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "412",
+    "created_at": "2026-04-12T13:16:56Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+    "priority": 0.88,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像都已存在，核心语义资产完整，可支持后续恢复与验证。",
+      "该题对图像依赖高，但注册记录中已有可用图片文件，且 `registry_passed` 为 true。",
+      "初步打分中可验证性较高，答案为明确数值，适合进入候选池。",
+      "已知问题主要是 `metadata.image_paths` 的元数据格式异常，不是核心资产缺失，风险可控。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_1d5a1f05a5151e6a01c2465e",
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "412",
+    "created_at": "2026-04-12T13:16:56Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_1d5a1f05a5151e6a01c2465e",
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+    "normalized_answer_text": "28",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading <image> marker as noise.",
+      "Kept the angle-number references unchanged because they depend on the diagram.",
+      "force_requires_image=true, so the sample remains image-dependent."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T13:16:56Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "412",
+    "subject": "数学",
+    "raw_question_text": "<image>If $m \\angle 2=70-4 x$ and $m \\angle 5=18 x-8,$ find $m \\angle 5$",
+    "raw_answer_text": "28",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.93,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 412,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(373, 169)>"
+      ],
+      "extraction_notes": [
+        "image 字段中是 PIL 对象字符串表示，不是实际文件路径或 URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T13:18:27Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都已存在，核心语义资产完整，可支持后续恢复与验证。",
+      "该题对图像依赖高，但注册记录中已有可用图片文件，且 `registry_passed` 为 true。",
+      "初步打分中可验证性较高，答案为明确数值，适合进入候选池。",
+      "已知问题主要是 `metadata.image_paths` 的元数据格式异常，不是核心资产缺失，风险可控。"
+    ],
+    "collection_risk_flags": [
+      "Diagram relation between `angle 2` and `angle 5` is not explicit in the text, so scoring depends on the registered image being usable.",
+      "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_7fb741da4911697bc108103f",
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "412",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_e6e8b00fa0ec73d257351e6e/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_e6e8b00fa0ec73d257351e6e/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 373,
+        "height": 169
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.93,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-12T13:18:27Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_7fbfe84aac3c92cec062f82a",
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "412",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.88,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.93,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-12T13:18:27Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像都已存在，核心语义资产完整，可支持后续恢复与验证。",
+      "该题对图像依赖高，但注册记录中已有可用图片文件，且 `registry_passed` 为 true。",
+      "初步打分中可验证性较高，答案为明确数值，适合进入候选池。",
+      "已知问题主要是 `metadata.image_paths` 的元数据格式异常，不是核心资产缺失，风险可控。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_1d5a1f05a5151e6a01c2465e",
+      "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T13:18:27Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_1d5a1f05a5151e6a01c2465e",
+    "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "412",
+    "normalized_question_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+    "normalized_answer_text": "28",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_sufficient",
+      "answer_available",
+      "jointly_understandable",
+      "rewrite_usable"
+    ],
+    "created_at": "2026-04-12T13:18:27Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_1d5a1f05a5151e6a01c2465e",
+    "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+    "normalized_question_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+    "normalized_answer_text": "28",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "If",
+        "canonical": "If",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 373,
+          "height": 169
+        },
+        "readability_score": 0.6044,
+        "contrast_score": 34.1624
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T13:18:27Z",
+    "normalization_notes": [
+      "Removed the leading <image> marker as noise.",
+      "Kept the angle-number references unchanged because they depend on the diagram.",
+      "force_requires_image=true, so the sample remains image-dependent."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "412",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-900-1500_20260412T071102Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>If $m \\angle 2=70-4 x$ and $m \\angle 5=18 x-8,$ find $m \\angle 5$",
+    "normalized_question_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+    "raw_answer_text": "28",
+    "normalized_answer_text": "28",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9454,
+    "multi_step_score": 0.3827,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_sufficient",
+      "answer_available",
+      "jointly_understandable",
+      "rewrite_usable"
+    ],
+    "clean_decision_rationale": "The sample is semantically usable for annotation: the question and answer are complete, the diagram is clear enough to support the needed geometry relation, the rewrite is consistent and usable, and alignment/solvability indicate no serious failure. The metadata image-path issue is non-blocking.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T13:16:56Z",
+    "updated_at": "2026-04-12T13:18:27Z",
+    "initial_image_dependency_score": 0.93,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都已存在，核心语义资产完整，可支持后续恢复与验证。",
+      "该题对图像依赖高，但注册记录中已有可用图片文件，且 `registry_passed` 为 true。",
+      "初步打分中可验证性较高，答案为明确数值，适合进入候选池。",
+      "已知问题主要是 `metadata.image_paths` 的元数据格式异常，不是核心资产缺失，风险可控。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_5ec267dc7f1a18a730db662e",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[900:1500]/412/question",
+      "storage_uri": "inline://prob_e6e8b00fa0ec73d257351e6e/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 72,
+      "width": null,
+      "height": null,
+      "sha256": "5becdd2ec8559687a0e73c7d4d78ef0abdf02404afd245e0e054a3f1264e7f25",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>If $m \\angle 2=70-4 x$ and $m \\angle 5=18 x-8,$ find $m \\angle 5$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6116,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "asset_id": "asset_d94e8f20c445bc8e3b377ed6",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_e6e8b00fa0ec73d257351e6e/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 69,
+      "width": null,
+      "height": null,
+      "sha256": "8d9d1bc60641efef20889d2da64310d9435247a6c7ac55e5240a54d423a33200",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>If $m \\angle 2=70-4 x$ and $m \\angle 5=18 x-8,$ find $m \\angle 5$",
+      "normalized_text_snapshot": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+      "text_completeness_score": 0.6116,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "asset_id": "asset_1675afe0a78a11fa0da0c223",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[900:1500]/412/answer",
+      "storage_uri": "inline://prob_e6e8b00fa0ec73d257351e6e/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "59e19706d51d39f66711c2653cd7eb1291c94d9b55eb14bda74ce4dc636d015a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "28",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "asset_id": "asset_37f7296a1a0e4cf7252f5e7e",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_e6e8b00fa0ec73d257351e6e/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "59e19706d51d39f66711c2653cd7eb1291c94d9b55eb14bda74ce4dc636d015a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "28",
+      "normalized_text_snapshot": "28",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "asset_id": "asset_59a6b1bd4a5fc2079157fae0",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_e6e8b00fa0ec73d257351e6e_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 7160,
+      "width": 373,
+      "height": 169,
+      "sha256": "e578659b1f5e0eb2c00996a5089eba7374e6e4acb7c2e4e3fe8af826814d31db",
+      "perceptual_hash": "3c18dbe7e79b187e",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2296.3962,
+      "readability_score": 0.6044,
+      "noise_score": 25.5867,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 373,
+        "height": 169
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "asset_id": "asset_80aa81aa8ebbc4abe680fa66",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_9992c7224730ac397bc1d452",
+      "file_format": "txt",
+      "file_size_bytes": 69,
+      "width": null,
+      "height": null,
+      "sha256": "8d9d1bc60641efef20889d2da64310d9435247a6c7ac55e5240a54d423a33200",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>If $m \\angle 2=70-4 x$ and $m \\angle 5=18 x-8,$ find $m \\angle 5$",
+      "normalized_text_snapshot": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+      "text_completeness_score": 0.6116,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_e6e8b00fa0ec73d257351e6e",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "question_type": "calculation",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2",
+            "70",
+            "4",
+            "5",
+            "18",
+            "8",
+            "5"
+          ],
+          "unit_mentions": [
+            "g",
+            "m"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_e6e8b00fa0ec73d257351e6e_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "28",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "m"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T13:17:56Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_e6e8b00fa0ec73d257351e6e_1",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 2.2071,
+        "dark_pixel_ratio": 0.0813,
+        "readability_score": 0.6044,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 373,
+            "height": 169
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 373,
+            "height": 169
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 186,
+            "height": 84
+          },
+          "salience": 0.428
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 186,
+            "y": 0,
+            "width": 187,
+            "height": 84
+          },
+          "salience": 0.4377
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 84,
+            "width": 186,
+            "height": 85
+          },
+          "salience": 0.4318
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 186,
+            "y": 84,
+            "width": 187,
+            "height": 85
+          },
+          "salience": 0.4278
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8418,
+      "created_at": "2026-04-12T13:17:56Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_e6e8b00fa0ec73d257351e6e",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T13:18:13Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_811bccabdef9033abbdc1fbc",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "target_slot",
+      "canonical_value": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+      "surface_forms": [
+        "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_d94e8f20c445bc8e3b377ed6"
+      ],
+      "evidence_refs": [
+        "asset_d94e8f20c445bc8e3b377ed6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_e6e8b00fa0ec73d257351e6e_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "28",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_d6c4b80b10e67c2f415cc637",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "answer_claim",
+      "canonical_value": "28",
+      "surface_forms": [
+        "28"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_37f7296a1a0e4cf7252f5e7e"
+      ],
+      "evidence_refs": [
+        "asset_37f7296a1a0e4cf7252f5e7e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "28"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_bdbdd7798fde6a4eca572e50",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 373,
+          "height": 169
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8418,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_cd96dbd296a879bb657f8353",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 373,
+          "height": 169
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8418,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_1eb4ee14e2556eb33effc57d",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 186,
+          "height": 84
+        },
+        "salience": 0.428
+      },
+      "unit": null,
+      "confidence": 0.8418,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_3268ca4666a3336a934a1491",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 186,
+          "y": 0,
+          "width": 187,
+          "height": 84
+        },
+        "salience": 0.4377
+      },
+      "unit": null,
+      "confidence": 0.8418,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_91b9ab3f70a0bff84d442bc9",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 84,
+          "width": 186,
+          "height": 85
+        },
+        "salience": 0.4318
+      },
+      "unit": null,
+      "confidence": 0.8418,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_b65cd9529f699e302dc7ee54",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 186,
+          "y": 84,
+          "width": 187,
+          "height": 85
+        },
+        "salience": 0.4278
+      },
+      "unit": null,
+      "confidence": 0.8418,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_f2956bb43fbe6db91928f307",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "text_fact",
+      "canonical_value": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+      "surface_forms": [
+        "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_80aa81aa8ebbc4abe680fa66"
+      ],
+      "evidence_refs": [
+        "asset_80aa81aa8ebbc4abe680fa66"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_9992c7224730ac397bc1d452",
+        "parent_problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "28",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_73dac155f041f5f6acbf68b9",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_0341e915fd7f11653c1421c7",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_e6e8b00fa0ec73d257351e6e",
+        "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T13:18:13Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "node_id": "node_8a67e86e952c16a27c703070",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_sufficient",
+          "answer_available",
+          "jointly_understandable",
+          "rewrite_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T13:18:27Z",
+      "updated_at": "2026-04-12T13:18:27Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_1d5a1f05a5151e6a01c2465e",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a8f6ef9ab7139b21",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_5ec267dc7f1a18a730db662e",
+        "asset_d94e8f20c445bc8e3b377ed6",
+        "asset_1675afe0a78a11fa0da0c223",
+        "asset_37f7296a1a0e4cf7252f5e7e",
+        "asset_59a6b1bd4a5fc2079157fae0",
+        "asset_80aa81aa8ebbc4abe680fa66"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 3
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 373,
+            "height": 169,
+            "blur_score": 2296.3962,
+            "contrast_score": 34.1624,
+            "noise_score": 25.5867,
+            "readability_score": 0.6044,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 373,
+              "height": 169
+            },
+            "perceptual_hash": "3c18dbe7e79b187e"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_1d5a1f05a5151e6a01c2465e",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_e6e8b00fa0ec73d257351e6e",
+        "question_type": "calculation",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_e6e8b00fa0ec73d257351e6e",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "geometry_diagram_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for the measure of angle 5, and the diagram clearly shows angles 2 and 5 on a rectangular figure with diagonals, providing the needed geometric relationship. Despite modest quality signals, the image is semantically readable and the expected numeric answer is understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains a PIL object string representation instead of an actual file path or URL"
+      ],
+      "clean_score": 0.9854,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_sufficient",
+        "answer_available",
+        "jointly_understandable",
+        "rewrite_usable"
+      ],
+      "decision_rationale": "The sample is semantically usable for annotation: the question and answer are complete, the diagram is clear enough to support the needed geometry relation, the rewrite is consistent and usable, and alignment/solvability indicate no serious failure. The metadata image-path issue is non-blocking.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T13:18:27Z",
+      "finished_at": "2026-04-12T13:18:27Z",
+      "candidate_id": "cand_e6e8b00fa0ec73d257351e6e",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_1d5a1f05a5151e6a01c2465e",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "image_entity_refs": [
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1::roi",
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1::roi_top_left",
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1::roi_top_right",
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1::roi_bottom_left",
+        "visual_prob_e6e8b00fa0ec73d257351e6e_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_e6e8b00fa0ec73d257351e6e_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_e6e8b00fa0ec73d257351e6e_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7605
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T13:17:56Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_fea9d10d4460fa32d32a22bd",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>If $m \\angle 2=70-4 x$ and $m \\angle 5=18 x-8,$ find $m \\angle 5$",
+      "after_value": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "audit_id": "audit_62651e036d9cd4b8c32a585a",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "28",
+      "after_value": "28",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "audit_id": "audit_3f8139f1210e5b6c5f0549a9",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "audit_id": "audit_8a67e86e952c16a27c703070",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T13:18:27Z"
+    },
+    {
+      "audit_id": "audit_8f5cfa70d3789713179a2015",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T13:18:27Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_1d5a1f05a5151e6a01c2465e",
+      "problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "source_problem_id": "412",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_9992c7224730ac397bc1d452",
+          "parent_problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "28",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T13:18:27Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_9992c7224730ac397bc1d452",
+      "parent_problem_id": "prob_e6e8b00fa0ec73d257351e6e",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "If $m\\angle 2 = 70 - 4x$ and $m\\angle 5 = 18x - 8$, find $m\\angle 5$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "28",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00840",
+  "canonical_sample_index": 840,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00840.json",
+  "image_path": "artifacts/images/geometry3k00840.png",
+  "images": [
+    "artifacts/images/geometry3k00840.png"
+  ]
+}

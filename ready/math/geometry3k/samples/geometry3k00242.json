@@ -1,0 +1,1450 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_ec0c558f46e6e5cb38f9cfd3",
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "problem_id": "prob_6e98b2f514116eaa9035ad10",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "775",
+    "raw_question_text": "In rhombus $A B C D, A B=2 x+3$ and $B C=5 x$. Find x.",
+    "raw_answer_text": "1",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(228, 211)>"
+    ],
+    "force_requires_image": false,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "题目前有\"<image>\"标记且记录含图像对象，但题干文字本身已给出求解所需条件，是否必须依赖图像不完全确定",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-13T02:27:27Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_6e98b2f514116eaa9035ad10",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_6e98b2f514116eaa9035ad10_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 228,
+        "height": 211,
+        "file_size": 6793
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 54,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 1
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_ec0c558f46e6e5cb38f9cfd3",
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "775",
+    "created_at": "2026-04-13T02:27:27Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_6e98b2f514116eaa9035ad10",
+    "image_dependency_score": 0.08,
+    "multi_step_score": 0.56,
+    "verifiability_score": 0.96,
+    "score_evidence": {
+      "image_dependency": [
+        "题干仅给出菱形边长代数式，求解可直接依据菱形四边相等这一文字性质完成",
+        "输入字段明确标注 requires_image=false 且 text_dominant=true",
+        "虽然 registry 中有 1 张图片资源，但题面未显式引用图形、位置关系或视觉属性"
+      ],
+      "multi_step": [
+        "需要先调用几何性质：菱形相邻边相等，所以 AB=BC",
+        "再将 2x+3 与 5x 建立等式并做一次线性求解",
+        "推理链较短，但确实包含性质识别与代数计算两个环节"
+      ],
+      "verifiability": [
+        "答案类型为 numeric/number，目标输出形式单一明确",
+        "可通过规则化检验：由 2x+3=5x 得 x=1，易于复算",
+        "asset_registry_record 中 question_present=true、answer_present=true、registry_passed=true，基础登记完整"
+      ]
+    },
+    "risk_flags": [
+      "image_present_but_question_marked_text_only"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_ec0c558f46e6e5cb38f9cfd3",
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "775",
+    "created_at": "2026-04-13T02:27:27Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_6e98b2f514116eaa9035ad10",
+    "priority": 0.84,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和图像资产均已登记且 registry_passed=true，核心语义支撑完整",
+      "verifiability_score=0.96，答案为单一数值，容易通过规则复算验证",
+      "multi_step_score=0.56，虽推理链不长，但包含几何性质识别与代数求解两个环节，具备一定训练价值",
+      "风险标记仅为 image_present_but_question_marked_text_only，不影响样本可用性，且文本已足以完成求解"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_ec0c558f46e6e5cb38f9cfd3",
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "775",
+    "created_at": "2026-04-13T02:27:27Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_ec0c558f46e6e5cb38f9cfd3",
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "problem_id": "prob_6e98b2f514116eaa9035ad10",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+    "normalized_answer_text": "1",
+    "normalized_choice_map": {},
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "normalization_notes": [
+      "Removed spacing noise in geometric labels and expressions.",
+      "Question is solvable from text alone using the property that all sides of a rhombus are equal."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-13T02:27:27Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "775",
+    "subject": "数学",
+    "raw_question_text": "In rhombus $A B C D, A B=2 x+3$ and $B C=5 x$. Find x.",
+    "raw_answer_text": "1",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": false,
+    "text_dominant": true,
+    "recommended_cleaning_path": "text_lightweight",
+    "initial_image_dependency_score": 0.08,
+    "initial_multi_solution_score": 0.56,
+    "initial_verifiability_score": 0.96,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 775,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(228, 211)>"
+      ],
+      "extraction_notes": [
+        "题目前有\"<image>\"标记且记录含图像对象，但题干文字本身已给出求解所需条件，是否必须依赖图像不完全确定",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-13T02:28:31Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已登记且 registry_passed=true，核心语义支撑完整",
+      "verifiability_score=0.96，答案为单一数值，容易通过规则复算验证",
+      "multi_step_score=0.56，虽推理链不长，但包含几何性质识别与代数求解两个环节，具备一定训练价值",
+      "风险标记仅为 image_present_but_question_marked_text_only，不影响样本可用性，且文本已足以完成求解"
+    ],
+    "collection_risk_flags": [
+      "image_present_but_question_marked_text_only"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_d1b28253d297b4c45f5e2bcb",
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "775",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_6e98b2f514116eaa9035ad10/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_6e98b2f514116eaa9035ad10/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 228,
+        "height": 211
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.08,
+      "initial_multi_solution_score": 0.56,
+      "initial_verifiability_score": 0.96
+    },
+    "created_at": "2026-04-13T02:28:31Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_c73e833f06dd9043c7a56397",
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "775",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.84,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "text_lightweight",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.08,
+      "initial_multi_solution_score": 0.56,
+      "initial_verifiability_score": 0.96
+    },
+    "created_at": "2026-04-13T02:28:31Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和图像资产均已登记且 registry_passed=true，核心语义支撑完整",
+      "verifiability_score=0.96，答案为单一数值，容易通过规则复算验证",
+      "multi_step_score=0.56，虽推理链不长，但包含几何性质识别与代数求解两个环节，具备一定训练价值",
+      "风险标记仅为 image_present_but_question_marked_text_only，不影响样本可用性，且文本已足以完成求解"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_ec0c558f46e6e5cb38f9cfd3",
+      "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": true,
+      "cleaning_path": "text_lightweight",
+      "created_at": "2026-04-13T02:28:31Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_ec0c558f46e6e5cb38f9cfd3",
+    "problem_id": "prob_6e98b2f514116eaa9035ad10",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "775",
+    "normalized_question_text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+    "normalized_answer_text": "1",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "text_only",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "text_sufficient"
+    ],
+    "created_at": "2026-04-13T02:28:31Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_ec0c558f46e6e5cb38f9cfd3",
+    "problem_id": "prob_6e98b2f514116eaa9035ad10",
+    "normalized_question_text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+    "normalized_answer_text": "1",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "ABCD",
+        "canonical": "ABCD",
+        "variable_type": "label"
+      },
+      {
+        "original": "AB",
+        "canonical": "AB",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "BC",
+        "canonical": "BC",
+        "variable_type": "label"
+      },
+      {
+        "original": "x",
+        "canonical": "x",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find x."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 1,
+          "y": 23,
+          "width": 222,
+          "height": 178
+        },
+        "readability_score": 0.7272,
+        "contrast_score": 35.0375
+      }
+    ],
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "created_at": "2026-04-13T02:28:31Z",
+    "normalization_notes": [
+      "Removed spacing noise in geometric labels and expressions.",
+      "Question is solvable from text alone using the property that all sides of a rhombus are equal."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_6e98b2f514116eaa9035ad10",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "775",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-000-900_20260412T151456Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "In rhombus $A B C D, A B=2 x+3$ and $B C=5 x$. Find x.",
+    "normalized_question_text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+    "raw_answer_text": "1",
+    "normalized_answer_text": "1",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "multimodal_strength_score": 0.5527,
+    "multi_step_score": 0.3737,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "text_only_without_visual_need"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "text_sufficient"
+    ],
+    "clean_decision_rationale": "The sample is fully understandable from text alone, the answer is present and correct, the rewrite is clean and usable, and alignment and solvability evidence show no serious issue. The lack of visual necessity is not a semantic failure for downstream annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-13T02:27:27Z",
+    "updated_at": "2026-04-13T02:28:31Z",
+    "initial_image_dependency_score": 0.08,
+    "initial_multi_solution_score": 0.56,
+    "initial_verifiability_score": 0.96,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已登记且 registry_passed=true，核心语义支撑完整",
+      "verifiability_score=0.96，答案为单一数值，容易通过规则复算验证",
+      "multi_step_score=0.56，虽推理链不长，但包含几何性质识别与代数求解两个环节，具备一定训练价值",
+      "风险标记仅为 image_present_but_question_marked_text_only，不影响样本可用性，且文本已足以完成求解"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_7b5b6ce1c1bb30540eb6a1c5",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[0:900]/775/question",
+      "storage_uri": "inline://prob_6e98b2f514116eaa9035ad10/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 54,
+      "width": null,
+      "height": null,
+      "sha256": "018a74ba94a74d65848058e4d3aebb91a3fd097fa244beef42a5cece48b10cce",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In rhombus $A B C D, A B=2 x+3$ and $B C=5 x$. Find x.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.5938,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "asset_id": "asset_27a137df8346b4eb2df9c94e",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_6e98b2f514116eaa9035ad10/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 49,
+      "width": null,
+      "height": null,
+      "sha256": "149279cfe07bd3089be850ff606e0a3122e497054e2806da7233acff34957c73",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In rhombus $A B C D, A B=2 x+3$ and $B C=5 x$. Find x.",
+      "normalized_text_snapshot": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+      "text_completeness_score": 0.5938,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "asset_id": "asset_2474f35edea82a63ffca80e8",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[0:900]/775/answer",
+      "storage_uri": "inline://prob_6e98b2f514116eaa9035ad10/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "1",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "asset_id": "asset_5cebec5b7c8226c8a094c75a",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_6e98b2f514116eaa9035ad10/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "1",
+      "normalized_text_snapshot": "1",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "asset_id": "asset_d863d6879b39059148f9563e",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_6e98b2f514116eaa9035ad10_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 6793,
+      "width": 228,
+      "height": 211,
+      "sha256": "4df9d9c33598d72239e4d045d00edfd71de45a8442da830f4f08e0888b045d09",
+      "perceptual_hash": "fec4dce3c59b037b",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2483.2102,
+      "readability_score": 0.7272,
+      "noise_score": 26.5095,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 1,
+        "y": 23,
+        "width": 222,
+        "height": 178
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "text_only_without_visual_need"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "asset_id": "asset_95d860259b6953dd8b126548",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/crops/prob_6e98b2f514116eaa9035ad10_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 6587,
+      "width": 222,
+      "height": 178,
+      "sha256": "612d3a8f516216aab5b982511941d2551c895ce3db6a827f6472346b283b34f6",
+      "perceptual_hash": "dedcfde7e5bf3b7b",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2483.2102,
+      "readability_score": 0.7272,
+      "noise_score": 26.5095,
+      "cropped_from_asset_id": "asset_d863d6879b39059148f9563e",
+      "roi_bbox": {
+        "x": 1,
+        "y": 23,
+        "width": 222,
+        "height": 178
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "asset_id": "asset_8f01771940da5bd05c3ade58",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_6c3cbfe161d50bdf47aa5f1d",
+      "file_format": "txt",
+      "file_size_bytes": 49,
+      "width": null,
+      "height": null,
+      "sha256": "149279cfe07bd3089be850ff606e0a3122e497054e2806da7233acff34957c73",
+      "perceptual_hash": null,
+      "source_text_snapshot": "In rhombus $A B C D, A B=2 x+3$ and $B C=5 x$. Find x.",
+      "normalized_text_snapshot": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+      "text_completeness_score": 0.5938,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_6e98b2f514116eaa9035ad10",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2",
+            "3",
+            "5"
+          ],
+          "unit_mentions": [
+            "A",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find x.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_6e98b2f514116eaa9035ad10_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find x.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "1",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "AB",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find x."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-13T02:28:06Z"
+    }
+  ],
+  "visual_structure_records": [],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_6e98b2f514116eaa9035ad10",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "text_only",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-13T02:28:20Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_a6e38fae9198f0206e9dd4d1",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "node_type": "text_fact",
+      "canonical_value": "In rhombus ABCD, AB = 2x + 3 and BC = 5x.",
+      "surface_forms": [
+        "In rhombus ABCD, AB = 2x + 3 and BC = 5x."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_27a137df8346b4eb2df9c94e"
+      ],
+      "evidence_refs": [
+        "asset_27a137df8346b4eb2df9c94e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "2",
+          "3",
+          "5"
+        ],
+        "unit_mentions": [
+          "A",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "node_id": "node_fb14ce87646e5608d3abd79f",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "node_type": "target_slot",
+      "canonical_value": "Find x.",
+      "surface_forms": [
+        "Find x."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_27a137df8346b4eb2df9c94e"
+      ],
+      "evidence_refs": [
+        "asset_27a137df8346b4eb2df9c94e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_6e98b2f514116eaa9035ad10_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find x.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "1",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "node_id": "node_71fa9deb896ef4f4eb500f03",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "node_type": "answer_claim",
+      "canonical_value": "1",
+      "surface_forms": [
+        "1"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_5cebec5b7c8226c8a094c75a"
+      ],
+      "evidence_refs": [
+        "asset_5cebec5b7c8226c8a094c75a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "1"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "node_id": "node_bb18d47379cc369e35780f18",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "node_type": "text_fact",
+      "canonical_value": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+      "surface_forms": [
+        "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_8f01771940da5bd05c3ade58"
+      ],
+      "evidence_refs": [
+        "asset_8f01771940da5bd05c3ade58"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_6c3cbfe161d50bdf47aa5f1d",
+        "parent_problem_id": "prob_6e98b2f514116eaa9035ad10",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "1",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "node_id": "node_8ab299551f1dd32ec6def859",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "node_type": "quality_signal",
+      "canonical_value": "text_only_without_visual_need",
+      "surface_forms": [
+        "text_only_without_visual_need"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "text_only_without_visual_need"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "node_id": "node_61baf15568afc1a83bdac9f0",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_6e98b2f514116eaa9035ad10",
+        "problem_id": "prob_6e98b2f514116eaa9035ad10",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "text_only",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-13T02:28:20Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "node_id": "node_c45a8f267745bc8880dbf873",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "text_sufficient"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:28:31Z",
+      "updated_at": "2026-04-13T02:28:31Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_ec0c558f46e6e5cb38f9cfd3",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_b396994bd2367a1c",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_7b5b6ce1c1bb30540eb6a1c5",
+        "asset_27a137df8346b4eb2df9c94e",
+        "asset_2474f35edea82a63ffca80e8",
+        "asset_5cebec5b7c8226c8a094c75a",
+        "asset_d863d6879b39059148f9563e",
+        "asset_95d860259b6953dd8b126548",
+        "asset_8f01771940da5bd05c3ade58"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 6
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 228,
+            "height": 211,
+            "blur_score": 2483.2102,
+            "contrast_score": 35.0375,
+            "noise_score": 26.5095,
+            "readability_score": 0.7272,
+            "crop_integrity_score": 0.78,
+            "roi_bbox": {
+              "x": 1,
+              "y": 23,
+              "width": 222,
+              "height": 178
+            },
+            "perceptual_hash": "fec4dce3c59b037b"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_ec0c558f46e6e5cb38f9cfd3",
+        "coverage_score": 1.0,
+        "consistency_score": 1.0,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_6e98b2f514116eaa9035ad10",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_6e98b2f514116eaa9035ad10",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "jointly_understandable",
+          "text_sufficient"
+        ],
+        "rationale": "The problem is fully understandable from the text alone: in a rhombus all sides are equal, so setting AB = BC gives 2x + 3 = 5x, yielding x = 1. The provided answer matches, and the image is not necessary.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "text_only_without_visual_need"
+      ],
+      "clean_score": 0.9828,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "text_sufficient"
+      ],
+      "decision_rationale": "The sample is fully understandable from text alone, the answer is present and correct, the rewrite is clean and usable, and alignment and solvability evidence show no serious issue. The lack of visual necessity is not a semantic failure for downstream annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-13T02:28:31Z",
+      "finished_at": "2026-04-13T02:28:31Z",
+      "candidate_id": "cand_6e98b2f514116eaa9035ad10",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_ec0c558f46e6e5cb38f9cfd3",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "image_entity_refs": [],
+      "text_span_refs": [
+        "asset_prob_6e98b2f514116eaa9035ad10_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [],
+      "coverage_score": 1.0,
+      "consistency_score": 1.0,
+      "alignment_status": "good",
+      "created_at": "2026-04-13T02:28:06Z",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_34bec2a7723c39fefbbb636d",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "In rhombus $A B C D, A B=2 x+3$ and $B C=5 x$. Find x.",
+      "after_value": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "audit_id": "audit_4a7ae9710647704db00f6d1a",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "1",
+      "after_value": "1",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "audit_id": "audit_54339ce282bc9d667266d441",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "audit_id": "audit_c45a8f267745bc8880dbf873",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:28:31Z"
+    },
+    {
+      "audit_id": "audit_be38cd78d01697d311ffa3a4",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "AB",
+          "canonical": "AB",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        },
+        {
+          "original": "x",
+          "canonical": "x",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:28:31Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_ec0c558f46e6e5cb38f9cfd3",
+      "problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "source_problem_id": "775",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_6c3cbfe161d50bdf47aa5f1d",
+          "parent_problem_id": "prob_6e98b2f514116eaa9035ad10",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "1",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-13T02:28:31Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_6c3cbfe161d50bdf47aa5f1d",
+      "parent_problem_id": "prob_6e98b2f514116eaa9035ad10",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "In rhombus ABCD, AB = 2x + 3 and BC = 5x. Find x.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "1",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00242",
+  "canonical_sample_index": 242,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00242.json",
+  "image_path": "artifacts/images/geometry3k00242.png",
+  "images": [
+    "artifacts/images/geometry3k00242.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00242.png",
+  "crops": [
+    "artifacts/crops/geometry3k00242.png"
+  ]
+}

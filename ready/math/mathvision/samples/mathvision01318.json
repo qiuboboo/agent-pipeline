@@ -1,0 +1,2173 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_91dbd9f8f79b4ad41569bef9",
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "problem_id": "prob_414d81a00ae7d58210786f50",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2775",
+    "raw_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner $A$, added to the number on Spinner $B$. What is the probability that $N$ is a perfect square number?\n<image1>",
+    "raw_answer_text": "$\\frac{1}{8}$",
+    "choice_map": {
+      "A": "$\\frac{1}{16}$",
+      "B": "$\\frac{1}{8}$",
+      "C": "$\\frac{1}{4}$",
+      "D": "$\\frac{3}{8}$",
+      "E": "$\\frac{1}{2} $"
+    },
+    "image_paths": [
+      "images/2775.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": "options",
+    "extraction_notes": [
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-08T10:38:41Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_414d81a00ae7d58210786f50",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_414d81a00ae7d58210786f50_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 616,
+        "height": 343,
+        "file_size": 53046
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 219,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 13
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_91dbd9f8f79b4ad41569bef9",
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2775",
+    "created_at": "2026-04-08T10:38:41Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_414d81a00ae7d58210786f50",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.84,
+    "score_evidence": {
+      "image_dependency": [
+        "题干明确写到 'two spinners shown below'，关键输入来自图片中的转盘内容",
+        "requires_image=true 且 text_dominant=false，说明文本本身不足以独立解题",
+        "需要读取转盘上的数字/分区才能构造 N=10*A+B，图片是核心信息源",
+        "asset_registry_record.registry_passed=true，且有 1 张可用图片记录"
+      ],
+      "multi_step": [
+        "解题至少包含读取两个转盘结果空间、构造两位数 N、判断 perfect square、再统计概率这几步",
+        "题目是概率题，通常需要组合枚举或分类计数，不是单步直接读取",
+        "存在图文联合推理：先从图像获取转盘信息，再进行数论/概率计算",
+        "metadata.multi_solution_policy.mode=aggressive，侧面支持该题具备较稳定的多步求解潜力"
+      ],
+      "verifiability": [
+        "answer_type=short_text，标准答案是明确分数 1/8，输出形式清晰",
+        "同时给出 5 个选项，最终答案可做结果级核对",
+        "若成功解析图片中的转盘数字与等可能性，可通过枚举全部结果验证答案",
+        "asset_registry_record.registry_passed=true，题面与答案资产登记完整"
+      ]
+    },
+    "risk_flags": [
+      "image_content_not_transcribed_in_text",
+      "verification_depends_on_correct_spinner_parsing"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_91dbd9f8f79b4ad41569bef9",
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2775",
+    "created_at": "2026-04-08T10:38:41Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_414d81a00ae7d58210786f50",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和关键图片资产齐全，asset registry 无缺失且 registry_passed=true",
+      "题目虽强依赖图片，但图片文件存在且可用，核心语义仍完整可恢复",
+      "综合初评较高（image_dependency_score=0.96，multi_step_score=0.74，verifiability_score=0.84），具备进入候选池价值",
+      "存在转盘内容解析与验证风险，但这属于可后续处理的质量风险，不构成 reject 或降为 low_priority 的充分理由"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_91dbd9f8f79b4ad41569bef9",
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "dataset_name": "MathVision",
+    "source_problem_id": "2775",
+    "created_at": "2026-04-08T10:38:41Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_91dbd9f8f79b4ad41569bef9",
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "problem_id": "prob_414d81a00ae7d58210786f50",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+    "normalized_answer_text": "$\\frac{1}{8}$",
+    "normalized_choice_map": {
+      "A": "$\\frac{1}{16}$",
+      "B": "$\\frac{1}{8}$",
+      "C": "$\\frac{1}{4}$",
+      "D": "$\\frac{3}{8}$",
+      "E": "$\\frac{1}{2}$"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder token from the question text.",
+      "Kept image dependency because the spinner values needed to solve the problem are shown in the diagram.",
+      "Trimmed minor whitespace noise in the choice text."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-08T10:38:41Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2775",
+    "subject": "数学",
+    "raw_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner $A$, added to the number on Spinner $B$. What is the probability that $N$ is a perfect square number?\n<image1>",
+    "raw_answer_text": "$\\frac{1}{8}$",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 2474,
+      "image_paths": [
+        "images/2775.jpg"
+      ],
+      "extraction_notes": [
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": "options",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-08T10:39:45Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和关键图片资产齐全，asset registry 无缺失且 registry_passed=true",
+      "题目虽强依赖图片，但图片文件存在且可用，核心语义仍完整可恢复",
+      "综合初评较高（image_dependency_score=0.96，multi_step_score=0.74，verifiability_score=0.84），具备进入候选池价值",
+      "存在转盘内容解析与验证风险，但这属于可后续处理的质量风险，不构成 reject 或降为 low_priority 的充分理由"
+    ],
+    "collection_risk_flags": [
+      "image_content_not_transcribed_in_text",
+      "verification_depends_on_correct_spinner_parsing"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_4837b18caeb4eb7b16639bdd",
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2775",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_414d81a00ae7d58210786f50/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_414d81a00ae7d58210786f50/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 616,
+        "height": 343
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-08T10:39:45Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_e8c0617b9533cc10f0bb6f37",
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2775",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-08T10:39:45Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和关键图片资产齐全，asset registry 无缺失且 registry_passed=true",
+      "题目虽强依赖图片，但图片文件存在且可用，核心语义仍完整可恢复",
+      "综合初评较高（image_dependency_score=0.96，multi_step_score=0.74，verifiability_score=0.84），具备进入候选池价值",
+      "存在转盘内容解析与验证风险，但这属于可后续处理的质量风险，不构成 reject 或降为 low_priority 的充分理由"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_91dbd9f8f79b4ad41569bef9",
+      "candidate_id": "cand_414d81a00ae7d58210786f50",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "dataset_name": "MathVision",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-08T10:39:45Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_91dbd9f8f79b4ad41569bef9",
+    "problem_id": "prob_414d81a00ae7d58210786f50",
+    "source_dataset": "MathVision",
+    "source_problem_id": "2775",
+    "normalized_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+    "normalized_answer_text": "$\\frac{1}{8}$",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "jointly_understandable",
+      "rewrite_usable"
+    ],
+    "created_at": "2026-04-08T10:39:45Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_91dbd9f8f79b4ad41569bef9",
+    "problem_id": "prob_414d81a00ae7d58210786f50",
+    "normalized_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+    "normalized_answer_text": "$\\frac{1}{8}$",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "two",
+        "canonical": "two",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "spun",
+        "canonical": "spun",
+        "variable_type": "label"
+      },
+      {
+        "original": "Let",
+        "canonical": "Let",
+        "variable_type": "label"
+      },
+      {
+        "original": "N",
+        "canonical": "N",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "B",
+        "canonical": "B",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "The arrows on the two spinners shown below are spun."
+      },
+      {
+        "segment_index": 2,
+        "text": "Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B."
+      },
+      {
+        "segment_index": 3,
+        "text": "What is the probability that $N$ is a perfect square number?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 568,
+          "height": 288
+        },
+        "readability_score": 0.9092,
+        "contrast_score": 57.6591
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-08T10:39:45Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder token from the question text.",
+      "Kept image dependency because the spinner values needed to solve the problem are shown in the diagram.",
+      "Trimmed minor whitespace noise in the choice text."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_414d81a00ae7d58210786f50",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "2775",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260407T041348Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner $A$, added to the number on Spinner $B$. What is the probability that $N$ is a perfect square number?\n<image1>",
+    "normalized_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+    "raw_answer_text": "$\\frac{1}{8}$",
+    "normalized_answer_text": "$\\frac{1}{8}$",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9879,
+    "multi_step_score": 0.3917,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "jointly_understandable",
+      "rewrite_usable"
+    ],
+    "clean_decision_rationale": "The sample is semantically clear and complete: the image is required but readable, the answer is provided, the rewritten open form is usable, and alignment/solvability signals show no serious failure.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_414d81a00ae7d58210786f50",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-08T10:38:41Z",
+    "updated_at": "2026-04-08T10:39:45Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和关键图片资产齐全，asset registry 无缺失且 registry_passed=true",
+      "题目虽强依赖图片，但图片文件存在且可用，核心语义仍完整可恢复",
+      "综合初评较高（image_dependency_score=0.96，multi_step_score=0.74，verifiability_score=0.84），具备进入候选池价值",
+      "存在转盘内容解析与验证风险，但这属于可后续处理的质量风险，不构成 reject 或降为 low_priority 的充分理由"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_334626f472c2f2d4e2aa41bc",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/2775/question",
+      "storage_uri": "inline://prob_414d81a00ae7d58210786f50/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 219,
+      "width": null,
+      "height": null,
+      "sha256": "33959593a0c96af653afb3a89377bfc293697e232bb890f0db6c3a75220c983d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner $A$, added to the number on Spinner $B$. What is the probability that $N$ is a perfect square number?\n<image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7339,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "spun",
+          "canonical": "spun",
+          "variable_type": "label"
+        },
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "asset_id": "asset_de397901197c073fc8d635b5",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_414d81a00ae7d58210786f50/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 206,
+      "width": null,
+      "height": null,
+      "sha256": "341f447cc3884dd4119002e2ab1e4e2784a4106e1261013f08c9d4569456451c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner $A$, added to the number on Spinner $B$. What is the probability that $N$ is a perfect square number?\n<image1>",
+      "normalized_text_snapshot": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+      "text_completeness_score": 0.7339,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "spun",
+          "canonical": "spun",
+          "variable_type": "label"
+        },
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "asset_id": "asset_943d4b119e52692d4a2688ff",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/2775/answer",
+      "storage_uri": "inline://prob_414d81a00ae7d58210786f50/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 13,
+      "width": null,
+      "height": null,
+      "sha256": "de78f6287ac0119a0d8121ddf93d9ca4b0fa8e34ce904a77112a19a0c7bfda5d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\frac{1}{8}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "asset_id": "asset_8036c123673893a0e5ab9767",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_414d81a00ae7d58210786f50/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 13,
+      "width": null,
+      "height": null,
+      "sha256": "de78f6287ac0119a0d8121ddf93d9ca4b0fa8e34ce904a77112a19a0c7bfda5d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$\\frac{1}{8}$",
+      "normalized_text_snapshot": "$\\frac{1}{8}$",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "frac",
+          "canonical": "frac",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "asset_id": "asset_e39e81f4f61cc317397997f3",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/images/prob_414d81a00ae7d58210786f50_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 53046,
+      "width": 616,
+      "height": 343,
+      "sha256": "15c9f611ceca0bdb84ed7f9c45eed53cb3747ad6fb8919777d31677d0651d99f",
+      "perceptual_hash": "fd9c981819b9b9ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4562.9624,
+      "readability_score": 0.9092,
+      "noise_score": 30.9984,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 24,
+        "y": 24,
+        "width": 568,
+        "height": 288
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "asset_id": "asset_e9c5fccbe3b5994c5aa503eb",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_72ab9b4332499938/datasets/mathvision/artifacts/crops/prob_414d81a00ae7d58210786f50_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 51583,
+      "width": 568,
+      "height": 288,
+      "sha256": "1356e6136b188d24e6917d00dec9f7bec3acff58a86469d10ffbc4541b17d3ac",
+      "perceptual_hash": "9d9c9c181839ff39",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4562.9624,
+      "readability_score": 0.9092,
+      "noise_score": 30.9984,
+      "cropped_from_asset_id": "asset_e39e81f4f61cc317397997f3",
+      "roi_bbox": {
+        "x": 24,
+        "y": 24,
+        "width": 568,
+        "height": 288
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "asset_id": "asset_553c532395e1187c2575559e",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_5438966394ae791b89407c8c",
+      "file_format": "txt",
+      "file_size_bytes": 206,
+      "width": null,
+      "height": null,
+      "sha256": "341f447cc3884dd4119002e2ab1e4e2784a4106e1261013f08c9d4569456451c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner $A$, added to the number on Spinner $B$. What is the probability that $N$ is a perfect square number?\n<image1>",
+      "normalized_text_snapshot": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+      "text_completeness_score": 0.7339,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "spun",
+          "canonical": "spun",
+          "variable_type": "label"
+        },
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_414d81a00ae7d58210786f50",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "The arrows on the two spinners shown below are spun.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "10"
+          ],
+          "unit_mentions": [
+            "A",
+            "N",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "What is the probability that $N$ is a perfect square number?",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "N",
+            "W",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_414d81a00ae7d58210786f50_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "What is the probability that $N$ is a perfect square number?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$\\frac{1}{8}$",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "N",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "B",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "spun",
+          "canonical": "spun",
+          "variable_type": "label"
+        },
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "N",
+        "W",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "The arrows on the two spinners shown below are spun."
+        },
+        {
+          "segment_index": 2,
+          "text": "Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B."
+        },
+        {
+          "segment_index": 3,
+          "text": "What is the probability that $N$ is a perfect square number?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-08T10:39:34Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_414d81a00ae7d58210786f50_1",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 1.7959,
+        "dark_pixel_ratio": 0.403,
+        "readability_score": 0.9092,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 616,
+            "height": 343
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 24,
+            "y": 24,
+            "width": 568,
+            "height": 288
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 24,
+            "width": 284,
+            "height": 144
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 308,
+            "y": 24,
+            "width": 284,
+            "height": 144
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 168,
+            "width": 284,
+            "height": 144
+          },
+          "salience": 0.7276
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 308,
+            "y": 168,
+            "width": 284,
+            "height": 144
+          },
+          "salience": 0.7303
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9637,
+      "created_at": "2026-04-08T10:39:34Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_414d81a00ae7d58210786f50",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-08T10:39:41Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_a819c5fcf0c359544e5349b8",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "text_fact",
+      "canonical_value": "The arrows on the two spinners shown below are spun.",
+      "surface_forms": [
+        "The arrows on the two spinners shown below are spun."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_de397901197c073fc8d635b5"
+      ],
+      "evidence_refs": [
+        "asset_de397901197c073fc8d635b5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The arrows on the two spinners shown below are spun.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_b8c0ec44db07e0bb0a1927a0",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "text_fact",
+      "canonical_value": "Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B.",
+      "surface_forms": [
+        "Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_de397901197c073fc8d635b5"
+      ],
+      "evidence_refs": [
+        "asset_de397901197c073fc8d635b5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "10"
+        ],
+        "unit_mentions": [
+          "A",
+          "N",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,N,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_a6111c97d413a8b25a5b779f",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "target_slot",
+      "canonical_value": "What is the probability that $N$ is a perfect square number?",
+      "surface_forms": [
+        "What is the probability that $N$ is a perfect square number?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_de397901197c073fc8d635b5"
+      ],
+      "evidence_refs": [
+        "asset_de397901197c073fc8d635b5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_414d81a00ae7d58210786f50_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "What is the probability that $N$ is a perfect square number?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$\\frac{1}{8}$",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_bfd277e53068a025026c19d0",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "answer_claim",
+      "canonical_value": "$\\frac{1}{8}$",
+      "surface_forms": [
+        "$\\frac{1}{8}$"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8036c123673893a0e5ab9767"
+      ],
+      "evidence_refs": [
+        "asset_8036c123673893a0e5ab9767"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "$\\frac{1}{8}$"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_763423e47e8b35db15dff5f3",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 616,
+          "height": 343
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9637,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_c91acdf917cb65281952d990",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 568,
+          "height": 288
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9637,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_c7d041f370a7accb4e51cb90",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 284,
+          "height": 144
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9637,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_fe735f9ed95f063c38f82c76",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 308,
+          "y": 24,
+          "width": 284,
+          "height": 144
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9637,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_d2f95705419bc63a1e7d3df2",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 168,
+          "width": 284,
+          "height": 144
+        },
+        "salience": 0.7276
+      },
+      "unit": null,
+      "confidence": 0.9637,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_b2e84333c5b5390b568196a9",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 308,
+          "y": 168,
+          "width": 284,
+          "height": 144
+        },
+        "salience": 0.7303
+      },
+      "unit": null,
+      "confidence": 0.9637,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_618103137831ae04051cc6f2",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "text_fact",
+      "canonical_value": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+      "surface_forms": [
+        "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_553c532395e1187c2575559e"
+      ],
+      "evidence_refs": [
+        "asset_553c532395e1187c2575559e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_5438966394ae791b89407c8c",
+        "parent_problem_id": "prob_414d81a00ae7d58210786f50",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$\\frac{1}{8}$",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_a4918e8f2ac1354b864359f8",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_414d81a00ae7d58210786f50",
+        "problem_id": "prob_414d81a00ae7d58210786f50",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-08T10:39:41Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "node_id": "node_9aa1ab2f9e9880ca6b900ff5",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "jointly_understandable",
+          "rewrite_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T10:39:45Z",
+      "updated_at": "2026-04-08T10:39:45Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_91dbd9f8f79b4ad41569bef9",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_72ab9b4332499938",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_334626f472c2f2d4e2aa41bc",
+        "asset_de397901197c073fc8d635b5",
+        "asset_943d4b119e52692d4a2688ff",
+        "asset_8036c123673893a0e5ab9767",
+        "asset_e39e81f4f61cc317397997f3",
+        "asset_e9c5fccbe3b5994c5aa503eb",
+        "asset_553c532395e1187c2575559e"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 14
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 616,
+            "height": 343,
+            "blur_score": 4562.9624,
+            "contrast_score": 57.6591,
+            "noise_score": 30.9984,
+            "readability_score": 0.9092,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 24,
+              "y": 24,
+              "width": 568,
+              "height": 288
+            },
+            "perceptual_hash": "fd9c981819b9b9ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_91dbd9f8f79b4ad41569bef9",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_414d81a00ae7d58210786f50",
+        "question_type": "multiple_choice",
+        "condition_count": 2,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_414d81a00ae7d58210786f50",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The question is fully stated, the expected answer is clear, and the image clearly shows the numbered outcomes on Spinner A and Spinner B needed to compute the probability that the two-digit number is a perfect square.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "jointly_understandable",
+        "rewrite_usable"
+      ],
+      "decision_rationale": "The sample is semantically clear and complete: the image is required but readable, the answer is provided, the rewritten open form is usable, and alignment/solvability signals show no serious failure.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-08T10:39:45Z",
+      "finished_at": "2026-04-08T10:39:45Z",
+      "candidate_id": "cand_414d81a00ae7d58210786f50",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_91dbd9f8f79b4ad41569bef9",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "image_entity_refs": [
+        "visual_prob_414d81a00ae7d58210786f50_1::roi",
+        "visual_prob_414d81a00ae7d58210786f50_1::roi_top_left",
+        "visual_prob_414d81a00ae7d58210786f50_1::roi_top_right",
+        "visual_prob_414d81a00ae7d58210786f50_1::roi_bottom_left",
+        "visual_prob_414d81a00ae7d58210786f50_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_414d81a00ae7d58210786f50_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "N",
+          "image_ref": "visual_prob_414d81a00ae7d58210786f50_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7909
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_414d81a00ae7d58210786f50_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7909
+        },
+        {
+          "text_ref": "B",
+          "image_ref": "visual_prob_414d81a00ae7d58210786f50_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7909
+        },
+        {
+          "text_ref": "slot_prob_414d81a00ae7d58210786f50_1",
+          "image_ref": "visual_prob_414d81a00ae7d58210786f50_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.792
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-08T10:39:34Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_69f629d23cede34d157e504a",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner $A$, added to the number on Spinner $B$. What is the probability that $N$ is a perfect square number?\n<image1>",
+      "after_value": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "audit_id": "audit_6a20470aebe75ac012c737a3",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$\\frac{1}{8}$",
+      "after_value": "$\\frac{1}{8}$",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "audit_id": "audit_bef9fc2cf9c63f1e1446beb2",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "audit_id": "audit_9aa1ab2f9e9880ca6b900ff5",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:39:45Z"
+    },
+    {
+      "audit_id": "audit_041468fafb6e3f17621c9c49",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "spun",
+          "canonical": "spun",
+          "variable_type": "label"
+        },
+        {
+          "original": "Let",
+          "canonical": "Let",
+          "variable_type": "label"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "B",
+          "canonical": "B",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T10:39:45Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_91dbd9f8f79b4ad41569bef9",
+      "problem_id": "prob_414d81a00ae7d58210786f50",
+      "source_problem_id": "2775",
+      "strategy": "keep_open",
+      "rationale": "The stem is already a directly answerable open-ended probability question once the multiple-choice options are removed.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_5438966394ae791b89407c8c",
+          "parent_problem_id": "prob_414d81a00ae7d58210786f50",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$\\frac{1}{8}$",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-08T10:39:45Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_5438966394ae791b89407c8c",
+      "parent_problem_id": "prob_414d81a00ae7d58210786f50",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "The arrows on the two spinners shown below are spun. Let the number $N$ equal 10 times the number on Spinner A, added to the number on Spinner B. What is the probability that $N$ is a perfect square number?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$\\frac{1}{8}$",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "mathvision01318",
+  "canonical_sample_index": 1318,
+  "canonical_dataset_key": "mathvision",
+  "sample_path": "samples/mathvision01318.json",
+  "image_path": "artifacts/images/mathvision01318.png",
+  "images": [
+    "artifacts/images/mathvision01318.png"
+  ],
+  "crop_path": "artifacts/crops/mathvision01318.png",
+  "crops": [
+    "artifacts/crops/mathvision01318.png"
+  ]
+}

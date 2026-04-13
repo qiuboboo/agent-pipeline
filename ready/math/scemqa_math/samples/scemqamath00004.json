@@ -1,0 +1,2523 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_45100a18c07b68579c0bb11a",
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "problem_id": "prob_0d64d51585420cc480db8401",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "49",
+    "raw_question_text": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+    "raw_answer_text": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+    "choice_map": {
+      "A": "The number of cereals with HFCS is about the same as the number of cereals without HFCS.",
+      "B": "The cereals with HFCS have a greater interquartile range than the cereals without HFCS.",
+      "C": "The cereals without HFCS have a greater range than the cereals with HFCS.",
+      "D": "About half the cereals without HFCS have less sugar than about three-fourths of the cereals with HFCS.",
+      "E": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS."
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image",
+    "choice_field": "choices",
+    "extraction_notes": [
+      "answer field is numeric '4' and the record does not explicitly specify whether choices are 0-based or 1-based, so the answer text was not mapped to a choice",
+      "image field contains a PIL image object string representation rather than a file path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T20:38:26Z",
+    "subject": "Math"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_0d64d51585420cc480db8401",
+    "image_manifest": [
+      {
+        "path": "outputs/scemqa_0_300/run_27cf924f5da4f1fe/datasets/scemqa/artifacts/images/prob_0d64d51585420cc480db8401_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 489,
+        "height": 195,
+        "file_size": 18637
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 321,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 102
+    },
+    "issues": [
+      "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear",
+      "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL",
+      "metadata.image_paths is empty despite a top-level image_paths entry being present"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_45100a18c07b68579c0bb11a",
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "49",
+    "created_at": "2026-04-12T20:38:26Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_0d64d51585420cc480db8401",
+    "image_dependency_score": 0.98,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.74,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly refers to 'The boxplots above' and asks what is true based on the boxplots",
+        "requires_image=true and text_dominant=false",
+        "the needed information is quartile/median relationships from two boxplots, which are not recoverable from text alone",
+        "asset_registry_record shows an image exists and registry_passed=true"
+      ],
+      "multi_step": [
+        "solving requires reading summary positions from two different boxplots rather than extracting a single value",
+        "the correct statement compares proportions across groups (e.g. about half vs about three-fourths), so it requires interpreting median and quartile locations",
+        "the task is multiple choice with 5 statements, requiring comparison/elimination across alternatives"
+      ],
+      "verifiability": [
+        "choices are provided and answer_text matches one explicit option statement",
+        "the claim can be checked against boxplot features such as median, quartiles, and range",
+        "answer_present=true and registry_passed=true support basic evaluability",
+        "verifiability is reduced somewhat because asset_registry_record notes the original numeric answer-to-choice mapping was ambiguous"
+      ]
+    },
+    "risk_flags": [
+      "image readability is only moderate based on metadata.image_quality_summaries.readability_score=0.632",
+      "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear",
+      "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL",
+      "metadata.image_paths is empty despite a top-level image_paths entry being present"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_45100a18c07b68579c0bb11a",
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "49",
+    "created_at": "2026-04-12T20:38:26Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_0d64d51585420cc480db8401",
+    "priority": 0.72,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Core assets are present and recoverable: question text, an image, and an answer are all available, so the sample should not be rejected.",
+      "The item is highly image-dependent, and the required boxplot information appears to be in the available image, but image readability is only moderate.",
+      "Verifiability is weakened because the original answer was recorded as numeric '4' and the answer-to-choice indexing was noted as ambiguous.",
+      "There are metadata inconsistencies around the image field and image_paths, which increase curation risk even though a primary image file exists."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_45100a18c07b68579c0bb11a",
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "49",
+    "created_at": "2026-04-12T20:38:26Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_45100a18c07b68579c0bb11a",
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "problem_id": "prob_0d64d51585420cc480db8401",
+    "dataset_name": "SCEMQA",
+    "normalized_question_text": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+    "normalized_answer_text": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+    "normalized_choice_map": {
+      "A": "The number of cereals with HFCS is about the same as the number of cereals without HFCS.",
+      "B": "The cereals with HFCS have a greater interquartile range than the cereals without HFCS.",
+      "C": "The cereals without HFCS have a greater range than the cereals with HFCS.",
+      "D": "About half the cereals without HFCS have less sugar than about three-fourths of the cereals with HFCS.",
+      "E": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS."
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Question explicitly depends on boxplots shown above.",
+      "force_requires_image=true, so image dependence is preserved.",
+      "Retained original wording and all provided answer choices with only light formatting normalization."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T20:38:26Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "49",
+    "subject": "数学、物理、生物、化学",
+    "raw_question_text": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+    "raw_answer_text": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.74,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "row_index": 49,
+      "image_paths": [],
+      "extraction_notes": [
+        "answer field is numeric '4' and the record does not explicitly specify whether choices are 0-based or 1-based, so the answer text was not mapped to a choice",
+        "image field contains a PIL image object string representation rather than a file path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image",
+      "choice_field": "choices",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T20:42:15Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.72,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Core assets are present and recoverable: question text, an image, and an answer are all available, so the sample should not be rejected.",
+      "The item is highly image-dependent, and the required boxplot information appears to be in the available image, but image readability is only moderate.",
+      "Verifiability is weakened because the original answer was recorded as numeric '4' and the answer-to-choice indexing was noted as ambiguous.",
+      "There are metadata inconsistencies around the image field and image_paths, which increase curation risk even though a primary image file exists."
+    ],
+    "collection_risk_flags": [
+      "image readability is only moderate based on metadata.image_quality_summaries.readability_score=0.632",
+      "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear",
+      "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL",
+      "metadata.image_paths is empty despite a top-level image_paths entry being present"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_bf64833f0eff4e16078d2f4b",
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "49",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_0d64d51585420cc480db8401/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_0d64d51585420cc480db8401/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 489,
+        "height": 195
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.74
+    },
+    "created_at": "2026-04-12T20:42:15Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear",
+      "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL",
+      "metadata.image_paths is empty despite a top-level image_paths entry being present"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_6e51f75913fcf3d934ccb346",
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "49",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.72,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.74
+    },
+    "created_at": "2026-04-12T20:42:15Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Core assets are present and recoverable: question text, an image, and an answer are all available, so the sample should not be rejected.",
+      "The item is highly image-dependent, and the required boxplot information appears to be in the available image, but image readability is only moderate.",
+      "Verifiability is weakened because the original answer was recorded as numeric '4' and the answer-to-choice indexing was noted as ambiguous.",
+      "There are metadata inconsistencies around the image field and image_paths, which increase curation risk even though a primary image file exists."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_45100a18c07b68579c0bb11a",
+      "candidate_id": "cand_0d64d51585420cc480db8401",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "dataset_name": "SCEMQA",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T20:42:15Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_45100a18c07b68579c0bb11a",
+    "problem_id": "prob_0d64d51585420cc480db8401",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "49",
+    "normalized_question_text": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+    "normalized_answer_text": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_sufficient",
+      "answer_available",
+      "joint_understandable",
+      "rewrite_usable"
+    ],
+    "created_at": "2026-04-12T20:42:15Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_45100a18c07b68579c0bb11a",
+    "problem_id": "prob_0d64d51585420cc480db8401",
+    "normalized_question_text": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+    "normalized_answer_text": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "have",
+        "canonical": "have",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "wide",
+        "canonical": "wide",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "Some",
+        "canonical": "Some",
+        "variable_type": "label"
+      },
+      {
+        "original": "High",
+        "canonical": "High",
+        "variable_type": "label"
+      },
+      {
+        "original": "Corn",
+        "canonical": "Corn",
+        "variable_type": "label"
+      },
+      {
+        "original": "HFCS",
+        "canonical": "HFCS",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "some",
+        "canonical": "some",
+        "variable_type": "label"
+      },
+      {
+        "original": "do",
+        "canonical": "do",
+        "variable_type": "label"
+      },
+      {
+        "original": "not",
+        "canonical": "not",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "show",
+        "canonical": "show",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "true",
+        "canonical": "true",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Breakfast cereals have a wide range of sugar content."
+      },
+      {
+        "segment_index": 2,
+        "text": "Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not."
+      },
+      {
+        "segment_index": 3,
+        "text": "The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not."
+      },
+      {
+        "segment_index": 4,
+        "text": "Which statement is true based on the boxplots?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 489,
+          "height": 195
+        },
+        "readability_score": 0.632,
+        "contrast_score": 35.2923
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T20:42:15Z",
+    "normalization_notes": [
+      "Question explicitly depends on boxplots shown above.",
+      "force_requires_image=true, so image dependence is preserved.",
+      "Retained original wording and all provided answer choices with only light formatting normalization."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_0d64d51585420cc480db8401",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "49",
+    "ingest_batch_id": "benchmarkallinone-scemqa-0-300_20260412T122622Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学、物理、生物、化学"
+    ],
+    "language": "en",
+    "raw_question_text": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+    "normalized_question_text": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+    "raw_answer_text": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+    "normalized_answer_text": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+    "answer_type": "text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9482,
+    "multi_step_score": 0.3647,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "image_metadata_inconsistency",
+      "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear",
+      "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL",
+      "metadata.image_paths is empty despite a top-level image_paths entry being present",
+      "source_answer_mapping_ambiguity"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_sufficient",
+      "answer_available",
+      "joint_understandable",
+      "rewrite_usable"
+    ],
+    "clean_decision_rationale": "The sample is semantically complete and understandable, the boxplots are usable for the required comparison, and the rewritten open form preserves a clear answer target. Minor metadata and source mapping ambiguities are non-fatal because the final answer content is explicitly available and alignment/solvability evidence is strong.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_0d64d51585420cc480db8401",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T20:38:26Z",
+    "updated_at": "2026-04-12T20:42:15Z",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.74,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.72,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Core assets are present and recoverable: question text, an image, and an answer are all available, so the sample should not be rejected.",
+      "The item is highly image-dependent, and the required boxplot information appears to be in the available image, but image readability is only moderate.",
+      "Verifiability is weakened because the original answer was recorded as numeric '4' and the answer-to-choice indexing was noted as ambiguous.",
+      "There are metadata inconsistencies around the image field and image_paths, which increase curation risk even though a primary image file exists."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_b6695d18ac509a450a2d41c3",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://scemqa/test/49/question",
+      "storage_uri": "inline://prob_0d64d51585420cc480db8401/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 321,
+      "width": null,
+      "height": null,
+      "sha256": "86fb1153b6d807ea6cfaa1be8b8cb767beb30dce2a72d3465e4de5f58ed50160",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "wide",
+          "canonical": "wide",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "Some",
+          "canonical": "Some",
+          "variable_type": "label"
+        },
+        {
+          "original": "High",
+          "canonical": "High",
+          "variable_type": "label"
+        },
+        {
+          "original": "Corn",
+          "canonical": "Corn",
+          "variable_type": "label"
+        },
+        {
+          "original": "HFCS",
+          "canonical": "HFCS",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "do",
+          "canonical": "do",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "true",
+          "canonical": "true",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "asset_id": "asset_58bd746dc1f9e44c62355ee7",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_0d64d51585420cc480db8401/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 321,
+      "width": null,
+      "height": null,
+      "sha256": "86fb1153b6d807ea6cfaa1be8b8cb767beb30dce2a72d3465e4de5f58ed50160",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+      "normalized_text_snapshot": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "wide",
+          "canonical": "wide",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "Some",
+          "canonical": "Some",
+          "variable_type": "label"
+        },
+        {
+          "original": "High",
+          "canonical": "High",
+          "variable_type": "label"
+        },
+        {
+          "original": "Corn",
+          "canonical": "Corn",
+          "variable_type": "label"
+        },
+        {
+          "original": "HFCS",
+          "canonical": "HFCS",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "do",
+          "canonical": "do",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "true",
+          "canonical": "true",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "asset_id": "asset_cb7204f3e7dc3d0086a569ce",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://scemqa/test/49/answer",
+      "storage_uri": "inline://prob_0d64d51585420cc480db8401/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 102,
+      "width": null,
+      "height": null,
+      "sha256": "c5eb9f5a352d6b12f118753f7f896c22132b7d9f8d39179ea4b39214a8edf400",
+      "perceptual_hash": null,
+      "source_text_snapshot": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "half",
+          "canonical": "half",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "HFCS",
+          "canonical": "HFCS",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "more",
+          "canonical": "more",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "asset_id": "asset_3c8ecd86b034384dd3b3abf3",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_0d64d51585420cc480db8401/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 102,
+      "width": null,
+      "height": null,
+      "sha256": "c5eb9f5a352d6b12f118753f7f896c22132b7d9f8d39179ea4b39214a8edf400",
+      "perceptual_hash": null,
+      "source_text_snapshot": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+      "normalized_text_snapshot": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "half",
+          "canonical": "half",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "HFCS",
+          "canonical": "HFCS",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "more",
+          "canonical": "more",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "asset_id": "asset_8320a5819c3e4a8c169c6839",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/scemqa_0_300/run_27cf924f5da4f1fe/datasets/scemqa/artifacts/images/prob_0d64d51585420cc480db8401_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 18637,
+      "width": 489,
+      "height": 195,
+      "sha256": "4104d251c0ff97660fe33ebd0a388ae1c4b208565ecb74d256d01066f2fd89a4",
+      "perceptual_hash": "c747e7e763e3f8f7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 3521.5085,
+      "readability_score": 0.632,
+      "noise_score": 26.0364,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 489,
+        "height": 195
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "image_metadata_inconsistency",
+        "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear",
+        "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL",
+        "metadata.image_paths is empty despite a top-level image_paths entry being present",
+        "source_answer_mapping_ambiguity"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "asset_id": "asset_87c37a4da0fe1a838c1062d1",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_5df34e4020b0123cf915282d",
+      "file_format": "txt",
+      "file_size_bytes": 229,
+      "width": null,
+      "height": null,
+      "sha256": "bdb380bed66fdd26e93ac0d83788909143d52ae6f6547eb69481de24a564b995",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+      "normalized_text_snapshot": "The boxplots compare total sugar content for cereals with HFCS and cereals without HFCS. Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "wide",
+          "canonical": "wide",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "Some",
+          "canonical": "Some",
+          "variable_type": "label"
+        },
+        {
+          "original": "High",
+          "canonical": "High",
+          "variable_type": "label"
+        },
+        {
+          "original": "Corn",
+          "canonical": "Corn",
+          "variable_type": "label"
+        },
+        {
+          "original": "HFCS",
+          "canonical": "HFCS",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "do",
+          "canonical": "do",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "true",
+          "canonical": "true",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_0d64d51585420cc480db8401",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not.",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Which statement is true based on the boxplots?",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_0d64d51585420cc480db8401_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "text",
+          "target_text": "Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS.",
+          "expected_answer_type": "text",
+          "expected_answer": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "plot",
+          "entity_category": "graph",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "wide",
+          "canonical": "wide",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "Some",
+          "canonical": "Some",
+          "variable_type": "label"
+        },
+        {
+          "original": "High",
+          "canonical": "High",
+          "variable_type": "label"
+        },
+        {
+          "original": "Corn",
+          "canonical": "Corn",
+          "variable_type": "label"
+        },
+        {
+          "original": "HFCS",
+          "canonical": "HFCS",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "do",
+          "canonical": "do",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "true",
+          "canonical": "true",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Breakfast cereals have a wide range of sugar content."
+        },
+        {
+          "segment_index": 2,
+          "text": "Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not."
+        },
+        {
+          "segment_index": 3,
+          "text": "The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not."
+        },
+        {
+          "segment_index": 4,
+          "text": "Which statement is true based on the boxplots?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T20:41:32Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_0d64d51585420cc480db8401_1",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "chart_like",
+        "aspect_ratio": 2.5077,
+        "dark_pixel_ratio": 0.2159,
+        "readability_score": 0.632,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 489,
+            "height": 195
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 489,
+            "height": 195
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 244,
+            "height": 97
+          },
+          "salience": 0.6156
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 244,
+            "y": 0,
+            "width": 245,
+            "height": 97
+          },
+          "salience": 0.5944
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 97,
+            "width": 244,
+            "height": 98
+          },
+          "salience": 0.4778
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 244,
+            "y": 97,
+            "width": 245,
+            "height": 98
+          },
+          "salience": 0.5766
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8528,
+      "created_at": "2026-04-12T20:41:32Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_0d64d51585420cc480db8401",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T20:42:00Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_44a53053db56e8b8ad840f8e",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "text_fact",
+      "canonical_value": "The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not.",
+      "surface_forms": [
+        "The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_58bd746dc1f9e44c62355ee7"
+      ],
+      "evidence_refs": [
+        "asset_58bd746dc1f9e44c62355ee7"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not.",
+        "segment_index": 3,
+        "mentions_visual": false,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_6fa337d5a5d30b2d0f3eae36",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "target_slot",
+      "canonical_value": "Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS.",
+      "surface_forms": [
+        "Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_58bd746dc1f9e44c62355ee7"
+      ],
+      "evidence_refs": [
+        "asset_58bd746dc1f9e44c62355ee7"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "slot_id": "slot_prob_0d64d51585420cc480db8401_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "text",
+        "target_text": "Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS.",
+        "expected_answer_type": "text",
+        "expected_answer": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_ed25a5dd702ccde20c48338e",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "answer_claim",
+      "canonical_value": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+      "surface_forms": [
+        "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_3c8ecd86b034384dd3b3abf3"
+      ],
+      "evidence_refs": [
+        "asset_3c8ecd86b034384dd3b3abf3"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "answer": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS."
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_7f36098bb79dcef2c7c7acd8",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 489,
+          "height": 195
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8528,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_ed22c8558180df8586d9879d",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 489,
+          "height": 195
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8528,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_69e12bb88684512ba4037d88",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 244,
+          "height": 97
+        },
+        "salience": 0.6156
+      },
+      "unit": null,
+      "confidence": 0.8528,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_ad54107341ad2dc39a7236ea",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 244,
+          "y": 0,
+          "width": 245,
+          "height": 97
+        },
+        "salience": 0.5944
+      },
+      "unit": null,
+      "confidence": 0.8528,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_6de2dcd6fcc69dff86bb021b",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 97,
+          "width": 244,
+          "height": 98
+        },
+        "salience": 0.4778
+      },
+      "unit": null,
+      "confidence": 0.8528,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_a4dcf5246f916205715c099a",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 244,
+          "y": 97,
+          "width": 245,
+          "height": 98
+        },
+        "salience": 0.5766
+      },
+      "unit": null,
+      "confidence": 0.8528,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_a1b087b6172f6f20b7fbeea2",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "text_fact",
+      "canonical_value": "The boxplots compare total sugar content for cereals with HFCS and cereals without HFCS. Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS.",
+      "surface_forms": [
+        "The boxplots compare total sugar content for cereals with HFCS and cereals without HFCS. Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_87c37a4da0fe1a838c1062d1"
+      ],
+      "evidence_refs": [
+        "asset_87c37a4da0fe1a838c1062d1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_5df34e4020b0123cf915282d",
+        "parent_problem_id": "prob_0d64d51585420cc480db8401",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "The boxplots compare total sugar content for cereals with HFCS and cereals without HFCS. Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS.",
+        "expected_answer_type": "text",
+        "expected_answer": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_2da36b1ff7ddc003d1df6d30",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "quality_signal",
+      "canonical_value": "image_metadata_inconsistency",
+      "surface_forms": [
+        "image_metadata_inconsistency"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "image_metadata_inconsistency"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_662d26595911a86c70760817",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear",
+      "surface_forms": [
+        "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_5f10b8e15d4df875121928a1",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL",
+      "surface_forms": [
+        "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_36039dfd76c0a0d380e744c9",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty despite a top-level image_paths entry being present",
+      "surface_forms": [
+        "metadata.image_paths is empty despite a top-level image_paths entry being present"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty despite a top-level image_paths entry being present"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_99fdd5ee3cd3e5f0a1665ba5",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "quality_signal",
+      "canonical_value": "source_answer_mapping_ambiguity",
+      "surface_forms": [
+        "source_answer_mapping_ambiguity"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "source_answer_mapping_ambiguity"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_7afef4378896b7c6e2211488",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_0d64d51585420cc480db8401",
+        "problem_id": "prob_0d64d51585420cc480db8401",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T20:42:00Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "node_id": "node_c73061de739500c65a6a33cc",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_sufficient",
+          "answer_available",
+          "joint_understandable",
+          "rewrite_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T20:42:15Z",
+      "updated_at": "2026-04-12T20:42:15Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_45100a18c07b68579c0bb11a",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_27cf924f5da4f1fe",
+      "dataset_name": "SCEMQA",
+      "input_asset_ids": [
+        "asset_b6695d18ac509a450a2d41c3",
+        "asset_58bd746dc1f9e44c62355ee7",
+        "asset_cb7204f3e7dc3d0086a569ce",
+        "asset_3c8ecd86b034384dd3b3abf3",
+        "asset_8320a5819c3e4a8c169c6839",
+        "asset_87c37a4da0fe1a838c1062d1"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 21
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.92,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 489,
+            "height": 195,
+            "blur_score": 3521.5085,
+            "contrast_score": 35.2923,
+            "noise_score": 26.0364,
+            "readability_score": 0.632,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 489,
+              "height": 195
+            },
+            "perceptual_hash": "c747e7e763e3f8f7"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_45100a18c07b68579c0bb11a",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_0d64d51585420cc480db8401",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_0d64d51585420cc480db8401",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_target_clear",
+          "image_required_and_usable",
+          "jointly_understandable",
+          "question_text_clear"
+        ],
+        "rationale": "The prompt, choices, and expected answer are semantically clear. The boxplots are visible enough to compare medians, quartiles, and ranges, so the image-text pair is understandable despite extraction metadata issues.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "image_metadata_inconsistency",
+        "metadata.extraction_notes states the original answer field was numeric '4' and the choice indexing was ambiguous, so the source answer-to-choice mapping was unclear",
+        "metadata.extraction_notes states the original image field contained a PIL image object string representation rather than a file path or URL",
+        "metadata.image_paths is empty despite a top-level image_paths entry being present",
+        "source_answer_mapping_ambiguity"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_sufficient",
+        "answer_available",
+        "joint_understandable",
+        "rewrite_usable"
+      ],
+      "decision_rationale": "The sample is semantically complete and understandable, the boxplots are usable for the required comparison, and the rewritten open form preserves a clear answer target. Minor metadata and source mapping ambiguities are non-fatal because the final answer content is explicitly available and alignment/solvability evidence is strong.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T20:42:15Z",
+      "finished_at": "2026-04-12T20:42:15Z",
+      "candidate_id": "cand_0d64d51585420cc480db8401",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_45100a18c07b68579c0bb11a",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "image_entity_refs": [
+        "visual_prob_0d64d51585420cc480db8401_1::roi",
+        "visual_prob_0d64d51585420cc480db8401_1::roi_top_left",
+        "visual_prob_0d64d51585420cc480db8401_1::roi_top_right",
+        "visual_prob_0d64d51585420cc480db8401_1::roi_bottom_left",
+        "visual_prob_0d64d51585420cc480db8401_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_0d64d51585420cc480db8401_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "plot",
+          "image_ref": "visual_prob_0d64d51585420cc480db8401_1::roi",
+          "relation": "grounds_graph",
+          "confidence": 0.7632
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T20:41:32Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_143177571d127d5c8cd1d674",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+      "after_value": "Breakfast cereals have a wide range of sugar content. Some cereals contain High Fructose Corn Syrup (HFCS) as a source of sugar and some do not. The boxplots above show the total sugar content of different types of cereal for those containing HFCS and for those that do not. Which statement is true based on the boxplots?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "audit_id": "audit_b6a73ab237e5c7038b46b8f6",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+      "after_value": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "audit_id": "audit_cfb46d254b433e37a7f14cfb",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "audit_id": "audit_c73061de739500c65a6a33cc",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:42:15Z"
+    },
+    {
+      "audit_id": "audit_d3b4e33c3941be55c8ea6279",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "wide",
+          "canonical": "wide",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "Some",
+          "canonical": "Some",
+          "variable_type": "label"
+        },
+        {
+          "original": "High",
+          "canonical": "High",
+          "variable_type": "label"
+        },
+        {
+          "original": "Corn",
+          "canonical": "Corn",
+          "variable_type": "label"
+        },
+        {
+          "original": "HFCS",
+          "canonical": "HFCS",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "do",
+          "canonical": "do",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "true",
+          "canonical": "true",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T20:42:15Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_45100a18c07b68579c0bb11a",
+      "problem_id": "prob_0d64d51585420cc480db8401",
+      "source_problem_id": "49",
+      "strategy": "blank_open",
+      "rationale": "Rewrote the multiple-choice prompt into a direct fill-in-the-blank question anchored on the correct statement's quantitative comparison.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_5df34e4020b0123cf915282d",
+          "parent_problem_id": "prob_0d64d51585420cc480db8401",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "The boxplots compare total sugar content for cereals with HFCS and cereals without HFCS. Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS.",
+          "expected_answer_type": "text",
+          "expected_answer": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T20:42:15Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_5df34e4020b0123cf915282d",
+      "parent_problem_id": "prob_0d64d51585420cc480db8401",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "The boxplots compare total sugar content for cereals with HFCS and cereals without HFCS. Fill in the blanks based on the boxplots: About _____ of the cereals with HFCS have more sugar than about _____ of the cereals without HFCS.",
+      "expected_answer_type": "text",
+      "expected_answer": "About half the cereals with HFCS have more sugar than about three-fourths of the cereals without HFCS.",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "scemqamath00004",
+  "canonical_sample_index": 4,
+  "canonical_dataset_key": "scemqa_math",
+  "sample_path": "samples/scemqamath00004.json",
+  "image_path": "artifacts/images/scemqamath00004.png",
+  "images": [
+    "artifacts/images/scemqamath00004.png"
+  ]
+}

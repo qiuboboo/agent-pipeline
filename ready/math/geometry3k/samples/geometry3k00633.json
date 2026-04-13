@@ -1,0 +1,1845 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_277cb3368f263f7b3a902dd7",
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "70",
+    "raw_question_text": "<image>Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+    "raw_answer_text": "27",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(288, 276)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images字段中是PIL图像占位字符串，不是具体文件路径或URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T10:13:09Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_4ca4a3a45eef121f30be7d12_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 288,
+        "height": 276,
+        "file_size": 7419
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 84,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_277cb3368f263f7b3a902dd7",
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "70",
+    "created_at": "2026-04-12T10:13:09Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+    "image_dependency_score": 0.38,
+    "multi_step_score": 0.69,
+    "verifiability_score": 0.95,
+    "score_evidence": {
+      "image_dependency": [
+        "Input marks `requires_image=true` and `text_dominant=false`, which suggests some intended visual grounding.",
+        "However, the question text itself states the key object type (`rhombus`) and the needed angle label/value (`m∠BCD = 54`), so the core reasoning appears recoverable from text alone.",
+        "No explicit visual attributes such as lengths, unlabeled points, relative position, or diagram-only markings are referenced in the text."
+      ],
+      "multi_step": [
+        "Solving requires chaining at least two geometry facts: relating the given interior angle in a rhombus/parallelogram to angle `A`, then using diagonal `AC` as an angle bisector to get `∠BAC`.",
+        "This is not a direct lookup; it needs conditional property application on the named quadrilateral and diagonal.",
+        "The problem is still short and constrained, so the reasoning burden is moderate rather than very high."
+      ],
+      "verifiability": [
+        "The expected answer is a single numeric value (`answer_type` numeric; `answer_text` is `27`).",
+        "Given the formal geometry setup, a downstream checker can verify the derivation from standard rhombus properties.",
+        "`asset_registry_record.registry_passed=true`, and both question and answer are present."
+      ]
+    },
+    "risk_flags": [
+      "Possible mismatch between `requires_image=true` and the apparently text-sufficient problem statement",
+      "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_277cb3368f263f7b3a902dd7",
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "70",
+    "created_at": "2026-04-12T10:13:09Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+    "priority": 0.82,
+    "decision": "keep",
+    "decision_reasons": [
+      "Question, answer, and primary image are all present, so the sample has the core semantic assets needed for recovery and verification.",
+      "Verifiability is very strong because the expected output is a single numeric answer and the geometry setup is checkable from standard properties.",
+      "The recorded metadata path issue is a manageable registry-quality risk rather than a loss of core problem content."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_277cb3368f263f7b3a902dd7",
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "70",
+    "created_at": "2026-04-12T10:13:09Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_277cb3368f263f7b3a902dd7",
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+    "normalized_answer_text": "27",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading <image> marker from the question text.",
+      "Kept the original mathematical wording and answer unchanged.",
+      "Set requires_image=true and cleaning_path=multimodal_full because force_requires_image is true and the problem references a geometric diagram."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T10:13:09Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "70",
+    "subject": "数学",
+    "raw_question_text": "<image>Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+    "raw_answer_text": "27",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.38,
+    "initial_multi_solution_score": 0.69,
+    "initial_verifiability_score": 0.95,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 70,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(288, 276)>"
+      ],
+      "extraction_notes": [
+        "images字段中是PIL图像占位字符串，不是具体文件路径或URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T10:14:10Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.82,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question, answer, and primary image are all present, so the sample has the core semantic assets needed for recovery and verification.",
+      "Verifiability is very strong because the expected output is a single numeric answer and the geometry setup is checkable from standard properties.",
+      "The recorded metadata path issue is a manageable registry-quality risk rather than a loss of core problem content."
+    ],
+    "collection_risk_flags": [
+      "Possible mismatch between `requires_image=true` and the apparently text-sufficient problem statement",
+      "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_8b7ee0d5c93cb4a7afedd15b",
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "70",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_4ca4a3a45eef121f30be7d12/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_4ca4a3a45eef121f30be7d12/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 288,
+        "height": 276
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.38,
+      "initial_multi_solution_score": 0.69,
+      "initial_verifiability_score": 0.95
+    },
+    "created_at": "2026-04-12T10:14:10Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_5c53a39a526c9a22c4f272a1",
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "70",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.82,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.38,
+      "initial_multi_solution_score": 0.69,
+      "initial_verifiability_score": 0.95
+    },
+    "created_at": "2026-04-12T10:14:10Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Question, answer, and primary image are all present, so the sample has the core semantic assets needed for recovery and verification.",
+      "Verifiability is very strong because the expected output is a single numeric answer and the geometry setup is checkable from standard properties.",
+      "The recorded metadata path issue is a manageable registry-quality risk rather than a loss of core problem content."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_277cb3368f263f7b3a902dd7",
+      "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T10:14:10Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_277cb3368f263f7b3a902dd7",
+    "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "70",
+    "normalized_question_text": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+    "normalized_answer_text": "27",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "answer_available",
+      "solvable",
+      "text_sufficient"
+    ],
+    "created_at": "2026-04-12T10:14:10Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_277cb3368f263f7b3a902dd7",
+    "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+    "normalized_question_text": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+    "normalized_answer_text": "27",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "ABCD",
+        "canonical": "ABCD",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "If",
+        "canonical": "If",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "BCD",
+        "canonical": "BCD",
+        "variable_type": "label"
+      },
+      {
+        "original": "BAC",
+        "canonical": "BAC",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Quadrilateral $ABCD$ is a rhombus."
+      },
+      {
+        "segment_index": 2,
+        "text": "If $m\\angle BCD = 54$, find $m\\angle BAC$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 9,
+          "y": 25,
+          "width": 266,
+          "height": 227
+        },
+        "readability_score": 0.7647,
+        "contrast_score": 34.6755
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T10:14:10Z",
+    "normalization_notes": [
+      "Removed the leading <image> marker from the question text.",
+      "Kept the original mathematical wording and answer unchanged.",
+      "Set requires_image=true and cleaning_path=multimodal_full because force_requires_image is true and the problem references a geometric diagram."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "70",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-900-1500_20260412T071102Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+    "normalized_question_text": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+    "raw_answer_text": "27",
+    "normalized_answer_text": "27",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9615,
+    "multi_step_score": 0.3557,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "answer_available",
+      "solvable",
+      "text_sufficient"
+    ],
+    "clean_decision_rationale": "The sample is fully understandable from text alone, the numeric answer is present, and the rewritten variant is consistent and usable. Minor metadata image-path issues do not affect annotation because the image is not needed to solve the problem.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T10:13:09Z",
+    "updated_at": "2026-04-12T10:14:10Z",
+    "initial_image_dependency_score": 0.38,
+    "initial_multi_solution_score": 0.69,
+    "initial_verifiability_score": 0.95,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.82,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question, answer, and primary image are all present, so the sample has the core semantic assets needed for recovery and verification.",
+      "Verifiability is very strong because the expected output is a single numeric answer and the geometry setup is checkable from standard properties.",
+      "The recorded metadata path issue is a manageable registry-quality risk rather than a loss of core problem content."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_d35a0d2be7d08a2fe1447b83",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[900:1500]/70/question",
+      "storage_uri": "inline://prob_4ca4a3a45eef121f30be7d12/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 84,
+      "width": null,
+      "height": null,
+      "sha256": "91aa8a7d93286efb5f36d84c77d5643a0f8e900c743931b963193c22e6078c4e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6188,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "BCD",
+          "canonical": "BCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "asset_id": "asset_f7cd9aad0dfaf6b4115fb083",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_4ca4a3a45eef121f30be7d12/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 77,
+      "width": null,
+      "height": null,
+      "sha256": "3681a4140045d6f6805cd09ff2ecb02c086e4bf87a63aa54c1df427fc768fbc0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "normalized_text_snapshot": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "text_completeness_score": 0.6188,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "BCD",
+          "canonical": "BCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "asset_id": "asset_3847c120b8f53ba5a1da38ba",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[900:1500]/70/answer",
+      "storage_uri": "inline://prob_4ca4a3a45eef121f30be7d12/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "670671cd97404156226e507973f2ab8330d3022ca96e0c93bdbdb320c41adcaf",
+      "perceptual_hash": null,
+      "source_text_snapshot": "27",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "asset_id": "asset_7c3acda9e6fcc5227f2aad9e",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_4ca4a3a45eef121f30be7d12/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "670671cd97404156226e507973f2ab8330d3022ca96e0c93bdbdb320c41adcaf",
+      "perceptual_hash": null,
+      "source_text_snapshot": "27",
+      "normalized_text_snapshot": "27",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "asset_id": "asset_eb730f91c5e4bd03c8ebf69e",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_4ca4a3a45eef121f30be7d12_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 7419,
+      "width": 288,
+      "height": 276,
+      "sha256": "1e733dee12d65476f28d5844d193f879c79217eaa788c513b81731acba0838c8",
+      "perceptual_hash": "fec0c9a5a593037b",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1683.9199,
+      "readability_score": 0.7647,
+      "noise_score": 23.419,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 9,
+        "y": 25,
+        "width": 266,
+        "height": 227
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "asset_id": "asset_7a9e02191524042ab90abc43",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/crops/prob_4ca4a3a45eef121f30be7d12_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 7115,
+      "width": 266,
+      "height": 227,
+      "sha256": "72507e41a7bef27d6efa51e10e51ce8db244e5166170e47bda0310396694b3f6",
+      "perceptual_hash": "deccd5a7e59b237b",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1683.9199,
+      "readability_score": 0.7647,
+      "noise_score": 23.419,
+      "cropped_from_asset_id": "asset_eb730f91c5e4bd03c8ebf69e",
+      "roi_bbox": {
+        "x": 9,
+        "y": 25,
+        "width": 266,
+        "height": 227
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "asset_id": "asset_5d6b3eff035d48ecd9ec87b1",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_44e80526151a0d769658d507",
+      "file_format": "txt",
+      "file_size_bytes": 77,
+      "width": null,
+      "height": null,
+      "sha256": "3681a4140045d6f6805cd09ff2ecb02c086e4bf87a63aa54c1df427fc768fbc0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "normalized_text_snapshot": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "text_completeness_score": 0.6188,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "BCD",
+          "canonical": "BCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_4ca4a3a45eef121f30be7d12",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "question_type": "calculation",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "54"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "m"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_4ca4a3a45eef121f30be7d12_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "27",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BCD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BAC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "BCD",
+          "canonical": "BCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Quadrilateral $ABCD$ is a rhombus."
+        },
+        {
+          "segment_index": 2,
+          "text": "If $m\\angle BCD = 54$, find $m\\angle BAC$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T10:13:57Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_4ca4a3a45eef121f30be7d12_1",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.0435,
+        "dark_pixel_ratio": 0.0571,
+        "readability_score": 0.7647,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 288,
+            "height": 276
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 9,
+            "y": 25,
+            "width": 266,
+            "height": 227
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 9,
+            "y": 25,
+            "width": 133,
+            "height": 113
+          },
+          "salience": 0.4135
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 142,
+            "y": 25,
+            "width": 133,
+            "height": 113
+          },
+          "salience": 0.4438
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 9,
+            "y": 138,
+            "width": 133,
+            "height": 114
+          },
+          "salience": 0.4332
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 142,
+            "y": 138,
+            "width": 133,
+            "height": 114
+          },
+          "salience": 0.4102
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9059,
+      "created_at": "2026-04-12T10:13:57Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_4ca4a3a45eef121f30be7d12",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T10:14:05Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_6daac947c20ee56db7656ac6",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "target_slot",
+      "canonical_value": "If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "surface_forms": [
+        "If $m\\angle BCD = 54$, find $m\\angle BAC$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_f7cd9aad0dfaf6b4115fb083"
+      ],
+      "evidence_refs": [
+        "asset_f7cd9aad0dfaf6b4115fb083"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_4ca4a3a45eef121f30be7d12_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "27",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_1eebc79b0d444958adf2d475",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "answer_claim",
+      "canonical_value": "27",
+      "surface_forms": [
+        "27"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_7c3acda9e6fcc5227f2aad9e"
+      ],
+      "evidence_refs": [
+        "asset_7c3acda9e6fcc5227f2aad9e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "27"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_6b12b3d085a8394072fd1467",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 288,
+          "height": 276
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9059,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_6e02cf6a4375afd96a7fea2c",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 9,
+          "y": 25,
+          "width": 266,
+          "height": 227
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9059,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_02606b4f3d935327e2e23e8b",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 9,
+          "y": 25,
+          "width": 133,
+          "height": 113
+        },
+        "salience": 0.4135
+      },
+      "unit": null,
+      "confidence": 0.9059,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_dd9fe76f55ce245f9ff5ec51",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 142,
+          "y": 25,
+          "width": 133,
+          "height": 113
+        },
+        "salience": 0.4438
+      },
+      "unit": null,
+      "confidence": 0.9059,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_738c05a99d706b4b6eded993",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 9,
+          "y": 138,
+          "width": 133,
+          "height": 114
+        },
+        "salience": 0.4332
+      },
+      "unit": null,
+      "confidence": 0.9059,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_9b90d6495f9476df0a36625c",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 142,
+          "y": 138,
+          "width": 133,
+          "height": 114
+        },
+        "salience": 0.4102
+      },
+      "unit": null,
+      "confidence": 0.9059,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_4634d33b0099428d9e5a4bcb",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "text_fact",
+      "canonical_value": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "surface_forms": [
+        "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_5d6b3eff035d48ecd9ec87b1"
+      ],
+      "evidence_refs": [
+        "asset_5d6b3eff035d48ecd9ec87b1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_44e80526151a0d769658d507",
+        "parent_problem_id": "prob_4ca4a3a45eef121f30be7d12",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "27",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_b14b531bf49153ba61aafd27",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs",
+      "surface_forms": [
+        "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_9fb0e1b6c81f5659fefdc967",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_4ca4a3a45eef121f30be7d12",
+        "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T10:14:05Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "node_id": "node_26a03e1b63a3b00dfcc8796b",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "answer_available",
+          "solvable",
+          "text_sufficient"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:14:10Z",
+      "updated_at": "2026-04-12T10:14:10Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_277cb3368f263f7b3a902dd7",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a8f6ef9ab7139b21",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_d35a0d2be7d08a2fe1447b83",
+        "asset_f7cd9aad0dfaf6b4115fb083",
+        "asset_3847c120b8f53ba5a1da38ba",
+        "asset_7c3acda9e6fcc5227f2aad9e",
+        "asset_eb730f91c5e4bd03c8ebf69e",
+        "asset_7a9e02191524042ab90abc43",
+        "asset_5d6b3eff035d48ecd9ec87b1"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 7
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 288,
+            "height": 276,
+            "blur_score": 1683.9199,
+            "contrast_score": 34.6755,
+            "noise_score": 23.419,
+            "readability_score": 0.7647,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 9,
+              "y": 25,
+              "width": 266,
+              "height": 227
+            },
+            "perceptual_hash": "fec0c9a5a593037b"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_277cb3368f263f7b3a902dd7",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_4ca4a3a45eef121f30be7d12",
+        "question_type": "calculation",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_4ca4a3a45eef121f30be7d12",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "jointly_understandable",
+          "text_sufficient"
+        ],
+        "rationale": "The problem text fully specifies a rhombus with labeled vertices and asks for an angle measure; the expected numeric answer is clear. The diagram is consistent and readable, but it is not necessary to understand or solve the question.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains PIL placeholder strings instead of concrete file paths or URLs"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "answer_available",
+        "solvable",
+        "text_sufficient"
+      ],
+      "decision_rationale": "The sample is fully understandable from text alone, the numeric answer is present, and the rewritten variant is consistent and usable. Minor metadata image-path issues do not affect annotation because the image is not needed to solve the problem.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T10:14:10Z",
+      "finished_at": "2026-04-12T10:14:10Z",
+      "candidate_id": "cand_4ca4a3a45eef121f30be7d12",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_277cb3368f263f7b3a902dd7",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "image_entity_refs": [
+        "visual_prob_4ca4a3a45eef121f30be7d12_1::roi",
+        "visual_prob_4ca4a3a45eef121f30be7d12_1::roi_top_left",
+        "visual_prob_4ca4a3a45eef121f30be7d12_1::roi_top_right",
+        "visual_prob_4ca4a3a45eef121f30be7d12_1::roi_bottom_left",
+        "visual_prob_4ca4a3a45eef121f30be7d12_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_4ca4a3a45eef121f30be7d12_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_4ca4a3a45eef121f30be7d12_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7765
+        },
+        {
+          "text_ref": "BCD",
+          "image_ref": "visual_prob_4ca4a3a45eef121f30be7d12_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7765
+        },
+        {
+          "text_ref": "BAC",
+          "image_ref": "visual_prob_4ca4a3a45eef121f30be7d12_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7765
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T10:13:57Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_9bb8e45b46887a4e1c637b91",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "after_value": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "audit_id": "audit_65af55ca464c726ded065287",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "27",
+      "after_value": "27",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "audit_id": "audit_3d3d87fac4b18e427c771465",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "audit_id": "audit_26a03e1b63a3b00dfcc8796b",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:14:10Z"
+    },
+    {
+      "audit_id": "audit_f5e8d3068331b839ea90069e",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "ABCD",
+          "canonical": "ABCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "BCD",
+          "canonical": "BCD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BAC",
+          "canonical": "BAC",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:14:10Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_277cb3368f263f7b3a902dd7",
+      "problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "source_problem_id": "70",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_44e80526151a0d769658d507",
+          "parent_problem_id": "prob_4ca4a3a45eef121f30be7d12",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "27",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T10:14:10Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_44e80526151a0d769658d507",
+      "parent_problem_id": "prob_4ca4a3a45eef121f30be7d12",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "Quadrilateral $ABCD$ is a rhombus. If $m\\angle BCD = 54$, find $m\\angle BAC$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "27",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00633",
+  "canonical_sample_index": 633,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00633.json",
+  "image_path": "artifacts/images/geometry3k00633.png",
+  "images": [
+    "artifacts/images/geometry3k00633.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00633.png",
+  "crops": [
+    "artifacts/crops/geometry3k00633.png"
+  ]
+}

@@ -1,0 +1,2371 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_f00053d866fc88dbdb4cd954",
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "problem_id": "prob_1504bc21327a494d4c07aa8c",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "255",
+    "raw_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+    "raw_answer_text": "The bonds do not match the angles.",
+    "choice_map": {
+      "A": "Hydrocarbon compounds are relatively unstable in general.",
+      "B": "Compounds that have identical atoms bonded to each other are relatively unstable.",
+      "C": "The bonds do not match the angles.",
+      "D": "There is no resonance to stabilize the compound."
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image",
+    "choice_field": "choices",
+    "extraction_notes": [
+      "answer is stored as numeric value \"2\", but the record does not explicitly state whether choices are 0-based or 1-based indexed",
+      "image field contains an in-memory PIL image representation, not a path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-11T22:51:47Z",
+    "subject": "Chemistry"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_1504bc21327a494d4c07aa8c",
+    "image_manifest": [
+      {
+        "path": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_1504bc21327a494d4c07aa8c_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 101,
+        "height": 107,
+        "file_size": 3690
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 340,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 34
+    },
+    "issues": [
+      "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based",
+      "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL",
+      "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_f00053d866fc88dbdb4cd954",
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "255",
+    "created_at": "2026-04-11T22:51:47Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_1504bc21327a494d4c07aa8c",
+    "image_dependency_score": 0.88,
+    "multi_step_score": 0.58,
+    "verifiability_score": 0.84,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式引用图片信息：'pictured above'、'As seen in the diagram'",
+        "requires_image=true 且 text_dominant=false，说明样本被上游标记为非纯文本主导",
+        "题目依赖结构/空间关系判断：碳原子位于等边三角形顶点，属于视觉结构信息"
+      ],
+      "multi_step": [
+        "需要把图中/题干给出的环状三角结构与化学键角稳定性知识结合起来判断不稳定原因",
+        "不是直接读图，需要至少经过“识别结构角度”+“比较理想成键角与实际角度”的组合推理",
+        "但答案选项已给出，且题干文字已描述部分结构，因此多步复杂度中等而非很高"
+      ],
+      "verifiability": [
+        "choices 中存在与 answer_text 几乎完全一致的选项 C，可直接核对",
+        "answer_type=short_text，但答案内容短且边界清晰，便于规则或字符串匹配验证",
+        "registry_passed=true，题目、答案、图像资产均已登记存在"
+      ]
+    },
+    "risk_flags": [
+      "image is very small (101x107), which may limit downstream visual parsing robustness",
+      "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based",
+      "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL",
+      "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_f00053d866fc88dbdb4cd954",
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "255",
+    "created_at": "2026-04-11T22:51:47Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_1504bc21327a494d4c07aa8c",
+    "priority": 0.76,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Question, answer, and image assets are all present, so the sample retains recoverable core semantics and should stay in the candidate pool.",
+      "The image-dependent nature is high, but the only image is very small (101x107), which raises downstream visual parsing risk.",
+      "There are metadata consistency issues around the source answer encoding and image path provenance, which reduce confidence in clean reconstruction.",
+      "Given the collection-stage high-recall rule, these issues justify deprioritizing rather than rejecting because the sample is still materially usable."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_f00053d866fc88dbdb4cd954",
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "255",
+    "created_at": "2026-04-11T22:51:47Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_f00053d866fc88dbdb4cd954",
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "problem_id": "prob_1504bc21327a494d4c07aa8c",
+    "dataset_name": "SCEMQA",
+    "normalized_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+    "normalized_answer_text": "The bonds do not match the angles",
+    "normalized_choice_map": {
+      "A": "Hydrocarbon compounds are relatively unstable in general.",
+      "B": "Compounds that have identical atoms bonded to each other are relatively unstable.",
+      "C": "The bonds do not match the angles.",
+      "D": "There is no resonance to stabilize the compound."
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "rule_based_normalization"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-11T22:51:47Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "255",
+    "subject": "数学、物理、生物、化学",
+    "raw_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+    "raw_answer_text": "The bonds do not match the angles.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.88,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "row_index": 255,
+      "image_paths": [],
+      "extraction_notes": [
+        "answer is stored as numeric value \"2\", but the record does not explicitly state whether choices are 0-based or 1-based indexed",
+        "image field contains an in-memory PIL image representation, not a path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image",
+      "choice_field": "choices",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-11T22:53:37Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.76,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question, answer, and image assets are all present, so the sample retains recoverable core semantics and should stay in the candidate pool.",
+      "The image-dependent nature is high, but the only image is very small (101x107), which raises downstream visual parsing risk.",
+      "There are metadata consistency issues around the source answer encoding and image path provenance, which reduce confidence in clean reconstruction.",
+      "Given the collection-stage high-recall rule, these issues justify deprioritizing rather than rejecting because the sample is still materially usable."
+    ],
+    "collection_risk_flags": [
+      "image is very small (101x107), which may limit downstream visual parsing robustness",
+      "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based",
+      "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL",
+      "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_1b0666afe634f4c931bf85ac",
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "255",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_1504bc21327a494d4c07aa8c/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_1504bc21327a494d4c07aa8c/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 101,
+        "height": 107
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.88,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-11T22:53:37Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based",
+      "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL",
+      "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_055895c2e75aae7c460c209a",
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "255",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.76,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.88,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-11T22:53:37Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Question, answer, and image assets are all present, so the sample retains recoverable core semantics and should stay in the candidate pool.",
+      "The image-dependent nature is high, but the only image is very small (101x107), which raises downstream visual parsing risk.",
+      "There are metadata consistency issues around the source answer encoding and image path provenance, which reduce confidence in clean reconstruction.",
+      "Given the collection-stage high-recall rule, these issues justify deprioritizing rather than rejecting because the sample is still materially usable."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_f00053d866fc88dbdb4cd954",
+      "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "dataset_name": "SCEMQA",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-11T22:53:37Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_f00053d866fc88dbdb4cd954",
+    "problem_id": "prob_1504bc21327a494d4c07aa8c",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "255",
+    "normalized_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+    "normalized_answer_text": "The bonds do not match the angles",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "jointly_understandable",
+      "rewrite_usable"
+    ],
+    "created_at": "2026-04-11T22:53:37Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_f00053d866fc88dbdb4cd954",
+    "problem_id": "prob_1504bc21327a494d4c07aa8c",
+    "normalized_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+    "normalized_answer_text": "The bonds do not match the angles",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "As",
+        "canonical": "As",
+        "variable_type": "label"
+      },
+      {
+        "original": "seen",
+        "canonical": "seen",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "form",
+        "canonical": "form",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "an",
+        "canonical": "an",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "each",
+        "canonical": "each",
+        "variable_type": "label"
+      },
+      {
+        "original": "atom",
+        "canonical": "atom",
+        "variable_type": "label"
+      },
+      {
+        "original": "has",
+        "canonical": "has",
+        "variable_type": "label"
+      },
+      {
+        "original": "two",
+        "canonical": "two",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "upon",
+        "canonical": "upon",
+        "variable_type": "label"
+      },
+      {
+        "original": "this",
+        "canonical": "this",
+        "variable_type": "label"
+      },
+      {
+        "original": "why",
+        "canonical": "why",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Cyclopropane, pictured above, is a relatively unstable compound."
+      },
+      {
+        "segment_index": 2,
+        "text": "As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms."
+      },
+      {
+        "segment_index": 3,
+        "text": "Based upon this structure, why is cyclopropane a relatively unstable compound?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 101,
+          "height": 107
+        },
+        "readability_score": 0.606,
+        "contrast_score": 38.0231
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-11T22:53:37Z",
+    "normalization_notes": [
+      "rule_based_normalization"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_1504bc21327a494d4c07aa8c",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "255",
+    "ingest_batch_id": "benchmarkallinone-scemqa-300-840_20260411T164516Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学、物理、生物、化学"
+    ],
+    "language": "en",
+    "raw_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+    "normalized_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+    "raw_answer_text": "The bonds do not match the angles.",
+    "normalized_answer_text": "The bonds do not match the angles",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9576,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based",
+      "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL",
+      "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path",
+      "visual_evidence_weak"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "jointly_understandable",
+      "rewrite_usable"
+    ],
+    "clean_decision_rationale": "The sample is complete and semantically clear: the question and answer are present, the image is clear enough to support the triangular ring/angle-strain concept, and the open rewrite preserves the target meaning. Alignment and solvability signals show no serious failure, and the minor visual/metadata risks are not blocking for annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-11T22:51:47Z",
+    "updated_at": "2026-04-11T22:53:37Z",
+    "initial_image_dependency_score": 0.88,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.76,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question, answer, and image assets are all present, so the sample retains recoverable core semantics and should stay in the candidate pool.",
+      "The image-dependent nature is high, but the only image is very small (101x107), which raises downstream visual parsing risk.",
+      "There are metadata consistency issues around the source answer encoding and image path provenance, which reduce confidence in clean reconstruction.",
+      "Given the collection-stage high-recall rule, these issues justify deprioritizing rather than rejecting because the sample is still materially usable."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_6b30985eb42552280dc08f25",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://scemqa/test/255/question",
+      "storage_uri": "inline://prob_1504bc21327a494d4c07aa8c/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 340,
+      "width": null,
+      "height": null,
+      "sha256": "259dd9eda40308855ab4dcb91177fb5a8e0147a16fcd6949d6042b6e540959e2",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "atom",
+          "canonical": "atom",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "upon",
+          "canonical": "upon",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "asset_id": "asset_c958776e6378b0a514b410e9",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1504bc21327a494d4c07aa8c/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 340,
+      "width": null,
+      "height": null,
+      "sha256": "259dd9eda40308855ab4dcb91177fb5a8e0147a16fcd6949d6042b6e540959e2",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+      "normalized_text_snapshot": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "atom",
+          "canonical": "atom",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "upon",
+          "canonical": "upon",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "asset_id": "asset_a9ad035376215a7053865c92",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://scemqa/test/255/answer",
+      "storage_uri": "inline://prob_1504bc21327a494d4c07aa8c/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 34,
+      "width": null,
+      "height": null,
+      "sha256": "9c95ca652210e5aa817ef3b9ff3cd95b475976a44b342c597eb6d9cb5619bcd3",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The bonds do not match the angles.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "do",
+          "canonical": "do",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "asset_id": "asset_a9b906e2d3c9ee774f6767f5",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1504bc21327a494d4c07aa8c/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 33,
+      "width": null,
+      "height": null,
+      "sha256": "cabdf71bbae72d9740b31d399525ba0eaf608b3fac2b125cf80b3108881e46ac",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The bonds do not match the angles.",
+      "normalized_text_snapshot": "The bonds do not match the angles",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "do",
+          "canonical": "do",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "asset_id": "asset_092b0659bd7d693389892466",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_1504bc21327a494d4c07aa8c_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 3690,
+      "width": 101,
+      "height": 107,
+      "sha256": "b16626ba89c00b4d223a4e1f95ca3e7391979e7a93314cea81db5dc50a81e2d7",
+      "perceptual_hash": "dbe7e7661881bd7e",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 8121.3052,
+      "readability_score": 0.606,
+      "noise_score": 31.7639,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 101,
+        "height": 107
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based",
+        "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL",
+        "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path",
+        "visual_evidence_weak"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "asset_id": "asset_6ab04231a49a445e61deb6d2",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_2f17fb264ae483bb8a2af0f0",
+      "file_format": "txt",
+      "file_size_bytes": 351,
+      "width": null,
+      "height": null,
+      "sha256": "c6039f9b42181bfbe229badbdfed15d7f63ddc60b248ec17d8b3c9fcfe0d62e5",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+      "normalized_text_snapshot": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based on this structure, how do the bond angles contribute to cyclopropane's instability?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "atom",
+          "canonical": "atom",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "upon",
+          "canonical": "upon",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_1504bc21327a494d4c07aa8c",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms.",
+          "segment_index": 2,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Based upon this structure, why is cyclopropane a relatively unstable compound?",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_1504bc21327a494d4c07aa8c_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "Based on this structure, how do the bond angles contribute to cyclopropane's instability?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "The bonds do not match the angles",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "diagram",
+          "entity_category": "diagram",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "table",
+          "entity_category": "table",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "triangle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "atom",
+          "canonical": "atom",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "upon",
+          "canonical": "upon",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Cyclopropane, pictured above, is a relatively unstable compound."
+        },
+        {
+          "segment_index": 2,
+          "text": "As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms."
+        },
+        {
+          "segment_index": 3,
+          "text": "Based upon this structure, why is cyclopropane a relatively unstable compound?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-11T22:53:08Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_1504bc21327a494d4c07aa8c_1",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 0.9439,
+        "dark_pixel_ratio": 0.0746,
+        "readability_score": 0.606,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 101,
+            "height": 107
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 101,
+            "height": 107
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "height": 53
+          },
+          "salience": 0.4209
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 50,
+            "y": 0,
+            "width": 51,
+            "height": 53
+          },
+          "salience": 0.4162
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 53,
+            "width": 50,
+            "height": 54
+          },
+          "salience": 0.4304
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 50,
+            "y": 53,
+            "width": 51,
+            "height": 54
+          },
+          "salience": 0.4306
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8424,
+      "created_at": "2026-04-11T22:53:08Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_1504bc21327a494d4c07aa8c",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-11T22:53:23Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_1874aae5f8a3458a0b22e62e",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "text_fact",
+      "canonical_value": "As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms.",
+      "surface_forms": [
+        "As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_c958776e6378b0a514b410e9"
+      ],
+      "evidence_refs": [
+        "asset_c958776e6378b0a514b410e9"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms.",
+        "segment_index": 2,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_c7e7df9d555a57213d57bc19",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "target_slot",
+      "canonical_value": "Based on this structure, how do the bond angles contribute to cyclopropane's instability?",
+      "surface_forms": [
+        "Based on this structure, how do the bond angles contribute to cyclopropane's instability?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_c958776e6378b0a514b410e9"
+      ],
+      "evidence_refs": [
+        "asset_c958776e6378b0a514b410e9"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_1504bc21327a494d4c07aa8c_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "Based on this structure, how do the bond angles contribute to cyclopropane's instability?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "The bonds do not match the angles",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_3b61d06dd684f9660466219b",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "answer_claim",
+      "canonical_value": "The bonds do not match the angles",
+      "surface_forms": [
+        "The bonds do not match the angles"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_a9b906e2d3c9ee774f6767f5"
+      ],
+      "evidence_refs": [
+        "asset_a9b906e2d3c9ee774f6767f5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "The bonds do not match the angles"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_27dc0dc6b7c614030411d1d9",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 101,
+          "height": 107
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8424,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_1a44ef90b5970a1e3245386f",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 101,
+          "height": 107
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8424,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_a41b063d96f8b1356af1aea7",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 50,
+          "height": 53
+        },
+        "salience": 0.4209
+      },
+      "unit": null,
+      "confidence": 0.8424,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_cd551ea61951769e8b7e3f8d",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 50,
+          "y": 0,
+          "width": 51,
+          "height": 53
+        },
+        "salience": 0.4162
+      },
+      "unit": null,
+      "confidence": 0.8424,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_14c0b1c4eaa1807c56396166",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 53,
+          "width": 50,
+          "height": 54
+        },
+        "salience": 0.4304
+      },
+      "unit": null,
+      "confidence": 0.8424,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_e77df65f773d0e4695f44d55",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 50,
+          "y": 53,
+          "width": 51,
+          "height": 54
+        },
+        "salience": 0.4306
+      },
+      "unit": null,
+      "confidence": 0.8424,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_dbbc00aae0d6655401ae8c26",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "text_fact",
+      "canonical_value": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based on this structure, how do the bond angles contribute to cyclopropane's instability?",
+      "surface_forms": [
+        "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based on this structure, how do the bond angles contribute to cyclopropane's instability?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_6ab04231a49a445e61deb6d2"
+      ],
+      "evidence_refs": [
+        "asset_6ab04231a49a445e61deb6d2"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_2f17fb264ae483bb8a2af0f0",
+        "parent_problem_id": "prob_1504bc21327a494d4c07aa8c",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based on this structure, how do the bond angles contribute to cyclopropane's instability?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "The bonds do not match the angles",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_5bd6b188c280b1dbeaf33a5e",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based",
+      "surface_forms": [
+        "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_91cf83eb2e10da20afd70cff",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL",
+      "surface_forms": [
+        "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_4ac483e8e75fe7294482fa6b",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path",
+      "surface_forms": [
+        "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_31e7a57450a86f486f5928fd",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "quality_signal",
+      "canonical_value": "visual_evidence_weak",
+      "surface_forms": [
+        "visual_evidence_weak"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "visual_evidence_weak"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_467de2f949420dafd5e8572b",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_1504bc21327a494d4c07aa8c",
+        "problem_id": "prob_1504bc21327a494d4c07aa8c",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-11T22:53:23Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "node_id": "node_22b4bb2fcb81b5bd6da8a269",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "jointly_understandable",
+          "rewrite_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T22:53:37Z",
+      "updated_at": "2026-04-11T22:53:37Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_f00053d866fc88dbdb4cd954",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_2d03c8d7aebd328e",
+      "dataset_name": "SCEMQA",
+      "input_asset_ids": [
+        "asset_6b30985eb42552280dc08f25",
+        "asset_c958776e6378b0a514b410e9",
+        "asset_a9ad035376215a7053865c92",
+        "asset_a9b906e2d3c9ee774f6767f5",
+        "asset_092b0659bd7d693389892466",
+        "asset_6ab04231a49a445e61deb6d2"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 18
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.91,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 101,
+            "height": 107,
+            "blur_score": 8121.3052,
+            "contrast_score": 38.0231,
+            "noise_score": 31.7639,
+            "readability_score": 0.606,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 101,
+              "height": 107
+            },
+            "perceptual_hash": "dbe7e7661881bd7e"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_f00053d866fc88dbdb4cd954",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_1504bc21327a494d4c07aa8c",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_1504bc21327a494d4c07aa8c",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "jointly_understandable"
+        ],
+        "rationale": "The question clearly asks why cyclopropane is unstable based on its depicted triangular structure, the answer choice/text is explicit, and the image—though small—still shows the 3-carbon ring geometry needed to understand the bond-angle strain idea.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes state the source answer was stored as numeric value \"2\", but the record does not specify whether choice indexing is 0-based or 1-based",
+        "metadata.extraction_notes state the source image field contained an in-memory PIL image representation rather than a path or URL",
+        "metadata.image_paths is empty while the top-level image_paths field contains an extracted image path",
+        "visual_evidence_weak"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "jointly_understandable",
+        "rewrite_usable"
+      ],
+      "decision_rationale": "The sample is complete and semantically clear: the question and answer are present, the image is clear enough to support the triangular ring/angle-strain concept, and the open rewrite preserves the target meaning. Alignment and solvability signals show no serious failure, and the minor visual/metadata risks are not blocking for annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-11T22:53:37Z",
+      "finished_at": "2026-04-11T22:53:37Z",
+      "candidate_id": "cand_1504bc21327a494d4c07aa8c",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_f00053d866fc88dbdb4cd954",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "image_entity_refs": [
+        "visual_prob_1504bc21327a494d4c07aa8c_1::roi",
+        "visual_prob_1504bc21327a494d4c07aa8c_1::roi_top_left",
+        "visual_prob_1504bc21327a494d4c07aa8c_1::roi_top_right",
+        "visual_prob_1504bc21327a494d4c07aa8c_1::roi_bottom_left",
+        "visual_prob_1504bc21327a494d4c07aa8c_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_1504bc21327a494d4c07aa8c_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "diagram",
+          "image_ref": "visual_prob_1504bc21327a494d4c07aa8c_1::roi",
+          "relation": "grounds_diagram",
+          "confidence": 0.7606
+        },
+        {
+          "text_ref": "table",
+          "image_ref": "visual_prob_1504bc21327a494d4c07aa8c_1::roi",
+          "relation": "grounds_table",
+          "confidence": 0.7606
+        },
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_1504bc21327a494d4c07aa8c_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7606
+        },
+        {
+          "text_ref": "triangle",
+          "image_ref": "visual_prob_1504bc21327a494d4c07aa8c_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7606
+        },
+        {
+          "text_ref": "slot_prob_1504bc21327a494d4c07aa8c_1",
+          "image_ref": "visual_prob_1504bc21327a494d4c07aa8c_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7653
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-11T22:53:08Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_a7292423662137c14ba1d65c",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+      "after_value": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based upon this structure, why is cyclopropane a relatively unstable compound?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "audit_id": "audit_629707d5bba617077463b4e5",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "The bonds do not match the angles.",
+      "after_value": "The bonds do not match the angles",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "audit_id": "audit_0c164badab06da4c5dda5ae6",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "audit_id": "audit_22b4bb2fcb81b5bd6da8a269",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T22:53:37Z"
+    },
+    {
+      "audit_id": "audit_9d4da4ecdcbf4eeb374ccec1",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "As",
+          "canonical": "As",
+          "variable_type": "label"
+        },
+        {
+          "original": "seen",
+          "canonical": "seen",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "form",
+          "canonical": "form",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "an",
+          "canonical": "an",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "atom",
+          "canonical": "atom",
+          "variable_type": "label"
+        },
+        {
+          "original": "has",
+          "canonical": "has",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "upon",
+          "canonical": "upon",
+          "variable_type": "label"
+        },
+        {
+          "original": "this",
+          "canonical": "this",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T22:53:37Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_f00053d866fc88dbdb4cd954",
+      "problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "source_problem_id": "255",
+      "strategy": "blank_open",
+      "rationale": "The correct option expresses a single causal idea, so the multiple-choice framing can be rewritten as a direct open-ended question about cyclopropane's instability.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_2f17fb264ae483bb8a2af0f0",
+          "parent_problem_id": "prob_1504bc21327a494d4c07aa8c",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based on this structure, how do the bond angles contribute to cyclopropane's instability?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "The bonds do not match the angles",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-11T22:53:37Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_2f17fb264ae483bb8a2af0f0",
+      "parent_problem_id": "prob_1504bc21327a494d4c07aa8c",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "Cyclopropane, pictured above, is a relatively unstable compound. As seen in the diagram, the carbon atoms form the corners of an equilateral triangle and each carbon atom has two hydrogen atoms attached to complete an octet of electrons around the carbon atoms. Based on this structure, how do the bond angles contribute to cyclopropane's instability?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "The bonds do not match the angles",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "scemqachemistry00027",
+  "canonical_sample_index": 27,
+  "canonical_dataset_key": "scemqa_chemistry",
+  "sample_path": "samples/scemqachemistry00027.json",
+  "image_path": "artifacts/images/scemqachemistry00027.png",
+  "images": [
+    "artifacts/images/scemqachemistry00027.png"
+  ]
+}

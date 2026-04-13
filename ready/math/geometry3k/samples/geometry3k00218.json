@@ -1,0 +1,1848 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_97de4eb103b5985217f5c04e",
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "problem_id": "prob_6559a5d37077e891d1c64496",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "843",
+    "raw_question_text": "<image>In $\\odot S, m \\angle T S R=42$\nFind $m\\widehat{KT}$",
+    "raw_answer_text": "138",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(235, 249)>",
+      "<PIL.PngImagePlugin.PngImageFile image mode=RGBA size=235x249 at 0x7A7B91235E50>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image-related fields contain PIL object representations rather than explicit file paths or URLs",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-13T03:07:51Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_6559a5d37077e891d1c64496",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_6559a5d37077e891d1c64496_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 235,
+        "height": 249,
+        "file_size": 9835
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 59,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 3
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_97de4eb103b5985217f5c04e",
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "843",
+    "created_at": "2026-04-13T03:07:51Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_6559a5d37077e891d1c64496",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.58,
+    "verifiability_score": 0.84,
+    "score_evidence": {
+      "image_dependency": [
+        "题目显式标注 `requires_image=true`，且 `text_dominant=false`。",
+        "仅凭文字无法确定点 K、T、R 在圆中的相对位置与所求弧对应关系，核心信息依赖图形。",
+        "资产登记显示图片存在且 `registry_passed=true`，说明该题按图像题正常收录。"
+      ],
+      "multi_step": [
+        "这是几何图文题，至少需要先从图中识别角与弧的对应关系，再进行角弧关系推断。",
+        "题干只给出一个角度和一个目标弧，计算链条不算很长，但不是纯直接读取。",
+        "上游 `multi_solution_policy.should_push_multi_solution_agent=true` 提示该样本具备一定推理展开空间，但证据不足以给很高分。"
+      ],
+      "verifiability": [
+        "答案类型为 `numeric`，且 `answer_text` 明确为 `138`，最终结果形式清晰。",
+        "几何角弧题通常可依据标准定理对结果进行核验，存在较明确的正确性标准。",
+        "但由于关键约束来自图片而非完整文本，过程级自动核验难度高于纯文本题，因此不打满分。"
+      ]
+    },
+    "risk_flags": [
+      "diagram_semantics_not_fully_specified_in_text",
+      "image_required"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_97de4eb103b5985217f5c04e",
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "843",
+    "created_at": "2026-04-13T03:07:51Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_6559a5d37077e891d1c64496",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像都存在，asset registry 无 issues 且 registry_passed=true，核心语义资产完整。",
+      "该题虽强依赖图像，但图片已正常收录，图文结合后可支撑几何关系恢复与求解。",
+      "初步评分中 image_dependency_score 和 verifiability_score 较高，答案为明确数值，具有较好的入池价值。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_97de4eb103b5985217f5c04e",
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "843",
+    "created_at": "2026-04-13T03:07:51Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_97de4eb103b5985217f5c04e",
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "problem_id": "prob_6559a5d37077e891d1c64496",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+    "normalized_answer_text": "138",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading image placeholder token.",
+      "Normalized spacing and math punctuation in the question text.",
+      "Kept the answer as the original numeric value.",
+      "Marked as image-required because the target arc depends on the circle diagram and labeled point positions."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-13T03:07:51Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "843",
+    "subject": "数学",
+    "raw_question_text": "<image>In $\\odot S, m \\angle T S R=42$\nFind $m\\widehat{KT}$",
+    "raw_answer_text": "138",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 843,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(235, 249)>",
+        "<PIL.PngImagePlugin.PngImageFile image mode=RGBA size=235x249 at 0x7A7B91235E50>"
+      ],
+      "extraction_notes": [
+        "image-related fields contain PIL object representations rather than explicit file paths or URLs",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-13T03:09:03Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都存在，asset registry 无 issues 且 registry_passed=true，核心语义资产完整。",
+      "该题虽强依赖图像，但图片已正常收录，图文结合后可支撑几何关系恢复与求解。",
+      "初步评分中 image_dependency_score 和 verifiability_score 较高，答案为明确数值，具有较好的入池价值。"
+    ],
+    "collection_risk_flags": [
+      "diagram_semantics_not_fully_specified_in_text",
+      "image_required"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_d287621698994a024a1abf68",
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "843",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_6559a5d37077e891d1c64496/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_6559a5d37077e891d1c64496/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 235,
+        "height": 249
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-13T03:09:03Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_20867c985497aeee7fae3635",
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "843",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.84
+    },
+    "created_at": "2026-04-13T03:09:03Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像都存在，asset registry 无 issues 且 registry_passed=true，核心语义资产完整。",
+      "该题虽强依赖图像，但图片已正常收录，图文结合后可支撑几何关系恢复与求解。",
+      "初步评分中 image_dependency_score 和 verifiability_score 较高，答案为明确数值，具有较好的入池价值。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_97de4eb103b5985217f5c04e",
+      "candidate_id": "cand_6559a5d37077e891d1c64496",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-13T03:09:03Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_97de4eb103b5985217f5c04e",
+    "problem_id": "prob_6559a5d37077e891d1c64496",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "843",
+    "normalized_question_text": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+    "normalized_answer_text": "138",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_available",
+      "jointly_understandable",
+      "rewrite_usable"
+    ],
+    "created_at": "2026-04-13T03:09:03Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_97de4eb103b5985217f5c04e",
+    "problem_id": "prob_6559a5d37077e891d1c64496",
+    "normalized_question_text": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+    "normalized_answer_text": "138",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "odot",
+        "canonical": "odot",
+        "variable_type": "label"
+      },
+      {
+        "original": "S",
+        "canonical": "S",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "TSR",
+        "canonical": "TSR",
+        "variable_type": "label"
+      },
+      {
+        "original": "KT",
+        "canonical": "KT",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In $\\odot S$, $m\\angle TSR = 42$."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find $m\\widehat{KT}$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 34,
+          "y": 19,
+          "width": 180,
+          "height": 222
+        },
+        "readability_score": 0.7594,
+        "contrast_score": 36.9529
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-13T03:09:03Z",
+    "normalization_notes": [
+      "Removed the leading image placeholder token.",
+      "Normalized spacing and math punctuation in the question text.",
+      "Kept the answer as the original numeric value.",
+      "Marked as image-required because the target arc depends on the circle diagram and labeled point positions."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_6559a5d37077e891d1c64496",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "843",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-000-900_20260412T151456Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>In $\\odot S, m \\angle T S R=42$\nFind $m\\widehat{KT}$",
+    "normalized_question_text": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+    "raw_answer_text": "138",
+    "normalized_answer_text": "138",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9609,
+    "multi_step_score": 0.3557,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_available",
+      "jointly_understandable",
+      "rewrite_usable"
+    ],
+    "clean_decision_rationale": "The problem is complete and understandable, the image support is clear enough for the geometry relation, the answer is available, and the rewrite/alignment evidence indicates the sample is usable for downstream annotation despite a minor non-fatal conflict.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_6559a5d37077e891d1c64496",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-13T03:07:51Z",
+    "updated_at": "2026-04-13T03:09:03Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.84,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都存在，asset registry 无 issues 且 registry_passed=true，核心语义资产完整。",
+      "该题虽强依赖图像，但图片已正常收录，图文结合后可支撑几何关系恢复与求解。",
+      "初步评分中 image_dependency_score 和 verifiability_score 较高，答案为明确数值，具有较好的入池价值。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_ae75e1368269fe77c18bec7a",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[0:900]/843/question",
+      "storage_uri": "inline://prob_6559a5d37077e891d1c64496/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 59,
+      "width": null,
+      "height": null,
+      "sha256": "f9144cd2eb025a6141da12f844f91ba069b5546984723ffee7335f99628b6ffd",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In $\\odot S, m \\angle T S R=42$\nFind $m\\widehat{KT}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.5991,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "TSR",
+          "canonical": "TSR",
+          "variable_type": "label"
+        },
+        {
+          "original": "KT",
+          "canonical": "KT",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "asset_id": "asset_ae39bdf6196ea37783422af6",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_6559a5d37077e891d1c64496/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 55,
+      "width": null,
+      "height": null,
+      "sha256": "3f6bcef9648e89bf37e371adf99c4f0134cf424fb643c0bd30ad265eb86308de",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In $\\odot S, m \\angle T S R=42$\nFind $m\\widehat{KT}$",
+      "normalized_text_snapshot": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+      "text_completeness_score": 0.5991,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "TSR",
+          "canonical": "TSR",
+          "variable_type": "label"
+        },
+        {
+          "original": "KT",
+          "canonical": "KT",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "asset_id": "asset_915937554c4680bc13b4834a",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[0:900]/843/answer",
+      "storage_uri": "inline://prob_6559a5d37077e891d1c64496/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 3,
+      "width": null,
+      "height": null,
+      "sha256": "d6a4031733610bb080d0bfa794fcc9dbdcff74834aeaab7c6b927e21e9754037",
+      "perceptual_hash": null,
+      "source_text_snapshot": "138",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "asset_id": "asset_20f790cb6472df3ce7f21aeb",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_6559a5d37077e891d1c64496/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 3,
+      "width": null,
+      "height": null,
+      "sha256": "d6a4031733610bb080d0bfa794fcc9dbdcff74834aeaab7c6b927e21e9754037",
+      "perceptual_hash": null,
+      "source_text_snapshot": "138",
+      "normalized_text_snapshot": "138",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "asset_id": "asset_f82999a5149678b2626feace",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_6559a5d37077e891d1c64496_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 9835,
+      "width": 235,
+      "height": 249,
+      "sha256": "6a5643281e23ea290a3651beb9fcae7a26bdecc1ab250700e6dcb4d8be667b1d",
+      "perceptual_hash": "ebc3b5a6a6b5c1c3",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1744.2155,
+      "readability_score": 0.7594,
+      "noise_score": 24.8596,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 34,
+        "y": 19,
+        "width": 180,
+        "height": 222
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "asset_id": "asset_64b81fcee5a8bab333a9c72d",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/crops/prob_6559a5d37077e891d1c64496_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 9450,
+      "width": 180,
+      "height": 222,
+      "sha256": "403109740ef7e39321c0a9f8aec77b9c776d90f55befb5fac40dab203d8b3a20",
+      "perceptual_hash": "c3817666e6768183",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1744.2155,
+      "readability_score": 0.7594,
+      "noise_score": 24.8596,
+      "cropped_from_asset_id": "asset_f82999a5149678b2626feace",
+      "roi_bbox": {
+        "x": 34,
+        "y": 19,
+        "width": 180,
+        "height": 222
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "asset_id": "asset_d2051fa2fea3f1f9d54c37fb",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_91db7bdfe30413e0c1885171",
+      "file_format": "txt",
+      "file_size_bytes": 55,
+      "width": null,
+      "height": null,
+      "sha256": "3f6bcef9648e89bf37e371adf99c4f0134cf424fb643c0bd30ad265eb86308de",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In $\\odot S, m \\angle T S R=42$\nFind $m\\widehat{KT}$",
+      "normalized_text_snapshot": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+      "text_completeness_score": 0.5991,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "TSR",
+          "canonical": "TSR",
+          "variable_type": "label"
+        },
+        {
+          "original": "KT",
+          "canonical": "KT",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_6559a5d37077e891d1c64496",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "In $\\odot S$, $m\\angle TSR = 42$.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "42"
+          ],
+          "unit_mentions": [
+            "g",
+            "m"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find $m\\widehat{KT}$.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "m"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_6559a5d37077e891d1c64496_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find $m\\widehat{KT}$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "138",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "S",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "TSR",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "KT",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "TSR",
+          "canonical": "TSR",
+          "variable_type": "label"
+        },
+        {
+          "original": "KT",
+          "canonical": "KT",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In $\\odot S$, $m\\angle TSR = 42$."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find $m\\widehat{KT}$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-13T03:08:40Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_6559a5d37077e891d1c64496_1",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 0.9438,
+        "dark_pixel_ratio": 0.0685,
+        "readability_score": 0.7594,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 235,
+            "height": 249
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 34,
+            "y": 19,
+            "width": 180,
+            "height": 222
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 34,
+            "y": 19,
+            "width": 90,
+            "height": 111
+          },
+          "salience": 0.4455
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 124,
+            "y": 19,
+            "width": 90,
+            "height": 111
+          },
+          "salience": 0.4473
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 34,
+            "y": 130,
+            "width": 90,
+            "height": 111
+          },
+          "salience": 0.4589
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 124,
+            "y": 130,
+            "width": 90,
+            "height": 111
+          },
+          "salience": 0.4495
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9038,
+      "created_at": "2026-04-13T03:08:40Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_6559a5d37077e891d1c64496",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-13T03:08:57Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_fe55d879846444d2393d83ae",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "text_fact",
+      "canonical_value": "In $\\odot S$, $m\\angle TSR = 42$.",
+      "surface_forms": [
+        "In $\\odot S$, $m\\angle TSR = 42$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_ae39bdf6196ea37783422af6"
+      ],
+      "evidence_refs": [
+        "asset_ae39bdf6196ea37783422af6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "In $\\odot S$, $m\\angle TSR = 42$.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "42"
+        ],
+        "unit_mentions": [
+          "g",
+          "m"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,m",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_139da2322c6d06c12a60ebaa",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "target_slot",
+      "canonical_value": "Find $m\\widehat{KT}$.",
+      "surface_forms": [
+        "Find $m\\widehat{KT}$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_ae39bdf6196ea37783422af6"
+      ],
+      "evidence_refs": [
+        "asset_ae39bdf6196ea37783422af6"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_6559a5d37077e891d1c64496_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find $m\\widehat{KT}$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "138",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_d126221a5cd3dd77eac977ab",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "answer_claim",
+      "canonical_value": "138",
+      "surface_forms": [
+        "138"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_20f790cb6472df3ce7f21aeb"
+      ],
+      "evidence_refs": [
+        "asset_20f790cb6472df3ce7f21aeb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "138"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_5951339ccdc9aea3f1127d67",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 235,
+          "height": 249
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9038,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_88d4c44e548f87c65036fc3a",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 34,
+          "y": 19,
+          "width": 180,
+          "height": 222
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9038,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_0d34ddbba785b6ec0a60d562",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 34,
+          "y": 19,
+          "width": 90,
+          "height": 111
+        },
+        "salience": 0.4455
+      },
+      "unit": null,
+      "confidence": 0.9038,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_dd8ecf2d5a1f8ee3333c3ffc",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 124,
+          "y": 19,
+          "width": 90,
+          "height": 111
+        },
+        "salience": 0.4473
+      },
+      "unit": null,
+      "confidence": 0.9038,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_d4a5b0c44ce164cf28c6dccf",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 34,
+          "y": 130,
+          "width": 90,
+          "height": 111
+        },
+        "salience": 0.4589
+      },
+      "unit": null,
+      "confidence": 0.9038,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_5beaa4632a3e21e257ed10ab",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 124,
+          "y": 130,
+          "width": 90,
+          "height": 111
+        },
+        "salience": 0.4495
+      },
+      "unit": null,
+      "confidence": 0.9038,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_6021869b2f2f92664084a638",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "text_fact",
+      "canonical_value": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+      "surface_forms": [
+        "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_d2051fa2fea3f1f9d54c37fb"
+      ],
+      "evidence_refs": [
+        "asset_d2051fa2fea3f1f9d54c37fb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_91db7bdfe30413e0c1885171",
+        "parent_problem_id": "prob_6559a5d37077e891d1c64496",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "138",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_6e7b8a955536b70fb2b834eb",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_6559a5d37077e891d1c64496",
+        "problem_id": "prob_6559a5d37077e891d1c64496",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-13T03:08:57Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "node_id": "node_f28321ff9f89badda253b456",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_acceptable",
+          "answer_available",
+          "jointly_understandable",
+          "rewrite_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T03:09:03Z",
+      "updated_at": "2026-04-13T03:09:03Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_97de4eb103b5985217f5c04e",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_b396994bd2367a1c",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_ae75e1368269fe77c18bec7a",
+        "asset_ae39bdf6196ea37783422af6",
+        "asset_915937554c4680bc13b4834a",
+        "asset_20f790cb6472df3ce7f21aeb",
+        "asset_f82999a5149678b2626feace",
+        "asset_64b81fcee5a8bab333a9c72d",
+        "asset_d2051fa2fea3f1f9d54c37fb"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 6
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 235,
+            "height": 249,
+            "blur_score": 1744.2155,
+            "contrast_score": 36.9529,
+            "noise_score": 24.8596,
+            "readability_score": 0.7594,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 34,
+              "y": 19,
+              "width": 180,
+              "height": 222
+            },
+            "perceptual_hash": "ebc3b5a6a6b5c1c3"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_97de4eb103b5985217f5c04e",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_6559a5d37077e891d1c64496",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_6559a5d37077e891d1c64496",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "geometry_relationships_visible",
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for an arc measure in circle S, and the diagram clearly shows the labeled points and diametric relationships needed to infer arc KT from central angle TSR. The image is necessary and semantically readable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.9982,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_acceptable",
+        "answer_available",
+        "jointly_understandable",
+        "rewrite_usable"
+      ],
+      "decision_rationale": "The problem is complete and understandable, the image support is clear enough for the geometry relation, the answer is available, and the rewrite/alignment evidence indicates the sample is usable for downstream annotation despite a minor non-fatal conflict.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-13T03:09:03Z",
+      "finished_at": "2026-04-13T03:09:03Z",
+      "candidate_id": "cand_6559a5d37077e891d1c64496",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_97de4eb103b5985217f5c04e",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "image_entity_refs": [
+        "visual_prob_6559a5d37077e891d1c64496_1::roi",
+        "visual_prob_6559a5d37077e891d1c64496_1::roi_top_left",
+        "visual_prob_6559a5d37077e891d1c64496_1::roi_top_right",
+        "visual_prob_6559a5d37077e891d1c64496_1::roi_bottom_left",
+        "visual_prob_6559a5d37077e891d1c64496_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_6559a5d37077e891d1c64496_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_6559a5d37077e891d1c64496_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.776
+        },
+        {
+          "text_ref": "S",
+          "image_ref": "visual_prob_6559a5d37077e891d1c64496_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.776
+        },
+        {
+          "text_ref": "TSR",
+          "image_ref": "visual_prob_6559a5d37077e891d1c64496_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.776
+        },
+        {
+          "text_ref": "KT",
+          "image_ref": "visual_prob_6559a5d37077e891d1c64496_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.776
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-13T03:08:40Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_55ef53e61e51146dbc715c0f",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>In $\\odot S, m \\angle T S R=42$\nFind $m\\widehat{KT}$",
+      "after_value": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "audit_id": "audit_2bdf80d8e3ffb035541b9572",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "138",
+      "after_value": "138",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "audit_id": "audit_6dc6f846f8240374c228922c",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "audit_id": "audit_f28321ff9f89badda253b456",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T03:09:03Z"
+    },
+    {
+      "audit_id": "audit_43c68d72f4374f7e4d467ad1",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "S",
+          "canonical": "S",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "TSR",
+          "canonical": "TSR",
+          "variable_type": "label"
+        },
+        {
+          "original": "KT",
+          "canonical": "KT",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T03:09:03Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_97de4eb103b5985217f5c04e",
+      "problem_id": "prob_6559a5d37077e891d1c64496",
+      "source_problem_id": "843",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_91db7bdfe30413e0c1885171",
+          "parent_problem_id": "prob_6559a5d37077e891d1c64496",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "138",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-13T03:09:03Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_91db7bdfe30413e0c1885171",
+      "parent_problem_id": "prob_6559a5d37077e891d1c64496",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "In $\\odot S$, $m\\angle TSR = 42$.\nFind $m\\widehat{KT}$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "138",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00218",
+  "canonical_sample_index": 218,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00218.json",
+  "image_path": "artifacts/images/geometry3k00218.png",
+  "images": [
+    "artifacts/images/geometry3k00218.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00218.png",
+  "crops": [
+    "artifacts/crops/geometry3k00218.png"
+  ]
+}

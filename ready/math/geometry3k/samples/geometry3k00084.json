@@ -1,0 +1,1628 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_55a0674144f76d337b570117",
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "367",
+    "raw_question_text": "<image>Find $SW$.",
+    "raw_answer_text": "16",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(449, 348)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains a PIL image object string representation rather than a concrete file path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T22:34:00Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_2d10a9be74ebcaa20c900a93_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 449,
+        "height": 348,
+        "file_size": 22147
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 17,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_55a0674144f76d337b570117",
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "367",
+    "created_at": "2026-04-12T22:34:00Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.44,
+    "verifiability_score": 0.88,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text is only \"Find SW.\", which does not specify enough information without the diagram",
+        "requires_image=true and text_dominant=false directly indicate reliance on visual content",
+        "asset_registry_record shows an existing image asset and registry_passed=true"
+      ],
+      "multi_step": [
+        "the prompt asks for a geometric segment value rather than reading off a label, which often implies some reasoning over the diagram",
+        "metadata.multi_solution_policy.mode=aggressive suggests the dataset/item type is considered to have meaningful solution-path potential",
+        "the text itself is extremely short, so the exact number of reasoning steps is not observable from text alone; score is kept moderate"
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_text is a short scalar value (\"16\"), which is easy to compare against a gold answer",
+        "asset_registry_record.answer_manifest shows answer_present=true and answer_type=number",
+        "registry_passed=true and the image asset exists, so downstream checking is feasible despite a metadata issue"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL",
+      "question text is highly underspecified without the image"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_55a0674144f76d337b570117",
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "367",
+    "created_at": "2026-04-12T22:34:00Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+    "priority": 0.87,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、图像和数值答案均存在，核心语义资产完整，可支撑样本进入候选池。",
+      "该题虽高度依赖图像，但主图文件已存在且 registry_passed=true，题目语义仍可恢复。",
+      "可验证性较高：答案为短数值型，便于与标准答案比对。",
+      "当前风险主要是 metadata.image_paths 记录格式异常，而不是图像资产缺失，因此不足以降为 reject 或 low_priority。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_55a0674144f76d337b570117",
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "367",
+    "created_at": "2026-04-12T22:34:00Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_55a0674144f76d337b570117",
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "Find $SW$.",
+    "normalized_answer_text": "16",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading <image> marker from the question text.",
+      "Question depends on the geometry diagram to identify segment SW.",
+      "force_requires_image=true, so the sample is routed to multimodal_full."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T22:34:00Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "367",
+    "subject": "数学",
+    "raw_question_text": "<image>Find $SW$.",
+    "raw_answer_text": "16",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.44,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 367,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(449, 348)>"
+      ],
+      "extraction_notes": [
+        "image field contains a PIL image object string representation rather than a concrete file path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T22:35:07Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.87,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、图像和数值答案均存在，核心语义资产完整，可支撑样本进入候选池。",
+      "该题虽高度依赖图像，但主图文件已存在且 registry_passed=true，题目语义仍可恢复。",
+      "可验证性较高：答案为短数值型，便于与标准答案比对。",
+      "当前风险主要是 metadata.image_paths 记录格式异常，而不是图像资产缺失，因此不足以降为 reject 或 low_priority。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL",
+      "question text is highly underspecified without the image"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_3267297339514d04de42d05e",
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "367",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_2d10a9be74ebcaa20c900a93/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_2d10a9be74ebcaa20c900a93/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 449,
+        "height": 348
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.44,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-12T22:35:07Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_26bd68cf97d48e8c9065b3bb",
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "367",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.87,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.44,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-12T22:35:07Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、图像和数值答案均存在，核心语义资产完整，可支撑样本进入候选池。",
+      "该题虽高度依赖图像，但主图文件已存在且 registry_passed=true，题目语义仍可恢复。",
+      "可验证性较高：答案为短数值型，便于与标准答案比对。",
+      "当前风险主要是 metadata.image_paths 记录格式异常，而不是图像资产缺失，因此不足以降为 reject 或 low_priority。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_55a0674144f76d337b570117",
+      "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T22:35:07Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_55a0674144f76d337b570117",
+    "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "367",
+    "normalized_question_text": "Find $SW$.",
+    "normalized_answer_text": "16",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "jointly_understandable",
+      "solvable_and_aligned"
+    ],
+    "created_at": "2026-04-12T22:35:07Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_55a0674144f76d337b570117",
+    "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+    "normalized_question_text": "Find $SW$.",
+    "normalized_answer_text": "16",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "SW",
+        "canonical": "SW",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Find $SW$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 50,
+          "y": 34,
+          "width": 341,
+          "height": 278
+        },
+        "readability_score": 0.7249,
+        "contrast_score": 34.2134
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T22:35:07Z",
+    "normalization_notes": [
+      "Removed the leading <image> marker from the question text.",
+      "Question depends on the geometry diagram to identify segment SW.",
+      "force_requires_image=true, so the sample is routed to multimodal_full."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "367",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-000-900_20260412T151456Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>Find $SW$.",
+    "normalized_question_text": "Find $SW$.",
+    "raw_answer_text": "16",
+    "normalized_answer_text": "16",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9575,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "jointly_understandable",
+      "solvable_and_aligned"
+    ],
+    "clean_decision_rationale": "The sample is semantically usable for annotation: the diagram supplies the necessary geometry relationships, the question and answer are complete, the rewrite is usable, and alignment and solvability show no serious failure. The partial text structure is expected for a diagram-dependent prompt and is not a material defect.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T22:34:00Z",
+    "updated_at": "2026-04-12T22:35:07Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.44,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.87,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、图像和数值答案均存在，核心语义资产完整，可支撑样本进入候选池。",
+      "该题虽高度依赖图像，但主图文件已存在且 registry_passed=true，题目语义仍可恢复。",
+      "可验证性较高：答案为短数值型，便于与标准答案比对。",
+      "当前风险主要是 metadata.image_paths 记录格式异常，而不是图像资产缺失，因此不足以降为 reject 或 low_priority。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_a8ef3a223479c5817e16b7b4",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[0:900]/367/question",
+      "storage_uri": "inline://prob_2d10a9be74ebcaa20c900a93/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 17,
+      "width": null,
+      "height": null,
+      "sha256": "4fadf4e62acf22f1d4a5db6b98db959542ce94563be879a8a7720c9fb2942a86",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Find $SW$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.5589,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "SW",
+          "canonical": "SW",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "asset_id": "asset_6838723e4a688d6684a8ba84",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_2d10a9be74ebcaa20c900a93/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 10,
+      "width": null,
+      "height": null,
+      "sha256": "7d013220855ef90f42e5b204b97d8d512ecad2731a3e331f51fe645cd87ec78a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Find $SW$.",
+      "normalized_text_snapshot": "Find $SW$.",
+      "text_completeness_score": 0.5589,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "SW",
+          "canonical": "SW",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "asset_id": "asset_ab0ed64a02ef8cde0229d252",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[0:900]/367/answer",
+      "storage_uri": "inline://prob_2d10a9be74ebcaa20c900a93/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "b17ef6d19c7a5b1ee83b907c595526dcb1eb06db8227d650d5dda0a9f4ce8cd9",
+      "perceptual_hash": null,
+      "source_text_snapshot": "16",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "asset_id": "asset_d6c7528fdd41ba543a980029",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_2d10a9be74ebcaa20c900a93/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "b17ef6d19c7a5b1ee83b907c595526dcb1eb06db8227d650d5dda0a9f4ce8cd9",
+      "perceptual_hash": null,
+      "source_text_snapshot": "16",
+      "normalized_text_snapshot": "16",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "asset_id": "asset_b2034ace028d1f89855e99f5",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_2d10a9be74ebcaa20c900a93_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 22147,
+      "width": 449,
+      "height": 348,
+      "sha256": "e47a3e401cdabceceb9cdcfaae41456eab6ccb7f81155bb1189c9dd0e5bb23e5",
+      "perceptual_hash": "fbf3e18383e1f3fb",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 447.4339,
+      "readability_score": 0.7249,
+      "noise_score": 18.013,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 50,
+        "y": 34,
+        "width": 341,
+        "height": 278
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "asset_id": "asset_3d85f911166e3b5825ad7978",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/crops/prob_2d10a9be74ebcaa20c900a93_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 21284,
+      "width": 341,
+      "height": 278,
+      "sha256": "fb228cb07e1a12b1ca8fd935e21c9d36a9cbc3f76b530970daaf8b90c2057f78",
+      "perceptual_hash": "f9f3a80313e8f1fb",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 447.4339,
+      "readability_score": 0.7249,
+      "noise_score": 18.013,
+      "cropped_from_asset_id": "asset_b2034ace028d1f89855e99f5",
+      "roi_bbox": {
+        "x": 50,
+        "y": 34,
+        "width": 341,
+        "height": 278
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "asset_id": "asset_8e0785882cffb913dbad5e46",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_a992f0b2651c48d34f56c18b",
+      "file_format": "txt",
+      "file_size_bytes": 10,
+      "width": null,
+      "height": null,
+      "sha256": "7d013220855ef90f42e5b204b97d8d512ecad2731a3e331f51fe645cd87ec78a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Find $SW$.",
+      "normalized_text_snapshot": "Find $SW$.",
+      "text_completeness_score": 0.5589,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "SW",
+          "canonical": "SW",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_2d10a9be74ebcaa20c900a93",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "question_type": "calculation",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Find $SW$.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_2d10a9be74ebcaa20c900a93_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find $SW$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "16",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "SW",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "SW",
+          "canonical": "SW",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Find $SW$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "partial",
+      "parser_confidence": 0.74,
+      "created_at": "2026-04-12T22:34:50Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_2d10a9be74ebcaa20c900a93_1",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.2902,
+        "dark_pixel_ratio": 0.0547,
+        "readability_score": 0.7249,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 449,
+            "height": 348
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 50,
+            "y": 34,
+            "width": 341,
+            "height": 278
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 50,
+            "y": 34,
+            "width": 170,
+            "height": 139
+          },
+          "salience": 0.4053
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 220,
+            "y": 34,
+            "width": 171,
+            "height": 139
+          },
+          "salience": 0.4663
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 50,
+            "y": 173,
+            "width": 170,
+            "height": 139
+          },
+          "salience": 0.4255
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 220,
+            "y": 173,
+            "width": 171,
+            "height": 139
+          },
+          "salience": 0.4635
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.89,
+      "created_at": "2026-04-12T22:34:50Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_2d10a9be74ebcaa20c900a93",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T22:34:59Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_183bd36bb3da6fdb5f5b3087",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "target_slot",
+      "canonical_value": "Find $SW$.",
+      "surface_forms": [
+        "Find $SW$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_6838723e4a688d6684a8ba84"
+      ],
+      "evidence_refs": [
+        "asset_6838723e4a688d6684a8ba84"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_2d10a9be74ebcaa20c900a93_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find $SW$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "16",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.74,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_ec1f3bae61da6b9ae6531098",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "answer_claim",
+      "canonical_value": "16",
+      "surface_forms": [
+        "16"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d6c7528fdd41ba543a980029"
+      ],
+      "evidence_refs": [
+        "asset_d6c7528fdd41ba543a980029"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "16"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_6d4118013825890887264ee8",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 449,
+          "height": 348
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.89,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_77867114757a77379f9e5813",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 50,
+          "y": 34,
+          "width": 341,
+          "height": 278
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.89,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_60e2430bae8d7b18640f43a2",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 50,
+          "y": 34,
+          "width": 170,
+          "height": 139
+        },
+        "salience": 0.4053
+      },
+      "unit": null,
+      "confidence": 0.89,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_afa28789997a527b625e1f70",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 220,
+          "y": 34,
+          "width": 171,
+          "height": 139
+        },
+        "salience": 0.4663
+      },
+      "unit": null,
+      "confidence": 0.89,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_39a2f3b43f879fab3fe0341c",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 50,
+          "y": 173,
+          "width": 170,
+          "height": 139
+        },
+        "salience": 0.4255
+      },
+      "unit": null,
+      "confidence": 0.89,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_a36e58d024b2c290c8fec828",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 220,
+          "y": 173,
+          "width": 171,
+          "height": 139
+        },
+        "salience": 0.4635
+      },
+      "unit": null,
+      "confidence": 0.89,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_221016e1834f145b685b4144",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "text_fact",
+      "canonical_value": "Find $SW$.",
+      "surface_forms": [
+        "Find $SW$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_8e0785882cffb913dbad5e46"
+      ],
+      "evidence_refs": [
+        "asset_8e0785882cffb913dbad5e46"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_a992f0b2651c48d34f56c18b",
+        "parent_problem_id": "prob_2d10a9be74ebcaa20c900a93",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "Find $SW$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "16",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_2719e685e23b0f8efcc0c0dd",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_e03ba0f9159f8d5a6dae9fad",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_2d10a9be74ebcaa20c900a93",
+        "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T22:34:59Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "node_id": "node_a5f2810df3b108c7eb265b1b",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "jointly_understandable",
+          "solvable_and_aligned"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T22:35:07Z",
+      "updated_at": "2026-04-12T22:35:07Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_55a0674144f76d337b570117",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_b396994bd2367a1c",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_a8ef3a223479c5817e16b7b4",
+        "asset_6838723e4a688d6684a8ba84",
+        "asset_ab0ed64a02ef8cde0229d252",
+        "asset_d6c7528fdd41ba543a980029",
+        "asset_b2034ace028d1f89855e99f5",
+        "asset_3d85f911166e3b5825ad7978",
+        "asset_8e0785882cffb913dbad5e46"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 1
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 449,
+            "height": 348,
+            "blur_score": 447.4339,
+            "contrast_score": 34.2134,
+            "noise_score": 18.013,
+            "readability_score": 0.7249,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 50,
+              "y": 34,
+              "width": 341,
+              "height": 278
+            },
+            "perceptual_hash": "fbf3e18383e1f3fb"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_55a0674144f76d337b570117",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_2d10a9be74ebcaa20c900a93",
+        "question_type": "calculation",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "partial"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_2d10a9be74ebcaa20c900a93",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "geometry_relationships_visible",
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text alone is minimal, but the diagram clearly shows an isosceles triangle with equal sides from R to W and S, a perpendicular from R to base WS at T, and labeled segments WT=4x-4 and TS=2x+2. A human can infer T bisects WS, solve for x, and find SW.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains a PIL image object string representation rather than a concrete file path or URL"
+      ],
+      "clean_score": 0.9794,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "jointly_understandable",
+        "solvable_and_aligned"
+      ],
+      "decision_rationale": "The sample is semantically usable for annotation: the diagram supplies the necessary geometry relationships, the question and answer are complete, the rewrite is usable, and alignment and solvability show no serious failure. The partial text structure is expected for a diagram-dependent prompt and is not a material defect.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T22:35:07Z",
+      "finished_at": "2026-04-12T22:35:07Z",
+      "candidate_id": "cand_2d10a9be74ebcaa20c900a93",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_55a0674144f76d337b570117",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "image_entity_refs": [
+        "visual_prob_2d10a9be74ebcaa20c900a93_1::roi",
+        "visual_prob_2d10a9be74ebcaa20c900a93_1::roi_top_left",
+        "visual_prob_2d10a9be74ebcaa20c900a93_1::roi_top_right",
+        "visual_prob_2d10a9be74ebcaa20c900a93_1::roi_bottom_left",
+        "visual_prob_2d10a9be74ebcaa20c900a93_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_2d10a9be74ebcaa20c900a93_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "SW",
+          "image_ref": "visual_prob_2d10a9be74ebcaa20c900a93_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7725
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T22:34:50Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_f31b9433ab1831d1ce558a27",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>Find $SW$.",
+      "after_value": "Find $SW$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "audit_id": "audit_1d929148f817b9f0af9dd4b7",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "16",
+      "after_value": "16",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "audit_id": "audit_4f43a750dd5b0320947e7e4f",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "audit_id": "audit_a5f2810df3b108c7eb265b1b",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T22:35:07Z"
+    },
+    {
+      "audit_id": "audit_10037c900ed39fdd64cf5e21",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "SW",
+          "canonical": "SW",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T22:35:07Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_55a0674144f76d337b570117",
+      "problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "source_problem_id": "367",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_a992f0b2651c48d34f56c18b",
+          "parent_problem_id": "prob_2d10a9be74ebcaa20c900a93",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "Find $SW$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "16",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T22:35:07Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_a992f0b2651c48d34f56c18b",
+      "parent_problem_id": "prob_2d10a9be74ebcaa20c900a93",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "Find $SW$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "16",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00084",
+  "canonical_sample_index": 84,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00084.json",
+  "image_path": "artifacts/images/geometry3k00084.png",
+  "images": [
+    "artifacts/images/geometry3k00084.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00084.png",
+  "crops": [
+    "artifacts/crops/geometry3k00084.png"
+  ]
+}

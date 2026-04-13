@@ -1,0 +1,2005 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_2fb0f91c20a161cbb3738656",
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "problem_id": "prob_5d225b289bdad86419ba97f9",
+    "dataset_name": "MathVision",
+    "source_problem_id": "1781",
+    "raw_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing? <image1>",
+    "raw_answer_text": "3",
+    "choice_map": {},
+    "image_paths": [
+      "images/1781.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-07T02:08:17Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_5d225b289bdad86419ba97f9",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_42c44b29896259fd/datasets/mathvision/artifacts/images/prob_5d225b289bdad86419ba97f9_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 235,
+        "height": 241,
+        "file_size": 18135
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 164,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 1
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_2fb0f91c20a161cbb3738656",
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "dataset_name": "MathVision",
+    "source_problem_id": "1781",
+    "created_at": "2026-04-07T02:08:17Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_5d225b289bdad86419ba97f9",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.74,
+    "verifiability_score": 0.93,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text says \"Alice's map, as shown, is incomplete,\" so the missing-road count depends on the displayed diagram",
+        "requires_image=true and text_dominant=false",
+        "the image is present in asset_registry_record.image_manifest with exists=true"
+      ],
+      "multi_step": [
+        "solving requires combining the textual rule \"each city is joined to every other city\" with the visual map",
+        "likely steps: infer total roads for 5 fully connected cities, count roads already drawn in the image, then subtract to get missing roads",
+        "this is more than simple image lookup because it involves counting and comparison"
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_text is a single value: \"3\"",
+        "the result can be checked by a deterministic procedure from the prompt and image: total complete-graph roads minus visible roads",
+        "registry_passed=true, with question and answer both present and no recorded issues"
+      ]
+    },
+    "risk_flags": [],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_2fb0f91c20a161cbb3738656",
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "dataset_name": "MathVision",
+    "source_problem_id": "1781",
+    "created_at": "2026-04-07T02:08:17Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_5d225b289bdad86419ba97f9",
+    "priority": 0.92,
+    "decision": "keep",
+    "decision_reasons": [
+      "question, image, and numeric answer are all present, so the core semantic assets are complete",
+      "image dependency is very high and the required diagram asset exists, making this a strong vision-based sample",
+      "verifiability is high because the answer is a deterministic numeric result checkable from the prompt and image",
+      "no registry issues or risk flags are recorded, and the initial scoring indicates strong collection value"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_2fb0f91c20a161cbb3738656",
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "dataset_name": "MathVision",
+    "source_problem_id": "1781",
+    "created_at": "2026-04-07T02:08:17Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_2fb0f91c20a161cbb3738656",
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "problem_id": "prob_5d225b289bdad86419ba97f9",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+    "normalized_answer_text": "3",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed inline image placeholder token.",
+      "Question explicitly depends on the shown map to determine missing roads.",
+      "force_requires_image=true, so multimodal processing is required."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-07T02:08:17Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "1781",
+    "subject": "数学",
+    "raw_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing? <image1>",
+    "raw_answer_text": "3",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.93,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 1480,
+      "image_paths": [
+        "images/1781.jpg"
+      ],
+      "extraction_notes": [
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-07T02:09:22Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question, image, and numeric answer are all present, so the core semantic assets are complete",
+      "image dependency is very high and the required diagram asset exists, making this a strong vision-based sample",
+      "verifiability is high because the answer is a deterministic numeric result checkable from the prompt and image",
+      "no registry issues or risk flags are recorded, and the initial scoring indicates strong collection value"
+    ],
+    "collection_risk_flags": []
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_292628a2ae523abc92cb76fd",
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "source_dataset": "MathVision",
+    "source_problem_id": "1781",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_5d225b289bdad86419ba97f9/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_5d225b289bdad86419ba97f9/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 235,
+        "height": 241
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.93
+    },
+    "created_at": "2026-04-07T02:09:22Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_52476ca5261d2233f2c426ab",
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "source_dataset": "MathVision",
+    "source_problem_id": "1781",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.92,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.74,
+      "initial_verifiability_score": 0.93
+    },
+    "created_at": "2026-04-07T02:09:22Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "question, image, and numeric answer are all present, so the core semantic assets are complete",
+      "image dependency is very high and the required diagram asset exists, making this a strong vision-based sample",
+      "verifiability is high because the answer is a deterministic numeric result checkable from the prompt and image",
+      "no registry issues or risk flags are recorded, and the initial scoring indicates strong collection value"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_2fb0f91c20a161cbb3738656",
+      "candidate_id": "cand_5d225b289bdad86419ba97f9",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "dataset_name": "MathVision",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-07T02:09:22Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_2fb0f91c20a161cbb3738656",
+    "problem_id": "prob_5d225b289bdad86419ba97f9",
+    "source_dataset": "MathVision",
+    "source_problem_id": "1781",
+    "normalized_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+    "normalized_answer_text": "3",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "image_clear_enough",
+      "rewrite_usable",
+      "semantically_usable",
+      "solvable_and_verifiable"
+    ],
+    "created_at": "2026-04-07T02:09:22Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_2fb0f91c20a161cbb3738656",
+    "problem_id": "prob_5d225b289bdad86419ba97f9",
+    "normalized_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+    "normalized_answer_text": "3",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "map",
+        "canonical": "map",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "five",
+        "canonical": "five",
+        "variable_type": "label"
+      },
+      {
+        "original": "Each",
+        "canonical": "Each",
+        "variable_type": "label"
+      },
+      {
+        "original": "city",
+        "canonical": "city",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "by",
+        "canonical": "by",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "road",
+        "canonical": "road",
+        "variable_type": "label"
+      },
+      {
+        "original": "s",
+        "canonical": "s",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "How",
+        "canonical": "How",
+        "variable_type": "label"
+      },
+      {
+        "original": "many",
+        "canonical": "many",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "A map of Wonderland shows five cities."
+      },
+      {
+        "segment_index": 2,
+        "text": "Each city is joined to every other city by a road."
+      },
+      {
+        "segment_index": 3,
+        "text": "Alice's map, as shown, is incomplete."
+      },
+      {
+        "segment_index": 4,
+        "text": "How many roads are missing?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 24,
+          "y": 16,
+          "width": 200,
+          "height": 208
+        },
+        "readability_score": 0.813,
+        "contrast_score": 43.839
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-07T02:09:22Z",
+    "normalization_notes": [
+      "Removed inline image placeholder token.",
+      "Question explicitly depends on the shown map to determine missing roads.",
+      "force_requires_image=true, so multimodal processing is required."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_5d225b289bdad86419ba97f9",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "1781",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260406T073442Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing? <image1>",
+    "normalized_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+    "raw_answer_text": "3",
+    "normalized_answer_text": "3",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9663,
+    "multi_step_score": 0.2567,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "image_clear_enough",
+      "rewrite_usable",
+      "semantically_usable",
+      "solvable_and_verifiable"
+    ],
+    "clean_decision_rationale": "The sample is complete and jointly understandable, the image is necessary but clear enough to count missing roads, the rewritten question is usable, and alignment/solvability signals do not indicate any serious failure.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_5d225b289bdad86419ba97f9",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-07T02:08:17Z",
+    "updated_at": "2026-04-07T02:09:22Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.74,
+    "initial_verifiability_score": 0.93,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "question, image, and numeric answer are all present, so the core semantic assets are complete",
+      "image dependency is very high and the required diagram asset exists, making this a strong vision-based sample",
+      "verifiability is high because the answer is a deterministic numeric result checkable from the prompt and image",
+      "no registry issues or risk flags are recorded, and the initial scoring indicates strong collection value"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_5b4698370d53016cfcf7b4b9",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/1781/question",
+      "storage_uri": "inline://prob_5d225b289bdad86419ba97f9/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 164,
+      "width": null,
+      "height": null,
+      "sha256": "a16d469401b083c26361865f9db731ded24e8e6c4ef5ee660a80a50cb70e1404",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing? <image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6884,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "city",
+          "canonical": "city",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "road",
+          "canonical": "road",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "asset_id": "asset_751f9fa70d96d124e7760287",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_5d225b289bdad86419ba97f9/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 155,
+      "width": null,
+      "height": null,
+      "sha256": "3d7f0c18a8f6176795c055e78c22a7b2ab326a92f9fdb08a03a5e9852fe30b36",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing? <image1>",
+      "normalized_text_snapshot": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+      "text_completeness_score": 0.6884,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "city",
+          "canonical": "city",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "road",
+          "canonical": "road",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "asset_id": "asset_4788b79aa32a91e836389922",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/1781/answer",
+      "storage_uri": "inline://prob_5d225b289bdad86419ba97f9/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "perceptual_hash": null,
+      "source_text_snapshot": "3",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "asset_id": "asset_0ab0f6af2b0e19b452ad74f7",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_5d225b289bdad86419ba97f9/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "perceptual_hash": null,
+      "source_text_snapshot": "3",
+      "normalized_text_snapshot": "3",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "asset_id": "asset_232ab50630c5743176540395",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_42c44b29896259fd/datasets/mathvision/artifacts/images/prob_5d225b289bdad86419ba97f9_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 18135,
+      "width": 235,
+      "height": 241,
+      "sha256": "e82cf684278e32bea20a0cee30f02fa67f2473cd77197d7b72e7372cd4bad6e1",
+      "perceptual_hash": "f7c727d7cbc081fb",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4240.5298,
+      "readability_score": 0.813,
+      "noise_score": 30.475,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 24,
+        "y": 16,
+        "width": 200,
+        "height": 208
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "asset_id": "asset_a4b7ff98fee9f3d86d1a8b46",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_42c44b29896259fd/datasets/mathvision/artifacts/crops/prob_5d225b289bdad86419ba97f9_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 16962,
+      "width": 200,
+      "height": 208,
+      "sha256": "88a92b38630bcf678c3b2d2b5b9f497b4238cd752f5f07b4dd516e158c536f41",
+      "perceptual_hash": "e7877797dfea80c1",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4240.5298,
+      "readability_score": 0.813,
+      "noise_score": 30.475,
+      "cropped_from_asset_id": "asset_232ab50630c5743176540395",
+      "roi_bbox": {
+        "x": 24,
+        "y": 16,
+        "width": 200,
+        "height": 208
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "asset_id": "asset_a42993ff91273a4a60a79593",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_a7bdd4bf1c9011d6889c3404",
+      "file_format": "txt",
+      "file_size_bytes": 155,
+      "width": null,
+      "height": null,
+      "sha256": "3d7f0c18a8f6176795c055e78c22a7b2ab326a92f9fdb08a03a5e9852fe30b36",
+      "perceptual_hash": null,
+      "source_text_snapshot": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing? <image1>",
+      "normalized_text_snapshot": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+      "text_completeness_score": 0.6884,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "city",
+          "canonical": "city",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "road",
+          "canonical": "road",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_5d225b289bdad86419ba97f9",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "question_type": "open",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "How many roads are missing?",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_5d225b289bdad86419ba97f9_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "How many roads are missing?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "3",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "city",
+          "canonical": "city",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "road",
+          "canonical": "road",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "A map of Wonderland shows five cities."
+        },
+        {
+          "segment_index": 2,
+          "text": "Each city is joined to every other city by a road."
+        },
+        {
+          "segment_index": 3,
+          "text": "Alice's map, as shown, is incomplete."
+        },
+        {
+          "segment_index": 4,
+          "text": "How many roads are missing?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-07T02:08:53Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_5d225b289bdad86419ba97f9_1",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 0.9751,
+        "dark_pixel_ratio": 0.0574,
+        "readability_score": 0.813,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 235,
+            "height": 241
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 24,
+            "y": 16,
+            "width": 200,
+            "height": 208
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 16,
+            "width": 100,
+            "height": 104
+          },
+          "salience": 0.4377
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 120,
+            "width": 100,
+            "height": 104
+          },
+          "salience": 0.4355
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 124,
+            "y": 120,
+            "width": 100,
+            "height": 104
+          },
+          "salience": 0.4612
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9252,
+      "created_at": "2026-04-07T02:08:53Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_5d225b289bdad86419ba97f9",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-07T02:09:08Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_4869bbed33441f9a8958edc2",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "target_slot",
+      "canonical_value": "How many roads are missing?",
+      "surface_forms": [
+        "How many roads are missing?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_751f9fa70d96d124e7760287"
+      ],
+      "evidence_refs": [
+        "asset_751f9fa70d96d124e7760287"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_5d225b289bdad86419ba97f9_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "How many roads are missing?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "3",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_cbe98d2e43b169cbe8b3f2d5",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "answer_claim",
+      "canonical_value": "3",
+      "surface_forms": [
+        "3"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_0ab0f6af2b0e19b452ad74f7"
+      ],
+      "evidence_refs": [
+        "asset_0ab0f6af2b0e19b452ad74f7"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "3"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_42ce65b4e4498d7befccab10",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 235,
+          "height": 241
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9252,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_bddf5f1a0c44bc4e7cdbfbf0",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 24,
+          "y": 16,
+          "width": 200,
+          "height": 208
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9252,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_d388e1a81c3630b9390b4b52",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 16,
+          "width": 100,
+          "height": 104
+        },
+        "salience": 0.4377
+      },
+      "unit": null,
+      "confidence": 0.9252,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_c05c42faf532ff1f2b1ce6ba",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 120,
+          "width": 100,
+          "height": 104
+        },
+        "salience": 0.4355
+      },
+      "unit": null,
+      "confidence": 0.9252,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_405e83710d22365a1d967b72",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 124,
+          "y": 120,
+          "width": 100,
+          "height": 104
+        },
+        "salience": 0.4612
+      },
+      "unit": null,
+      "confidence": 0.9252,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_d350b11e3ba711a86a79742d",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "text_fact",
+      "canonical_value": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+      "surface_forms": [
+        "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_a42993ff91273a4a60a79593"
+      ],
+      "evidence_refs": [
+        "asset_a42993ff91273a4a60a79593"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_a7bdd4bf1c9011d6889c3404",
+        "parent_problem_id": "prob_5d225b289bdad86419ba97f9",
+        "variant_index": 1,
+        "title": "MathVision 开放题",
+        "rewritten_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "3",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_460238090643f3d9bc287d3b",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_5d225b289bdad86419ba97f9",
+        "problem_id": "prob_5d225b289bdad86419ba97f9",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-07T02:09:08Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "node_id": "node_9ea63b58e9563e041bdfdfb0",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "image_clear_enough",
+          "rewrite_usable",
+          "semantically_usable",
+          "solvable_and_verifiable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-07T02:09:22Z",
+      "updated_at": "2026-04-07T02:09:22Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_2fb0f91c20a161cbb3738656",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_42c44b29896259fd",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_5b4698370d53016cfcf7b4b9",
+        "asset_751f9fa70d96d124e7760287",
+        "asset_4788b79aa32a91e836389922",
+        "asset_0ab0f6af2b0e19b452ad74f7",
+        "asset_232ab50630c5743176540395",
+        "asset_a4b7ff98fee9f3d86d1a8b46",
+        "asset_a42993ff91273a4a60a79593"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 16
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 235,
+            "height": 241,
+            "blur_score": 4240.5298,
+            "contrast_score": 43.839,
+            "noise_score": 30.475,
+            "readability_score": 0.813,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 24,
+              "y": 16,
+              "width": 200,
+              "height": 208
+            },
+            "perceptual_hash": "f7c727d7cbc081fb"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_2fb0f91c20a161cbb3738656",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_5d225b289bdad86419ba97f9",
+        "question_type": "open",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_5d225b289bdad86419ba97f9",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_answer_semantics_clear"
+        ],
+        "rationale": "The question clearly asks for the number of missing roads in an incomplete 5-city fully connected map. The image is necessary and is simple but readable: the five cities and drawn roads can be counted well enough to infer the missing-road count.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "image_clear_enough",
+        "rewrite_usable",
+        "semantically_usable",
+        "solvable_and_verifiable"
+      ],
+      "decision_rationale": "The sample is complete and jointly understandable, the image is necessary but clear enough to count missing roads, the rewritten question is usable, and alignment/solvability signals do not indicate any serious failure.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-07T02:09:22Z",
+      "finished_at": "2026-04-07T02:09:22Z",
+      "candidate_id": "cand_5d225b289bdad86419ba97f9",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_2fb0f91c20a161cbb3738656",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "image_entity_refs": [
+        "visual_prob_5d225b289bdad86419ba97f9_1::roi",
+        "visual_prob_5d225b289bdad86419ba97f9_1::roi_top_left",
+        "visual_prob_5d225b289bdad86419ba97f9_1::roi_bottom_left",
+        "visual_prob_5d225b289bdad86419ba97f9_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_5d225b289bdad86419ba97f9_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_5d225b289bdad86419ba97f9_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7813
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-07T02:08:53Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_00025d4f843e836fa0f508ad",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing? <image1>",
+      "after_value": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "audit_id": "audit_f735a18ddce4d13faa4962a5",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "3",
+      "after_value": "3",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "audit_id": "audit_b74e502c4ca805db4342651a",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "audit_id": "audit_9ea63b58e9563e041bdfdfb0",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T02:09:22Z"
+    },
+    {
+      "audit_id": "audit_008b20cf2713dd075e884805",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "map",
+          "canonical": "map",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "five",
+          "canonical": "five",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "city",
+          "canonical": "city",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "road",
+          "canonical": "road",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "How",
+          "canonical": "How",
+          "variable_type": "label"
+        },
+        {
+          "original": "many",
+          "canonical": "many",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-07T02:09:22Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_2fb0f91c20a161cbb3738656",
+      "problem_id": "prob_5d225b289bdad86419ba97f9",
+      "source_problem_id": "1781",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_a7bdd4bf1c9011d6889c3404",
+          "parent_problem_id": "prob_5d225b289bdad86419ba97f9",
+          "variant_index": 1,
+          "title": "MathVision 开放题",
+          "rewritten_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "3",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-07T02:09:22Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_a7bdd4bf1c9011d6889c3404",
+      "parent_problem_id": "prob_5d225b289bdad86419ba97f9",
+      "variant_index": 1,
+      "title": "MathVision 开放题",
+      "rewritten_question_text": "A map of Wonderland shows five cities. Each city is joined to every other city by a road. Alice's map, as shown, is incomplete. How many roads are missing?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "3",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "mathvision00788",
+  "canonical_sample_index": 788,
+  "canonical_dataset_key": "mathvision",
+  "sample_path": "samples/mathvision00788.json",
+  "image_path": "artifacts/images/mathvision00788.png",
+  "images": [
+    "artifacts/images/mathvision00788.png"
+  ],
+  "crop_path": "artifacts/crops/mathvision00788.png",
+  "crops": [
+    "artifacts/crops/mathvision00788.png"
+  ]
+}

@@ -1,0 +1,1538 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_ad7c24e60f2233664110cf40",
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+    "dataset_name": "EMMA-Chemistry",
+    "source_problem_id": "635",
+    "raw_question_text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows. <image_1>",
+    "raw_answer_text": "*C#[N+]*",
+    "choice_map": {
+      "A": "[R2]C=[N+][R1]",
+      "B": "*C#[N+]*",
+      "C": "C#N+[R]",
+      "D": "C#N"
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image_1",
+    "choice_field": "options",
+    "extraction_notes": [
+      "image_1 exists as an in-memory PIL image representation, not a file path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-08T02:37:31Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+    "image_manifest": [
+      {
+        "path": "outputs/emma_chemistry_full/run_98c1c89903499d3e/datasets/emma_chemistry/artifacts/images/prob_f56ee5e4ab4e04124d355d2c_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 150,
+        "height": 90,
+        "file_size": 5634
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 120,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 8
+    },
+    "issues": [
+      "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path.",
+      "`metadata.image_paths` is empty while top-level `image_paths` contains one image path."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_ad7c24e60f2233664110cf40",
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "dataset_name": "EMMA-Chemistry",
+    "source_problem_id": "635",
+    "created_at": "2026-04-08T02:37:31Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.38,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式要求根据“shown in the image”的过渡态结构作答，文本本身不足以确定答案。",
+        "requires_image=true 且 text_dominant=false，说明该样本核心信息主要来自图像而非文字。",
+        "需要识别化学结构的视觉表示并选择对应 SMILES，属于强图像依赖。"
+      ],
+      "multi_step": [
+        "需要先从图中识别过渡态/键连关系，再将其映射到候选 SMILES，存在至少两步推断。",
+        "题目为 4 选 1，主要是结构识别与选项匹配，没有明显复杂计算或长链条件组合，因此多步性中等偏低。",
+        "“ignoring the arrows” 表明需要区分结构本体与附加图示元素，增加了一点过程性。"
+      ],
+      "verifiability": [
+        "候选项共 4 个，答案空间清晰，最终答案可直接与标准选项比对。",
+        "answer_text='*C#[N+]*' 与选项 B 完全一致，核验规则明确。",
+        "answer_type=short_text 且 registry_passed=true，适合做确定性检查。"
+      ]
+    },
+    "risk_flags": [
+      "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path.",
+      "`metadata.image_paths` is empty while top-level `image_paths` contains one image path."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_ad7c24e60f2233664110cf40",
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "dataset_name": "EMMA-Chemistry",
+    "source_problem_id": "635",
+    "created_at": "2026-04-08T02:37:31Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+    "priority": 0.84,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像都已存在，核心语义资产完整，未出现题干与图像同时缺失的情况。",
+      "该样本强依赖图像作答，但登记中提供的主图像文件 exists=true，仍能支撑恢复和核验核心语义。",
+      "可核验性高，答案为短文本且与明确选项空间对应，便于后续确定性检查。",
+      "当前风险主要是元数据字段之间的不一致，而不是核心内容缺失，因此不足以降为 reject。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_ad7c24e60f2233664110cf40",
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "dataset_name": "EMMA-Chemistry",
+    "source_problem_id": "635",
+    "created_at": "2026-04-08T02:37:31Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_ad7c24e60f2233664110cf40",
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+    "dataset_name": "EMMA-Chemistry",
+    "normalized_question_text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows.",
+    "normalized_answer_text": "*C#[N+]*",
+    "normalized_choice_map": {
+      "A": "[R2]C=[N+][R1]",
+      "B": "*C#[N+]*",
+      "C": "C#N+[R]",
+      "D": "C#N"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder token as formatting noise.",
+      "Question explicitly depends on the depicted transition-state structure, so image is required.",
+      "Preserved answer and choice texts without semantic changes."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-08T02:37:31Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "source_dataset": "EMMA-Chemistry",
+    "source_split": "test",
+    "source_problem_id": "635",
+    "subject": "化学",
+    "raw_question_text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows. <image_1>",
+    "raw_answer_text": "*C#[N+]*",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.38,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "row_index": 635,
+      "image_paths": [],
+      "extraction_notes": [
+        "image_1 exists as an in-memory PIL image representation, not a file path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image_1",
+      "choice_field": "options",
+      "reasoning_chain_field": "pid",
+      "reasoning_chain": "chem_636",
+      "has_reasoning_chain": true
+    },
+    "created_at": "2026-04-08T02:39:33Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都已存在，核心语义资产完整，未出现题干与图像同时缺失的情况。",
+      "该样本强依赖图像作答，但登记中提供的主图像文件 exists=true，仍能支撑恢复和核验核心语义。",
+      "可核验性高，答案为短文本且与明确选项空间对应，便于后续确定性检查。",
+      "当前风险主要是元数据字段之间的不一致，而不是核心内容缺失，因此不足以降为 reject。"
+    ],
+    "collection_risk_flags": [
+      "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path.",
+      "`metadata.image_paths` is empty while top-level `image_paths` contains one image path."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_336dad547e727671be8fc1c5",
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "source_dataset": "EMMA-Chemistry",
+    "source_problem_id": "635",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_f56ee5e4ab4e04124d355d2c/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_f56ee5e4ab4e04124d355d2c/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 150,
+        "height": 90
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.38,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-08T02:39:33Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path.",
+      "`metadata.image_paths` is empty while top-level `image_paths` contains one image path."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_a9d300ffceb23806aa0a822c",
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "source_dataset": "EMMA-Chemistry",
+    "source_problem_id": "635",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.84,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.38,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-08T02:39:33Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像都已存在，核心语义资产完整，未出现题干与图像同时缺失的情况。",
+      "该样本强依赖图像作答，但登记中提供的主图像文件 exists=true，仍能支撑恢复和核验核心语义。",
+      "可核验性高，答案为短文本且与明确选项空间对应，便于后续确定性检查。",
+      "当前风险主要是元数据字段之间的不一致，而不是核心内容缺失，因此不足以降为 reject。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_ad7c24e60f2233664110cf40",
+      "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "dataset_name": "EMMA-Chemistry",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-08T02:39:33Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_ad7c24e60f2233664110cf40",
+    "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+    "source_dataset": "EMMA-Chemistry",
+    "source_problem_id": "635",
+    "normalized_question_text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows.",
+    "normalized_answer_text": "*C#[N+]*",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-08T02:39:33Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_ad7c24e60f2233664110cf40",
+    "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+    "normalized_question_text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows.",
+    "normalized_answer_text": "*C#[N+]*",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 12,
+          "y": 21,
+          "width": 123,
+          "height": 37
+        },
+        "readability_score": 0.7643,
+        "contrast_score": 45.8638
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-08T02:39:33Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder token as formatting noise.",
+      "Question explicitly depends on the depicted transition-state structure, so image is required.",
+      "Preserved answer and choice texts without semantic changes."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+    "source_dataset": "EMMA-Chemistry",
+    "source_split": "test",
+    "source_problem_id": "635",
+    "ingest_batch_id": "benchmarkallinone-emma-chemistry-full_20260407T045742Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "化学"
+    ],
+    "language": "en",
+    "raw_question_text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows. <image_1>",
+    "normalized_question_text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows.",
+    "raw_answer_text": "*C#[N+]*",
+    "normalized_answer_text": "*C#[N+]*",
+    "answer_type": "short_text",
+    "has_reasoning_chain": true,
+    "reasoning_chain": "chem_636",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9734,
+    "multi_step_score": 0.2657,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path.",
+      "`metadata.image_paths` is empty while top-level `image_paths` contains one image path.",
+      "metadata_image_reference_inconsistent"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable, the image-supported target is clear, the expected SMILES answer is present, and rewrite/alignment/solvability evidence all indicate the item is usable for downstream annotation. The metadata image-reference inconsistency is a non-semantic risk and does not materially block annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-08T02:37:31Z",
+    "updated_at": "2026-04-08T02:39:33Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.38,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.84,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像都已存在，核心语义资产完整，未出现题干与图像同时缺失的情况。",
+      "该样本强依赖图像作答，但登记中提供的主图像文件 exists=true，仍能支撑恢复和核验核心语义。",
+      "可核验性高，答案为短文本且与明确选项空间对应，便于后续确定性检查。",
+      "当前风险主要是元数据字段之间的不一致，而不是核心内容缺失，因此不足以降为 reject。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_0f7c8d4c58c2a8f274de98f5",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://emma_chemistry/test/635/question",
+      "storage_uri": "inline://prob_f56ee5e4ab4e04124d355d2c/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 120,
+      "width": null,
+      "height": null,
+      "sha256": "c0ba1a79b33bea177589298ca200e1ec332107b41d1717dd1aca479b713a6899",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows. <image_1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6482,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "asset_id": "asset_00aa8cf30bdb06d1cf87e7df",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_f56ee5e4ab4e04124d355d2c/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 110,
+      "width": null,
+      "height": null,
+      "sha256": "d1697e8b686b05e0c26a8ab4ba0728e35dbd1c62825de0a2fd45f3ad930fa407",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows. <image_1>",
+      "normalized_text_snapshot": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows.",
+      "text_completeness_score": 0.6482,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "asset_id": "asset_7411c75bcf847e6011ef9be2",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://emma_chemistry/test/635/answer",
+      "storage_uri": "inline://prob_f56ee5e4ab4e04124d355d2c/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 8,
+      "width": null,
+      "height": null,
+      "sha256": "1ce9e53f3a0e2f394d8a4d2e74d98e347648856523613ddfcdbba11b7f6a5b1e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "*C#[N+]*",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "asset_id": "asset_9360783fa02e948aeb798475",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_f56ee5e4ab4e04124d355d2c/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 8,
+      "width": null,
+      "height": null,
+      "sha256": "1ce9e53f3a0e2f394d8a4d2e74d98e347648856523613ddfcdbba11b7f6a5b1e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "*C#[N+]*",
+      "normalized_text_snapshot": "*C#[N+]*",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "N",
+          "canonical": "N",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "asset_id": "asset_4b94304b12938b33966dca7a",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/emma_chemistry_full/run_98c1c89903499d3e/datasets/emma_chemistry/artifacts/images/prob_f56ee5e4ab4e04124d355d2c_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 5634,
+      "width": 150,
+      "height": 90,
+      "sha256": "0d94b6f75b8215fd04cb6cc2ee548418a812eeea1e6db261034c3cfaef1a4499",
+      "perceptual_hash": "ffffe72001ffffff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 6068.5791,
+      "readability_score": 0.7643,
+      "noise_score": 34.7563,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 12,
+        "y": 21,
+        "width": 123,
+        "height": 37
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path.",
+        "`metadata.image_paths` is empty while top-level `image_paths` contains one image path.",
+        "metadata_image_reference_inconsistent"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "asset_id": "asset_0edf6f6b6da13ee9dac3c2b2",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/emma_chemistry_full/run_98c1c89903499d3e/datasets/emma_chemistry/artifacts/crops/prob_f56ee5e4ab4e04124d355d2c_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 5380,
+      "width": 123,
+      "height": 37,
+      "sha256": "bba7fd3774f416336b1c9b271c011cb5f4adf6d8a3696fd08d5d0fb26f5225bd",
+      "perceptual_hash": "f7f7f3b364004062",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 6068.5791,
+      "readability_score": 0.7643,
+      "noise_score": 34.7563,
+      "cropped_from_asset_id": "asset_4b94304b12938b33966dca7a",
+      "roi_bbox": {
+        "x": 12,
+        "y": 21,
+        "width": 123,
+        "height": 37
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "asset_id": "asset_6c8f30aba61e71256858fdc3",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_2d65ff67680c773014873ebb",
+      "file_format": "txt",
+      "file_size_bytes": 104,
+      "width": null,
+      "height": null,
+      "sha256": "205f184dfa22a74cb2cbc958aa40d0838174d2e242c712e4260fe3297d9e0672",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows. <image_1>",
+      "normalized_text_snapshot": "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?",
+      "text_completeness_score": 0.6482,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_f56ee5e4ab4e04124d355d2c",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "question_type": "multiple_choice",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_f56ee5e4ab4e04124d355d2c_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "*C#[N+]*",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "image",
+          "entity_category": "image",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "N",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-08T02:38:58Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_f56ee5e4ab4e04124d355d2c_1",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 1.6667,
+        "dark_pixel_ratio": 0.0698,
+        "readability_score": 0.7643,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 150,
+            "height": 90
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 12,
+            "y": 21,
+            "width": 123,
+            "height": 37
+          },
+          "salience": 0.95
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        }
+      ],
+      "parser_confidence": 0.8157,
+      "created_at": "2026-04-08T02:38:58Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_f56ee5e4ab4e04124d355d2c",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-08T02:39:16Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_a4876d77643d6d7d2725ec84",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "target_slot",
+      "canonical_value": "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?",
+      "surface_forms": [
+        "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_00aa8cf30bdb06d1cf87e7df"
+      ],
+      "evidence_refs": [
+        "asset_00aa8cf30bdb06d1cf87e7df"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_f56ee5e4ab4e04124d355d2c_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "*C#[N+]*",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_7313d2324435ebd1e5b08380",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "answer_claim",
+      "canonical_value": "*C#[N+]*",
+      "surface_forms": [
+        "*C#[N+]*"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_9360783fa02e948aeb798475"
+      ],
+      "evidence_refs": [
+        "asset_9360783fa02e948aeb798475"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "*C#[N+]*"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_1bc8721d973bfe3382238061",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f56ee5e4ab4e04124d355d2c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f56ee5e4ab4e04124d355d2c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 150,
+          "height": 90
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8157,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_a9c8070e1f13135b084c8bda",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f56ee5e4ab4e04124d355d2c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f56ee5e4ab4e04124d355d2c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 12,
+          "y": 21,
+          "width": 123,
+          "height": 37
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8157,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_9822e5e5ece33d80f1feb61f",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "text_fact",
+      "canonical_value": "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?",
+      "surface_forms": [
+        "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_6c8f30aba61e71256858fdc3"
+      ],
+      "evidence_refs": [
+        "asset_6c8f30aba61e71256858fdc3"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_2d65ff67680c773014873ebb",
+        "parent_problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "*C#[N+]*",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_78d8c34ccd2508da8b5f57fd",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "quality_signal",
+      "canonical_value": "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path.",
+      "surface_forms": [
+        "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_f1b7063712ca9edf17075c20",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "quality_signal",
+      "canonical_value": "`metadata.image_paths` is empty while top-level `image_paths` contains one image path.",
+      "surface_forms": [
+        "`metadata.image_paths` is empty while top-level `image_paths` contains one image path."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "`metadata.image_paths` is empty while top-level `image_paths` contains one image path."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_1c29324c5d4800ed74759439",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_image_reference_inconsistent",
+      "surface_forms": [
+        "metadata_image_reference_inconsistent"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_image_reference_inconsistent"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_e7c2f135eacf88b7904dd286",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_f56ee5e4ab4e04124d355d2c",
+        "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-08T02:39:16Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "node_id": "node_52b5b1b2ad31b9b7c94b2a39",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-08T02:39:33Z",
+      "updated_at": "2026-04-08T02:39:33Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_ad7c24e60f2233664110cf40",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_98c1c89903499d3e",
+      "dataset_name": "EMMA-Chemistry",
+      "input_asset_ids": [
+        "asset_0f7c8d4c58c2a8f274de98f5",
+        "asset_00aa8cf30bdb06d1cf87e7df",
+        "asset_7411c75bcf847e6011ef9be2",
+        "asset_9360783fa02e948aeb798475",
+        "asset_4b94304b12938b33966dca7a",
+        "asset_0edf6f6b6da13ee9dac3c2b2",
+        "asset_6c8f30aba61e71256858fdc3"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 3
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.89,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 150,
+            "height": 90,
+            "blur_score": 6068.5791,
+            "contrast_score": 45.8638,
+            "noise_score": 34.7563,
+            "readability_score": 0.7643,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 12,
+              "y": 21,
+              "width": 123,
+              "height": 37
+            },
+            "perceptual_hash": "ffffe72001ffffff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_ad7c24e60f2233664110cf40",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_f56ee5e4ab4e04124d355d2c",
+        "question_type": "multiple_choice",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_f56ee5e4ab4e04124d355d2c",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "choice_target_clear",
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for the SMILES matching the depicted transition-state structure, and the image is small but still semantically readable: it shows an N+ center with substituents and bonding sufficient to distinguish the intended option. The expected answer format is clear from the multiple-choice options and provided answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "`metadata.extraction_notes` states the image exists as an in-memory PIL representation rather than a file path or URL, which is inconsistent with the provided top-level image path.",
+        "`metadata.image_paths` is empty while top-level `image_paths` contains one image path.",
+        "metadata_image_reference_inconsistent"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The sample is jointly understandable, the image-supported target is clear, the expected SMILES answer is present, and rewrite/alignment/solvability evidence all indicate the item is usable for downstream annotation. The metadata image-reference inconsistency is a non-semantic risk and does not materially block annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-08T02:39:33Z",
+      "finished_at": "2026-04-08T02:39:33Z",
+      "candidate_id": "cand_f56ee5e4ab4e04124d355d2c",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_ad7c24e60f2233664110cf40",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "image_entity_refs": [
+        "visual_prob_f56ee5e4ab4e04124d355d2c_1::roi"
+      ],
+      "text_span_refs": [
+        "asset_prob_f56ee5e4ab4e04124d355d2c_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "image",
+          "image_ref": "visual_prob_f56ee5e4ab4e04124d355d2c_1::roi",
+          "relation": "grounds_image",
+          "confidence": 0.7539
+        },
+        {
+          "text_ref": "slot_prob_f56ee5e4ab4e04124d355d2c_1",
+          "image_ref": "visual_prob_f56ee5e4ab4e04124d355d2c_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7595
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-08T02:38:58Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_fda855b5f954f1c810af9b88",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows. <image_1>",
+      "after_value": "Please choose the SMILES expression of the transition-state structure shown in the image, ignoring the arrows.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "audit_id": "audit_c3415b8c7c5d90e78798fbd5",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "*C#[N+]*",
+      "after_value": "*C#[N+]*",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "audit_id": "audit_6c2bed45085e0a5302bb6122",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "audit_id": "audit_52b5b1b2ad31b9b7c94b2a39",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T02:39:33Z"
+    },
+    {
+      "audit_id": "audit_4baefdc0e4f23a9636868e8c",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-08T02:39:33Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_ad7c24e60f2233664110cf40",
+      "problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "source_problem_id": "635",
+      "strategy": "blank_open",
+      "rationale": "Rewrote the multiple-choice prompt as a direct open-ended question asking for the SMILES string shown by the structure in the image.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_2d65ff67680c773014873ebb",
+          "parent_problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "*C#[N+]*",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-08T02:39:33Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_2d65ff67680c773014873ebb",
+      "parent_problem_id": "prob_f56ee5e4ab4e04124d355d2c",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "What is the SMILES expression of the transition-state structure shown in the image, ignoring the arrows?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "*C#[N+]*",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "emmachemistry00824",
+  "canonical_sample_index": 824,
+  "canonical_dataset_key": "emma_chemistry",
+  "sample_path": "samples/emmachemistry00824.json",
+  "image_path": "artifacts/images/emmachemistry00824.png",
+  "images": [
+    "artifacts/images/emmachemistry00824.png"
+  ],
+  "crop_path": "artifacts/crops/emmachemistry00824.png",
+  "crops": [
+    "artifacts/crops/emmachemistry00824.png"
+  ]
+}

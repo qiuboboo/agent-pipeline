@@ -1,0 +1,1977 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_c9bb9586f22cff63686db70a",
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "problem_id": "prob_33e2fd6c569a30d17253a82f",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "139",
+    "raw_question_text": "Question: 54\nThe histogram represents the heights of males in the United States between the ages 20â29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+    "raw_answer_text": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, â2.54, and 3.62.",
+    "choice_map": {
+      "A": "The 79-inch height is the only one that is unusual because it is more than three standard deviations above the mean. The z-scores, respectively, are: 2.08, â2.54, and 3.62.",
+      "B": "The 79-inch and 63-inch heights are the only ones that are unusual because they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.00, â2.54, and 3.62.",
+      "C": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: â2.08, â2.54, and 3.62.",
+      "D": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, â2.54, and 3.62.",
+      "E": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, 2.54, and 3.62."
+    },
+    "image_paths": [],
+    "force_requires_image": false,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image",
+    "choice_field": "choices",
+    "extraction_notes": [
+      "answer field is numeric; interpreted as a zero-based index into the choices array",
+      "image field contains a PIL.Image object representation, not a path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-11T21:17:17Z",
+    "subject": "Math"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_33e2fd6c569a30d17253a82f",
+    "image_manifest": [
+      {
+        "path": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_33e2fd6c569a30d17253a82f_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 670,
+        "height": 441,
+        "file_size": 40907
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 343,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "long_text",
+      "answer_char_length": 145
+    },
+    "issues": [
+      "Question and answer text contain apparent encoding artifacts such as `â`.",
+      "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_c9bb9586f22cff63686db70a",
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "139",
+    "created_at": "2026-04-11T21:17:17Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_33e2fd6c569a30d17253a82f",
+    "image_dependency_score": 0.1,
+    "multi_step_score": 0.5,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image=false` and `text_dominant=true` indicate the problem is intended to be solvable from text.",
+        "The mean (69.6) and standard deviation (2.6) are explicitly given in the question, so the histogram is not necessary for the calculation.",
+        "Although a histogram image exists, the task only asks for z-score style threshold checking on listed heights."
+      ],
+      "multi_step": [
+        "Solving requires computing z-scores for three separate heights using the given mean and standard deviation.",
+        "The result then requires comparing each computed value against an unusualness rule (more than two standard deviations from the mean).",
+        "This is more than a single lookup, but still a short, structured quantitative reasoning task."
+      ],
+      "verifiability": [
+        "The answer is numerically checkable: each height can be converted to a z-score and classified by a clear threshold.",
+        "The provided answer includes explicit z-scores and a concrete set of unusual heights, enabling deterministic verification.",
+        "The item also has multiple-choice options, which further constrains and clarifies the expected output.",
+        "`registry_passed=true` supports basic asset/text integrity, though some metadata issues remain."
+      ]
+    },
+    "risk_flags": [
+      "Question and answer text contain apparent encoding artifacts such as `â`.",
+      "Top-level `answer_type` (`set`) does not match `answer_manifest.answer_type` (`long_text`).",
+      "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_c9bb9586f22cff63686db70a",
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "139",
+    "created_at": "2026-04-11T21:17:17Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_33e2fd6c569a30d17253a82f",
+    "priority": 0.58,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Question text, answer text, and the primary image are all present, so the core semantics appear recoverable.",
+      "The item is largely text-solvable and has high verifiability evidence, which argues against rejection.",
+      "Apparent encoding artifacts in the question/answer introduce quality risk and may require cleanup before reliable use.",
+      "Metadata inconsistencies remain, including missing top-level choices and an answer-type mismatch, so it should not be prioritized as a clean keep candidate."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_c9bb9586f22cff63686db70a",
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "139",
+    "created_at": "2026-04-11T21:17:17Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_c9bb9586f22cff63686db70a",
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "problem_id": "prob_33e2fd6c569a30d17253a82f",
+    "dataset_name": "SCEMQA",
+    "normalized_question_text": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+    "normalized_answer_text": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+    "normalized_choice_map": {
+      "A": "The 79-inch height is the only one that is unusual because it is more than three standard deviations above the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+      "B": "The 79-inch and 63-inch heights are the only ones that are unusual because they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.00, -2.54, and 3.62.",
+      "C": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: -2.08, -2.54, and 3.62.",
+      "D": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+      "E": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, 2.54, and 3.62."
+    },
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "normalization_notes": [
+      "Removed the question-number prefix as formatting noise.",
+      "Normalized mojibake characters in the age range and negative signs.",
+      "Kept image as non-required because the mean, standard deviation, and queried heights are fully provided in text."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-11T21:17:17Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "139",
+    "subject": "数学、物理、生物、化学",
+    "raw_question_text": "Question: 54\nThe histogram represents the heights of males in the United States between the ages 20â29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+    "raw_answer_text": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, â2.54, and 3.62.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": false,
+    "text_dominant": true,
+    "recommended_cleaning_path": "text_lightweight",
+    "initial_image_dependency_score": 0.1,
+    "initial_multi_solution_score": 0.5,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "row_index": 139,
+      "image_paths": [],
+      "extraction_notes": [
+        "answer field is numeric; interpreted as a zero-based index into the choices array",
+        "image field contains a PIL.Image object representation, not a path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image",
+      "choice_field": "choices",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-11T21:19:39Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.58,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question text, answer text, and the primary image are all present, so the core semantics appear recoverable.",
+      "The item is largely text-solvable and has high verifiability evidence, which argues against rejection.",
+      "Apparent encoding artifacts in the question/answer introduce quality risk and may require cleanup before reliable use.",
+      "Metadata inconsistencies remain, including missing top-level choices and an answer-type mismatch, so it should not be prioritized as a clean keep candidate."
+    ],
+    "collection_risk_flags": [
+      "Question and answer text contain apparent encoding artifacts such as `â`.",
+      "Top-level `answer_type` (`set`) does not match `answer_manifest.answer_type` (`long_text`).",
+      "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_635b0c5d0d24f772eb24800b",
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "139",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_33e2fd6c569a30d17253a82f/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_33e2fd6c569a30d17253a82f/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 670,
+        "height": 441
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.1,
+      "initial_multi_solution_score": 0.5,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-11T21:19:39Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Question and answer text contain apparent encoding artifacts such as `â`.",
+      "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_81598589d33f89b41506edae",
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "139",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.58,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "text_lightweight",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.1,
+      "initial_multi_solution_score": 0.5,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-11T21:19:39Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Question text, answer text, and the primary image are all present, so the core semantics appear recoverable.",
+      "The item is largely text-solvable and has high verifiability evidence, which argues against rejection.",
+      "Apparent encoding artifacts in the question/answer introduce quality risk and may require cleanup before reliable use.",
+      "Metadata inconsistencies remain, including missing top-level choices and an answer-type mismatch, so it should not be prioritized as a clean keep candidate."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_c9bb9586f22cff63686db70a",
+      "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "dataset_name": "SCEMQA",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": true,
+      "cleaning_path": "text_lightweight",
+      "created_at": "2026-04-11T21:19:39Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_c9bb9586f22cff63686db70a",
+    "problem_id": "prob_33e2fd6c569a30d17253a82f",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "139",
+    "normalized_question_text": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+    "normalized_answer_text": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "text_only",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "minor_encoding_artifacts",
+      "text_sufficient"
+    ],
+    "created_at": "2026-04-11T21:19:39Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_c9bb9586f22cff63686db70a",
+    "problem_id": "prob_33e2fd6c569a30d17253a82f",
+    "normalized_question_text": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+    "normalized_answer_text": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "ages",
+        "canonical": "ages",
+        "variable_type": "label"
+      },
+      {
+        "original": "mean",
+        "canonical": "mean",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "from",
+        "canonical": "from",
+        "variable_type": "label"
+      },
+      {
+        "original": "if",
+        "canonical": "if",
+        "variable_type": "label"
+      },
+      {
+        "original": "any",
+        "canonical": "any",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "The histogram represents the heights of males in the United States between the ages 20-29."
+      },
+      {
+        "segment_index": 2,
+        "text": "The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal)."
+      },
+      {
+        "segment_index": 3,
+        "text": "Three adult males are selected from the group."
+      },
+      {
+        "segment_index": 4,
+        "text": "Their heights are 75 inches, 63 inches, and 79 inches."
+      },
+      {
+        "segment_index": 5,
+        "text": "Determine which heights, if any, are unusual."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 670,
+          "height": 441
+        },
+        "readability_score": 0.7502,
+        "contrast_score": 42.0169
+      }
+    ],
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "created_at": "2026-04-11T21:19:39Z",
+    "normalization_notes": [
+      "Removed the question-number prefix as formatting noise.",
+      "Normalized mojibake characters in the age range and negative signs.",
+      "Kept image as non-required because the mean, standard deviation, and queried heights are fully provided in text."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_33e2fd6c569a30d17253a82f",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "139",
+    "ingest_batch_id": "benchmarkallinone-scemqa-300-840_20260411T164516Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学、物理、生物、化学"
+    ],
+    "language": "en",
+    "raw_question_text": "Question: 54\nThe histogram represents the heights of males in the United States between the ages 20â29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+    "normalized_question_text": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+    "raw_answer_text": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, â2.54, and 3.62.",
+    "normalized_answer_text": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+    "answer_type": "set",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "multimodal_strength_score": 0.405,
+    "multi_step_score": 0.5537,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "Question and answer text contain apparent encoding artifacts such as `â`.",
+      "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`.",
+      "minor_encoding_artifacts",
+      "text_only_without_visual_need"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "minor_encoding_artifacts",
+      "text_sufficient"
+    ],
+    "clean_decision_rationale": "The sample is fully understandable and solvable from the text, the answer is explicitly available, and the rewritten open variant is usable. Alignment and solvability signals are strong, and the remaining issues are minor encoding artifacts rather than semantic failures.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-11T21:17:17Z",
+    "updated_at": "2026-04-11T21:19:39Z",
+    "initial_image_dependency_score": 0.1,
+    "initial_multi_solution_score": 0.5,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.58,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question text, answer text, and the primary image are all present, so the core semantics appear recoverable.",
+      "The item is largely text-solvable and has high verifiability evidence, which argues against rejection.",
+      "Apparent encoding artifacts in the question/answer introduce quality risk and may require cleanup before reliable use.",
+      "Metadata inconsistencies remain, including missing top-level choices and an answer-type mismatch, so it should not be prioritized as a clean keep candidate."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_b3079c48a4d86f6e92e24c46",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://scemqa/test/139/question",
+      "storage_uri": "inline://prob_33e2fd6c569a30d17253a82f/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 346,
+      "width": null,
+      "height": null,
+      "sha256": "ae0cf4adb2be98f9fc1c709f40bb02f279604eb8c724d0aba1e6bbc57bb90228",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Question: 54\nThe histogram represents the heights of males in the United States between the ages 20â29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "ages",
+          "canonical": "ages",
+          "variable_type": "label"
+        },
+        {
+          "original": "mean",
+          "canonical": "mean",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "any",
+          "canonical": "any",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "asset_id": "asset_fcf5497898b45e45f6dda7eb",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_33e2fd6c569a30d17253a82f/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 328,
+      "width": null,
+      "height": null,
+      "sha256": "ac4e1fcb31c49a8289a15bc12fa471226f4cb31a35a3936ec69e32e4421eba58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Question: 54\nThe histogram represents the heights of males in the United States between the ages 20â29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "normalized_text_snapshot": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "ages",
+          "canonical": "ages",
+          "variable_type": "label"
+        },
+        {
+          "original": "mean",
+          "canonical": "mean",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "any",
+          "canonical": "any",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "asset_id": "asset_52323423af81e50f857d835c",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://scemqa/test/139/answer",
+      "storage_uri": "inline://prob_33e2fd6c569a30d17253a82f/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 148,
+      "width": null,
+      "height": null,
+      "sha256": "1ad5514f8e71fbb42f0fc0e11275ef56dac4387ab616e694b1430f66aa4b0cd8",
+      "perceptual_hash": null,
+      "source_text_snapshot": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, â2.54, and 3.62.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "All",
+          "canonical": "All",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "they",
+          "canonical": "they",
+          "variable_type": "label"
+        },
+        {
+          "original": "more",
+          "canonical": "more",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "mean",
+          "canonical": "mean",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "z",
+          "canonical": "z",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "asset_id": "asset_ea347cc2035a831e3f18d41d",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_33e2fd6c569a30d17253a82f/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 143,
+      "width": null,
+      "height": null,
+      "sha256": "b5cfea20615574916374eaf1793dfc11e9153bb5e51e0745c9e7314272f62e00",
+      "perceptual_hash": null,
+      "source_text_snapshot": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, â2.54, and 3.62.",
+      "normalized_text_snapshot": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "All",
+          "canonical": "All",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "they",
+          "canonical": "they",
+          "variable_type": "label"
+        },
+        {
+          "original": "more",
+          "canonical": "more",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        },
+        {
+          "original": "two",
+          "canonical": "two",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "mean",
+          "canonical": "mean",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "z",
+          "canonical": "z",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "asset_id": "asset_08e1fe34e5004e63bd13b6a4",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_33e2fd6c569a30d17253a82f_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 40907,
+      "width": 670,
+      "height": 441,
+      "sha256": "e0d2be5b163ddad92be3e2702a0edea6c6c4602ad85c6d175b3dcc9e324d8c49",
+      "perceptual_hash": "e7efe747c3c180f7",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2739.2952,
+      "readability_score": 0.7502,
+      "noise_score": 26.3031,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 670,
+        "height": 441
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Question and answer text contain apparent encoding artifacts such as `â`.",
+        "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`.",
+        "minor_encoding_artifacts",
+        "text_only_without_visual_need"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "asset_id": "asset_cc2a48a217e5b833582d0e7a",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_0e3b06a5ae978ecaaf0fba05",
+      "file_format": "txt",
+      "file_size_bytes": 328,
+      "width": null,
+      "height": null,
+      "sha256": "ac4e1fcb31c49a8289a15bc12fa471226f4cb31a35a3936ec69e32e4421eba58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Question: 54\nThe histogram represents the heights of males in the United States between the ages 20â29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "normalized_text_snapshot": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "ages",
+          "canonical": "ages",
+          "variable_type": "label"
+        },
+        {
+          "original": "mean",
+          "canonical": "mean",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "any",
+          "canonical": "any",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_33e2fd6c569a30d17253a82f",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "The histogram represents the heights of males in the United States between the ages 20-29.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "20",
+            "-29"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal).",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "69.6",
+            "2.6"
+          ],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "Their heights are 75 inches, 63 inches, and 79 inches.",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "75",
+            "63",
+            "79"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Determine which heights, if any, are unusual.",
+          "segment_index": 5,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "min",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_33e2fd6c569a30d17253a82f_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "Determine which heights, if any, are unusual.",
+          "expected_answer_type": "short_text",
+          "expected_answer": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "ages",
+          "canonical": "ages",
+          "variable_type": "label"
+        },
+        {
+          "original": "mean",
+          "canonical": "mean",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "any",
+          "canonical": "any",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "min",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "The histogram represents the heights of males in the United States between the ages 20-29."
+        },
+        {
+          "segment_index": 2,
+          "text": "The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal)."
+        },
+        {
+          "segment_index": 3,
+          "text": "Three adult males are selected from the group."
+        },
+        {
+          "segment_index": 4,
+          "text": "Their heights are 75 inches, 63 inches, and 79 inches."
+        },
+        {
+          "segment_index": 5,
+          "text": "Determine which heights, if any, are unusual."
+        }
+      ],
+      "requires_visual_grounding": false,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-11T21:19:25Z"
+    }
+  ],
+  "visual_structure_records": [],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_33e2fd6c569a30d17253a82f",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "text_only",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-11T21:19:32Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_b4e2a97b9eb256d10ee392db",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "text_fact",
+      "canonical_value": "The histogram represents the heights of males in the United States between the ages 20-29.",
+      "surface_forms": [
+        "The histogram represents the heights of males in the United States between the ages 20-29."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fcf5497898b45e45f6dda7eb"
+      ],
+      "evidence_refs": [
+        "asset_fcf5497898b45e45f6dda7eb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The histogram represents the heights of males in the United States between the ages 20-29.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "20",
+          "-29"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_5181b4919fc15a49ff4919bd",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "text_fact",
+      "canonical_value": "The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal).",
+      "surface_forms": [
+        "The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal)."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fcf5497898b45e45f6dda7eb"
+      ],
+      "evidence_refs": [
+        "asset_fcf5497898b45e45f6dda7eb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal).",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "69.6",
+          "2.6"
+        ],
+        "unit_mentions": [
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_20ee2a6f8f8cb5b81dc010d9",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "text_fact",
+      "canonical_value": "Their heights are 75 inches, 63 inches, and 79 inches.",
+      "surface_forms": [
+        "Their heights are 75 inches, 63 inches, and 79 inches."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fcf5497898b45e45f6dda7eb"
+      ],
+      "evidence_refs": [
+        "asset_fcf5497898b45e45f6dda7eb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Their heights are 75 inches, 63 inches, and 79 inches.",
+        "segment_index": 4,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "75",
+          "63",
+          "79"
+        ],
+        "unit_mentions": [
+          "g",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_c33f7b39652c6f640f4fe085",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "target_slot",
+      "canonical_value": "Determine which heights, if any, are unusual.",
+      "surface_forms": [
+        "Determine which heights, if any, are unusual."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_fcf5497898b45e45f6dda7eb"
+      ],
+      "evidence_refs": [
+        "asset_fcf5497898b45e45f6dda7eb"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_33e2fd6c569a30d17253a82f_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "Determine which heights, if any, are unusual.",
+        "expected_answer_type": "short_text",
+        "expected_answer": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_d3d2a81d8bdfccbbca069863",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "answer_claim",
+      "canonical_value": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+      "surface_forms": [
+        "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_ea347cc2035a831e3f18d41d"
+      ],
+      "evidence_refs": [
+        "asset_ea347cc2035a831e3f18d41d"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62."
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_be62a010319618c00168b05a",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "text_fact",
+      "canonical_value": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "surface_forms": [
+        "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_cc2a48a217e5b833582d0e7a"
+      ],
+      "evidence_refs": [
+        "asset_cc2a48a217e5b833582d0e7a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_0e3b06a5ae978ecaaf0fba05",
+        "parent_problem_id": "prob_33e2fd6c569a30d17253a82f",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+        "expected_answer_type": "short_text",
+        "expected_answer": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_b316e0919b9d0c8d76946e31",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "quality_signal",
+      "canonical_value": "Question and answer text contain apparent encoding artifacts such as `â`.",
+      "surface_forms": [
+        "Question and answer text contain apparent encoding artifacts such as `â`."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Question and answer text contain apparent encoding artifacts such as `â`."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_82b235d9030f21f389b63d7e",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "quality_signal",
+      "canonical_value": "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`.",
+      "surface_forms": [
+        "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_e1ca6f2059a7bc1b057d3f4f",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "quality_signal",
+      "canonical_value": "minor_encoding_artifacts",
+      "surface_forms": [
+        "minor_encoding_artifacts"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "minor_encoding_artifacts"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_d6718f63b45f93c68337f92c",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "quality_signal",
+      "canonical_value": "text_only_without_visual_need",
+      "surface_forms": [
+        "text_only_without_visual_need"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "text_only_without_visual_need"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_04787818ced1d8ebd6523a98",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_33e2fd6c569a30d17253a82f",
+        "problem_id": "prob_33e2fd6c569a30d17253a82f",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "text_only",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-11T21:19:32Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "node_id": "node_3864c2e4b7cb3fe058494b8f",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "minor_encoding_artifacts",
+          "text_sufficient"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T21:19:39Z",
+      "updated_at": "2026-04-11T21:19:39Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_c9bb9586f22cff63686db70a",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_2d03c8d7aebd328e",
+      "dataset_name": "SCEMQA",
+      "input_asset_ids": [
+        "asset_b3079c48a4d86f6e92e24c46",
+        "asset_fcf5497898b45e45f6dda7eb",
+        "asset_52323423af81e50f857d835c",
+        "asset_ea347cc2035a831e3f18d41d",
+        "asset_08e1fe34e5004e63bd13b6a4",
+        "asset_cc2a48a217e5b833582d0e7a"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 12
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 670,
+            "height": 441,
+            "blur_score": 2739.2952,
+            "contrast_score": 42.0169,
+            "noise_score": 26.3031,
+            "readability_score": 0.7502,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 670,
+              "height": 441
+            },
+            "perceptual_hash": "e7efe747c3c180f7"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_c9bb9586f22cff63686db70a",
+        "coverage_score": 1.0,
+        "consistency_score": 1.0,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_33e2fd6c569a30d17253a82f",
+        "question_type": "multiple_choice",
+        "condition_count": 3,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_33e2fd6c569a30d17253a82f",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "jointly_understandable",
+          "text_sufficient"
+        ],
+        "rationale": "The question clearly asks which of three heights are unusual using the given mean and standard deviation, and the expected answer is explicit. The image is not needed to solve or understand the task, so minor text artifacts do not prevent comprehension.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Question and answer text contain apparent encoding artifacts such as `â`.",
+        "Top-level `choices` field is missing, although `choice_count` is 5 and metadata references `choices`.",
+        "minor_encoding_artifacts",
+        "text_only_without_visual_need"
+      ],
+      "clean_score": 0.9898,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "minor_encoding_artifacts",
+        "text_sufficient"
+      ],
+      "decision_rationale": "The sample is fully understandable and solvable from the text, the answer is explicitly available, and the rewritten open variant is usable. Alignment and solvability signals are strong, and the remaining issues are minor encoding artifacts rather than semantic failures.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-11T21:19:39Z",
+      "finished_at": "2026-04-11T21:19:39Z",
+      "candidate_id": "cand_33e2fd6c569a30d17253a82f",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_c9bb9586f22cff63686db70a",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "image_entity_refs": [],
+      "text_span_refs": [
+        "asset_prob_33e2fd6c569a30d17253a82f_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [],
+      "coverage_score": 1.0,
+      "consistency_score": 1.0,
+      "alignment_status": "good",
+      "created_at": "2026-04-11T21:19:25Z",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_f611447919627d09298c2400",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Question: 54\nThe histogram represents the heights of males in the United States between the ages 20â29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "after_value": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "audit_id": "audit_a54dbfbb24dbc1c84467721d",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, â2.54, and 3.62.",
+      "after_value": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "audit_id": "audit_7c895dab36633afccadb6e2d",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "audit_id": "audit_3864c2e4b7cb3fe058494b8f",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T21:19:39Z"
+    },
+    {
+      "audit_id": "audit_e2a9ff10b74719498203a295",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "ages",
+          "canonical": "ages",
+          "variable_type": "label"
+        },
+        {
+          "original": "mean",
+          "canonical": "mean",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "any",
+          "canonical": "any",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T21:19:39Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_c9bb9586f22cff63686db70a",
+      "problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "source_problem_id": "139",
+      "strategy": "keep_open",
+      "rationale": "The stem is already a directly answerable open-ended question, so it can be preserved without relying on the multiple-choice options.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_0e3b06a5ae978ecaaf0fba05",
+          "parent_problem_id": "prob_33e2fd6c569a30d17253a82f",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+          "expected_answer_type": "short_text",
+          "expected_answer": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-11T21:19:39Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_0e3b06a5ae978ecaaf0fba05",
+      "parent_problem_id": "prob_33e2fd6c569a30d17253a82f",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "The histogram represents the heights of males in the United States between the ages 20-29. The mean is 69.6 inches, and the standard deviation is 2.6 inches (approximately normal). Three adult males are selected from the group. Their heights are 75 inches, 63 inches, and 79 inches. Determine which heights, if any, are unusual.",
+      "expected_answer_type": "short_text",
+      "expected_answer": "All heights are unusual since they are more than two standard deviations from the mean. The z-scores, respectively, are: 2.08, -2.54, and 3.62.",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "scemqamath00117",
+  "canonical_sample_index": 117,
+  "canonical_dataset_key": "scemqa_math",
+  "sample_path": "samples/scemqamath00117.json",
+  "image_path": "artifacts/images/scemqamath00117.png",
+  "images": [
+    "artifacts/images/scemqamath00117.png"
+  ]
+}

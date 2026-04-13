@@ -1,0 +1,1910 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_00b0144fbc8091c42ecb3782",
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "problem_id": "prob_6255e9f72f15b6f1bacade54",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "418",
+    "raw_question_text": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+    "raw_answer_text": "This reflex action bypasses the brain.",
+    "choice_map": {
+      "A": "Reflex actions are not automatic.",
+      "B": "Some reflex actions can be inhibited or facilitated.",
+      "C": "All behaviors in frogs are primarily reflex responses.",
+      "D": "This reflex action bypasses the brain."
+    },
+    "image_paths": [],
+    "force_requires_image": false,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image",
+    "choice_field": "choices",
+    "extraction_notes": [
+      "answer field is numeric '3', but the record does not explicitly specify whether choice indexing is 0-based or 1-based",
+      "image field contains a PIL image object representation, not a usable image path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T00:54:39Z",
+    "subject": "Biology"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_6255e9f72f15b6f1bacade54",
+    "image_manifest": [
+      {
+        "path": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_6255e9f72f15b6f1bacade54_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 566,
+        "height": 249,
+        "file_size": 95651
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 242,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 38
+    },
+    "issues": [
+      "Choice texts are not provided; only `choice_count` = 4 is available.",
+      "`metadata.extraction_notes` states the original answer field was numeric `3`, but the choice indexing basis (0-based or 1-based) is unspecified.",
+      "`metadata.extraction_notes` states the original image field contained a PIL image object representation rather than a usable path or URL.",
+      "`metadata.image_paths` is empty."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_00b0144fbc8091c42ecb3782",
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "418",
+    "created_at": "2026-04-12T00:54:39Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_6255e9f72f15b6f1bacade54",
+    "image_dependency_score": 0.06,
+    "multi_step_score": 0.34,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image` is false.",
+        "`text_dominant` is true, and the question can be answered from the textual experiment description alone.",
+        "Although an image asset exists in the registry, no visual attribute, diagram reading, or spatial interpretation is referenced in the question."
+      ],
+      "multi_step": [
+        "The solver must connect two conditions in the experiment: the frog's brain is destroyed, yet leg withdrawal still occurs after acid stimulus.",
+        "Answering requires a small causal inference from observation to conclusion about reflex control, not mere lookup.",
+        "The task is still relatively simple multiple-choice reasoning rather than a long chain of computation or multimodal synthesis."
+      ],
+      "verifiability": [
+        "The item is effectively multiple-choice, and the provided `answer_text` exactly matches choice D.",
+        "`answer_type` is `short_text`, but the expected answer is still a concise, unambiguous statement.",
+        "`registry_passed` is true, and both question and answer are present in the manifests."
+      ]
+    },
+    "risk_flags": [
+      "Asset registry issues mention missing choice texts and ambiguous original numeric answer indexing, which conflicts with the top-level provided choices.",
+      "Registry notes indicate the original image field/path extraction was imperfect, though this likely does not matter because the item appears text-solvable.",
+      "Scientific interpretation is straightforward, but wording like 'best supported' can allow mild ambiguity in explanation style."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_00b0144fbc8091c42ecb3782",
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "418",
+    "created_at": "2026-04-12T00:54:39Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_6255e9f72f15b6f1bacade54",
+    "priority": 0.45,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题干和答案都存在，且初步打分显示该题主要可由文本作答，核心语义仍可恢复，不应直接 reject。",
+      "但资产存在明显缺口：选项文本缺失，仅有 `choice_count=4`，原始数值答案 `3` 的索引基准也不明确，降低了可验证性与可复原性。",
+      "图像资产虽存在，但原始图像字段提取不完整；不过根据评分证据，该题对图像依赖很低，因此更适合降级保留而非淘汰。",
+      "综合来看，样本可进入候选池，但需要后续补齐选项与答案映射信息。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_00b0144fbc8091c42ecb3782",
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "418",
+    "created_at": "2026-04-12T00:54:39Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_00b0144fbc8091c42ecb3782",
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "problem_id": "prob_6255e9f72f15b6f1bacade54",
+    "dataset_name": "SCEMQA",
+    "normalized_question_text": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+    "normalized_answer_text": "This reflex action bypasses the brain",
+    "normalized_choice_map": {
+      "A": "Reflex actions are not automatic.",
+      "B": "Some reflex actions can be inhibited or facilitated.",
+      "C": "All behaviors in frogs are primarily reflex responses.",
+      "D": "This reflex action bypasses the brain."
+    },
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "normalization_notes": [
+      "Question is text-complete and solvable without the image.",
+      "Answer punctuation normalized without changing semantics.",
+      "Choice map preserved as provided."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T00:54:39Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "418",
+    "subject": "数学、物理、生物、化学",
+    "raw_question_text": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+    "raw_answer_text": "This reflex action bypasses the brain.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": false,
+    "text_dominant": true,
+    "recommended_cleaning_path": "text_lightweight",
+    "initial_image_dependency_score": 0.06,
+    "initial_multi_solution_score": 0.34,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "row_index": 418,
+      "image_paths": [],
+      "extraction_notes": [
+        "answer field is numeric '3', but the record does not explicitly specify whether choice indexing is 0-based or 1-based",
+        "image field contains a PIL image object representation, not a usable image path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image",
+      "choice_field": "choices",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T00:56:19Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.45,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干和答案都存在，且初步打分显示该题主要可由文本作答，核心语义仍可恢复，不应直接 reject。",
+      "但资产存在明显缺口：选项文本缺失，仅有 `choice_count=4`，原始数值答案 `3` 的索引基准也不明确，降低了可验证性与可复原性。",
+      "图像资产虽存在，但原始图像字段提取不完整；不过根据评分证据，该题对图像依赖很低，因此更适合降级保留而非淘汰。",
+      "综合来看，样本可进入候选池，但需要后续补齐选项与答案映射信息。"
+    ],
+    "collection_risk_flags": [
+      "Asset registry issues mention missing choice texts and ambiguous original numeric answer indexing, which conflicts with the top-level provided choices.",
+      "Registry notes indicate the original image field/path extraction was imperfect, though this likely does not matter because the item appears text-solvable.",
+      "Scientific interpretation is straightforward, but wording like 'best supported' can allow mild ambiguity in explanation style."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_5bab26f480ff2b8431f3ae86",
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "418",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_6255e9f72f15b6f1bacade54/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_6255e9f72f15b6f1bacade54/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 566,
+        "height": 249
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.06,
+      "initial_multi_solution_score": 0.34,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-12T00:56:19Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "Choice texts are not provided; only `choice_count` = 4 is available.",
+      "`metadata.extraction_notes` states the original answer field was numeric `3`, but the choice indexing basis (0-based or 1-based) is unspecified.",
+      "`metadata.extraction_notes` states the original image field contained a PIL image object representation rather than a usable path or URL.",
+      "`metadata.image_paths` is empty."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_127608d07856a69b2a69b829",
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "418",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.45,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "text_lightweight",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.06,
+      "initial_multi_solution_score": 0.34,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-12T00:56:19Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题干和答案都存在，且初步打分显示该题主要可由文本作答，核心语义仍可恢复，不应直接 reject。",
+      "但资产存在明显缺口：选项文本缺失，仅有 `choice_count=4`，原始数值答案 `3` 的索引基准也不明确，降低了可验证性与可复原性。",
+      "图像资产虽存在，但原始图像字段提取不完整；不过根据评分证据，该题对图像依赖很低，因此更适合降级保留而非淘汰。",
+      "综合来看，样本可进入候选池，但需要后续补齐选项与答案映射信息。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_00b0144fbc8091c42ecb3782",
+      "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "dataset_name": "SCEMQA",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": true,
+      "cleaning_path": "text_lightweight",
+      "created_at": "2026-04-12T00:56:19Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_00b0144fbc8091c42ecb3782",
+    "problem_id": "prob_6255e9f72f15b6f1bacade54",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "418",
+    "normalized_question_text": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+    "normalized_answer_text": "This reflex action bypasses the brain",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "text_only",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_ok",
+      "rewrite_usable",
+      "text_sufficient"
+    ],
+    "created_at": "2026-04-12T00:56:19Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_00b0144fbc8091c42ecb3782",
+    "problem_id": "prob_6255e9f72f15b6f1bacade54",
+    "normalized_question_text": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+    "normalized_answer_text": "This reflex action bypasses the brain",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "frog",
+        "canonical": "frog",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "acid",
+        "canonical": "acid",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "s",
+        "canonical": "s",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "skin",
+        "canonical": "skin",
+        "variable_type": "label"
+      },
+      {
+        "original": "time",
+        "canonical": "time",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "its",
+        "canonical": "its",
+        "variable_type": "label"
+      },
+      {
+        "original": "one",
+        "canonical": "one",
+        "variable_type": "label"
+      },
+      {
+        "original": "leg",
+        "canonical": "leg",
+        "variable_type": "label"
+      },
+      {
+        "original": "best",
+        "canonical": "best",
+        "variable_type": "label"
+      },
+      {
+        "original": "by",
+        "canonical": "by",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "The brain of the frog is destroyed."
+      },
+      {
+        "segment_index": 2,
+        "text": "A piece of acid-soaked paper is applied to the frog's skin."
+      },
+      {
+        "segment_index": 3,
+        "text": "Every time the piece of paper is placed on its skin, one leg moves upward."
+      },
+      {
+        "segment_index": 4,
+        "text": "Which of the following conclusions is best supported by the experiment?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 566,
+          "height": 249
+        },
+        "readability_score": 0.7196,
+        "contrast_score": 52.2991
+      }
+    ],
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "created_at": "2026-04-12T00:56:19Z",
+    "normalization_notes": [
+      "Question is text-complete and solvable without the image.",
+      "Answer punctuation normalized without changing semantics.",
+      "Choice map preserved as provided."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_6255e9f72f15b6f1bacade54",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "418",
+    "ingest_batch_id": "benchmarkallinone-scemqa-300-840_20260411T164516Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学、物理、生物、化学"
+    ],
+    "language": "en",
+    "raw_question_text": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+    "normalized_question_text": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+    "raw_answer_text": "This reflex action bypasses the brain.",
+    "normalized_answer_text": "This reflex action bypasses the brain",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "multimodal_strength_score": 0.552,
+    "multi_step_score": 0.3107,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "Choice texts are not provided; only `choice_count` = 4 is available.",
+      "`metadata.extraction_notes` states the original answer field was numeric `3`, but the choice indexing basis (0-based or 1-based) is unspecified.",
+      "`metadata.extraction_notes` states the original image field contained a PIL image object representation rather than a usable path or URL.",
+      "`metadata.image_paths` is empty.",
+      "metadata_inconsistency",
+      "text_only_without_visual_need"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_ok",
+      "rewrite_usable",
+      "text_sufficient"
+    ],
+    "clean_decision_rationale": "The sample is semantically usable: the question and answer are clear, the rewritten open form preserves the target conclusion, and alignment and solvability show no serious failure. The metadata inconsistencies do not materially block downstream annotation because the item is fully understandable from text alone.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T00:54:39Z",
+    "updated_at": "2026-04-12T00:56:19Z",
+    "initial_image_dependency_score": 0.06,
+    "initial_multi_solution_score": 0.34,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.45,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干和答案都存在，且初步打分显示该题主要可由文本作答，核心语义仍可恢复，不应直接 reject。",
+      "但资产存在明显缺口：选项文本缺失，仅有 `choice_count=4`，原始数值答案 `3` 的索引基准也不明确，降低了可验证性与可复原性。",
+      "图像资产虽存在，但原始图像字段提取不完整；不过根据评分证据，该题对图像依赖很低，因此更适合降级保留而非淘汰。",
+      "综合来看，样本可进入候选池，但需要后续补齐选项与答案映射信息。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_2d0dc0e8930d8928359e2cc6",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://scemqa/test/418/question",
+      "storage_uri": "inline://prob_6255e9f72f15b6f1bacade54/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 242,
+      "width": null,
+      "height": null,
+      "sha256": "b4128c4c6eae5bf9b4ff4d572ac2cec2e333406fa3f223704f8b1f8847b26cd8",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7661,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "frog",
+          "canonical": "frog",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "acid",
+          "canonical": "acid",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "skin",
+          "canonical": "skin",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "leg",
+          "canonical": "leg",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "asset_id": "asset_e79c617f17641a5c7caabb22",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_6255e9f72f15b6f1bacade54/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 242,
+      "width": null,
+      "height": null,
+      "sha256": "b4128c4c6eae5bf9b4ff4d572ac2cec2e333406fa3f223704f8b1f8847b26cd8",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+      "normalized_text_snapshot": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+      "text_completeness_score": 0.7661,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "frog",
+          "canonical": "frog",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "acid",
+          "canonical": "acid",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "skin",
+          "canonical": "skin",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "leg",
+          "canonical": "leg",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "asset_id": "asset_e3ad0695c92a1090af84aa6c",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://scemqa/test/418/answer",
+      "storage_uri": "inline://prob_6255e9f72f15b6f1bacade54/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 38,
+      "width": null,
+      "height": null,
+      "sha256": "5d64bea7d1e3cf9a8c790bf7ee909982f4dde5813228101f04556978b784cd72",
+      "perceptual_hash": null,
+      "source_text_snapshot": "This reflex action bypasses the brain.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "asset_id": "asset_b3eab89459fb922b112cfbd5",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_6255e9f72f15b6f1bacade54/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 37,
+      "width": null,
+      "height": null,
+      "sha256": "607a7aed6b510f6703f7f50191ec90c5684c43de16dc15087d30303d4939bd21",
+      "perceptual_hash": null,
+      "source_text_snapshot": "This reflex action bypasses the brain.",
+      "normalized_text_snapshot": "This reflex action bypasses the brain",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "asset_id": "asset_09eaad420d91f336109dd193",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_6255e9f72f15b6f1bacade54_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 95651,
+      "width": 566,
+      "height": 249,
+      "sha256": "50610653f036f3d191afd943b003ced1486a1437448cd5bb7652c2d0c4c3033b",
+      "perceptual_hash": "3f16007f9d899dff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 5753.4463,
+      "readability_score": 0.7196,
+      "noise_score": 34.5454,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 566,
+        "height": 249
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "Choice texts are not provided; only `choice_count` = 4 is available.",
+        "`metadata.extraction_notes` states the original answer field was numeric `3`, but the choice indexing basis (0-based or 1-based) is unspecified.",
+        "`metadata.extraction_notes` states the original image field contained a PIL image object representation rather than a usable path or URL.",
+        "`metadata.image_paths` is empty.",
+        "metadata_inconsistency",
+        "text_only_without_visual_need"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "asset_id": "asset_af0fcfc1daf127043cf382f4",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_ce22fb3aa6b1d3639e260e46",
+      "file_format": "txt",
+      "file_size_bytes": 90,
+      "width": null,
+      "height": null,
+      "sha256": "3f284bc5d1035b47339020793023b0ab18c1b9f6f76acc2b03a1ea5f7031d819",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+      "normalized_text_snapshot": "What does this experiment show about whether this reflex action involves the frog's brain?",
+      "text_completeness_score": 0.7661,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "frog",
+          "canonical": "frog",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "acid",
+          "canonical": "acid",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "skin",
+          "canonical": "skin",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "leg",
+          "canonical": "leg",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_6255e9f72f15b6f1bacade54",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "question_type": "multiple_choice",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Which of the following conclusions is best supported by the experiment?",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_6255e9f72f15b6f1bacade54_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "What does this experiment show about whether this reflex action involves the frog's brain?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "This reflex action bypasses the brain",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "frog",
+          "canonical": "frog",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "acid",
+          "canonical": "acid",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "skin",
+          "canonical": "skin",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "leg",
+          "canonical": "leg",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "The brain of the frog is destroyed."
+        },
+        {
+          "segment_index": 2,
+          "text": "A piece of acid-soaked paper is applied to the frog's skin."
+        },
+        {
+          "segment_index": 3,
+          "text": "Every time the piece of paper is placed on its skin, one leg moves upward."
+        },
+        {
+          "segment_index": 4,
+          "text": "Which of the following conclusions is best supported by the experiment?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T00:55:59Z"
+    }
+  ],
+  "visual_structure_records": [],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_6255e9f72f15b6f1bacade54",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "text_only",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T00:56:05Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_d5b3a8581af008c4a3737540",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "target_slot",
+      "canonical_value": "What does this experiment show about whether this reflex action involves the frog's brain?",
+      "surface_forms": [
+        "What does this experiment show about whether this reflex action involves the frog's brain?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_e79c617f17641a5c7caabb22"
+      ],
+      "evidence_refs": [
+        "asset_e79c617f17641a5c7caabb22"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_6255e9f72f15b6f1bacade54_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "What does this experiment show about whether this reflex action involves the frog's brain?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "This reflex action bypasses the brain",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_8064abcc8af18019af83a058",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "answer_claim",
+      "canonical_value": "This reflex action bypasses the brain",
+      "surface_forms": [
+        "This reflex action bypasses the brain"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_b3eab89459fb922b112cfbd5"
+      ],
+      "evidence_refs": [
+        "asset_b3eab89459fb922b112cfbd5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "This reflex action bypasses the brain"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_2f51776e61b9805afa863909",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "text_fact",
+      "canonical_value": "What does this experiment show about whether this reflex action involves the frog's brain?",
+      "surface_forms": [
+        "What does this experiment show about whether this reflex action involves the frog's brain?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_af0fcfc1daf127043cf382f4"
+      ],
+      "evidence_refs": [
+        "asset_af0fcfc1daf127043cf382f4"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_ce22fb3aa6b1d3639e260e46",
+        "parent_problem_id": "prob_6255e9f72f15b6f1bacade54",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "What does this experiment show about whether this reflex action involves the frog's brain?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "This reflex action bypasses the brain",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_500c72c1d23471af00935903",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "quality_signal",
+      "canonical_value": "Choice texts are not provided; only `choice_count` = 4 is available.",
+      "surface_forms": [
+        "Choice texts are not provided; only `choice_count` = 4 is available."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "Choice texts are not provided; only `choice_count` = 4 is available."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_ccbba7254f53ddb1c1d57e7e",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "quality_signal",
+      "canonical_value": "`metadata.extraction_notes` states the original answer field was numeric `3`, but the choice indexing basis (0-based or 1-based) is unspecified.",
+      "surface_forms": [
+        "`metadata.extraction_notes` states the original answer field was numeric `3`, but the choice indexing basis (0-based or 1-based) is unspecified."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "`metadata.extraction_notes` states the original answer field was numeric `3`, but the choice indexing basis (0-based or 1-based) is unspecified."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_2c64dda252e9a10f43977544",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "quality_signal",
+      "canonical_value": "`metadata.extraction_notes` states the original image field contained a PIL image object representation rather than a usable path or URL.",
+      "surface_forms": [
+        "`metadata.extraction_notes` states the original image field contained a PIL image object representation rather than a usable path or URL."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "`metadata.extraction_notes` states the original image field contained a PIL image object representation rather than a usable path or URL."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_ac1a20012df250562650057e",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "quality_signal",
+      "canonical_value": "`metadata.image_paths` is empty.",
+      "surface_forms": [
+        "`metadata.image_paths` is empty."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "`metadata.image_paths` is empty."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_5827ee1e8a80a3288f546a93",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_inconsistency",
+      "surface_forms": [
+        "metadata_inconsistency"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_inconsistency"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_74fac97f80f47554b7b302ef",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "quality_signal",
+      "canonical_value": "text_only_without_visual_need",
+      "surface_forms": [
+        "text_only_without_visual_need"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "text_only_without_visual_need"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_9987b74244945ae53019692d",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_6255e9f72f15b6f1bacade54",
+        "problem_id": "prob_6255e9f72f15b6f1bacade54",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "text_only",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T00:56:05Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "node_id": "node_031a7bc446a904e6f4cf96e9",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_ok",
+          "rewrite_usable",
+          "text_sufficient"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T00:56:19Z",
+      "updated_at": "2026-04-12T00:56:19Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_00b0144fbc8091c42ecb3782",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_2d03c8d7aebd328e",
+      "dataset_name": "SCEMQA",
+      "input_asset_ids": [
+        "asset_2d0dc0e8930d8928359e2cc6",
+        "asset_e79c617f17641a5c7caabb22",
+        "asset_e3ad0695c92a1090af84aa6c",
+        "asset_b3eab89459fb922b112cfbd5",
+        "asset_09eaad420d91f336109dd193",
+        "asset_af0fcfc1daf127043cf382f4"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 17
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 566,
+            "height": 249,
+            "blur_score": 5753.4463,
+            "contrast_score": 52.2991,
+            "noise_score": 34.5454,
+            "readability_score": 0.7196,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 566,
+              "height": 249
+            },
+            "perceptual_hash": "3f16007f9d899dff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_00b0144fbc8091c42ecb3782",
+        "coverage_score": 1.0,
+        "consistency_score": 1.0,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_6255e9f72f15b6f1bacade54",
+        "question_type": "multiple_choice",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_6255e9f72f15b6f1bacade54",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_clear",
+          "jointly_understandable",
+          "question_clear",
+          "text_sufficient"
+        ],
+        "rationale": "The question clearly describes the frog reflex experiment, the expected conclusion is explicit in the provided choices and answer text, and the image is not necessary to understand or answer the item. Some metadata signals are inconsistent, but they do not materially affect semantic understanding of the sample.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "Choice texts are not provided; only `choice_count` = 4 is available.",
+        "`metadata.extraction_notes` states the original answer field was numeric `3`, but the choice indexing basis (0-based or 1-based) is unspecified.",
+        "`metadata.extraction_notes` states the original image field contained a PIL image object representation rather than a usable path or URL.",
+        "`metadata.image_paths` is empty.",
+        "metadata_inconsistency",
+        "text_only_without_visual_need"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_ok",
+        "rewrite_usable",
+        "text_sufficient"
+      ],
+      "decision_rationale": "The sample is semantically usable: the question and answer are clear, the rewritten open form preserves the target conclusion, and alignment and solvability show no serious failure. The metadata inconsistencies do not materially block downstream annotation because the item is fully understandable from text alone.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T00:56:19Z",
+      "finished_at": "2026-04-12T00:56:19Z",
+      "candidate_id": "cand_6255e9f72f15b6f1bacade54",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_00b0144fbc8091c42ecb3782",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "image_entity_refs": [],
+      "text_span_refs": [
+        "asset_prob_6255e9f72f15b6f1bacade54_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [],
+      "coverage_score": 1.0,
+      "consistency_score": 1.0,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T00:55:59Z",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_1f0e9047a191bd3da1e96ddc",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+      "after_value": "The brain of the frog is destroyed. A piece of acid-soaked paper is applied to the frog's skin. Every time the piece of paper is placed on its skin, one leg moves upward. Which of the following conclusions is best supported by the experiment?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "audit_id": "audit_d47b2bc727eb2798fa06ea84",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "This reflex action bypasses the brain.",
+      "after_value": "This reflex action bypasses the brain",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "audit_id": "audit_366d4b4e359050cf76cbf032",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "audit_id": "audit_031a7bc446a904e6f4cf96e9",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T00:56:19Z"
+    },
+    {
+      "audit_id": "audit_d1188ea66c7d050e4621ca41",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "frog",
+          "canonical": "frog",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "acid",
+          "canonical": "acid",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "s",
+          "canonical": "s",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "skin",
+          "canonical": "skin",
+          "variable_type": "label"
+        },
+        {
+          "original": "time",
+          "canonical": "time",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "its",
+          "canonical": "its",
+          "variable_type": "label"
+        },
+        {
+          "original": "one",
+          "canonical": "one",
+          "variable_type": "label"
+        },
+        {
+          "original": "leg",
+          "canonical": "leg",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "by",
+          "canonical": "by",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T00:56:19Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_00b0144fbc8091c42ecb3782",
+      "problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "source_problem_id": "418",
+      "strategy": "blank_open",
+      "rationale": "Rewrote the multiple-choice conclusion into a direct open-ended question anchored to the correct option.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_ce22fb3aa6b1d3639e260e46",
+          "parent_problem_id": "prob_6255e9f72f15b6f1bacade54",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "What does this experiment show about whether this reflex action involves the frog's brain?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "This reflex action bypasses the brain",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T00:56:19Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_ce22fb3aa6b1d3639e260e46",
+      "parent_problem_id": "prob_6255e9f72f15b6f1bacade54",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "What does this experiment show about whether this reflex action involves the frog's brain?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "This reflex action bypasses the brain",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "scemqabiology00026",
+  "canonical_sample_index": 26,
+  "canonical_dataset_key": "scemqa_biology",
+  "sample_path": "samples/scemqabiology00026.json",
+  "image_path": "artifacts/images/scemqabiology00026.png",
+  "images": [
+    "artifacts/images/scemqabiology00026.png"
+  ]
+}

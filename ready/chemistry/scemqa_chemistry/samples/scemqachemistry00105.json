@@ -1,0 +1,1904 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_59584e20a2fe2b4c9233393b",
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "problem_id": "prob_f05a72cefa93f4559058407c",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "283",
+    "raw_question_text": "The above diagrams shows the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order for the reaction?",
+    "raw_answer_text": "First order",
+    "choice_map": {
+      "A": "Zero order",
+      "B": "First order",
+      "C": "Second order",
+      "D": "Third order"
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image",
+    "choice_field": "choices",
+    "extraction_notes": [
+      "answer field is numeric \"1\", but the record does not explicitly define whether choices are 0-based or 1-based indexed",
+      "image field contains a PIL image object representation rather than a path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-11T23:14:00Z",
+    "subject": "Chemistry"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_f05a72cefa93f4559058407c",
+    "image_manifest": [
+      {
+        "path": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_f05a72cefa93f4559058407c_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 429,
+        "height": 191,
+        "file_size": 60389
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 160,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 11
+    },
+    "issues": [
+      "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing",
+      "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL",
+      "metadata.image_paths is empty"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_59584e20a2fe2b4c9233393b",
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "283",
+    "created_at": "2026-04-11T23:14:00Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_f05a72cefa93f4559058407c",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.46,
+    "verifiability_score": 0.76,
+    "score_evidence": {
+      "image_dependency": [
+        "题干显式写明 \"The above diagrams show...\"，解题依赖上方图示内容。",
+        "输入字段 `requires_image=true` 且 `text_dominant=false`，表明不是纯文本即可完成。",
+        "资产登记中存在 1 张主图且 `registry_passed=true`，说明图像资源可用。"
+      ],
+      "multi_step": [
+        "需要先从图示读取反应过程/变化关系，再据此判断 \"overall order of the reaction\"，至少包含图像解读与概念判定两步。",
+        "答案空间是 4 选 1 的反应级数分类，不像纯读数题，通常需要一定化学推断。",
+        "仅凭题干文本不足以直接得到答案，说明存在图文联合推理；但未见明确复杂计算证据，保守给中等分。"
+      ],
+      "verifiability": [
+        "标准答案是离散短文本 `First order`，且与选项 `B` 对应，结果形式清晰。",
+        "`answer_present=true`、`answer_type=short_text`、`registry_passed=true`，便于后续规则核验。",
+        "但登记问题指出源答案曾是数值 \"1\" 且 choice indexing 未说明，存在映射歧义，降低可验证性。"
+      ]
+    },
+    "risk_flags": [
+      "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing",
+      "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL",
+      "metadata.image_paths is empty"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_59584e20a2fe2b4c9233393b",
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "283",
+    "created_at": "2026-04-11T23:14:00Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_f05a72cefa93f4559058407c",
+    "priority": 0.78,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "Question, primary image, and a short-text answer are all present, so the sample still has recoverable core semantics.",
+      "The problem appears strongly image-dependent, and the registered image artifact exists with registry_passed=true, which supports retention.",
+      "There is answer provenance ambiguity because the source answer was recorded as numeric \"1\" with unspecified choice indexing, reducing confidence in exact answer mapping.",
+      "Image-source metadata is imperfect because the original image field was a PIL object representation and metadata.image_paths is empty, so this sample should be retained but ranked behind cleaner records."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_59584e20a2fe2b4c9233393b",
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "283",
+    "created_at": "2026-04-11T23:14:00Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_59584e20a2fe2b4c9233393b",
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "problem_id": "prob_f05a72cefa93f4559058407c",
+    "dataset_name": "SCEMQA",
+    "normalized_question_text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+    "normalized_answer_text": "First order",
+    "normalized_choice_map": {
+      "A": "Zero order",
+      "B": "First order",
+      "C": "Second order",
+      "D": "Third order"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Light grammar normalization applied to the question text.",
+      "Question explicitly refers to diagrams, so image dependence is retained.",
+      "force_requires_image=true, therefore requires_image is set to true and cleaning_path to multimodal_full."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-11T23:14:00Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "283",
+    "subject": "数学、物理、生物、化学",
+    "raw_question_text": "The above diagrams shows the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order for the reaction?",
+    "raw_answer_text": "First order",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.46,
+    "initial_verifiability_score": 0.76,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "row_index": 283,
+      "image_paths": [],
+      "extraction_notes": [
+        "answer field is numeric \"1\", but the record does not explicitly define whether choices are 0-based or 1-based indexed",
+        "image field contains a PIL image object representation rather than a path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image",
+      "choice_field": "choices",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-11T23:15:34Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question, primary image, and a short-text answer are all present, so the sample still has recoverable core semantics.",
+      "The problem appears strongly image-dependent, and the registered image artifact exists with registry_passed=true, which supports retention.",
+      "There is answer provenance ambiguity because the source answer was recorded as numeric \"1\" with unspecified choice indexing, reducing confidence in exact answer mapping.",
+      "Image-source metadata is imperfect because the original image field was a PIL object representation and metadata.image_paths is empty, so this sample should be retained but ranked behind cleaner records."
+    ],
+    "collection_risk_flags": [
+      "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing",
+      "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL",
+      "metadata.image_paths is empty"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_b5eb7884ae5bd45f33cedd21",
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "283",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_f05a72cefa93f4559058407c/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_f05a72cefa93f4559058407c/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 429,
+        "height": 191
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.46,
+      "initial_verifiability_score": 0.76
+    },
+    "created_at": "2026-04-11T23:15:34Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing",
+      "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL",
+      "metadata.image_paths is empty"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_98312da73b5385280010563b",
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "283",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.78,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.46,
+      "initial_verifiability_score": 0.76
+    },
+    "created_at": "2026-04-11T23:15:34Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "Question, primary image, and a short-text answer are all present, so the sample still has recoverable core semantics.",
+      "The problem appears strongly image-dependent, and the registered image artifact exists with registry_passed=true, which supports retention.",
+      "There is answer provenance ambiguity because the source answer was recorded as numeric \"1\" with unspecified choice indexing, reducing confidence in exact answer mapping.",
+      "Image-source metadata is imperfect because the original image field was a PIL object representation and metadata.image_paths is empty, so this sample should be retained but ranked behind cleaner records."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_59584e20a2fe2b4c9233393b",
+      "candidate_id": "cand_f05a72cefa93f4559058407c",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "dataset_name": "SCEMQA",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-11T23:15:34Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_59584e20a2fe2b4c9233393b",
+    "problem_id": "prob_f05a72cefa93f4559058407c",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "283",
+    "normalized_question_text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+    "normalized_answer_text": "First order",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "answer_supported_by_visual",
+      "rewrite_usable",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-11T23:15:34Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_59584e20a2fe2b4c9233393b",
+    "problem_id": "prob_f05a72cefa93f4559058407c",
+    "normalized_question_text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+    "normalized_answer_text": "First order",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "show",
+        "canonical": "show",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst."
+      },
+      {
+        "segment_index": 2,
+        "text": "What is the overall order of the reaction?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 429,
+          "height": 191
+        },
+        "readability_score": 0.659,
+        "contrast_score": 42.5865
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-11T23:15:34Z",
+    "normalization_notes": [
+      "Light grammar normalization applied to the question text.",
+      "Question explicitly refers to diagrams, so image dependence is retained.",
+      "force_requires_image=true, therefore requires_image is set to true and cleaning_path to multimodal_full."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_f05a72cefa93f4559058407c",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "283",
+    "ingest_batch_id": "benchmarkallinone-scemqa-300-840_20260411T164516Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学、物理、生物、化学"
+    ],
+    "language": "en",
+    "raw_question_text": "The above diagrams shows the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order for the reaction?",
+    "normalized_question_text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+    "raw_answer_text": "First order",
+    "normalized_answer_text": "First order",
+    "answer_type": "short_text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9509,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 0.986,
+    "quality_risk_flags": [
+      "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing",
+      "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL",
+      "metadata.image_paths is empty",
+      "source_answer_index_ambiguous"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "answer_supported_by_visual",
+      "rewrite_usable",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The sample is understandable, the rewritten open question is usable, and the answer is materially supported by the visual trend in the diagrams. Reported issues are metadata-related and do not prevent meaningful downstream annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_f05a72cefa93f4559058407c",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-11T23:14:00Z",
+    "updated_at": "2026-04-11T23:15:34Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.46,
+    "initial_verifiability_score": 0.76,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "Question, primary image, and a short-text answer are all present, so the sample still has recoverable core semantics.",
+      "The problem appears strongly image-dependent, and the registered image artifact exists with registry_passed=true, which supports retention.",
+      "There is answer provenance ambiguity because the source answer was recorded as numeric \"1\" with unspecified choice indexing, reducing confidence in exact answer mapping.",
+      "Image-source metadata is imperfect because the original image field was a PIL object representation and metadata.image_paths is empty, so this sample should be retained but ranked behind cleaner records."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_32e834a54de590c625206a1f",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://scemqa/test/283/question",
+      "storage_uri": "inline://prob_f05a72cefa93f4559058407c/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 160,
+      "width": null,
+      "height": null,
+      "sha256": "c301b704226f9f6631a5a42c6b2f7bc4964b7354cd0fac3b555d5dad02aa4c15",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The above diagrams shows the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order for the reaction?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6911,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "asset_id": "asset_a86a303986baf567da4372b1",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_f05a72cefa93f4559058407c/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 158,
+      "width": null,
+      "height": null,
+      "sha256": "97fae7266fc3701de282c7f04ccb73993576bc35759d2c3277d6826cccbe3c84",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The above diagrams shows the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order for the reaction?",
+      "normalized_text_snapshot": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+      "text_completeness_score": 0.6911,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "asset_id": "asset_ef0f21caa9c08afb64a54271",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://scemqa/test/283/answer",
+      "storage_uri": "inline://prob_f05a72cefa93f4559058407c/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 11,
+      "width": null,
+      "height": null,
+      "sha256": "a3bdad046b105e2589eaf789c9561fba79f8283c21b89e94a9f40557986abc18",
+      "perceptual_hash": null,
+      "source_text_snapshot": "First order",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "asset_id": "asset_f765e048e02aa53de742683b",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_f05a72cefa93f4559058407c/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 11,
+      "width": null,
+      "height": null,
+      "sha256": "a3bdad046b105e2589eaf789c9561fba79f8283c21b89e94a9f40557986abc18",
+      "perceptual_hash": null,
+      "source_text_snapshot": "First order",
+      "normalized_text_snapshot": "First order",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "asset_id": "asset_f73506b84e9f80458b682ffa",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_f05a72cefa93f4559058407c_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 60389,
+      "width": 429,
+      "height": 191,
+      "sha256": "8b4892b1aef56ebaf17255a34ff7412936be1f6ff54322607db28d7f7577e5b9",
+      "perceptual_hash": "c3ff0000e4e4e424",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 4779.125,
+      "readability_score": 0.659,
+      "noise_score": 32.7164,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 429,
+        "height": 191
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing",
+        "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL",
+        "metadata.image_paths is empty",
+        "source_answer_index_ambiguous"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "asset_id": "asset_1d467ee9cd67fe4e4be43a17",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_1ed0a0c3a9714e45a66642d7",
+      "file_format": "txt",
+      "file_size_bytes": 158,
+      "width": null,
+      "height": null,
+      "sha256": "97fae7266fc3701de282c7f04ccb73993576bc35759d2c3277d6826cccbe3c84",
+      "perceptual_hash": null,
+      "source_text_snapshot": "The above diagrams shows the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order for the reaction?",
+      "normalized_text_snapshot": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+      "text_completeness_score": 0.6911,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_f05a72cefa93f4559058407c",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "question_type": "multiple_choice",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "What is the overall order of the reaction?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_f05a72cefa93f4559058407c_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "What is the overall order of the reaction?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "First order",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "diagram",
+          "entity_category": "diagram",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst."
+        },
+        {
+          "segment_index": 2,
+          "text": "What is the overall order of the reaction?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-11T23:15:09Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_f05a72cefa93f4559058407c_1",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 2.2461,
+        "dark_pixel_ratio": 0.1131,
+        "readability_score": 0.659,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 191
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 191
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 214,
+            "height": 95
+          },
+          "salience": 0.4638
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 214,
+            "y": 0,
+            "width": 215,
+            "height": 95
+          },
+          "salience": 0.4666
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 95,
+            "width": 214,
+            "height": 96
+          },
+          "salience": 0.4346
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 214,
+            "y": 95,
+            "width": 215,
+            "height": 96
+          },
+          "salience": 0.4872
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8636,
+      "created_at": "2026-04-11T23:15:09Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_f05a72cefa93f4559058407c",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-11T23:15:26Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_96f1b4d4bb8fe3034fe0b1bf",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "target_slot",
+      "canonical_value": "What is the overall order of the reaction?",
+      "surface_forms": [
+        "What is the overall order of the reaction?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_a86a303986baf567da4372b1"
+      ],
+      "evidence_refs": [
+        "asset_a86a303986baf567da4372b1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_f05a72cefa93f4559058407c_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "What is the overall order of the reaction?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "First order",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_e02f9e9a917550375c0a9766",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "answer_claim",
+      "canonical_value": "First order",
+      "surface_forms": [
+        "First order"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_f765e048e02aa53de742683b"
+      ],
+      "evidence_refs": [
+        "asset_f765e048e02aa53de742683b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "answer": "First order"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_55e4ea25601335d7169eb712",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 429,
+          "height": 191
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8636,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_048a8a936d455d7f6e747e64",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 429,
+          "height": 191
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8636,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_680ee964de1b826b5b34c634",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 214,
+          "height": 95
+        },
+        "salience": 0.4638
+      },
+      "unit": null,
+      "confidence": 0.8636,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_5419edde9ecd2c07ac003b04",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 214,
+          "y": 0,
+          "width": 215,
+          "height": 95
+        },
+        "salience": 0.4666
+      },
+      "unit": null,
+      "confidence": 0.8636,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_d452675ef04037035e4ab249",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 95,
+          "width": 214,
+          "height": 96
+        },
+        "salience": 0.4346
+      },
+      "unit": null,
+      "confidence": 0.8636,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_eb5f7ec7a80abc7f3d4f971e",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 214,
+          "y": 95,
+          "width": 215,
+          "height": 96
+        },
+        "salience": 0.4872
+      },
+      "unit": null,
+      "confidence": 0.8636,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_5cfc08997f0d3f5712f0166d",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "text_fact",
+      "canonical_value": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+      "surface_forms": [
+        "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_1d467ee9cd67fe4e4be43a17"
+      ],
+      "evidence_refs": [
+        "asset_1d467ee9cd67fe4e4be43a17"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_1ed0a0c3a9714e45a66642d7",
+        "parent_problem_id": "prob_f05a72cefa93f4559058407c",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "First order",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_c6b779927aa0f62c169a096e",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing",
+      "surface_forms": [
+        "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_8116b1fdab9d35d6b4fc567c",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL",
+      "surface_forms": [
+        "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_4a29ced372d3314bfbdd23e6",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty",
+      "surface_forms": [
+        "metadata.image_paths is empty"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_5afc61e0e0f505866b31384a",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "quality_signal",
+      "canonical_value": "source_answer_index_ambiguous",
+      "surface_forms": [
+        "source_answer_index_ambiguous"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "source_answer_index_ambiguous"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_fe9225d9b9b23173359e31b2",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_f05a72cefa93f4559058407c",
+        "problem_id": "prob_f05a72cefa93f4559058407c",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-11T23:15:26Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "node_id": "node_9418bae2b37f20b704277f2d",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "answer_supported_by_visual",
+          "rewrite_usable",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-11T23:15:34Z",
+      "updated_at": "2026-04-11T23:15:34Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_59584e20a2fe2b4c9233393b",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_2d03c8d7aebd328e",
+      "dataset_name": "SCEMQA",
+      "input_asset_ids": [
+        "asset_32e834a54de590c625206a1f",
+        "asset_a86a303986baf567da4372b1",
+        "asset_ef0f21caa9c08afb64a54271",
+        "asset_f765e048e02aa53de742683b",
+        "asset_f73506b84e9f80458b682ffa",
+        "asset_1d467ee9cd67fe4e4be43a17"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 7
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.93,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 429,
+            "height": 191,
+            "blur_score": 4779.125,
+            "contrast_score": 42.5865,
+            "noise_score": 32.7164,
+            "readability_score": 0.659,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 429,
+              "height": 191
+            },
+            "perceptual_hash": "c3ff0000e4e4e424"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_59584e20a2fe2b4c9233393b",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_f05a72cefa93f4559058407c",
+        "question_type": "multiple_choice",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_f05a72cefa93f4559058407c",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_inferable_from_visual_trend",
+          "image_needed_and_informative",
+          "jointly_understandable",
+          "question_clear"
+        ],
+        "rationale": "The question is clear and the image provides the needed time-series molecule counts. The hydrogen peroxide amount drops from 8 to 4 to 2 in equal 200 s intervals, indicating a constant half-life and therefore a first-order reaction. Despite some metadata issues, the image-text pair is semantically understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes states the source answer field was numeric \"1\" with unspecified choice indexing",
+        "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL",
+        "metadata.image_paths is empty",
+        "source_answer_index_ambiguous"
+      ],
+      "clean_score": 0.9986,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "answer_supported_by_visual",
+        "rewrite_usable",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The sample is understandable, the rewritten open question is usable, and the answer is materially supported by the visual trend in the diagrams. Reported issues are metadata-related and do not prevent meaningful downstream annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-11T23:15:34Z",
+      "finished_at": "2026-04-11T23:15:34Z",
+      "candidate_id": "cand_f05a72cefa93f4559058407c",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_59584e20a2fe2b4c9233393b",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "image_entity_refs": [
+        "visual_prob_f05a72cefa93f4559058407c_1::roi",
+        "visual_prob_f05a72cefa93f4559058407c_1::roi_top_left",
+        "visual_prob_f05a72cefa93f4559058407c_1::roi_top_right",
+        "visual_prob_f05a72cefa93f4559058407c_1::roi_bottom_left",
+        "visual_prob_f05a72cefa93f4559058407c_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_f05a72cefa93f4559058407c_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "diagram",
+          "image_ref": "visual_prob_f05a72cefa93f4559058407c_1::roi",
+          "relation": "grounds_diagram",
+          "confidence": 0.7659
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-11T23:15:09Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_88d3b077411dc0e2148d658e",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "The above diagrams shows the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order for the reaction?",
+      "after_value": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "audit_id": "audit_8a4c1d56b7574d677ea6de9e",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "First order",
+      "after_value": "First order",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "audit_id": "audit_e0e673be52bc9ce3479a7322",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "audit_id": "audit_9418bae2b37f20b704277f2d",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T23:15:34Z"
+    },
+    {
+      "audit_id": "audit_e7a6f7511970f98b6e9cf66b",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "show",
+          "canonical": "show",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-11T23:15:34Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_59584e20a2fe2b4c9233393b",
+      "problem_id": "prob_f05a72cefa93f4559058407c",
+      "source_problem_id": "283",
+      "strategy": "keep_open",
+      "rationale": "The stem already asks for the reaction order directly and remains answerable without the choices.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_1ed0a0c3a9714e45a66642d7",
+          "parent_problem_id": "prob_f05a72cefa93f4559058407c",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "First order",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-11T23:15:34Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_1ed0a0c3a9714e45a66642d7",
+      "parent_problem_id": "prob_f05a72cefa93f4559058407c",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "The above diagrams show the decomposition of hydrogen peroxide in a sealed container in the presence of a catalyst. What is the overall order of the reaction?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "First order",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "scemqachemistry00105",
+  "canonical_sample_index": 105,
+  "canonical_dataset_key": "scemqa_chemistry",
+  "sample_path": "samples/scemqachemistry00105.json",
+  "image_path": "artifacts/images/scemqachemistry00105.png",
+  "images": [
+    "artifacts/images/scemqachemistry00105.png"
+  ]
+}

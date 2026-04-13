@@ -1,0 +1,2184 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_ccf4c895b7b4167476f92ee3",
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "problem_id": "prob_1287ea1e0e28130d76c0826b",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "165",
+    "raw_question_text": "Consider the Z-channel given in the <image>. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+    "raw_answer_text": "0.8",
+    "choice_map": {},
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "solution",
+    "image_field": "image",
+    "choice_field": null,
+    "extraction_notes": [
+      "Excluded the leading hint line from raw_question_text as non-question instruction",
+      "Image field is an in-memory PIL image representation; no image path or URL is available",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T14:45:44Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_1287ea1e0e28130d76c0826b",
+    "image_manifest": [
+      {
+        "path": "outputs/eee_bench_1000_2860/run_9ab7b7c008590714/datasets/eee_bench/artifacts/images/prob_1287ea1e0e28130d76c0826b_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 384,
+        "height": 384,
+        "file_size": 35284
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 156,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 3
+    },
+    "issues": [
+      "metadata.extraction_notes states that no image path or URL is available, which conflicts with the provided top-level image path.",
+      "metadata.image_paths is empty while the top-level image_paths contains a provided image path."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_ccf4c895b7b4167476f92ee3",
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "165",
+    "created_at": "2026-04-05T14:45:44Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_1287ea1e0e28130d76c0826b",
+    "image_dependency_score": 0.94,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.91,
+    "score_evidence": {
+      "image_dependency": [
+        "The question explicitly says 'given in the image,' so the channel parameters are expected to come from the image.",
+        "requires_image=true and text_dominant=false indicate the problem is not primarily solvable from text alone.",
+        "To compute P(input=0 | output=0), the Z-channel transition probabilities shown in the diagram are needed."
+      ],
+      "multi_step": [
+        "Solving requires extracting the channel behavior/probabilities from the image and then applying conditional probability or Bayes' rule.",
+        "The statement 'input is 0 or 1 with equal probability' must be combined with the channel transition information.",
+        "This is more than direct lookup, but still a relatively short calculation once the diagram is read."
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_text is a single numeric value ('0.8'), which is easy to check.",
+        "The required computation is well-defined: derive a posterior probability from stated priors and channel probabilities.",
+        "asset_registry_record shows answer_present=true and registry_passed=true, supporting reliable downstream checking."
+      ]
+    },
+    "risk_flags": [
+      "Problem depends on image-specific channel parameters that are not present in the text",
+      "metadata/image path inconsistency noted in asset_registry_record issues"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_ccf4c895b7b4167476f92ee3",
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "165",
+    "created_at": "2026-04-05T14:45:44Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_1287ea1e0e28130d76c0826b",
+    "priority": 0.92,
+    "decision": "keep",
+    "decision_reasons": [
+      "Question, answer, and primary image are all present, so the core semantic assets needed to solve the problem are available.",
+      "Although the problem is strongly image-dependent, the referenced image file exists and appears usable.",
+      "Initial scoring indicates high image dependency and high verifiability, with a numeric answer that is straightforward to check.",
+      "Recorded issues concern metadata inconsistency about image paths rather than absence of the actual image asset, so they do not by themselves block candidacy."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_ccf4c895b7b4167476f92ee3",
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "dataset_name": "EEE-Bench",
+    "source_problem_id": "165",
+    "created_at": "2026-04-05T14:45:44Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_ccf4c895b7b4167476f92ee3",
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "problem_id": "prob_1287ea1e0e28130d76c0826b",
+    "dataset_name": "EEE-Bench",
+    "normalized_question_text": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+    "normalized_answer_text": "0.8",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the markup token '<image>' and normalized it to 'image'.",
+      "Question explicitly depends on the channel diagram, so image is required.",
+      "No answer or option content was altered beyond formatting normalization."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T14:45:44Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[1000:2860]",
+    "source_problem_id": "165",
+    "subject": "电气电子工程领域",
+    "raw_question_text": "Consider the Z-channel given in the <image>. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+    "raw_answer_text": "0.8",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 165,
+      "image_paths": [],
+      "extraction_notes": [
+        "Excluded the leading hint line from raw_question_text as non-question instruction",
+        "Image field is an in-memory PIL image representation; no image path or URL is available",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "solution",
+      "image_field": "image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T14:46:54Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question, answer, and primary image are all present, so the core semantic assets needed to solve the problem are available.",
+      "Although the problem is strongly image-dependent, the referenced image file exists and appears usable.",
+      "Initial scoring indicates high image dependency and high verifiability, with a numeric answer that is straightforward to check.",
+      "Recorded issues concern metadata inconsistency about image paths rather than absence of the actual image asset, so they do not by themselves block candidacy."
+    ],
+    "collection_risk_flags": [
+      "Problem depends on image-specific channel parameters that are not present in the text",
+      "metadata/image path inconsistency noted in asset_registry_record issues"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_dca660c6d3844196434dd5aa",
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "165",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_1287ea1e0e28130d76c0826b/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_1287ea1e0e28130d76c0826b/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 384,
+        "height": 384
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-05T14:46:54Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes states that no image path or URL is available, which conflicts with the provided top-level image path.",
+      "metadata.image_paths is empty while the top-level image_paths contains a provided image path."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_574042a2e541a6769f8212b9",
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "165",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.92,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.94,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.91
+    },
+    "created_at": "2026-04-05T14:46:54Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Question, answer, and primary image are all present, so the core semantic assets needed to solve the problem are available.",
+      "Although the problem is strongly image-dependent, the referenced image file exists and appears usable.",
+      "Initial scoring indicates high image dependency and high verifiability, with a numeric answer that is straightforward to check.",
+      "Recorded issues concern metadata inconsistency about image paths rather than absence of the actual image asset, so they do not by themselves block candidacy."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_ccf4c895b7b4167476f92ee3",
+      "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "dataset_name": "EEE-Bench",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T14:46:54Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_ccf4c895b7b4167476f92ee3",
+    "problem_id": "prob_1287ea1e0e28130d76c0826b",
+    "source_dataset": "EEE-Bench",
+    "source_problem_id": "165",
+    "normalized_question_text": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+    "normalized_answer_text": "0.8",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "image_support_clear",
+      "solvable_with_answer",
+      "understandable_complete"
+    ],
+    "created_at": "2026-04-05T14:46:54Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_ccf4c895b7b4167476f92ee3",
+    "problem_id": "prob_1287ea1e0e28130d76c0826b",
+    "normalized_question_text": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+    "normalized_answer_text": "0.8",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "Z",
+        "canonical": "Z",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "or",
+        "canonical": "or",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "If",
+        "canonical": "If",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "also",
+        "canonical": "also",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Consider the Z-channel given in the image."
+      },
+      {
+        "segment_index": 2,
+        "text": "The input is 0 or 1 with equal probability."
+      },
+      {
+        "segment_index": 3,
+        "text": "If the output is 0, the probability that the input is also 0 equals"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 12,
+          "y": 17,
+          "width": 365,
+          "height": 347
+        },
+        "readability_score": 0.8116,
+        "contrast_score": 43.4431
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T14:46:54Z",
+    "normalization_notes": [
+      "Removed the markup token '<image>' and normalized it to 'image'.",
+      "Question explicitly depends on the channel diagram, so image is required.",
+      "No answer or option content was altered beyond formatting normalization."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_1287ea1e0e28130d76c0826b",
+    "source_dataset": "EEE-Bench",
+    "source_split": "test[1000:2860]",
+    "source_problem_id": "165",
+    "ingest_batch_id": "benchmarkallinone-eee-bench-1000-2860_20260405T044622Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "电气电子工程领域"
+    ],
+    "language": "en",
+    "raw_question_text": "Consider the Z-channel given in the <image>. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+    "normalized_question_text": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+    "raw_answer_text": "0.8",
+    "normalized_answer_text": "0.8",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9782,
+    "multi_step_score": 0.4457,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.extraction_notes states that no image path or URL is available, which conflicts with the provided top-level image path.",
+      "metadata.image_paths is empty while the top-level image_paths contains a provided image path.",
+      "metadata_image_reference_conflict"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "image_support_clear",
+      "solvable_with_answer",
+      "understandable_complete"
+    ],
+    "clean_decision_rationale": "The sample is complete and jointly understandable, the image provides the needed Z-channel information, the rewritten question is usable, and alignment/solvability signals show no substantive failure. The metadata image-reference conflict is non-material to semantic usability here.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T14:45:44Z",
+    "updated_at": "2026-04-05T14:46:54Z",
+    "initial_image_dependency_score": 0.94,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.91,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.92,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question, answer, and primary image are all present, so the core semantic assets needed to solve the problem are available.",
+      "Although the problem is strongly image-dependent, the referenced image file exists and appears usable.",
+      "Initial scoring indicates high image dependency and high verifiability, with a numeric answer that is straightforward to check.",
+      "Recorded issues concern metadata inconsistency about image paths rather than absence of the actual image asset, so they do not by themselves block candidacy."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_722c83108f2ccf2031bd5f89",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://eee_bench/test[1000:2860]/165/question",
+      "storage_uri": "inline://prob_1287ea1e0e28130d76c0826b/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 156,
+      "width": null,
+      "height": null,
+      "sha256": "221bfa04bb164fab0037510829ece4858320a0a9c9a006346dfb9774f190e731",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Consider the Z-channel given in the <image>. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6875,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "Z",
+          "canonical": "Z",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "asset_id": "asset_2ff4529333a8a415d7e93bb1",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1287ea1e0e28130d76c0826b/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 154,
+      "width": null,
+      "height": null,
+      "sha256": "4b08afdec04f3682c4a7bfa7be84cc68311ec7e3f0a4d66ba11cb67f4c16369f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Consider the Z-channel given in the <image>. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "normalized_text_snapshot": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "text_completeness_score": 0.6875,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "Z",
+          "canonical": "Z",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "asset_id": "asset_044b8fc787d912a4ccddedc7",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://eee_bench/test[1000:2860]/165/answer",
+      "storage_uri": "inline://prob_1287ea1e0e28130d76c0826b/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 3,
+      "width": null,
+      "height": null,
+      "sha256": "1e9d7c27c8bbc8ddf0055c93e064a62fa995d177fee28cc8fa949bc8a4db06f4",
+      "perceptual_hash": null,
+      "source_text_snapshot": "0.8",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "asset_id": "asset_bb60b0345be4e776b8e7ff25",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1287ea1e0e28130d76c0826b/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 3,
+      "width": null,
+      "height": null,
+      "sha256": "1e9d7c27c8bbc8ddf0055c93e064a62fa995d177fee28cc8fa949bc8a4db06f4",
+      "perceptual_hash": null,
+      "source_text_snapshot": "0.8",
+      "normalized_text_snapshot": "0.8",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "asset_id": "asset_be3644bd3b93945d6ffd86c3",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/eee_bench_1000_2860/run_9ab7b7c008590714/datasets/eee_bench/artifacts/images/prob_1287ea1e0e28130d76c0826b_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 35284,
+      "width": 384,
+      "height": 384,
+      "sha256": "8404f87bbcebc19cc93fc31097c2ed0e6e8cf13d2a89f441c03f5cc56126aa7d",
+      "perceptual_hash": "ef83ff24e7dbc3ef",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 931.7084,
+      "readability_score": 0.8116,
+      "noise_score": 23.8084,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 12,
+        "y": 17,
+        "width": 365,
+        "height": 347
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes states that no image path or URL is available, which conflicts with the provided top-level image path.",
+        "metadata.image_paths is empty while the top-level image_paths contains a provided image path.",
+        "metadata_image_reference_conflict"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "asset_id": "asset_bec9915ca50eda6a9a345faa",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/eee_bench_1000_2860/run_9ab7b7c008590714/datasets/eee_bench/artifacts/crops/prob_1287ea1e0e28130d76c0826b_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 34629,
+      "width": 365,
+      "height": 347,
+      "sha256": "d5c32e7dcfb2537fdd3f94e8068d8ea8f6a131eff44f1fe121a987537f600472",
+      "perceptual_hash": "c383ff2467df83ef",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 931.7084,
+      "readability_score": 0.8116,
+      "noise_score": 23.8084,
+      "cropped_from_asset_id": "asset_be3644bd3b93945d6ffd86c3",
+      "roi_bbox": {
+        "x": 12,
+        "y": 17,
+        "width": 365,
+        "height": 347
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "asset_id": "asset_780c901afd1af85006879ba7",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_71c30b476fa812762b7c13eb",
+      "file_format": "txt",
+      "file_size_bytes": 154,
+      "width": null,
+      "height": null,
+      "sha256": "4b08afdec04f3682c4a7bfa7be84cc68311ec7e3f0a4d66ba11cb67f4c16369f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Consider the Z-channel given in the <image>. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "normalized_text_snapshot": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "text_completeness_score": 0.6875,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "Z",
+          "canonical": "Z",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_1287ea1e0e28130d76c0826b",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "Consider the Z-channel given in the image.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "The input is 0 or 1 with equal probability.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0",
+            "1"
+          ],
+          "unit_mentions": [
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "If the output is 0, the probability that the input is also 0 equals",
+          "segment_index": 3,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "0",
+            "0"
+          ],
+          "unit_mentions": [
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+          "segment_index": 3,
+          "mentions_visual": true,
+          "numeric_tokens": [
+            "0",
+            "1",
+            "0",
+            "0"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_1287ea1e0e28130d76c0826b_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "If the output is 0, the probability that the input is also 0 equals",
+          "expected_answer_type": "numeric",
+          "expected_answer": "0.8",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "image",
+          "entity_category": "image",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "Z",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "Z",
+          "canonical": "Z",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Consider the Z-channel given in the image."
+        },
+        {
+          "segment_index": 2,
+          "text": "The input is 0 or 1 with equal probability."
+        },
+        {
+          "segment_index": 3,
+          "text": "If the output is 0, the probability that the input is also 0 equals"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T14:46:40Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_1287ea1e0e28130d76c0826b_1",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.0,
+        "dark_pixel_ratio": 0.0612,
+        "readability_score": 0.8116,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 384,
+            "height": 384
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 12,
+            "y": 17,
+            "width": 365,
+            "height": 347
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 12,
+            "y": 17,
+            "width": 182,
+            "height": 173
+          },
+          "salience": 0.4368
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 194,
+            "y": 17,
+            "width": 183,
+            "height": 173
+          },
+          "salience": 0.4377
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 12,
+            "y": 190,
+            "width": 182,
+            "height": 174
+          },
+          "salience": 0.4195
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 194,
+            "y": 190,
+            "width": 183,
+            "height": 174
+          },
+          "salience": 0.3912
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9246,
+      "created_at": "2026-04-05T14:46:40Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_1287ea1e0e28130d76c0826b",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-05T14:46:47Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_d0350a808a636c5c2910ad46",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "text_fact",
+      "canonical_value": "Consider the Z-channel given in the image.",
+      "surface_forms": [
+        "Consider the Z-channel given in the image."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_2ff4529333a8a415d7e93bb1"
+      ],
+      "evidence_refs": [
+        "asset_2ff4529333a8a415d7e93bb1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Consider the Z-channel given in the image.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_27190aa647e34d245bfb94af",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "text_fact",
+      "canonical_value": "The input is 0 or 1 with equal probability.",
+      "surface_forms": [
+        "The input is 0 or 1 with equal probability."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_2ff4529333a8a415d7e93bb1"
+      ],
+      "evidence_refs": [
+        "asset_2ff4529333a8a415d7e93bb1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "The input is 0 or 1 with equal probability.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "0",
+          "1"
+        ],
+        "unit_mentions": [
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_48071f18baf8bd3d9eb83490",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "text_fact",
+      "canonical_value": "If the output is 0, the probability that the input is also 0 equals",
+      "surface_forms": [
+        "If the output is 0, the probability that the input is also 0 equals"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_2ff4529333a8a415d7e93bb1"
+      ],
+      "evidence_refs": [
+        "asset_2ff4529333a8a415d7e93bb1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "If the output is 0, the probability that the input is also 0 equals",
+        "segment_index": 3,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "0",
+          "0"
+        ],
+        "unit_mentions": [
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_2846776dd287897a70f6e7e3",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "target_slot",
+      "canonical_value": "If the output is 0, the probability that the input is also 0 equals",
+      "surface_forms": [
+        "If the output is 0, the probability that the input is also 0 equals"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_2ff4529333a8a415d7e93bb1"
+      ],
+      "evidence_refs": [
+        "asset_2ff4529333a8a415d7e93bb1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_1287ea1e0e28130d76c0826b_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "If the output is 0, the probability that the input is also 0 equals",
+        "expected_answer_type": "numeric",
+        "expected_answer": "0.8",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_7d274515d372bfd538cd2d5b",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "answer_claim",
+      "canonical_value": "0.8",
+      "surface_forms": [
+        "0.8"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_bb60b0345be4e776b8e7ff25"
+      ],
+      "evidence_refs": [
+        "asset_bb60b0345be4e776b8e7ff25"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "0.8"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_b0810f934e3c8cf2c3df9071",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 384,
+          "height": 384
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9246,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_0955a99d4d336733f3e1d46a",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 12,
+          "y": 17,
+          "width": 365,
+          "height": 347
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9246,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_1b491c5a728e0e177f70596a",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 12,
+          "y": 17,
+          "width": 182,
+          "height": 173
+        },
+        "salience": 0.4368
+      },
+      "unit": null,
+      "confidence": 0.9246,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_b1bb8029615d6b3fb76147d2",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 194,
+          "y": 17,
+          "width": 183,
+          "height": 173
+        },
+        "salience": 0.4377
+      },
+      "unit": null,
+      "confidence": 0.9246,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_aa3f06e605541196268094a6",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 12,
+          "y": 190,
+          "width": 182,
+          "height": 174
+        },
+        "salience": 0.4195
+      },
+      "unit": null,
+      "confidence": 0.9246,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_98efeabc2da7ec2e0e08873d",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 194,
+          "y": 190,
+          "width": 183,
+          "height": 174
+        },
+        "salience": 0.3912
+      },
+      "unit": null,
+      "confidence": 0.9246,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_b2def246fbfda8868c5c0e1b",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "text_fact",
+      "canonical_value": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "surface_forms": [
+        "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_780c901afd1af85006879ba7"
+      ],
+      "evidence_refs": [
+        "asset_780c901afd1af85006879ba7"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_71c30b476fa812762b7c13eb",
+        "parent_problem_id": "prob_1287ea1e0e28130d76c0826b",
+        "variant_index": 1,
+        "title": "EEE-Bench 开放题",
+        "rewritten_question_text": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+        "expected_answer_type": "numeric",
+        "expected_answer": "0.8",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_b12225dd85cecda64c321d6b",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states that no image path or URL is available, which conflicts with the provided top-level image path.",
+      "surface_forms": [
+        "metadata.extraction_notes states that no image path or URL is available, which conflicts with the provided top-level image path."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states that no image path or URL is available, which conflicts with the provided top-level image path."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_d23b3e780939db57aa017877",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty while the top-level image_paths contains a provided image path.",
+      "surface_forms": [
+        "metadata.image_paths is empty while the top-level image_paths contains a provided image path."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty while the top-level image_paths contains a provided image path."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_277a75dbb3e4d2dc772632c5",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_image_reference_conflict",
+      "surface_forms": [
+        "metadata_image_reference_conflict"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_image_reference_conflict"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_6022ddccc40abdae037c11a3",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_1287ea1e0e28130d76c0826b",
+        "problem_id": "prob_1287ea1e0e28130d76c0826b",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-05T14:46:47Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "node_id": "node_e328f5cd7c334e13d9baee7e",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "image_support_clear",
+          "solvable_with_answer",
+          "understandable_complete"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T14:46:54Z",
+      "updated_at": "2026-04-05T14:46:54Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_ccf4c895b7b4167476f92ee3",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_9ab7b7c008590714",
+      "dataset_name": "EEE-Bench",
+      "input_asset_ids": [
+        "asset_722c83108f2ccf2031bd5f89",
+        "asset_2ff4529333a8a415d7e93bb1",
+        "asset_044b8fc787d912a4ccddedc7",
+        "asset_bb60b0345be4e776b8e7ff25",
+        "asset_be3644bd3b93945d6ffd86c3",
+        "asset_bec9915ca50eda6a9a345faa",
+        "asset_780c901afd1af85006879ba7"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 10
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 384,
+            "height": 384,
+            "blur_score": 931.7084,
+            "contrast_score": 43.4431,
+            "noise_score": 23.8084,
+            "readability_score": 0.8116,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 12,
+              "y": 17,
+              "width": 365,
+              "height": 347
+            },
+            "perceptual_hash": "ef83ff24e7dbc3ef"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_ccf4c895b7b4167476f92ee3",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_1287ea1e0e28130d76c0826b",
+        "question_type": "open",
+        "condition_count": 3,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_1287ea1e0e28130d76c0826b",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The question is fully specified, and the image clearly shows the Z-channel transition probabilities needed to compute P(input=0 | output=0). The expected numeric answer is understandable and consistent with the diagram.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes states that no image path or URL is available, which conflicts with the provided top-level image path.",
+        "metadata.image_paths is empty while the top-level image_paths contains a provided image path.",
+        "metadata_image_reference_conflict"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "image_support_clear",
+        "solvable_with_answer",
+        "understandable_complete"
+      ],
+      "decision_rationale": "The sample is complete and jointly understandable, the image provides the needed Z-channel information, the rewritten question is usable, and alignment/solvability signals show no substantive failure. The metadata image-reference conflict is non-material to semantic usability here.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-05T14:46:54Z",
+      "finished_at": "2026-04-05T14:46:54Z",
+      "candidate_id": "cand_1287ea1e0e28130d76c0826b",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_ccf4c895b7b4167476f92ee3",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "image_entity_refs": [
+        "visual_prob_1287ea1e0e28130d76c0826b_1::roi",
+        "visual_prob_1287ea1e0e28130d76c0826b_1::roi_top_left",
+        "visual_prob_1287ea1e0e28130d76c0826b_1::roi_top_right",
+        "visual_prob_1287ea1e0e28130d76c0826b_1::roi_bottom_left",
+        "visual_prob_1287ea1e0e28130d76c0826b_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_1287ea1e0e28130d76c0826b_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "image",
+          "image_ref": "visual_prob_1287ea1e0e28130d76c0826b_1::roi",
+          "relation": "grounds_image",
+          "confidence": 0.7812
+        },
+        {
+          "text_ref": "Z",
+          "image_ref": "visual_prob_1287ea1e0e28130d76c0826b_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7812
+        },
+        {
+          "text_ref": "slot_prob_1287ea1e0e28130d76c0826b_1",
+          "image_ref": "visual_prob_1287ea1e0e28130d76c0826b_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7834
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-05T14:46:40Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_c0803ae5b4a0017ad590218a",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Consider the Z-channel given in the <image>. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "after_value": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "audit_id": "audit_293db1a5d06de99f48c0544b",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "0.8",
+      "after_value": "0.8",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "audit_id": "audit_141532364df3274d655d1707",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "audit_id": "audit_e328f5cd7c334e13d9baee7e",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:46:54Z"
+    },
+    {
+      "audit_id": "audit_11a0b7cd22ee16d01499270d",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "Z",
+          "canonical": "Z",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "or",
+          "canonical": "or",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "If",
+          "canonical": "If",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T14:46:54Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_ccf4c895b7b4167476f92ee3",
+      "problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "source_problem_id": "165",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_71c30b476fa812762b7c13eb",
+          "parent_problem_id": "prob_1287ea1e0e28130d76c0826b",
+          "variant_index": 1,
+          "title": "EEE-Bench 开放题",
+          "rewritten_question_text": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+          "expected_answer_type": "numeric",
+          "expected_answer": "0.8",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-05T14:46:54Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_71c30b476fa812762b7c13eb",
+      "parent_problem_id": "prob_1287ea1e0e28130d76c0826b",
+      "variant_index": 1,
+      "title": "EEE-Bench 开放题",
+      "rewritten_question_text": "Consider the Z-channel given in the image. The input is 0 or 1 with equal probability.\nIf the output is 0, the probability that the input is also 0 equals",
+      "expected_answer_type": "numeric",
+      "expected_answer": "0.8",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "eeebench00947",
+  "canonical_sample_index": 947,
+  "canonical_dataset_key": "eee_bench",
+  "sample_path": "samples/eeebench00947.json",
+  "image_path": "artifacts/images/eeebench00947.png",
+  "images": [
+    "artifacts/images/eeebench00947.png"
+  ],
+  "crop_path": "artifacts/crops/eeebench00947.png",
+  "crops": [
+    "artifacts/crops/eeebench00947.png"
+  ]
+}

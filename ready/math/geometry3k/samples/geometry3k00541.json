@@ -1,0 +1,1825 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_32e315d49b0b5af2b988dad6",
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "problem_id": "prob_04e7271d1486786585ab78c1",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "132",
+    "raw_question_text": "<image>$ \\triangle WXY $ and $ \\triangle XYZ $ are isosceles and $m∠XYZ = 128$. Find the measure of $∠WXY$.",
+    "raw_answer_text": "76",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(422, 223)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains an in-memory PIL image representation rather than a file path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T10:46:06Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_04e7271d1486786585ab78c1",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_04e7271d1486786585ab78c1_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 422,
+        "height": 223,
+        "file_size": 38342
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 107,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_32e315d49b0b5af2b988dad6",
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "132",
+    "created_at": "2026-04-12T10:46:06Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_04e7271d1486786585ab78c1",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.68,
+    "verifiability_score": 0.89,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image` is true",
+        "`text_dominant` is false",
+        "The text says both triangles are isosceles but does not specify which sides are equal, so the diagram is needed to identify the intended configuration"
+      ],
+      "multi_step": [
+        "Solving likely requires combining angle facts from two isosceles triangles that share side/vertex structure",
+        "The target angle is not directly given; it must be derived from the given 128-degree angle through intermediate geometric relations",
+        "Geometry3K items with diagram-defined triangle roles typically involve at least two inference steps rather than simple lookup"
+      ],
+      "verifiability": [
+        "`answer_type` is numeric and `answer_text` is a short concrete value (`76`)",
+        "`registry_passed` is true, and both question and answer are present in the manifests",
+        "A single numeric geometry answer is generally easy to check once the intended diagram interpretation is fixed"
+      ]
+    },
+    "risk_flags": [
+      "Diagram-specific isosceles equal-side relationships are not explicit in the text, so verification depends on correct image interpretation",
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_32e315d49b0b5af2b988dad6",
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "132",
+    "created_at": "2026-04-12T10:46:06Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_04e7271d1486786585ab78c1",
+    "priority": 0.88,
+    "decision": "keep",
+    "decision_reasons": [
+      "Question, answer, and primary diagram asset are all present, and the image file exists in the registry.",
+      "The sample has high verifiability with a concrete numeric answer and a passed asset registry record.",
+      "Although the text alone does not fully specify the isosceles relationships, the required diagram is available, so the core semantics are still recoverable.",
+      "The metadata.image_paths issue is a registry/metadata risk, but it does not remove the usable image asset for this sample."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_32e315d49b0b5af2b988dad6",
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "132",
+    "created_at": "2026-04-12T10:46:06Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_32e315d49b0b5af2b988dad6",
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "problem_id": "prob_04e7271d1486786585ab78c1",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+    "normalized_answer_text": "76",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed leading image marker.",
+      "Diagram is required because the equal-side information is conveyed by tick marks rather than fully specified in text.",
+      "force_requires_image=true, so multimodal processing is retained."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T10:46:06Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "132",
+    "subject": "数学",
+    "raw_question_text": "<image>$ \\triangle WXY $ and $ \\triangle XYZ $ are isosceles and $m∠XYZ = 128$. Find the measure of $∠WXY$.",
+    "raw_answer_text": "76",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.89,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 132,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(422, 223)>"
+      ],
+      "extraction_notes": [
+        "image field contains an in-memory PIL image representation rather than a file path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T10:47:11Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question, answer, and primary diagram asset are all present, and the image file exists in the registry.",
+      "The sample has high verifiability with a concrete numeric answer and a passed asset registry record.",
+      "Although the text alone does not fully specify the isosceles relationships, the required diagram is available, so the core semantics are still recoverable.",
+      "The metadata.image_paths issue is a registry/metadata risk, but it does not remove the usable image asset for this sample."
+    ],
+    "collection_risk_flags": [
+      "Diagram-specific isosceles equal-side relationships are not explicit in the text, so verification depends on correct image interpretation",
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_356b819cc29408aaaef6a3f7",
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "132",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_04e7271d1486786585ab78c1/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_04e7271d1486786585ab78c1/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 422,
+        "height": 223
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.89
+    },
+    "created_at": "2026-04-12T10:47:11Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_68d369e1a278ae4ba3cd91e3",
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "132",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.88,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.68,
+      "initial_verifiability_score": 0.89
+    },
+    "created_at": "2026-04-12T10:47:11Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Question, answer, and primary diagram asset are all present, and the image file exists in the registry.",
+      "The sample has high verifiability with a concrete numeric answer and a passed asset registry record.",
+      "Although the text alone does not fully specify the isosceles relationships, the required diagram is available, so the core semantics are still recoverable.",
+      "The metadata.image_paths issue is a registry/metadata risk, but it does not remove the usable image asset for this sample."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_32e315d49b0b5af2b988dad6",
+      "candidate_id": "cand_04e7271d1486786585ab78c1",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T10:47:11Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_32e315d49b0b5af2b988dad6",
+    "problem_id": "prob_04e7271d1486786585ab78c1",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "132",
+    "normalized_question_text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+    "normalized_answer_text": "76",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "answer_available",
+      "jointly_understandable",
+      "rewrite_usable",
+      "solvable_with_image"
+    ],
+    "created_at": "2026-04-12T10:47:11Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_32e315d49b0b5af2b988dad6",
+    "problem_id": "prob_04e7271d1486786585ab78c1",
+    "normalized_question_text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+    "normalized_answer_text": "76",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "WXY",
+        "canonical": "WXY",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "XYZ",
+        "canonical": "XYZ",
+        "variable_type": "label"
+      },
+      {
+        "original": "are",
+        "canonical": "are",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find the measure of $\\angle WXY$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 422,
+          "height": 223
+        },
+        "readability_score": 0.6075,
+        "contrast_score": 34.4276
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T10:47:11Z",
+    "normalization_notes": [
+      "Removed leading image marker.",
+      "Diagram is required because the equal-side information is conveyed by tick marks rather than fully specified in text.",
+      "force_requires_image=true, so multimodal processing is retained."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_04e7271d1486786585ab78c1",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "132",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-900-1500_20260412T071102Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>$ \\triangle WXY $ and $ \\triangle XYZ $ are isosceles and $m∠XYZ = 128$. Find the measure of $∠WXY$.",
+    "normalized_question_text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+    "raw_answer_text": "76",
+    "normalized_answer_text": "76",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9457,
+    "multi_step_score": 0.3557,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "answer_available",
+      "jointly_understandable",
+      "rewrite_usable",
+      "solvable_with_image"
+    ],
+    "clean_decision_rationale": "The sample is semantically clear and complete: the question and numeric answer are present, the rewrite is usable, and the diagram is reported clear enough to supply the isosceles relationships needed for solving. Alignment and solvability signals are strong, and the minor metadata issue does not materially block annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_04e7271d1486786585ab78c1",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T10:46:06Z",
+    "updated_at": "2026-04-12T10:47:11Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.68,
+    "initial_verifiability_score": 0.89,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Question, answer, and primary diagram asset are all present, and the image file exists in the registry.",
+      "The sample has high verifiability with a concrete numeric answer and a passed asset registry record.",
+      "Although the text alone does not fully specify the isosceles relationships, the required diagram is available, so the core semantics are still recoverable.",
+      "The metadata.image_paths issue is a registry/metadata risk, but it does not remove the usable image asset for this sample."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_b79dedc8a4f6dd71953bd255",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[900:1500]/132/question",
+      "storage_uri": "inline://prob_04e7271d1486786585ab78c1/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 111,
+      "width": null,
+      "height": null,
+      "sha256": "1854e7ac6ee787999d9ddc30fbb73ce3c8c2991079d8e1fdaeb979c67a97d74c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>$ \\triangle WXY $ and $ \\triangle XYZ $ are isosceles and $m∠XYZ = 128$. Find the measure of $∠WXY$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6464,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "WXY",
+          "canonical": "WXY",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "XYZ",
+          "canonical": "XYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "asset_id": "asset_6e6ea2451d90e62dec5bed4c",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_04e7271d1486786585ab78c1/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 108,
+      "width": null,
+      "height": null,
+      "sha256": "178877b0a185fc24bdf4068ca204c56a26e2cad2ade3c038787ea8e5aeac44ea",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>$ \\triangle WXY $ and $ \\triangle XYZ $ are isosceles and $m∠XYZ = 128$. Find the measure of $∠WXY$.",
+      "normalized_text_snapshot": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+      "text_completeness_score": 0.6464,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "WXY",
+          "canonical": "WXY",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "XYZ",
+          "canonical": "XYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "asset_id": "asset_2c8a7f80dcd632249a35d57e",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[900:1500]/132/answer",
+      "storage_uri": "inline://prob_04e7271d1486786585ab78c1/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "f74efabef12ea619e30b79bddef89cffa9dda494761681ca862cff2871a85980",
+      "perceptual_hash": null,
+      "source_text_snapshot": "76",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "asset_id": "asset_fa907d3d0dc6f22715248c2f",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_04e7271d1486786585ab78c1/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "f74efabef12ea619e30b79bddef89cffa9dda494761681ca862cff2871a85980",
+      "perceptual_hash": null,
+      "source_text_snapshot": "76",
+      "normalized_text_snapshot": "76",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "asset_id": "asset_a5c019a7101d4433876b33d0",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_04e7271d1486786585ab78c1_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 38342,
+      "width": 422,
+      "height": 223,
+      "sha256": "885f2a2d882bd3d510db25b1fe2d85aa8b9f2029d742c4bdc5456ab29de6321d",
+      "perceptual_hash": "dfcfcf87bbb0007e",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1567.8121,
+      "readability_score": 0.6075,
+      "noise_score": 23.4096,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 422,
+        "height": 223
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "asset_id": "asset_7dbef2e940d063a8df32a918",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_95a6c3031983a7da4bf9db90",
+      "file_format": "txt",
+      "file_size_bytes": 108,
+      "width": null,
+      "height": null,
+      "sha256": "178877b0a185fc24bdf4068ca204c56a26e2cad2ade3c038787ea8e5aeac44ea",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>$ \\triangle WXY $ and $ \\triangle XYZ $ are isosceles and $m∠XYZ = 128$. Find the measure of $∠WXY$.",
+      "normalized_text_snapshot": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+      "text_completeness_score": 0.6464,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "WXY",
+          "canonical": "WXY",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "XYZ",
+          "canonical": "XYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_04e7271d1486786585ab78c1",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "128"
+          ],
+          "unit_mentions": [
+            "W",
+            "g",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find the measure of $\\angle WXY$.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_04e7271d1486786585ab78c1_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find the measure of $\\angle WXY$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "76",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "triangle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "WXY",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "XYZ",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "WXY",
+          "canonical": "WXY",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "XYZ",
+          "canonical": "XYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find the measure of $\\angle WXY$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T10:46:56Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_04e7271d1486786585ab78c1_1",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.8924,
+        "dark_pixel_ratio": 0.0496,
+        "readability_score": 0.6075,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 422,
+            "height": 223
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 422,
+            "height": 223
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 211,
+            "height": 111
+          },
+          "salience": 0.4012
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 111,
+            "width": 211,
+            "height": 112
+          },
+          "salience": 0.4006
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 211,
+            "y": 111,
+            "width": 211,
+            "height": 112
+          },
+          "salience": 0.436
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.843,
+      "created_at": "2026-04-12T10:46:56Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_04e7271d1486786585ab78c1",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T10:47:05Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_e76e766e67e59da3d60870b3",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "text_fact",
+      "canonical_value": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$.",
+      "surface_forms": [
+        "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_6e6ea2451d90e62dec5bed4c"
+      ],
+      "evidence_refs": [
+        "asset_6e6ea2451d90e62dec5bed4c"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "128"
+        ],
+        "unit_mentions": [
+          "W",
+          "g",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "W,g,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_4030c0f33a4d0c5afd0ec506",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "target_slot",
+      "canonical_value": "Find the measure of $\\angle WXY$.",
+      "surface_forms": [
+        "Find the measure of $\\angle WXY$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_6e6ea2451d90e62dec5bed4c"
+      ],
+      "evidence_refs": [
+        "asset_6e6ea2451d90e62dec5bed4c"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_04e7271d1486786585ab78c1_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find the measure of $\\angle WXY$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "76",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_2a1ffc02107e9875ed616c4c",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "answer_claim",
+      "canonical_value": "76",
+      "surface_forms": [
+        "76"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fa907d3d0dc6f22715248c2f"
+      ],
+      "evidence_refs": [
+        "asset_fa907d3d0dc6f22715248c2f"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "76"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_c0d2657c5817911613045987",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 422,
+          "height": 223
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.843,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_e2eb1577aefc63361ddfe657",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 422,
+          "height": 223
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.843,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_0638029346e8e4813a49da65",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 211,
+          "height": 111
+        },
+        "salience": 0.4012
+      },
+      "unit": null,
+      "confidence": 0.843,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_b9db132e4d7320e981d729ee",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 111,
+          "width": 211,
+          "height": 112
+        },
+        "salience": 0.4006
+      },
+      "unit": null,
+      "confidence": 0.843,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_f9f1fbedd864ba2600e9bb83",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 211,
+          "y": 111,
+          "width": 211,
+          "height": 112
+        },
+        "salience": 0.436
+      },
+      "unit": null,
+      "confidence": 0.843,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_32fc5ccbc19a7bf7da22b4bc",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "text_fact",
+      "canonical_value": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+      "surface_forms": [
+        "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_7dbef2e940d063a8df32a918"
+      ],
+      "evidence_refs": [
+        "asset_7dbef2e940d063a8df32a918"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_95a6c3031983a7da4bf9db90",
+        "parent_problem_id": "prob_04e7271d1486786585ab78c1",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "76",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_2e19ccbc696ae876562d9c30",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_610ad3fbb3cd2a5f6437ef02",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_04e7271d1486786585ab78c1",
+        "problem_id": "prob_04e7271d1486786585ab78c1",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T10:47:05Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "node_id": "node_d9ee66c1332258f8369ebc21",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "answer_available",
+          "jointly_understandable",
+          "rewrite_usable",
+          "solvable_with_image"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T10:47:11Z",
+      "updated_at": "2026-04-12T10:47:11Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_32e315d49b0b5af2b988dad6",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a8f6ef9ab7139b21",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_b79dedc8a4f6dd71953bd255",
+        "asset_6e6ea2451d90e62dec5bed4c",
+        "asset_2c8a7f80dcd632249a35d57e",
+        "asset_fa907d3d0dc6f22715248c2f",
+        "asset_a5c019a7101d4433876b33d0",
+        "asset_7dbef2e940d063a8df32a918"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 7
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 422,
+            "height": 223,
+            "blur_score": 1567.8121,
+            "contrast_score": 34.4276,
+            "noise_score": 23.4096,
+            "readability_score": 0.6075,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 422,
+              "height": 223
+            },
+            "perceptual_hash": "dfcfcf87bbb0007e"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_32e315d49b0b5af2b988dad6",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_04e7271d1486786585ab78c1",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_04e7271d1486786585ab78c1",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly states the target angle and given angle, and the image clearly supplies the needed isosceles side markings for both triangles. Despite low crop-integrity metadata, the visible diagram is semantically readable and sufficient to understand the problem and expected numeric answer.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+      ],
+      "clean_score": 0.9899,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "answer_available",
+        "jointly_understandable",
+        "rewrite_usable",
+        "solvable_with_image"
+      ],
+      "decision_rationale": "The sample is semantically clear and complete: the question and numeric answer are present, the rewrite is usable, and the diagram is reported clear enough to supply the isosceles relationships needed for solving. Alignment and solvability signals are strong, and the minor metadata issue does not materially block annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T10:47:11Z",
+      "finished_at": "2026-04-12T10:47:11Z",
+      "candidate_id": "cand_04e7271d1486786585ab78c1",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_32e315d49b0b5af2b988dad6",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "image_entity_refs": [
+        "visual_prob_04e7271d1486786585ab78c1_1::roi",
+        "visual_prob_04e7271d1486786585ab78c1_1::roi_top_left",
+        "visual_prob_04e7271d1486786585ab78c1_1::roi_bottom_left",
+        "visual_prob_04e7271d1486786585ab78c1_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_04e7271d1486786585ab78c1_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_04e7271d1486786585ab78c1_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7608
+        },
+        {
+          "text_ref": "triangle",
+          "image_ref": "visual_prob_04e7271d1486786585ab78c1_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7608
+        },
+        {
+          "text_ref": "WXY",
+          "image_ref": "visual_prob_04e7271d1486786585ab78c1_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7608
+        },
+        {
+          "text_ref": "XYZ",
+          "image_ref": "visual_prob_04e7271d1486786585ab78c1_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7608
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T10:46:56Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_ef21de4024edf516d7110ca2",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>$ \\triangle WXY $ and $ \\triangle XYZ $ are isosceles and $m∠XYZ = 128$. Find the measure of $∠WXY$.",
+      "after_value": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "audit_id": "audit_12d6a8be3abdb89e6b6ea1db",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "76",
+      "after_value": "76",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "audit_id": "audit_f140c918f0fb78805ebc775e",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "audit_id": "audit_d9ee66c1332258f8369ebc21",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:47:11Z"
+    },
+    {
+      "audit_id": "audit_7dc3a226ccf75febeda67014",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "WXY",
+          "canonical": "WXY",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "XYZ",
+          "canonical": "XYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "are",
+          "canonical": "are",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T10:47:11Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_32e315d49b0b5af2b988dad6",
+      "problem_id": "prob_04e7271d1486786585ab78c1",
+      "source_problem_id": "132",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_95a6c3031983a7da4bf9db90",
+          "parent_problem_id": "prob_04e7271d1486786585ab78c1",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "76",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T10:47:11Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_95a6c3031983a7da4bf9db90",
+      "parent_problem_id": "prob_04e7271d1486786585ab78c1",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "$\\triangle WXY$ and $\\triangle XYZ$ are isosceles and $m\\angle XYZ = 128$. Find the measure of $\\angle WXY$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "76",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00541",
+  "canonical_sample_index": 541,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00541.json",
+  "image_path": "artifacts/images/geometry3k00541.png",
+  "images": [
+    "artifacts/images/geometry3k00541.png"
+  ]
+}

@@ -1,0 +1,1835 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_1ce665aaef4d01c98982dd11",
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "problem_id": "prob_b4741185588477916abff2dd",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "525",
+    "raw_question_text": "<image>Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m∠1 = 30$.",
+    "raw_answer_text": "30",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(410, 273)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images字段中只有PIL对象字符串表示，未提供实际图片路径或URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-13T00:03:55Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_b4741185588477916abff2dd",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_b4741185588477916abff2dd_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 410,
+        "height": 273,
+        "file_size": 18855
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 89,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [
+      "metadata.extraction_notes indicates the original images field only contained a PIL object string representation and did not provide an actual image path or URL."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_1ce665aaef4d01c98982dd11",
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "525",
+    "created_at": "2026-04-13T00:03:55Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_b4741185588477916abff2dd",
+    "image_dependency_score": 0.97,
+    "multi_step_score": 0.58,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "题干只给出“rectangle”和“angle 1/angle 8”，角的编号与位置关系必须依赖配图理解。",
+        "输入字段显示 `requires_image=true` 且 `text_dominant=false`，说明关键信息主要在图像中而非文字中。",
+        "asset_registry_record 中存在可用图片文件，`image_manifest[0].exists=true`，支持这是标准图形题。"
+      ],
+      "multi_step": [
+        "从 `m∠1=30` 推到 `∠8`，通常需要结合矩形性质与图中编号角之间的关系，不是直接读数。",
+        "题型来自 `Geometry3K`，且 metadata 标记 `should_push_multi_solution_agent=true`，表明存在一定的图形推理链路潜力。",
+        "但题干文字很短，未显式给出更多条件；具体推理步数高度依赖图形结构，因此保守给中等分。"
+      ],
+      "verifiability": [
+        "`answer_type` 为 `numeric`，且 `answer_text` 为明确单值 `30`，答案形式清晰。",
+        "`asset_registry_record.registry_passed=true`，问题、答案、图片资产均已登记，可供后续核验。",
+        "这是典型几何角度求值题，若结合图像可用规则或重建推理检查结果是否一致。"
+      ]
+    },
+    "risk_flags": [
+      "asset_registry_record.issues 提示原始 images 字段曾只有 PIL 对象字符串表示，存在上游抽取链路风险。",
+      "requires_image=true，若脱离原图无法确定 angle 1 与 angle 8 的对应位置。"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_1ce665aaef4d01c98982dd11",
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "525",
+    "created_at": "2026-04-13T00:03:55Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_b4741185588477916abff2dd",
+    "priority": 0.78,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题干、答案和图片资产都已登记且图片文件存在，核心语义仍可恢复，不应过早 reject。",
+      "该题 image_dependency_score 很高，angle 编号关系明显依赖配图理解，因此图片质量与来源稳定性很关键。",
+      "asset_registry_record.issues 提示上游原始 images 字段曾只有 PIL 对象字符串表示，存在抽取链路风险，适合进入候选池但降低优先级。",
+      "verifiability_score 较高且答案为明确数值，后续仍具备核验与修复价值。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_1ce665aaef4d01c98982dd11",
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "525",
+    "created_at": "2026-04-13T00:03:55Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_1ce665aaef4d01c98982dd11",
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "problem_id": "prob_b4741185588477916abff2dd",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+    "normalized_answer_text": "30",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading <image> marker as non-semantic noise.",
+      "Angle labels refer to the diagram, so the item remains image-dependent.",
+      "Used the fallback-compatible multimodal normalization path."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-13T00:03:55Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "525",
+    "subject": "数学",
+    "raw_question_text": "<image>Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m∠1 = 30$.",
+    "raw_answer_text": "30",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 525,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(410, 273)>"
+      ],
+      "extraction_notes": [
+        "images字段中只有PIL对象字符串表示，未提供实际图片路径或URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-13T00:05:01Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和图片资产都已登记且图片文件存在，核心语义仍可恢复，不应过早 reject。",
+      "该题 image_dependency_score 很高，angle 编号关系明显依赖配图理解，因此图片质量与来源稳定性很关键。",
+      "asset_registry_record.issues 提示上游原始 images 字段曾只有 PIL 对象字符串表示，存在抽取链路风险，适合进入候选池但降低优先级。",
+      "verifiability_score 较高且答案为明确数值，后续仍具备核验与修复价值。"
+    ],
+    "collection_risk_flags": [
+      "asset_registry_record.issues 提示原始 images 字段曾只有 PIL 对象字符串表示，存在上游抽取链路风险。",
+      "requires_image=true，若脱离原图无法确定 angle 1 与 angle 8 的对应位置。"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_6384c735e35eba5479a203cb",
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "525",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_b4741185588477916abff2dd/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_b4741185588477916abff2dd/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 410,
+        "height": 273
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-13T00:05:01Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes indicates the original images field only contained a PIL object string representation and did not provide an actual image path or URL."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_3d952616351a80dd1d25e8aa",
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "525",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.78,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.97,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-13T00:05:01Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题干、答案和图片资产都已登记且图片文件存在，核心语义仍可恢复，不应过早 reject。",
+      "该题 image_dependency_score 很高，angle 编号关系明显依赖配图理解，因此图片质量与来源稳定性很关键。",
+      "asset_registry_record.issues 提示上游原始 images 字段曾只有 PIL 对象字符串表示，存在抽取链路风险，适合进入候选池但降低优先级。",
+      "verifiability_score 较高且答案为明确数值，后续仍具备核验与修复价值。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_1ce665aaef4d01c98982dd11",
+      "candidate_id": "cand_b4741185588477916abff2dd",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-13T00:05:01Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_1ce665aaef4d01c98982dd11",
+    "problem_id": "prob_b4741185588477916abff2dd",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "525",
+    "normalized_question_text": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+    "normalized_answer_text": "30",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "semantically_usable",
+      "solvable"
+    ],
+    "created_at": "2026-04-13T00:05:01Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_1ce665aaef4d01c98982dd11",
+    "problem_id": "prob_b4741185588477916abff2dd",
+    "normalized_question_text": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+    "normalized_answer_text": "30",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "WXYZ",
+        "canonical": "WXYZ",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "if",
+        "canonical": "if",
+        "variable_type": "label"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Quadrilateral $WXYZ$ is a rectangle."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find the measure of $\\angle 8$ if $m\\angle 1 = 30$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 22,
+          "y": 34,
+          "width": 366,
+          "height": 226
+        },
+        "readability_score": 0.8144,
+        "contrast_score": 43.8117
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-13T00:05:01Z",
+    "normalization_notes": [
+      "Removed the leading <image> marker as non-semantic noise.",
+      "Angle labels refer to the diagram, so the item remains image-dependent.",
+      "Used the fallback-compatible multimodal normalization path."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_b4741185588477916abff2dd",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "525",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-000-900_20260412T151456Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m∠1 = 30$.",
+    "normalized_question_text": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+    "raw_answer_text": "30",
+    "normalized_answer_text": "30",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9664,
+    "multi_step_score": 0.3557,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.extraction_notes indicates the original images field only contained a PIL object string representation and did not provide an actual image path or URL."
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "semantically_usable",
+      "solvable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable, the numeric answer target is present, the rewrite is usable, and alignment and solvability evidence indicate no serious failure. The metadata note about the original image field is a minor provenance risk, but it does not outweigh the clear evidence that the diagram content was available and sufficient for solving.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_b4741185588477916abff2dd",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-13T00:03:55Z",
+    "updated_at": "2026-04-13T00:05:01Z",
+    "initial_image_dependency_score": 0.97,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.78,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和图片资产都已登记且图片文件存在，核心语义仍可恢复，不应过早 reject。",
+      "该题 image_dependency_score 很高，angle 编号关系明显依赖配图理解，因此图片质量与来源稳定性很关键。",
+      "asset_registry_record.issues 提示上游原始 images 字段曾只有 PIL 对象字符串表示，存在抽取链路风险，适合进入候选池但降低优先级。",
+      "verifiability_score 较高且答案为明确数值，后续仍具备核验与修复价值。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_7a5c96d7b957456bcd7c5ddb",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[0:900]/525/question",
+      "storage_uri": "inline://prob_b4741185588477916abff2dd/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 91,
+      "width": null,
+      "height": null,
+      "sha256": "b6a7164dc36947a3ea10a6302b76891cc9f6734bcd63acb2fea437f4516edc9d",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m∠1 = 30$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6286,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "WXYZ",
+          "canonical": "WXYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "asset_id": "asset_e7c9921156b840694b193039",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_b4741185588477916abff2dd/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 88,
+      "width": null,
+      "height": null,
+      "sha256": "613b8f9c0a8fec113aca414a7c118474bd7758557397d160af6fc7de6a98fc0c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m∠1 = 30$.",
+      "normalized_text_snapshot": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+      "text_completeness_score": 0.6286,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "WXYZ",
+          "canonical": "WXYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "asset_id": "asset_8c0206ff5156109b61806541",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[0:900]/525/answer",
+      "storage_uri": "inline://prob_b4741185588477916abff2dd/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "624b60c58c9d8bfb6ff1886c2fd605d2adeb6ea4da576068201b6c6958ce93f4",
+      "perceptual_hash": null,
+      "source_text_snapshot": "30",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "asset_id": "asset_1a372bb45cb0f644cdee6aa9",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_b4741185588477916abff2dd/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "624b60c58c9d8bfb6ff1886c2fd605d2adeb6ea4da576068201b6c6958ce93f4",
+      "perceptual_hash": null,
+      "source_text_snapshot": "30",
+      "normalized_text_snapshot": "30",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "asset_id": "asset_f967e48ed4a998897fbd1114",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_b4741185588477916abff2dd_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 18855,
+      "width": 410,
+      "height": 273,
+      "sha256": "3860ac82ceda27aa98957ac9611fa75bbf6c7ac2591ea6cf3e24e0057adc87ad",
+      "perceptual_hash": "ff3e99e7e79d187e",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2279.8291,
+      "readability_score": 0.8144,
+      "noise_score": 30.1824,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 22,
+        "y": 34,
+        "width": 366,
+        "height": 226
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes indicates the original images field only contained a PIL object string representation and did not provide an actual image path or URL."
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "asset_id": "asset_8395532002dad1e7dc03216e",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/crops/prob_b4741185588477916abff2dd_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 18134,
+      "width": 366,
+      "height": 226,
+      "sha256": "6285cf964d814e7bae337e021d9b5fb281f12ed2633b2468837035c1b564f63e",
+      "perceptual_hash": "7e18bce7e73e187e",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 2279.8291,
+      "readability_score": 0.8144,
+      "noise_score": 30.1824,
+      "cropped_from_asset_id": "asset_f967e48ed4a998897fbd1114",
+      "roi_bbox": {
+        "x": 22,
+        "y": 34,
+        "width": 366,
+        "height": 226
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "asset_id": "asset_dedb4396da7644eb0a79e7f3",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_19f3b1022dc81da579bebf78",
+      "file_format": "txt",
+      "file_size_bytes": 88,
+      "width": null,
+      "height": null,
+      "sha256": "613b8f9c0a8fec113aca414a7c118474bd7758557397d160af6fc7de6a98fc0c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m∠1 = 30$.",
+      "normalized_text_snapshot": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+      "text_completeness_score": 0.6286,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "WXYZ",
+          "canonical": "WXYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_b4741185588477916abff2dd",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "question_type": "calculation",
+      "conditions": [],
+      "targets": [
+        {
+          "text": "Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "8",
+            "1",
+            "30"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_b4741185588477916abff2dd_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "30",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "WXYZ",
+          "canonical": "WXYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Quadrilateral $WXYZ$ is a rectangle."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find the measure of $\\angle 8$ if $m\\angle 1 = 30$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-13T00:04:47Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_b4741185588477916abff2dd_1",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.5018,
+        "dark_pixel_ratio": 0.0749,
+        "readability_score": 0.8144,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 410,
+            "height": 273
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 22,
+            "y": 34,
+            "width": 366,
+            "height": 226
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 22,
+            "y": 34,
+            "width": 183,
+            "height": 113
+          },
+          "salience": 0.4499
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 205,
+            "y": 34,
+            "width": 183,
+            "height": 113
+          },
+          "salience": 0.441
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 22,
+            "y": 147,
+            "width": 183,
+            "height": 113
+          },
+          "salience": 0.4577
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 205,
+            "y": 147,
+            "width": 183,
+            "height": 113
+          },
+          "salience": 0.4566
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9258,
+      "created_at": "2026-04-13T00:04:47Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_b4741185588477916abff2dd",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-13T00:04:52Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_ef187ac09336a3036ef5aff3",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "target_slot",
+      "canonical_value": "Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+      "surface_forms": [
+        "Find the measure of $\\angle 8$ if $m\\angle 1 = 30$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_e7c9921156b840694b193039"
+      ],
+      "evidence_refs": [
+        "asset_e7c9921156b840694b193039"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_b4741185588477916abff2dd_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "30",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_b3d1373688ed47b54a2df235",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "answer_claim",
+      "canonical_value": "30",
+      "surface_forms": [
+        "30"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_1a372bb45cb0f644cdee6aa9"
+      ],
+      "evidence_refs": [
+        "asset_1a372bb45cb0f644cdee6aa9"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "30"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_59c9864b0f64632b9eb0413c",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 410,
+          "height": 273
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_fe826e96f2b8acb9f264c61e",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 22,
+          "y": 34,
+          "width": 366,
+          "height": 226
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_7b8848b7fb66ebd6c1fa71a1",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 22,
+          "y": 34,
+          "width": 183,
+          "height": 113
+        },
+        "salience": 0.4499
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_f931ca4439ee3d1edc05393e",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 205,
+          "y": 34,
+          "width": 183,
+          "height": 113
+        },
+        "salience": 0.441
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_eceeed5aeb90473815fc2bb3",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 22,
+          "y": 147,
+          "width": 183,
+          "height": 113
+        },
+        "salience": 0.4577
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_baacf427282b0f79c91ec294",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_b4741185588477916abff2dd_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 205,
+          "y": 147,
+          "width": 183,
+          "height": 113
+        },
+        "salience": 0.4566
+      },
+      "unit": null,
+      "confidence": 0.9258,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_c55fa0a9d1fed7ee1ccc8b23",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "text_fact",
+      "canonical_value": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+      "surface_forms": [
+        "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_dedb4396da7644eb0a79e7f3"
+      ],
+      "evidence_refs": [
+        "asset_dedb4396da7644eb0a79e7f3"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_19f3b1022dc81da579bebf78",
+        "parent_problem_id": "prob_b4741185588477916abff2dd",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "30",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_081d67115fba1b12c0444c18",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes indicates the original images field only contained a PIL object string representation and did not provide an actual image path or URL.",
+      "surface_forms": [
+        "metadata.extraction_notes indicates the original images field only contained a PIL object string representation and did not provide an actual image path or URL."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes indicates the original images field only contained a PIL object string representation and did not provide an actual image path or URL."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_c4ef49ca88025344a2b5c64e",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_b4741185588477916abff2dd",
+        "problem_id": "prob_b4741185588477916abff2dd",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-13T00:04:52Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "node_id": "node_4601a147b04f2bf00da16c0d",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "semantically_usable",
+          "solvable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T00:05:01Z",
+      "updated_at": "2026-04-13T00:05:01Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_1ce665aaef4d01c98982dd11",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_b396994bd2367a1c",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_7a5c96d7b957456bcd7c5ddb",
+        "asset_e7c9921156b840694b193039",
+        "asset_8c0206ff5156109b61806541",
+        "asset_1a372bb45cb0f644cdee6aa9",
+        "asset_f967e48ed4a998897fbd1114",
+        "asset_8395532002dad1e7dc03216e",
+        "asset_dedb4396da7644eb0a79e7f3"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 7
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 410,
+            "height": 273,
+            "blur_score": 2279.8291,
+            "contrast_score": 43.8117,
+            "noise_score": 30.1824,
+            "readability_score": 0.8144,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 22,
+              "y": 34,
+              "width": 366,
+              "height": 226
+            },
+            "perceptual_hash": "ff3e99e7e79d187e"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_1ce665aaef4d01c98982dd11",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_b4741185588477916abff2dd",
+        "question_type": "calculation",
+        "condition_count": 0,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_b4741185588477916abff2dd",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "diagram_present",
+          "jointly_understandable",
+          "question_semantics_clear"
+        ],
+        "rationale": "The question text is complete, the expected answer is a numeric angle measure, and the diagram is clear enough to identify the rectangle, diagonals, and labeled angles needed to relate angle 1 and angle 8.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes indicates the original images field only contained a PIL object string representation and did not provide an actual image path or URL."
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "semantically_usable",
+        "solvable"
+      ],
+      "decision_rationale": "The sample is jointly understandable, the numeric answer target is present, the rewrite is usable, and alignment and solvability evidence indicate no serious failure. The metadata note about the original image field is a minor provenance risk, but it does not outweigh the clear evidence that the diagram content was available and sufficient for solving.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-13T00:05:01Z",
+      "finished_at": "2026-04-13T00:05:01Z",
+      "candidate_id": "cand_b4741185588477916abff2dd",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_1ce665aaef4d01c98982dd11",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "image_entity_refs": [
+        "visual_prob_b4741185588477916abff2dd_1::roi",
+        "visual_prob_b4741185588477916abff2dd_1::roi_top_left",
+        "visual_prob_b4741185588477916abff2dd_1::roi_top_right",
+        "visual_prob_b4741185588477916abff2dd_1::roi_bottom_left",
+        "visual_prob_b4741185588477916abff2dd_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_b4741185588477916abff2dd_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_b4741185588477916abff2dd_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7814
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-13T00:04:47Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_1a0fb0aea9cc34ddda69406a",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m∠1 = 30$.",
+      "after_value": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "audit_id": "audit_2c5b7dda5fa6565ea029e0c9",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "30",
+      "after_value": "30",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "audit_id": "audit_0ca96316eed6b518c1f152b3",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "audit_id": "audit_4601a147b04f2bf00da16c0d",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T00:05:01Z"
+    },
+    {
+      "audit_id": "audit_2053073225dfc7e341f1c175",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "WXYZ",
+          "canonical": "WXYZ",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T00:05:01Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_1ce665aaef4d01c98982dd11",
+      "problem_id": "prob_b4741185588477916abff2dd",
+      "source_problem_id": "525",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_19f3b1022dc81da579bebf78",
+          "parent_problem_id": "prob_b4741185588477916abff2dd",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "30",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-13T00:05:01Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_19f3b1022dc81da579bebf78",
+      "parent_problem_id": "prob_b4741185588477916abff2dd",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "Quadrilateral $WXYZ$ is a rectangle. Find the measure of $\\angle 8$ if $m\\angle 1 = 30$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "30",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00377",
+  "canonical_sample_index": 377,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00377.json",
+  "image_path": "artifacts/images/geometry3k00377.png",
+  "images": [
+    "artifacts/images/geometry3k00377.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00377.png",
+  "crops": [
+    "artifacts/crops/geometry3k00377.png"
+  ]
+}

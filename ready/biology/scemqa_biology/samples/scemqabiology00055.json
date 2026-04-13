@@ -1,0 +1,3301 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_4241b4a4444b12af9ae5287d",
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "problem_id": "prob_e032309d43cde503ff17e2d8",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "460",
+    "raw_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies.Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+    "raw_answer_text": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+    "choice_map": {
+      "A": "The bacteria on Plate 2 did not transform.",
+      "B": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "C": "The transformation of bacteria on Plate 2 was more successful.",
+      "D": "The bacteria on Plates 1 and 2 were not taken from the same culture."
+    },
+    "image_paths": [],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "image",
+    "choice_field": "choices",
+    "extraction_notes": [
+      "answer field is numeric `1`, but this record alone does not establish whether the choice index is 0-based or 1-based",
+      "image field contains a PIL image object representation, not a path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T01:27:03Z",
+    "subject": "Biology"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_e032309d43cde503ff17e2d8",
+    "image_manifest": [
+      {
+        "path": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_e032309d43cde503ff17e2d8_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 509,
+        "height": 137,
+        "file_size": 60249
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 820,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 93
+    },
+    "issues": [
+      "metadata.extraction_notes states the source answer field was numeric `1`, which is inconsistent with the provided free-text answer_text.",
+      "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL.",
+      "metadata.image_paths is empty while top-level image_paths contains an image path."
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_4241b4a4444b12af9ae5287d",
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "460",
+    "created_at": "2026-04-12T01:27:03Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_e032309d43cde503ff17e2d8",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.62,
+    "verifiability_score": 0.81,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image` is true and `text_dominant` is false.",
+        "The question explicitly refers to a figure showing plate outcomes and asks about colony differences on Plate 1 versus Plate 2.",
+        "Key visual encodings are described as shaded plates versus dots for colonies, indicating the figure is central to solving the item."
+      ],
+      "multi_step": [
+        "Solving requires combining the setup conditions (plasmid present/absent and ampicillin present/absent) with the observed plate outcomes.",
+        "The explanation depends on comparing Plate 1 and Plate 2 rather than reading a single fact.",
+        "This is still a relatively bounded biology MCQ, so the reasoning is multi-step but not deeply compositional."
+      ],
+      "verifiability": [
+        "The item is multiple-choice with 4 explicit options, and the provided `answer_text` matches choice B verbatim.",
+        "`answer_present` is true, `answer_type` is short text/text, and `registry_passed` is true.",
+        "The correct explanation is semantically clear and can be checked against the options and experiment description."
+      ]
+    },
+    "risk_flags": [
+      "Source answer field reportedly was numeric `1`, which is inconsistent with the provided free-text `answer_text`.",
+      "Source image field reportedly contained a PIL image object representation rather than a stable original path or URL.",
+      "`metadata.image_paths` is empty while a top-level image path exists in the registry record."
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_4241b4a4444b12af9ae5287d",
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "460",
+    "created_at": "2026-04-12T01:27:03Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_e032309d43cde503ff17e2d8",
+    "priority": 0.68,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题干、答案和图像资产都已存在，核心语义仍然可恢复，不符合 reject 条件。",
+      "该题图像依赖高，但当前已有可用图片文件，且题干长度和答案长度都足以支撑后续判断。",
+      "存在答案来源字段不一致的问题：源答案记录为数值 `1`，但当前提供的是自由文本答案，需后续核验。",
+      "图像元数据存在不一致：源图像字段是 PIL 对象表示，且 `metadata.image_paths` 为空而顶层图像路径存在，降低资产可信度。",
+      "综合来看样本可保留进入候选池，但因元数据和答案映射风险更适合降为低优先级。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_4241b4a4444b12af9ae5287d",
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "dataset_name": "SCEMQA",
+    "source_problem_id": "460",
+    "created_at": "2026-04-12T01:27:03Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_4241b4a4444b12af9ae5287d",
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "problem_id": "prob_e032309d43cde503ff17e2d8",
+    "dataset_name": "SCEMQA",
+    "normalized_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+    "normalized_answer_text": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+    "normalized_choice_map": {
+      "A": "The bacteria on Plate 2 did not transform.",
+      "B": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "C": "The transformation of bacteria on Plate 2 was more successful.",
+      "D": "The bacteria on Plates 1 and 2 were not taken from the same culture."
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Preserved the original stem, answer, and options with only minor punctuation/spacing cleanup.",
+      "Marked as image-required because the question explicitly references the figure and force_requires_image is true."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T01:27:03Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "460",
+    "subject": "数学、物理、生物、化学",
+    "raw_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies.Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+    "raw_answer_text": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.62,
+    "initial_verifiability_score": 0.81,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "row_index": 460,
+      "image_paths": [],
+      "extraction_notes": [
+        "answer field is numeric `1`, but this record alone does not establish whether the choice index is 0-based or 1-based",
+        "image field contains a PIL image object representation, not a path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "image",
+      "choice_field": "choices",
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T01:28:38Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.68,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产都已存在，核心语义仍然可恢复，不符合 reject 条件。",
+      "该题图像依赖高，但当前已有可用图片文件，且题干长度和答案长度都足以支撑后续判断。",
+      "存在答案来源字段不一致的问题：源答案记录为数值 `1`，但当前提供的是自由文本答案，需后续核验。",
+      "图像元数据存在不一致：源图像字段是 PIL 对象表示，且 `metadata.image_paths` 为空而顶层图像路径存在，降低资产可信度。",
+      "综合来看样本可保留进入候选池，但因元数据和答案映射风险更适合降为低优先级。"
+    ],
+    "collection_risk_flags": [
+      "Source answer field reportedly was numeric `1`, which is inconsistent with the provided free-text `answer_text`.",
+      "Source image field reportedly contained a PIL image object representation rather than a stable original path or URL.",
+      "`metadata.image_paths` is empty while a top-level image path exists in the registry record."
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_a16a6c077aeaeb5a1485e9c2",
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "460",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_e032309d43cde503ff17e2d8/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_e032309d43cde503ff17e2d8/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 509,
+        "height": 137
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.62,
+      "initial_verifiability_score": 0.81
+    },
+    "created_at": "2026-04-12T01:28:38Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.extraction_notes states the source answer field was numeric `1`, which is inconsistent with the provided free-text answer_text.",
+      "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL.",
+      "metadata.image_paths is empty while top-level image_paths contains an image path."
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_2851ef3bbbfdcb6c8e57c45e",
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "460",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.68,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.62,
+      "initial_verifiability_score": 0.81
+    },
+    "created_at": "2026-04-12T01:28:38Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题干、答案和图像资产都已存在，核心语义仍然可恢复，不符合 reject 条件。",
+      "该题图像依赖高，但当前已有可用图片文件，且题干长度和答案长度都足以支撑后续判断。",
+      "存在答案来源字段不一致的问题：源答案记录为数值 `1`，但当前提供的是自由文本答案，需后续核验。",
+      "图像元数据存在不一致：源图像字段是 PIL 对象表示，且 `metadata.image_paths` 为空而顶层图像路径存在，降低资产可信度。",
+      "综合来看样本可保留进入候选池，但因元数据和答案映射风险更适合降为低优先级。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_4241b4a4444b12af9ae5287d",
+      "candidate_id": "cand_e032309d43cde503ff17e2d8",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "dataset_name": "SCEMQA",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T01:28:38Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_4241b4a4444b12af9ae5287d",
+    "problem_id": "prob_e032309d43cde503ff17e2d8",
+    "source_dataset": "SCEMQA",
+    "source_problem_id": "460",
+    "normalized_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+    "normalized_answer_text": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "rewrite_usable",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-12T01:28:37Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_4241b4a4444b12af9ae5287d",
+    "problem_id": "prob_e032309d43cde503ff17e2d8",
+    "normalized_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+    "normalized_answer_text": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "Four",
+        "canonical": "Four",
+        "variable_type": "label"
+      },
+      {
+        "original": "were",
+        "canonical": "were",
+        "variable_type": "label"
+      },
+      {
+        "original": "set",
+        "canonical": "set",
+        "variable_type": "label"
+      },
+      {
+        "original": "up",
+        "canonical": "up",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "each",
+        "canonical": "each",
+        "variable_type": "label"
+      },
+      {
+        "original": "E",
+        "canonical": "E",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "coli",
+        "canonical": "coli",
+        "variable_type": "label"
+      },
+      {
+        "original": "that",
+        "canonical": "that",
+        "variable_type": "label"
+      },
+      {
+        "original": "had",
+        "canonical": "had",
+        "variable_type": "label"
+      },
+      {
+        "original": "been",
+        "canonical": "been",
+        "variable_type": "label"
+      },
+      {
+        "original": "made",
+        "canonical": "made",
+        "variable_type": "label"
+      },
+      {
+        "original": "then",
+        "canonical": "then",
+        "variable_type": "label"
+      },
+      {
+        "original": "with",
+        "canonical": "with",
+        "variable_type": "label"
+      },
+      {
+        "original": "a",
+        "canonical": "a",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "gene",
+        "canonical": "gene",
+        "variable_type": "label"
+      },
+      {
+        "original": "for",
+        "canonical": "for",
+        "variable_type": "label"
+      },
+      {
+        "original": "pAMP",
+        "canonical": "pAMP",
+        "variable_type": "label"
+      },
+      {
+        "original": "both",
+        "canonical": "both",
+        "variable_type": "label"
+      },
+      {
+        "original": "also",
+        "canonical": "also",
+        "variable_type": "label"
+      },
+      {
+        "original": "but",
+        "canonical": "but",
+        "variable_type": "label"
+      },
+      {
+        "original": "not",
+        "canonical": "not",
+        "variable_type": "label"
+      },
+      {
+        "original": "Each",
+        "canonical": "Each",
+        "variable_type": "label"
+      },
+      {
+        "original": "vial",
+        "canonical": "vial",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "was",
+        "canonical": "was",
+        "variable_type": "label"
+      },
+      {
+        "original": "onto",
+        "canonical": "onto",
+        "variable_type": "label"
+      },
+      {
+        "original": "agar",
+        "canonical": "agar",
+        "variable_type": "label"
+      },
+      {
+        "original": "did",
+        "canonical": "did",
+        "variable_type": "label"
+      },
+      {
+        "original": "This",
+        "canonical": "This",
+        "variable_type": "label"
+      },
+      {
+        "original": "like",
+        "canonical": "like",
+        "variable_type": "label"
+      },
+      {
+        "original": "The",
+        "canonical": "The",
+        "variable_type": "label"
+      },
+      {
+        "original": "dots",
+        "canonical": "dots",
+        "variable_type": "label"
+      },
+      {
+        "original": "best",
+        "canonical": "best",
+        "variable_type": "label"
+      },
+      {
+        "original": "why",
+        "canonical": "why",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "than",
+        "canonical": "than",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Four vials were set up to investigate bacterial transformation."
+      },
+      {
+        "segment_index": 2,
+        "text": "Vials 1 and 2 each contained E."
+      },
+      {
+        "segment_index": 3,
+        "text": "coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance."
+      },
+      {
+        "segment_index": 4,
+        "text": "Vials 3 and 4 both contained E."
+      },
+      {
+        "segment_index": 5,
+        "text": "coli that had also been made competent but had not been mixed with a plasmid."
+      },
+      {
+        "segment_index": 6,
+        "text": "Each vial of bacteria was poured onto a nutrient agar plate."
+      },
+      {
+        "segment_index": 7,
+        "text": "Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin."
+      },
+      {
+        "segment_index": 8,
+        "text": "Vials 2 and 4 were poured onto plates that did not contain ampicillin."
+      },
+      {
+        "segment_index": 9,
+        "text": "This figure shows what the nutrient agar plates looked like."
+      },
+      {
+        "segment_index": 10,
+        "text": "The shaded plates represent extensive growth, and the dots represent individual bacterial colonies."
+      },
+      {
+        "segment_index": 11,
+        "text": "Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 509,
+          "height": 137
+        },
+        "readability_score": 0.645,
+        "contrast_score": 44.4091
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T01:28:37Z",
+    "normalization_notes": [
+      "Preserved the original stem, answer, and options with only minor punctuation/spacing cleanup.",
+      "Marked as image-required because the question explicitly references the figure and force_requires_image is true."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_e032309d43cde503ff17e2d8",
+    "source_dataset": "SCEMQA",
+    "source_split": "test",
+    "source_problem_id": "460",
+    "ingest_batch_id": "benchmarkallinone-scemqa-300-840_20260411T164516Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学、物理、生物、化学"
+    ],
+    "language": "en",
+    "raw_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies.Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+    "normalized_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+    "raw_answer_text": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+    "normalized_answer_text": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+    "answer_type": "text",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9615,
+    "multi_step_score": 0.5947,
+    "verifiability_score": 0.9972,
+    "quality_risk_flags": [
+      "metadata.extraction_notes states the source answer field was numeric `1`, which is inconsistent with the provided free-text answer_text.",
+      "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL.",
+      "metadata.image_paths is empty while top-level image_paths contains an image path.",
+      "source_metadata_inconsistency"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "rewrite_usable",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The question-answer pair is complete and understandable, the image evidence is clear enough to support the colony comparison, the open rewrite is usable, and alignment/solvability show no serious failure. Minor source metadata inconsistencies do not materially block annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_e032309d43cde503ff17e2d8",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T01:27:03Z",
+    "updated_at": "2026-04-12T01:28:38Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.62,
+    "initial_verifiability_score": 0.81,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.68,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产都已存在，核心语义仍然可恢复，不符合 reject 条件。",
+      "该题图像依赖高，但当前已有可用图片文件，且题干长度和答案长度都足以支撑后续判断。",
+      "存在答案来源字段不一致的问题：源答案记录为数值 `1`，但当前提供的是自由文本答案，需后续核验。",
+      "图像元数据存在不一致：源图像字段是 PIL 对象表示，且 `metadata.image_paths` 为空而顶层图像路径存在，降低资产可信度。",
+      "综合来看样本可保留进入候选池，但因元数据和答案映射风险更适合降为低优先级。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_c4d1cad2b2487d40ff5225c6",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://scemqa/test/460/question",
+      "storage_uri": "inline://prob_e032309d43cde503ff17e2d8/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 820,
+      "width": null,
+      "height": null,
+      "sha256": "e26255f440b80c4cf56c96c9b36aa324c9e0d64cadeb970eaa49963be840456a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies.Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Four",
+          "canonical": "Four",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "set",
+          "canonical": "set",
+          "variable_type": "label"
+        },
+        {
+          "original": "up",
+          "canonical": "up",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "coli",
+          "canonical": "coli",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "been",
+          "canonical": "been",
+          "variable_type": "label"
+        },
+        {
+          "original": "made",
+          "canonical": "made",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "gene",
+          "canonical": "gene",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "pAMP",
+          "canonical": "pAMP",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "vial",
+          "canonical": "vial",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "agar",
+          "canonical": "agar",
+          "variable_type": "label"
+        },
+        {
+          "original": "did",
+          "canonical": "did",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "dots",
+          "canonical": "dots",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T01:28:37Z",
+      "updated_at": "2026-04-12T01:28:37Z"
+    },
+    {
+      "asset_id": "asset_083a3dd8f7198d96b2a4fc30",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_e032309d43cde503ff17e2d8/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 821,
+      "width": null,
+      "height": null,
+      "sha256": "8440643722aca0dacde4cb189db5f72a1b2d6273a023977b2c0ca65a1ec3954a",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies.Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+      "normalized_text_snapshot": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Four",
+          "canonical": "Four",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "set",
+          "canonical": "set",
+          "variable_type": "label"
+        },
+        {
+          "original": "up",
+          "canonical": "up",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "coli",
+          "canonical": "coli",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "been",
+          "canonical": "been",
+          "variable_type": "label"
+        },
+        {
+          "original": "made",
+          "canonical": "made",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "gene",
+          "canonical": "gene",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "pAMP",
+          "canonical": "pAMP",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "vial",
+          "canonical": "vial",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "agar",
+          "canonical": "agar",
+          "variable_type": "label"
+        },
+        {
+          "original": "did",
+          "canonical": "did",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "dots",
+          "canonical": "dots",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T01:28:37Z",
+      "updated_at": "2026-04-12T01:28:37Z"
+    },
+    {
+      "asset_id": "asset_e877055e5fd534b248b2a263",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://scemqa/test/460/answer",
+      "storage_uri": "inline://prob_e032309d43cde503ff17e2d8/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 93,
+      "width": null,
+      "height": null,
+      "sha256": "9dc2ea1a2c9a8dd25eb98ebcd444aaf8f990e38a5be63c29d58417512dfef819",
+      "perceptual_hash": null,
+      "source_text_snapshot": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "no",
+          "canonical": "no",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "agar",
+          "canonical": "agar",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T01:28:37Z",
+      "updated_at": "2026-04-12T01:28:37Z"
+    },
+    {
+      "asset_id": "asset_d57f242af87905997f0cc8d1",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_e032309d43cde503ff17e2d8/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 93,
+      "width": null,
+      "height": null,
+      "sha256": "9dc2ea1a2c9a8dd25eb98ebcd444aaf8f990e38a5be63c29d58417512dfef819",
+      "perceptual_hash": null,
+      "source_text_snapshot": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "normalized_text_snapshot": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "no",
+          "canonical": "no",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "agar",
+          "canonical": "agar",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "have",
+          "canonical": "have",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T01:28:37Z",
+      "updated_at": "2026-04-12T01:28:37Z"
+    },
+    {
+      "asset_id": "asset_f144c86f07d6170c6e764dc6",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/scemqa_300_840/run_2d03c8d7aebd328e/datasets/scemqa/artifacts/images/prob_e032309d43cde503ff17e2d8_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 60249,
+      "width": 509,
+      "height": 137,
+      "sha256": "29cfe5d917905a7f872f916b70a1136c72c554f600265b57078a2fd45d22cfb9",
+      "perceptual_hash": "424a4ccccc4c5aff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 6143.9023,
+      "readability_score": 0.645,
+      "noise_score": 32.1206,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 509,
+        "height": 137
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.extraction_notes states the source answer field was numeric `1`, which is inconsistent with the provided free-text answer_text.",
+        "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL.",
+        "metadata.image_paths is empty while top-level image_paths contains an image path.",
+        "source_metadata_inconsistency"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T01:28:37Z",
+      "updated_at": "2026-04-12T01:28:37Z"
+    },
+    {
+      "asset_id": "asset_91fa32fa1eb7a6a81877da89",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_07b0392e4e0428bfedf703da",
+      "file_format": "txt",
+      "file_size_bytes": 773,
+      "width": null,
+      "height": null,
+      "sha256": "fa6ba2bf6c0e2356f9c18800ecbce80b7f24e7aebf8e73b2df1db4256aa6b51b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies.Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+      "normalized_text_snapshot": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Why were there fewer colonies on Plate 1 than on Plate 2?",
+      "text_completeness_score": 0.8,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "Four",
+          "canonical": "Four",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "set",
+          "canonical": "set",
+          "variable_type": "label"
+        },
+        {
+          "original": "up",
+          "canonical": "up",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "coli",
+          "canonical": "coli",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "been",
+          "canonical": "been",
+          "variable_type": "label"
+        },
+        {
+          "original": "made",
+          "canonical": "made",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "gene",
+          "canonical": "gene",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "pAMP",
+          "canonical": "pAMP",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "vial",
+          "canonical": "vial",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "agar",
+          "canonical": "agar",
+          "variable_type": "label"
+        },
+        {
+          "original": "did",
+          "canonical": "did",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "dots",
+          "canonical": "dots",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T01:28:37Z",
+      "updated_at": "2026-04-12T01:28:37Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_e032309d43cde503ff17e2d8",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "Vials 1 and 2 each contained E.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "2"
+          ],
+          "unit_mentions": [
+            "V",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "Vials 3 and 4 both contained E.",
+          "segment_index": 4,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3",
+            "4"
+          ],
+          "unit_mentions": [
+            "V",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin.",
+          "segment_index": 7,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "3"
+          ],
+          "unit_mentions": [
+            "V",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        },
+        {
+          "text": "Vials 2 and 4 were poured onto plates that did not contain ampicillin.",
+          "segment_index": 8,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2",
+            "4"
+          ],
+          "unit_mentions": [
+            "V",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "This figure shows what the nutrient agar plates looked like.",
+          "segment_index": 9,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        },
+        {
+          "text": "Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+          "segment_index": 11,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "2"
+          ],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_e032309d43cde503ff17e2d8_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "This figure shows what the nutrient agar plates looked like.",
+          "expected_answer_type": "short_text",
+          "expected_answer": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "E",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "Four",
+          "canonical": "Four",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "set",
+          "canonical": "set",
+          "variable_type": "label"
+        },
+        {
+          "original": "up",
+          "canonical": "up",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "coli",
+          "canonical": "coli",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "been",
+          "canonical": "been",
+          "variable_type": "label"
+        },
+        {
+          "original": "made",
+          "canonical": "made",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "gene",
+          "canonical": "gene",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "pAMP",
+          "canonical": "pAMP",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "vial",
+          "canonical": "vial",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "agar",
+          "canonical": "agar",
+          "variable_type": "label"
+        },
+        {
+          "original": "did",
+          "canonical": "did",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "dots",
+          "canonical": "dots",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "V",
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Four vials were set up to investigate bacterial transformation."
+        },
+        {
+          "segment_index": 2,
+          "text": "Vials 1 and 2 each contained E."
+        },
+        {
+          "segment_index": 3,
+          "text": "coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance."
+        },
+        {
+          "segment_index": 4,
+          "text": "Vials 3 and 4 both contained E."
+        },
+        {
+          "segment_index": 5,
+          "text": "coli that had also been made competent but had not been mixed with a plasmid."
+        },
+        {
+          "segment_index": 6,
+          "text": "Each vial of bacteria was poured onto a nutrient agar plate."
+        },
+        {
+          "segment_index": 7,
+          "text": "Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin."
+        },
+        {
+          "segment_index": 8,
+          "text": "Vials 2 and 4 were poured onto plates that did not contain ampicillin."
+        },
+        {
+          "segment_index": 9,
+          "text": "This figure shows what the nutrient agar plates looked like."
+        },
+        {
+          "segment_index": 10,
+          "text": "The shaded plates represent extensive growth, and the dots represent individual bacterial colonies."
+        },
+        {
+          "segment_index": 11,
+          "text": "Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T01:28:18Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_e032309d43cde503ff17e2d8_1",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 3.7153,
+        "dark_pixel_ratio": 0.2734,
+        "readability_score": 0.645,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 509,
+            "height": 137
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 509,
+            "height": 137
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 254,
+            "height": 68
+          },
+          "salience": 0.6605
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 254,
+            "y": 0,
+            "width": 255,
+            "height": 68
+          },
+          "salience": 0.6531
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 0,
+            "y": 68,
+            "width": 254,
+            "height": 69
+          },
+          "salience": 0.597
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 254,
+            "y": 68,
+            "width": 255,
+            "height": 69
+          },
+          "salience": 0.584
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.858,
+      "created_at": "2026-04-12T01:28:18Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_e032309d43cde503ff17e2d8",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T01:28:32Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_0cf64daea88cdeee61c5cd4a",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "text_fact",
+      "canonical_value": "Vials 1 and 2 each contained E.",
+      "surface_forms": [
+        "Vials 1 and 2 each contained E."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "evidence_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Vials 1 and 2 each contained E.",
+        "segment_index": 2,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "2"
+        ],
+        "unit_mentions": [
+          "V",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "V,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_02ba8d0af1cf8df04f576a80",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "text_fact",
+      "canonical_value": "Vials 3 and 4 both contained E.",
+      "surface_forms": [
+        "Vials 3 and 4 both contained E."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "evidence_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Vials 3 and 4 both contained E.",
+        "segment_index": 4,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "3",
+          "4"
+        ],
+        "unit_mentions": [
+          "V",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "V,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_a383fb88154b64f4f6775364",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "text_fact",
+      "canonical_value": "Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin.",
+      "surface_forms": [
+        "Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "evidence_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin.",
+        "segment_index": 7,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "3"
+        ],
+        "unit_mentions": [
+          "V",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "V,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_5f9f98b6f3ccceedde694ca3",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "text_fact",
+      "canonical_value": "Vials 2 and 4 were poured onto plates that did not contain ampicillin.",
+      "surface_forms": [
+        "Vials 2 and 4 were poured onto plates that did not contain ampicillin."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "evidence_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Vials 2 and 4 were poured onto plates that did not contain ampicillin.",
+        "segment_index": 8,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "2",
+          "4"
+        ],
+        "unit_mentions": [
+          "V",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "V,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_d9f9ea774ab36cee7073eb96",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "target_slot",
+      "canonical_value": "This figure shows what the nutrient agar plates looked like.",
+      "surface_forms": [
+        "This figure shows what the nutrient agar plates looked like."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "evidence_refs": [
+        "asset_083a3dd8f7198d96b2a4fc30"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_e032309d43cde503ff17e2d8_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "This figure shows what the nutrient agar plates looked like.",
+        "expected_answer_type": "short_text",
+        "expected_answer": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_37564a072139fee7a566c5c8",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "answer_claim",
+      "canonical_value": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "surface_forms": [
+        "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d57f242af87905997f0cc8d1"
+      ],
+      "evidence_refs": [
+        "asset_d57f242af87905997f0cc8d1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "answer": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria."
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_23f37da0425d84925d3b0a27",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 509,
+          "height": 137
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.858,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_5c7c8598001f25432687ead9",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 509,
+          "height": 137
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.858,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_bf4ce3a329e9078cc217e4b3",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 254,
+          "height": 68
+        },
+        "salience": 0.6605
+      },
+      "unit": null,
+      "confidence": 0.858,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_e57c5c9821f8514c79b61b49",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 254,
+          "y": 0,
+          "width": 255,
+          "height": 68
+        },
+        "salience": 0.6531
+      },
+      "unit": null,
+      "confidence": 0.858,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_0db988fd139008336d2e319c",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 0,
+          "y": 68,
+          "width": 254,
+          "height": 69
+        },
+        "salience": 0.597
+      },
+      "unit": null,
+      "confidence": 0.858,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_dac20f0866e4ca799833e762",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 254,
+          "y": 68,
+          "width": 255,
+          "height": 69
+        },
+        "salience": 0.584
+      },
+      "unit": null,
+      "confidence": 0.858,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_f425b459db10a68e3d054ea7",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "text_fact",
+      "canonical_value": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Why were there fewer colonies on Plate 1 than on Plate 2?",
+      "surface_forms": [
+        "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Why were there fewer colonies on Plate 1 than on Plate 2?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_91fa32fa1eb7a6a81877da89"
+      ],
+      "evidence_refs": [
+        "asset_91fa32fa1eb7a6a81877da89"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_07b0392e4e0428bfedf703da",
+        "parent_problem_id": "prob_e032309d43cde503ff17e2d8",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Why were there fewer colonies on Plate 1 than on Plate 2?",
+        "expected_answer_type": "short_text",
+        "expected_answer": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_79fd46ad30bfae2ec69dea44",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states the source answer field was numeric `1`, which is inconsistent with the provided free-text answer_text.",
+      "surface_forms": [
+        "metadata.extraction_notes states the source answer field was numeric `1`, which is inconsistent with the provided free-text answer_text."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states the source answer field was numeric `1`, which is inconsistent with the provided free-text answer_text."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_7320d9a3c789729e3b409e5d",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL.",
+      "surface_forms": [
+        "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_f1a21987d517ed11abb73422",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths is empty while top-level image_paths contains an image path.",
+      "surface_forms": [
+        "metadata.image_paths is empty while top-level image_paths contains an image path."
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths is empty while top-level image_paths contains an image path."
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_40a1d13a0d7b9dd4d0d0b748",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "quality_signal",
+      "canonical_value": "source_metadata_inconsistency",
+      "surface_forms": [
+        "source_metadata_inconsistency"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "source_metadata_inconsistency"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_9039415c3846f1a6a2b2d116",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_e032309d43cde503ff17e2d8",
+        "problem_id": "prob_e032309d43cde503ff17e2d8",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T01:28:32Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "node_id": "node_86682256da2e55f4cefaa4df",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "rewrite_usable",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T01:28:38Z",
+      "updated_at": "2026-04-12T01:28:38Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_4241b4a4444b12af9ae5287d",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_2d03c8d7aebd328e",
+      "dataset_name": "SCEMQA",
+      "input_asset_ids": [
+        "asset_c4d1cad2b2487d40ff5225c6",
+        "asset_083a3dd8f7198d96b2a4fc30",
+        "asset_e877055e5fd534b248b2a263",
+        "asset_d57f242af87905997f0cc8d1",
+        "asset_f144c86f07d6170c6e764dc6",
+        "asset_91fa32fa1eb7a6a81877da89"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 39
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.94,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 509,
+            "height": 137,
+            "blur_score": 6143.9023,
+            "contrast_score": 44.4091,
+            "noise_score": 32.1206,
+            "readability_score": 0.645,
+            "crop_integrity_score": 0.12,
+            "roi_bbox": {
+              "x": 0,
+              "y": 0,
+              "width": 509,
+              "height": 137
+            },
+            "perceptual_hash": "424a4ccccc4c5aff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_4241b4a4444b12af9ae5287d",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_e032309d43cde503ff17e2d8",
+        "question_type": "multiple_choice",
+        "condition_count": 4,
+        "target_count": 2,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_e032309d43cde503ff17e2d8",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_needed_and_semantically_clear",
+          "jointly_understandable",
+          "question_and_answer_clear"
+        ],
+        "rationale": "The question clearly describes the transformation setup and asks for the reason Plate 1 has fewer colonies than Plate 2. The image is simple but usable: Plate 1 shows discrete colonies while Plate 2 shows extensive growth, which supports the correct explanation that Plate 2 lacked ampicillin. Despite minor metadata inconsistencies, the sample is semantically understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.extraction_notes states the source answer field was numeric `1`, which is inconsistent with the provided free-text answer_text.",
+        "metadata.extraction_notes states the source image field contained a PIL image object representation rather than a path or URL.",
+        "metadata.image_paths is empty while top-level image_paths contains an image path.",
+        "source_metadata_inconsistency"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "rewrite_usable",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The question-answer pair is complete and understandable, the image evidence is clear enough to support the colony comparison, the open rewrite is usable, and alignment/solvability show no serious failure. Minor source metadata inconsistencies do not materially block annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T01:28:38Z",
+      "finished_at": "2026-04-12T01:28:38Z",
+      "candidate_id": "cand_e032309d43cde503ff17e2d8",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_4241b4a4444b12af9ae5287d",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "image_entity_refs": [
+        "visual_prob_e032309d43cde503ff17e2d8_1::roi",
+        "visual_prob_e032309d43cde503ff17e2d8_1::roi_top_left",
+        "visual_prob_e032309d43cde503ff17e2d8_1::roi_top_right",
+        "visual_prob_e032309d43cde503ff17e2d8_1::roi_bottom_left",
+        "visual_prob_e032309d43cde503ff17e2d8_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_e032309d43cde503ff17e2d8_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_e032309d43cde503ff17e2d8_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7645
+        },
+        {
+          "text_ref": "E",
+          "image_ref": "visual_prob_e032309d43cde503ff17e2d8_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7645
+        },
+        {
+          "text_ref": "slot_prob_e032309d43cde503ff17e2d8_1",
+          "image_ref": "visual_prob_e032309d43cde503ff17e2d8_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7688
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T01:28:18Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_6585ee3b5f20571c6037819d",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies.Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+      "after_value": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Which of the following statements best explains why there were fewer colonies on Plate 1 than on Plate 2?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "audit_id": "audit_735d943974e44dd16b25e71b",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "after_value": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "audit_id": "audit_e668372a5a8899357d516096",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "audit_id": "audit_86682256da2e55f4cefaa4df",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T01:28:38Z"
+    },
+    {
+      "audit_id": "audit_44db15418cc722c795e8f1e7",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "Four",
+          "canonical": "Four",
+          "variable_type": "label"
+        },
+        {
+          "original": "were",
+          "canonical": "were",
+          "variable_type": "label"
+        },
+        {
+          "original": "set",
+          "canonical": "set",
+          "variable_type": "label"
+        },
+        {
+          "original": "up",
+          "canonical": "up",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "each",
+          "canonical": "each",
+          "variable_type": "label"
+        },
+        {
+          "original": "E",
+          "canonical": "E",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "coli",
+          "canonical": "coli",
+          "variable_type": "label"
+        },
+        {
+          "original": "that",
+          "canonical": "that",
+          "variable_type": "label"
+        },
+        {
+          "original": "had",
+          "canonical": "had",
+          "variable_type": "label"
+        },
+        {
+          "original": "been",
+          "canonical": "been",
+          "variable_type": "label"
+        },
+        {
+          "original": "made",
+          "canonical": "made",
+          "variable_type": "label"
+        },
+        {
+          "original": "then",
+          "canonical": "then",
+          "variable_type": "label"
+        },
+        {
+          "original": "with",
+          "canonical": "with",
+          "variable_type": "label"
+        },
+        {
+          "original": "a",
+          "canonical": "a",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "gene",
+          "canonical": "gene",
+          "variable_type": "label"
+        },
+        {
+          "original": "for",
+          "canonical": "for",
+          "variable_type": "label"
+        },
+        {
+          "original": "pAMP",
+          "canonical": "pAMP",
+          "variable_type": "label"
+        },
+        {
+          "original": "both",
+          "canonical": "both",
+          "variable_type": "label"
+        },
+        {
+          "original": "also",
+          "canonical": "also",
+          "variable_type": "label"
+        },
+        {
+          "original": "but",
+          "canonical": "but",
+          "variable_type": "label"
+        },
+        {
+          "original": "not",
+          "canonical": "not",
+          "variable_type": "label"
+        },
+        {
+          "original": "Each",
+          "canonical": "Each",
+          "variable_type": "label"
+        },
+        {
+          "original": "vial",
+          "canonical": "vial",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        },
+        {
+          "original": "onto",
+          "canonical": "onto",
+          "variable_type": "label"
+        },
+        {
+          "original": "agar",
+          "canonical": "agar",
+          "variable_type": "label"
+        },
+        {
+          "original": "did",
+          "canonical": "did",
+          "variable_type": "label"
+        },
+        {
+          "original": "This",
+          "canonical": "This",
+          "variable_type": "label"
+        },
+        {
+          "original": "like",
+          "canonical": "like",
+          "variable_type": "label"
+        },
+        {
+          "original": "The",
+          "canonical": "The",
+          "variable_type": "label"
+        },
+        {
+          "original": "dots",
+          "canonical": "dots",
+          "variable_type": "label"
+        },
+        {
+          "original": "best",
+          "canonical": "best",
+          "variable_type": "label"
+        },
+        {
+          "original": "why",
+          "canonical": "why",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "than",
+          "canonical": "than",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T01:28:38Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_4241b4a4444b12af9ae5287d",
+      "problem_id": "prob_e032309d43cde503ff17e2d8",
+      "source_problem_id": "460",
+      "strategy": "blank_open",
+      "rationale": "Rewrote the multiple-choice explanation into a directly answerable open-ended question anchored to the correct option.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_07b0392e4e0428bfedf703da",
+          "parent_problem_id": "prob_e032309d43cde503ff17e2d8",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Why were there fewer colonies on Plate 1 than on Plate 2?",
+          "expected_answer_type": "short_text",
+          "expected_answer": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T01:28:38Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_07b0392e4e0428bfedf703da",
+      "parent_problem_id": "prob_e032309d43cde503ff17e2d8",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "Four vials were set up to investigate bacterial transformation. Vials 1 and 2 each contained E. coli bacteria that had been made competent and had then been mixed with a plasmid containing the gene for ampicillin (pAMP) resistance. Vials 3 and 4 both contained E. coli that had also been made competent but had not been mixed with a plasmid. Each vial of bacteria was poured onto a nutrient agar plate. Vials 1 and 3 were poured onto plates that contained the antibiotic ampicillin. Vials 2 and 4 were poured onto plates that did not contain ampicillin.\n\nThis figure shows what the nutrient agar plates looked like. The shaded plates represent extensive growth, and the dots represent individual bacterial colonies. Why were there fewer colonies on Plate 1 than on Plate 2?",
+      "expected_answer_type": "short_text",
+      "expected_answer": "There was no antibiotic in the agar in Plate 2 that would have restricted growth of bacteria.",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "scemqabiology00055",
+  "canonical_sample_index": 55,
+  "canonical_dataset_key": "scemqa_biology",
+  "sample_path": "samples/scemqabiology00055.json",
+  "image_path": "artifacts/images/scemqabiology00055.png",
+  "images": [
+    "artifacts/images/scemqabiology00055.png"
+  ]
+}

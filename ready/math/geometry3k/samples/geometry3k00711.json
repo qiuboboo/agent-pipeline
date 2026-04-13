@@ -1,0 +1,2007 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_4aa91e94d3d208a1967b21d9",
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "problem_id": "prob_8737d3ec07415d05f5ece62a",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "480",
+    "raw_question_text": "<image>In the figure, $ \\triangle ABC$ is isosceles, $ \\triangle DCE$ is equilateral, and $ \\triangle FCG$ is isosceles. Find the measure of the $\\angle 2$ at vertex $C$.",
+    "raw_answer_text": "17",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.PngImagePlugin.PngImageFile image mode=RGBA size=593x338 at 0x7385D4A95810>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images字段中只有PIL图像对象描述，没有可提取的具体图片路径、文件名或URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T13:58:57Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_8737d3ec07415d05f5ece62a",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_8737d3ec07415d05f5ece62a_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 593,
+        "height": 338,
+        "file_size": 24974
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 170,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_4aa91e94d3d208a1967b21d9",
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "480",
+    "created_at": "2026-04-12T13:58:57Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_8737d3ec07415d05f5ece62a",
+    "image_dependency_score": 0.98,
+    "multi_step_score": 0.7,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image` is true.",
+        "Question explicitly says \"In the figure\" and asks for the measure of `angle 2` at vertex C, which depends on diagram-specific labeling.",
+        "`text_dominant` is false, so the essential information is not primarily contained in text.",
+        "Asset registry shows a valid image exists and `registry_passed` is true."
+      ],
+      "multi_step": [
+        "The prompt combines three geometric constraints: `triangle ABC` is isosceles, `triangle DCE` is equilateral, and `triangle FCG` is isosceles.",
+        "Finding a specific labeled angle at C in this setup likely requires chaining multiple angle relations rather than a single direct lookup.",
+        "Metadata marks `should_push_multi_solution_agent=true`, which supports nontrivial reasoning potential, though this is only auxiliary evidence."
+      ],
+      "verifiability": [
+        "`answer_type` is numeric and `answer_text` is present (`17`), so the expected output format is clear.",
+        "The target is a single angle measure, which is usually straightforward to check against a solver or annotation.",
+        "Asset registry indicates `registry_passed=true`, with question, answer, and image all present."
+      ]
+    },
+    "risk_flags": [
+      "diagram_labels_not_recoverable_from_text_alone",
+      "image_required"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_4aa91e94d3d208a1967b21d9",
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "480",
+    "created_at": "2026-04-12T13:58:57Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_8737d3ec07415d05f5ece62a",
+    "priority": 0.93,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和图像资产均已存在，且 `registry_passed=true`，核心语义支撑完整。",
+      "图像依赖虽高，但对应图片文件可用，因此不构成降级或拒绝理由。",
+      "初步评分中 `verifiability_score` 和 `multi_step_score` 均较高，适合作为候选样本进入候选池。",
+      "资产登记无 issues，未见明确缺口或恢复风险。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_4aa91e94d3d208a1967b21d9",
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "480",
+    "created_at": "2026-04-12T13:58:57Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_4aa91e94d3d208a1967b21d9",
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "problem_id": "prob_8737d3ec07415d05f5ece62a",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+    "normalized_answer_text": "17",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading <image> marker as non-semantic noise.",
+      "Kept the figure reference because the problem explicitly depends on the diagram and labeled angles.",
+      "Preserved the answer text and empty choice map without modification."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T13:58:57Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "480",
+    "subject": "数学",
+    "raw_question_text": "<image>In the figure, $ \\triangle ABC$ is isosceles, $ \\triangle DCE$ is equilateral, and $ \\triangle FCG$ is isosceles. Find the measure of the $\\angle 2$ at vertex $C$.",
+    "raw_answer_text": "17",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.7,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 480,
+      "image_paths": [
+        "<PIL.PngImagePlugin.PngImageFile image mode=RGBA size=593x338 at 0x7385D4A95810>"
+      ],
+      "extraction_notes": [
+        "images字段中只有PIL图像对象描述，没有可提取的具体图片路径、文件名或URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T14:00:08Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.93,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已存在，且 `registry_passed=true`，核心语义支撑完整。",
+      "图像依赖虽高，但对应图片文件可用，因此不构成降级或拒绝理由。",
+      "初步评分中 `verifiability_score` 和 `multi_step_score` 均较高，适合作为候选样本进入候选池。",
+      "资产登记无 issues，未见明确缺口或恢复风险。"
+    ],
+    "collection_risk_flags": [
+      "diagram_labels_not_recoverable_from_text_alone",
+      "image_required"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_cb223e1042dd69ef6c378fa9",
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "480",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_8737d3ec07415d05f5ece62a/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_8737d3ec07415d05f5ece62a/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 593,
+        "height": 338
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.7,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-12T14:00:08Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_b48e93effdcb80b4499a5f11",
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "480",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.93,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.7,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-12T14:00:08Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和图像资产均已存在，且 `registry_passed=true`，核心语义支撑完整。",
+      "图像依赖虽高，但对应图片文件可用，因此不构成降级或拒绝理由。",
+      "初步评分中 `verifiability_score` 和 `multi_step_score` 均较高，适合作为候选样本进入候选池。",
+      "资产登记无 issues，未见明确缺口或恢复风险。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_4aa91e94d3d208a1967b21d9",
+      "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T14:00:08Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_4aa91e94d3d208a1967b21d9",
+    "problem_id": "prob_8737d3ec07415d05f5ece62a",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "480",
+    "normalized_question_text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+    "normalized_answer_text": "17",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "jointly_understandable",
+      "solvable"
+    ],
+    "created_at": "2026-04-12T14:00:08Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_4aa91e94d3d208a1967b21d9",
+    "problem_id": "prob_8737d3ec07415d05f5ece62a",
+    "normalized_question_text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+    "normalized_answer_text": "17",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "ABC",
+        "canonical": "ABC",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "DCE",
+        "canonical": "DCE",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "FCG",
+        "canonical": "FCG",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      },
+      {
+        "original": "at",
+        "canonical": "at",
+        "variable_type": "label"
+      },
+      {
+        "original": "C",
+        "canonical": "C",
+        "variable_type": "symbol"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find the measure of $\\angle 2$ at vertex $C$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 15,
+          "y": 0,
+          "width": 541,
+          "height": 305
+        },
+        "readability_score": 0.7524,
+        "contrast_score": 34.4757
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T14:00:08Z",
+    "normalization_notes": [
+      "Removed the leading <image> marker as non-semantic noise.",
+      "Kept the figure reference because the problem explicitly depends on the diagram and labeled angles.",
+      "Preserved the answer text and empty choice map without modification."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_8737d3ec07415d05f5ece62a",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "480",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-900-1500_20260412T071102Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>In the figure, $ \\triangle ABC$ is isosceles, $ \\triangle DCE$ is equilateral, and $ \\triangle FCG$ is isosceles. Find the measure of the $\\angle 2$ at vertex $C$.",
+    "normalized_question_text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+    "raw_answer_text": "17",
+    "normalized_answer_text": "17",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9722,
+    "multi_step_score": 0.3467,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "jointly_understandable",
+      "solvable"
+    ],
+    "clean_decision_rationale": "The sample is complete and semantically clear: the question and numeric answer are present, the image is required but readable, the rewrite is usable, and alignment and solvability show no serious issues.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T13:58:57Z",
+    "updated_at": "2026-04-12T14:00:08Z",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.7,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.93,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和图像资产均已存在，且 `registry_passed=true`，核心语义支撑完整。",
+      "图像依赖虽高，但对应图片文件可用，因此不构成降级或拒绝理由。",
+      "初步评分中 `verifiability_score` 和 `multi_step_score` 均较高，适合作为候选样本进入候选池。",
+      "资产登记无 issues，未见明确缺口或恢复风险。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_7e8caafffcce140f6ab5eb9c",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[900:1500]/480/question",
+      "storage_uri": "inline://prob_8737d3ec07415d05f5ece62a/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 170,
+      "width": null,
+      "height": null,
+      "sha256": "78939709ff24a5008d487e986f7849e587de010e0ac84b26b27c0787e5636b7f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In the figure, $ \\triangle ABC$ is isosceles, $ \\triangle DCE$ is equilateral, and $ \\triangle FCG$ is isosceles. Find the measure of the $\\angle 2$ at vertex $C$.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6893,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "DCE",
+          "canonical": "DCE",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "FCG",
+          "canonical": "FCG",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "asset_id": "asset_4bc794566f588d84f77f2a66",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_8737d3ec07415d05f5ece62a/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 156,
+      "width": null,
+      "height": null,
+      "sha256": "069cca24509b5fee9054bf9e1687778824672597d825e88a651e0906e0831053",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In the figure, $ \\triangle ABC$ is isosceles, $ \\triangle DCE$ is equilateral, and $ \\triangle FCG$ is isosceles. Find the measure of the $\\angle 2$ at vertex $C$.",
+      "normalized_text_snapshot": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+      "text_completeness_score": 0.6893,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "DCE",
+          "canonical": "DCE",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "FCG",
+          "canonical": "FCG",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "asset_id": "asset_478936d166e60d932ee3bc57",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[900:1500]/480/answer",
+      "storage_uri": "inline://prob_8737d3ec07415d05f5ece62a/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "4523540f1504cd17100c4835e85b7eefd49911580f8efff0599a8f283be6b9e3",
+      "perceptual_hash": null,
+      "source_text_snapshot": "17",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "asset_id": "asset_1d45095bdec8f26e8f315c6d",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_8737d3ec07415d05f5ece62a/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "4523540f1504cd17100c4835e85b7eefd49911580f8efff0599a8f283be6b9e3",
+      "perceptual_hash": null,
+      "source_text_snapshot": "17",
+      "normalized_text_snapshot": "17",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "asset_id": "asset_caa1bb4f6b2b3e03aaf17410",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_8737d3ec07415d05f5ece62a_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 24974,
+      "width": 593,
+      "height": 338,
+      "sha256": "b6d10adcd66d67fc0e619c4d7210e20a9a9724407bbd85aee7237496b9ce62dc",
+      "perceptual_hash": "efe7c7c3db2d00ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1593.0465,
+      "readability_score": 0.7524,
+      "noise_score": 23.7312,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 15,
+        "y": 0,
+        "width": 541,
+        "height": 305
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "asset_id": "asset_a0b8fcd9b949f32f2c9d6a78",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/crops/prob_8737d3ec07415d05f5ece62a_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 24512,
+      "width": 541,
+      "height": 305,
+      "sha256": "bd9bda090e495e291bbd83c98cf966e4f54afe5cffb88ca81e2b152dd2b69536",
+      "perceptual_hash": "ffe7e7c3dbff2400",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1593.0465,
+      "readability_score": 0.7524,
+      "noise_score": 23.7312,
+      "cropped_from_asset_id": "asset_caa1bb4f6b2b3e03aaf17410",
+      "roi_bbox": {
+        "x": 15,
+        "y": 0,
+        "width": 541,
+        "height": 305
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "asset_id": "asset_d48e91121c845559c2301180",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_a7dc2dbd370ee1f6145c5faf",
+      "file_format": "txt",
+      "file_size_bytes": 156,
+      "width": null,
+      "height": null,
+      "sha256": "069cca24509b5fee9054bf9e1687778824672597d825e88a651e0906e0831053",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In the figure, $ \\triangle ABC$ is isosceles, $ \\triangle DCE$ is equilateral, and $ \\triangle FCG$ is isosceles. Find the measure of the $\\angle 2$ at vertex $C$.",
+      "normalized_text_snapshot": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+      "text_completeness_score": 0.6893,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "DCE",
+          "canonical": "DCE",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "FCG",
+          "canonical": "FCG",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_8737d3ec07415d05f5ece62a",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "g",
+            "h",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find the measure of $\\angle 2$ at vertex $C$.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "2"
+          ],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_8737d3ec07415d05f5ece62a_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find the measure of $\\angle 2$ at vertex $C$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "17",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "triangle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "ABC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "DCE",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "FCG",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "C",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "DCE",
+          "canonical": "DCE",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "FCG",
+          "canonical": "FCG",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find the measure of $\\angle 2$ at vertex $C$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T13:59:48Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_8737d3ec07415d05f5ece62a_1",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.7544,
+        "dark_pixel_ratio": 0.0501,
+        "readability_score": 0.7524,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 593,
+            "height": 338
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 15,
+            "y": 0,
+            "width": 541,
+            "height": 305
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 15,
+            "y": 0,
+            "width": 270,
+            "height": 152
+          },
+          "salience": 0.3908
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 285,
+            "y": 0,
+            "width": 271,
+            "height": 152
+          },
+          "salience": 0.3933
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 15,
+            "y": 152,
+            "width": 270,
+            "height": 153
+          },
+          "salience": 0.4355
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 285,
+            "y": 152,
+            "width": 271,
+            "height": 153
+          },
+          "salience": 0.4234
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.901,
+      "created_at": "2026-04-12T13:59:48Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_8737d3ec07415d05f5ece62a",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T13:59:58Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_3d96b82010821545643de23c",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "text_fact",
+      "canonical_value": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles.",
+      "surface_forms": [
+        "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_4bc794566f588d84f77f2a66"
+      ],
+      "evidence_refs": [
+        "asset_4bc794566f588d84f77f2a66"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "A",
+          "g",
+          "h",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,h,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_16bb5e53568f58c4317d54f7",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "target_slot",
+      "canonical_value": "Find the measure of $\\angle 2$ at vertex $C$.",
+      "surface_forms": [
+        "Find the measure of $\\angle 2$ at vertex $C$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_4bc794566f588d84f77f2a66"
+      ],
+      "evidence_refs": [
+        "asset_4bc794566f588d84f77f2a66"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_8737d3ec07415d05f5ece62a_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find the measure of $\\angle 2$ at vertex $C$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "17",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_9bdbd113603107f289e7dad1",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "answer_claim",
+      "canonical_value": "17",
+      "surface_forms": [
+        "17"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_1d45095bdec8f26e8f315c6d"
+      ],
+      "evidence_refs": [
+        "asset_1d45095bdec8f26e8f315c6d"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "17"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_9382f1f3c512913ff2be2a56",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 593,
+          "height": 338
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.901,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_12b595c3f4bd852d2e174940",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 15,
+          "y": 0,
+          "width": 541,
+          "height": 305
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.901,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_6b9e4f5b83f39a6a6b12fa96",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 15,
+          "y": 0,
+          "width": 270,
+          "height": 152
+        },
+        "salience": 0.3908
+      },
+      "unit": null,
+      "confidence": 0.901,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_639ec15791670ec10cda9eee",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 285,
+          "y": 0,
+          "width": 271,
+          "height": 152
+        },
+        "salience": 0.3933
+      },
+      "unit": null,
+      "confidence": 0.901,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_643c10dc52753a0a278c39c5",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 15,
+          "y": 152,
+          "width": 270,
+          "height": 153
+        },
+        "salience": 0.4355
+      },
+      "unit": null,
+      "confidence": 0.901,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_a57d9d149e02c8a780b82daa",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 285,
+          "y": 152,
+          "width": 271,
+          "height": 153
+        },
+        "salience": 0.4234
+      },
+      "unit": null,
+      "confidence": 0.901,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_a5809ae94f0e2eb698baeb62",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "text_fact",
+      "canonical_value": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+      "surface_forms": [
+        "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_d48e91121c845559c2301180"
+      ],
+      "evidence_refs": [
+        "asset_d48e91121c845559c2301180"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_a7dc2dbd370ee1f6145c5faf",
+        "parent_problem_id": "prob_8737d3ec07415d05f5ece62a",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "17",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_d180878170d0448dd6190eb5",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_8737d3ec07415d05f5ece62a",
+        "problem_id": "prob_8737d3ec07415d05f5ece62a",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T13:59:58Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "node_id": "node_656fed1896a87f78da18af9c",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "jointly_understandable",
+          "solvable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:00:08Z",
+      "updated_at": "2026-04-12T14:00:08Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_4aa91e94d3d208a1967b21d9",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a8f6ef9ab7139b21",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_7e8caafffcce140f6ab5eb9c",
+        "asset_4bc794566f588d84f77f2a66",
+        "asset_478936d166e60d932ee3bc57",
+        "asset_1d45095bdec8f26e8f315c6d",
+        "asset_caa1bb4f6b2b3e03aaf17410",
+        "asset_a0b8fcd9b949f32f2c9d6a78",
+        "asset_d48e91121c845559c2301180"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 10
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 593,
+            "height": 338,
+            "blur_score": 1593.0465,
+            "contrast_score": 34.4757,
+            "noise_score": 23.7312,
+            "readability_score": 0.7524,
+            "crop_integrity_score": 0.78,
+            "roi_bbox": {
+              "x": 15,
+              "y": 0,
+              "width": 541,
+              "height": 305
+            },
+            "perceptual_hash": "efe7c7c3db2d00ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_4aa91e94d3d208a1967b21d9",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_8737d3ec07415d05f5ece62a",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_8737d3ec07415d05f5ece62a",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_semantics_clear"
+        ],
+        "rationale": "The text clearly states the geometric conditions and asks for angle 2 at vertex C, and the diagram is readable with labeled points, angle partitions, and given angle measures visible. A human annotator can understand what is being asked and what numeric answer is expected.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "jointly_understandable",
+        "solvable"
+      ],
+      "decision_rationale": "The sample is complete and semantically clear: the question and numeric answer are present, the image is required but readable, the rewrite is usable, and alignment and solvability show no serious issues.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T14:00:08Z",
+      "finished_at": "2026-04-12T14:00:08Z",
+      "candidate_id": "cand_8737d3ec07415d05f5ece62a",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_4aa91e94d3d208a1967b21d9",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "image_entity_refs": [
+        "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+        "visual_prob_8737d3ec07415d05f5ece62a_1::roi_top_left",
+        "visual_prob_8737d3ec07415d05f5ece62a_1::roi_top_right",
+        "visual_prob_8737d3ec07415d05f5ece62a_1::roi_bottom_left",
+        "visual_prob_8737d3ec07415d05f5ece62a_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_8737d3ec07415d05f5ece62a_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7752
+        },
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7752
+        },
+        {
+          "text_ref": "triangle",
+          "image_ref": "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7752
+        },
+        {
+          "text_ref": "ABC",
+          "image_ref": "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7752
+        },
+        {
+          "text_ref": "DCE",
+          "image_ref": "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7752
+        },
+        {
+          "text_ref": "FCG",
+          "image_ref": "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7752
+        },
+        {
+          "text_ref": "C",
+          "image_ref": "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7752
+        },
+        {
+          "text_ref": "slot_prob_8737d3ec07415d05f5ece62a_1",
+          "image_ref": "visual_prob_8737d3ec07415d05f5ece62a_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7782
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T13:59:48Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_46283ad166048845488ee254",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>In the figure, $ \\triangle ABC$ is isosceles, $ \\triangle DCE$ is equilateral, and $ \\triangle FCG$ is isosceles. Find the measure of the $\\angle 2$ at vertex $C$.",
+      "after_value": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "audit_id": "audit_fe6b5b35ebb6e8eb375d187e",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "17",
+      "after_value": "17",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "audit_id": "audit_7e44d0cc7a3f8922c4356ae6",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "audit_id": "audit_656fed1896a87f78da18af9c",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:00:08Z"
+    },
+    {
+      "audit_id": "audit_b229bb722da16c53fa8e69cc",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "ABC",
+          "canonical": "ABC",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "DCE",
+          "canonical": "DCE",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "FCG",
+          "canonical": "FCG",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        },
+        {
+          "original": "at",
+          "canonical": "at",
+          "variable_type": "label"
+        },
+        {
+          "original": "C",
+          "canonical": "C",
+          "variable_type": "symbol"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:00:08Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_4aa91e94d3d208a1967b21d9",
+      "problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "source_problem_id": "480",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_a7dc2dbd370ee1f6145c5faf",
+          "parent_problem_id": "prob_8737d3ec07415d05f5ece62a",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "17",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T14:00:08Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_a7dc2dbd370ee1f6145c5faf",
+      "parent_problem_id": "prob_8737d3ec07415d05f5ece62a",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "In the figure, $\\triangle ABC$ is isosceles, $\\triangle DCE$ is equilateral, and $\\triangle FCG$ is isosceles. Find the measure of $\\angle 2$ at vertex $C$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "17",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00711",
+  "canonical_sample_index": 711,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00711.json",
+  "image_path": "artifacts/images/geometry3k00711.png",
+  "images": [
+    "artifacts/images/geometry3k00711.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00711.png",
+  "crops": [
+    "artifacts/crops/geometry3k00711.png"
+  ]
+}

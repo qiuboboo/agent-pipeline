@@ -1,0 +1,1847 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_a4eda519d37b517a2d8b771c",
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "problem_id": "prob_c88ece7146419d32cbf03537",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "747",
+    "raw_question_text": "<image>In $\\odot A, m \\angle E A D=42$. Find $m \\widehat{B C}$",
+    "raw_answer_text": "42",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(285, 253)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "images字段中只有PIL图像对象字符串表示，没有具体图片路径或URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-13T02:10:59Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_c88ece7146419d32cbf03537",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_c88ece7146419d32cbf03537_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 285,
+        "height": 253,
+        "file_size": 10286
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 62,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 2
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_a4eda519d37b517a2d8b771c",
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "747",
+    "created_at": "2026-04-13T02:10:59Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_c88ece7146419d32cbf03537",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.42,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text only gives symbolic geometry labels and does not describe the diagram structure",
+        "requires_image=true and text_dominant=false indicate the visual is necessary",
+        "asset_registry_record.image_manifest shows a valid registered image and registry_passed=true"
+      ],
+      "multi_step": [
+        "solving likely requires identifying the relevant points/arcs from the diagram before applying a geometry relation",
+        "the prompt is very short and provides only one numeric angle, so the explicit textual reasoning chain is limited",
+        "metadata.multi_solution_policy.mode=aggressive suggests some structured reasoning potential, but this is only indirect evidence"
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_text is a short explicit number",
+        "asset_registry_record.answer_manifest confirms answer_present=true and answer_type=number",
+        "registry_passed=true reduces ambiguity about asset availability for downstream checking"
+      ]
+    },
+    "risk_flags": [
+      "diagram_under_specified_in_text",
+      "image_required"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_a4eda519d37b517a2d8b771c",
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "747",
+    "created_at": "2026-04-13T02:10:59Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_c88ece7146419d32cbf03537",
+    "priority": 0.88,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像资产均已登记且可用，registry_passed=true，核心语义支撑完整。",
+      "虽然题干对图形依赖高且文本本身对图形描述不足，但所需图像已存在，因此不构成核心资产缺失。",
+      "答案为明确的数值型结果，verifiability_score较高，便于后续校验。",
+      "当前没有登记问题项，整体可恢复性和可用性较好，适合进入候选池。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_a4eda519d37b517a2d8b771c",
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "747",
+    "created_at": "2026-04-13T02:10:59Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_a4eda519d37b517a2d8b771c",
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "problem_id": "prob_c88ece7146419d32cbf03537",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+    "normalized_answer_text": "42",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading `<image>` marker as non-semantic noise.",
+      "Kept the geometry notation and answer unchanged except for light formatting normalization.",
+      "Marked as image-dependent because the arc $\\widehat{BC}$ must be identified from the diagram and `force_requires_image` is true."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-13T02:10:59Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "747",
+    "subject": "数学",
+    "raw_question_text": "<image>In $\\odot A, m \\angle E A D=42$. Find $m \\widehat{B C}$",
+    "raw_answer_text": "42",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.42,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 747,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(285, 253)>"
+      ],
+      "extraction_notes": [
+        "images字段中只有PIL图像对象字符串表示，没有具体图片路径或URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-13T02:12:02Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均已登记且可用，registry_passed=true，核心语义支撑完整。",
+      "虽然题干对图形依赖高且文本本身对图形描述不足，但所需图像已存在，因此不构成核心资产缺失。",
+      "答案为明确的数值型结果，verifiability_score较高，便于后续校验。",
+      "当前没有登记问题项，整体可恢复性和可用性较好，适合进入候选池。"
+    ],
+    "collection_risk_flags": [
+      "diagram_under_specified_in_text",
+      "image_required"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_bb84b59d5cb01cab81ecbf67",
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "747",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_c88ece7146419d32cbf03537/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_c88ece7146419d32cbf03537/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 285,
+        "height": 253
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.42,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-13T02:12:02Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_7050ce6696efe3a681e755c8",
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "747",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.88,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.42,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-13T02:12:02Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像资产均已登记且可用，registry_passed=true，核心语义支撑完整。",
+      "虽然题干对图形依赖高且文本本身对图形描述不足，但所需图像已存在，因此不构成核心资产缺失。",
+      "答案为明确的数值型结果，verifiability_score较高，便于后续校验。",
+      "当前没有登记问题项，整体可恢复性和可用性较好，适合进入候选池。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_a4eda519d37b517a2d8b771c",
+      "candidate_id": "cand_c88ece7146419d32cbf03537",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-13T02:12:02Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_a4eda519d37b517a2d8b771c",
+    "problem_id": "prob_c88ece7146419d32cbf03537",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "747",
+    "normalized_question_text": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+    "normalized_answer_text": "42",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-13T02:12:02Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_a4eda519d37b517a2d8b771c",
+    "problem_id": "prob_c88ece7146419d32cbf03537",
+    "normalized_question_text": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+    "normalized_answer_text": "42",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "In",
+        "canonical": "In",
+        "variable_type": "label"
+      },
+      {
+        "original": "odot",
+        "canonical": "odot",
+        "variable_type": "label"
+      },
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "m",
+        "canonical": "m",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "EAD",
+        "canonical": "EAD",
+        "variable_type": "label"
+      },
+      {
+        "original": "BC",
+        "canonical": "BC",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "In $\\odot A$, $m\\angle EAD=42$."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find $m\\widehat{BC}$."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 15,
+          "y": 51,
+          "width": 218,
+          "height": 172
+        },
+        "readability_score": 0.7482,
+        "contrast_score": 33.169
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-13T02:12:02Z",
+    "normalization_notes": [
+      "Removed the leading `<image>` marker as non-semantic noise.",
+      "Kept the geometry notation and answer unchanged except for light formatting normalization.",
+      "Marked as image-dependent because the arc $\\widehat{BC}$ must be identified from the diagram and `force_requires_image` is true."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_c88ece7146419d32cbf03537",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "747",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-000-900_20260412T151456Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>In $\\odot A, m \\angle E A D=42$. Find $m \\widehat{B C}$",
+    "normalized_question_text": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+    "raw_answer_text": "42",
+    "normalized_answer_text": "42",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9598,
+    "multi_step_score": 0.3557,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_acceptable",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The sample is complete and understandable, the diagram is usable, and the rewritten question cleanly preserves the geometry task with a verifiable numeric answer. Alignment shows no serious failure, so the item is suitable for downstream annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_c88ece7146419d32cbf03537",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-13T02:10:59Z",
+    "updated_at": "2026-04-13T02:12:02Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.42,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均已登记且可用，registry_passed=true，核心语义支撑完整。",
+      "虽然题干对图形依赖高且文本本身对图形描述不足，但所需图像已存在，因此不构成核心资产缺失。",
+      "答案为明确的数值型结果，verifiability_score较高，便于后续校验。",
+      "当前没有登记问题项，整体可恢复性和可用性较好，适合进入候选池。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_1511ba0a8cc678ed1269cc50",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[0:900]/747/question",
+      "storage_uri": "inline://prob_c88ece7146419d32cbf03537/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 62,
+      "width": null,
+      "height": null,
+      "sha256": "26c0283eb91fc44e632c83f683ed763629d642c228d81899eda20a4802c9187f",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In $\\odot A, m \\angle E A D=42$. Find $m \\widehat{B C}$",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.5973,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "EAD",
+          "canonical": "EAD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "asset_id": "asset_8f1454c8a849e3dbc9733dc2",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_c88ece7146419d32cbf03537/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 53,
+      "width": null,
+      "height": null,
+      "sha256": "1cc18507e7ce9653e40f6f2d6f01ab56fb422178b1effaa2ee57306679e1bd58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In $\\odot A, m \\angle E A D=42$. Find $m \\widehat{B C}$",
+      "normalized_text_snapshot": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+      "text_completeness_score": 0.5973,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "EAD",
+          "canonical": "EAD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "asset_id": "asset_0cda555b477b3d9143869af2",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[0:900]/747/answer",
+      "storage_uri": "inline://prob_c88ece7146419d32cbf03537/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+      "perceptual_hash": null,
+      "source_text_snapshot": "42",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "asset_id": "asset_b3a4ac581738895386e6aa75",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_c88ece7146419d32cbf03537/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 2,
+      "width": null,
+      "height": null,
+      "sha256": "73475cb40a568e8da8a045ced110137e159f890ac4da883b6b17dc651b3a8049",
+      "perceptual_hash": null,
+      "source_text_snapshot": "42",
+      "normalized_text_snapshot": "42",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "asset_id": "asset_652ae0c480d0f01b15559b73",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_c88ece7146419d32cbf03537_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 10286,
+      "width": 285,
+      "height": 253,
+      "sha256": "aae7e9110c3dc38e00c498b4d2228258959a856d6a0253165724bb4ed1d1e871",
+      "perceptual_hash": "ff87930b01b3c3ef",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1629.2272,
+      "readability_score": 0.7482,
+      "noise_score": 23.2016,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 15,
+        "y": 51,
+        "width": 218,
+        "height": 172
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "asset_id": "asset_d5430442d323f861c5d801f6",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/crops/prob_c88ece7146419d32cbf03537_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 9625,
+      "width": 218,
+      "height": 172,
+      "sha256": "f331eeace85645aa0a872946d4c2e6739c89af738ffa66f5a10d50913c0b767c",
+      "perceptual_hash": "839dff26f0fbb9c1",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1629.2272,
+      "readability_score": 0.7482,
+      "noise_score": 23.2016,
+      "cropped_from_asset_id": "asset_652ae0c480d0f01b15559b73",
+      "roi_bbox": {
+        "x": 15,
+        "y": 51,
+        "width": 218,
+        "height": 172
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "asset_id": "asset_75cc26290748da72944e9eee",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_ab336abb270502d55c50a7af",
+      "file_format": "txt",
+      "file_size_bytes": 53,
+      "width": null,
+      "height": null,
+      "sha256": "1cc18507e7ce9653e40f6f2d6f01ab56fb422178b1effaa2ee57306679e1bd58",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>In $\\odot A, m \\angle E A D=42$. Find $m \\widehat{B C}$",
+      "normalized_text_snapshot": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+      "text_completeness_score": 0.5973,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "EAD",
+          "canonical": "EAD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_c88ece7146419d32cbf03537",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "In $\\odot A$, $m\\angle EAD=42$.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "42"
+          ],
+          "unit_mentions": [
+            "A",
+            "g",
+            "m"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find $m\\widehat{BC}$.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "m"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_c88ece7146419d32cbf03537_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find $m\\widehat{BC}$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "42",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "angle",
+          "entity_category": "angle",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "EAD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BC",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "EAD",
+          "canonical": "EAD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "g",
+        "h",
+        "m"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "In $\\odot A$, $m\\angle EAD=42$."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find $m\\widehat{BC}$."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-13T02:11:48Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_c88ece7146419d32cbf03537_1",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.1265,
+        "dark_pixel_ratio": 0.0542,
+        "readability_score": 0.7482,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 285,
+            "height": 253
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 15,
+            "y": 51,
+            "width": 218,
+            "height": 172
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 15,
+            "y": 51,
+            "width": 109,
+            "height": 86
+          },
+          "salience": 0.4911
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 124,
+            "y": 51,
+            "width": 109,
+            "height": 86
+          },
+          "salience": 0.4156
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 15,
+            "y": 137,
+            "width": 109,
+            "height": 86
+          },
+          "salience": 0.3979
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 124,
+            "y": 137,
+            "width": 109,
+            "height": 86
+          },
+          "salience": 0.5124
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.8993,
+      "created_at": "2026-04-13T02:11:48Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_c88ece7146419d32cbf03537",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-13T02:11:57Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_258c3a803098a14ad7707663",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "text_fact",
+      "canonical_value": "In $\\odot A$, $m\\angle EAD=42$.",
+      "surface_forms": [
+        "In $\\odot A$, $m\\angle EAD=42$."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8f1454c8a849e3dbc9733dc2"
+      ],
+      "evidence_refs": [
+        "asset_8f1454c8a849e3dbc9733dc2"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "In $\\odot A$, $m\\angle EAD=42$.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "42"
+        ],
+        "unit_mentions": [
+          "A",
+          "g",
+          "m"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,g,m",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_b73e75fd75003d489ec16ad1",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "target_slot",
+      "canonical_value": "Find $m\\widehat{BC}$.",
+      "surface_forms": [
+        "Find $m\\widehat{BC}$."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_8f1454c8a849e3dbc9733dc2"
+      ],
+      "evidence_refs": [
+        "asset_8f1454c8a849e3dbc9733dc2"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_c88ece7146419d32cbf03537_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find $m\\widehat{BC}$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "42",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_9903750476d7921690e419f1",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "answer_claim",
+      "canonical_value": "42",
+      "surface_forms": [
+        "42"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_b3a4ac581738895386e6aa75"
+      ],
+      "evidence_refs": [
+        "asset_b3a4ac581738895386e6aa75"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "42"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_bef13417d9dab1f5af538e79",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 285,
+          "height": 253
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.8993,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_ffdeba649f07746aba66d18c",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 15,
+          "y": 51,
+          "width": 218,
+          "height": 172
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.8993,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_70709ba24353550277192227",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 15,
+          "y": 51,
+          "width": 109,
+          "height": 86
+        },
+        "salience": 0.4911
+      },
+      "unit": null,
+      "confidence": 0.8993,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_1a0cf606f41941fb8b2f5a9f",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 124,
+          "y": 51,
+          "width": 109,
+          "height": 86
+        },
+        "salience": 0.4156
+      },
+      "unit": null,
+      "confidence": 0.8993,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_fc8959d9373c2362a35b46e0",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 15,
+          "y": 137,
+          "width": 109,
+          "height": 86
+        },
+        "salience": 0.3979
+      },
+      "unit": null,
+      "confidence": 0.8993,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_53acbbd5dc20dd658dbcee7d",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 124,
+          "y": 137,
+          "width": 109,
+          "height": 86
+        },
+        "salience": 0.5124
+      },
+      "unit": null,
+      "confidence": 0.8993,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_adf055eb559b09f783283d24",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "text_fact",
+      "canonical_value": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+      "surface_forms": [
+        "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_75cc26290748da72944e9eee"
+      ],
+      "evidence_refs": [
+        "asset_75cc26290748da72944e9eee"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_ab336abb270502d55c50a7af",
+        "parent_problem_id": "prob_c88ece7146419d32cbf03537",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "42",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_e53640aad6c1d69cf127970f",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_c88ece7146419d32cbf03537",
+        "problem_id": "prob_c88ece7146419d32cbf03537",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-13T02:11:57Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "node_id": "node_dcc076386ec070253f487832",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_acceptable",
+          "answer_available",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-13T02:12:02Z",
+      "updated_at": "2026-04-13T02:12:02Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_a4eda519d37b517a2d8b771c",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_b396994bd2367a1c",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_1511ba0a8cc678ed1269cc50",
+        "asset_8f1454c8a849e3dbc9733dc2",
+        "asset_0cda555b477b3d9143869af2",
+        "asset_b3a4ac581738895386e6aa75",
+        "asset_652ae0c480d0f01b15559b73",
+        "asset_d5430442d323f861c5d801f6",
+        "asset_75cc26290748da72944e9eee"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 6
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 285,
+            "height": 253,
+            "blur_score": 1629.2272,
+            "contrast_score": 33.169,
+            "noise_score": 23.2016,
+            "readability_score": 0.7482,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 15,
+              "y": 51,
+              "width": 218,
+              "height": 172
+            },
+            "perceptual_hash": "ff87930b01b3c3ef"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_a4eda519d37b517a2d8b771c",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_c88ece7146419d32cbf03537",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_c88ece7146419d32cbf03537",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "answer_matches_visible_geometry",
+          "diagram_semantics_clear",
+          "image_required_and_usable"
+        ],
+        "rationale": "The text specifies a circle centered at A and asks for an arc measure; the diagram clearly shows two intersecting lines through A with labeled points B, C, E, and D, making the central-angle/vertical-angle relationship understandable. A human annotator can infer why the target arc measure is 42.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 0.9969,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_acceptable",
+        "answer_available",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The sample is complete and understandable, the diagram is usable, and the rewritten question cleanly preserves the geometry task with a verifiable numeric answer. Alignment shows no serious failure, so the item is suitable for downstream annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-13T02:12:02Z",
+      "finished_at": "2026-04-13T02:12:02Z",
+      "candidate_id": "cand_c88ece7146419d32cbf03537",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_a4eda519d37b517a2d8b771c",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "image_entity_refs": [
+        "visual_prob_c88ece7146419d32cbf03537_1::roi",
+        "visual_prob_c88ece7146419d32cbf03537_1::roi_top_left",
+        "visual_prob_c88ece7146419d32cbf03537_1::roi_top_right",
+        "visual_prob_c88ece7146419d32cbf03537_1::roi_bottom_left",
+        "visual_prob_c88ece7146419d32cbf03537_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_c88ece7146419d32cbf03537_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "angle",
+          "image_ref": "visual_prob_c88ece7146419d32cbf03537_1::roi",
+          "relation": "grounds_angle",
+          "confidence": 0.7748
+        },
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_c88ece7146419d32cbf03537_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7748
+        },
+        {
+          "text_ref": "EAD",
+          "image_ref": "visual_prob_c88ece7146419d32cbf03537_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7748
+        },
+        {
+          "text_ref": "BC",
+          "image_ref": "visual_prob_c88ece7146419d32cbf03537_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7748
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-13T02:11:48Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_0c303a0e4252410278efa515",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>In $\\odot A, m \\angle E A D=42$. Find $m \\widehat{B C}$",
+      "after_value": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "audit_id": "audit_a1a55654cee9e521c2632551",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "42",
+      "after_value": "42",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "audit_id": "audit_0a6fe3b66f7c502b221ae411",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "audit_id": "audit_dcc076386ec070253f487832",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:12:02Z"
+    },
+    {
+      "audit_id": "audit_abf6883cbab5e315d1cd114e",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "In",
+          "canonical": "In",
+          "variable_type": "label"
+        },
+        {
+          "original": "odot",
+          "canonical": "odot",
+          "variable_type": "label"
+        },
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "m",
+          "canonical": "m",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "EAD",
+          "canonical": "EAD",
+          "variable_type": "label"
+        },
+        {
+          "original": "BC",
+          "canonical": "BC",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-13T02:12:02Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_a4eda519d37b517a2d8b771c",
+      "problem_id": "prob_c88ece7146419d32cbf03537",
+      "source_problem_id": "747",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_ab336abb270502d55c50a7af",
+          "parent_problem_id": "prob_c88ece7146419d32cbf03537",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "42",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-13T02:12:02Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_ab336abb270502d55c50a7af",
+      "parent_problem_id": "prob_c88ece7146419d32cbf03537",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "In $\\odot A$, $m\\angle EAD=42$. Find $m\\widehat{BC}$.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "42",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00421",
+  "canonical_sample_index": 421,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00421.json",
+  "image_path": "artifacts/images/geometry3k00421.png",
+  "images": [
+    "artifacts/images/geometry3k00421.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00421.png",
+  "crops": [
+    "artifacts/crops/geometry3k00421.png"
+  ]
+}

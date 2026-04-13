@@ -1,0 +1,1298 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_24d3453496e682d9c239f499",
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "problem_id": "prob_2109b7addae324258de710c8",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "403",
+    "raw_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西．电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内．设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（　　）",
+    "raw_answer_text": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+    "choice_map": {
+      "A": "$F_1,F_2$和$F_3$的合力竖直向下",
+      "B": "地面对电杆的作用力竖直向上",
+      "C": "$F_1,F_2$和$F_3$在水平面内的合力可能为0",
+      "D": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧"
+    },
+    "image_paths": [
+      "../Data/2/38_0.png"
+    ],
+    "force_requires_image": false,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "picture",
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-09T05:43:05Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_2109b7addae324258de710c8",
+    "image_manifest": [
+      {
+        "path": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/images/prob_2109b7addae324258de710c8_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 158,
+        "height": 129,
+        "file_size": 7486
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 172,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "choice",
+      "answer_char_length": 31
+    },
+    "issues": [
+      "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_24d3453496e682d9c239f499",
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "403",
+    "created_at": "2026-04-09T05:43:05Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_2109b7addae324258de710c8",
+    "image_dependency_score": 0.1,
+    "multi_step_score": 0.66,
+    "verifiability_score": 0.76,
+    "score_evidence": {
+      "image_dependency": [
+        "题干为纯文字力学情境描述，明确给出南北、东西、竖直平面等关系，文本可独立承载求解",
+        "requires_image=false 且 text_dominant=true，说明图片不是主要信息来源",
+        "虽有 1 张配图资产，但输入未显示必须依赖图像中的额外几何细节"
+      ],
+      "multi_step": [
+        "需要先分析北向与西向两段电缆对电杆的水平拉力方向，再结合钢索所在竖直平面判断合力方向",
+        "需要把三力分解到水平/竖直或方位分量，并结合电杆竖直、受力平衡来排除错误选项",
+        "属于多条件物理推理题，不是直接识记或单步代入"
+      ],
+      "verifiability": [
+        "是四选一选择题，choices 与 answer_text 都给出，目标答案形式清晰",
+        "题目结论可用经典受力分析与平衡条件进行规则化核验，可验证性较强",
+        "registry_passed=true，题干与答案资产均登记存在，但存在类型字段不一致风险，故不打满分"
+      ]
+    },
+    "risk_flags": [
+      "answer_type 存在不一致：顶层为 set，而 asset_registry_record.answer_manifest.answer_type 为 choice",
+      "存在配图资产但 requires_image=false，图像是否提供额外隐含信息需谨慎",
+      "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_24d3453496e682d9c239f499",
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "403",
+    "created_at": "2026-04-09T05:43:05Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_2109b7addae324258de710c8",
+    "priority": 0.52,
+    "decision": "low_priority",
+    "decision_reasons": [
+      "题干、答案和配图资产均已登记存在，核心语义并未缺失，不应直接 reject。",
+      "题目文本占主导且 image_dependency_score 很低，说明即使图像作用有限，题干仍可承载主要求解信息。",
+      "该题是四选一选择题，但缺少具体选项文本，显著影响答案核验与样本可用性，因此不宜直接 keep。",
+      "answer_type 存在不一致风险（choice 与 set 不一致），需要后续复核后再提升优先级。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_24d3453496e682d9c239f499",
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "403",
+    "created_at": "2026-04-09T05:43:05Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_24d3453496e682d9c239f499",
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "problem_id": "prob_2109b7addae324258de710c8",
+    "dataset_name": "Multi-Physics",
+    "normalized_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+    "normalized_answer_text": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+    "normalized_choice_map": {
+      "A": "$F_1,F_2$和$F_3$的合力竖直向下",
+      "B": "地面对电杆的作用力竖直向上",
+      "C": "$F_1,F_2$和$F_3$在水平面内的合力可能为0",
+      "D": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧"
+    },
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "normalization_notes": [
+      "规范化标点与空格，保留原题语义和方向关系描述",
+      "题干已提供求解所需关键信息，图像仅作辅助示意"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-09T05:43:05Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "source_dataset": "Multi-Physics",
+    "source_split": "repo_discovered",
+    "source_problem_id": "403",
+    "subject": "物理",
+    "raw_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西．电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内．设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（　　）",
+    "raw_answer_text": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": false,
+    "text_dominant": true,
+    "recommended_cleaning_path": "text_lightweight",
+    "initial_image_dependency_score": 0.1,
+    "initial_multi_solution_score": 0.66,
+    "initial_verifiability_score": 0.76,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "data_file": "outputs/repo_cache/multi_physics/Data/2.json",
+      "image_paths": [
+        "../Data/2/38_0.png"
+      ],
+      "extraction_notes": [
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "picture",
+      "choice_field": null
+    },
+    "created_at": "2026-04-09T05:45:33Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.52,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和配图资产均已登记存在，核心语义并未缺失，不应直接 reject。",
+      "题目文本占主导且 image_dependency_score 很低，说明即使图像作用有限，题干仍可承载主要求解信息。",
+      "该题是四选一选择题，但缺少具体选项文本，显著影响答案核验与样本可用性，因此不宜直接 keep。",
+      "answer_type 存在不一致风险（choice 与 set 不一致），需要后续复核后再提升优先级。"
+    ],
+    "collection_risk_flags": [
+      "answer_type 存在不一致：顶层为 set，而 asset_registry_record.answer_manifest.answer_type 为 choice",
+      "存在配图资产但 requires_image=false，图像是否提供额外隐含信息需谨慎",
+      "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_df4aa2a13f764d982ce63097",
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "403",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_2109b7addae324258de710c8/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_2109b7addae324258de710c8/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/38_0.png",
+        "is_present": true,
+        "width": 158,
+        "height": 129
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.1,
+      "initial_multi_solution_score": 0.66,
+      "initial_verifiability_score": 0.76
+    },
+    "created_at": "2026-04-09T05:45:33Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_b39744dd50f0be77b3ccbb52",
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "403",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.52,
+    "priority_tier": "normal",
+    "recommended_cleaning_path": "text_lightweight",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.1,
+      "initial_multi_solution_score": 0.66,
+      "initial_verifiability_score": 0.76
+    },
+    "created_at": "2026-04-09T05:45:33Z",
+    "registration_decision": "low_priority",
+    "registration_decision_reasons": [
+      "题干、答案和配图资产均已登记存在，核心语义并未缺失，不应直接 reject。",
+      "题目文本占主导且 image_dependency_score 很低，说明即使图像作用有限，题干仍可承载主要求解信息。",
+      "该题是四选一选择题，但缺少具体选项文本，显著影响答案核验与样本可用性，因此不宜直接 keep。",
+      "answer_type 存在不一致风险（choice 与 set 不一致），需要后续复核后再提升优先级。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_24d3453496e682d9c239f499",
+      "candidate_id": "cand_2109b7addae324258de710c8",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "dataset_name": "Multi-Physics",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": true,
+      "cleaning_path": "text_lightweight",
+      "created_at": "2026-04-09T05:45:33Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_24d3453496e682d9c239f499",
+    "problem_id": "prob_2109b7addae324258de710c8",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "403",
+    "normalized_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+    "normalized_answer_text": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "text_only",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "metadata_inconsistency",
+      "text_sufficient"
+    ],
+    "created_at": "2026-04-09T05:45:33Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_24d3453496e682d9c239f499",
+    "problem_id": "prob_2109b7addae324258de710c8",
+    "normalized_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+    "normalized_answer_text": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/38_0.png",
+        "roi_bbox": {
+          "x": 5,
+          "y": 3,
+          "width": 142,
+          "height": 119
+        },
+        "readability_score": 0.8154,
+        "contrast_score": 55.0465
+      }
+    ],
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "created_at": "2026-04-09T05:45:33Z",
+    "normalization_notes": [
+      "规范化标点与空格，保留原题语义和方向关系描述",
+      "题干已提供求解所需关键信息，图像仅作辅助示意"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_2109b7addae324258de710c8",
+    "source_dataset": "Multi-Physics",
+    "source_split": "repo_discovered",
+    "source_problem_id": "403",
+    "ingest_batch_id": "benchmarkallinone-multi-physics-500-1412_20260408T142155Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西．电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内．设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（　　）",
+    "normalized_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+    "raw_answer_text": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+    "normalized_answer_text": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+    "answer_type": "set",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": false,
+    "multimodal_strength_score": 0.4115,
+    "multi_step_score": 0.3017,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata_inconsistency",
+      "text_only_without_visual_need",
+      "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "metadata_inconsistency",
+      "text_sufficient"
+    ],
+    "clean_decision_rationale": "The sample is semantically complete and usable: the question and answer are present, the text alone is sufficient to solve it, and the rewritten open version is consistent with the target answer. Alignment and solvability signals are strong, and the missing original choice metadata is only a minor inconsistency, not a blocker for annotation.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_2109b7addae324258de710c8",
+    "text_dominant": true,
+    "cleaning_path": "text_lightweight",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "not_needed",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-09T05:43:05Z",
+    "updated_at": "2026-04-09T05:45:33Z",
+    "initial_image_dependency_score": 0.1,
+    "initial_multi_solution_score": 0.66,
+    "initial_verifiability_score": 0.76,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.52,
+    "collection_decision": "low_priority",
+    "collection_decision_reasons": [
+      "题干、答案和配图资产均已登记存在，核心语义并未缺失，不应直接 reject。",
+      "题目文本占主导且 image_dependency_score 很低，说明即使图像作用有限，题干仍可承载主要求解信息。",
+      "该题是四选一选择题，但缺少具体选项文本，显著影响答案核验与样本可用性，因此不宜直接 keep。",
+      "answer_type 存在不一致风险（choice 与 set 不一致），需要后续复核后再提升优先级。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_a424317e9d8cf15fe4682c16",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://multi_physics/repo_discovered/403/question",
+      "storage_uri": "inline://prob_2109b7addae324258de710c8/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 484,
+      "width": null,
+      "height": null,
+      "sha256": "ef398f06b1c69bf8f328b39dda3350941d124e4c1c5b37b27dcb7eabfa45cf83",
+      "perceptual_hash": null,
+      "source_text_snapshot": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西．电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内．设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（　　）",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "asset_id": "asset_eef752909c755219938f3b20",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_2109b7addae324258de710c8/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 479,
+      "width": null,
+      "height": null,
+      "sha256": "ae05c38d8312590b90ab407fd1ea1d1b690a0d99e82fe8dbd13da3c52e63baff",
+      "perceptual_hash": null,
+      "source_text_snapshot": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西．电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内．设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（　　）",
+      "normalized_text_snapshot": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+      "text_completeness_score": 0.7027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "asset_id": "asset_aea55545928c945c5c951cfd",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://multi_physics/repo_discovered/403/answer",
+      "storage_uri": "inline://prob_2109b7addae324258de710c8/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 65,
+      "width": null,
+      "height": null,
+      "sha256": "109108b039ddcfab44c7ed9b3084e09ebb37c19a48a6672d87cc852490dbecfc",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "asset_id": "asset_8d6b5b92fed1edfa0f816d10",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_2109b7addae324258de710c8/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 65,
+      "width": null,
+      "height": null,
+      "sha256": "109108b039ddcfab44c7ed9b3084e09ebb37c19a48a6672d87cc852490dbecfc",
+      "perceptual_hash": null,
+      "source_text_snapshot": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+      "normalized_text_snapshot": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "asset_id": "asset_cfe9a6389f4434d249c84cc1",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/38_0.png",
+      "storage_uri": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/images/prob_2109b7addae324258de710c8_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 7486,
+      "width": 158,
+      "height": 129,
+      "sha256": "f1b7ea0a8730ec9de7c3997b4d1891a5d5638c427b48a19856559f841c92d3de",
+      "perceptual_hash": "fbfbe727e7e7e100",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 6448.5415,
+      "readability_score": 0.8154,
+      "noise_score": 35.4189,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 5,
+        "y": 3,
+        "width": 142,
+        "height": 119
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata_inconsistency",
+        "text_only_without_visual_need",
+        "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "asset_id": "asset_c381797ab79d95856aa5abae",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/crops/prob_2109b7addae324258de710c8_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 7365,
+      "width": 142,
+      "height": 119,
+      "sha256": "26a0f7932d75d1db9ad42445f4df2aa739c6735273c6b7a9e727bad388e35f1a",
+      "perceptual_hash": "f9fbe70777e3f700",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 6448.5415,
+      "readability_score": 0.8154,
+      "noise_score": 35.4189,
+      "cropped_from_asset_id": "asset_cfe9a6389f4434d249c84cc1",
+      "roi_bbox": {
+        "x": 5,
+        "y": 3,
+        "width": 142,
+        "height": 119
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "asset_id": "asset_229d1a8dbd853a67f2913b84",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_c69ae3c6bbedc1c52a822478",
+      "file_format": "txt",
+      "file_size_bytes": 516,
+      "width": null,
+      "height": null,
+      "sha256": "06b041ad75a76e876a92ecc829a21d1d3441084abe48858fa12a192ca64de52b",
+      "perceptual_hash": null,
+      "source_text_snapshot": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西．电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内．设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（　　）",
+      "normalized_text_snapshot": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？",
+      "text_completeness_score": 0.7027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_2109b7addae324258de710c8",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "2",
+            "3"
+          ],
+          "unit_mentions": [],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1",
+            "2",
+            "3"
+          ],
+          "unit_mentions": [],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_2109b7addae324258de710c8_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "short_text",
+          "target_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [],
+      "unit_mentions": [],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）"
+        }
+      ],
+      "requires_visual_grounding": false,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-09T05:45:02Z"
+    }
+  ],
+  "visual_structure_records": [],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_2109b7addae324258de710c8",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "text_only",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-09T05:45:15Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_706350f5ed6f3444d1a96a9a",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "text_fact",
+      "canonical_value": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+      "surface_forms": [
+        "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_eef752909c755219938f3b20"
+      ],
+      "evidence_refs": [
+        "asset_eef752909c755219938f3b20"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1",
+          "2",
+          "3"
+        ],
+        "unit_mentions": [],
+        "condition_role": "explicit"
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "node_id": "node_036950a8b731d8fddb4187ac",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "target_slot",
+      "canonical_value": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？",
+      "surface_forms": [
+        "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_eef752909c755219938f3b20"
+      ],
+      "evidence_refs": [
+        "asset_eef752909c755219938f3b20"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "short_text",
+      "normalized_value": {
+        "slot_id": "slot_prob_2109b7addae324258de710c8_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "short_text",
+        "target_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "node_id": "node_0a2aa846abe9f6782d9bbacf",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "answer_claim",
+      "canonical_value": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+      "surface_forms": [
+        "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8d6b5b92fed1edfa0f816d10"
+      ],
+      "evidence_refs": [
+        "asset_8d6b5b92fed1edfa0f816d10"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "node_id": "node_126b50424176ee599df4def3",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "text_fact",
+      "canonical_value": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？",
+      "surface_forms": [
+        "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_229d1a8dbd853a67f2913b84"
+      ],
+      "evidence_refs": [
+        "asset_229d1a8dbd853a67f2913b84"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_c69ae3c6bbedc1c52a822478",
+        "parent_problem_id": "prob_2109b7addae324258de710c8",
+        "variant_index": 1,
+        "title": "Dataset Open Question",
+        "rewritten_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？",
+        "expected_answer_type": "short_text",
+        "expected_answer": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "node_id": "node_8203ff23b0c7c649c0f1ffe3",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata_inconsistency",
+      "surface_forms": [
+        "metadata_inconsistency"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata_inconsistency"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "node_id": "node_a42d7f049fc167af71fc18dd",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "quality_signal",
+      "canonical_value": "text_only_without_visual_need",
+      "surface_forms": [
+        "text_only_without_visual_need"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "text_only_without_visual_need"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "node_id": "node_2cbb6d4d984c123693effb79",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "quality_signal",
+      "canonical_value": "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。",
+      "surface_forms": [
+        "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "node_id": "node_cc3960a14c29c7689cf5e8c4",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_2109b7addae324258de710c8",
+        "problem_id": "prob_2109b7addae324258de710c8",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "text_only",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-09T05:45:15Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "node_id": "node_c9351b724318fbcacd2e9fd0",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "metadata_inconsistency",
+          "text_sufficient"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T05:45:33Z",
+      "updated_at": "2026-04-09T05:45:33Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_24d3453496e682d9c239f499",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_db31e0002acdd125",
+      "dataset_name": "Multi-Physics",
+      "input_asset_ids": [
+        "asset_a424317e9d8cf15fe4682c16",
+        "asset_eef752909c755219938f3b20",
+        "asset_aea55545928c945c5c951cfd",
+        "asset_8d6b5b92fed1edfa0f816d10",
+        "asset_cfe9a6389f4434d249c84cc1",
+        "asset_c381797ab79d95856aa5abae",
+        "asset_229d1a8dbd853a67f2913b84"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 0
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 158,
+            "height": 129,
+            "blur_score": 6448.5415,
+            "contrast_score": 55.0465,
+            "noise_score": 35.4189,
+            "readability_score": 0.8154,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 5,
+              "y": 3,
+              "width": 142,
+              "height": 119
+            },
+            "perceptual_hash": "fbfbe727e7e7e100"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_24d3453496e682d9c239f499",
+        "coverage_score": 1.0,
+        "consistency_score": 1.0,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_2109b7addae324258de710c8",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_2109b7addae324258de710c8",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "not_needed",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "jointly_understandable",
+          "question_and_answer_present",
+          "text_sufficient"
+        ],
+        "rationale": "The physics multiple-choice question is semantically complete: it states the setup, asks which statement is correct, provides the options, and the expected answer is identifiable as option D. The image is not necessary because the spatial relations are fully described in text. There is a minor metadata inconsistency claiming missing choices, but the provided sample itself is understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata_inconsistency",
+        "text_only_without_visual_need",
+        "题目为4选项选择题，但未提供具体选项文本（metadata.choice_field 为 null）。"
+      ],
+      "clean_score": 0.9789,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "metadata_inconsistency",
+        "text_sufficient"
+      ],
+      "decision_rationale": "The sample is semantically complete and usable: the question and answer are present, the text alone is sufficient to solve it, and the rewritten open version is consistent with the target answer. Alignment and solvability signals are strong, and the missing original choice metadata is only a minor inconsistency, not a blocker for annotation.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-09T05:45:33Z",
+      "finished_at": "2026-04-09T05:45:33Z",
+      "candidate_id": "cand_2109b7addae324258de710c8",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_24d3453496e682d9c239f499",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "image_entity_refs": [],
+      "text_span_refs": [
+        "asset_prob_2109b7addae324258de710c8_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [],
+      "coverage_score": 1.0,
+      "consistency_score": 1.0,
+      "alignment_status": "good",
+      "created_at": "2026-04-09T05:45:02Z",
+      "cleaning_path": "text_lightweight",
+      "text_dominant": true
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_b4821d2575c8fef83e68e053",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西．电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内．设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（　　）",
+      "after_value": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直，下列说法正确的是（ ）",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "audit_id": "audit_99223fac4ec135c7b4560648",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+      "after_value": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "audit_id": "audit_59ee456a31456b338925c4a1",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T05:45:33Z"
+    },
+    {
+      "audit_id": "audit_c9351b724318fbcacd2e9fd0",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T05:45:33Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_24d3453496e682d9c239f499",
+      "problem_id": "prob_2109b7addae324258de710c8",
+      "source_problem_id": "403",
+      "strategy": "blank_open",
+      "rationale": "将基于选项判断的多选题改写为直接询问正确命题中关键结论的开放题，语义保持不变。",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_c69ae3c6bbedc1c52a822478",
+          "parent_problem_id": "prob_2109b7addae324258de710c8",
+          "variant_index": 1,
+          "title": "Dataset Open Question",
+          "rewritten_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？",
+          "expected_answer_type": "short_text",
+          "expected_answer": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-09T05:45:33Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_c69ae3c6bbedc1c52a822478",
+      "parent_problem_id": "prob_2109b7addae324258de710c8",
+      "variant_index": 1,
+      "title": "Dataset Open Question",
+      "rewritten_question_text": "迎泽公园有这样一根电杆，一条电缆线由北向南绕过电杆转向由东向西。电缆与电杆的接触点为P。固定电杆的钢索一端固定在P点，另一端固定在地面上，钢索、电杆与东西方向的电缆在同一竖直平面内。设电缆线水平，南北、东西方向的电缆对电杆的拉力分别为$F_1,F_2$，且大小相等，钢索对电杆的拉力为$F_3$。已知植于土中的电杆竖直。在水平面内，$F_1,F_2$和$F_3$的合力方向偏向哪一侧？",
+      "expected_answer_type": "short_text",
+      "expected_answer": "$F_1,F_2$和$F_3$在水平面内合力的方向偏向北方一侧",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "multiphysics00253",
+  "canonical_sample_index": 253,
+  "canonical_dataset_key": "multi_physics",
+  "sample_path": "samples/multiphysics00253.json",
+  "image_path": "artifacts/images/multiphysics00253.png",
+  "images": [
+    "artifacts/images/multiphysics00253.png"
+  ],
+  "crop_path": "artifacts/crops/multiphysics00253.png",
+  "crops": [
+    "artifacts/crops/multiphysics00253.png"
+  ]
+}

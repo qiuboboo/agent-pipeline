@@ -1,0 +1,2064 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_04a568b53d15ff3060a84ba8",
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "467",
+    "raw_question_text": "<image>A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+    "raw_answer_text": "1153",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(765, 330)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains an in-memory PIL image representation rather than a file path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T23:30:43Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_1f17d43d34f7c176cadf3aa6_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 765,
+        "height": 330,
+        "file_size": 12710
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 193,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 4
+    },
+    "issues": [
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_04a568b53d15ff3060a84ba8",
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "467",
+    "created_at": "2026-04-12T23:30:43Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+    "image_dependency_score": 0.95,
+    "multi_step_score": 0.44,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "`requires_image`=true indicates the problem is intended to rely on an image.",
+        "`text_dominant`=false suggests the key information is not primarily contained in text.",
+        "The question says \"as shown below,\" which explicitly points to diagram-based information for solving.",
+        "`asset_registry_record.image_manifest` shows a valid image asset exists and `registry_passed`=true."
+      ],
+      "multi_step": [
+        "The route includes multiple legs (Des Moines -> Phoenix -> Atlanta -> Des Moines), so solving likely requires combining more than one segment relation.",
+        "The question asks for one leg length from a total trip distance, which usually involves at least subtraction from other diagram-provided distances.",
+        "Because the exact diagram labels are not present in text, the precise reasoning depth is uncertain, so the score is kept moderate rather than high."
+      ],
+      "verifiability": [
+        "`answer_type` is numeric and `answer_text` is a single number (`1153`), making the target answer format clear.",
+        "Given a fixed diagram and total distance, the result should be uniquely checkable by arithmetic.",
+        "`asset_registry_record.answer_manifest.answer_present`=true and `registry_passed`=true support reliable downstream checking."
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_04a568b53d15ff3060a84ba8",
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "467",
+    "created_at": "2026-04-12T23:30:43Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+    "priority": 0.91,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整，不属于应当拒绝的样本。",
+      "该题明显依赖图像，但 `image_manifest` 中已有可用图片且 `registry_passed`=true，具备进入候选池的基本条件。",
+      "答案为明确的数值型，`verifiability_score` 较高，后续校验和利用价值较好。",
+      "当前风险主要是元数据中的 `image_paths` 记录异常，但这不影响已落盘图像资产的可用性，属于可容忍问题。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_04a568b53d15ff3060a84ba8",
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "467",
+    "created_at": "2026-04-12T23:30:43Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_04a568b53d15ff3060a84ba8",
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+    "normalized_answer_text": "1153",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading <image> marker as non-semantic noise.",
+      "Kept the original question wording without adding missing diagram details.",
+      "Marked as image-required because the route segment expressions are provided in the diagram.",
+      "No answer choices were provided."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T23:30:43Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "467",
+    "subject": "数学",
+    "raw_question_text": "<image>A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+    "raw_answer_text": "1153",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.44,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 467,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(765, 330)>"
+      ],
+      "extraction_notes": [
+        "image field contains an in-memory PIL image representation rather than a file path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T23:31:42Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.91,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整，不属于应当拒绝的样本。",
+      "该题明显依赖图像，但 `image_manifest` 中已有可用图片且 `registry_passed`=true，具备进入候选池的基本条件。",
+      "答案为明确的数值型，`verifiability_score` 较高，后续校验和利用价值较好。",
+      "当前风险主要是元数据中的 `image_paths` 记录异常，但这不影响已落盘图像资产的可用性，属于可容忍问题。"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_799daf2f854b0a778a88d302",
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "467",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_1f17d43d34f7c176cadf3aa6/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_1f17d43d34f7c176cadf3aa6/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 765,
+        "height": 330
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.44,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-12T23:31:42Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_8dcdcbe0e2b5598ae36503b3",
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "467",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.91,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.95,
+      "initial_multi_solution_score": 0.44,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-12T23:31:42Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整，不属于应当拒绝的样本。",
+      "该题明显依赖图像，但 `image_manifest` 中已有可用图片且 `registry_passed`=true，具备进入候选池的基本条件。",
+      "答案为明确的数值型，`verifiability_score` 较高，后续校验和利用价值较好。",
+      "当前风险主要是元数据中的 `image_paths` 记录异常，但这不影响已落盘图像资产的可用性，属于可容忍问题。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_04a568b53d15ff3060a84ba8",
+      "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T23:31:42Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_04a568b53d15ff3060a84ba8",
+    "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "467",
+    "normalized_question_text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+    "normalized_answer_text": "1153",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-12T23:31:42Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_04a568b53d15ff3060a84ba8",
+    "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+    "normalized_question_text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+    "normalized_answer_text": "1153",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "A",
+        "canonical": "A",
+        "variable_type": "symbol"
+      },
+      {
+        "original": "from",
+        "canonical": "from",
+        "variable_type": "label"
+      },
+      {
+        "original": "Des",
+        "canonical": "Des",
+        "variable_type": "label"
+      },
+      {
+        "original": "to",
+        "canonical": "to",
+        "variable_type": "label"
+      },
+      {
+        "original": "on",
+        "canonical": "on",
+        "variable_type": "label"
+      },
+      {
+        "original": "and",
+        "canonical": "and",
+        "variable_type": "label"
+      },
+      {
+        "original": "back",
+        "canonical": "back",
+        "variable_type": "label"
+      },
+      {
+        "original": "as",
+        "canonical": "as",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "if",
+        "canonical": "if",
+        "variable_type": "label"
+      },
+      {
+        "original": "trip",
+        "canonical": "trip",
+        "variable_type": "label"
+      },
+      {
+        "original": "was",
+        "canonical": "was",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 84,
+          "y": 52,
+          "width": 622,
+          "height": 235
+        },
+        "readability_score": 0.7996,
+        "contrast_score": 37.69
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T23:31:42Z",
+    "normalization_notes": [
+      "Removed the leading <image> marker as non-semantic noise.",
+      "Kept the original question wording without adding missing diagram details.",
+      "Marked as image-required because the route segment expressions are provided in the diagram.",
+      "No answer choices were provided."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[0:900]",
+    "source_problem_id": "467",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-000-900_20260412T151456Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+    "normalized_question_text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+    "raw_answer_text": "1153",
+    "normalized_answer_text": "1153",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.977,
+    "multi_step_score": 0.3917,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "answer_available",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The sample is complete and understandable, the image-text relationship is clear enough to support solving the route-distance calculation, the expected numeric answer is present, and alignment/solvability signals show no serious failure.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T23:30:43Z",
+    "updated_at": "2026-04-12T23:31:42Z",
+    "initial_image_dependency_score": 0.95,
+    "initial_multi_solution_score": 0.44,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.91,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像资产均存在，核心语义支撑完整，不属于应当拒绝的样本。",
+      "该题明显依赖图像，但 `image_manifest` 中已有可用图片且 `registry_passed`=true，具备进入候选池的基本条件。",
+      "答案为明确的数值型，`verifiability_score` 较高，后续校验和利用价值较好。",
+      "当前风险主要是元数据中的 `image_paths` 记录异常，但这不影响已落盘图像资产的可用性，属于可容忍问题。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_635fc35de8d5395bc8446773",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[0:900]/467/question",
+      "storage_uri": "inline://prob_1f17d43d34f7c176cadf3aa6/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 193,
+      "width": null,
+      "height": null,
+      "sha256": "9cac37961038a56085b60345c3357f527723c40d137bb7adebd14b22cec3f4d5",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.7161,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "Des",
+          "canonical": "Des",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "back",
+          "canonical": "back",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "trip",
+          "canonical": "trip",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "asset_id": "asset_d5ea46ebea6c66732ce6b4db",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1f17d43d34f7c176cadf3aa6/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 186,
+      "width": null,
+      "height": null,
+      "sha256": "c8791044703c50abfd9ebc22a90e04f696c5a42061efd34fc75b65afb9745c5e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "normalized_text_snapshot": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "text_completeness_score": 0.7161,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "Des",
+          "canonical": "Des",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "back",
+          "canonical": "back",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "trip",
+          "canonical": "trip",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "asset_id": "asset_d0f884bd31a32cfdf3fd98d6",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[0:900]/467/answer",
+      "storage_uri": "inline://prob_1f17d43d34f7c176cadf3aa6/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 4,
+      "width": null,
+      "height": null,
+      "sha256": "c28474616c0273f299e922da2138b3ba7949770067a57f40a3896a0564bb5036",
+      "perceptual_hash": null,
+      "source_text_snapshot": "1153",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "asset_id": "asset_b8f6cf925c2a6e745a024559",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_1f17d43d34f7c176cadf3aa6/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 4,
+      "width": null,
+      "height": null,
+      "sha256": "c28474616c0273f299e922da2138b3ba7949770067a57f40a3896a0564bb5036",
+      "perceptual_hash": null,
+      "source_text_snapshot": "1153",
+      "normalized_text_snapshot": "1153",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "asset_id": "asset_dffaeff9436f1619e9afa21c",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/images/prob_1f17d43d34f7c176cadf3aa6_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 12710,
+      "width": 765,
+      "height": 330,
+      "sha256": "6a3c81dea4c59c97f06ef97961b89f6f70de8c2eb3ffaf6704c1ee71bc60bb7d",
+      "perceptual_hash": "ffe7e389df81a4ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1751.7144,
+      "readability_score": 0.7996,
+      "noise_score": 24.1677,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 84,
+        "y": 52,
+        "width": 622,
+        "height": 235
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "asset_id": "asset_be7a29b743a2f407517b4972",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_000_900/run_b396994bd2367a1c/datasets/geometry3k/artifacts/crops/prob_1f17d43d34f7c176cadf3aa6_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 11777,
+      "width": 622,
+      "height": 235,
+      "sha256": "a42c7a59dd14d5de6e0338c5903c292ad5f4896c2d0241b763baa62f603d38ea",
+      "perceptual_hash": "c7f78d9dffbf0026",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1751.7144,
+      "readability_score": 0.7996,
+      "noise_score": 24.1677,
+      "cropped_from_asset_id": "asset_dffaeff9436f1619e9afa21c",
+      "roi_bbox": {
+        "x": 84,
+        "y": 52,
+        "width": 622,
+        "height": 235
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "asset_id": "asset_47134f838f2426feca5b328a",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_b54290b540c001e1ab48cf3f",
+      "file_format": "txt",
+      "file_size_bytes": 186,
+      "width": null,
+      "height": null,
+      "sha256": "c8791044703c50abfd9ebc22a90e04f696c5a42061efd34fc75b65afb9745c5e",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "normalized_text_snapshot": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "text_completeness_score": 0.7161,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "Des",
+          "canonical": "Des",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "back",
+          "canonical": "back",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "trip",
+          "canonical": "trip",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_1f17d43d34f7c176cadf3aa6",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "A",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "3482"
+          ],
+          "unit_mentions": [
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_1f17d43d34f7c176cadf3aa6_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "1153",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "A",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "Des",
+          "canonical": "Des",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "back",
+          "canonical": "back",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "trip",
+          "canonical": "trip",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "A",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T23:31:31Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_1f17d43d34f7c176cadf3aa6_1",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "wide_diagram",
+        "aspect_ratio": 2.3182,
+        "dark_pixel_ratio": 0.0471,
+        "readability_score": 0.7996,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 765,
+            "height": 330
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 84,
+            "y": 52,
+            "width": 622,
+            "height": 235
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 84,
+            "y": 52,
+            "width": 311,
+            "height": 117
+          },
+          "salience": 0.4256
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 395,
+            "y": 52,
+            "width": 311,
+            "height": 117
+          },
+          "salience": 0.4147
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 84,
+            "y": 169,
+            "width": 311,
+            "height": 118
+          },
+          "salience": 0.4439
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 395,
+            "y": 169,
+            "width": 311,
+            "height": 118
+          },
+          "salience": 0.4407
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9198,
+      "created_at": "2026-04-12T23:31:31Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_1f17d43d34f7c176cadf3aa6",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T23:31:37Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_7ed99cc789a463d6bd351108",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "text_fact",
+      "canonical_value": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below.",
+      "surface_forms": [
+        "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_d5ea46ebea6c66732ce6b4db"
+      ],
+      "evidence_refs": [
+        "asset_d5ea46ebea6c66732ce6b4db"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "A",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "A,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_b97362fe77709996c186a4ba",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "target_slot",
+      "canonical_value": "Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "surface_forms": [
+        "Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_d5ea46ebea6c66732ce6b4db"
+      ],
+      "evidence_refs": [
+        "asset_d5ea46ebea6c66732ce6b4db"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_1f17d43d34f7c176cadf3aa6_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "1153",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_d474884b3dbb52c4bcc230fb",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "answer_claim",
+      "canonical_value": "1153",
+      "surface_forms": [
+        "1153"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_b8f6cf925c2a6e745a024559"
+      ],
+      "evidence_refs": [
+        "asset_b8f6cf925c2a6e745a024559"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "1153"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_9907a6cd18d9a5b0e1853139",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 765,
+          "height": 330
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9198,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_06e6f7dcd83131212c584b26",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 84,
+          "y": 52,
+          "width": 622,
+          "height": 235
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9198,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_f1f72bed5b5665178b9a0c3e",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 84,
+          "y": 52,
+          "width": 311,
+          "height": 117
+        },
+        "salience": 0.4256
+      },
+      "unit": null,
+      "confidence": 0.9198,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_af06c5b4196ff956c5702cb8",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 395,
+          "y": 52,
+          "width": 311,
+          "height": 117
+        },
+        "salience": 0.4147
+      },
+      "unit": null,
+      "confidence": 0.9198,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_f8fcffbba8c9cde3dda2edc3",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 84,
+          "y": 169,
+          "width": 311,
+          "height": 118
+        },
+        "salience": 0.4439
+      },
+      "unit": null,
+      "confidence": 0.9198,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_9d314bc959defce408dd6620",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 395,
+          "y": 169,
+          "width": 311,
+          "height": 118
+        },
+        "salience": 0.4407
+      },
+      "unit": null,
+      "confidence": 0.9198,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_750767d3885763edbe735ad8",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "text_fact",
+      "canonical_value": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "surface_forms": [
+        "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_47134f838f2426feca5b328a"
+      ],
+      "evidence_refs": [
+        "asset_47134f838f2426feca5b328a"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_b54290b540c001e1ab48cf3f",
+        "parent_problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "1153",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_c370df4522160beecc7717af",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_8c88897c69d68602566c8f19",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_1f17d43d34f7c176cadf3aa6",
+        "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T23:31:37Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "node_id": "node_0bcb68e8b977e2c9e0b5cc00",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "answer_available",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T23:31:42Z",
+      "updated_at": "2026-04-12T23:31:42Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_04a568b53d15ff3060a84ba8",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_b396994bd2367a1c",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_635fc35de8d5395bc8446773",
+        "asset_d5ea46ebea6c66732ce6b4db",
+        "asset_d0f884bd31a32cfdf3fd98d6",
+        "asset_b8f6cf925c2a6e745a024559",
+        "asset_dffaeff9436f1619e9afa21c",
+        "asset_be7a29b743a2f407517b4972",
+        "asset_47134f838f2426feca5b328a"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 13
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 765,
+            "height": 330,
+            "blur_score": 1751.7144,
+            "contrast_score": 37.69,
+            "noise_score": 24.1677,
+            "readability_score": 0.7996,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 84,
+              "y": 52,
+              "width": 622,
+              "height": 235
+            },
+            "perceptual_hash": "ffe7e389df81a4ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_04a568b53d15ff3060a84ba8",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_1f17d43d34f7c176cadf3aa6",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_1f17d43d34f7c176cadf3aa6",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for the Des Moines to Phoenix distance from a total trip length, and the image clearly provides the three route segment expressions needed to set up the total distance equation. The question, expected numeric answer, and image-text relationship are all understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains an in-memory PIL image representation rather than a file path or URL"
+      ],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "answer_available",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The sample is complete and understandable, the image-text relationship is clear enough to support solving the route-distance calculation, the expected numeric answer is present, and alignment/solvability signals show no serious failure.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T23:31:42Z",
+      "finished_at": "2026-04-12T23:31:42Z",
+      "candidate_id": "cand_1f17d43d34f7c176cadf3aa6",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_04a568b53d15ff3060a84ba8",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "image_entity_refs": [
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1::roi",
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1::roi_top_left",
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1::roi_top_right",
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1::roi_bottom_left",
+        "visual_prob_1f17d43d34f7c176cadf3aa6_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_1f17d43d34f7c176cadf3aa6_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "A",
+          "image_ref": "visual_prob_1f17d43d34f7c176cadf3aa6_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.78
+        },
+        {
+          "text_ref": "slot_prob_1f17d43d34f7c176cadf3aa6_1",
+          "image_ref": "visual_prob_1f17d43d34f7c176cadf3aa6_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7824
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T23:31:31Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_e3bc2c0e0de704cd4bd5c508",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "after_value": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "audit_id": "audit_74be77906c9c90b6431ccd51",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "1153",
+      "after_value": "1153",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "audit_id": "audit_0f25e83f918c4ad7f5849dd5",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "audit_id": "audit_0bcb68e8b977e2c9e0b5cc00",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T23:31:42Z"
+    },
+    {
+      "audit_id": "audit_0f73a5038fcbca058d36e490",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "A",
+          "canonical": "A",
+          "variable_type": "symbol"
+        },
+        {
+          "original": "from",
+          "canonical": "from",
+          "variable_type": "label"
+        },
+        {
+          "original": "Des",
+          "canonical": "Des",
+          "variable_type": "label"
+        },
+        {
+          "original": "to",
+          "canonical": "to",
+          "variable_type": "label"
+        },
+        {
+          "original": "on",
+          "canonical": "on",
+          "variable_type": "label"
+        },
+        {
+          "original": "and",
+          "canonical": "and",
+          "variable_type": "label"
+        },
+        {
+          "original": "back",
+          "canonical": "back",
+          "variable_type": "label"
+        },
+        {
+          "original": "as",
+          "canonical": "as",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "if",
+          "canonical": "if",
+          "variable_type": "label"
+        },
+        {
+          "original": "trip",
+          "canonical": "trip",
+          "variable_type": "label"
+        },
+        {
+          "original": "was",
+          "canonical": "was",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T23:31:42Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_04a568b53d15ff3060a84ba8",
+      "problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "source_problem_id": "467",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_b54290b540c001e1ab48cf3f",
+          "parent_problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "1153",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T23:31:42Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_b54290b540c001e1ab48cf3f",
+      "parent_problem_id": "prob_1f17d43d34f7c176cadf3aa6",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "A plane travels from Des Moines to Phoenix, on to Atlanta, and back to Des Moines, as shown below. Find the distance in miles from Des Moines to Phoenix if the total trip was 3482 miles.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "1153",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00063",
+  "canonical_sample_index": 63,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00063.json",
+  "image_path": "artifacts/images/geometry3k00063.png",
+  "images": [
+    "artifacts/images/geometry3k00063.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00063.png",
+  "crops": [
+    "artifacts/crops/geometry3k00063.png"
+  ]
+}

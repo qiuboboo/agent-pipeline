@@ -1,0 +1,1824 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_c848a932d193913839636bac",
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "problem_id": "prob_a97d702947af77aa5698b54f",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "486",
+    "raw_question_text": "<image>Suppose $B D=12$ millimeters. Find the radius of the circle.",
+    "raw_answer_text": "6",
+    "choice_map": {},
+    "image_paths": [
+      "<PIL.Image mode=RGBA size=(280, 260)>"
+    ],
+    "force_requires_image": true,
+    "question_field": "problem",
+    "answer_field": "answer",
+    "image_field": "images",
+    "choice_field": null,
+    "extraction_notes": [
+      "image field contains a PIL object representation rather than a file path or URL",
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-12T14:02:22Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_a97d702947af77aa5698b54f",
+    "image_manifest": [
+      {
+        "path": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_a97d702947af77aa5698b54f_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 280,
+        "height": 260,
+        "file_size": 11170
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 67,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 1
+    },
+    "issues": [
+      "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_c848a932d193913839636bac",
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "486",
+    "created_at": "2026-04-12T14:02:22Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_a97d702947af77aa5698b54f",
+    "image_dependency_score": 0.96,
+    "multi_step_score": 0.58,
+    "verifiability_score": 0.88,
+    "score_evidence": {
+      "image_dependency": [
+        "题干只给出“BD = 12 millimeters”且要求求圆半径，关键信息 BD 在图中的几何角色必须依赖图片判断",
+        "requires_image=true 且 text_dominant=false，说明该题不是纯文本可解",
+        "asset_registry_record.image_manifest 中存在 1 张有效图片，registry_passed=true，支持这是标准图形题"
+      ],
+      "multi_step": [
+        "需要先从图中识别线段 BD 与圆的关系，再据此推出半径，至少包含图形识别与数值计算两步",
+        "答案为 6，较像先判定 BD 为直径再做 12/2 的计算，存在基础的组合推理",
+        "题干文本很短，未显式给出几何关系，因此多步性主要来自图文联合推断，但整体计算链不长"
+      ],
+      "verifiability": [
+        "answer_type 为 numeric，且 answer_text='6'，最终答案格式清晰",
+        "若图中可确认 BD 为直径，则求半径的规则明确，后续可由几何关系进行核验",
+        "registry_passed=true，question_present=true，answer_present=true，样本基础登记完整"
+      ]
+    },
+    "risk_flags": [
+      "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_c848a932d193913839636bac",
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "486",
+    "created_at": "2026-04-12T14:02:22Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_a97d702947af77aa5698b54f",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和有效图片均已存在，核心语义资产完整，可支撑进入候选池",
+      "图像依赖度高但当前已有可用图片文件，能够恢复并验证关键几何关系",
+      "综合初评分较高，数值答案明确且可核验，样本整体质量较好",
+      "现有问题仅是 metadata.image_paths 的元数据表示异常，不影响主要资产可用性"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_c848a932d193913839636bac",
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "dataset_name": "Geometry3K",
+    "source_problem_id": "486",
+    "created_at": "2026-04-12T14:02:22Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_c848a932d193913839636bac",
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "problem_id": "prob_a97d702947af77aa5698b54f",
+    "dataset_name": "Geometry3K",
+    "normalized_question_text": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+    "normalized_answer_text": "6",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the leading <image> marker.",
+      "Normalized spacing in the segment label from 'B D' to 'BD'.",
+      "Marked as image-required because force_requires_image is true and the geometry relationship depends on the diagram."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-12T14:02:22Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "486",
+    "subject": "数学",
+    "raw_question_text": "<image>Suppose $B D=12$ millimeters. Find the radius of the circle.",
+    "raw_answer_text": "6",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 486,
+      "image_paths": [
+        "<PIL.Image mode=RGBA size=(280, 260)>"
+      ],
+      "extraction_notes": [
+        "image field contains a PIL object representation rather than a file path or URL",
+        "source_intake_agent"
+      ],
+      "question_field": "problem",
+      "answer_field": "answer",
+      "image_field": "images",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-12T14:03:40Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和有效图片均已存在，核心语义资产完整，可支撑进入候选池",
+      "图像依赖度高但当前已有可用图片文件，能够恢复并验证关键几何关系",
+      "综合初评分较高，数值答案明确且可核验，样本整体质量较好",
+      "现有问题仅是 metadata.image_paths 的元数据表示异常，不影响主要资产可用性"
+    ],
+    "collection_risk_flags": [
+      "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_fc2e4ab35f27d19672b869da",
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "486",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_a97d702947af77aa5698b54f/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_a97d702947af77aa5698b54f/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 280,
+        "height": 260
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-12T14:03:40Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_219900a1a9ae0978e583f0a4",
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "486",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.96,
+      "initial_multi_solution_score": 0.58,
+      "initial_verifiability_score": 0.88
+    },
+    "created_at": "2026-04-12T14:03:40Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和有效图片均已存在，核心语义资产完整，可支撑进入候选池",
+      "图像依赖度高但当前已有可用图片文件，能够恢复并验证关键几何关系",
+      "综合初评分较高，数值答案明确且可核验，样本整体质量较好",
+      "现有问题仅是 metadata.image_paths 的元数据表示异常，不影响主要资产可用性"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_c848a932d193913839636bac",
+      "candidate_id": "cand_a97d702947af77aa5698b54f",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "dataset_name": "Geometry3K",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-12T14:03:40Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_c848a932d193913839636bac",
+    "problem_id": "prob_a97d702947af77aa5698b54f",
+    "source_dataset": "Geometry3K",
+    "source_problem_id": "486",
+    "normalized_question_text": "Suppose BD = 12mm. Find the radius of the circle.",
+    "normalized_answer_text": "6",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "calculation",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_ok",
+      "answer_supported",
+      "semantically_usable"
+    ],
+    "created_at": "2026-04-12T14:03:40Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_c848a932d193913839636bac",
+    "problem_id": "prob_a97d702947af77aa5698b54f",
+    "normalized_question_text": "Suppose BD = 12mm. Find the radius of the circle.",
+    "normalized_answer_text": "6",
+    "question_unit_normalization_map": [
+      {
+        "canonical_unit": "mm",
+        "match_count": 1,
+        "matched_examples": [
+          " millimeters"
+        ]
+      }
+    ],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "BD",
+        "canonical": "BD",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "of",
+        "canonical": "of",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Suppose BD = 12mm."
+      },
+      {
+        "segment_index": 2,
+        "text": "Find the radius of the circle."
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 44,
+          "y": 28,
+          "width": 208,
+          "height": 208
+        },
+        "readability_score": 0.7628,
+        "contrast_score": 35.1249
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-12T14:03:40Z",
+    "normalization_notes": [
+      "Removed the leading <image> marker.",
+      "Normalized spacing in the segment label from 'B D' to 'BD'.",
+      "Marked as image-required because force_requires_image is true and the geometry relationship depends on the diagram."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_a97d702947af77aa5698b54f",
+    "source_dataset": "Geometry3K",
+    "source_split": "train[900:1500]",
+    "source_problem_id": "486",
+    "ingest_batch_id": "benchmarkallinone-geometry3k-900-1500_20260412T071102Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "<image>Suppose $B D=12$ millimeters. Find the radius of the circle.",
+    "normalized_question_text": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+    "raw_answer_text": "6",
+    "normalized_answer_text": "6",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9613,
+    "multi_step_score": 0.3557,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [
+      "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+    ],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_ok",
+      "answer_supported",
+      "semantically_usable"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable, the diagram supports that BD is the diameter through the center, and the numeric answer 6 is directly verifiable as half of 12. Minor metadata noise does not affect downstream annotation usability.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_a97d702947af77aa5698b54f",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-12T14:02:22Z",
+    "updated_at": "2026-04-12T14:03:40Z",
+    "initial_image_dependency_score": 0.96,
+    "initial_multi_solution_score": 0.58,
+    "initial_verifiability_score": 0.88,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和有效图片均已存在，核心语义资产完整，可支撑进入候选池",
+      "图像依赖度高但当前已有可用图片文件，能够恢复并验证关键几何关系",
+      "综合初评分较高，数值答案明确且可核验，样本整体质量较好",
+      "现有问题仅是 metadata.image_paths 的元数据表示异常，不影响主要资产可用性"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_2b7c8ea3e31c222fbdd8a72a",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://geometry3k/train[900:1500]/486/question",
+      "storage_uri": "inline://prob_a97d702947af77aa5698b54f/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 67,
+      "width": null,
+      "height": null,
+      "sha256": "77540165f8a4dc4ad02157c65fb4ec5d0357fe901c963932bd96f133eb6fd2b7",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Suppose $B D=12$ millimeters. Find the radius of the circle.",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "mm",
+          "match_count": 1,
+          "matched_examples": [
+            " millimeters"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "asset_id": "asset_fd88c81d833d7ed8e2a79d8f",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_a97d702947af77aa5698b54f/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 59,
+      "width": null,
+      "height": null,
+      "sha256": "87fe42ccf631d67064c51d4585a6314627d88ca66e343fcceaa8502ded28fb2c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Suppose $B D=12$ millimeters. Find the radius of the circle.",
+      "normalized_text_snapshot": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+      "text_completeness_score": 0.6027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "mm",
+          "match_count": 1,
+          "matched_examples": [
+            " millimeters"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "asset_id": "asset_518dd5a954e628388a1fa386",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://geometry3k/train[900:1500]/486/answer",
+      "storage_uri": "inline://prob_a97d702947af77aa5698b54f/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+      "perceptual_hash": null,
+      "source_text_snapshot": "6",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "asset_id": "asset_5bb8102f3c4527bf516f4b5e",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_a97d702947af77aa5698b54f/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+      "perceptual_hash": null,
+      "source_text_snapshot": "6",
+      "normalized_text_snapshot": "6",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "asset_id": "asset_f287b9aa04ee8f755e101966",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/images/prob_a97d702947af77aa5698b54f_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 11170,
+      "width": 280,
+      "height": 260,
+      "sha256": "67174aa5cdb82f72c06bbb9e7377c642a2de5426ab684da21325439d32935664",
+      "perceptual_hash": "ffc1c1a7e79999ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1772.1516,
+      "readability_score": 0.7628,
+      "noise_score": 24.351,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 44,
+        "y": 28,
+        "width": 208,
+        "height": 208
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "asset_id": "asset_36478a85bfe63cec1c1e16b2",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/geometry3k_900_1500/run_a8f6ef9ab7139b21/datasets/geometry3k/artifacts/crops/prob_a97d702947af77aa5698b54f_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 10571,
+      "width": 208,
+      "height": 208,
+      "sha256": "3abeaec901343be43df92e4d7ab0655eaf021062017cb9af18f03779c105c4c6",
+      "perceptual_hash": "03987ce6e65e3dc1",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 1772.1516,
+      "readability_score": 0.7628,
+      "noise_score": 24.351,
+      "cropped_from_asset_id": "asset_f287b9aa04ee8f755e101966",
+      "roi_bbox": {
+        "x": 44,
+        "y": 28,
+        "width": 208,
+        "height": 208
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "asset_id": "asset_3a989e890a0b506f0e7aa176",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_5f5f8076fee54ed96ced697f",
+      "file_format": "txt",
+      "file_size_bytes": 59,
+      "width": null,
+      "height": null,
+      "sha256": "87fe42ccf631d67064c51d4585a6314627d88ca66e343fcceaa8502ded28fb2c",
+      "perceptual_hash": null,
+      "source_text_snapshot": "<image>Suppose $B D=12$ millimeters. Find the radius of the circle.",
+      "normalized_text_snapshot": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+      "text_completeness_score": 0.6027,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [
+        {
+          "canonical_unit": "mm",
+          "match_count": 1,
+          "matched_examples": [
+            " millimeters"
+          ]
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_a97d702947af77aa5698b54f",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "question_type": "calculation",
+      "conditions": [
+        {
+          "text": "Suppose BD = 12mm.",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "12"
+          ],
+          "unit_mentions": [
+            "m",
+            "mm",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "Find the radius of the circle.",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "h",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_a97d702947af77aa5698b54f_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "Find the radius of the circle.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "6",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "circle",
+          "entity_category": "shape",
+          "requires_visual_grounding": true
+        },
+        {
+          "mention": "BD",
+          "entity_category": "label",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "h",
+        "m",
+        "mm",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Suppose BD = 12mm."
+        },
+        {
+          "segment_index": 2,
+          "text": "Find the radius of the circle."
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-12T14:03:22Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_a97d702947af77aa5698b54f_1",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "geometry_diagram",
+        "aspect_ratio": 1.0769,
+        "dark_pixel_ratio": 0.0636,
+        "readability_score": 0.7628,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 280,
+            "height": 260
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 44,
+            "y": 28,
+            "width": 208,
+            "height": 208
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 44,
+            "y": 28,
+            "width": 104,
+            "height": 104
+          },
+          "salience": 0.467
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 148,
+            "y": 28,
+            "width": 104,
+            "height": 104
+          },
+          "salience": 0.4764
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 44,
+            "y": 132,
+            "width": 104,
+            "height": 104
+          },
+          "salience": 0.445
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 148,
+            "y": 132,
+            "width": 104,
+            "height": 104
+          },
+          "salience": 0.4395
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9051,
+      "created_at": "2026-04-12T14:03:22Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_a97d702947af77aa5698b54f",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-12T14:03:34Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_26186788d2fbdea65b62d7ee",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "text_fact",
+      "canonical_value": "Suppose BD = 12mm.",
+      "surface_forms": [
+        "Suppose BD = 12mm."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_fd88c81d833d7ed8e2a79d8f"
+      ],
+      "evidence_refs": [
+        "asset_fd88c81d833d7ed8e2a79d8f"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Suppose BD = 12mm.",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "12"
+        ],
+        "unit_mentions": [
+          "m",
+          "mm",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "m,mm,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_e0b79acf59cfa55eada1ec61",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "target_slot",
+      "canonical_value": "Find the radius of the circle.",
+      "surface_forms": [
+        "Find the radius of the circle."
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_fd88c81d833d7ed8e2a79d8f"
+      ],
+      "evidence_refs": [
+        "asset_fd88c81d833d7ed8e2a79d8f"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_a97d702947af77aa5698b54f_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "Find the radius of the circle.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "6",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_213cd92cbda31f5d55bbe16e",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "answer_claim",
+      "canonical_value": "6",
+      "surface_forms": [
+        "6"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_5bb8102f3c4527bf516f4b5e"
+      ],
+      "evidence_refs": [
+        "asset_5bb8102f3c4527bf516f4b5e"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "6"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_9e827fa8ee9393f974e5bc6e",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 280,
+          "height": 260
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9051,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_bea7fe34f34c9812b7afd4b3",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 44,
+          "y": 28,
+          "width": 208,
+          "height": 208
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9051,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_a50289e8755826415df1dd94",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 44,
+          "y": 28,
+          "width": 104,
+          "height": 104
+        },
+        "salience": 0.467
+      },
+      "unit": null,
+      "confidence": 0.9051,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_d9af2c55510cbd25d6ff651e",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 148,
+          "y": 28,
+          "width": 104,
+          "height": 104
+        },
+        "salience": 0.4764
+      },
+      "unit": null,
+      "confidence": 0.9051,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_ca0fe4f9d053bbac5579a668",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 44,
+          "y": 132,
+          "width": 104,
+          "height": 104
+        },
+        "salience": 0.445
+      },
+      "unit": null,
+      "confidence": 0.9051,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_771ccf0cc6ce262d807dc8b4",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 148,
+          "y": 132,
+          "width": 104,
+          "height": 104
+        },
+        "salience": 0.4395
+      },
+      "unit": null,
+      "confidence": 0.9051,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_32b4659550c866caa612b556",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "text_fact",
+      "canonical_value": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+      "surface_forms": [
+        "Suppose BD = 12 millimeters. Find the radius of the circle."
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_3a989e890a0b506f0e7aa176"
+      ],
+      "evidence_refs": [
+        "asset_3a989e890a0b506f0e7aa176"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_5f5f8076fee54ed96ced697f",
+        "parent_problem_id": "prob_a97d702947af77aa5698b54f",
+        "variant_index": 1,
+        "title": "Geometry3K 开放题",
+        "rewritten_question_text": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+        "expected_answer_type": "numeric",
+        "expected_answer": "6",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_5718b12aa3e04a31275266e6",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.image_paths contains a PIL object representation rather than a file path or URL",
+      "surface_forms": [
+        "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_8d2a554cd61bc8f480d9ce10",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_a97d702947af77aa5698b54f",
+        "problem_id": "prob_a97d702947af77aa5698b54f",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-12T14:03:34Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "node_id": "node_030425d8e27bcaead83187c5",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_ok",
+          "answer_supported",
+          "semantically_usable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-12T14:03:40Z",
+      "updated_at": "2026-04-12T14:03:40Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_c848a932d193913839636bac",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_a8f6ef9ab7139b21",
+      "dataset_name": "Geometry3K",
+      "input_asset_ids": [
+        "asset_2b7c8ea3e31c222fbdd8a72a",
+        "asset_fd88c81d833d7ed8e2a79d8f",
+        "asset_518dd5a954e628388a1fa386",
+        "asset_5bb8102f3c4527bf516f4b5e",
+        "asset_f287b9aa04ee8f755e101966",
+        "asset_36478a85bfe63cec1c1e16b2",
+        "asset_3a989e890a0b506f0e7aa176"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 1,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 3
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.97,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 280,
+            "height": 260,
+            "blur_score": 1772.1516,
+            "contrast_score": 35.1249,
+            "noise_score": 24.351,
+            "readability_score": 0.7628,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 44,
+              "y": 28,
+              "width": 208,
+              "height": 208
+            },
+            "perceptual_hash": "ffc1c1a7e79999ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_c848a932d193913839636bac",
+        "coverage_score": 0.9,
+        "consistency_score": 0.9,
+        "alignment_status": "good",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_a97d702947af77aa5698b54f",
+        "question_type": "calculation",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_a97d702947af77aa5698b54f",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "diagram_shows_diameter_through_center",
+          "jointly_understandable"
+        ],
+        "rationale": "The text clearly asks for the circle's radius given BD = 12, and the diagram is clear enough to show that segment BD passes through the center E, so BD is the diameter. The expected numeric answer is therefore understandable as half of 12.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.image_paths contains a PIL object representation rather than a file path or URL"
+      ],
+      "clean_score": 0.9989,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_ok",
+        "answer_supported",
+        "semantically_usable"
+      ],
+      "decision_rationale": "The sample is jointly understandable, the diagram supports that BD is the diameter through the center, and the numeric answer 6 is directly verifiable as half of 12. Minor metadata noise does not affect downstream annotation usability.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-12T14:03:40Z",
+      "finished_at": "2026-04-12T14:03:40Z",
+      "candidate_id": "cand_a97d702947af77aa5698b54f",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_c848a932d193913839636bac",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "image_entity_refs": [
+        "visual_prob_a97d702947af77aa5698b54f_1::roi",
+        "visual_prob_a97d702947af77aa5698b54f_1::roi_top_left",
+        "visual_prob_a97d702947af77aa5698b54f_1::roi_top_right",
+        "visual_prob_a97d702947af77aa5698b54f_1::roi_bottom_left",
+        "visual_prob_a97d702947af77aa5698b54f_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_a97d702947af77aa5698b54f_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "circle",
+          "image_ref": "visual_prob_a97d702947af77aa5698b54f_1::roi",
+          "relation": "grounds_shape",
+          "confidence": 0.7763
+        },
+        {
+          "text_ref": "BD",
+          "image_ref": "visual_prob_a97d702947af77aa5698b54f_1::roi",
+          "relation": "grounds_label",
+          "confidence": 0.7763
+        }
+      ],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.9,
+      "consistency_score": 0.9,
+      "alignment_status": "good",
+      "created_at": "2026-04-12T14:03:22Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_d248ed15896dc7c539570512",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "<image>Suppose $B D=12$ millimeters. Find the radius of the circle.",
+      "after_value": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "audit_id": "audit_d41970ad3255494360624f84",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "6",
+      "after_value": "6",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "audit_id": "audit_e5d74068f1bf65bb1b07e8bd",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "audit_id": "audit_030425d8e27bcaead83187c5",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "audit_id": "audit_9bc62f41af9dd8b505acf965",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "record_type": "normalized_assets",
+      "field_name": "question_unit_normalization_map",
+      "before_value": "<image>Suppose $B D=12$ millimeters. Find the radius of the circle.",
+      "after_value": [
+        {
+          "canonical_unit": "mm",
+          "match_count": 1,
+          "matched_examples": [
+            " millimeters"
+          ]
+        }
+      ],
+      "change_type": "unit_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:03:40Z"
+    },
+    {
+      "audit_id": "audit_105cb3c7432a625b507174c5",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "BD",
+          "canonical": "BD",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "of",
+          "canonical": "of",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-12T14:03:40Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_c848a932d193913839636bac",
+      "problem_id": "prob_a97d702947af77aa5698b54f",
+      "source_problem_id": "486",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_5f5f8076fee54ed96ced697f",
+          "parent_problem_id": "prob_a97d702947af77aa5698b54f",
+          "variant_index": 1,
+          "title": "Geometry3K 开放题",
+          "rewritten_question_text": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+          "expected_answer_type": "numeric",
+          "expected_answer": "6",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-12T14:03:40Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_5f5f8076fee54ed96ced697f",
+      "parent_problem_id": "prob_a97d702947af77aa5698b54f",
+      "variant_index": 1,
+      "title": "Geometry3K 开放题",
+      "rewritten_question_text": "Suppose BD = 12 millimeters. Find the radius of the circle.",
+      "expected_answer_type": "numeric",
+      "expected_answer": "6",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "geometry3k00758",
+  "canonical_sample_index": 758,
+  "canonical_dataset_key": "geometry3k",
+  "sample_path": "samples/geometry3k00758.json",
+  "image_path": "artifacts/images/geometry3k00758.png",
+  "images": [
+    "artifacts/images/geometry3k00758.png"
+  ],
+  "crop_path": "artifacts/crops/geometry3k00758.png",
+  "crops": [
+    "artifacts/crops/geometry3k00758.png"
+  ]
+}

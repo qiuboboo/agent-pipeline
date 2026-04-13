@@ -1,0 +1,1698 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_5442f8e3824e57f08c139761",
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "problem_id": "prob_7d1f9b5848914d496601df88",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "427",
+    "raw_question_text": "如图所示，将球用细绳如图所示是轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是(　　)",
+    "raw_answer_text": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+    "choice_map": {
+      "A": "此时千斤顶每臂受到的压力大小均为$5.0\\times10^4N$",
+      "B": "此时千斤顶对汽车的支持力为$1.0\\times10^4\\mathrm{~N}$",
+      "C": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将增大",
+      "D": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小"
+    },
+    "image_paths": [
+      "../Data/2/62_0.png"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "picture",
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-09T06:33:46Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_7d1f9b5848914d496601df88",
+    "image_manifest": [
+      {
+        "path": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/images/prob_7d1f9b5848914d496601df88_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 732,
+        "height": 531,
+        "file_size": 181354
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 128,
+      "language_hint": "zh"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "short_text",
+      "answer_char_length": 27
+    },
+    "issues": [
+      "metadata.choice_field is null"
+    ],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_5442f8e3824e57f08c139761",
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "427",
+    "created_at": "2026-04-09T06:33:46Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_7d1f9b5848914d496601df88",
+    "image_dependency_score": 0.92,
+    "multi_step_score": 0.72,
+    "verifiability_score": 0.86,
+    "score_evidence": {
+      "image_dependency": [
+        "题干明确写有“如图所示”，且 requires_image=true、text_dominant=false，说明解题依赖配图。",
+        "装置是千斤顶机构，涉及两臂夹角、螺纹轴与受力方向等空间/结构信息，单靠文字不够完整。",
+        "asset_registry_record 中存在 1 张主图且 registry_passed=true，说明图像资产可用。"
+      ],
+      "multi_step": [
+        "需要结合图示识别千斤顶受力结构，再根据“汽车压力=1.0×10^5 N、夹角=120°”做受力分析，不是单步直接提取。",
+        "选项既包含当前时刻受力判断，也包含“继续摇动把手后每臂压力变化”的趋势判断，涉及状态变化比较。",
+        "这是物理多选/单选型判断题，通常需组合几何关系与力学平衡后排除错误选项。"
+      ],
+      "verifiability": [
+        "题目给出明确选项 A/B/C/D，answer_text 对应唯一可核对结论，结果形式清晰。",
+        "给定了关键数值和条件（汽车压力、夹角），后续可用受力平衡规则检验各选项真伪。",
+        "question_present=true、answer_present=true、registry_passed=true，有利于后续程序化或人工复核。"
+      ]
+    },
+    "risk_flags": [
+      "answer_type_mismatch: input=set, registry=short_text",
+      "metadata.choice_field is null"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_5442f8e3824e57f08c139761",
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "427",
+    "created_at": "2026-04-09T06:33:46Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_7d1f9b5848914d496601df88",
+    "priority": 0.88,
+    "decision": "keep",
+    "decision_reasons": [
+      "题干、答案和主图像均存在，核心语义资产完整，具备进入候选池的基本条件。",
+      "初步评分较高：image_dependency_score=0.92、multi_step_score=0.72、verifiability_score=0.86，说明样本有较强保留价值。",
+      "风险主要是元数据层面的 `metadata.choice_field is null` 与 `answer_type_mismatch`，当前证据不足以表明题目核心语义不可恢复。",
+      "题目明显依赖配图，但图像资产已登记且可用，因此不应仅因字段缺失而降为拒绝。"
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_5442f8e3824e57f08c139761",
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "dataset_name": "Multi-Physics",
+    "source_problem_id": "427",
+    "created_at": "2026-04-09T06:33:46Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_5442f8e3824e57f08c139761",
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "problem_id": "prob_7d1f9b5848914d496601df88",
+    "dataset_name": "Multi-Physics",
+    "normalized_question_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+    "normalized_answer_text": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+    "normalized_choice_map": {
+      "A": "此时千斤顶每臂受到的压力大小均为$5.0\\times10^4N$",
+      "B": "此时千斤顶对汽车的支持力为$1.0\\times10^4\\mathrm{~N}$",
+      "C": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将增大",
+      "D": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小"
+    },
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "删除题干中与当前千斤顶题意无关的明显残留短语，保留主干语义",
+      "题干显式依赖“如图所示”，且 force_requires_image=true，按需保留为多模态清洗"
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-09T06:33:46Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "source_dataset": "Multi-Physics",
+    "source_split": "repo_discovered",
+    "source_problem_id": "427",
+    "subject": "物理",
+    "raw_question_text": "如图所示，将球用细绳如图所示是轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是(　　)",
+    "raw_answer_text": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.92,
+    "initial_multi_solution_score": 0.72,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "conservative",
+    "should_push_multi_solution_agent": false,
+    "multi_solution_policy_rationale": "该数据集更可能以单解题为主，不强推多解 agent，只保留基础可验证性与可标注性检查。",
+    "metadata": {
+      "data_file": "outputs/repo_cache/multi_physics/Data/2.json",
+      "image_paths": [
+        "../Data/2/62_0.png"
+      ],
+      "extraction_notes": [
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "picture",
+      "choice_field": null
+    },
+    "created_at": "2026-04-09T06:35:33Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像均存在，核心语义资产完整，具备进入候选池的基本条件。",
+      "初步评分较高：image_dependency_score=0.92、multi_step_score=0.72、verifiability_score=0.86，说明样本有较强保留价值。",
+      "风险主要是元数据层面的 `metadata.choice_field is null` 与 `answer_type_mismatch`，当前证据不足以表明题目核心语义不可恢复。",
+      "题目明显依赖配图，但图像资产已登记且可用，因此不应仅因字段缺失而降为拒绝。"
+    ],
+    "collection_risk_flags": [
+      "answer_type_mismatch: input=set, registry=short_text",
+      "metadata.choice_field is null"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_8fce0f8442ccf54a00aa9e92",
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "427",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_7d1f9b5848914d496601df88/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_7d1f9b5848914d496601df88/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/62_0.png",
+        "is_present": true,
+        "width": 732,
+        "height": 531
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.92,
+      "initial_multi_solution_score": 0.72,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-09T06:35:33Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": [
+      "metadata.choice_field is null"
+    ]
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_a5386f3b304af4def6cd735e",
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "427",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.88,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "conservative",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.92,
+      "initial_multi_solution_score": 0.72,
+      "initial_verifiability_score": 0.86
+    },
+    "created_at": "2026-04-09T06:35:33Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "题干、答案和主图像均存在，核心语义资产完整，具备进入候选池的基本条件。",
+      "初步评分较高：image_dependency_score=0.92、multi_step_score=0.72、verifiability_score=0.86，说明样本有较强保留价值。",
+      "风险主要是元数据层面的 `metadata.choice_field is null` 与 `answer_type_mismatch`，当前证据不足以表明题目核心语义不可恢复。",
+      "题目明显依赖配图，但图像资产已登记且可用，因此不应仅因字段缺失而降为拒绝。"
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_5442f8e3824e57f08c139761",
+      "candidate_id": "cand_7d1f9b5848914d496601df88",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "dataset_name": "Multi-Physics",
+      "pool_status": "manual_review",
+      "clean_decision": "review",
+      "review_required": true,
+      "rewrite_strategy": "blank_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-09T06:35:33Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_5442f8e3824e57f08c139761",
+    "problem_id": "prob_7d1f9b5848914d496601df88",
+    "source_dataset": "Multi-Physics",
+    "source_problem_id": "427",
+    "normalized_question_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+    "normalized_answer_text": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "multiple_choice",
+    "open_variant_count": 1,
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "review",
+    "decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "created_at": "2026-04-09T06:35:33Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_5442f8e3824e57f08c139761",
+    "problem_id": "prob_7d1f9b5848914d496601df88",
+    "normalized_question_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+    "normalized_answer_text": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "circ",
+        "canonical": "circ",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/62_0.png",
+        "roi_bbox": {
+          "x": 6,
+          "y": 2,
+          "width": 722,
+          "height": 521
+        },
+        "readability_score": 0.9407,
+        "contrast_score": 76.6675
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-09T06:35:33Z",
+    "normalization_notes": [
+      "删除题干中与当前千斤顶题意无关的明显残留短语，保留主干语义",
+      "题干显式依赖“如图所示”，且 force_requires_image=true，按需保留为多模态清洗"
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_7d1f9b5848914d496601df88",
+    "source_dataset": "Multi-Physics",
+    "source_split": "repo_discovered",
+    "source_problem_id": "427",
+    "ingest_batch_id": "benchmarkallinone-multi-physics-500-1412_20260408T142155Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "物理"
+    ],
+    "language": "zh",
+    "raw_question_text": "如图所示，将球用细绳如图所示是轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是(　　)",
+    "normalized_question_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+    "raw_answer_text": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+    "normalized_answer_text": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+    "answer_type": "set",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.8591,
+    "multi_step_score": 0.3377,
+    "verifiability_score": 0.874,
+    "quality_risk_flags": [
+      "metadata.choice_field is null"
+    ],
+    "current_status": "cleaning_review",
+    "clean_decision": "review",
+    "clean_decision_reason_codes": [
+      "alignment_requires_review",
+      "missing_grounded_visual_path"
+    ],
+    "clean_decision_rationale": "The sample is jointly understandable and the rewritten open question plus expected answer are usable, but the alignment record is poor and the solvability module could not establish a grounded visual reasoning path, so it should be kept for review rather than rejected.",
+    "review_priority": "high",
+    "annotation_ready": false,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "blank_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_7d1f9b5848914d496601df88",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "bad",
+    "solvability_score": 0.8,
+    "solvability_decision_hint": "reject",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-09T06:33:46Z",
+    "updated_at": "2026-04-09T06:35:33Z",
+    "initial_image_dependency_score": 0.92,
+    "initial_multi_solution_score": 0.72,
+    "initial_verifiability_score": 0.86,
+    "multi_solution_mining_policy": "conservative",
+    "collection_priority_score": 0.88,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "题干、答案和主图像均存在，核心语义资产完整，具备进入候选池的基本条件。",
+      "初步评分较高：image_dependency_score=0.92、multi_step_score=0.72、verifiability_score=0.86，说明样本有较强保留价值。",
+      "风险主要是元数据层面的 `metadata.choice_field is null` 与 `answer_type_mismatch`，当前证据不足以表明题目核心语义不可恢复。",
+      "题目明显依赖配图，但图像资产已登记且可用，因此不应仅因字段缺失而降为拒绝。"
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_d663c5e2cf1c5d9a582d8cec",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://multi_physics/repo_discovered/427/question",
+      "storage_uri": "inline://prob_7d1f9b5848914d496601df88/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 322,
+      "width": null,
+      "height": null,
+      "sha256": "6afd2ec3e18636e34bb1a0a36a155886a3f54c15fb5249f13550134cc7785575",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，将球用细绳如图所示是轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是(　　)",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6554,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "circ",
+          "canonical": "circ",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "asset_id": "asset_db2dbda5a78366f11c51a1c5",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_7d1f9b5848914d496601df88/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 290,
+      "width": null,
+      "height": null,
+      "sha256": "4764e49029e69c7aff851e7a8a7ef29ce2ff92e744560d78c7b1f2835bdd34b8",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，将球用细绳如图所示是轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是(　　)",
+      "normalized_text_snapshot": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+      "text_completeness_score": 0.6554,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "circ",
+          "canonical": "circ",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "asset_id": "asset_ebecd5f39a0eadb7e4b5b242",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://multi_physics/repo_discovered/427/answer",
+      "storage_uri": "inline://prob_7d1f9b5848914d496601df88/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 81,
+      "width": null,
+      "height": null,
+      "sha256": "437da18b93264717fb0c3ac2f72dfcfaf082d19cb61384862a2d2dd9bc42ec33",
+      "perceptual_hash": null,
+      "source_text_snapshot": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "asset_id": "asset_8741ee3b09db4b9683b3cfe4",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_7d1f9b5848914d496601df88/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 81,
+      "width": null,
+      "height": null,
+      "sha256": "437da18b93264717fb0c3ac2f72dfcfaf082d19cb61384862a2d2dd9bc42ec33",
+      "perceptual_hash": null,
+      "source_text_snapshot": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+      "normalized_text_snapshot": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "asset_id": "asset_5127edab7c3e3ffccf1a3e40",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "outputs/repo_cache/multi_physics/Data/../Data/2/62_0.png",
+      "storage_uri": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/images/prob_7d1f9b5848914d496601df88_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 181354,
+      "width": 732,
+      "height": 531,
+      "sha256": "8fdc7594f8ac789cf0d9afd6319bdeec9b2c6072d2b75f962a247d6bde4b729b",
+      "perceptual_hash": "1f1f0800c7dfbf7f",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 909.7347,
+      "readability_score": 0.9407,
+      "noise_score": 21.9759,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 6,
+        "y": 2,
+        "width": 722,
+        "height": 521
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [
+        "metadata.choice_field is null"
+      ],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "asset_id": "asset_a2bd3c76891464cfd18f466d",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/multi_physics_500_1412/run_db31e0002acdd125/datasets/multi_physics/artifacts/crops/prob_7d1f9b5848914d496601df88_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 180643,
+      "width": 722,
+      "height": 521,
+      "sha256": "82299244017d5ede205539106418ae112b832b4362bbb0e4fad185f3b2e9189f",
+      "perceptual_hash": "1f1f0c00c7dfbf7f",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 909.7347,
+      "readability_score": 0.9407,
+      "noise_score": 21.9759,
+      "cropped_from_asset_id": "asset_5127edab7c3e3ffccf1a3e40",
+      "roi_bbox": {
+        "x": 6,
+        "y": 2,
+        "width": 722,
+        "height": 521
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "asset_id": "asset_47cd6056e390c0fa6339676b",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_fd0a36a1781550edb6703eb9",
+      "file_format": "txt",
+      "file_size_bytes": 361,
+      "width": null,
+      "height": null,
+      "sha256": "dd3cac600356bbe6032aaab075b474397ff2de5753a7f400f6ba7b97137caab0",
+      "perceptual_hash": null,
+      "source_text_snapshot": "如图所示，将球用细绳如图所示是轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是(　　)",
+      "normalized_text_snapshot": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？",
+      "text_completeness_score": 0.6554,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "circ",
+          "canonical": "circ",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_7d1f9b5848914d496601df88",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "question_type": "multiple_choice",
+      "conditions": [
+        {
+          "text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1.0",
+            "10",
+            "5",
+            "120"
+          ],
+          "unit_mentions": [
+            "N",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+          "segment_index": 1,
+          "mentions_visual": false,
+          "numeric_tokens": [
+            "1.0",
+            "10",
+            "5",
+            "120"
+          ],
+          "unit_mentions": [
+            "N",
+            "m",
+            "s"
+          ],
+          "target_role": "fallback"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_7d1f9b5848914d496601df88_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "set",
+          "target_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？",
+          "expected_answer_type": "set",
+          "expected_answer": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+          "requires_visual_grounding": false
+        }
+      ],
+      "entity_mentions": [],
+      "variable_aliases": [
+        {
+          "original": "circ",
+          "canonical": "circ",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "N",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-09T06:35:15Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_7d1f9b5848914d496601df88_1",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "dense_diagram",
+        "aspect_ratio": 1.3785,
+        "dark_pixel_ratio": 0.6368,
+        "readability_score": 0.9407,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 732,
+            "height": 531
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 6,
+            "y": 2,
+            "width": 722,
+            "height": 521
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 6,
+            "y": 2,
+            "width": 361,
+            "height": 260
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 367,
+            "y": 2,
+            "width": 361,
+            "height": 260
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 6,
+            "y": 262,
+            "width": 361,
+            "height": 261
+          },
+          "salience": 0.861
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 367,
+            "y": 262,
+            "width": 361,
+            "height": 261
+          },
+          "salience": 0.6227
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9763,
+      "created_at": "2026-04-09T06:35:15Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_7d1f9b5848914d496601df88",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": false,
+      "reasoning_path_exists": false,
+      "path_mode": "multimodal",
+      "failure_codes": [
+        "missing_grounded_visual_path"
+      ],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 0.0
+      },
+      "solvability_score": 0.8,
+      "decision_hint": "reject",
+      "created_at": "2026-04-09T06:35:25Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_168eff2044057572939340a6",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "text_fact",
+      "canonical_value": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+      "surface_forms": [
+        "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_db2dbda5a78366f11c51a1c5"
+      ],
+      "evidence_refs": [
+        "asset_db2dbda5a78366f11c51a1c5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+        "segment_index": 1,
+        "mentions_visual": false,
+        "numeric_tokens": [
+          "1.0",
+          "10",
+          "5",
+          "120"
+        ],
+        "unit_mentions": [
+          "N",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "N,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_7899e9140def42dc61ff47bb",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "target_slot",
+      "canonical_value": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？",
+      "surface_forms": [
+        "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_db2dbda5a78366f11c51a1c5"
+      ],
+      "evidence_refs": [
+        "asset_db2dbda5a78366f11c51a1c5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "slot_id": "slot_prob_7d1f9b5848914d496601df88_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "set",
+        "target_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？",
+        "expected_answer_type": "set",
+        "expected_answer": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+        "requires_visual_grounding": false
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_51bd96f46284bb4952c6ae7b",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "answer_claim",
+      "canonical_value": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+      "surface_forms": [
+        "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_8741ee3b09db4b9683b3cfe4"
+      ],
+      "evidence_refs": [
+        "asset_8741ee3b09db4b9683b3cfe4"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "set",
+      "normalized_value": {
+        "answer": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_6cd9186e0e07e4b8e06eb1fd",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 732,
+          "height": 531
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9763,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_08a120e644855dfee97a8d5a",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 6,
+          "y": 2,
+          "width": 722,
+          "height": 521
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9763,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_0524706d4e520225100b999f",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 6,
+          "y": 2,
+          "width": 361,
+          "height": 260
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9763,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_7740c15750bc6c29a5e5e422",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 367,
+          "y": 2,
+          "width": 361,
+          "height": 260
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9763,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_f2f1e81ad0bbd84ee184e100",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 6,
+          "y": 262,
+          "width": 361,
+          "height": 261
+        },
+        "salience": 0.861
+      },
+      "unit": null,
+      "confidence": 0.9763,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_e3249068879b4640f42a271b",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 367,
+          "y": 262,
+          "width": 361,
+          "height": 261
+        },
+        "salience": 0.6227
+      },
+      "unit": null,
+      "confidence": 0.9763,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_2100584787ab7b16c7289733",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "text_fact",
+      "canonical_value": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？",
+      "surface_forms": [
+        "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_47cd6056e390c0fa6339676b"
+      ],
+      "evidence_refs": [
+        "asset_47cd6056e390c0fa6339676b"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_fd0a36a1781550edb6703eb9",
+        "parent_problem_id": "prob_7d1f9b5848914d496601df88",
+        "variant_index": 1,
+        "title": "Multi-Physics 开放题",
+        "rewritten_question_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？",
+        "expected_answer_type": "set",
+        "expected_answer": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_ee83e430a2a2799a68391d2d",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "quality_signal",
+      "canonical_value": "metadata.choice_field is null",
+      "surface_forms": [
+        "metadata.choice_field is null"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "flag": "metadata.choice_field is null"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_a28f65bf75af894197081a88",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=reject",
+      "surface_forms": [
+        "reject"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_7d1f9b5848914d496601df88",
+        "problem_id": "prob_7d1f9b5848914d496601df88",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": false,
+        "reasoning_path_exists": false,
+        "path_mode": "multimodal",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 0.0
+        },
+        "solvability_score": 0.8,
+        "decision_hint": "reject",
+        "created_at": "2026-04-09T06:35:25Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "node_id": "node_078542bc898d16a01f8b6438",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=review",
+      "surface_forms": [
+        "review"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "review",
+        "reasons": [
+          "alignment_requires_review",
+          "missing_grounded_visual_path"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-09T06:35:33Z",
+      "updated_at": "2026-04-09T06:35:33Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_5442f8e3824e57f08c139761",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_db31e0002acdd125",
+      "dataset_name": "Multi-Physics",
+      "input_asset_ids": [
+        "asset_d663c5e2cf1c5d9a582d8cec",
+        "asset_db2dbda5a78366f11c51a1c5",
+        "asset_ebecd5f39a0eadb7e4b5b242",
+        "asset_8741ee3b09db4b9683b3cfe4",
+        "asset_5127edab7c3e3ffccf1a3e40",
+        "asset_a2bd3c76891464cfd18f466d",
+        "asset_47cd6056e390c0fa6339676b"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 1
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.95,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 732,
+            "height": 531,
+            "blur_score": 909.7347,
+            "contrast_score": 76.6675,
+            "noise_score": 21.9759,
+            "readability_score": 0.9407,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 6,
+              "y": 2,
+              "width": 722,
+              "height": 521
+            },
+            "perceptual_hash": "1f1f0800c7dfbf7f"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_5442f8e3824e57f08c139761",
+        "coverage_score": 0.18,
+        "consistency_score": 0.1,
+        "alignment_status": "bad",
+        "conflict_count": 1
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_7d1f9b5848914d496601df88",
+        "question_type": "multiple_choice",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_7d1f9b5848914d496601df88",
+        "solvability_score": 0.8,
+        "reasoning_path_exists": false,
+        "decision_hint": "reject",
+        "failure_codes": [
+          "missing_grounded_visual_path"
+        ]
+      },
+      "rewrite_summary": {
+        "strategy": "blank_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_matches_text",
+          "jointly_understandable"
+        ],
+        "rationale": "题干、选项和标准答案完整，图中清楚展示了轿车使用的剪式千斤顶，能够支持理解受力与夹角变化的物理情境；图文结合后题目语义明确。",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [
+        "metadata.choice_field is null"
+      ],
+      "clean_score": 0.8946,
+      "decision": "review",
+      "decision_reason_codes": [
+        "alignment_requires_review",
+        "missing_grounded_visual_path"
+      ],
+      "decision_rationale": "The sample is jointly understandable and the rewritten open question plus expected answer are usable, but the alignment record is poor and the solvability module could not establish a grounded visual reasoning path, so it should be kept for review rather than rejected.",
+      "review_ticket_id": "review_prob_7d1f9b5848914d496601df88",
+      "operator_type": "system",
+      "started_at": "2026-04-09T06:35:33Z",
+      "finished_at": "2026-04-09T06:35:33Z",
+      "candidate_id": "cand_7d1f9b5848914d496601df88",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_5442f8e3824e57f08c139761",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "image_entity_refs": [
+        "visual_prob_7d1f9b5848914d496601df88_1::roi",
+        "visual_prob_7d1f9b5848914d496601df88_1::roi_top_left",
+        "visual_prob_7d1f9b5848914d496601df88_1::roi_top_right",
+        "visual_prob_7d1f9b5848914d496601df88_1::roi_bottom_left",
+        "visual_prob_7d1f9b5848914d496601df88_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_7d1f9b5848914d496601df88_question_text_normalized"
+      ],
+      "alignment_pairs": [],
+      "conflict_pairs": [
+        {
+          "type": "implicit_visual_dependency",
+          "detail": "题目依赖图像，但题干中视觉锚点表达较弱。",
+          "severity": "minor",
+          "confidence": 0.61
+        }
+      ],
+      "coverage_score": 0.18,
+      "consistency_score": 0.1,
+      "alignment_status": "bad",
+      "created_at": "2026-04-09T06:35:15Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_a40ea1c316ebb299ed04990c",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "如图所示，将球用细绳如图所示是轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是(　　)",
+      "after_value": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5N$，此时千斤顶两臂间的夹角为$120^{\\circ}$。下列判断正确的是( )",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "audit_id": "audit_37b67f57e5603277a9264ea7",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+      "after_value": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "audit_id": "audit_b2432697f73220b8d0266dfa",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "blank_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "audit_id": "audit_078542bc898d16a01f8b6438",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "review",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T06:35:33Z"
+    },
+    {
+      "audit_id": "audit_02a461185e5e6a47c8af955e",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "circ",
+          "canonical": "circ",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-09T06:35:33Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_5442f8e3824e57f08c139761",
+      "problem_id": "prob_7d1f9b5848914d496601df88",
+      "source_problem_id": "427",
+      "strategy": "blank_open",
+      "rationale": "依据正确选项的结论，将选择题改写为直接询问千斤顶每臂受力变化的开放题。",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_fd0a36a1781550edb6703eb9",
+          "parent_problem_id": "prob_7d1f9b5848914d496601df88",
+          "variant_index": 1,
+          "title": "Multi-Physics 开放题",
+          "rewritten_question_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？",
+          "expected_answer_type": "set",
+          "expected_answer": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-09T06:35:33Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_fd0a36a1781550edb6703eb9",
+      "parent_problem_id": "prob_7d1f9b5848914d496601df88",
+      "variant_index": 1,
+      "title": "Multi-Physics 开放题",
+      "rewritten_question_text": "如图所示，轿车常用的千斤顶，当摇动把手时，螺纹轴就能迫使千斤顶的两臂靠拢，从而将汽车顶起。当车轮刚被顶起时，汽车对千斤顶的压力为$1.0\\times10^5\\text{ N}$，此时千斤顶两臂间的夹角为$120^{\\circ}$。若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将怎样变化？",
+      "expected_answer_type": "set",
+      "expected_answer": "若继续摇动把手，将汽车顶起，千斤顶每臂受到的压力将减小",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "multiphysics00380",
+  "canonical_sample_index": 380,
+  "canonical_dataset_key": "multi_physics",
+  "sample_path": "samples/multiphysics00380.json",
+  "image_path": "artifacts/images/multiphysics00380.png",
+  "images": [
+    "artifacts/images/multiphysics00380.png"
+  ],
+  "crop_path": "artifacts/crops/multiphysics00380.png",
+  "crops": [
+    "artifacts/crops/multiphysics00380.png"
+  ]
+}

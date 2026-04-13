@@ -1,0 +1,1796 @@
+{
+  "source_intake_record": {
+    "source_intake_id": "sintake_ac08d3476fc55ceb419ccc24",
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+    "dataset_name": "MathVision",
+    "source_problem_id": "710",
+    "raw_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?\n<image1>",
+    "raw_answer_text": "7",
+    "choice_map": {},
+    "image_paths": [
+      "images/710.jpg"
+    ],
+    "force_requires_image": true,
+    "question_field": "question",
+    "answer_field": "answer",
+    "image_field": "decoded_image",
+    "choice_field": null,
+    "extraction_notes": [
+      "source_intake_agent"
+    ],
+    "created_at": "2026-04-05T21:09:09Z"
+  },
+  "asset_registry_record": {
+    "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+    "image_manifest": [
+      {
+        "path": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_dd082ec20d3b3a89b6bd83ed_primary.png",
+        "exists": true,
+        "format": "png",
+        "width": 204,
+        "height": 185,
+        "file_size": 16833
+      }
+    ],
+    "text_manifest": {
+      "question_present": true,
+      "question_char_length": 94,
+      "language_hint": "en"
+    },
+    "answer_manifest": {
+      "answer_present": true,
+      "answer_type": "number",
+      "answer_char_length": 1
+    },
+    "issues": [],
+    "registry_passed": true,
+    "llm_used": true,
+    "asset_registry_id": "areg_ac08d3476fc55ceb419ccc24",
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "dataset_name": "MathVision",
+    "source_problem_id": "710",
+    "created_at": "2026-04-05T21:09:09Z"
+  },
+  "initial_scoring_record": {
+    "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+    "image_dependency_score": 0.98,
+    "multi_step_score": 0.6,
+    "verifiability_score": 0.9,
+    "score_evidence": {
+      "image_dependency": [
+        "question_text explicitly says 'in the picture', so the needed information is in the image",
+        "requires_image=true",
+        "text_dominant=false",
+        "asset_registry_record.image_manifest shows 1 existing image"
+      ],
+      "multi_step": [
+        "question_text says each figure replaces some digit, implying a symbol-to-digit inference step before answering",
+        "the requested output is the sum of two symbols (square + circle), implying at least inference plus arithmetic combination",
+        "metadata.multi_solution_policy.should_push_multi_solution_agent=true provides an upstream signal of nontrivial reasoning potential",
+        "exact number of reasoning steps cannot be confirmed from text alone, so score is kept moderate"
+      ],
+      "verifiability": [
+        "answer_type is numeric and answer_text is a single number ('7'), which is easy to compare against a solved result",
+        "the target quantity is explicitly defined as square + circle, making the final answer format clear",
+        "asset_registry_record.answer_manifest.answer_present=true",
+        "asset_registry_record.registry_passed=true"
+      ]
+    },
+    "risk_flags": [
+      "exact visual complexity not directly observable from metadata alone",
+      "image is relatively small (204x185), which may limit readability despite nonzero readability_score"
+    ],
+    "scoring_version": "v1",
+    "llm_used": true,
+    "initial_scoring_id": "iscore_ac08d3476fc55ceb419ccc24",
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "dataset_name": "MathVision",
+    "source_problem_id": "710",
+    "created_at": "2026-04-05T21:09:09Z"
+  },
+  "candidate_registration_record": {
+    "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+    "priority": 0.9,
+    "decision": "keep",
+    "decision_reasons": [
+      "Core assets are present: question text exists, answer exists, and the referenced image file exists.",
+      "Registry passed with no recorded asset issues, so there is no evidence of missing core semantic support.",
+      "The sample appears strongly image-dependent and still has the necessary image asset available.",
+      "Verifiability is high because the expected answer is a numeric value with clear comparison format.",
+      "There is some readability risk from the relatively small image size, but this is a quality concern rather than a core-asset failure."
+    ],
+    "llm_used": true,
+    "candidate_registration_id": "creg_ac08d3476fc55ceb419ccc24",
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "dataset_name": "MathVision",
+    "source_problem_id": "710",
+    "created_at": "2026-04-05T21:09:09Z"
+  },
+  "normalization_record": {
+    "normalization_id": "norm_ac08d3476fc55ceb419ccc24",
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+    "dataset_name": "MathVision",
+    "normalized_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+    "normalized_answer_text": "7",
+    "normalized_choice_map": {},
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "normalization_notes": [
+      "Removed the inline image placeholder token.",
+      "Question explicitly depends on the pictured digit-replacement puzzle, so image is required."
+    ],
+    "llm_used": true,
+    "created_at": "2026-04-05T21:09:09Z"
+  },
+  "candidate_problem_record": {
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "710",
+    "subject": "数学",
+    "raw_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?\n<image1>",
+    "raw_answer_text": "7",
+    "has_image": true,
+    "image_count": 1,
+    "requires_image": true,
+    "text_dominant": false,
+    "recommended_cleaning_path": "multimodal_full",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.6,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "should_push_multi_solution_agent": true,
+    "multi_solution_policy_rationale": "该数据集被视为具备较稳定的多解潜力，可进入更强的多解挖掘链路。",
+    "metadata": {
+      "row_index": 409,
+      "image_paths": [
+        "images/710.jpg"
+      ],
+      "extraction_notes": [
+        "source_intake_agent"
+      ],
+      "question_field": "question",
+      "answer_field": "answer",
+      "image_field": "decoded_image",
+      "choice_field": null,
+      "reasoning_chain_field": null,
+      "reasoning_chain": "",
+      "has_reasoning_chain": false
+    },
+    "created_at": "2026-04-05T21:10:00Z",
+    "asset_registry_passed": true,
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Core assets are present: question text exists, answer exists, and the referenced image file exists.",
+      "Registry passed with no recorded asset issues, so there is no evidence of missing core semantic support.",
+      "The sample appears strongly image-dependent and still has the necessary image asset available.",
+      "Verifiability is high because the expected answer is a numeric value with clear comparison format.",
+      "There is some readability risk from the relatively small image size, but this is a quality concern rather than a core-asset failure."
+    ],
+    "collection_risk_flags": [
+      "exact visual complexity not directly observable from metadata alone",
+      "image is relatively small (204x185), which may limit readability despite nonzero readability_score"
+    ]
+  },
+  "raw_asset_bundle": {
+    "raw_asset_bundle_id": "bundle_5b501b4da70982c86bd45853",
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "source_dataset": "MathVision",
+    "source_problem_id": "710",
+    "assets": [
+      {
+        "asset_role": "question_text_raw",
+        "storage_uri": "inline://prob_dd082ec20d3b3a89b6bd83ed/question_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "answer_text_raw",
+        "storage_uri": "inline://prob_dd082ec20d3b3a89b6bd83ed/answer_source",
+        "is_present": true
+      },
+      {
+        "asset_role": "image_raw",
+        "storage_uri": "inline://pil_image",
+        "is_present": true,
+        "width": 204,
+        "height": 185
+      }
+    ],
+    "core_asset_completeness": {
+      "has_question_text": true,
+      "has_answer_text": true,
+      "image_count": 1,
+      "has_multiple_images": false
+    },
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.6,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-05T21:10:00Z",
+    "asset_registry_passed": true,
+    "asset_registry_issues": []
+  },
+  "candidate_pool_entry": {
+    "candidate_pool_entry_id": "cpool_c29f6648f77bdf5c500705af",
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "source_dataset": "MathVision",
+    "source_problem_id": "710",
+    "candidate_status": "ready_for_cleaning",
+    "priority_score": 0.9,
+    "priority_tier": "high",
+    "recommended_cleaning_path": "multimodal_full",
+    "multi_solution_mining_policy": "aggressive",
+    "initial_scores": {
+      "initial_image_dependency_score": 0.98,
+      "initial_multi_solution_score": 0.6,
+      "initial_verifiability_score": 0.9
+    },
+    "created_at": "2026-04-05T21:10:00Z",
+    "registration_decision": "keep",
+    "registration_decision_reasons": [
+      "Core assets are present: question text exists, answer exists, and the referenced image file exists.",
+      "Registry passed with no recorded asset issues, so there is no evidence of missing core semantic support.",
+      "The sample appears strongly image-dependent and still has the necessary image asset available.",
+      "Verifiability is high because the expected answer is a numeric value with clear comparison format.",
+      "There is some readability risk from the relatively small image size, but this is a quality concern rather than a core-asset failure."
+    ]
+  },
+  "clean_pool_entries": [
+    {
+      "clean_pool_entry_id": "cleanpool_ac08d3476fc55ceb419ccc24",
+      "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "dataset_name": "MathVision",
+      "pool_status": "ready_for_annotation",
+      "clean_decision": "pass",
+      "review_required": false,
+      "rewrite_strategy": "keep_open",
+      "open_variant_count": 1,
+      "text_dominant": false,
+      "cleaning_path": "multimodal_full",
+      "created_at": "2026-04-05T21:10:00Z"
+    }
+  ],
+  "clean_problem_record": {
+    "clean_problem_record_id": "cleanprob_ac08d3476fc55ceb419ccc24",
+    "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+    "source_dataset": "MathVision",
+    "source_problem_id": "710",
+    "normalized_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+    "normalized_answer_text": "7",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "question_type": "open",
+    "open_variant_count": 1,
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_path_mode": "multimodal",
+    "clean_decision": "pass",
+    "decision_reason_codes": [
+      "alignment_good",
+      "image_required_and_clear",
+      "question_answer_complete",
+      "rewrite_usable",
+      "solvable"
+    ],
+    "created_at": "2026-04-05T21:10:00Z"
+  },
+  "normalized_assets": {
+    "normalized_assets_id": "nassets_ac08d3476fc55ceb419ccc24",
+    "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+    "normalized_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+    "normalized_answer_text": "7",
+    "question_unit_normalization_map": [],
+    "answer_unit_normalization_map": [],
+    "variable_aliases": [
+      {
+        "original": "in",
+        "canonical": "in",
+        "variable_type": "label"
+      },
+      {
+        "original": "the",
+        "canonical": "the",
+        "variable_type": "label"
+      },
+      {
+        "original": "some",
+        "canonical": "some",
+        "variable_type": "label"
+      },
+      {
+        "original": "is",
+        "canonical": "is",
+        "variable_type": "label"
+      },
+      {
+        "original": "sum",
+        "canonical": "sum",
+        "variable_type": "label"
+      }
+    ],
+    "sentence_segments": [
+      {
+        "segment_index": 1,
+        "text": "Every figure in the picture replaces some digit."
+      },
+      {
+        "segment_index": 2,
+        "text": "What is the sum $\\square+\\bigcirc$ ?"
+      }
+    ],
+    "image_regions": [
+      {
+        "image_index": 1,
+        "source_uri": "inline://pil_image",
+        "roi_bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 146,
+          "height": 136
+        },
+        "readability_score": 0.7869,
+        "contrast_score": 42.1359
+      }
+    ],
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "created_at": "2026-04-05T21:10:00Z",
+    "normalization_notes": [
+      "Removed the inline image placeholder token.",
+      "Question explicitly depends on the pictured digit-replacement puzzle, so image is required."
+    ],
+    "normalization_llm_used": true
+  },
+  "problem_main_record": {
+    "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+    "source_dataset": "MathVision",
+    "source_split": "test[300:3040]",
+    "source_problem_id": "710",
+    "ingest_batch_id": "benchmarkallinone-mathvision-300-3040_20260405T051754Z",
+    "problem_type": "multimodal_reasoning",
+    "domain_tags": [
+      "数学"
+    ],
+    "language": "en",
+    "raw_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?\n<image1>",
+    "normalized_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+    "raw_answer_text": "7",
+    "normalized_answer_text": "7",
+    "answer_type": "numeric",
+    "has_reasoning_chain": false,
+    "reasoning_chain": "",
+    "image_count": 1,
+    "has_multiple_images": false,
+    "requires_image": true,
+    "multimodal_strength_score": 0.9757,
+    "multi_step_score": 0.3557,
+    "verifiability_score": 1.0,
+    "quality_risk_flags": [],
+    "current_status": "clean_passed",
+    "clean_decision": "pass",
+    "clean_decision_reason_codes": [
+      "alignment_good",
+      "image_required_and_clear",
+      "question_answer_complete",
+      "rewrite_usable",
+      "solvable"
+    ],
+    "clean_decision_rationale": "The sample is complete and jointly understandable: the question is clear, the image provides the needed digit-replacement puzzle, the expected numeric answer is present, and alignment/solvability evidence shows no serious issues.",
+    "review_priority": "normal",
+    "annotation_ready": true,
+    "qa_precheck_ready": true,
+    "release_reserved": {},
+    "rewrite_strategy": "keep_open",
+    "open_variant_count": 1,
+    "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+    "text_dominant": false,
+    "cleaning_path": "multimodal_full",
+    "alignment_status": "good",
+    "solvability_score": 1.0,
+    "solvability_decision_hint": "pass",
+    "agent_completeness_status": "complete",
+    "agent_image_support_status": "clear_enough",
+    "agent_joint_understanding_status": "understandable",
+    "agent_decision_source": "llm",
+    "created_at": "2026-04-05T21:09:09Z",
+    "updated_at": "2026-04-05T21:10:00Z",
+    "initial_image_dependency_score": 0.98,
+    "initial_multi_solution_score": 0.6,
+    "initial_verifiability_score": 0.9,
+    "multi_solution_mining_policy": "aggressive",
+    "collection_priority_score": 0.9,
+    "collection_decision": "keep",
+    "collection_decision_reasons": [
+      "Core assets are present: question text exists, answer exists, and the referenced image file exists.",
+      "Registry passed with no recorded asset issues, so there is no evidence of missing core semantic support.",
+      "The sample appears strongly image-dependent and still has the necessary image asset available.",
+      "Verifiability is high because the expected answer is a numeric value with clear comparison format.",
+      "There is some readability risk from the relatively small image size, but this is a quality concern rather than a core-asset failure."
+    ]
+  },
+  "asset_records": [
+    {
+      "asset_id": "asset_c8cdd9a237cda10c81b787d3",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "asset_type": "text",
+      "asset_role": "question_text_source",
+      "source_uri": "source://mathvision/test[300:3040]/710/question",
+      "storage_uri": "inline://prob_dd082ec20d3b3a89b6bd83ed/question_source",
+      "file_format": "txt",
+      "file_size_bytes": 94,
+      "width": null,
+      "height": null,
+      "sha256": "6a4de1a8909c2400e1bceae6ee76f851ea3c4edd04e2a306ac17c1729b9961ef",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?\n<image1>",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 0.6259,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "asset_id": "asset_7e2f381ff9bdb3b0eb725106",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "asset_type": "text",
+      "asset_role": "question_text_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_dd082ec20d3b3a89b6bd83ed/question_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 85,
+      "width": null,
+      "height": null,
+      "sha256": "0f692efe820fbeb5962335cc9046742377d46e5d9750e129679ebfb821bad332",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?\n<image1>",
+      "normalized_text_snapshot": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+      "text_completeness_score": 0.6259,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "asset_id": "asset_5bd009ab00033c5aa538076d",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "asset_type": "answer",
+      "asset_role": "answer_raw",
+      "source_uri": "source://mathvision/test[300:3040]/710/answer",
+      "storage_uri": "inline://prob_dd082ec20d3b3a89b6bd83ed/answer_raw",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451",
+      "perceptual_hash": null,
+      "source_text_snapshot": "7",
+      "normalized_text_snapshot": null,
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "asset_id": "asset_36d82fbe6135415fadafe45c",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "asset_type": "answer",
+      "asset_role": "answer_normalized",
+      "source_uri": null,
+      "storage_uri": "inline://prob_dd082ec20d3b3a89b6bd83ed/answer_normalized",
+      "file_format": "txt",
+      "file_size_bytes": 1,
+      "width": null,
+      "height": null,
+      "sha256": "7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451",
+      "perceptual_hash": null,
+      "source_text_snapshot": "7",
+      "normalized_text_snapshot": "7",
+      "text_completeness_score": 1.0,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "asset_id": "asset_dac856b44c1c997c473bbd73",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "asset_type": "image",
+      "asset_role": "primary_image",
+      "source_uri": "inline://pil_image",
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/images/prob_dd082ec20d3b3a89b6bd83ed_primary.png",
+      "file_format": "png",
+      "file_size_bytes": 16833,
+      "width": 204,
+      "height": 185,
+      "sha256": "43e75dbeb70852b0cd9114fc2e07486c881f107551bd272881206d753fd1000e",
+      "perceptual_hash": "ffc3c3c3c38183ff",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 6359.6177,
+      "readability_score": 0.7869,
+      "noise_score": 33.4108,
+      "cropped_from_asset_id": null,
+      "roi_bbox": {
+        "x": 24,
+        "y": 24,
+        "width": 146,
+        "height": 136
+      },
+      "unit_normalization_map": [],
+      "variable_aliases": [],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "asset_id": "asset_3ffcbe4f4ea260b9e66e0a1f",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "asset_type": "crop",
+      "asset_role": "region_crop",
+      "source_uri": null,
+      "storage_uri": "outputs/mathvision_300_3040/run_053a22a217c324a7/datasets/mathvision/artifacts/crops/prob_dd082ec20d3b3a89b6bd83ed_primary_roi.png",
+      "file_format": "png",
+      "file_size_bytes": 15959,
+      "width": 146,
+      "height": 136,
+      "sha256": "ae57f359e4797c3345d96e42ce11f1f650f7be8167932b7fb6e07c7a31b01ff7",
+      "perceptual_hash": "c1c1a1cdd5c08581",
+      "source_text_snapshot": null,
+      "normalized_text_snapshot": null,
+      "text_completeness_score": null,
+      "blur_score": 6359.6177,
+      "readability_score": 0.7869,
+      "noise_score": 33.4108,
+      "cropped_from_asset_id": "asset_dac856b44c1c997c473bbd73",
+      "roi_bbox": {
+        "x": 24,
+        "y": 24,
+        "width": 146,
+        "height": 136
+      },
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "asset_id": "asset_ad5236575d3b291eb1f5fff5",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "asset_type": "text",
+      "asset_role": "question_text_open_variant",
+      "source_uri": null,
+      "storage_uri": "inline://open_9b74a4ad236c013362aaf381",
+      "file_format": "txt",
+      "file_size_bytes": 85,
+      "width": null,
+      "height": null,
+      "sha256": "0f692efe820fbeb5962335cc9046742377d46e5d9750e129679ebfb821bad332",
+      "perceptual_hash": null,
+      "source_text_snapshot": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?\n<image1>",
+      "normalized_text_snapshot": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+      "text_completeness_score": 0.6259,
+      "blur_score": null,
+      "readability_score": null,
+      "noise_score": null,
+      "cropped_from_asset_id": null,
+      "roi_bbox": null,
+      "unit_normalization_map": [],
+      "variable_aliases": [
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        }
+      ],
+      "asset_quality_flags": [],
+      "is_usable": true,
+      "discard_reason_codes": [],
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    }
+  ],
+  "text_structure_records": [
+    {
+      "text_structure_id": "text_prob_dd082ec20d3b3a89b6bd83ed",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "question_type": "open",
+      "conditions": [
+        {
+          "text": "Every figure in the picture replaces some digit.",
+          "segment_index": 1,
+          "mentions_visual": true,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "condition_role": "explicit"
+        }
+      ],
+      "targets": [
+        {
+          "text": "What is the sum $\\square+\\bigcirc$ ?",
+          "segment_index": 2,
+          "mentions_visual": false,
+          "numeric_tokens": [],
+          "unit_mentions": [
+            "W",
+            "g",
+            "h",
+            "m",
+            "s"
+          ],
+          "target_role": "primary"
+        }
+      ],
+      "answer_slots": [
+        {
+          "slot_id": "slot_prob_dd082ec20d3b3a89b6bd83ed_1",
+          "variant_index": 1,
+          "split_role": "single",
+          "slot_type": "numeric",
+          "target_text": "What is the sum $\\square+\\bigcirc$ ?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "7",
+          "requires_visual_grounding": true
+        }
+      ],
+      "entity_mentions": [
+        {
+          "mention": "figure",
+          "entity_category": "figure",
+          "requires_visual_grounding": true
+        }
+      ],
+      "variable_aliases": [
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        }
+      ],
+      "unit_mentions": [
+        "W",
+        "g",
+        "h",
+        "m",
+        "s"
+      ],
+      "sentence_segments": [
+        {
+          "segment_index": 1,
+          "text": "Every figure in the picture replaces some digit."
+        },
+        {
+          "segment_index": 2,
+          "text": "What is the sum $\\square+\\bigcirc$ ?"
+        }
+      ],
+      "requires_visual_grounding": true,
+      "text_structure_status": "complete",
+      "parser_confidence": 0.92,
+      "created_at": "2026-04-05T21:09:48Z"
+    }
+  ],
+  "visual_structure_records": [
+    {
+      "visual_structure_id": "visual_prob_dd082ec20d3b3a89b6bd83ed_1",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "image_index": 1,
+      "image_asset_role": "primary_image",
+      "global_attributes": {
+        "visual_kind": "generic_visual",
+        "aspect_ratio": 1.1027,
+        "dark_pixel_ratio": 0.0769,
+        "readability_score": 0.7869,
+        "has_roi": true
+      },
+      "visual_entities": [
+        {
+          "entity_id": "canvas",
+          "entity_type": "full_canvas",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 204,
+            "height": 185
+          },
+          "salience": 1.0
+        },
+        {
+          "entity_id": "roi",
+          "entity_type": "content_region",
+          "bbox": {
+            "x": 24,
+            "y": 24,
+            "width": 146,
+            "height": 136
+          },
+          "salience": 0.95
+        },
+        {
+          "entity_id": "roi_top_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 24,
+            "width": 73,
+            "height": 68
+          },
+          "salience": 0.4584
+        },
+        {
+          "entity_id": "roi_top_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 97,
+            "y": 24,
+            "width": 73,
+            "height": 68
+          },
+          "salience": 0.5196
+        },
+        {
+          "entity_id": "roi_bottom_left",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 24,
+            "y": 92,
+            "width": 73,
+            "height": 68
+          },
+          "salience": 0.484
+        },
+        {
+          "entity_id": "roi_bottom_right",
+          "entity_type": "subregion",
+          "bbox": {
+            "x": 97,
+            "y": 92,
+            "width": 73,
+            "height": 68
+          },
+          "salience": 0.523
+        }
+      ],
+      "visual_relations": [
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi_bottom_right",
+          "target_entity_id": "canvas",
+          "relation": "inside"
+        },
+        {
+          "source_entity_id": "roi",
+          "target_entity_id": "roi_top_left",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_left",
+          "target_entity_id": "roi_top_right",
+          "relation": "left_of"
+        },
+        {
+          "source_entity_id": "roi_top_right",
+          "target_entity_id": "roi_bottom_left",
+          "relation": "right_of"
+        },
+        {
+          "source_entity_id": "roi_bottom_left",
+          "target_entity_id": "roi_bottom_right",
+          "relation": "left_of"
+        }
+      ],
+      "parser_confidence": 0.9148,
+      "created_at": "2026-04-05T21:09:48Z"
+    }
+  ],
+  "solvability_reports": [
+    {
+      "solvability_id": "solv_prob_dd082ec20d3b3a89b6bd83ed",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "answer_verifiable": true,
+      "target_clear": true,
+      "rewrite_complete": true,
+      "text_sufficient": true,
+      "visual_grounding_available": true,
+      "reasoning_path_exists": true,
+      "path_mode": "multimodal",
+      "failure_codes": [],
+      "score_breakdown": {
+        "answer_verifiable": 1.0,
+        "target_clear": 1.0,
+        "rewrite_complete": 1.0,
+        "text_sufficient": 1.0,
+        "visual_grounding": 1.0
+      },
+      "solvability_score": 1.0,
+      "decision_hint": "pass",
+      "created_at": "2026-04-05T21:09:55Z"
+    }
+  ],
+  "node_records": [
+    {
+      "node_id": "node_836245e0fbb0d9616c6e5b63",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "text_fact",
+      "canonical_value": "Every figure in the picture replaces some digit.",
+      "surface_forms": [
+        "Every figure in the picture replaces some digit."
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_7e2f381ff9bdb3b0eb725106"
+      ],
+      "evidence_refs": [
+        "asset_7e2f381ff9bdb3b0eb725106"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "condition",
+      "normalized_value": {
+        "text": "Every figure in the picture replaces some digit.",
+        "segment_index": 1,
+        "mentions_visual": true,
+        "numeric_tokens": [],
+        "unit_mentions": [
+          "g",
+          "h",
+          "m",
+          "s"
+        ],
+        "condition_role": "explicit"
+      },
+      "unit": "g,h,m,s",
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_790345da6624996802c02305",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "target_slot",
+      "canonical_value": "What is the sum $\\square+\\bigcirc$ ?",
+      "surface_forms": [
+        "What is the sum $\\square+\\bigcirc$ ?"
+      ],
+      "origin_kind": "text_structure",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_7e2f381ff9bdb3b0eb725106"
+      ],
+      "evidence_refs": [
+        "asset_7e2f381ff9bdb3b0eb725106"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "slot_id": "slot_prob_dd082ec20d3b3a89b6bd83ed_1",
+        "variant_index": 1,
+        "split_role": "single",
+        "slot_type": "numeric",
+        "target_text": "What is the sum $\\square+\\bigcirc$ ?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "7",
+        "requires_visual_grounding": true
+      },
+      "unit": null,
+      "confidence": 0.92,
+      "verifiability": "high",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_55ebeeee69dbfc6f9b8c5ab4",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "answer_claim",
+      "canonical_value": "7",
+      "surface_forms": [
+        "7"
+      ],
+      "origin_kind": "text",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "asset_36d82fbe6135415fadafe45c"
+      ],
+      "evidence_refs": [
+        "asset_36d82fbe6135415fadafe45c"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "numeric",
+      "normalized_value": {
+        "answer": "7"
+      },
+      "unit": null,
+      "confidence": 0.98,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": true,
+      "is_generated_by_system": false,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_82c3026cc85ae228eaa82a52",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::full_canvas::canvas",
+      "surface_forms": [
+        "canvas"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "full_canvas",
+      "normalized_value": {
+        "entity_id": "canvas",
+        "entity_type": "full_canvas",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 204,
+          "height": 185
+        },
+        "salience": 1.0
+      },
+      "unit": null,
+      "confidence": 0.9148,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_6098027b903b4afe7b998eff",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::content_region::roi",
+      "surface_forms": [
+        "roi"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "content_region",
+      "normalized_value": {
+        "entity_id": "roi",
+        "entity_type": "content_region",
+        "bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 146,
+          "height": 136
+        },
+        "salience": 0.95
+      },
+      "unit": null,
+      "confidence": 0.9148,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_6c190117939d5ebbfbb75bf4",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_left",
+      "surface_forms": [
+        "roi_top_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 24,
+          "width": 73,
+          "height": 68
+        },
+        "salience": 0.4584
+      },
+      "unit": null,
+      "confidence": 0.9148,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_5d0cd4e7b30a43a03dcb8a72",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_top_right",
+      "surface_forms": [
+        "roi_top_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_top_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 97,
+          "y": 24,
+          "width": 73,
+          "height": 68
+        },
+        "salience": 0.5196
+      },
+      "unit": null,
+      "confidence": 0.9148,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_32f6de66c0a29a86e806d2c5",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_left",
+      "surface_forms": [
+        "roi_bottom_left"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_left",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 24,
+          "y": 92,
+          "width": 73,
+          "height": 68
+        },
+        "salience": 0.484
+      },
+      "unit": null,
+      "confidence": 0.9148,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_e8ceb38390285ebc03fe0473",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "perception_fact",
+      "canonical_value": "primary_image::subregion::roi_bottom_right",
+      "surface_forms": [
+        "roi_bottom_right"
+      ],
+      "origin_kind": "vision",
+      "cognitive_level": "objective",
+      "source_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "evidence_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "subregion",
+      "normalized_value": {
+        "entity_id": "roi_bottom_right",
+        "entity_type": "subregion",
+        "bbox": {
+          "x": 97,
+          "y": 92,
+          "width": 73,
+          "height": 68
+        },
+        "salience": 0.523
+      },
+      "unit": null,
+      "confidence": 0.9148,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_a45a58da1b96a3e13bf9635a",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "text_fact",
+      "canonical_value": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+      "surface_forms": [
+        "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?"
+      ],
+      "origin_kind": "reasoning",
+      "cognitive_level": "computed",
+      "source_refs": [
+        "asset_ad5236575d3b291eb1f5fff5"
+      ],
+      "evidence_refs": [
+        "asset_ad5236575d3b291eb1f5fff5"
+      ],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "open_variant_id": "open_9b74a4ad236c013362aaf381",
+        "parent_problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+        "variant_index": 1,
+        "title": "MathVision 开放题",
+        "rewritten_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+        "expected_answer_type": "numeric",
+        "expected_answer": "7",
+        "split_role": "single"
+      },
+      "unit": null,
+      "confidence": 0.88,
+      "verifiability": "medium",
+      "ambiguity_level": "low",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_51a68d9eb08c21958b39b84c",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "quality_signal",
+      "canonical_value": "solvability=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "solvability_id": "solv_prob_dd082ec20d3b3a89b6bd83ed",
+        "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+        "answer_verifiable": true,
+        "target_clear": true,
+        "rewrite_complete": true,
+        "text_sufficient": true,
+        "visual_grounding_available": true,
+        "reasoning_path_exists": true,
+        "path_mode": "multimodal",
+        "failure_codes": [],
+        "score_breakdown": {
+          "answer_verifiable": 1.0,
+          "target_clear": 1.0,
+          "rewrite_complete": 1.0,
+          "text_sufficient": 1.0,
+          "visual_grounding": 1.0
+        },
+        "solvability_score": 1.0,
+        "decision_hint": "pass",
+        "created_at": "2026-04-05T21:09:55Z"
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "node_id": "node_e58d23e1ba7a1a6deeb3764b",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "node_type": "quality_signal",
+      "canonical_value": "clean_decision=pass",
+      "surface_forms": [
+        "pass"
+      ],
+      "origin_kind": "system_quality",
+      "cognitive_level": "computed",
+      "source_refs": [],
+      "evidence_refs": [],
+      "upstream_node_ids": [],
+      "value_type": "text",
+      "normalized_value": {
+        "decision": "pass",
+        "reasons": [
+          "alignment_good",
+          "image_required_and_clear",
+          "question_answer_complete",
+          "rewrite_usable",
+          "solvable"
+        ]
+      },
+      "unit": null,
+      "confidence": 1.0,
+      "verifiability": "high",
+      "ambiguity_level": "none",
+      "is_direct_from_source": false,
+      "is_generated_by_system": true,
+      "is_reviewed_by_human": false,
+      "stage_created": "cleaning",
+      "status": "active",
+      "version": 1,
+      "created_at": "2026-04-05T21:10:00Z",
+      "updated_at": "2026-04-05T21:10:00Z"
+    }
+  ],
+  "cleaning_records": [
+    {
+      "cleaning_id": "clean_ac08d3476fc55ceb419ccc24",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "cleaning_version": "v3.2.0",
+      "pipeline_run_id": "run_053a22a217c324a7",
+      "dataset_name": "MathVision",
+      "input_asset_ids": [
+        "asset_c8cdd9a237cda10c81b787d3",
+        "asset_7e2f381ff9bdb3b0eb725106",
+        "asset_5bd009ab00033c5aa538076d",
+        "asset_36d82fbe6135415fadafe45c",
+        "asset_dac856b44c1c997c473bbd73",
+        "asset_3ffcbe4f4ea260b9e66e0a1f",
+        "asset_ad5236575d3b291eb1f5fff5"
+      ],
+      "normalization_actions": [
+        {
+          "action_type": "text_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "answer_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.98,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "unit_normalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.92,
+          "human_confirmed": false,
+          "question_unit_count": 0,
+          "answer_unit_count": 0
+        },
+        {
+          "action_type": "variable_canonicalized",
+          "trigger": "NormalizationAgent",
+          "confidence": 0.88,
+          "human_confirmed": false,
+          "variable_alias_count": 5
+        },
+        {
+          "action_type": "question_rewritten",
+          "trigger": "QuestionRewriteAgent",
+          "confidence": 0.85,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "sample_understood",
+          "trigger": "SampleUnderstandingAgent",
+          "confidence": 0.96,
+          "human_confirmed": false
+        },
+        {
+          "action_type": "gate_decided",
+          "trigger": "DecisionAgent",
+          "confidence": 1.0,
+          "human_confirmed": false
+        }
+      ],
+      "quality_checks": [
+        {
+          "check": "image_observation_1",
+          "result": {
+            "width": 204,
+            "height": 185,
+            "blur_score": 6359.6177,
+            "contrast_score": 42.1359,
+            "noise_score": 33.4108,
+            "readability_score": 0.7869,
+            "crop_integrity_score": 1.0,
+            "roi_bbox": {
+              "x": 24,
+              "y": 24,
+              "width": 146,
+              "height": 136
+            },
+            "perceptual_hash": "ffc3c3c3c38183ff"
+          },
+          "passed": true,
+          "judged_by": "SampleUnderstandingAgent"
+        }
+      ],
+      "alignment_summary": {
+        "alignment_id": "align_ac08d3476fc55ceb419ccc24",
+        "coverage_score": 0.9,
+        "consistency_score": 0.98,
+        "alignment_status": "good",
+        "conflict_count": 0
+      },
+      "text_structure_summary": {
+        "text_structure_id": "text_prob_dd082ec20d3b3a89b6bd83ed",
+        "question_type": "open",
+        "condition_count": 1,
+        "target_count": 1,
+        "answer_slot_count": 1,
+        "status": "complete"
+      },
+      "solvability_summary": {
+        "solvability_id": "solv_prob_dd082ec20d3b3a89b6bd83ed",
+        "solvability_score": 1.0,
+        "reasoning_path_exists": true,
+        "decision_hint": "pass",
+        "failure_codes": []
+      },
+      "rewrite_summary": {
+        "strategy": "keep_open",
+        "variant_count": 1,
+        "discard_reason_codes": []
+      },
+      "agent_assessment": {
+        "completeness_status": "complete",
+        "image_support_status": "clear_enough",
+        "joint_understanding_status": "understandable",
+        "reason_codes": [
+          "image_required_and_clear",
+          "jointly_understandable",
+          "question_text_clear"
+        ],
+        "rationale": "The text clearly asks for the value of square plus circle, and the image provides the necessary digit-replacement addition puzzle in a legible way. The expected answer type is numeric and the sample is semantically understandable.",
+        "llm_used": true
+      },
+      "missing_field_summary": {
+        "missing_question_text": false,
+        "missing_answer_text": false,
+        "missing_image_count": 0
+      },
+      "risk_flags": [],
+      "clean_score": 1.0,
+      "decision": "pass",
+      "decision_reason_codes": [
+        "alignment_good",
+        "image_required_and_clear",
+        "question_answer_complete",
+        "rewrite_usable",
+        "solvable"
+      ],
+      "decision_rationale": "The sample is complete and jointly understandable: the question is clear, the image provides the needed digit-replacement puzzle, the expected numeric answer is present, and alignment/solvability evidence shows no serious issues.",
+      "review_ticket_id": null,
+      "operator_type": "system",
+      "started_at": "2026-04-05T21:10:00Z",
+      "finished_at": "2026-04-05T21:10:00Z",
+      "candidate_id": "cand_dd082ec20d3b3a89b6bd83ed",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "reject_records": [],
+  "alignment_records": [
+    {
+      "alignment_id": "align_ac08d3476fc55ceb419ccc24",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "image_entity_refs": [
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1::roi",
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1::roi_top_left",
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1::roi_top_right",
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1::roi_bottom_left",
+        "visual_prob_dd082ec20d3b3a89b6bd83ed_1::roi_bottom_right"
+      ],
+      "text_span_refs": [
+        "asset_prob_dd082ec20d3b3a89b6bd83ed_question_text_normalized"
+      ],
+      "alignment_pairs": [
+        {
+          "text_ref": "figure",
+          "image_ref": "visual_prob_dd082ec20d3b3a89b6bd83ed_1::roi",
+          "relation": "grounds_figure",
+          "confidence": 0.7787
+        },
+        {
+          "text_ref": "slot_prob_dd082ec20d3b3a89b6bd83ed_1",
+          "image_ref": "visual_prob_dd082ec20d3b3a89b6bd83ed_1::roi",
+          "relation": "slot_grounding",
+          "confidence": 0.7813
+        }
+      ],
+      "conflict_pairs": [],
+      "coverage_score": 0.9,
+      "consistency_score": 0.98,
+      "alignment_status": "good",
+      "created_at": "2026-04-05T21:09:48Z",
+      "cleaning_path": "multimodal_full",
+      "text_dominant": false
+    }
+  ],
+  "field_audit_records": [
+    {
+      "audit_id": "audit_59a7a65caabfcf7fe83e4884",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_question_text",
+      "before_value": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?\n<image1>",
+      "after_value": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+      "change_type": "text_normalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "audit_id": "audit_8a59e8852ee847178ce005ca",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "record_type": "problem_main_record",
+      "field_name": "normalized_answer_text",
+      "before_value": "7",
+      "after_value": "7",
+      "change_type": "answer_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "audit_id": "audit_5b37e747a61d96ca85a1ed69",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "record_type": "rewrite_report",
+      "field_name": "rewrite_strategy",
+      "before_value": null,
+      "after_value": "keep_open",
+      "change_type": "question_rewritten",
+      "trigger": "QuestionRewriteAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "audit_id": "audit_e58d23e1ba7a1a6deeb3764b",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "record_type": "cleaning_record",
+      "field_name": "decision",
+      "before_value": null,
+      "after_value": "pass",
+      "change_type": "gate_decision",
+      "trigger": "CleanGateAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T21:10:00Z"
+    },
+    {
+      "audit_id": "audit_88518a906ccb9104a74e65c8",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "record_type": "normalized_assets",
+      "field_name": "variable_aliases",
+      "before_value": null,
+      "after_value": [
+        {
+          "original": "in",
+          "canonical": "in",
+          "variable_type": "label"
+        },
+        {
+          "original": "the",
+          "canonical": "the",
+          "variable_type": "label"
+        },
+        {
+          "original": "some",
+          "canonical": "some",
+          "variable_type": "label"
+        },
+        {
+          "original": "is",
+          "canonical": "is",
+          "variable_type": "label"
+        },
+        {
+          "original": "sum",
+          "canonical": "sum",
+          "variable_type": "label"
+        }
+      ],
+      "change_type": "variable_canonicalized",
+      "trigger": "NormalizationAgent",
+      "operator_type": "system",
+      "created_at": "2026-04-05T21:10:00Z"
+    }
+  ],
+  "rewrite_reports": [
+    {
+      "rewrite_id": "rewrite_ac08d3476fc55ceb419ccc24",
+      "problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "source_problem_id": "710",
+      "strategy": "keep_open",
+      "rationale": "Question is already open-ended.",
+      "discard_reason_codes": [],
+      "variant_count": 1,
+      "variants": [
+        {
+          "open_variant_id": "open_9b74a4ad236c013362aaf381",
+          "parent_problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+          "variant_index": 1,
+          "title": "MathVision 开放题",
+          "rewritten_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+          "expected_answer_type": "numeric",
+          "expected_answer": "7",
+          "split_role": "single"
+        }
+      ],
+      "created_at": "2026-04-05T21:10:00Z"
+    }
+  ],
+  "open_ended_problem_variants": [
+    {
+      "open_variant_id": "open_9b74a4ad236c013362aaf381",
+      "parent_problem_id": "prob_dd082ec20d3b3a89b6bd83ed",
+      "variant_index": 1,
+      "title": "MathVision 开放题",
+      "rewritten_question_text": "Every figure in the picture replaces some digit. What is the sum $\\square+\\bigcirc$ ?",
+      "expected_answer_type": "numeric",
+      "expected_answer": "7",
+      "split_role": "single"
+    }
+  ],
+  "canonical_sample_id": "mathvision00565",
+  "canonical_sample_index": 565,
+  "canonical_dataset_key": "mathvision",
+  "sample_path": "samples/mathvision00565.json",
+  "image_path": "artifacts/images/mathvision00565.png",
+  "images": [
+    "artifacts/images/mathvision00565.png"
+  ],
+  "crop_path": "artifacts/crops/mathvision00565.png",
+  "crops": [
+    "artifacts/crops/mathvision00565.png"
+  ]
+}
