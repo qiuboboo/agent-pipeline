@@ -139,7 +139,25 @@ python3 scripts/build_ready_from_outputs_content_dedup.py --dataset <dataset_key
 
 > 注意：`ready/` 现在被视为**本地派生产物**，不再作为 Git 同步对象。跨机器时请同步 `outputs/` 和代码版本，而不是同步 `ready/` 目录本身。
 
-### 6. 脚本边界：哪些是主链，哪些不是
+### 6. 第二步 pipeline2（qjb）
+
+`qjb` 分支已接入第二步 `pipeline2` 的仓库级入口：
+
+```bash
+python3 run_pipeline2.py annotate --config src/benchmarkallinone/pipeline2/configs/default_pipeline2.yaml
+python3 run_pipeline2.py evaluate-traces --config src/benchmarkallinone/pipeline2/configs/default_pipeline2.yaml --trace-file <trace.json>
+python3 run_verified_cot.py --config src/benchmarkallinone/pipeline2/configs/verified_cot_default.yaml
+```
+
+运行 `pipeline2` 前，除基础依赖外，还需要确保安装 `langgraph`：
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+如果环境里没有 `langgraph`，入口会在 import 阶段报错。
+
+### 7. 脚本边界：哪些是主链，哪些不是
 
 当前与 `qjb` local-artifact policy 最相关的脚本，建议按下面 4 层理解：
 
