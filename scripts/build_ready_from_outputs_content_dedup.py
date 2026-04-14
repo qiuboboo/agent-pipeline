@@ -62,6 +62,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true", help="Analyze and print manifest only; do not write ready output.")
     parser.add_argument("--release-policy-config", default="configs/review_release_policies.yaml", help="Unified review release policy config used to allow review buckets into ready.")
     parser.add_argument("--disable-review-release", action="store_true", help="Disable review-release gating and keep only clean_decision=pass samples in ready.")
+    parser.add_argument("--ready-root", default=str(READY_ROOT), help="Root directory for ready output. Default: project ready/.")
+    parser.add_argument("--dataset-root", default="", help="Optional explicit output directory for a single selected dataset.")
     return parser.parse_args()
 
 
@@ -1277,6 +1279,17 @@ def write_run_summary(path: Path, dataset_summaries: Dict[str, Dict[str, Any]]) 
     write_json(path, payload)
 
 
+def resolve_dataset_root(dataset_key: str, args: argparse.Namespace) -> Path:
+    if args.dataset_root:
+        dataset_root = Path(args.dataset_root)
+        if len(args.dataset) > 1:
+            raise ValueError("--dataset-root only supports a single selected dataset")
+        if len(args.output_glob) > 1:
+            raise ValueError("--dataset-root only supports a single selected output glob")
+        return dataset_root
+    return Path(args.ready_root) / dataset_key
+
+
 def main() -> None:
     args = parse_args()
     dataset_filter = set(args.dataset)
@@ -1303,8 +1316,9 @@ def main() -> None:
         return
 
     dataset_summaries: Dict[str, Dict[str, Any]] = {}
+    ready_root = Path(args.ready_root)
     for dataset_key, entries in sorted(selected.items()):
-        dataset_root = READY_ROOT / dataset_key
+        dataset_root = resolve_dataset_root(dataset_key, args)
         log_progress(f"package-start dataset={dataset_key} dataset_root={dataset_root}")
         ensure_clean_dir(dataset_root)
         release_gate = build_release_gate(
@@ -1328,8 +1342,8 @@ def main() -> None:
         dataset_summaries[dataset_key] = {**summary, "dataset_root": dataset_root.as_posix()}
         print(f"[done] {dataset_key}: {summary['selected_samples']} -> {dataset_root}")
 
-    write_run_summary(READY_ROOT / "summary.json", dataset_summaries)
-    log_progress(f"summary-written path={READY_ROOT / 'summary.json'} datasets={len(dataset_summaries)}")
+    write_run_summary(ready_root / "summary.json", dataset_summaries)
+    log_progress(f"summary-written path={ready_root / 'summary.json'} datasets={len(dataset_summaries)}")
 
 
 if __name__ == "__main__":
