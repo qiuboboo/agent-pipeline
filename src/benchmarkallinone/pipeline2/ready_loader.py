@@ -40,7 +40,8 @@ def _allowed_statuses(include_manual_review: bool) -> set[str]:
 def _resolve_candidate_path(raw_path: str, sample_path: Path, workspace_root: Path) -> Optional[Path]:
     if not raw_path or raw_path.startswith("inline://"):
         return None
-    candidate = Path(raw_path)
+    normalized_raw_path = raw_path.replace("\\", "/")
+    candidate = Path(normalized_raw_path)
     workspace_parent = workspace_root.parent
     dataset_root = sample_path.parent.parent
     ready_run_root = sample_path.parents[3] if len(sample_path.parents) > 3 else sample_path.parent
@@ -62,19 +63,19 @@ def _resolve_candidate_path(raw_path: str, sample_path: Path, workspace_root: Pa
         trial_paths.append(candidate)
     else:
         trial_paths.extend(root / candidate for root in search_roots)
-        if "datasets/" in raw_path:
-            suffix_after_datasets = raw_path.split("datasets/", 1)[1]
+        if "datasets/" in normalized_raw_path:
+            suffix_after_datasets = normalized_raw_path.split("datasets/", 1)[1]
             trial_paths.append(ready_run_root / "datasets" / suffix_after_datasets)
-        if "artifacts/images/" in raw_path:
-            suffix = raw_path.split("artifacts/images/", 1)[1]
+        if "artifacts/images/" in normalized_raw_path:
+            suffix = normalized_raw_path.split("artifacts/images/", 1)[1]
             filename = Path(suffix).name
             trial_paths.append(dataset_root / "artifacts" / "images" / suffix)
             trial_paths.append(dataset_root / "artifacts" / "images" / filename)
             trial_paths.append(dataset_root / "artifacts" / "images" / f"{sample_path.stem}{Path(filename).suffix}")
             trial_paths.append(ready_run_root / "datasets" / dataset_root.name / "artifacts" / "images" / suffix)
             trial_paths.append(ready_run_root / "datasets" / dataset_root.name / "artifacts" / "images" / filename)
-        if "artifacts/crops/" in raw_path:
-            suffix = raw_path.split("artifacts/crops/", 1)[1]
+        if "artifacts/crops/" in normalized_raw_path:
+            suffix = normalized_raw_path.split("artifacts/crops/", 1)[1]
             filename = Path(suffix).name
             trial_paths.append(dataset_root / "artifacts" / "crops" / suffix)
             trial_paths.append(dataset_root / "artifacts" / "crops" / filename)
