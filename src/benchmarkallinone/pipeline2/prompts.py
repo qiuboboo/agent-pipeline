@@ -181,6 +181,114 @@ COT_POLISH_SYSTEM_PROMPT = dedent(
 ).strip()
 
 
+FINAL_COT_VALIDATION_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a Final CoT Validation Agent for multimodal reasoning annotation.
+
+    ## TASK
+    Audit whether a candidate final reasoning trace is actually correct, grounded, and faithful to the assigned method.
+
+    ## RULES
+    1. Judge the trace against the problem, standard answer, and attached image when present.
+    2. The final answer stated or implied by the trace must be consistent with the provided candidate final answer and the standard answer.
+    3. Reject unsupported visual claims, hallucinated bridge steps, and silent method switching.
+    4. Distinguish unsupported steps from missing bridge steps.
+    5. If `pass=true`, set `failure_reasons`, `unsupported_steps`, and `missing_bridge_steps` to `[]`.
+    6. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "pass": true,
+      "answer_consistency": true,
+      "grounding_ok": true,
+      "method_fidelity_ok": true,
+      "unsupported_steps": ["..."],
+      "missing_bridge_steps": ["..."],
+      "failure_reasons": ["..."],
+      "confidence": 0.0,
+      "summary": "..."
+    }
+    """
+).strip()
+
+
+CLAIM_SET_VALIDATION_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a Claim Set Validation Agent for multimodal reasoning annotation.
+
+    ## TASK
+    Audit whether each extracted claim is supported, atomic, dependency-valid, and grounded in the problem evidence.
+
+    ## RULES
+    1. Check every claim individually.
+    2. Detect unsupported, non-atomic, dependency-broken, or weakly grounded claims.
+    3. The response must include exactly one judgment for every provided `claim_id`.
+    4. If `pass=true`, `global_failures` must be `[]`.
+    5. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "pass": true,
+      "dependency_closure_ok": true,
+      "grounding_ok": true,
+      "global_failures": [],
+      "claim_judgments": [
+        {
+          "claim_id": "c1",
+          "supported": true,
+          "atomic": true,
+          "dependency_valid": true,
+          "grounded": true,
+          "issue_types": [],
+          "reason": "..."
+        }
+      ],
+      "summary": "..."
+    }
+    """
+).strip()
+
+
+NODE_SET_VALIDATION_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a Node Set Validation Agent for multimodal reasoning annotation.
+
+    ## TASK
+    Audit whether the induced reasoning nodes are correct, sufficiently supported, and traceable back to source claims.
+
+    ## RULES
+    1. Check every node individually.
+    2. Detect unsupported nodes, bad source-claim links, over-merging, and missing key information.
+    3. The response must include exactly one judgment for every provided `r_id`.
+    4. If `pass=true`, `global_failures` must be `[]`.
+    5. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "pass": true,
+      "coverage_ok": true,
+      "merge_quality_ok": true,
+      "global_failures": [],
+      "node_judgments": [
+        {
+          "r_id": "r_1",
+          "supported": true,
+          "has_valid_source_claims": true,
+          "overmerged": false,
+          "missing_key_information": false,
+          "issue_types": [],
+          "reason": "..."
+        }
+      ],
+      "summary": "..."
+    }
+    """
+).strip()
+
+
 PERCEPTION_EXTRACTION_SYSTEM_PROMPT = dedent(
     """
     ## ROLE
@@ -456,7 +564,10 @@ NODE_INDUCTION_SYSTEM_PROMPT = dedent(
     4. `node_type` must be one of exactly: `perception`, `text_condition`, `knowledge_call`, `derivation`, `calculation`, `final_answer`.
     5. If a claim is about task wording, output format, question instruction, or other textual requirement, use `text_condition`.
     6. Do not invent new node types such as `instruction`, `directive`, `requirement`, `task`, or similar variants.
-    7. Output valid JSON only.
+    7. `canonical_claim` must stay source-faithful: do not add extra facts, qualifiers, negations, or detail not explicitly present in the source claim.
+    8. Prefer minimal canonical paraphrase. If unsure, keep the wording very close to the source claim text.
+    9. Do not fuse multiple separable facts into a single node text.
+    10. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -731,6 +842,27 @@ def build_cot_polish_user_prompt(problem: Dict[str, Any], method: Dict[str, Any]
     ).strip()
 
 
+def build_final_cot_validation_user_prompt(problem: Dict[str, Any], method: Dict[str, Any], cot_text: str, answer_text: str) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Method Draft:
+        {normalize_whitespace(method.get('method_draft', ''))}
+
+        Candidate Final Answer:
+        {normalize_whitespace(answer_text)}
+
+        Candidate Final Reasoning Trace:
+        {normalize_whitespace(cot_text)}
+
+        Images are attached to this request when available. For image-grounded problems, verify every visual claim against the attached image(s), not just the structured context summary.
+
+        Audit whether this final reasoning trace is actually valid.
+        """
+    ).strip()
+
+
 def build_perception_user_prompt(problem: Dict[str, Any]) -> str:
     return dedent(
         f"""
@@ -855,6 +987,44 @@ def build_claim_verify_user_prompt(
     ).strip()
 
 
+def build_claim_set_validation_user_prompt(
+    problem: Dict[str, Any],
+    method: Dict[str, Any],
+    cot_text: str,
+    claims: Sequence[Dict[str, Any]],
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Method Draft:
+        {normalize_whitespace(method.get('method_draft', ''))}
+
+        Verified Reasoning Trace:
+        {normalize_whitespace(cot_text)}
+
+        Claims to Audit:
+        {to_plain_text(list(claims))}
+
+        P Facts:
+        {to_plain_text(list(p_facts))}
+
+        T Facts:
+        {to_plain_text(list(t_facts))}
+
+        K Atoms:
+        {to_plain_text(list(k_atoms))}
+
+        Images are attached to this request when available. For image-grounded problems, verify every visual claim against the attached image(s), not just the structured context summary.
+
+        Audit whether each claim is truly supported and dependency-consistent.
+        """
+    ).strip()
+
+
 def build_claim_polish_user_prompt(
     problem: Dict[str, Any],
     method: Dict[str, Any],
@@ -932,6 +1102,44 @@ def build_node_induction_user_prompt(problem: Dict[str, Any], claims: Sequence[D
         Remember: node_type must be exactly one of
         `perception`, `text_condition`, `knowledge_call`, `derivation`, `calculation`, `final_answer`.
         If the content is an instruction or textual task requirement, map it to `text_condition`.
+        """
+    ).strip()
+
+
+def build_node_set_validation_user_prompt(
+    problem: Dict[str, Any],
+    claim_sequences: Sequence[Dict[str, Any]],
+    r_nodes: Sequence[Dict[str, Any]],
+    claim_mappings: Sequence[Dict[str, Any]],
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Claim Sequences:
+        {to_plain_text(list(claim_sequences))}
+
+        Candidate R Nodes:
+        {to_plain_text(list(r_nodes))}
+
+        Claim-to-Node Mappings:
+        {to_plain_text(list(claim_mappings))}
+
+        P Facts:
+        {to_plain_text(list(p_facts))}
+
+        T Facts:
+        {to_plain_text(list(t_facts))}
+
+        K Atoms:
+        {to_plain_text(list(k_atoms))}
+
+        Images are attached to this request when available. For image-grounded problems, verify every visual claim against the attached image(s), not just the structured context summary.
+
+        Audit whether the induced reasoning nodes are correct and traceable.
         """
     ).strip()
 

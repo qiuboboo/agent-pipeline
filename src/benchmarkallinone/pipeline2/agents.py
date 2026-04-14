@@ -11,12 +11,15 @@ from .prompts import (
     ANSWER_EQUIVALENCE_SYSTEM_PROMPT,
     ANSWER_REPAIR_SYSTEM_PROMPT,
     CLAIM_EXTRACTION_SYSTEM_PROMPT,
+    CLAIM_SET_VALIDATION_SYSTEM_PROMPT,
     COT_POLISH_SYSTEM_PROMPT,
     COT_VERIFY_SYSTEM_PROMPT,
     EVIDENCE_BINDER_SYSTEM_PROMPT,
+    FINAL_COT_VALIDATION_SYSTEM_PROMPT,
     KNOWLEDGE_LIBRARIAN_SYSTEM_PROMPT,
     METHOD_PLANNER_SYSTEM_PROMPT,
     NODE_INDUCTION_SYSTEM_PROMPT,
+    NODE_SET_VALIDATION_SYSTEM_PROMPT,
     NOVELTY_DETECTOR_SYSTEM_PROMPT,
     PERCEPTION_EXTRACTION_SYSTEM_PROMPT,
     SOLUTION_GROUPER_SYSTEM_PROMPT,
@@ -26,12 +29,15 @@ from .prompts import (
     build_answer_equivalence_user_prompt,
     build_answer_repair_user_prompt,
     build_claim_extraction_user_prompt,
+    build_claim_set_validation_user_prompt,
     build_cot_polish_user_prompt,
     build_cot_verify_user_prompt,
     build_evidence_binding_user_prompt,
+    build_final_cot_validation_user_prompt,
     build_knowledge_user_prompt,
     build_method_planner_user_prompt,
     build_node_induction_user_prompt,
+    build_node_set_validation_user_prompt,
     build_novelty_detector_user_prompt,
     build_perception_user_prompt,
     build_solution_grouping_user_prompt,
@@ -778,7 +784,12 @@ def extract_claims(router: ModelRouter, problem: Dict[str, Any], method: Dict[st
 def induce_nodes(router: ModelRouter, problem: Dict[str, Any], claims: Sequence[Dict[str, Any]], p_facts: Sequence[Dict[str, Any]], t_facts: Sequence[Dict[str, Any]], k_atoms: Sequence[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     if not claims:
         raise _data_error("NodeInduction", "Cannot induce nodes from an empty claim set.")
-    claim_id_set = {str(item.get("claim_id", "")) for item in claims}
+    claim_lookup = {
+        str(item.get("claim_id", "")): item
+        for item in claims
+        if isinstance(item, dict) and str(item.get("claim_id", ""))
+    }
+    claim_id_set = set(claim_lookup)
     response = _call_router(
         router,
         NODE_INDUCTION_SYSTEM_PROMPT,
@@ -796,23 +807,34 @@ def induce_nodes(router: ModelRouter, problem: Dict[str, Any], claims: Sequence[
         claim_id = _require_non_empty_text("NodeInduction", item.get("claim_id"), "claim_id")
         if claim_id not in claim_id_set:
             raise _contract_error("NodeInduction", f"Unknown claim_id `{claim_id}` in canonical_nodes.")
-        canonical_claim = _require_non_empty_text("NodeInduction", item.get("canonical_claim"), "canonical_claim")
+        claim_record = claim_lookup[claim_id]
+        claim_text = _require_non_empty_text("NodeInduction", claim_record.get("claim_text"), "claim_text")
+        suggested_canonical_claim = _require_non_empty_text("NodeInduction", item.get("canonical_claim"), "canonical_claim")
         node_type = _normalize_node_type(item.get("node_type"), "NodeInduction")
         support_level = _require_choice("NodeInduction", item.get("support_level"), "support_level", _ALLOWED_SUPPORT_LEVELS)
-        group_key = canonicalize_free_text(canonical_claim)
+
+        # Keep node canonicalization source-faithful: do not let NodeInduction expand a node
+        # beyond the actual source claim text. We still use the model-suggested canonical claim
+        # only for grouping if it is semantically close enough, but the stored canonical claim
+        # falls back to the exact source claim text.
+        group_key = canonicalize_free_text(claim_text)
+        canonical_claim = claim_text
+        if canonicalize_free_text(suggested_canonical_claim) == group_key:
+            canonical_claim = suggested_canonical_claim
+
         if group_key not in grouped:
             grouped[group_key] = NodeRecord(
                 r_id=f"r_{stable_digest([str(problem.get('problem_id', '')), group_key])}",
                 problem_id=str(problem.get("problem_id", "")),
                 node_type=node_type,
                 canonical_claim=canonical_claim,
-                surface_forms=[canonical_claim],
+                surface_forms=[claim_text],
                 equivalence_group_id=f"eq_{stable_digest([group_key], 12)}",
                 support_level=support_level,
                 source_claim_ids=[claim_id],
             )
         else:
-            grouped[group_key].surface_forms = unique_list(grouped[group_key].surface_forms + [canonical_claim])
+            grouped[group_key].surface_forms = unique_list(grouped[group_key].surface_forms + [claim_text])
             grouped[group_key].source_claim_ids = unique_list(grouped[group_key].source_claim_ids + [claim_id])
         claim_mappings.append(
             {
