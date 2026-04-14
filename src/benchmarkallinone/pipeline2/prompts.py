@@ -453,7 +453,10 @@ NODE_INDUCTION_SYSTEM_PROMPT = dedent(
     1. Merge claims only when they are genuinely equivalent in meaning and role.
     2. Keep node texts canonical and reusable.
     3. Preserve source claim traceability.
-    4. Output valid JSON only.
+    4. `node_type` must be one of exactly: `perception`, `text_condition`, `knowledge_call`, `derivation`, `calculation`, `final_answer`.
+    5. If a claim is about task wording, output format, question instruction, or other textual requirement, use `text_condition`.
+    6. Do not invent new node types such as `instruction`, `directive`, `requirement`, `task`, or similar variants.
+    7. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -926,6 +929,9 @@ def build_node_induction_user_prompt(problem: Dict[str, Any], claims: Sequence[D
         {to_plain_text(list(k_atoms))}
 
         Canonicalize these claims into reusable reasoning nodes.
+        Remember: node_type must be exactly one of
+        `perception`, `text_condition`, `knowledge_call`, `derivation`, `calculation`, `final_answer`.
+        If the content is an instruction or textual task requirement, map it to `text_condition`.
         """
     ).strip()
 
