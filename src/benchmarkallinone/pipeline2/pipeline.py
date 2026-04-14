@@ -878,7 +878,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    project_root = Path(__file__).resolve().parents[1]
+    project_root = Path(__file__).resolve().parents[3]
     config = Pipeline2Config.from_yaml(getattr(args, "config", None))
     if args.command == "evaluate-traces":
         result = evaluate_traces(config, project_root, Path(args.trace_file))
