@@ -19,6 +19,7 @@ class ModelEndpointConfig:
     temperature: float = 0.1
     timeout_seconds: int = 180
     enabled: bool = True
+    api_mode: str = "chat_completions"
 
 
 @dataclass
