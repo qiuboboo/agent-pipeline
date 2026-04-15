@@ -330,7 +330,9 @@ TEXT_CONDITION_SYSTEM_PROMPT = dedent(
     1. Only include information explicitly stated in the problem.
     2. Distinguish givens from targets.
     3. Preserve multi-part structure if the problem has multiple sub-questions.
-    4. Output valid JSON only.
+    4. Do not copy image-derived structure, tables, map cell values, geometry relations, circuit topology, or any other visual observations into `t_facts` unless the same content is explicitly stated in the text itself.
+    5. If the problem is multimodal, `t_facts` should usually be short and text-only; visual details belong in `p_facts`, not `t_facts`.
+    6. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -358,7 +360,10 @@ KNOWLEDGE_LIBRARIAN_SYSTEM_PROMPT = dedent(
     1. Propose plausible knowledge atoms, not full solutions.
     2. Keep each atom concise and reusable.
     3. Prefer canonical rule names plus one-line applicability notes.
-    4. Output valid JSON only.
+    4. Do not restate visual observations or text givens as `k_atoms`; those belong in `p_facts` or `t_facts`.
+    5. Avoid redundant or overlapping atoms; merge near-duplicates into a single more general reusable rule when possible.
+    6. For K-map / Karnaugh-map problems, include every adjacency rule needed for valid grouping. In particular, for 5-variable K-maps split into two 4x4 planes, explicitly include that corresponding cells at the same row and column across the two planes are adjacent because they differ only in the split variable.
+    7. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -419,11 +424,14 @@ PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT = dedent(
     1. Check visual grounding against the image and the trusted ready context.
     2. `p_facts` must contain only objective visual facts, not reasoning conclusions.
     3. `t_facts` must cover explicit givens, goals, constraints, and subquestions from the text.
-    4. `k_atoms` must be reusable knowledge atoms, not solution-specific claims.
-    5. Flag unsupported facts, missing essentials, duplicated content, and over-specific knowledge.
-    6. If any critical issue remains, set `pass=false` and provide concrete revision instructions.
-    7. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
-    8. Output valid JSON only.
+    4. `t_facts` must not include image-derived map layouts, cell values, diagram structure, circuit connectivity, geometric relations, or other visual observations unless the same content is explicitly written in the text.
+    5. `k_atoms` must be reusable knowledge atoms, not solution-specific claims.
+    6. `k_atoms` should be minimal: flag duplicate, near-duplicate, or heavily overlapping rules and ask for merge/pruning when needed.
+    7. For K-map / Karnaugh-map problems, treat cross-plane adjacency as essential coverage when the map is split across variable planes. For a 5-variable K-map shown as two 4x4 maps, the foundation is incomplete unless it states that corresponding cells across the two planes are adjacent because they differ only in the split variable.
+    8. Flag unsupported facts, missing essentials, duplicated content, and over-specific knowledge.
+    9. If any critical issue remains, set `pass=false` and provide concrete revision instructions.
+    10. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
+    11. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -879,6 +887,8 @@ def build_text_condition_user_prompt(problem: Dict[str, Any]) -> str:
         {_problem_header(problem)}
 
         Extract explicit text conditions, goals, and constraints.
+        Only include content explicitly written in the problem text itself.
+        Do not copy image-derived structure, cell values, diagram layout, or other visual observations into `t_facts` unless the same content appears verbatim in the text.
         """
     ).strip()
 
@@ -895,6 +905,9 @@ def build_knowledge_user_prompt(problem: Dict[str, Any], p_facts: Sequence[Dict[
         {to_plain_text(list(t_facts))}
 
         Enumerate likely knowledge atoms needed for this problem.
+        Keep them reusable, minimal, and non-redundant.
+        Do not restate P facts or T facts as knowledge atoms.
+        If this is a K-map / Karnaugh-map problem, include all adjacency rules required for valid grouping; for a 5-variable map split into two 4x4 planes, explicitly include inter-plane adjacency between corresponding cells.
         """
     ).strip()
 
