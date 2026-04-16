@@ -3007,8 +3007,8 @@ class RewriteAgent(BaseStructuredAgent):
                     "variant_id": to_plain_text(primary_variant.get("variant_id") or fallback_variant.get("variant_id") or "open_1"),
                     "title": to_plain_text(primary_variant.get("title") or fallback_variant.get("title") or f"{dataset_name} 开放题"),
                     "rewritten_question_text": to_plain_text(primary_variant.get("rewritten_question_text") or fallback_variant.get("rewritten_question_text")),
-                    "expected_answer_type": to_plain_text(fallback_variant.get("expected_answer_type") or primary_variant.get("expected_answer_type") or "short_text"),
-                    "expected_answer": to_plain_text(fallback_variant.get("expected_answer") or primary_variant.get("expected_answer")),
+                    "expected_answer_type": to_plain_text(primary_variant.get("expected_answer_type") or fallback_variant.get("expected_answer_type") or "short_text"),
+                    "expected_answer": to_plain_text(primary_variant.get("expected_answer") or fallback_variant.get("expected_answer")),
                     "split_role": to_plain_text(primary_variant.get("split_role") or fallback_variant.get("split_role") or "single"),
                 }
             ]
