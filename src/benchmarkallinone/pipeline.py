@@ -237,6 +237,7 @@ class DatasetSpec:
     metadata_fields: List[str] = field(default_factory=list)
     force_requires_image: bool = False
     answer_index_base: Optional[int] = None
+    answer_resolution_mode: str = "default"
     multi_solution_mode: str = "auto"
 
 
@@ -1263,11 +1264,34 @@ def resolve_answer_source_text(row: Dict[str, Any], extracted: Dict[str, Any]) -
 
 
 
-def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, str], answer_index_base: Optional[int] = None) -> str:
+def resolve_multiple_choice_answer_text(
+    answer_text: str,
+    choice_map: Dict[str, str],
+    answer_index_base: Optional[int] = None,
+    answer_resolution_mode: str = "default",
+) -> str:
     answer = normalize_whitespace(answer_text)
     if not answer:
         return ""
     upper = answer.upper().strip()
+    if answer_resolution_mode == "region_label_index":
+        if choice_map and answer_index_base is not None:
+            numeric_match = re.fullmatch(r"[+-]?\d+", answer)
+            if numeric_match:
+                try:
+                    raw_index = int(numeric_match.group(0))
+                except ValueError:
+                    raw_index = None
+                if raw_index is not None:
+                    choice_labels = [label for label in sorted(choice_map.keys()) if re.fullmatch(r"[A-H]", label)]
+                    resolved_index = raw_index - int(answer_index_base)
+                    if 0 <= resolved_index < len(choice_labels):
+                        mapped_label = choice_labels[resolved_index]
+                        mapped_answer = normalize_whitespace(choice_map.get(mapped_label, ""))
+                        if mapped_answer:
+                            return mapped_answer
+        # AI2D-style region labels are already the final answer and must not be remapped as slot letters.
+        return answer
     letter_match = re.fullmatch(r"\(?([A-Z])\)?", upper)
     if letter_match:
         key = letter_match.group(1)
@@ -1298,7 +1322,14 @@ def resolve_multiple_choice_answer_text(answer_text: str, choice_map: Dict[str, 
     return normalize_whitespace(answer)
 
 
-def rewrite_answer_consistency_flags(normalized_answer_text: str, rewrite_report: Dict[str, Any], open_variants: Sequence[Dict[str, Any]]) -> List[str]:
+def rewrite_answer_consistency_flags(
+    normalized_answer_text: str,
+    rewrite_report: Dict[str, Any],
+    open_variants: Sequence[Dict[str, Any]],
+    choices: Dict[str, str],
+    answer_index_base: Optional[int] = None,
+    answer_resolution_mode: str = "default",
+) -> List[str]:
     strategy = to_plain_text(rewrite_report.get("strategy")).strip().lower()
     if strategy not in {"blank_open", "keep_open"}:
         return []
@@ -1306,7 +1337,13 @@ def rewrite_answer_consistency_flags(normalized_answer_text: str, rewrite_report
         return []
     variant = open_variants[0] if isinstance(open_variants[0], dict) else {}
     expected_answer = to_plain_text(variant.get("expected_answer"))
-    if canonicalize_answer_text(expected_answer) == canonicalize_answer_text(normalized_answer_text):
+    resolved_gold_answer = resolve_multiple_choice_answer_text(
+        normalized_answer_text,
+        choices,
+        answer_index_base,
+        answer_resolution_mode,
+    )
+    if canonicalize_answer_text(expected_answer) == canonicalize_answer_text(resolved_gold_answer):
         return []
     return ["rewrite_expected_answer_mismatch", "answer_annotation_inconsistent", "gold_answer_mismatch"]
 
@@ -1435,6 +1472,7 @@ class LocalFileConnector(BaseConnector):
                 resolve_answer_source_text(row, extracted),
                 extracted["choice_map"],
                 self.spec.answer_index_base,
+                self.spec.answer_resolution_mode,
             )
             images: List[Image.Image] = []
             image_sources: List[str] = []
@@ -1602,6 +1640,7 @@ class HuggingFaceConnector(BaseConnector):
                     self.resolve_answer_text(row.get("solution") or resolve_answer_source_text(row, extracted)),
                     extracted["choice_map"],
                     self.spec.answer_index_base,
+                    self.spec.answer_resolution_mode,
                 )
                 images: List[Image.Image] = []
                 image_sources: List[str] = []
@@ -1755,6 +1794,7 @@ class HuggingFaceConnector(BaseConnector):
                 self.resolve_answer_text(resolve_answer_source_text(row, extracted)),
                 extracted["choice_map"],
                 self.spec.answer_index_base,
+                self.spec.answer_resolution_mode,
             )
             image_field_candidates: List[str] = []
             explicit_image_field = extracted.get("image_field")
@@ -2019,6 +2059,7 @@ class GitHubConnector(BaseConnector):
                     to_plain_text(data.get("answer") or data.get("label") or data.get("solution")),
                     choice_map,
                     self.spec.answer_index_base,
+                    self.spec.answer_resolution_mode,
                 )
                 images: List[Image.Image] = []
                 image_sources: List[str] = []
@@ -2105,6 +2146,7 @@ class GitHubConnector(BaseConnector):
                     resolve_answer_source_text(row, extracted),
                     extracted["choice_map"],
                     self.spec.answer_index_base,
+                    self.spec.answer_resolution_mode,
                 )
                 images: List[Image.Image] = []
                 image_sources: List[str] = []
@@ -4601,6 +4643,7 @@ class MultiDatasetCleaningPipeline:
             raw_answer_text,
             dict(sample.choice_map),
             spec.answer_index_base,
+            spec.answer_resolution_mode,
         )
         sample.raw_answer_text = raw_answer_text
         digest_seed = [
@@ -4636,6 +4679,7 @@ class MultiDatasetCleaningPipeline:
             normalized_answer_text,
             choices,
             spec.answer_index_base,
+            spec.answer_resolution_mode,
         )
         text_dominant = bool(normalization_result.get("text_dominant", False))
         cleaning_path = to_plain_text(
@@ -4765,7 +4809,14 @@ class MultiDatasetCleaningPipeline:
 
         rewrite_report = self.rewrite_agent.rewrite(spec.display_name, normalized_question_text, normalized_answer_text, original_answer_type, choices)
         open_variants = self.build_open_variants(problem_id, rewrite_report)
-        rewrite_consistency_flags = rewrite_answer_consistency_flags(normalized_answer_text, rewrite_report, open_variants)
+        rewrite_consistency_flags = rewrite_answer_consistency_flags(
+            normalized_answer_text,
+            rewrite_report,
+            open_variants,
+            choices,
+            spec.answer_index_base,
+            spec.answer_resolution_mode,
+        )
         rewrite_question_flags = rewrite_question_residual_flags(rewrite_report, open_variants)
         rewrite_report["consistency_check_passed"] = not rewrite_consistency_flags
         rewrite_report["consistency_issue_codes"] = list(rewrite_consistency_flags)
