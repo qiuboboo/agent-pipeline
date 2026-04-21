@@ -656,6 +656,16 @@
 - `t_facts`：文本条件。
 - `k_atoms`：知识原子。
 
+##### 当前 repair 策略
+PTK foundation 现在不是再让 `PTKFoundationPolish` 每轮“整份重写整个 PTK”，而是优先走**分阶段修补**：
+- critic 先给出 revision instructions；
+- 代码会根据指令判断优先需要修的是 `p_facts`、`t_facts` 还是 `k_atoms`；
+- 对应 section 用单独 patch agent 做局部重写；
+- 其他 section 只作为 reference context 保留，不在该轮一起重写；
+- 多个 section 需要修改时，再按 section 逐个 patch 并回填。
+
+这样做的主要目的，是降低一次 polish 把本来好的 section 也一起改坏的概率，尤其是避免 `p_facts` 在整份重写时被误修空。
+
 ##### `problem_record` 字段解释
 - `problem_id`：题目标识。
 - `question_text`：题干。

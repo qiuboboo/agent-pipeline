@@ -72,7 +72,7 @@ class AnnotationModulesTests(unittest.TestCase):
             {
                 "pass": False,
                 "critical_issues": ["p_facts 缺少足够 grounding。"],
-                "revision_instructions": "补充更具体的视觉锚点。",
+                "revision_instructions": "补充更具体的视觉锚点，并修正 p_facts。",
                 "grounding_score": 0.2,
                 "coverage_score": 0.6,
             },
@@ -85,22 +85,7 @@ class AnnotationModulesTests(unittest.TestCase):
                         "visual_anchor": "vertex X / angle label 115°",
                     }
                 ],
-                "t_facts": [
-                    {
-                        "t_id": "t1",
-                        "fact_text": "求角 VXW 的大小。",
-                        "fact_role": "goal",
-                    }
-                ],
-                "k_atoms": [
-                    {
-                        "k_id": "k1",
-                        "knowledge_text": "线性对互补。",
-                        "knowledge_type": "principle",
-                        "applicability_note": "相邻角共线时可用。",
-                    }
-                ],
-                "revision_summary": "补入明确视觉锚点并保留必要文本与知识。",
+                "revision_summary": "补入明确视觉锚点并清理 p_facts。",
             },
             {
                 "pass": True,
@@ -115,9 +100,11 @@ class AnnotationModulesTests(unittest.TestCase):
             result = annotation_modules.build_ptk_foundation(router=None, problem=self.problem, max_repair_rounds=1)
 
         self.assertEqual(result["p_facts"][0]["visual_anchor"], "vertex X / angle label 115°")
+        self.assertEqual(result["t_facts"][0]["fact_text"], "求目标角大小。")
         self.assertTrue(result["audit"]["passed"])
         self.assertEqual(len(result["audit"]["rounds"]), 2)
-        self.assertEqual(result["audit"]["rounds"][0]["polish_summary"], "补入明确视觉锚点并保留必要文本与知识。")
+        self.assertEqual(result["audit"]["rounds"][0]["polish_summary"], "补入明确视觉锚点并清理 p_facts。")
+        self.assertEqual(result["audit"]["rounds"][0]["patched_sections"], ["p_facts"])
 
     def test_extract_claims_bundle_repair_loop(self) -> None:
         p_facts = [
@@ -225,7 +212,7 @@ class AnnotationModulesTests(unittest.TestCase):
         self.assertEqual(result["claims"][-1]["depends_on"], ["c4"])
         self.assertEqual(result["audit"]["rounds"][0]["polish_summary"], "补足桥梁与计算 claim，并显式依赖。")
 
-    def test_extract_claims_bundle_raises_on_unfixable_claims(self) -> None:
+    def test_extract_claims_bundle_soft_fails_on_unfixable_claims(self) -> None:
         p_facts = [
             {
                 "p_id": "p1",
@@ -260,17 +247,21 @@ class AnnotationModulesTests(unittest.TestCase):
         ]
 
         with patch.object(annotation_modules, "_call_router", side_effect=side_effect):
-            with self.assertRaises(PipelineDataContractError):
-                annotation_modules.extract_claims_bundle(
-                    router=None,
-                    problem=self.problem,
-                    method=self.method,
-                    cot_text="只有观察，没有结论。",
-                    p_facts=p_facts,
-                    t_facts=t_facts,
-                    k_atoms=k_atoms,
-                    max_repair_rounds=0,
-                )
+            result = annotation_modules.extract_claims_bundle(
+                router=None,
+                problem=self.problem,
+                method=self.method,
+                cot_text="只有观察，没有结论。",
+                p_facts=p_facts,
+                t_facts=t_facts,
+                k_atoms=k_atoms,
+                max_repair_rounds=0,
+            )
+
+        self.assertFalse(result["claim_gate_passed"])
+        self.assertEqual(result["claim_gate_status"], "soft_failed")
+        self.assertEqual(result["audit"]["status"], "soft_failed")
+        self.assertEqual(len(result["claims"]), 1)
 
 
 class GroupSolutionsTests(unittest.TestCase):

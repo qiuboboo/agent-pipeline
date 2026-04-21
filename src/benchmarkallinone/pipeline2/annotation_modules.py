@@ -25,6 +25,9 @@ from .prompts import (
     PERCEPTION_EXTRACTION_SYSTEM_PROMPT,
     PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT,
     PTK_FOUNDATION_POLISH_SYSTEM_PROMPT,
+    PTK_K_ATOMS_POLISH_SYSTEM_PROMPT,
+    PTK_P_FACTS_POLISH_SYSTEM_PROMPT,
+    PTK_T_FACTS_POLISH_SYSTEM_PROMPT,
     TEXT_CONDITION_SYSTEM_PROMPT,
     build_claim_extraction_user_prompt,
     build_claim_polish_user_prompt,
@@ -33,9 +36,12 @@ from .prompts import (
     build_perception_user_prompt,
     build_ptk_foundation_critic_user_prompt,
     build_ptk_foundation_polish_user_prompt,
+    build_ptk_k_atoms_polish_user_prompt,
+    build_ptk_p_facts_polish_user_prompt,
+    build_ptk_t_facts_polish_user_prompt,
     build_text_condition_user_prompt,
 )
-from .utils import safe_float, to_plain_text
+from .utils import normalize_whitespace, safe_float, to_plain_text
 
 
 def _problem_image_paths(problem: Dict[str, Any]) -> List[str]:
@@ -137,6 +143,128 @@ def _validate_claim_sequence(agent_name: str, claims: Sequence[Dict[str, Any]]) 
         seen.add(claim_id)
 
 
+def _coerce_string_list(value: Any) -> List[str]:
+    if not isinstance(value, list):
+        return []
+    output: List[str] = []
+    for item in value:
+        if isinstance(item, str):
+            text = item.strip()
+            if text:
+                output.append(text)
+    return output
+
+
+def _topologically_reorder_claims(claims: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    dependency_map: Dict[str, List[str]] = {
+        str(item.get("claim_id", "")): [str(dep) for dep in item.get("depends_on") or []]
+        for item in claims
+    }
+    claim_map: Dict[str, Dict[str, Any]] = {str(item.get("claim_id", "")): dict(item) for item in claims}
+    indegree: Dict[str, int] = {claim_id: 0 for claim_id in claim_map}
+    followers: Dict[str, List[str]] = {claim_id: [] for claim_id in claim_map}
+    for claim_id, deps in dependency_map.items():
+        for dep in deps:
+            if dep in indegree:
+                indegree[claim_id] += 1
+                followers[dep].append(claim_id)
+
+    queue = sorted(
+        [claim_id for claim_id, degree in indegree.items() if degree == 0],
+        key=lambda claim_id: int(claim_map[claim_id].get("_original_index", 0)),
+    )
+    ordered_ids: List[str] = []
+    while queue:
+        current = queue.pop(0)
+        ordered_ids.append(current)
+        for follower in sorted(followers[current], key=lambda claim_id: int(claim_map[claim_id].get("_original_index", 0))):
+            indegree[follower] -= 1
+            if indegree[follower] == 0:
+                queue.append(follower)
+                queue.sort(key=lambda claim_id: int(claim_map[claim_id].get("_original_index", 0)))
+
+    if len(ordered_ids) != len(claim_map):
+        leftovers = [claim_id for claim_id in claim_map if claim_id not in set(ordered_ids)]
+        leftovers.sort(key=lambda claim_id: int(claim_map[claim_id].get("_original_index", 0)))
+        ordered_ids.extend(leftovers)
+
+    return [claim_map[claim_id] for claim_id in ordered_ids]
+
+
+def _repair_claim_sequence_locally(claims: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    prepared: List[Dict[str, Any]] = []
+    seen_raw_ids: set[str] = set()
+    for index, item in enumerate(claims):
+        if not isinstance(item, dict):
+            continue
+        claim_text = normalize_whitespace(item.get("claim_text"))
+        if not claim_text:
+            continue
+        raw_id = normalize_whitespace(item.get("claim_id")) or f"claim_{index + 1}"
+        if raw_id in seen_raw_ids:
+            raw_id = f"{raw_id}__{index + 1}"
+        seen_raw_ids.add(raw_id)
+        try:
+            claim_type = _normalize_claim_type(item.get("claim_type"), "ClaimRepair")
+        except Exception:
+            claim_type = "derivation"
+        prepared.append(
+            {
+                "claim_id": raw_id,
+                "claim_text": claim_text,
+                "claim_type": claim_type,
+                "depends_on": _coerce_string_list(item.get("depends_on", [])),
+                "evidence_hint": normalize_whitespace(item.get("evidence_hint")) or "Derived from CoT step and PTK context.",
+                "_original_index": index,
+            }
+        )
+
+    if not prepared:
+        return []
+
+    all_ids = {str(item.get("claim_id", "")) for item in prepared}
+    for item in prepared:
+        deps: List[str] = []
+        for dependency in item.get("depends_on") or []:
+            if dependency == item.get("claim_id"):
+                continue
+            if dependency not in all_ids:
+                continue
+            if dependency in deps:
+                continue
+            deps.append(dependency)
+        item["depends_on"] = deps
+
+    ordered = _topologically_reorder_claims(prepared)
+    old_to_new: Dict[str, str] = {}
+    for index, item in enumerate(ordered, start=1):
+        old_to_new[str(item.get("claim_id", ""))] = f"c{index}"
+
+    repaired: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    for item in ordered:
+        new_id = old_to_new[str(item.get("claim_id", ""))]
+        mapped_deps: List[str] = []
+        for dependency in item.get("depends_on") or []:
+            mapped = old_to_new.get(str(dependency))
+            if not mapped or mapped == new_id or mapped not in seen:
+                continue
+            if mapped in mapped_deps:
+                continue
+            mapped_deps.append(mapped)
+        repaired.append(
+            {
+                "claim_id": new_id,
+                "claim_text": str(item.get("claim_text", "")),
+                "claim_type": str(item.get("claim_type", "derivation")),
+                "depends_on": mapped_deps,
+                "evidence_hint": normalize_whitespace(item.get("evidence_hint")) or "Derived from CoT step and PTK context.",
+            }
+        )
+        seen.add(new_id)
+    return repaired
+
+
 def _normalize_claims_response(
     response: Dict[str, Any],
     *,
@@ -145,18 +273,27 @@ def _normalize_claims_response(
     method_id: str,
 ) -> List[Dict[str, Any]]:
     items = _require_list(agent_name, response.get("claims"), "claims", allow_empty=False)
-    output: List[Dict[str, Any]] = []
-    seen_ids: set[str] = set()
-    for item in items:
+    raw_claims: List[Dict[str, Any]] = []
+    for index, item in enumerate(items):
         if not isinstance(item, dict):
-            raise AgentContractError(f"[{agent_name}] Each claim must be an object.")
-        claim_id = _require_non_empty_text(agent_name, item.get("claim_id"), "claim_id")
-        if claim_id in seen_ids:
-            raise AgentContractError(f"[{agent_name}] Duplicate claim_id `{claim_id}`.")
-        seen_ids.add(claim_id)
+            continue
+        raw_claims.append(
+            {
+                "claim_id": item.get("claim_id") or f"claim_{index + 1}",
+                "claim_text": item.get("claim_text", ""),
+                "claim_type": item.get("claim_type", "derivation"),
+                "depends_on": item.get("depends_on", []),
+                "evidence_hint": item.get("evidence_hint", ""),
+            }
+        )
+    repaired = _repair_claim_sequence_locally(raw_claims)
+    if not repaired:
+        raise AgentContractError(f"[{agent_name}] No usable claims remained after local repair.")
+    output: List[Dict[str, Any]] = []
+    for item in repaired:
         output.append(
             ClaimRecord(
-                claim_id=claim_id,
+                claim_id=_require_non_empty_text(agent_name, item.get("claim_id"), "claim_id"),
                 problem_id=problem_id,
                 method_id=method_id,
                 claim_text=_require_non_empty_text(agent_name, item.get("claim_text"), "claim_text"),
@@ -167,6 +304,92 @@ def _normalize_claims_response(
         )
     _validate_claim_sequence(agent_name, output)
     return output
+
+
+def _normalize_ptk_section_targets(revision_instructions: str, current_foundation: Dict[str, Any]) -> List[str]:
+    normalized = normalize_whitespace(revision_instructions).lower()
+    targets: List[str] = []
+    checks = [
+        ("p_facts", ["p_facts", "p facts", "p-facts", "visual facts", "perception facts", "visual grounding", "visual anchor"]),
+        ("t_facts", ["t_facts", "t facts", "t-facts", "text facts", "text conditions", "verbatim wording", "question wording"]),
+        ("k_atoms", ["k_atoms", "k atoms", "k-atoms", "knowledge atoms", "knowledge rules", "knowledge"]),
+    ]
+    for section, keywords in checks:
+        if any(keyword in normalized for keyword in keywords):
+            targets.append(section)
+    if targets:
+        return targets
+
+    fallback_targets: List[str] = []
+    if current_foundation.get("p_facts"):
+        fallback_targets.append("p_facts")
+    if current_foundation.get("t_facts"):
+        fallback_targets.append("t_facts")
+    if current_foundation.get("k_atoms"):
+        fallback_targets.append("k_atoms")
+    return fallback_targets or ["p_facts", "t_facts", "k_atoms"]
+
+
+def _polish_ptk_section(
+    router: ModelRouter,
+    problem: Dict[str, Any],
+    current_foundation: Dict[str, Any],
+    revision_instructions: str,
+    section_name: str,
+) -> Dict[str, Any]:
+    _ensure_problem_minimum(problem, "PTKFoundationPolish")
+    section_specs = {
+        "p_facts": {
+            "system_prompt": PTK_P_FACTS_POLISH_SYSTEM_PROMPT,
+            "prompt_builder": build_ptk_p_facts_polish_user_prompt,
+            "field_name": "p_facts",
+            "normalizer": _normalize_p_facts,
+            "summary_label": "p_facts",
+        },
+        "t_facts": {
+            "system_prompt": PTK_T_FACTS_POLISH_SYSTEM_PROMPT,
+            "prompt_builder": build_ptk_t_facts_polish_user_prompt,
+            "field_name": "t_facts",
+            "normalizer": _normalize_t_facts,
+            "summary_label": "t_facts",
+        },
+        "k_atoms": {
+            "system_prompt": PTK_K_ATOMS_POLISH_SYSTEM_PROMPT,
+            "prompt_builder": build_ptk_k_atoms_polish_user_prompt,
+            "field_name": "k_atoms",
+            "normalizer": _normalize_k_atoms,
+            "summary_label": "k_atoms",
+        },
+    }
+    spec = section_specs.get(section_name)
+    if spec is None:
+        raise PipelineDataContractError(f"[PTKFoundationPolish] Unsupported section patch target `{section_name}`.")
+
+    response = _call_router(
+        router,
+        spec["system_prompt"],
+        _augment_prompt_with_ready_context(
+            problem,
+            spec["prompt_builder"](
+                problem,
+                current_foundation.get("p_facts", []),
+                current_foundation.get("t_facts", []),
+                current_foundation.get("k_atoms", []),
+                revision_instructions,
+            ),
+            "PTKFoundationPolish",
+        ),
+        _problem_image_paths(problem),
+        agent_name="PTKFoundationPolish",
+        require_images=bool(problem.get("requires_image")),
+    )
+    normalized_items = spec["normalizer"](response, "PTKFoundationPolish")
+    revision_summary = _require_non_empty_text("PTKFoundationPolish", response.get("revision_summary"), "revision_summary")
+    return {
+        spec["field_name"]: normalized_items,
+        "revision_summary": revision_summary,
+        "patched_section": spec["summary_label"],
+    }
 
 
 def _normalize_ptk_critique(response: Dict[str, Any]) -> Dict[str, Any]:
@@ -341,29 +564,39 @@ def polish_ptk_foundation(
     revision_instructions: str,
 ) -> Dict[str, Any]:
     _ensure_problem_minimum(problem, "PTKFoundationPolish")
-    response = _call_router(
-        router,
-        PTK_FOUNDATION_POLISH_SYSTEM_PROMPT,
-        _augment_prompt_with_ready_context(
+    section_targets = _normalize_ptk_section_targets(revision_instructions, current_foundation)
+    patched_foundation = {
+        **current_foundation,
+        "p_facts": list(current_foundation.get("p_facts", [])),
+        "t_facts": list(current_foundation.get("t_facts", [])),
+        "k_atoms": list(current_foundation.get("k_atoms", [])),
+    }
+    section_summaries: List[Dict[str, Any]] = []
+
+    for section_name in section_targets:
+        patch_result = _polish_ptk_section(
+            router,
             problem,
-            build_ptk_foundation_polish_user_prompt(
-                problem,
-                current_foundation.get("p_facts", []),
-                current_foundation.get("t_facts", []),
-                current_foundation.get("k_atoms", []),
-                revision_instructions,
-            ),
-            "PTKFoundationPolish",
-        ),
-        _problem_image_paths(problem),
-        agent_name="PTKFoundationPolish",
-        require_images=bool(problem.get("requires_image")),
-    )
+            patched_foundation,
+            revision_instructions,
+            section_name,
+        )
+        patched_foundation[section_name] = patch_result[section_name]
+        section_summaries.append(
+            {
+                "section": patch_result["patched_section"],
+                "revision_summary": patch_result["revision_summary"],
+            }
+        )
+
     return {
-        "p_facts": _normalize_p_facts(response, "PTKFoundationPolish"),
-        "t_facts": _normalize_t_facts(response, "PTKFoundationPolish"),
-        "k_atoms": _normalize_k_atoms(response, "PTKFoundationPolish"),
-        "revision_summary": _require_non_empty_text("PTKFoundationPolish", response.get("revision_summary"), "revision_summary"),
+        "p_facts": _normalize_p_facts({"p_facts": patched_foundation.get("p_facts", [])}, "PTKFoundationPolish"),
+        "t_facts": _normalize_t_facts({"t_facts": patched_foundation.get("t_facts", [])}, "PTKFoundationPolish"),
+        "k_atoms": _normalize_k_atoms({"k_atoms": patched_foundation.get("k_atoms", [])}, "PTKFoundationPolish"),
+        "revision_summary": " | ".join(item["revision_summary"] for item in section_summaries if item.get("revision_summary"))
+        or _require_non_empty_text("PTKFoundationPolish", normalize_whitespace(revision_instructions), "revision_summary"),
+        "patched_sections": [item["section"] for item in section_summaries],
+        "section_summaries": section_summaries,
     }
 
 
@@ -396,6 +629,8 @@ def build_ptk_foundation(router: ModelRouter, problem: Dict[str, Any], max_repai
             "k_atoms": polished["k_atoms"],
         }
         round_record["polish_summary"] = polished["revision_summary"]
+        round_record["patched_sections"] = polished.get("patched_sections", [])
+        round_record["section_summaries"] = polished.get("section_summaries", [])
         audit_rounds.append(round_record)
 
     audit = {
@@ -518,14 +753,13 @@ def extract_claims_bundle(
         "passed": passed,
         "max_repair_rounds": max_repair_rounds,
         "rounds": audit_rounds,
+        "status": "passed" if passed else "soft_failed",
     }
-    if not passed:
-        raise PipelineDataContractError(
-            f"[ClaimExtractionGate] Problem `{problem.get('problem_id', 'unknown_problem')}` method `{method.get('method_id', 'unknown_method')}` failed claim validation after {max_repair_rounds + 1} rounds."
-        )
     return {
         "problem_id": problem.get("problem_id", ""),
         "method_id": method.get("method_id", ""),
         "claims": claims,
         "audit": audit,
+        "claim_gate_passed": passed,
+        "claim_gate_status": "passed" if passed else "soft_failed",
     }

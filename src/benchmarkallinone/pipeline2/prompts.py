@@ -448,9 +448,10 @@ PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT = dedent(
     7. For K-map / Karnaugh-map problems, treat cross-plane adjacency as essential coverage when the map is split across variable planes. For a 5-variable K-map shown as two 4x4 maps, the foundation is incomplete unless it states that corresponding cells across the two planes are adjacent because they differ only in the split variable.
     8. Flag unsupported facts, missing essentials, duplicated content, over-specific knowledge, and `t_facts` that drift away from the original wording.
     9. Prefer revision-oriented feedback over hard blocking: if the foundation is broadly usable but too verbose, duplicated, or not minimal, give concrete trim/rewrite instructions so the polish step can fix it.
-    10. Use `pass=false` only when a real blocking issue remains (for example unsupported visual facts, materially missing text conditions/goals, or solution-specific knowledge that would corrupt downstream extraction). Do not fail solely because `t_facts` need trimming, deduplication, or more verbatim wording.
-    11. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
-    12. Output valid JSON only.
+    10. When revision is needed, explicitly name which section(s) must change: `p_facts`, `t_facts`, and/or `k_atoms`.
+    11. Use `pass=false` only when a real blocking issue remains (for example unsupported visual facts, materially missing text conditions/goals, or solution-specific knowledge that would corrupt downstream extraction). Do not fail solely because `t_facts` need trimming, deduplication, or more verbatim wording.
+    12. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
+    13. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -459,6 +460,106 @@ PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT = dedent(
       "revision_instructions": "...",
       "grounding_score": 0.0,
       "coverage_score": 0.0
+    }
+    """
+).strip()
+
+
+PTK_P_FACTS_POLISH_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a PTK P-Facts Patch Agent.
+
+    ## TASK
+    Revise only the `p_facts` section of the PTK foundation according to the critic feedback.
+
+    ## RULES
+    1. Revise only `p_facts`. Do not rewrite `t_facts` or `k_atoms`.
+    2. Preserve valid items when possible.
+    3. Add missing grounded visual facts and remove unsupported, duplicated, or interpretive items.
+    4. `p_facts` must stay objective and image-grounded.
+    5. Keep IDs stable when practical, but correctness is more important than ID continuity.
+    6. Return a non-empty `p_facts` list.
+    7. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "p_facts": [
+        {
+          "p_id": "p1",
+          "fact_text": "...",
+          "confidence": 0.0,
+          "visual_anchor": "..."
+        }
+      ],
+      "revision_summary": "..."
+    }
+    """
+).strip()
+
+
+PTK_T_FACTS_POLISH_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a PTK T-Facts Patch Agent.
+
+    ## TASK
+    Revise only the `t_facts` section of the PTK foundation according to the critic feedback.
+
+    ## RULES
+    1. Revise only `t_facts`. Do not rewrite `p_facts` or `k_atoms`.
+    2. Preserve valid items when possible.
+    3. `t_facts` must cover explicit givens, goals, constraints, and subquestions from the text.
+    4. Preserve question wording verbatim whenever possible: copy exact clauses/spans from the problem text instead of paraphrasing them.
+    5. If trimming is needed, prefer deleting extra wording or splitting clauses over inventing new prose.
+    6. `t_facts` must stay text-explicit and must not absorb visual-only content.
+    7. Keep IDs stable when practical, but correctness is more important than ID continuity.
+    8. Return a non-empty `t_facts` list.
+    9. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "t_facts": [
+        {
+          "t_id": "t1",
+          "fact_text": "...",
+          "fact_role": "given|goal|constraint|subquestion"
+        }
+      ],
+      "revision_summary": "..."
+    }
+    """
+).strip()
+
+
+PTK_K_ATOMS_POLISH_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a PTK K-Atoms Patch Agent.
+
+    ## TASK
+    Revise only the `k_atoms` section of the PTK foundation according to the critic feedback.
+
+    ## RULES
+    1. Revise only `k_atoms`. Do not rewrite `p_facts` or `t_facts`.
+    2. Preserve valid items when possible.
+    3. `k_atoms` must stay reusable and non-solution-specific.
+    4. Merge, prune, or rewrite overlapping knowledge atoms when needed, but keep only the minimum reusable set.
+    5. Keep IDs stable when practical, but correctness is more important than ID continuity.
+    6. Return a non-empty `k_atoms` list.
+    7. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "k_atoms": [
+        {
+          "k_id": "k1",
+          "knowledge_text": "...",
+          "knowledge_type": "formula|theorem|principle|commonsense",
+          "applicability_note": "..."
+        }
+      ],
+      "revision_summary": "..."
     }
     """
 ).strip()
@@ -1017,6 +1118,99 @@ def build_ptk_foundation_polish_user_prompt(
         {normalize_whitespace(revision_instructions)}
 
         Revise the PTK foundation accordingly.
+        """
+    ).strip()
+
+
+def build_ptk_p_facts_polish_user_prompt(
+    problem: Dict[str, Any],
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+    revision_instructions: str,
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Target Section:
+        p_facts
+
+        Current P Facts:
+        {to_plain_text(list(p_facts))}
+
+        Reference T Facts (do not rewrite):
+        {to_plain_text(list(t_facts))}
+
+        Reference K Atoms (do not rewrite):
+        {to_plain_text(list(k_atoms))}
+
+        Revision Instructions:
+        {normalize_whitespace(revision_instructions)}
+
+        Revise only `p_facts` and keep the rest of the PTK foundation unchanged.
+        """
+    ).strip()
+
+
+def build_ptk_t_facts_polish_user_prompt(
+    problem: Dict[str, Any],
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+    revision_instructions: str,
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Target Section:
+        t_facts
+
+        Reference P Facts (do not rewrite):
+        {to_plain_text(list(p_facts))}
+
+        Current T Facts:
+        {to_plain_text(list(t_facts))}
+
+        Reference K Atoms (do not rewrite):
+        {to_plain_text(list(k_atoms))}
+
+        Revision Instructions:
+        {normalize_whitespace(revision_instructions)}
+
+        Revise only `t_facts` and keep the rest of the PTK foundation unchanged.
+        """
+    ).strip()
+
+
+def build_ptk_k_atoms_polish_user_prompt(
+    problem: Dict[str, Any],
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+    revision_instructions: str,
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Target Section:
+        k_atoms
+
+        Reference P Facts (do not rewrite):
+        {to_plain_text(list(p_facts))}
+
+        Reference T Facts (do not rewrite):
+        {to_plain_text(list(t_facts))}
+
+        Current K Atoms:
+        {to_plain_text(list(k_atoms))}
+
+        Revision Instructions:
+        {normalize_whitespace(revision_instructions)}
+
+        Revise only `k_atoms` and keep the rest of the PTK foundation unchanged.
         """
     ).strip()
 
