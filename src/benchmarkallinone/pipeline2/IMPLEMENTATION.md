@@ -434,6 +434,18 @@
 也就是说：
 **system prompt 负责定义角色，user prompt builder 负责组织上下文。**
 
+### 当前的 prompt 瘦身策略
+当前实现已经开始避免把同一份大上下文无差别塞给所有 agent：
+- `agents.py` 中的 `READY STRUCTURED CONTEXT` 改成按 agent profile 做裁剪；
+- 不同 agent 会看到不同粒度的 `text_segments / targets / entities / visual_* / upstream_nodes`；
+- 长文本字段会做截断，减少无意义的 token 膨胀；
+- 图像题仍保留“必须直接看图、不要只依赖结构化摘要”的提示，避免瘦身后把 grounding 语义删坏。
+
+这意味着同样是一道题：
+- `PerceptionExtraction` 更偏向看视觉摘要；
+- `TextCondition` 不再携带视觉结构块；
+- `ClaimSetValidation` / `NodeSetValidation` 只拿更紧凑的 ready summary。
+
 ---
 
 ## 9. Ready 装载模块
@@ -518,6 +530,15 @@
 
 这个模块是真正的业务逻辑核心。它把 prompt、router 和严格契约检查结合起来，提供“一个个可调用的业务原子”。当前版本已经移除内容级 fallback：如果 LLM 没有返回满足 schema 的 JSON，就直接失败，不再自动补模板结果。
 
+### 当前的上下文裁剪策略
+`agents.py` 里的 `_augment_prompt_with_ready_context(...)` 不再总是附加同一份完整 ready 摘要，而是根据 agent 名称选择不同 profile：
+- 只保留该 agent 真正常用的结构块；
+- 限制 `text_segments / targets / entities / visual_entities / visual_relations / upstream_nodes` 数量；
+- 对长字符串做截断；
+- 把 ready summary 明确降级为“compact trusted upstream summary”，避免它在语义上压过原题、原 CoT、图像本身。
+
+这样做的目标不是改变任务定义，而是减少单次请求的 prompt 体积，尤其是 PTK / claim / validation 这类容易叠上下文的阶段。
+
 ### 10.1.1 方法规划
 
 #### [`plan_methods()`](benchmarkallinone/pipeline2/agents.py)
@@ -587,7 +608,15 @@
 - 先走 [`deterministic_answer_match()`](benchmarkallinone/pipeline2/agents.py)
 - 如果失败，再调用 `ANSWER_EQUIVALENCE_SYSTEM_PROMPT` 对模糊情况做 LLM judge
 
-### 10.1.4 答案修复
+### 10.1.9 结构校验的分批调用
+在 [`benchmarkallinone/pipeline2/verification_modules.py`](benchmarkallinone/pipeline2/verification_modules.py) 里，`ClaimSetValidation` 和 `NodeSetValidation` 已经支持按 batch 拆分：
+- claim set 默认按较小批次分批审查；
+- node set 也按较小批次拆开；
+- 每批仍然要求返回原有 JSON schema；
+- 代码侧会把多批结果重新合并回一个总报告，并保持原有字段结构（`pass`、`*_judgments`、`global_failures`、`summary` 等）。
+
+这样做的主要目的，是避免把整份 claims / nodes / mappings 一口气塞进单次请求，降低 prompt 臃肿和超长上下文失稳风险，同时尽量不改上游下游的数据契约。
+
 
 #### [`repair_answer()`](benchmarkallinone/pipeline2/agents.py)
 ##### 输入

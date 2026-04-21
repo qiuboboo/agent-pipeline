@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Sequence
 
+CLAIM_VALIDATION_BATCH_SIZE = 12
+NODE_VALIDATION_BATCH_SIZE = 10
+
 from .agents import (
     AgentContractError,
     PipelineDataContractError,
@@ -241,6 +244,161 @@ def _with_llm_meta(report: Dict[str, Any], response: Dict[str, Any]) -> Dict[str
     }
 
 
+def _batched(items: Sequence[Any], batch_size: int) -> List[List[Any]]:
+    size = max(1, int(batch_size))
+    return [list(items[index:index + size]) for index in range(0, len(items), size)]
+
+
+def _merge_claim_set_validation_reports(reports: Sequence[Dict[str, Any]], claims: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    expected_ids = [str(item.get("claim_id", "")) for item in claims if isinstance(item, dict)]
+    judgment_by_id: Dict[str, Dict[str, Any]] = {}
+    global_failures: List[str] = []
+    summaries: List[str] = []
+    dependency_closure_ok = True
+    grounding_ok = True
+    llm_request_modes: List[Any] = []
+    llm_endpoint_names: List[Any] = []
+    llm_elapsed_seconds_total = 0.0
+
+    for report in reports:
+        dependency_closure_ok = dependency_closure_ok and bool(report.get("dependency_closure_ok"))
+        grounding_ok = grounding_ok and bool(report.get("grounding_ok"))
+        global_failures.extend(report.get("global_failures", []))
+        summary = normalize_whitespace(report.get("summary"))
+        if summary:
+            summaries.append(summary)
+        if report.get("llm_request_mode") is not None:
+            llm_request_modes.append(report.get("llm_request_mode"))
+        if report.get("llm_endpoint_name") is not None:
+            llm_endpoint_names.append(report.get("llm_endpoint_name"))
+        try:
+            llm_elapsed_seconds_total += float(report.get("llm_elapsed_seconds") or 0.0)
+        except (TypeError, ValueError):
+            pass
+        for judgment in report.get("claim_judgments", []):
+            claim_id = str(judgment.get("claim_id", ""))
+            if claim_id and claim_id not in judgment_by_id:
+                judgment_by_id[claim_id] = judgment
+
+    missing = [claim_id for claim_id in expected_ids if claim_id and claim_id not in judgment_by_id]
+    if missing:
+        raise AgentContractError(
+            f"[ClaimSetValidation] Missing merged judgments for claim_id(s): {', '.join(missing)}."
+        )
+
+    merged_judgments = [judgment_by_id[claim_id] for claim_id in expected_ids if claim_id]
+    deduped_global_failures: List[str] = []
+    seen_failures: set[str] = set()
+    for item in global_failures:
+        text = normalize_whitespace(item)
+        if text and text not in seen_failures:
+            seen_failures.add(text)
+            deduped_global_failures.append(text)
+
+    deduped_summaries: List[str] = []
+    seen_summaries: set[str] = set()
+    for item in summaries:
+        if item and item not in seen_summaries:
+            seen_summaries.add(item)
+            deduped_summaries.append(item)
+
+    passed = dependency_closure_ok and grounding_ok and not deduped_global_failures and all(
+        bool(judgment.get("supported"))
+        and bool(judgment.get("atomic"))
+        and bool(judgment.get("dependency_valid"))
+        and bool(judgment.get("grounded"))
+        for judgment in merged_judgments
+    )
+
+    return {
+        "pass": passed,
+        "dependency_closure_ok": dependency_closure_ok,
+        "grounding_ok": grounding_ok,
+        "global_failures": deduped_global_failures,
+        "claim_judgments": merged_judgments,
+        "summary": " | ".join(deduped_summaries) if deduped_summaries else "Merged claim-set validation completed.",
+        "validation_batches": len(reports),
+        "llm_request_mode": llm_request_modes[0] if len(set(llm_request_modes)) == 1 and llm_request_modes else ("batched" if llm_request_modes else None),
+        "llm_endpoint_name": llm_endpoint_names[0] if len(set(llm_endpoint_names)) == 1 and llm_endpoint_names else (llm_endpoint_names[0] if llm_endpoint_names else None),
+        "llm_elapsed_seconds": round(llm_elapsed_seconds_total, 3),
+    }
+
+
+def _merge_node_set_validation_reports(reports: Sequence[Dict[str, Any]], r_nodes: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    expected_ids = [str(item.get("r_id", "")) for item in r_nodes if isinstance(item, dict)]
+    judgment_by_id: Dict[str, Dict[str, Any]] = {}
+    global_failures: List[str] = []
+    summaries: List[str] = []
+    coverage_ok = True
+    merge_quality_ok = True
+    llm_request_modes: List[Any] = []
+    llm_endpoint_names: List[Any] = []
+    llm_elapsed_seconds_total = 0.0
+
+    for report in reports:
+        coverage_ok = coverage_ok and bool(report.get("coverage_ok"))
+        merge_quality_ok = merge_quality_ok and bool(report.get("merge_quality_ok"))
+        global_failures.extend(report.get("global_failures", []))
+        summary = normalize_whitespace(report.get("summary"))
+        if summary:
+            summaries.append(summary)
+        if report.get("llm_request_mode") is not None:
+            llm_request_modes.append(report.get("llm_request_mode"))
+        if report.get("llm_endpoint_name") is not None:
+            llm_endpoint_names.append(report.get("llm_endpoint_name"))
+        try:
+            llm_elapsed_seconds_total += float(report.get("llm_elapsed_seconds") or 0.0)
+        except (TypeError, ValueError):
+            pass
+        for judgment in report.get("node_judgments", []):
+            r_id = str(judgment.get("r_id", ""))
+            if r_id and r_id not in judgment_by_id:
+                judgment_by_id[r_id] = judgment
+
+    missing = [r_id for r_id in expected_ids if r_id and r_id not in judgment_by_id]
+    if missing:
+        raise AgentContractError(
+            f"[NodeSetValidation] Missing merged judgments for r_id(s): {', '.join(missing)}."
+        )
+
+    merged_judgments = [judgment_by_id[r_id] for r_id in expected_ids if r_id]
+    deduped_global_failures: List[str] = []
+    seen_failures: set[str] = set()
+    for item in global_failures:
+        text = normalize_whitespace(item)
+        if text and text not in seen_failures:
+            seen_failures.add(text)
+            deduped_global_failures.append(text)
+
+    deduped_summaries: List[str] = []
+    seen_summaries: set[str] = set()
+    for item in summaries:
+        if item and item not in seen_summaries:
+            seen_summaries.add(item)
+            deduped_summaries.append(item)
+
+    passed = coverage_ok and merge_quality_ok and not deduped_global_failures and all(
+        bool(judgment.get("supported"))
+        and bool(judgment.get("has_valid_source_claims"))
+        and not bool(judgment.get("overmerged"))
+        and not bool(judgment.get("missing_key_information"))
+        for judgment in merged_judgments
+    )
+
+    return {
+        "pass": passed,
+        "coverage_ok": coverage_ok,
+        "merge_quality_ok": merge_quality_ok,
+        "global_failures": deduped_global_failures,
+        "node_judgments": merged_judgments,
+        "summary": " | ".join(deduped_summaries) if deduped_summaries else "Merged node-set validation completed.",
+        "validation_batches": len(reports),
+        "llm_request_mode": llm_request_modes[0] if len(set(llm_request_modes)) == 1 and llm_request_modes else ("batched" if llm_request_modes else None),
+        "llm_endpoint_name": llm_endpoint_names[0] if len(set(llm_endpoint_names)) == 1 and llm_endpoint_names else (llm_endpoint_names[0] if llm_endpoint_names else None),
+        "llm_elapsed_seconds": round(llm_elapsed_seconds_total, 3),
+    }
+
+
 def validate_final_cot(
     router: ModelRouter,
     problem: Dict[str, Any],
@@ -283,19 +441,34 @@ def validate_claim_set(
     _ensure_problem_minimum(problem, "ClaimSetValidation")
     if not claims:
         raise PipelineDataContractError("[ClaimSetValidation] Cannot validate an empty claim set.")
-    response = _call_router(
-        router,
-        CLAIM_SET_VALIDATION_SYSTEM_PROMPT,
-        _augment_prompt_with_ready_context(
-            problem,
-            build_claim_set_validation_user_prompt(problem, method, cot_text, claims, p_facts, t_facts, k_atoms),
-            "ClaimSetValidation",
-        ),
-        _problem_image_paths(problem),
-        agent_name="ClaimSetValidation",
-        require_images=bool(problem.get("requires_image")),
-    )
-    return _with_llm_meta(_normalize_claim_set_validation(response, claims=claims), response)
+
+    reports: List[Dict[str, Any]] = []
+    claim_batches = _batched(list(claims), CLAIM_VALIDATION_BATCH_SIZE)
+    for batch_index, claim_batch in enumerate(claim_batches, start=1):
+        batch_prompt = build_claim_set_validation_user_prompt(problem, method, cot_text, claim_batch, p_facts, t_facts, k_atoms)
+        if len(claim_batches) > 1:
+            batch_prompt += (
+                f"\n\nBATCH AUDIT NOTE:\n"
+                f"This is claim validation batch {batch_index}/{len(claim_batches)}. "
+                f"Audit only the claims listed in this batch; do not assume hidden claims outside this batch."
+            )
+        response = _call_router(
+            router,
+            CLAIM_SET_VALIDATION_SYSTEM_PROMPT,
+            _augment_prompt_with_ready_context(
+                problem,
+                batch_prompt,
+                "ClaimSetValidation",
+            ),
+            _problem_image_paths(problem),
+            agent_name="ClaimSetValidation",
+            require_images=bool(problem.get("requires_image")),
+        )
+        reports.append(_with_llm_meta(_normalize_claim_set_validation(response, claims=claim_batch), response))
+
+    if len(reports) == 1:
+        return reports[0]
+    return _merge_claim_set_validation_reports(reports, claims)
 
 
 def validate_node_set(
@@ -348,27 +521,70 @@ def validate_node_set(
                 raise PipelineDataContractError(
                     f"[NodeSetValidation] r_node references unknown source_claim_id `{claim_id}`."
                 )
-    response = _call_router(
-        router,
-        NODE_SET_VALIDATION_SYSTEM_PROMPT,
-        _augment_prompt_with_ready_context(
+
+    reports: List[Dict[str, Any]] = []
+    node_batches = _batched(list(r_nodes), NODE_VALIDATION_BATCH_SIZE)
+    r_id_to_node = {
+        str(node.get("r_id", "")): node
+        for node in r_nodes
+        if isinstance(node, dict) and str(node.get("r_id", ""))
+    }
+    for batch_index, node_batch in enumerate(node_batches, start=1):
+        batch_r_ids = {str(node.get("r_id", "")) for node in node_batch if isinstance(node, dict)}
+        batch_mappings = [
+            mapping
+            for mapping in claim_mappings
+            if isinstance(mapping, dict) and str(mapping.get("r_id", "")) in batch_r_ids
+        ]
+        batch_claim_ids = {
+            str(mapping.get("claim_id", ""))
+            for mapping in batch_mappings
+            if isinstance(mapping, dict) and str(mapping.get("claim_id", ""))
+        }
+        batch_claim_sequences: List[Dict[str, Any]] = []
+        for sequence in claim_sequences:
+            if not isinstance(sequence, dict):
+                continue
+            filtered_claims = [
+                claim
+                for claim in (sequence.get("claims") or [])
+                if isinstance(claim, dict) and str(claim.get("claim_id", "")) in batch_claim_ids
+            ]
+            if not filtered_claims:
+                continue
+            batch_claim_sequences.append({**sequence, "claims": filtered_claims})
+        batch_prompt = build_node_set_validation_user_prompt(
             problem,
-            build_node_set_validation_user_prompt(
+            batch_claim_sequences,
+            [r_id_to_node[r_id] for r_id in [str(node.get("r_id", "")) for node in node_batch] if r_id in r_id_to_node],
+            batch_mappings,
+            p_facts,
+            t_facts,
+            k_atoms,
+        )
+        if len(node_batches) > 1:
+            batch_prompt += (
+                f"\n\nBATCH AUDIT NOTE:\n"
+                f"This is node validation batch {batch_index}/{len(node_batches)}. "
+                f"Audit only the nodes listed in this batch and the source claims mapped to them."
+            )
+        response = _call_router(
+            router,
+            NODE_SET_VALIDATION_SYSTEM_PROMPT,
+            _augment_prompt_with_ready_context(
                 problem,
-                claim_sequences,
-                r_nodes,
-                claim_mappings,
-                p_facts,
-                t_facts,
-                k_atoms,
+                batch_prompt,
+                "NodeSetValidation",
             ),
-            "NodeSetValidation",
-        ),
-        _problem_image_paths(problem),
-        agent_name="NodeSetValidation",
-        require_images=bool(problem.get("requires_image")),
-    )
-    return _with_llm_meta(_normalize_node_set_validation(response, r_nodes=r_nodes), response)
+            _problem_image_paths(problem),
+            agent_name="NodeSetValidation",
+            require_images=bool(problem.get("requires_image")),
+        )
+        reports.append(_with_llm_meta(_normalize_node_set_validation(response, r_nodes=node_batch), response))
+
+    if len(reports) == 1:
+        return reports[0]
+    return _merge_node_set_validation_reports(reports, r_nodes)
 
 
 def validate_problem_structure(

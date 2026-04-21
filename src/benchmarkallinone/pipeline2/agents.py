@@ -268,6 +268,195 @@ def _problem_image_paths(problem: Dict[str, Any]) -> List[str]:
     return output
 
 
+_READY_CONTEXT_PROFILES: Dict[str, Dict[str, Any]] = {
+    "default": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": True,
+        "text_segments_limit": 8,
+        "targets_limit": 6,
+        "entities_limit": 8,
+        "visual_entities_limit": 10,
+        "visual_relations_limit": 10,
+        "upstream_nodes_limit": 6,
+        "max_text_chars": 220,
+    },
+    "PerceptionExtraction": {
+        "include_text": False,
+        "include_targets": False,
+        "include_entities": False,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "visual_entities_limit": 16,
+        "visual_relations_limit": 16,
+        "max_text_chars": 220,
+    },
+    "TextCondition": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": False,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 12,
+        "targets_limit": 8,
+        "entities_limit": 10,
+        "max_text_chars": 220,
+    },
+    "KnowledgeLibrarian": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 8,
+        "targets_limit": 6,
+        "entities_limit": 8,
+        "visual_entities_limit": 8,
+        "visual_relations_limit": 8,
+        "max_text_chars": 220,
+    },
+    "PTKFoundationCritic": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 8,
+        "targets_limit": 6,
+        "entities_limit": 8,
+        "visual_entities_limit": 8,
+        "visual_relations_limit": 8,
+        "max_text_chars": 220,
+    },
+    "PTKFoundationPolish": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 8,
+        "targets_limit": 6,
+        "entities_limit": 8,
+        "visual_entities_limit": 8,
+        "visual_relations_limit": 8,
+        "max_text_chars": 220,
+    },
+    "ClaimExtraction": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 8,
+        "targets_limit": 6,
+        "entities_limit": 8,
+        "visual_entities_limit": 8,
+        "visual_relations_limit": 8,
+        "max_text_chars": 220,
+    },
+    "ClaimVerify": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 6,
+        "targets_limit": 4,
+        "entities_limit": 6,
+        "visual_entities_limit": 6,
+        "visual_relations_limit": 6,
+        "max_text_chars": 180,
+    },
+    "ClaimPolish": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 6,
+        "targets_limit": 4,
+        "entities_limit": 6,
+        "visual_entities_limit": 6,
+        "visual_relations_limit": 6,
+        "max_text_chars": 180,
+    },
+    "FinalCoTValidation": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 6,
+        "targets_limit": 4,
+        "entities_limit": 6,
+        "visual_entities_limit": 6,
+        "visual_relations_limit": 6,
+        "max_text_chars": 180,
+    },
+    "ClaimSetValidation": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 6,
+        "targets_limit": 4,
+        "entities_limit": 6,
+        "visual_entities_limit": 6,
+        "visual_relations_limit": 6,
+        "max_text_chars": 180,
+    },
+    "NodeSetValidation": {
+        "include_text": True,
+        "include_targets": True,
+        "include_entities": True,
+        "include_visual": True,
+        "include_upstream_nodes": False,
+        "text_segments_limit": 6,
+        "targets_limit": 4,
+        "entities_limit": 6,
+        "visual_entities_limit": 6,
+        "visual_relations_limit": 6,
+        "max_text_chars": 180,
+    },
+}
+
+
+def _ready_context_profile(component_name: str) -> Dict[str, Any]:
+    return {**_READY_CONTEXT_PROFILES["default"], **_READY_CONTEXT_PROFILES.get(component_name, {})}
+
+
+def _truncate_ready_value(value: Any, max_text_chars: int) -> Any:
+    if isinstance(value, str):
+        text = normalize_whitespace(value)
+        if len(text) <= max_text_chars:
+            return text
+        return text[: max(0, max_text_chars - 1)].rstrip() + "…"
+    if isinstance(value, list):
+        return [_truncate_ready_value(item, max_text_chars) for item in value]
+    if isinstance(value, dict):
+        output: Dict[str, Any] = {}
+        for key, item in value.items():
+            normalized = _truncate_ready_value(item, max_text_chars)
+            if normalized in (None, "", [], {}):
+                continue
+            output[str(key)] = normalized
+        return output
+    return value
+
+
+def _truncate_ready_list(items: Sequence[Any], limit: int, max_text_chars: int) -> List[Any]:
+    output: List[Any] = []
+    for item in list(items)[: max(0, limit)]:
+        normalized = _truncate_ready_value(item, max_text_chars)
+        if normalized in (None, "", [], {}):
+            continue
+        output.append(normalized)
+    return output
+
+
 def _call_router(
     router: ModelRouter,
     system_prompt: str,
@@ -309,6 +498,8 @@ def _ensure_problem_minimum(problem: Dict[str, Any], component_name: str) -> Non
 
 def _build_ready_context_summary(problem: Dict[str, Any], component_name: str) -> Dict[str, Any]:
     sample_record = problem.get("sample_record") or {}
+    profile = _ready_context_profile(component_name)
+    max_text_chars = int(profile.get("max_text_chars", 220))
     summary: Dict[str, Any] = {
         "dataset_name": problem.get("dataset_name", ""),
         "subject": problem.get("subject", ""),
@@ -316,38 +507,81 @@ def _build_ready_context_summary(problem: Dict[str, Any], component_name: str) -
         "solvability_score": safe_float(problem.get("solvability_score"), 0.0),
         "question_type": (problem.get("metadata") or {}).get("question_type"),
         "multi_solution_policy": (problem.get("metadata") or {}).get("multi_solution_policy"),
+        "context_profile": component_name,
     }
 
     text_records = sample_record.get("text_structure_records") or []
     if text_records and isinstance(text_records[0], dict):
         first = text_records[0]
-        summary["text_segments"] = (first.get("text_segments") or [])[:16]
-        summary["targets"] = (first.get("targets") or [])[:8]
-        summary["entities"] = (first.get("entities") or [])[:12]
+        if profile.get("include_text"):
+            text_segments = _truncate_ready_list(
+                first.get("text_segments") or [],
+                int(profile.get("text_segments_limit", 8)),
+                max_text_chars,
+            )
+            if text_segments:
+                summary["text_segments"] = text_segments
+        if profile.get("include_targets"):
+            targets = _truncate_ready_list(
+                first.get("targets") or [],
+                int(profile.get("targets_limit", 6)),
+                max_text_chars,
+            )
+            if targets:
+                summary["targets"] = targets
+        if profile.get("include_entities"):
+            entities = _truncate_ready_list(
+                first.get("entities") or [],
+                int(profile.get("entities_limit", 8)),
+                max_text_chars,
+            )
+            if entities:
+                summary["entities"] = entities
 
     if problem.get("requires_image"):
         visual_records = sample_record.get("visual_structure_records") or []
         if not visual_records or not isinstance(visual_records[0], dict):
             raise _data_error(component_name, "Problem requires image grounding but ready sample is missing `visual_structure_records`.")
         first_visual = visual_records[0]
-        summary["visual_global_attributes"] = first_visual.get("global_attributes") or {}
-        summary["visual_entities"] = (first_visual.get("visual_entities") or [])[:20]
-        summary["visual_relations"] = (first_visual.get("visual_relations") or [])[:20]
+        if profile.get("include_visual"):
+            global_attributes = _truncate_ready_value(first_visual.get("global_attributes") or {}, max_text_chars)
+            if global_attributes:
+                summary["visual_global_attributes"] = global_attributes
+            visual_entities = _truncate_ready_list(
+                first_visual.get("visual_entities") or [],
+                int(profile.get("visual_entities_limit", 10)),
+                max_text_chars,
+            )
+            if visual_entities:
+                summary["visual_entities"] = visual_entities
+            visual_relations = _truncate_ready_list(
+                first_visual.get("visual_relations") or [],
+                int(profile.get("visual_relations_limit", 10)),
+                max_text_chars,
+            )
+            if visual_relations:
+                summary["visual_relations"] = visual_relations
 
     node_records = sample_record.get("node_records") or []
-    if node_records:
-        summary["upstream_nodes"] = [
-            {
-                "node_id": item.get("node_id"),
-                "node_type": item.get("node_type"),
-                "canonical_value": item.get("canonical_value"),
-                "source_refs": item.get("source_refs", []),
-            }
-            for item in node_records[:20]
-            if isinstance(item, dict)
-        ]
+    if node_records and profile.get("include_upstream_nodes"):
+        upstream_nodes = _truncate_ready_list(
+            [
+                {
+                    "node_id": item.get("node_id"),
+                    "node_type": item.get("node_type"),
+                    "canonical_value": item.get("canonical_value"),
+                    "source_refs": item.get("source_refs", []),
+                }
+                for item in node_records
+                if isinstance(item, dict)
+            ],
+            int(profile.get("upstream_nodes_limit", 6)),
+            max_text_chars,
+        )
+        if upstream_nodes:
+            summary["upstream_nodes"] = upstream_nodes
 
-    return summary
+    return {key: value for key, value in summary.items() if value not in (None, "", [], {})}
 
 
 def _augment_prompt_with_ready_context(problem: Dict[str, Any], base_prompt: str, component_name: str) -> str:
@@ -358,12 +592,12 @@ def _augment_prompt_with_ready_context(problem: Dict[str, Any], base_prompt: str
             "\n\nATTACHED IMAGE REQUIREMENT:\n"
             "This is an image-grounded problem. Images are attached to this request. "
             "Inspect the attached image(s) directly and ground every visual or structural claim in them; "
-            "do not rely only on the structured context summary."
+            "do not rely only on the compact structured context summary."
         )
     return (
         base_prompt
         + image_requirement
-        + "\n\nREADY STRUCTURED CONTEXT (trusted upstream normalized extraction; use this as the authoritative multimodal grounding context):\n"
+        + "\n\nREADY STRUCTURED CONTEXT (compact trusted upstream summary; use it as grounding support, not as a substitute for the attached image when images are present):\n"
         + json.dumps(summary, ensure_ascii=False, indent=2)
     )
 
