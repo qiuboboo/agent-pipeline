@@ -300,8 +300,12 @@ PERCEPTION_EXTRACTION_SYSTEM_PROMPT = dedent(
     ## RULES
     1. Do not infer hidden conclusions.
     2. Only describe entities, labels, positions, shapes, trends, and visible relations.
-    3. If a fact is uncertain, mark it as uncertain instead of overclaiming.
-    4. Output valid JSON only.
+    3. For symbols, labels, legends, axis text, circuit/component markings, geometry point names, subscripts, superscripts, Greek letters, operators, and units, preserve the visible string as faithfully as possible instead of paraphrasing, normalizing, translating, or “cleaning up” it.
+    4. If an exact symbol or label is unclear, say it is visually unclear in `fact_text` rather than guessing a plausible normalized form.
+    5. Do not move text-explicit givens, targets, or constraints from the question text into `p_facts`; keep `p_facts` limited to what is visibly present in the image.
+    6. Do not convert a visible label into an interpreted meaning unless that meaning is itself explicitly shown in the image.
+    7. If a fact is uncertain, mark it as uncertain instead of overclaiming.
+    8. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -388,31 +392,20 @@ CLAIM_EXTRACTION_SYSTEM_PROMPT = dedent(
     You are a Claim Extraction Agent.
 
     ## TASK
-    Convert a verified reasoning trace into the smallest sufficient sequence of verifiable claims, prioritizing correctness and support completeness over brevity.
+    Convert a verified reasoning trace into an ordered list of atomic, verifiable claims.
 
     ## RULES
-    1. Each claim should represent one atomic reasoning step.
-    2. Tag the type of each claim.
-    3. Explicitly mark dependencies.
-    4. Prefer under-splitting only when the step is truly indivisible.
-    4a. When brevity conflicts with accuracy or support completeness, prefer more claims.
-    5. Preserve the original reasoning order.
-    6. If one sentence contains a short local micro-chain, split it into separate claims when the substeps are independently verifiable. Typical examples include: identifying what stays constant vs. deriving an implicant, establishing coverage vs. concluding minimality, observing a mismatch vs. concluding a larger grouping is impossible, OR-ing selected implicants vs. asserting that the result is minimal, showing that enlargement fails by columns vs. showing that enlargement fails by rows, or listing several constant or varying variables in one sentence before deriving an implicant.
-    7. Treat cross-object or cross-region summaries as non-atomic unless the merged statement is itself the smallest checkable unit. For example, do not write one perception claim that says "on both planes" or "in both figures" when each plane or figure can be checked separately; instead emit one claim per plane or figure. Likewise, do not merge plane-local counts into a single total-count claim when the per-plane counts can be checked separately; emit plane-local count claims first, then a short total-count claim if needed.
-    8. You may add the smallest possible bridge claims only when they are directly supported by the verified CoT plus the PTK foundation and are necessary to make a later claim verifiable. Treat such bridge claims as a local unpacking of the same reasoning step, not as a new reasoning route.
-    9. When the final answer explicitly claims a property such as minimum, minimal, optimal, shortest, largest, or unique, add only the shortest grounded support chain needed to justify that property if it is directly grounded in the image/PTK foundation and consistent with the verified CoT.
-    10. After the two main implicants or analogous terminal derivation claims are established, place the synthesis claim immediately or nearly immediately next. Only then add a very short local bridge for the final property claim if needed.
-    11. For a post-synthesis minimality bridge, keep it short but complete. A typical acceptable pattern is: one claim that the selected X=0 group covers all 1-cells on the X=0 plane, one claim that the selected X=1 group covers all 1-cells on the X=1 plane, separate X=0 and X=1 across-plane non-extension claims only if needed, and one brief minimum-cover conclusion tied specifically to those groups.
-    12. Keep post-synthesis bridge claims plane-local and group-local. Do not write one claim that summarizes coverage on both planes, and do not write one claim that says both groups cannot extend across X; split those into separate X=0 and X=1 claims.
-    13. Do not mix plane-local counting facts with coverage facts in the same claim. For example, do not write one claim that says a plane has four 1-cells and that a selected group covers those four 1-cells; split count from coverage, or omit the count if it is unnecessary.
-    14. In group-analysis steps, keep one variable fact per claim when those facts are independently checkable. For example, emit separate claims for `Q=0`, `S=1`, and `X=0`, and separate claims for `P varies` and `R varies`, before the implicant-extraction claim.
-    15. If a grouping claim relies on wrap-around between the first and last row or column, make its dependencies explicitly include the relevant header-order claim or a narrow bridge claim establishing that those labels are the first and last positions on that plane.
-    16. `depends_on` may reference only earlier claim IDs from this output sequence, such as `c1` or `c7`. Do not put `p_facts`, `t_facts`, or `k_atoms` identifiers such as `p3`, `t2`, or `k5` inside `depends_on`; mention those only in `evidence_hint` or encode their use as a `knowledge_call` claim that later claims can depend on.
-    17. When a bridge claim is needed, place it immediately before the claim it justifies and keep it narrowly scoped. Do not add a separate optimization proof, alternative solution path, or summary chain that goes beyond what the CoT already states or directly implies.
-    18. If the verified CoT solves by direct variable elimination or plane-local activation-pattern reading, keep that route. Do not rewrite it into a K-map grouping proof, wrap-around proof, maximality proof, or across-X non-extension proof unless those steps already appear explicitly in the verified CoT.
-    19. For variable-elimination traces, prefer a route like: plane-local activation-pattern claim, split constant/varying variable-status claims, implicant claim, synthesis, and only the shortest local support for a final property word if needed.
-    20. For post-synthesis minimum support on variable-elimination traces, prefer the shortest literal-conflict or plane-local necessity bridge over a long contradiction proof. For example, if one plane-local cover requires `X'` and another requires `X`, prefer the short conclusion that no single product term can cover both, then conclude that at least two terms are required. Do not expand this into a longer `constant-1`, global contradiction, or all-zero-cells proof unless the verified CoT explicitly uses that route.
-    21. Output valid JSON only.
+    1. Preserve the verified reasoning route and original order.
+    2. Each claim must be atomic and independently checkable.
+    3. Tag the type of each claim and mark dependencies explicitly.
+    4. Split independently checkable substeps: cross-plane summaries, synthesis vs minimality, row-vs-column enlargement failure, plane-local vs global counting, and bundled variable-status facts.
+    5. Add a bridge claim only when it is the smallest local support needed for a later claim, and place it immediately before that claim.
+    6. Keep `depends_on` limited to earlier claim IDs from the same output sequence; never place raw `p#`, `t#`, or `k#` identifiers there.
+    7. If wrap-around adjacency is used, include explicit support for the needed header-order or edge-adjacency fact.
+    8. If the final answer uses a property word such as `minimum` or `optimal`, include only the shortest grounded support chain needed for that property.
+    9. Keep synthesis immediately before the final answer; any post-synthesis minimality support should stay short and local.
+    10. For variable-elimination or plane-local activation-pattern traces, preserve that route and do not drift into unrelated grouping, wrap-around, across-X non-extension, or maximality proofs unless the verified trace already uses them.
+    11. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -430,6 +423,8 @@ CLAIM_EXTRACTION_SYSTEM_PROMPT = dedent(
 ).strip()
 
 
+
+
 PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT = dedent(
     """
     ## ROLE
@@ -441,17 +436,19 @@ PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT = dedent(
     ## RULES
     1. Check visual grounding against the image and the trusted ready context.
     2. `p_facts` must contain only objective visual facts, not reasoning conclusions.
-    3. `t_facts` must cover explicit givens, goals, constraints, and subquestions from the text, and each `fact_text` should stay as close as possible to verbatim wording from the question text rather than a paraphrase.
-    4. `t_facts` must not include image-derived map layouts, cell values, diagram structure, circuit connectivity, geometric relations, or other visual observations unless the same content is explicitly written in the text.
-    5. `k_atoms` must be reusable knowledge atoms, not solution-specific claims.
-    6. `k_atoms` should be minimal: flag duplicate, near-duplicate, or heavily overlapping rules and ask for merge/pruning when needed.
-    7. For K-map / Karnaugh-map problems, treat cross-plane adjacency as essential coverage when the map is split across variable planes. For a 5-variable K-map shown as two 4x4 maps, the foundation is incomplete unless it states that corresponding cells across the two planes are adjacent because they differ only in the split variable.
-    8. Flag unsupported facts, missing essentials, duplicated content, over-specific knowledge, and `t_facts` that drift away from the original wording.
-    9. Prefer revision-oriented feedback over hard blocking: if the foundation is broadly usable but too verbose, duplicated, or not minimal, give concrete trim/rewrite instructions so the polish step can fix it.
-    10. When revision is needed, explicitly name which section(s) must change: `p_facts`, `t_facts`, and/or `k_atoms`.
-    11. Use `pass=false` only when a real blocking issue remains (for example unsupported visual facts, materially missing text conditions/goals, or solution-specific knowledge that would corrupt downstream extraction). Do not fail solely because `t_facts` need trimming, deduplication, or more verbatim wording.
-    12. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
-    13. Output valid JSON only.
+    3. For symbols, labels, legends, axis text, circuit/component markings, geometry point names, subscripts, superscripts, Greek letters, operators, and units, `p_facts` should preserve the visible string as faithfully as possible instead of paraphrasing, normalizing, or repairing it into a guessed canonical form.
+    4. Flag `p_facts` that contain guessed symbol normalization, mojibake-like corruption, interpreted meaning that is not explicitly shown, or text-explicit givens/constraints that belong in `t_facts` rather than `p_facts`.
+    5. `t_facts` must cover explicit givens, goals, constraints, and subquestions from the text, and each `fact_text` should stay as close as possible to verbatim wording from the question text rather than a paraphrase.
+    6. `t_facts` must not include image-derived map layouts, cell values, diagram structure, circuit connectivity, geometric relations, or other visual observations unless the same content is explicitly written in the text.
+    7. `k_atoms` must be reusable knowledge atoms, not solution-specific claims.
+    8. `k_atoms` should be minimal: flag duplicate, near-duplicate, or heavily overlapping rules and ask for merge/pruning when needed.
+    9. For K-map / Karnaugh-map problems, treat cross-plane adjacency as essential coverage when the map is split across variable planes. For a 5-variable K-map shown as two 4x4 maps, the foundation is incomplete unless it states that corresponding cells across the two planes are adjacent because they differ only in the split variable.
+    10. Flag unsupported facts, missing essentials, duplicated content, over-specific knowledge, and `t_facts` that drift away from the original wording.
+    11. Prefer revision-oriented feedback over hard blocking: if the foundation is broadly usable but too verbose, duplicated, or not minimal, give concrete trim/rewrite instructions so the polish step can fix it.
+    12. When revision is needed, explicitly name which section(s) must change: `p_facts`, `t_facts`, and/or `k_atoms`.
+    13. Use `pass=false` when blocking issues remain, including unsupported visual facts, materially missing text conditions/goals, solution-specific knowledge that would corrupt downstream extraction, or visibly corrupted / guessed symbol strings inside critical `p_facts`.
+    14. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
+    15. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -478,9 +475,12 @@ PTK_P_FACTS_POLISH_SYSTEM_PROMPT = dedent(
     2. Preserve valid items when possible.
     3. Add missing grounded visual facts and remove unsupported, duplicated, or interpretive items.
     4. `p_facts` must stay objective and image-grounded.
-    5. Keep IDs stable when practical, but correctness is more important than ID continuity.
-    6. Return a non-empty `p_facts` list.
-    7. Output valid JSON only.
+    5. Preserve visible symbol strings, labels, legends, point names, subscripts, superscripts, Greek letters, operators, and units as faithfully as possible instead of paraphrasing, normalizing, or repairing them into guessed canonical text.
+    6. If a symbol or label is visually ambiguous, explicitly mark the ambiguity in `fact_text` rather than guessing.
+    7. Do not let `p_facts` absorb text-explicit givens, targets, or constraints that belong in `t_facts`.
+    8. Keep IDs stable when practical, but correctness is more important than ID continuity.
+    9. Return a non-empty `p_facts` list.
+    10. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -629,28 +629,103 @@ CLAIM_VERIFY_SYSTEM_PROMPT = dedent(
     3. Dependencies must only point to earlier claims and must be sufficient.
     4. Do not allow unsupported visual claims or missing bridge claims.
     5. The final answer claim must be explicit.
-    6. Treat a narrowly scoped bridge claim as order-consistent when it only unpacks support that is already explicit or directly implied by an adjacent CoT step and is inserted immediately before the claim it justifies. Do not treat that local unpacking as a reasoning-route change.
-    7. For final-answer properties such as minimum, minimal, optimal, shortest, largest, or unique, prefer sufficient support over aggressive compression. Do not fail a claim sequence merely because it adds a short, grounded support chain immediately before the final answer to justify that property.
-    8. Prefer the shortest adequate support chain. If synthesis of the derived terms is already available, do not require a long counting, lower-bound, or alternate optimality proof when a shorter local bridge is sufficient.
-    9. Flag bridge claims when they are too coarse, drift into a new proof path, or extend beyond the support needed for the dependent claim.
-    9. If a claim mixes multiple substeps that can be checked independently, require them to be split even when the CoT states them in one sentence.
-    10. Also split cross-object summaries when each object can be checked separately. For example, a claim about headers "on both planes" should usually be two claims, one per plane.
-    11. Also split synthesis from optimality. A claim that ORs selected implicants into an expression should be separate from a claim that the expression is minimal, unless the minimality statement is already fully supported and indivisible in context.
-    12. Also split distinct failure modes of enlargement or invalidity. For example, "cannot enlarge by adding columns" and "cannot enlarge by adding rows" should usually be separate claims, followed by a short conclusion that no larger same-plane group exists.
-    13. Also split plane-local counts from global counts. For example, "the X=0 plane has four 1-cells", "the X=1 plane has four 1-cells", and "therefore the full map has eight 1-cells" should usually be three claims.
-    14. If a final answer includes a property word like "minimum", do not require that property to be supported by the synthesis claim alone; accept a short, adjacent support chain grounded in plane-local coverage and PTK rules.
-    15. If the verified CoT goes from the final derived terms directly to the answer, expect synthesis to appear immediately or nearly immediately after those terms. Any additional minimality bridge should be very short and should sit between synthesis and the final-answer claim, not replace synthesis or delay it by a long proof block.
-    16. For a post-synthesis minimality bridge, prefer a short local block rather than a long alternate proof. A typical acceptable pattern is: the selected X=0 group covers all 1-cells on X=0; the selected X=1 group covers all 1-cells on X=1; if still needed, add separate X=0 and X=1 non-extension claims; then add one brief minimum-cover conclusion grounded in the local support and `k5`.
-    17. Also reject claims that mix plane-local counting with coverage in one statement when those facts are independently checkable.
-    18. Also reject post-synthesis summary claims that merge both planes or both groups into one statement, such as one cross-plane coverage claim or one combined across-X non-extension claim.
-    19. In group-analysis steps, also reject bundled variable-status claims when separate constant facts or varying facts can be checked independently. For example, `Q=0, S=1, X=0` should usually be three claims, and `P varies, R varies` should usually be two claims, before the implicant claim.
-    20. If a grouping claim uses wrap-around adjacency between the first and last row or column, require it to depend on the relevant header-order claim or an explicit local bridge establishing that edge adjacency.
-    21. When the verified CoT is a direct variable-elimination or plane-local activation-pattern route, reject repairs that drift into a grouping/maximality proof path. In that case, prefer bridge claims that restate the plane-local activation pattern, the constant/varying variable facts, and the shortest synthesis-adjacent support chain needed for any final property word.
-    22. For variable-elimination traces, also reject post-synthesis minimum bridges that expand into a long `constant-1` contradiction, global zero-cell contradiction, or other multi-step alternate proof when a shorter plane-local necessity bridge is sufficient. Prefer a short pattern like: left-plane cover requires `X'`; right-plane cover requires `X`; therefore one term cannot cover both; therefore at least two terms are required.
-    23. When a post-synthesis bridge needs zero-cell support for a non-extension claim, prefer to recreate or restate that zero support immediately before the bridge instead of depending on distant earlier claims.
-    24. If it fails, provide concrete rewrite instructions.
-    25. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
-    26. Output valid JSON only.
+    6. If it fails, provide concrete rewrite instructions.
+    7. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
+    8. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "pass": true,
+      "critical_issues": ["..."],
+      "revision_instructions": "...",
+      "atomicity_score": 0.0,
+      "dependency_score": 0.0,
+      "grounding_score": 0.0
+    }
+    """
+).strip()
+
+
+CLAIM_VERIFY_STRUCTURE_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a Claim Verification Critic focused on claim structure.
+
+    ## TASK
+    Audit only claim atomicity, ordering, and dependency correctness.
+
+    ## RULES
+    1. Every claim must be atomic and independently checkable.
+    2. The ordered claim list must follow the reasoning order in the verified CoT.
+    3. Dependencies must point only to earlier claims in the same claim list and must be sufficient.
+    4. Split cross-plane summaries, synthesis-vs-minimality, row-vs-column enlargement failure, and plane-local-vs-global counting when those parts are independently checkable.
+    5. Keep bridge claims minimal, local, and immediately before the claim they support.
+    6. The final answer claim must be explicit.
+    7. If it fails, provide concrete rewrite instructions.
+    8. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
+    9. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "pass": true,
+      "critical_issues": ["..."],
+      "revision_instructions": "...",
+      "atomicity_score": 0.0,
+      "dependency_score": 0.0,
+      "grounding_score": 0.0
+    }
+    """
+).strip()
+
+
+CLAIM_VERIFY_GROUNDING_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a Claim Verification Critic focused on grounding.
+
+    ## TASK
+    Audit only whether the claim sequence is grounded by the verified CoT plus the PTK foundation.
+
+    ## RULES
+    1. Reject unsupported visual claims, unsupported text-condition claims, and unsupported knowledge-use claims.
+    2. If wrap-around adjacency is used, require explicit support for the needed header-order or edge-adjacency fact.
+    3. For final-answer properties such as minimum or optimal, require the shortest grounded support chain needed for that property.
+    4. Prefer the shortest adequate support chain; reject long alternate contradiction chains unless the verified CoT explicitly uses them.
+    5. For variable-elimination or plane-local activation-pattern traces, preserve that route and reject drift into unrelated grouping or maximality proofs.
+    6. If it fails, provide concrete rewrite instructions.
+    7. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
+    8. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "pass": true,
+      "critical_issues": ["..."],
+      "revision_instructions": "...",
+      "atomicity_score": 0.0,
+      "dependency_score": 0.0,
+      "grounding_score": 0.0
+    }
+    """
+).strip()
+
+
+CLAIM_VERIFY_GLOBAL_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a Claim Verification Critic focused on sequence-level consistency.
+
+    ## TASK
+    Run a light global audit of the claim sequence against the verified CoT.
+
+    ## RULES
+    1. Check that the ordered claim list still follows the verified CoT at a global level.
+    2. Check that synthesis appears near the end and that the final-answer claim is explicit.
+    3. Check that any post-synthesis minimality support stays short and local.
+    4. Approve short local bridge claims when they only unpack adjacent support already present in the verified trace.
+    5. Report only sequence-level issues not already covered by local claim checks.
+    6. If it fails, provide concrete rewrite instructions.
+    7. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
+    8. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -674,28 +749,19 @@ CLAIM_POLISH_SYSTEM_PROMPT = dedent(
     Revise the current claim sequence according to the critic feedback while preserving the verified reasoning route.
 
     ## RULES
-    1. Keep claims minimal but sufficient, but prioritize correctness and support completeness over brevity.
-    2. Preserve the original reasoning order when correct; otherwise fix the order explicitly.
-    3. Fix dependency fields explicitly.
+    1. Keep claims minimal but sufficient; prioritize correctness and support completeness over brevity.
+    2. Preserve the verified reasoning route and original order when correct; otherwise fix order explicitly.
+    3. Fix `depends_on` explicitly and keep it limited to earlier claim IDs in the same output sequence.
     4. Remove unsupported claims and add missing bridge claims only when justified by the verified CoT and PTK foundation.
-    5. When a compound claim contains independently checkable substeps, split it into smaller claims instead of rewriting it as one broad summary.
-    6. Split cross-object summaries when each object can be checked separately; for example, replace "on both planes" with one claim for the X=0 plane and one claim for the X=1 plane.
-    7. Split synthesis from minimality; for example, OR-ing the selected implicants into an expression should usually be a different claim from asserting that the expression is minimal.
-    8. Split distinct enlargement-failure modes into separate claims; for example, failure by adding columns and failure by adding rows should usually be two claims before concluding that no larger same-plane group exists.
-    9. Split plane-local counts from global counts; for example, count 1-cells on each plane first and only then derive the total count if it is needed.
-    10. When the final answer claims a property like minimum or optimal, prefer adding the smallest grounded support chain for that property over leaving the final answer under-justified.
-    11. After the final derived terms are available, move synthesis to immediately or nearly immediately before the final answer. If a minimality bridge is needed, keep it extremely short and place it between synthesis and the final answer rather than inserting a long proof block earlier.
-    12. Keep a post-synthesis minimality bridge short and local. Prefer a pattern like: the selected X=0 group covers all 1-cells on X=0; the selected X=1 group covers all 1-cells on X=1; if still needed, add separate X=0 and X=1 non-extension claims; then add one brief minimum-cover conclusion.
-    13. Keep post-synthesis bridge claims plane-local and group-local. Do not merge both planes into one coverage claim, and do not merge both groups into one across-X non-extension claim.
-    14. Do not mix plane-local counting with coverage in one claim. Split those facts, or drop the count if it is not needed.
-    15. In group-analysis steps, keep one variable-status fact per claim when possible. Split bundled constants like `Q=0, S=1, X=0` into separate claims, and split bundled varying facts like `P varies, R varies` into separate claims, before deriving the implicant.
-    16. If a grouping claim uses wrap-around adjacency between the first and last row or column, make it depend on the relevant header-order claim or a local bridge proving that edge adjacency on that plane.
-    17. When a bridge claim is needed, keep it as the smallest local unpacking that supports the next claim, place it immediately before that claim, and avoid introducing an alternative proof route. If a post-synthesis non-extension claim needs zero-cell support, recreate that support locally near the bridge instead of relying on distant earlier claims.
-    18. If the verified CoT is a variable-elimination or plane-local activation-pattern trace, preserve that route during polishing. Do not rewrite it into a grouping, wrap-around, across-X non-extension, or maximality proof unless those steps are already explicit in the verified CoT.
-    19. For variable-elimination traces, prefer a repair shape like: plane-local activation-pattern claim, split constant/varying variable-status claims, implicant claim, synthesis, and only the shortest local support for a final property word if needed.
-    20. For post-synthesis minimum support on variable-elimination traces, prefer the shortest literal-conflict or plane-local necessity bridge over a long contradiction proof. For example, if one plane-local cover requires `X'` and another requires `X`, prefer the short conclusion that no single product term can cover both, then conclude that at least two terms are required. Do not expand this into a longer `constant-1`, global contradiction, or all-zero-cells proof unless the verified CoT explicitly uses that route.
-    21. Keep claim types semantically correct.
-    22. Output valid JSON only.
+    5. Split independently checkable substeps: cross-plane summaries, synthesis vs minimality, row-vs-column enlargement failure, and plane-local vs global counting.
+    6. Keep bridge claims minimal, local, and immediately before the claim they support.
+    7. If the final answer claims a property like `minimum` or `optimal`, add only the shortest grounded support chain needed for that property.
+    8. Keep synthesis immediately before the final answer; any post-synthesis minimality support should stay short and local.
+    9. If wrap-around adjacency is used, include explicit dependency support for the needed header-order or edge-adjacency fact.
+    10. For variable-elimination or plane-local activation-pattern traces, preserve that route and avoid drifting into unrelated grouping, wrap-around, across-X non-extension, or maximality proofs unless the verified CoT already uses them.
+    11. Prefer short plane-local necessity bridges over long contradiction chains unless the verified CoT explicitly requires the longer route.
+    12. Keep claim types semantically correct.
+    13. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -1035,6 +1101,9 @@ def build_perception_user_prompt(problem: Dict[str, Any]) -> str:
         {_problem_header(problem)}
 
         Extract objective visual facts relevant to solving this problem.
+        Preserve visible labels and symbol strings as faithfully as possible.
+        Do not paraphrase, translate, normalize, or guess unclear labels; mark them as visually unclear instead.
+        Do not move text-explicit givens or constraints into `p_facts`.
         """
     ).strip()
 
@@ -1149,6 +1218,9 @@ def build_ptk_p_facts_polish_user_prompt(
         {normalize_whitespace(revision_instructions)}
 
         Revise only `p_facts` and keep the rest of the PTK foundation unchanged.
+        Preserve visible labels and symbol strings as faithfully as possible.
+        Remove guessed normalizations, interpreted meanings, and text-only givens that leaked into `p_facts`.
+        If a critical symbol is visually ambiguous, say so explicitly instead of guessing.
         """
     ).strip()
 
@@ -1246,27 +1318,122 @@ def build_claim_verify_user_prompt(
         K Atoms:
         {to_plain_text(list(k_atoms))}
 
-        For ordering judgments, allow narrowly scoped bridge claims only when they merely unpack support that is already explicit or directly implied by the verified trace and PTK foundation. Such bridge claims should appear immediately before the claim they justify.
-
-        Treat any `depends_on` entry that references `p#`, `t#`, `k#`, or any identifier outside the claim sequence as invalid. Dependencies must point only to earlier claim IDs in the current claim list.
-
-        Enforce fine atomicity: split cross-plane summaries when each plane can be checked separately, split expression synthesis from minimality when they are independently checkable, split enlargement failure by columns vs. rows, split plane-local counts from global counts, and split bundled variable-status facts into one fact per claim when they can be checked independently.
-
-        If a grouping claim uses wrap-around adjacency between the first and last row or column, require it to depend on the corresponding header-order claim or a narrow bridge that establishes that edge adjacency.
-
-        If the final answer contains a property word such as minimum or optimal, prefer a short grounded support chain immediately before the final answer over leaving that property unsupported.
-
-        Keep synthesis near the end of the trace: once the final derived terms are available, synthesis should come immediately or nearly immediately next, and any minimality bridge should be a short local block placed between synthesis and the final answer.
-
-        Treat a post-synthesis minimality bridge as acceptable when it stays local and specific: plane-local coverage claims, separate plane-local non-extension claims only if needed, and one brief minimum-cover conclusion. Reject claims that mix plane-local counting with coverage in a single statement when those facts can be checked separately, and reject summary claims that merge both planes or both groups into one post-synthesis bridge claim.
-
-        Prefer any zero-cell support used by post-synthesis non-extension claims to appear locally near that bridge instead of being pulled from much earlier in the sequence.
-
-        If the verified CoT uses direct variable elimination or plane-local activation-pattern reading, do not approve a repaired claim sequence that drifts into a grouping/maximality proof path. In that case, prefer plane-local activation-pattern claims, split constant/varying variable facts, implicant claims, synthesis, and only the shortest local support needed for a final property word such as `minimum`.
-
-        For variable-elimination traces, also reject post-synthesis minimum bridges that expand into a long `constant-1` contradiction, global zero-cell contradiction, or other multi-step alternate proof when a shorter plane-local necessity bridge is sufficient. Prefer a short pattern like: left-plane cover requires `X'`; right-plane cover requires `X`; therefore one term cannot cover both; therefore at least two terms are required.
-
         Audit whether this claim sequence is ready for node induction.
+
+        Key audit rules:
+        1. Dependencies may point only to earlier claim IDs in this same claim list. Any `depends_on` reference to `p#`, `t#`, `k#`, or an out-of-list ID is invalid.
+        2. Enforce fine atomicity: split independently checkable facts, split cross-plane summaries by plane, split synthesis from minimality, split row-vs-column enlargement failures, and split plane-local counts from global counts.
+        3. Allow a bridge claim only when it is the smallest local support needed for the next claim, and place it immediately before that claim.
+        4. If wrap-around adjacency is used, require explicit support for that edge-adjacency/header-order fact.
+        5. Keep synthesis at the end: once final derived terms are available, synthesis should come immediately or nearly immediately next; any minimality support should be only a short local block between synthesis and the final answer.
+        6. If the final answer uses a property word such as `minimum` or `optimal`, require the shortest grounded support chain needed for that property.
+        7. For variable-elimination / plane-local activation-pattern traces, preserve that route. Reject repaired sequences that drift into grouping/maximality proofs not already present in the verified CoT.
+        8. For post-synthesis minimum support on such traces, prefer a short plane-local necessity bridge over a long contradiction chain.
+        """
+    ).strip()
+
+
+def build_claim_structure_verify_user_prompt(
+    problem: Dict[str, Any],
+    method: Dict[str, Any],
+    cot_text: str,
+    claims: Sequence[Dict[str, Any]],
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Method Draft:
+        {normalize_whitespace(method.get('method_draft', ''))}
+
+        Verified Reasoning Trace:
+        {normalize_whitespace(cot_text)}
+
+        Current Claims:
+        {to_plain_text(list(claims))}
+
+        Run a structure-focused audit only.
+
+        Structure rules:
+        1. Every claim must be atomic and independently checkable.
+        2. `depends_on` may reference only earlier claim IDs from this same claim list.
+        3. Split cross-plane summaries by plane, synthesis from minimality, row-vs-column enlargement failure, and plane-local counts from global counts.
+        4. Keep bridge claims minimal, local, and immediately before the claim they support.
+        5. The final answer claim must be explicit.
+        """
+    ).strip()
+
+
+def build_claim_grounding_verify_user_prompt(
+    problem: Dict[str, Any],
+    method: Dict[str, Any],
+    cot_text: str,
+    claims: Sequence[Dict[str, Any]],
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Method Draft:
+        {normalize_whitespace(method.get('method_draft', ''))}
+
+        Verified Reasoning Trace:
+        {normalize_whitespace(cot_text)}
+
+        Current Claims:
+        {to_plain_text(list(claims))}
+
+        P Facts:
+        {to_plain_text(list(p_facts))}
+
+        T Facts:
+        {to_plain_text(list(t_facts))}
+
+        K Atoms:
+        {to_plain_text(list(k_atoms))}
+
+        Run a grounding-focused audit only.
+
+        Grounding rules:
+        1. Reject unsupported visual claims, unsupported text-condition claims, and unsupported knowledge-use claims.
+        2. If wrap-around adjacency is used, require explicit support for the needed header-order / edge-adjacency fact.
+        3. If the final answer uses `minimum` / `optimal`, require the shortest grounded support chain needed for that property.
+        4. For variable-elimination / plane-local activation-pattern traces, preserve that route and reject drift into unrelated grouping/maximality proofs.
+        5. Prefer short local support over long alternate contradiction chains unless the verified CoT explicitly uses the longer route.
+        """
+    ).strip()
+
+
+def build_claim_global_verify_user_prompt(
+    problem: Dict[str, Any],
+    method: Dict[str, Any],
+    cot_text: str,
+    claims: Sequence[Dict[str, Any]],
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Method Draft:
+        {normalize_whitespace(method.get('method_draft', ''))}
+
+        Verified Reasoning Trace:
+        {normalize_whitespace(cot_text)}
+
+        Current Claims:
+        {to_plain_text(list(claims))}
+
+        Run a light global audit only.
+
+        Global rules:
+        1. Check that the ordered claim list still follows the verified CoT.
+        2. Check that synthesis appears near the end and the final-answer claim is explicit.
+        3. Check that any post-synthesis minimality support stays short and local.
+        4. Approve short local bridge claims when they only unpack adjacent support already present in the verified trace.
+        5. Provide concise rewrite instructions only for sequence-level issues not already covered by local claim checks.
         """
     ).strip()
 
@@ -1345,9 +1512,17 @@ def build_claim_polish_user_prompt(
         K Atoms:
         {to_plain_text(list(k_atoms))}
 
-        When revising, split independently checkable substeps into separate claims. If a bridge claim is necessary, keep it narrowly scoped and place it immediately before the claim it supports. Also split cross-plane summaries into one claim per plane when possible, keep expression synthesis separate from minimality, split enlargement failure by columns vs. rows, split plane-local counts from global counts, and split bundled variable-status facts into one fact per claim when they can be checked independently. If the final answer includes a property word such as minimum or optimal, add the smallest grounded support chain needed for that property rather than leaving it implicit. Keep synthesis immediately or nearly immediately before the final answer, followed only by a short local minimality bridge. For that post-synthesis bridge, keep coverage and across-X non-extension plane-local, add separate X=0 and X=1 non-extension claims only if they are truly needed, include one brief minimum-cover conclusion, and recreate any needed zero-cell support locally near that bridge. If a grouping claim uses wrap-around adjacency, make sure the dependencies explicitly include the relevant header-order support. In `depends_on`, keep only earlier claim IDs from the current output sequence; move any raw `p#`, `t#`, or `k#` references into `evidence_hint` or into explicit supporting claims. If the verified CoT is a variable-elimination or plane-local activation-pattern trace, preserve that route during revision and do not drift into grouping, wrap-around, across-X non-extension, or maximality proofs unless those steps are already explicit in the CoT. For such traces, prefer a repair shape like: plane-local activation-pattern claim, split constant/varying variable facts, implicant claim, synthesis, and only the shortest local support needed for a final property word. Prefer a short plane-local necessity bridge such as `left-plane cover requires X'`, `right-plane cover requires X`, `therefore one term cannot cover both`, `therefore at least two terms are required` over a longer `constant-1` contradiction or global zero-cell contradiction chain unless the CoT explicitly uses that longer route.
-
         Rewrite the claim sequence accordingly.
+
+        Repair rules:
+        1. Split independently checkable substeps into separate claims.
+        2. Keep bridge claims minimal, local, and immediately before the claim they support.
+        3. Keep `depends_on` limited to earlier claim IDs from the current output sequence; move raw `p#`/`t#`/`k#` references into `evidence_hint` or explicit supporting claims.
+        4. Split cross-plane summaries by plane, synthesis from minimality, row-vs-column enlargement failure, and plane-local counts from global counts.
+        5. Keep synthesis immediately before the final answer, followed only by the shortest local support needed for any property word such as `minimum` or `optimal`.
+        6. If wrap-around adjacency is used, include explicit dependency support for the relevant header-order fact.
+        7. If the verified CoT is variable-elimination / plane-local activation-pattern based, preserve that route and do not drift into grouping/maximality proofs unless the CoT already uses them.
+        8. Prefer a short plane-local necessity bridge over a longer contradiction chain unless the CoT explicitly requires the longer route.
         """
     ).strip()
 
@@ -1363,7 +1538,18 @@ def build_claim_extraction_user_prompt(problem: Dict[str, Any], method: Dict[str
         Verified Reasoning Trace:
         {normalize_whitespace(cot_text)}
 
-        Convert the trace into atomic claims. Split independently checkable substeps when needed, split cross-plane summaries into one claim per plane when possible, keep expression synthesis separate from minimality, split enlargement failure by columns vs. rows, split plane-local counts from global counts, split bundled variable-status facts into one fact per claim when they can be checked independently, and only insert bridge claims when they are the smallest local support needed for a later claim. If the final answer uses a property word such as minimum or optimal, include the smallest grounded support chain needed for that property. Keep synthesis immediately or nearly immediately before the final answer, followed only by a short local minimality bridge. For that post-synthesis bridge, keep coverage and across-X non-extension plane-local, add separate X=0 and X=1 non-extension claims only if they are truly needed, include one brief minimum-cover conclusion, and recreate any needed zero-cell support locally near that bridge. If a grouping claim uses wrap-around adjacency, make sure the dependencies explicitly include the relevant header-order support. In `depends_on`, reference only earlier claim IDs from this same output sequence; never put raw `p#`, `t#`, or `k#` identifiers there. If the verified CoT is a variable-elimination or plane-local activation-pattern trace, preserve that route: prefer plane-local activation-pattern claims, split constant/varying variable facts, derive the implicants directly, put synthesis immediately after them, and do not introduce grouping, wrap-around, across-X non-extension, or maximality proofs unless the CoT itself already uses that route. For post-synthesis minimum support on such traces, prefer a short plane-local necessity bridge such as `left-plane cover requires X'`, `right-plane cover requires X`, `therefore one term cannot cover both`, `therefore at least two terms are required` over a longer `constant-1` contradiction or global zero-cell contradiction chain unless the CoT explicitly uses that longer route.
+        Convert the trace into atomic claims.
+
+        Extraction rules:
+        1. Split independently checkable substeps into separate claims.
+        2. Split cross-plane summaries by plane, synthesis from minimality, row-vs-column enlargement failure, and plane-local counts from global counts.
+        3. Insert bridge claims only when they are the smallest local support needed for a later claim.
+        4. If the final answer uses a property word such as `minimum` or `optimal`, include only the shortest grounded support chain needed for that property.
+        5. Keep synthesis immediately before the final answer; any minimality support should be a short local block.
+        6. If wrap-around adjacency is used, include explicit dependency support for the relevant header-order fact.
+        7. In `depends_on`, reference only earlier claim IDs from the same output sequence; never place raw `p#`, `t#`, or `k#` identifiers there.
+        8. If the verified CoT is variable-elimination / plane-local activation-pattern based, preserve that route and do not introduce grouping/maximality proofs unless the CoT already uses them.
+        9. For post-synthesis minimum support on such traces, prefer a short plane-local necessity bridge over a longer contradiction chain unless the CoT explicitly uses the longer route.
         """
     ).strip()
 

@@ -434,17 +434,33 @@
 也就是说：
 **system prompt 负责定义角色，user prompt builder 负责组织上下文。**
 
-### 当前的 prompt 瘦身策略
-当前实现已经开始避免把同一份大上下文无差别塞给所有 agent：
-- `agents.py` 中的 `READY STRUCTURED CONTEXT` 改成按 agent profile 做裁剪；
-- 不同 agent 会看到不同粒度的 `text_segments / targets / entities / visual_* / upstream_nodes`；
-- 长文本字段会做截断，减少无意义的 token 膨胀；
-- 图像题仍保留“必须直接看图、不要只依赖结构化摘要”的提示，避免瘦身后把 grounding 语义删坏。
+### claim 链路 prompt 瘦身（最新）
+当前已先做一轮低风险 claim prompt 瘦身，目标是在**不改变最终 JSON schema / 输出契约**的前提下，先降低 `ClaimExtraction` / `ClaimVerify` / `ClaimPolish` 的单次请求体积：
+- 把三者 user prompt 中超长的自然语言规则段改写成更短的 numbered rules，保留核心约束（原子性、局部 bridge、depends_on 只能指向 earlier claim IDs、wrap-around 支撑、synthesis 靠后、minimum/optimal 的最短局部支撑、变量消元路径保持等）；
+- 在 `annotation_modules.py` 中为 claim 侧新增 `_select_claim_context(...)`，对传入 prompt 的 `p_facts / t_facts / k_atoms` 做窄化；
+- `ClaimExtraction` 现在只拼接 compact PTK foundation（默认 `p/t/k` 各截到 8/8/8）；
+- `ClaimVerify` / `ClaimPolish` 当前默认只携带较窄的 PTK 子集（默认 `8/8/6`），避免把整份 PTK 无差别塞入 claim 审核/修补请求。
 
-这意味着同样是一道题：
-- `PerceptionExtraction` 更偏向看视觉摘要；
-- `TextCondition` 不再携带视觉结构块；
-- `ClaimSetValidation` / `NodeSetValidation` 只拿更紧凑的 ready summary。
+在此基础上，`ClaimVerify` 已进一步拆成**三段窄审计**，但仍复用原有的 `CLAIM_VERIFY_SYSTEM_PROMPT` 输出契约：
+- `ClaimVerifyStructure`：只看 claim 原子性、顺序、depends_on 合法性、bridge 局部性；
+- `ClaimVerifyGrounding`：只看 PTK / CoT grounding、wrap-around 支撑、minimum/optimal 的最短支撑链；
+- `ClaimVerifyGlobal`：只看轻量的全局顺序与 synthesis/answer 位置关系；
+- 三段结果会在代码里 merge，最终仍回收到原先 `pass / critical_issues / revision_instructions / atomicity_score / dependency_score / grounding_score` 这套字段上。
+
+这轮改动的定位是**先缩 payload、先降 429 风险**，同时把最肥的 claim verify 从“一坨全审计”改成“多段窄审计”；但还没有把 claim 主链路彻底改造成新的多 agent 协议。也就是说：
+- `extract -> verify -> polish` 仍然是同一闭环；
+- 只是 `verify` 内部已经被拆成多次更窄的调用；
+- 后续如果需要，还可以继续把 `ClaimPolish` 对应拆成更细的 repair phases。
+
+### p_facts 符号保真约束（最新）
+针对近期暴露出的 `p_facts` 符号污染 / 标签漂移问题，当前已在 PTK 的 perception 链路上补充低风险约束，仍**不改变 JSON schema / 输出契约**：
+- `PerceptionExtraction` 明确要求对 labels、legends、axis text、circuit/component markings、geometry point names、subscripts、superscripts、Greek letters、operators、units 等**尽量逐视觉保真**，不要擅自 paraphrase、normalize、translate、或“修正”为猜测的标准写法；
+- 若关键符号看不清，优先显式写成视觉不清 / ambiguous，而不是猜一个看起来合理的 canonical string；
+- `PTKFoundationCritic` 现在会把 guessed symbol normalization、mojibake-like corruption、以及把 text-explicit givens 泄漏到 `p_facts` 里的情况视为明确问题；对关键 `p_facts` 中可见字符串被破坏的情况允许直接 `pass=false`；
+- `PTK_P_FACTS_POLISH` 在修补时被明确要求：优先保留可见字符串、删除猜测性正规化、删除解释性含义扩写、删除误混入 `p_facts` 的 text-only givens。
+
+这轮改动的目标不是让模型具备真正 OCR 级确定性，而是先把 `p_facts` 的默认偏好从“可读性整理”拉回到“视觉字符串保真优先”，减少同题重跑时的符号漂移与污染扩散。
+
 
 ---
 
