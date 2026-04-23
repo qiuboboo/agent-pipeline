@@ -618,8 +618,11 @@ def classify_sample(sample: Dict[str, Any], client: Any = None, llm_budget: Opti
         max_calls = int(llm_budget.get("max_calls", 0))
         if max_calls > 0 and used >= max_calls:
             return rule_metadata
+        llm_budget["attempted"] = int(llm_budget.get("attempted", 0)) + 1
     llm_metadata = llm_classify_sample(sample, rule_metadata, client)
     if llm_metadata is None:
+        if llm_budget is not None:
+            llm_budget["failed"] = int(llm_budget.get("failed", 0)) + 1
         return rule_metadata
     if llm_budget is not None:
         llm_budget["used"] = int(llm_budget.get("used", 0)) + 1
@@ -707,7 +710,7 @@ def main() -> None:
     sample_paths = iter_sample_paths(dataset_root, args.limit)
     llm_settings = resolve_llm_endpoint_settings(args)
     llm_client = build_llm_client(args)
-    llm_budget = {"used": 0, "max_calls": max(0, int(args.llm_max_calls))}
+    llm_budget = {"used": 0, "attempted": 0, "failed": 0, "max_calls": max(0, int(args.llm_max_calls))}
 
     counts = {"biology": 0, "geography": 0, "other": 0}
     route_counts = {"rules": 0, "llm_fallback": 0}
@@ -739,6 +742,8 @@ def main() -> None:
         "llm_model": llm_settings["model"],
         "llm_api_mode": llm_settings["api_mode"],
         "llm_calls_used": llm_budget["used"],
+        "llm_calls_attempted": llm_budget["attempted"],
+        "llm_calls_failed": llm_budget["failed"],
         "llm_calls_max": llm_budget["max_calls"],
         "updated": updated,
         "counts": counts,
