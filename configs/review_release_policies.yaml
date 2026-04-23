@@ -4,6 +4,50 @@ review_release:
     adjacent_label: adjacent bucket
 
   datasets:
+    ai2d:
+      dataset_root: ready/ai2d_geoqa_plus_from_zip_preview/ai2d
+      policy_doc: ""
+      release_buckets:
+        A:
+          enabled: true
+          candidate_key: strict_A_bucket_candidates
+          release_basis: exact alignment+missing_grounded_visual_path review bucket
+          pass_decision_reason_codes:
+            - alignment_requires_review
+            - missing_grounded_visual_path
+            - manual_release_pass
+          selection:
+            match_mode: exact_set
+            decision_reason_codes:
+              - alignment_requires_review
+              - missing_grounded_visual_path
+          adjacent_observation:
+            label: adjacent metadata/answer inconsistency bucket
+            candidate_key: adjacent_metadata_answer_risk_candidates
+            selection_notes: "samples near A but with extra metadata/answer inconsistency risks"
+
+    geoqa_plus:
+      dataset_root: ready/ai2d_geoqa_plus_from_zip_preview/geoqa_plus
+      policy_doc: ""
+      release_buckets:
+        A:
+          enabled: true
+          candidate_key: strict_A_bucket_candidates
+          release_basis: exact alignment+missing_grounded_visual_path review bucket
+          pass_decision_reason_codes:
+            - alignment_requires_review
+            - missing_grounded_visual_path
+            - manual_release_pass
+          selection:
+            match_mode: exact_set
+            decision_reason_codes:
+              - alignment_requires_review
+              - missing_grounded_visual_path
+          adjacent_observation:
+            label: adjacent pure-image-choice or metadata-risk bucket
+            candidate_key: adjacent_choice_or_metadata_risk_candidates
+            selection_notes: "samples near A but with extra pure_image_choice or metadata-related risks"
+
     mm_math:
       dataset_root: ready/mm_math/run_outputs_merged_by_source_problem_id__mm_math/datasets/mm_math
       policy_doc: docs/review/mm_math_A_release_decision_2026-04-10.md
