@@ -3,12 +3,27 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import sys
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SRC_ROOT = PROJECT_ROOT / "src"
 DEFAULT_DATASET_ROOT = PROJECT_ROOT / "ready" / "ai2d"
+DEFAULT_PIPELINE2_CONFIG_PATH = SRC_ROOT / "benchmarkallinone" / "pipeline2" / "configs" / "default_pipeline2.yaml"
+
+if SRC_ROOT.exists():
+    sys.path.insert(0, str(SRC_ROOT))
+
+try:
+    from benchmarkallinone.pipeline2.clients import OpenAICompatibleClient
+    from benchmarkallinone.pipeline2.config import ModelEndpointConfig, Pipeline2Config
+except Exception:
+    OpenAICompatibleClient = None
+    ModelEndpointConfig = None
+    Pipeline2Config = None
 
 BIOLOGY_PATTERNS: Sequence[Tuple[str, str, int]] = [
     ("food chain", "phrase:food chain", 4),
@@ -165,6 +180,36 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="When writing, also write subject=other for non-biology/non-geography samples. Default only writes biology/geography.",
     )
+    parser.add_argument(
+        "--llm-fallback",
+        action="store_true",
+        help="When rule classification is uncertain, call an OpenAI-compatible chat JSON model for a second opinion.",
+    )
+    parser.add_argument(
+        "--llm-max-calls",
+        type=int,
+        default=20,
+        help="Maximum fallback LLM calls to make in one run when --llm-fallback is enabled (default: 20).",
+    )
+    parser.add_argument(
+        "--llm-config",
+        default=os.environ.get("AI2D_SUBJECT_PIPELINE2_CONFIG", ""),
+        help="Optional pipeline2 YAML config to inherit primary model settings from.",
+    )
+    parser.add_argument("--llm-base-url", default=os.environ.get("AI2D_SUBJECT_BASE_URL", ""))
+    parser.add_argument("--llm-api-key", default=os.environ.get("AI2D_SUBJECT_API_KEY", ""))
+    parser.add_argument("--llm-model", default=os.environ.get("AI2D_SUBJECT_MODEL", ""))
+    parser.add_argument("--llm-reasoning-effort", default=os.environ.get("AI2D_SUBJECT_REASONING_EFFORT", ""))
+    parser.add_argument(
+        "--llm-temperature",
+        type=float,
+        default=float(os.environ["AI2D_SUBJECT_TEMPERATURE"]) if "AI2D_SUBJECT_TEMPERATURE" in os.environ else None,
+    )
+    parser.add_argument(
+        "--llm-timeout-seconds",
+        type=int,
+        default=int(os.environ["AI2D_SUBJECT_TIMEOUT_SECONDS"]) if "AI2D_SUBJECT_TIMEOUT_SECONDS" in os.environ else None,
+    )
     return parser.parse_args()
 
 
@@ -188,6 +233,88 @@ def pick_first_nonempty(*values: Any) -> str:
         if isinstance(value, (int, float)):
             return str(value)
     return ""
+
+
+def first_present(*values: Any) -> Any:
+    for value in values:
+        if value is None:
+            continue
+        if isinstance(value, str):
+            if value.strip():
+                return value
+            continue
+        return value
+    return None
+
+
+def resolve_pipeline2_primary_config(config_path: str) -> Tuple[Optional[Any], Optional[str]]:
+    if Pipeline2Config is None:
+        return None, None
+    candidate_paths: List[Path] = []
+    if config_path:
+        candidate_paths.append(Path(config_path))
+    if DEFAULT_PIPELINE2_CONFIG_PATH.exists():
+        candidate_paths.append(DEFAULT_PIPELINE2_CONFIG_PATH)
+    for candidate in candidate_paths:
+        try:
+            config = Pipeline2Config.from_yaml(str(candidate))
+            return config.models.primary, str(candidate)
+        except Exception:
+            continue
+    return None, None
+
+
+def resolve_llm_endpoint_settings(args: argparse.Namespace) -> Dict[str, Any]:
+    inherited_config, inherited_source = resolve_pipeline2_primary_config(args.llm_config)
+
+    base_url = first_present(
+        args.llm_base_url,
+        getattr(inherited_config, "base_url", None),
+        os.environ.get("ANNOTATION_API_BASE_URL"),
+        os.environ.get("PIPELINE2_BASE_URL_PRIMARY"),
+        os.environ.get("OPENAI_BASE_URL"),
+        "https://synai996.space/v1",
+    )
+    api_key = first_present(
+        args.llm_api_key,
+        getattr(inherited_config, "api_key", None),
+        os.environ.get("ANNOTATION_API_KEY"),
+        os.environ.get("PIPELINE2_API_KEY_PRIMARY"),
+        os.environ.get("OPENAI_API_KEY"),
+        "",
+    )
+    model = first_present(
+        args.llm_model,
+        getattr(inherited_config, "model", None),
+        os.environ.get("ANNOTATION_MODEL"),
+        "gpt-5.4",
+    )
+    reasoning_effort = first_present(
+        args.llm_reasoning_effort,
+        getattr(inherited_config, "reasoning_effort", None),
+        os.environ.get("ANNOTATION_REASONING_EFFORT"),
+        "low",
+    )
+    temperature = first_present(
+        args.llm_temperature,
+        getattr(inherited_config, "temperature", None),
+        0.0,
+    )
+    timeout_seconds = first_present(
+        args.llm_timeout_seconds,
+        getattr(inherited_config, "timeout_seconds", None),
+        180,
+    )
+
+    return {
+        "base_url": str(base_url),
+        "api_key": str(api_key),
+        "model": str(model),
+        "reasoning_effort": str(reasoning_effort),
+        "temperature": float(temperature),
+        "timeout_seconds": int(timeout_seconds),
+        "config_source": inherited_source or "direct-env-or-defaults",
+    }
 
 
 def append_text(parts: List[str], value: Any) -> None:
@@ -256,7 +383,7 @@ def score_patterns(text: str, patterns: Sequence[Tuple[str, str, int]]) -> Tuple
     return score, reasons
 
 
-def classify_sample(sample: Dict[str, Any]) -> Dict[str, Any]:
+def rule_classify_sample(sample: Dict[str, Any]) -> Dict[str, Any]:
     text_parts = gather_sample_texts(sample)
     normalized = normalize_text(text_parts)
     biology_score, biology_reasons = score_patterns(normalized, BIOLOGY_PATTERNS)
@@ -299,7 +426,158 @@ def classify_sample(sample: Dict[str, Any]) -> Dict[str, Any]:
         },
         "reasons": reasons[:8],
         "text_excerpt": normalized[:240],
+        "normalized_text": normalized,
+        "route": "rules",
     }
+
+
+def should_use_llm_fallback(rule_metadata: Dict[str, Any]) -> bool:
+    scores = rule_metadata.get("scores") or {}
+    biology_score = int(scores.get("biology", 0) or 0)
+    geography_score = int(scores.get("geography", 0) or 0)
+    other_score = int(scores.get("other", 0) or 0)
+    subject = rule_metadata.get("subject")
+    confidence = rule_metadata.get("confidence")
+    reasons = rule_metadata.get("reasons") or []
+
+    if confidence == "low":
+        return True
+    if subject == "other":
+        return True
+    if "fallback:non-bio-geo" in reasons:
+        return True
+    if abs(biology_score - geography_score) <= 1 and max(biology_score, geography_score) >= 2:
+        return True
+    if other_score >= max(biology_score, geography_score) and max(biology_score, geography_score) >= 2:
+        return True
+    return False
+
+
+def build_llm_user_prompt(sample: Dict[str, Any], rule_metadata: Dict[str, Any]) -> str:
+    question = pick_first_nonempty(
+        ((sample.get("clean_problem_record") or {}).get("normalized_question_text")),
+        ((sample.get("problem_main_record") or {}).get("normalized_question_text")),
+        ((sample.get("source_intake_record") or {}).get("raw_question_text")),
+    )
+    answer = pick_first_nonempty(
+        ((sample.get("clean_problem_record") or {}).get("normalized_answer_text")),
+        ((sample.get("problem_main_record") or {}).get("normalized_answer_text")),
+        ((sample.get("source_intake_record") or {}).get("raw_answer_text")),
+    )
+    choice_map = (
+        ((sample.get("clean_problem_record") or {}).get("choice_map"))
+        or ((sample.get("problem_main_record") or {}).get("choice_map"))
+        or ((sample.get("source_intake_record") or {}).get("choice_map"))
+        or {}
+    )
+    payload = {
+        "task": "Classify this AI2D science diagram question into one of: biology, geography, other.",
+        "policy": {
+            "labels": ["biology", "geography", "other"],
+            "use_other_when": [
+                "astronomy/space-science",
+                "physics/circuit/mechanics",
+                "generic visual label lookup with insufficient biology/geography evidence",
+            ],
+            "do_not_overcall": "Prefer other when the evidence for biology or geography is weak.",
+        },
+        "rule_guess": {
+            "subject": rule_metadata.get("subject"),
+            "confidence": rule_metadata.get("confidence"),
+            "scores": rule_metadata.get("scores"),
+            "reasons": rule_metadata.get("reasons"),
+        },
+        "sample": {
+            "question": question,
+            "answer": answer,
+            "choice_map": choice_map,
+            "text_excerpt": rule_metadata.get("normalized_text", "")[:1600],
+        },
+        "return_json_schema": {
+            "subject": "biology|geography|other",
+            "confidence": "high|medium|low",
+            "reasons": ["short reason strings"],
+        },
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
+def llm_classify_sample(sample: Dict[str, Any], rule_metadata: Dict[str, Any], client: Any) -> Optional[Dict[str, Any]]:
+    if client is None:
+        return None
+    system_prompt = (
+        "You classify AI2D science diagram questions into biology, geography, or other. "
+        "Return exactly one JSON object with keys subject, confidence, reasons. "
+        "Use 'other' for astronomy/space, physics/circuit, or generic label-lookup questions with insufficient evidence."
+    )
+    response = client.chat_json(system_prompt, build_llm_user_prompt(sample, rule_metadata))
+    if not isinstance(response, dict):
+        return None
+    subject = str(response.get("subject", "")).strip().lower()
+    confidence = str(response.get("confidence", "")).strip().lower()
+    reasons = response.get("reasons") or []
+    if subject not in {"biology", "geography", "other"}:
+        return None
+    if confidence not in {"high", "medium", "low"}:
+        confidence = "medium"
+    if not isinstance(reasons, list):
+        reasons = [str(reasons)] if reasons else []
+    return {
+        "subject": subject,
+        "confidence": confidence,
+        "scores": rule_metadata.get("scores", {}).copy(),
+        "reasons": [f"llm:{str(item).strip()}" for item in reasons if str(item).strip()][:8] or ["llm:fallback"],
+        "text_excerpt": rule_metadata.get("text_excerpt", ""),
+        "normalized_text": rule_metadata.get("normalized_text", ""),
+        "route": "llm_fallback",
+        "rule_subject": rule_metadata.get("subject"),
+        "rule_confidence": rule_metadata.get("confidence"),
+        "rule_reasons": list(rule_metadata.get("reasons") or []),
+        "llm_usage": response.get("_llm_usage"),
+        "llm_elapsed_seconds": response.get("_llm_elapsed_seconds"),
+        "llm_endpoint_name": response.get("_llm_endpoint_name"),
+        "llm_request_mode": response.get("_llm_request_mode"),
+    }
+
+
+def build_llm_client(args: argparse.Namespace) -> Any:
+    if not args.llm_fallback:
+        return None
+    if OpenAICompatibleClient is None or ModelEndpointConfig is None:
+        return None
+    settings = resolve_llm_endpoint_settings(args)
+    if not settings["api_key"]:
+        return None
+    config = ModelEndpointConfig(
+        name="ai2d-subject-fallback",
+        base_url=settings["base_url"],
+        api_key=settings["api_key"],
+        model=settings["model"],
+        reasoning_effort=settings["reasoning_effort"],
+        temperature=settings["temperature"],
+        timeout_seconds=settings["timeout_seconds"],
+        enabled=True,
+    )
+    return OpenAICompatibleClient(config)
+
+
+def classify_sample(sample: Dict[str, Any], client: Any = None, llm_budget: Optional[Dict[str, int]] = None) -> Dict[str, Any]:
+    rule_metadata = rule_classify_sample(sample)
+    if not should_use_llm_fallback(rule_metadata):
+        return rule_metadata
+    if client is None:
+        return rule_metadata
+    if llm_budget is not None:
+        used = int(llm_budget.get("used", 0))
+        max_calls = int(llm_budget.get("max_calls", 0))
+        if max_calls > 0 and used >= max_calls:
+            return rule_metadata
+    llm_metadata = llm_classify_sample(sample, rule_metadata, client)
+    if llm_metadata is None:
+        return rule_metadata
+    if llm_budget is not None:
+        llm_budget["used"] = int(llm_budget.get("used", 0)) + 1
+    return llm_metadata
 
 
 def current_subject(sample: Dict[str, Any]) -> str:
@@ -314,12 +592,25 @@ def current_subject(sample: Dict[str, Any]) -> str:
 def apply_subject(sample: Dict[str, Any], subject: str, metadata: Dict[str, Any], set_other: bool) -> bool:
     should_write = subject in {"biology", "geography"} or (set_other and subject == "other")
     sample["subject_tagging_record"] = {
-        "version": "ai2d_subject_rules_v2",
+        "version": "ai2d_subject_rules_v3_llm_fallback",
         "predicted_subject": metadata["subject"],
         "confidence": metadata["confidence"],
         "scores": metadata["scores"],
         "reasons": metadata["reasons"],
+        "route": metadata.get("route", "rules"),
     }
+    if metadata.get("route") == "llm_fallback":
+        sample["subject_tagging_record"]["rule_subject"] = metadata.get("rule_subject")
+        sample["subject_tagging_record"]["rule_confidence"] = metadata.get("rule_confidence")
+        sample["subject_tagging_record"]["rule_reasons"] = metadata.get("rule_reasons")
+        if metadata.get("llm_usage") is not None:
+            sample["subject_tagging_record"]["llm_usage"] = metadata.get("llm_usage")
+        if metadata.get("llm_elapsed_seconds") is not None:
+            sample["subject_tagging_record"]["llm_elapsed_seconds"] = metadata.get("llm_elapsed_seconds")
+        if metadata.get("llm_endpoint_name") is not None:
+            sample["subject_tagging_record"]["llm_endpoint_name"] = metadata.get("llm_endpoint_name")
+        if metadata.get("llm_request_mode") is not None:
+            sample["subject_tagging_record"]["llm_request_mode"] = metadata.get("llm_request_mode")
     if not should_write:
         return False
     for block_name in SUBJECT_FIELDS:
@@ -351,6 +642,8 @@ def preview_row(sample_path: Path, sample: Dict[str, Any], metadata: Dict[str, A
         "confidence": metadata["confidence"],
         "scores": metadata["scores"],
         "reasons": metadata["reasons"],
+        "route": metadata.get("route", "rules"),
+        "rule_subject": metadata.get("rule_subject"),
         "question": question[:180],
     }
 
@@ -366,15 +659,21 @@ def main() -> None:
     args = parse_args()
     dataset_root = Path(args.dataset_root)
     sample_paths = iter_sample_paths(dataset_root, args.limit)
+    llm_settings = resolve_llm_endpoint_settings(args)
+    llm_client = build_llm_client(args)
+    llm_budget = {"used": 0, "max_calls": max(0, int(args.llm_max_calls))}
 
     counts = {"biology": 0, "geography": 0, "other": 0}
+    route_counts = {"rules": 0, "llm_fallback": 0}
     updated = 0
     preview: List[Dict[str, Any]] = []
 
     for sample_path in sample_paths:
         sample = read_json(sample_path)
-        metadata = classify_sample(sample)
+        metadata = classify_sample(sample, client=llm_client, llm_budget=llm_budget)
         counts[metadata["subject"]] = counts.get(metadata["subject"], 0) + 1
+        route = metadata.get("route", "rules")
+        route_counts[route] = route_counts.get(route, 0) + 1
         wrote_subject = apply_subject(sample, metadata["subject"], metadata, args.set_other)
         if args.write and wrote_subject:
             write_json(sample_path, sample)
@@ -387,8 +686,16 @@ def main() -> None:
         "sample_count": len(sample_paths),
         "write": bool(args.write),
         "set_other": bool(args.set_other),
+        "llm_fallback": bool(args.llm_fallback),
+        "llm_client_enabled": llm_client is not None,
+        "llm_config_source": llm_settings["config_source"],
+        "llm_base_url": llm_settings["base_url"],
+        "llm_model": llm_settings["model"],
+        "llm_calls_used": llm_budget["used"],
+        "llm_calls_max": llm_budget["max_calls"],
         "updated": updated,
         "counts": counts,
+        "route_counts": route_counts,
         "preview": preview,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))
