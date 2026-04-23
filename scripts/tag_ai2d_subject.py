@@ -9,6 +9,8 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
+import yaml
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = PROJECT_ROOT / "src"
 DEFAULT_DATASET_ROOT = PROJECT_ROOT / "ready" / "ai2d"
@@ -20,10 +22,12 @@ if SRC_ROOT.exists():
 try:
     from benchmarkallinone.pipeline2.clients import OpenAICompatibleClient
     from benchmarkallinone.pipeline2.config import ModelEndpointConfig, Pipeline2Config
+    from benchmarkallinone.pipeline2.utils import env_expand
 except Exception:
     OpenAICompatibleClient = None
     ModelEndpointConfig = None
     Pipeline2Config = None
+    env_expand = None
 
 BIOLOGY_PATTERNS: Sequence[Tuple[str, str, int]] = [
     ("food chain", "phrase:food chain", 4),
@@ -199,6 +203,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--llm-base-url", default=os.environ.get("AI2D_SUBJECT_BASE_URL", ""))
     parser.add_argument("--llm-api-key", default=os.environ.get("AI2D_SUBJECT_API_KEY", ""))
     parser.add_argument("--llm-model", default=os.environ.get("AI2D_SUBJECT_MODEL", ""))
+    parser.add_argument("--llm-api-mode", default=os.environ.get("AI2D_SUBJECT_API_MODE", ""))
     parser.add_argument("--llm-reasoning-effort", default=os.environ.get("AI2D_SUBJECT_REASONING_EFFORT", ""))
     parser.add_argument(
         "--llm-temperature",
@@ -247,9 +252,30 @@ def first_present(*values: Any) -> Any:
     return None
 
 
-def resolve_pipeline2_primary_config(config_path: str) -> Tuple[Optional[Any], Optional[str]]:
+def load_env_file(path: Path) -> Dict[str, str]:
+    env_map: Dict[str, str] = {}
+    if not path.exists():
+        return env_map
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line[len("export ") :].strip()
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+            value = value[1:-1]
+        env_map[key] = value
+    return env_map
+
+
+def resolve_pipeline2_primary_config(config_path: str) -> Tuple[Optional[Any], Optional[str], Dict[str, str]]:
     if Pipeline2Config is None:
-        return None, None
+        return None, None, {}
     candidate_paths: List[Path] = []
     if config_path:
         candidate_paths.append(Path(config_path))
@@ -257,19 +283,25 @@ def resolve_pipeline2_primary_config(config_path: str) -> Tuple[Optional[Any], O
         candidate_paths.append(DEFAULT_PIPELINE2_CONFIG_PATH)
     for candidate in candidate_paths:
         try:
-            config = Pipeline2Config.from_yaml(str(candidate))
-            return config.models.primary, str(candidate)
+            file_env_map = load_env_file(candidate.parent / "pipeline2.local.env")
+            env_map = {**file_env_map, **os.environ}
+            with candidate.open("r", encoding="utf-8") as file:
+                raw = yaml.safe_load(file) or {}
+            expanded = env_expand(raw, env_map) if env_expand is not None else raw
+            config = Pipeline2Config.from_dict(expanded)
+            return config.models.primary, str(candidate), file_env_map
         except Exception:
             continue
-    return None, None
+    return None, None, {}
 
 
 def resolve_llm_endpoint_settings(args: argparse.Namespace) -> Dict[str, Any]:
-    inherited_config, inherited_source = resolve_pipeline2_primary_config(args.llm_config)
+    inherited_config, inherited_source, pipeline2_env = resolve_pipeline2_primary_config(args.llm_config)
 
     base_url = first_present(
         args.llm_base_url,
         getattr(inherited_config, "base_url", None),
+        pipeline2_env.get("ANNOTATION_API_BASE_URL"),
         os.environ.get("ANNOTATION_API_BASE_URL"),
         os.environ.get("PIPELINE2_BASE_URL_PRIMARY"),
         os.environ.get("OPENAI_BASE_URL"),
@@ -278,6 +310,7 @@ def resolve_llm_endpoint_settings(args: argparse.Namespace) -> Dict[str, Any]:
     api_key = first_present(
         args.llm_api_key,
         getattr(inherited_config, "api_key", None),
+        pipeline2_env.get("ANNOTATION_API_KEY"),
         os.environ.get("ANNOTATION_API_KEY"),
         os.environ.get("PIPELINE2_API_KEY_PRIMARY"),
         os.environ.get("OPENAI_API_KEY"),
@@ -286,12 +319,23 @@ def resolve_llm_endpoint_settings(args: argparse.Namespace) -> Dict[str, Any]:
     model = first_present(
         args.llm_model,
         getattr(inherited_config, "model", None),
+        pipeline2_env.get("ANNOTATION_MODEL"),
         os.environ.get("ANNOTATION_MODEL"),
         "gpt-5.4",
+    )
+    api_mode = first_present(
+        args.llm_api_mode,
+        getattr(inherited_config, "api_mode", None) if getattr(inherited_config, "api_mode", None) != "chat_completions" else None,
+        pipeline2_env.get("ANNOTATION_API_MODE"),
+        os.environ.get("ANNOTATION_API_MODE"),
+        os.environ.get("PIPELINE2_API_MODE_PRIMARY"),
+        os.environ.get("OPENAI_API_MODE"),
+        "chat_completions",
     )
     reasoning_effort = first_present(
         args.llm_reasoning_effort,
         getattr(inherited_config, "reasoning_effort", None),
+        pipeline2_env.get("ANNOTATION_REASONING_EFFORT"),
         os.environ.get("ANNOTATION_REASONING_EFFORT"),
         "low",
     )
@@ -310,6 +354,7 @@ def resolve_llm_endpoint_settings(args: argparse.Namespace) -> Dict[str, Any]:
         "base_url": str(base_url),
         "api_key": str(api_key),
         "model": str(model),
+        "api_mode": str(api_mode),
         "reasoning_effort": str(reasoning_effort),
         "temperature": float(temperature),
         "timeout_seconds": int(timeout_seconds),
@@ -553,6 +598,7 @@ def build_llm_client(args: argparse.Namespace) -> Any:
         base_url=settings["base_url"],
         api_key=settings["api_key"],
         model=settings["model"],
+        api_mode=settings["api_mode"],
         reasoning_effort=settings["reasoning_effort"],
         temperature=settings["temperature"],
         timeout_seconds=settings["timeout_seconds"],
@@ -691,6 +737,7 @@ def main() -> None:
         "llm_config_source": llm_settings["config_source"],
         "llm_base_url": llm_settings["base_url"],
         "llm_model": llm_settings["model"],
+        "llm_api_mode": llm_settings["api_mode"],
         "llm_calls_used": llm_budget["used"],
         "llm_calls_max": llm_budget["max_calls"],
         "updated": updated,
