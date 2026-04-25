@@ -305,7 +305,10 @@ PERCEPTION_EXTRACTION_SYSTEM_PROMPT = dedent(
     5. Do not move text-explicit givens, targets, or constraints from the question text into `p_facts`; keep `p_facts` limited to what is visibly present in the image.
     6. Do not convert a visible label into an interpreted meaning unless that meaning is itself explicitly shown in the image.
     7. If a fact is uncertain, mark it as uncertain instead of overclaiming.
-    8. Output valid JSON only.
+    8. Aim for coverage before interpretation: first capture the main visible objects/regions/curves/components, then the visible labels/numbers/units/legends, then only the directly visible relations among them.
+    9. For topology-style diagrams (geometry, circuits, food webs, chemical structures, labeled parts), prefer facts such as adjacency, connection, containment, intersection, arrow direction, and label attachment; do not jump to the solved identity or function of the whole diagram.
+    10. For chart/graph-style figures, prefer axes, legends, plotted series, category names, relative heights/lengths, and monotonic or local trend descriptions that are directly visible; do not add causal or scientific interpretation unless it is printed in the figure itself.
+    11. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -478,9 +481,12 @@ PTK_P_FACTS_POLISH_SYSTEM_PROMPT = dedent(
     5. Preserve visible symbol strings, labels, legends, point names, subscripts, superscripts, Greek letters, operators, and units as faithfully as possible instead of paraphrasing, normalizing, or repairing them into guessed canonical text.
     6. If a symbol or label is visually ambiguous, explicitly mark the ambiguity in `fact_text` rather than guessing.
     7. Do not let `p_facts` absorb text-explicit givens, targets, or constraints that belong in `t_facts`.
-    8. Keep IDs stable when practical, but correctness is more important than ID continuity.
-    9. Return a non-empty `p_facts` list.
-    10. Output valid JSON only.
+    8. Before finalizing, check coverage in this order: main visible entities/components/curves, then visible labels/numbers/units/legends, then directly visible relations such as connection, adjacency, containment, intersection, arrow direction, or trend.
+    9. When fixing topology-style diagrams, prefer visible structure over interpreted identity: keep wires, nodes, bonds, point labels, arrows, and attachments, but remove claims like "therefore this is a full subtractor" unless that phrase itself appears in the image.
+    10. When fixing chart/graph-style figures, keep axes, legends, plotted series, categories, relative magnitudes, and directly visible trend segments, but remove causal or domain interpretation that is not explicitly printed in the figure.
+    11. Keep IDs stable when practical, but correctness is more important than ID continuity.
+    12. Return a non-empty `p_facts` list.
+    13. Output valid JSON only.
 
     ## OUTPUT JSON
     {
@@ -1100,10 +1106,21 @@ def build_perception_user_prompt(problem: Dict[str, Any]) -> str:
         f"""
         {_problem_header(problem)}
 
+        Ready Hints:
+        requires_image={problem.get('requires_image', '')}
+        text_dominant={problem.get('text_dominant', '')}
+
         Extract objective visual facts relevant to solving this problem.
         Preserve visible labels and symbol strings as faithfully as possible.
         Do not paraphrase, translate, normalize, or guess unclear labels; mark them as visually unclear instead.
         Do not move text-explicit givens or constraints into `p_facts`.
+
+        Coverage checklist for `p_facts`:
+        - First capture the main visible objects / regions / components / curves.
+        - Then capture visible labels, point names, numbers, units, axis text, legends, and symbols.
+        - Then capture directly visible relations only: connection, adjacency, containment, intersection, arrow direction, relative position, and visible trend.
+        - Do not replace visible structure with an interpreted whole-diagram conclusion.
+        - If a symbol is hard to read, say it is visually unclear instead of guessing.
         """
     ).strip()
 
@@ -1202,6 +1219,10 @@ def build_ptk_p_facts_polish_user_prompt(
         f"""
         {_problem_header(problem)}
 
+        Ready Hints:
+        requires_image={problem.get('requires_image', '')}
+        text_dominant={problem.get('text_dominant', '')}
+
         Target Section:
         p_facts
 
@@ -1221,6 +1242,20 @@ def build_ptk_p_facts_polish_user_prompt(
         Preserve visible labels and symbol strings as faithfully as possible.
         Remove guessed normalizations, interpreted meanings, and text-only givens that leaked into `p_facts`.
         If a critical symbol is visually ambiguous, say so explicitly instead of guessing.
+
+        Coverage checklist for `p_facts`:
+        - Keep the main visible entities/components/curves.
+        - Keep visible labels, numbers, units, legends, and symbol strings.
+        - Keep only directly visible relations: connection, adjacency, containment, intersection, attachment, arrow direction, relative position, and visible trend.
+        - Delete whole-diagram interpretations that are not literally shown.
+
+        Micro few-shot A (structure / topology):
+        - Bad: "The circuit is a full subtractor."
+        - Better: "Three logic-gate symbols are shown; two input lines labeled X and Y enter gates on the left; a third input line labeled Bin enters a lower gate; output wires leave to the right toward labels including D and Bout."
+
+        Micro few-shot B (chart / graph):
+        - Bad: "The reaction becomes more stable because the molecule wants lower energy."
+        - Better: "The vertical axis is labeled 'Potential Energy (kJ/mol)' and the horizontal axis is labeled 'Internuclear Distance (nm)'; a curve dips to a minimum and rises on both sides; labeled points mark positions on the curve."
         """
     ).strip()
 

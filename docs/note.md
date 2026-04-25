@@ -1,5 +1,14 @@
 # Notes
 
+## 2026-04-26
+
+- `pipeline2` PTK prompt tuning direction for current `p_facts` failures: do **not** start with broad subject-classification prompts.
+- Current preferred strategy is a low-token visual-grounding upgrade:
+  - strengthen the first-pass perception prompt with a short coverage checklist;
+  - keep broad subject routing out for now;
+  - place only tiny `bad -> better` micro few-shots in the `p_facts` patch prompt, because that path is paid only on failed samples.
+- If later routing becomes necessary, prefer routing by **visual archetype** (for example diagram/topology vs chart/curve) rather than by school subject labels such as physics / chemistry / math.
+
 ## 2026-04-09
 
 - `mm_math` review 放行口径当前采用 **B方案（稍激进）**。
