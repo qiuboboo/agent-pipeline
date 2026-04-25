@@ -1,0 +1,40 @@
+paths:
+  ready_root: /root/.openclaw/workspace/agent-pipeline/tmp/pipeline2_ready_plus2each_20260425
+  output_root: /root/.openclaw/workspace/agent-pipeline/pipeline2/outputs_ready_plus2each_qjb_20260425
+  checkpoint_db_path: /root/.openclaw/workspace/agent-pipeline/pipeline2/runtime/pipeline_langgraph_ready_plus2each_qjb_20260425.sqlite
+
+runtime:
+  include_manual_review: false
+  max_problems: 0
+  max_problem_workers: 4
+  max_images_per_problem: 3
+  save_runtime_snapshots: false
+  save_problem_bundles: true
+  enable_trace_patch_writes: true
+
+thresholds:
+  method_score_thresholds: [0.33, 0.67]
+  novelty_total_threshold: 0.55
+  novelty_required_threshold: 0.50
+
+models:
+  primary:
+    name: primary
+    base_url: ${ANNOTATION_API_BASE_URL}
+    api_key: ${ANNOTATION_API_KEY}
+    model: ${ANNOTATION_MODEL}
+    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
+    temperature: 0.1
+    timeout_seconds: 180
+    enabled: true
+    api_mode: ${ANNOTATION_API_MODE}
+  fallback:
+    name: fallback
+    base_url: ${ANNOTATION_FALLBACK_BASE_URL}
+    api_key: ${ANNOTATION_FALLBACK_API_KEY}
+    model: ${ANNOTATION_MODEL}
+    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
+    temperature: 0.1
+    timeout_seconds: 180
+    enabled: true
+    api_mode: ${ANNOTATION_FALLBACK_API_MODE}
