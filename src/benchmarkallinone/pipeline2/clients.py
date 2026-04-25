@@ -4,6 +4,7 @@ import base64
 import http.client
 import io
 import json
+import logging
 import ssl
 import threading
 import time
@@ -16,6 +17,9 @@ from PIL import Image
 
 from .config import ModelEndpointConfig
 from .utils import extract_json_object, to_plain_text
+
+
+LOGGER = logging.getLogger("benchmarkallinone.pipeline2.clients")
 
 
 class OpenAICompatibleClient:
@@ -76,6 +80,20 @@ class OpenAICompatibleClient:
             "stream": True,
         }
 
+    def _max_attempts(self) -> int:
+        return 6
+
+    def _retry_delay_seconds(self, attempt: int) -> float:
+        return min(15.0, 1.5 * (2 ** max(0, attempt - 1)))
+
+    def _is_retryable_status(self, status_code: Optional[int]) -> bool:
+        if status_code is None:
+            return False
+        return status_code in {403, 408, 409, 423, 425, 429} or status_code >= 500
+
+    def _sleep_before_retry(self, attempt: int) -> None:
+        time.sleep(self._retry_delay_seconds(attempt))
+
     def _post_json(self, payload: Dict[str, Any], has_images: bool = False) -> Optional[Dict[str, Any]]:
         if not self.config.enabled or not self.config.api_key:
             return None
@@ -87,7 +105,16 @@ class OpenAICompatibleClient:
                 self.usage_totals["text_request_count"] += 1
         url = self.config.base_url.rstrip("/") + "/chat/completions"
         last_error_text = None
-        for attempt in range(1, 4):
+        max_attempts = self._max_attempts()
+        LOGGER.info(
+            "[llm-request-start] endpoint=%s api_mode=chat_completions request_mode=%s max_attempts=%s timeout_seconds=%s url=%s",
+            self.config.name,
+            "multimodal" if has_images else "text",
+            max_attempts,
+            self.config.timeout_seconds,
+            url,
+        )
+        for attempt in range(1, max_attempts + 1):
             started = time.perf_counter()
             req = urllib.request.Request(
                 url,
@@ -144,11 +171,21 @@ class OpenAICompatibleClient:
                 except Exception:
                     error_body = ""
                 last_error_text = f"HTTP {exc.code}: {error_body[:240] or exc.reason}"
-                retryable = exc.code in {408, 409, 429} or exc.code >= 500
-                if retryable and attempt < 3:
+                retryable = self._is_retryable_status(exc.code)
+                LOGGER.warning(
+                    "[llm-request-http-error] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s retryable=%s elapsed_seconds=%.3f error=%s",
+                    self.config.name,
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    max_attempts,
+                    retryable,
+                    elapsed,
+                    last_error_text,
+                )
+                if retryable and attempt < max_attempts:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    time.sleep(min(2.0, 0.5 * attempt))
+                    self._sleep_before_retry(attempt)
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
@@ -159,10 +196,19 @@ class OpenAICompatibleClient:
                     self.usage_totals["failed_request_count"] += 1
                     self.usage_totals["total_request_seconds"] += elapsed
                 last_error_text = f"{type(exc).__name__}: {exc}"
-                if attempt < 3:
+                LOGGER.warning(
+                    "[llm-request-transport-error] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                    self.config.name,
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    max_attempts,
+                    elapsed,
+                    last_error_text,
+                )
+                if attempt < max_attempts:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    time.sleep(min(2.0, 0.5 * attempt))
+                    self._sleep_before_retry(attempt)
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
@@ -176,10 +222,19 @@ class OpenAICompatibleClient:
                 last_error_text = (
                     f"JSONDecodeError: {exc}; status={status_code}; content_type={content_type!r}; body_preview={body_preview!r}"
                 )
-                if attempt < 3:
+                LOGGER.warning(
+                    "[llm-request-json-error] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                    self.config.name,
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    max_attempts,
+                    elapsed,
+                    last_error_text,
+                )
+                if attempt < max_attempts:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    time.sleep(min(2.0, 0.5 * attempt))
+                    self._sleep_before_retry(attempt)
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
@@ -197,14 +252,48 @@ class OpenAICompatibleClient:
                 if not parsed:
                     with self._usage_lock:
                         self.usage_totals["failed_request_count"] += 1
-                        self.usage_totals["last_error"] = "Response missing JSON object in streamed content."
+                    last_error_text = "Response missing JSON object in streamed content."
+                    LOGGER.warning(
+                        "[llm-request-parse-miss] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                        self.config.name,
+                        "multimodal" if has_images else "text",
+                        attempt,
+                        max_attempts,
+                        elapsed,
+                        last_error_text,
+                    )
+                    if attempt < max_attempts:
+                        with self._usage_lock:
+                            self.usage_totals["retry_count"] += 1
+                            self.usage_totals["last_error"] = last_error_text
+                        self._sleep_before_retry(attempt)
+                        continue
+                    with self._usage_lock:
+                        self.usage_totals["last_error"] = last_error_text
                     return None
             else:
                 choices = body.get("choices") or []
                 if not choices:
                     with self._usage_lock:
                         self.usage_totals["failed_request_count"] += 1
-                        self.usage_totals["last_error"] = "Response missing choices."
+                    last_error_text = "Response missing choices."
+                    LOGGER.warning(
+                        "[llm-request-parse-miss] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                        self.config.name,
+                        "multimodal" if has_images else "text",
+                        attempt,
+                        max_attempts,
+                        elapsed,
+                        last_error_text,
+                    )
+                    if attempt < max_attempts:
+                        with self._usage_lock:
+                            self.usage_totals["retry_count"] += 1
+                            self.usage_totals["last_error"] = last_error_text
+                        self._sleep_before_retry(attempt)
+                        continue
+                    with self._usage_lock:
+                        self.usage_totals["last_error"] = last_error_text
                     return None
                 message = choices[0].get("message") or {}
                 content = message.get("content", "")
@@ -214,11 +303,37 @@ class OpenAICompatibleClient:
                 if not parsed:
                     with self._usage_lock:
                         self.usage_totals["failed_request_count"] += 1
-                        self.usage_totals["last_error"] = "Response missing JSON object."
+                    last_error_text = "Response missing JSON object."
+                    LOGGER.warning(
+                        "[llm-request-parse-miss] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                        self.config.name,
+                        "multimodal" if has_images else "text",
+                        attempt,
+                        max_attempts,
+                        elapsed,
+                        last_error_text,
+                    )
+                    if attempt < max_attempts:
+                        with self._usage_lock:
+                            self.usage_totals["retry_count"] += 1
+                            self.usage_totals["last_error"] = last_error_text
+                        self._sleep_before_retry(attempt)
+                        continue
+                    with self._usage_lock:
+                        self.usage_totals["last_error"] = last_error_text
                     return None
             with self._usage_lock:
                 self.usage_totals["successful_request_count"] += 1
                 self.usage_totals["last_error"] = None
+            LOGGER.info(
+                "[llm-request-success] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f total_tokens=%s",
+                self.config.name,
+                "multimodal" if has_images else "text",
+                attempt,
+                max_attempts,
+                elapsed,
+                usage.get("total_tokens", 0),
+            )
             parsed["_llm_usage"] = usage
             parsed["_llm_elapsed_seconds"] = round(elapsed, 3)
             parsed["_llm_request_mode"] = "multimodal" if has_images else "text"
@@ -306,20 +421,17 @@ class OpenAICompatibleClient:
                 self.usage_totals["text_request_count"] += 1
         url = self.config.base_url.rstrip("/") + "/responses"
         last_error_text = None
-        for attempt in range(1, 4):
+        max_attempts = self._max_attempts()
+        LOGGER.info(
+            "[llm-request-start] endpoint=%s api_mode=responses request_mode=%s max_attempts=%s timeout_seconds=%s url=%s",
+            self.config.name,
+            "multimodal" if has_images else "text",
+            max_attempts,
+            self.config.timeout_seconds,
+            url,
+        )
+        for attempt in range(1, max_attempts + 1):
             started = time.perf_counter()
-            req = urllib.request.Request(
-                url,
-                data=json.dumps(payload).encode("utf-8"),
-                headers={
-                    "Content-Type": "application/json",
-                    "Accept": "text/event-stream",
-                    "Connection": "close",
-                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-                    "Authorization": f"Bearer {self.config.api_key}",
-                },
-                method="POST",
-            )
             try:
                 session = requests.Session()
                 session.trust_env = False
@@ -350,11 +462,21 @@ class OpenAICompatibleClient:
                     error_body = ""
                     status_code = None
                 last_error_text = f"HTTP {status_code}: {error_body or exc}"
-                retryable = status_code in {408, 409, 429} or (status_code is not None and status_code >= 500)
-                if retryable and attempt < 3:
+                retryable = self._is_retryable_status(status_code)
+                LOGGER.warning(
+                    "[llm-request-http-error] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s retryable=%s elapsed_seconds=%.3f error=%s",
+                    self.config.name,
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    max_attempts,
+                    retryable,
+                    elapsed,
+                    last_error_text,
+                )
+                if retryable and attempt < max_attempts:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    time.sleep(min(2.0, 0.5 * attempt))
+                    self._sleep_before_retry(attempt)
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
@@ -365,10 +487,19 @@ class OpenAICompatibleClient:
                     self.usage_totals["failed_request_count"] += 1
                     self.usage_totals["total_request_seconds"] += elapsed
                 last_error_text = f"{type(exc).__name__}: {exc}"
-                if attempt < 3:
+                LOGGER.warning(
+                    "[llm-request-transport-error] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                    self.config.name,
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    max_attempts,
+                    elapsed,
+                    last_error_text,
+                )
+                if attempt < max_attempts:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    time.sleep(min(2.0, 0.5 * attempt))
+                    self._sleep_before_retry(attempt)
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
@@ -379,12 +510,38 @@ class OpenAICompatibleClient:
                 with self._usage_lock:
                     self.usage_totals["failed_request_count"] += 1
                     self.usage_totals["total_request_seconds"] += elapsed
-                    self.usage_totals["last_error"] = "Response missing JSON object."
+                last_error_text = "Response missing JSON object."
+                LOGGER.warning(
+                    "[llm-request-parse-miss] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                    self.config.name,
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    max_attempts,
+                    elapsed,
+                    last_error_text,
+                )
+                if attempt < max_attempts:
+                    with self._usage_lock:
+                        self.usage_totals["retry_count"] += 1
+                        self.usage_totals["last_error"] = last_error_text
+                    self._sleep_before_retry(attempt)
+                    continue
+                with self._usage_lock:
+                    self.usage_totals["last_error"] = last_error_text
                 return None
             with self._usage_lock:
                 self.usage_totals["successful_request_count"] += 1
                 self.usage_totals["total_request_seconds"] += elapsed
                 self.usage_totals["last_error"] = None
+            LOGGER.info(
+                "[llm-request-success] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s elapsed_seconds=%.3f total_tokens=%s",
+                self.config.name,
+                "multimodal" if has_images else "text",
+                attempt,
+                max_attempts,
+                elapsed,
+                0,
+            )
             parsed["_llm_usage"] = {
                 "prompt_tokens": 0,
                 "completion_tokens": 0,
@@ -462,6 +619,12 @@ class ModelRouter:
         if result is not None:
             return result
         if self.fallback is not None:
+            LOGGER.warning(
+                "[llm-fallback] request_mode=text primary_endpoint=%s fallback_endpoint=%s primary_last_error=%s",
+                self.primary.config.name,
+                self.fallback.config.name,
+                self.primary.snapshot_usage().get("last_error"),
+            )
             return self.fallback.chat_json(system_prompt, user_prompt)
         return None
 
@@ -470,6 +633,12 @@ class ModelRouter:
         if result is not None:
             return result
         if self.fallback is not None:
+            LOGGER.warning(
+                "[llm-fallback] request_mode=multimodal primary_endpoint=%s fallback_endpoint=%s primary_last_error=%s",
+                self.primary.config.name,
+                self.fallback.config.name,
+                self.primary.snapshot_usage().get("last_error"),
+            )
             return self.fallback.chat_json_with_images(system_prompt, user_prompt, images)
         return None
 

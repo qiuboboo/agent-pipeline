@@ -2,6 +2,22 @@
 
 ## 2026-04-26
 
+- `pipeline2` now has a basic unified logger path instead of relying only on the final CLI `print(json.dumps(...))` output.
+- Added runtime config knobs in `default_pipeline2.yaml` / `config.py`:
+  - `runtime.log_level`
+  - `runtime.log_to_file`
+- Current logging coverage is intentionally lightweight but useful for debugging hangs and failure concentration:
+  - runtime initialization;
+  - annotate / resume / trace-eval start and end;
+  - batch start / end;
+  - per-problem start / success;
+  - per-problem exception logging with inferred failure stage;
+  - LLM request start / success / retryable HTTP failure / transport failure / parse miss;
+  - fallback activation from primary to fallback endpoint.
+- When `runtime.log_to_file: true`, logs are written to `output_root/annotation_runtime/pipeline2.log`.
+
+## 2026-04-26
+
 - `pipeline2` `ready_loader.py::_collect_image_paths(...)` now also consumes top-level ready-sample `images` and `image_path`, not only nested `image_paths` / asset-registry-derived fields.
 - Reason for the change: some ready samples store the actually usable subset-relative path only at the top level (for example `artifacts/images/...`), while nested fields may still contain empty `image_paths`, `inline://...`, or source-run `outputs/...` paths that are less reliable inside the subset runtime.
 - This is a compatibility fix so ready subsets do not miss images that are physically present under the dataset folder just because the usable path lived only in the top-level sample fields.

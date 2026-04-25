@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import atexit
 import json
+import logging
 import sqlite3
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from copy import deepcopy
@@ -68,6 +69,57 @@ _SHARED_CHECKPOINTER: Any = None
 _METHOD_GRAPH = None
 _PROBLEM_GRAPH = None
 _BATCH_GRAPH = None
+LOGGER = logging.getLogger("benchmarkallinone.pipeline2")
+
+
+def _resolve_log_level(level_name: str) -> int:
+    candidate = getattr(logging, str(level_name).upper(), None)
+    return candidate if isinstance(candidate, int) else logging.INFO
+
+
+def _setup_logging(ctx: RuntimeContext) -> None:
+    level = _resolve_log_level(ctx.config.runtime.log_level)
+    formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(threadName)s | %(name)s | %(message)s")
+    root_logger = logging.getLogger("benchmarkallinone.pipeline2")
+    root_logger.setLevel(level)
+    root_logger.propagate = False
+
+    stream_handler_exists = any(
+        isinstance(handler, logging.StreamHandler) and getattr(handler, "_pipeline2_stream_handler", False)
+        for handler in root_logger.handlers
+    )
+    if not stream_handler_exists:
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(formatter)
+        stream_handler.setLevel(level)
+        stream_handler._pipeline2_stream_handler = True  # type: ignore[attr-defined]
+        root_logger.addHandler(stream_handler)
+    else:
+        for handler in root_logger.handlers:
+            if getattr(handler, "_pipeline2_stream_handler", False):
+                handler.setLevel(level)
+                handler.setFormatter(formatter)
+
+    file_handler_path = ctx.runtime_dir / "pipeline2.log"
+    for handler in list(root_logger.handlers):
+        if getattr(handler, "_pipeline2_file_handler", False):
+            handler_path = Path(getattr(handler, "baseFilename", "")) if getattr(handler, "baseFilename", None) else None
+            if not ctx.config.runtime.log_to_file or handler_path != file_handler_path:
+                root_logger.removeHandler(handler)
+                handler.close()
+
+    if ctx.config.runtime.log_to_file:
+        file_handler_exists = any(
+            getattr(handler, "_pipeline2_file_handler", False)
+            and Path(getattr(handler, "baseFilename", "")) == file_handler_path
+            for handler in root_logger.handlers
+        )
+        if not file_handler_exists:
+            file_handler = logging.FileHandler(file_handler_path, encoding="utf-8")
+            file_handler.setFormatter(formatter)
+            file_handler.setLevel(level)
+            file_handler._pipeline2_file_handler = True  # type: ignore[attr-defined]
+            root_logger.addHandler(file_handler)
 
 
 def get_context() -> RuntimeContext:
@@ -501,6 +553,8 @@ def _extract_claims_node(state: ProblemState) -> Dict[str, Any]:
                 "answer_final": method.get("answer_answer_check_final", ""),
                 "claims": claim_bundle["claims"],
                 "claim_audit": claim_bundle["audit"],
+                "claim_gate_passed": bool(claim_bundle.get("claim_gate_passed", False)),
+                "claim_gate_status": claim_bundle.get("claim_gate_status", "unknown"),
             }
         )
     if not qualified_methods:
@@ -649,32 +703,95 @@ def build_problem_graph():
 
 def _run_single_problem(batch_id: str, problem: Dict[str, Any]) -> Dict[str, Any]:
     problem_graph = build_problem_graph()
-    config = _make_thread_config(_make_problem_thread_id(batch_id, str(problem.get("problem_id", "unknown_problem"))))
+    problem_id = str(problem.get("problem_id", "unknown_problem"))
+    LOGGER.info("[problem-start] batch_id=%s problem_id=%s sample_path=%s", batch_id, problem_id, problem.get("sample_path", ""))
+    config = _make_thread_config(_make_problem_thread_id(batch_id, problem_id))
     result = _invoke_resumable_graph(
         graph=problem_graph,
         initial_state={"batch_id": batch_id, "problem": deepcopy(problem)},
         config=config,
     )
-    return result.get("problem_bundle", {})
+    problem_bundle = result.get("problem_bundle", {})
+    LOGGER.info(
+        "[problem-done] batch_id=%s problem_id=%s methods=%s claims=%s r_nodes=%s solutions=%s",
+        batch_id,
+        problem_id,
+        len((problem_bundle.get("runtime_problem") or {}).get("method") or []),
+        len(problem_bundle.get("claim_sequences") or []),
+        len(problem_bundle.get("r_nodes") or []),
+        len(problem_bundle.get("solution_library") or []),
+    )
+    return problem_bundle
+
+
+def _format_problem_failure(problem: Dict[str, Any], exc: Exception) -> Dict[str, Any]:
+    problem_id = str(problem.get("problem_id", "unknown_problem"))
+    summary = {
+        "problem_id": problem_id,
+        "source_problem_id": problem.get("source_problem_id", ""),
+        "sample_path": problem.get("sample_path", ""),
+        "error_type": type(exc).__name__,
+        "error": str(exc),
+        "status": "failed",
+        "stage": "unknown",
+    }
+    text = str(exc)
+    if "ClaimExtractionGate" in text:
+        summary["stage"] = "ClaimExtractionGate"
+    elif "ClaimExtraction" in text:
+        summary["stage"] = "ClaimExtraction"
+    elif "ClaimPolish" in text:
+        summary["stage"] = "ClaimPolish"
+    elif "CoTVerify" in text:
+        summary["stage"] = "CoTVerify"
+    elif "MethodPlanner" in text:
+        summary["stage"] = "MethodPlanner"
+    elif "PTKFoundationGate" in text:
+        summary["stage"] = "PTKFoundationGate"
+    elif "ReadyLoader" in text:
+        summary["stage"] = "ReadyLoader"
+    return summary
 
 
 def _process_problems_in_parallel_node(state: BatchState) -> BatchState:
     batch_id = state["batch_id"]
     problems = deepcopy(state.get("problems", []))
     if not problems:
-        return {"batch_id": batch_id, "problems": []}
+        LOGGER.warning("[batch-empty] batch_id=%s has no problems to process", batch_id)
+        return {"batch_id": batch_id, "problems": [], "failed_problems": []}
     max_workers = min(get_context().config.runtime.max_problem_workers, len(problems))
+    LOGGER.info("[batch-start] batch_id=%s problem_count=%s max_workers=%s", batch_id, len(problems), max_workers)
     output: List[Dict[str, Any] | None] = [None] * len(problems)
+    failures: List[Dict[str, Any]] = []
     with ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="pipeline2-problem") as executor:
         future_map = {executor.submit(_run_single_problem, batch_id, problem): index for index, problem in enumerate(problems)}
         for future in as_completed(future_map):
             index = future_map[future]
+            problem_id = str(problems[index].get("problem_id", f"problem_{index}"))
             try:
                 output[index] = future.result()
             except Exception as exc:
-                problem_id = problems[index].get("problem_id", f"problem_{index}")
-                raise RuntimeError(f"Failed to process problem `{problem_id}`.") from exc
-    return {"batch_id": batch_id, "problems": [item for item in output if item is not None]}
+                failure = _format_problem_failure(problems[index], exc)
+                failures.append(failure)
+                LOGGER.exception(
+                    "[problem-failed] batch_id=%s problem_id=%s stage=%s error_type=%s error=%s",
+                    batch_id,
+                    problem_id,
+                    failure.get("stage", "unknown"),
+                    failure.get("error_type", type(exc).__name__),
+                    failure.get("error", str(exc)),
+                )
+    LOGGER.info(
+        "[batch-done] batch_id=%s success_count=%s failed_count=%s",
+        batch_id,
+        len([item for item in output if item is not None]),
+        len(failures),
+    )
+    return {
+        "batch_id": batch_id,
+        "problems": [item for item in output if item is not None],
+        "failed_problems": failures,
+    }
 
 
 def build_batch_graph():
@@ -727,11 +844,20 @@ def initialize_runtime(config: Pipeline2Config, project_root: Path) -> RuntimeCo
         ctx.checkpoint_db_path.parent,
     ]:
         ensure_dir(directory)
+    _setup_logging(ctx)
     RUNTIME_CONTEXT = ctx
     _METHOD_GRAPH = None
     _PROBLEM_GRAPH = None
     _BATCH_GRAPH = None
     close_shared_checkpointer()
+    LOGGER.info(
+        "[runtime-init] ready_root=%s output_root=%s checkpoint_db_path=%s log_level=%s log_to_file=%s",
+        ctx.ready_root,
+        ctx.output_root,
+        ctx.checkpoint_db_path,
+        ctx.config.runtime.log_level,
+        ctx.config.runtime.log_to_file,
+    )
     return ctx
 
 
@@ -753,6 +879,13 @@ def run_annotation_pipeline(config: Pipeline2Config, project_root: Path, batch_i
         raise ReadyDataContractError(f"[ReadyLoader] No eligible ready problems were loaded from `{ctx.ready_root}`.")
     runtime_problems = _loaded_problems_to_runtime(loaded_problems)
     actual_batch_id = batch_id or f"pipeline2_{utc_now().replace(':', '').replace('-', '')}"
+    LOGGER.info(
+        "[annotate-start] batch_id=%s loaded_problem_count=%s include_manual_review=%s max_images=%s",
+        actual_batch_id,
+        len(loaded_problems),
+        config.runtime.include_manual_review,
+        config.runtime.max_images_per_problem,
+    )
     batch_graph = build_batch_graph()
     config_payload = _make_thread_config(_make_batch_thread_id(actual_batch_id))
     result = _invoke_resumable_graph(
@@ -760,15 +893,30 @@ def run_annotation_pipeline(config: Pipeline2Config, project_root: Path, batch_i
         initial_state={"batch_id": actual_batch_id, "problems": runtime_problems},
         config=config_payload,
     )
-    runtime_state = {"batch_id": actual_batch_id, "problems": result.get("problems", [])}
+    runtime_state = {
+        "batch_id": actual_batch_id,
+        "problems": result.get("problems", []),
+        "failed_problems": result.get("failed_problems", []),
+    }
     if ctx.config.runtime.save_runtime_snapshots:
         write_json(ctx.runtime_state_path, runtime_state)
-    write_json(ctx.output_root / "usage_summary.json", ctx.router.usage_summary())
+        write_json(ctx.runtime_dir / "failed_problems.json", runtime_state["failed_problems"])
+    usage_summary = ctx.router.usage_summary()
+    write_json(ctx.output_root / "usage_summary.json", usage_summary)
+    LOGGER.info(
+        "[annotate-done] batch_id=%s success_count=%s failed_count=%s primary_requests=%s fallback_requests=%s",
+        actual_batch_id,
+        len(runtime_state["problems"]),
+        len(runtime_state["failed_problems"]),
+        (usage_summary.get("primary") or {}).get("request_count", 0),
+        ((usage_summary.get("fallback") or {}) if isinstance(usage_summary.get("fallback"), dict) else {}).get("request_count", 0),
+    )
     return runtime_state
 
 
 def resume_annotation_pipeline(config: Pipeline2Config, project_root: Path, batch_id: str) -> Dict[str, Any]:
     ctx = initialize_runtime(config, project_root)
+    LOGGER.info("[annotate-resume] batch_id=%s", batch_id)
     batch_graph = build_batch_graph()
     config_payload = _make_thread_config(_make_batch_thread_id(batch_id))
     result = _invoke_resumable_graph(
@@ -776,10 +924,24 @@ def resume_annotation_pipeline(config: Pipeline2Config, project_root: Path, batc
         initial_state={"batch_id": batch_id, "problems": []},
         config=config_payload,
     )
-    runtime_state = {"batch_id": batch_id, "problems": result.get("problems", [])}
+    runtime_state = {
+        "batch_id": batch_id,
+        "problems": result.get("problems", []),
+        "failed_problems": result.get("failed_problems", []),
+    }
     if ctx.config.runtime.save_runtime_snapshots:
         write_json(ctx.runtime_state_path, runtime_state)
-    write_json(ctx.output_root / "usage_summary.json", ctx.router.usage_summary())
+        write_json(ctx.runtime_dir / "failed_problems.json", runtime_state["failed_problems"])
+    usage_summary = ctx.router.usage_summary()
+    write_json(ctx.output_root / "usage_summary.json", usage_summary)
+    LOGGER.info(
+        "[annotate-resume-done] batch_id=%s success_count=%s failed_count=%s primary_requests=%s fallback_requests=%s",
+        batch_id,
+        len(runtime_state["problems"]),
+        len(runtime_state["failed_problems"]),
+        (usage_summary.get("primary") or {}).get("request_count", 0),
+        ((usage_summary.get("fallback") or {}) if isinstance(usage_summary.get("fallback"), dict) else {}).get("request_count", 0),
+    )
     return runtime_state
 
 
@@ -812,6 +974,7 @@ def evaluate_traces(config: Pipeline2Config, project_root: Path, trace_file: Pat
     trace_records = _iter_trace_records(trace_file)
     if not trace_records:
         raise PipelineDataContractError(f"[TraceEval] No trace records were parsed from `{trace_file}`.")
+    LOGGER.info("[trace-eval-start] trace_file=%s trace_count=%s", trace_file, len(trace_records))
     write_json(ctx.incoming_traces_dir / trace_file.name.replace(trace_file.suffix, ".json"), trace_records)
     mapping_rows: List[Dict[str, Any]] = []
     novelty_rows: List[Dict[str, Any]] = []
@@ -842,6 +1005,13 @@ def evaluate_traces(config: Pipeline2Config, project_root: Path, trace_file: Pat
             }
         )
         patch_rows.append(patch)
+        LOGGER.info(
+            "[trace-eval-item] problem_id=%s run_id=%s novelty_label=%s patch_applied=%s",
+            problem_id,
+            trace_record.get("run_id", ""),
+            novelty_result.get("novelty_label", "unknown"),
+            patch.get("patch_applied"),
+        )
         write_json(ctx.mapping_reports_dir / f"{problem_id}__{trace_record.get('run_id', 'trace')}.json", mapping_report)
         write_json(ctx.novelty_candidates_dir / f"{problem_id}__{trace_record.get('run_id', 'trace')}.json", {"mapping_report": mapping_report, "novelty_result": novelty_result})
         if patch.get("patch_applied") and config.runtime.enable_trace_patch_writes:
@@ -849,13 +1019,16 @@ def evaluate_traces(config: Pipeline2Config, project_root: Path, trace_file: Pat
     write_jsonl(ctx.trace_eval_dir / "mapping_reports.jsonl", mapping_rows)
     write_jsonl(ctx.trace_eval_dir / "novelty_candidates.jsonl", novelty_rows)
     write_jsonl(ctx.trace_eval_dir / "dataset_patches.jsonl", patch_rows)
-    write_json(ctx.output_root / "usage_summary.json", ctx.router.usage_summary())
-    return {
+    usage_summary = ctx.router.usage_summary()
+    write_json(ctx.output_root / "usage_summary.json", usage_summary)
+    result = {
         "trace_count": len(trace_records),
         "mapping_report_count": len(mapping_rows),
         "novelty_candidate_count": len([row for row in novelty_rows if row.get("novelty_label") in {"new_solution_family", "uncertain_manual_queue"}]),
         "patch_count": len([row for row in patch_rows if row.get("patch_applied")]),
     }
+    LOGGER.info("[trace-eval-done] trace_file=%s result=%s", trace_file, result)
+    return result
 
 
 def parse_args() -> argparse.Namespace:

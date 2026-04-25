@@ -38,6 +38,8 @@ class RuntimeConfig:
     save_runtime_snapshots: bool = False
     save_problem_bundles: bool = True
     enable_trace_patch_writes: bool = True
+    log_level: str = "INFO"
+    log_to_file: bool = True
 
 
 @dataclass
