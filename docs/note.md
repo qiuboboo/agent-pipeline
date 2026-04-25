@@ -2,6 +2,12 @@
 
 ## 2026-04-26
 
+- `pipeline2` `ready_loader.py::_collect_image_paths(...)` now also consumes top-level ready-sample `images` and `image_path`, not only nested `image_paths` / asset-registry-derived fields.
+- Reason for the change: some ready samples store the actually usable subset-relative path only at the top level (for example `artifacts/images/...`), while nested fields may still contain empty `image_paths`, `inline://...`, or source-run `outputs/...` paths that are less reliable inside the subset runtime.
+- This is a compatibility fix so ready subsets do not miss images that are physically present under the dataset folder just because the usable path lived only in the top-level sample fields.
+
+## 2026-04-26
+
 - `pipeline2` PTK prompt tuning direction for current `p_facts` failures: do **not** start with broad subject-classification prompts.
 - Current preferred strategy is a low-token visual-grounding upgrade:
   - strengthen the first-pass perception prompt with a short coverage checklist;

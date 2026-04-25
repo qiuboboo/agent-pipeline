@@ -89,7 +89,18 @@ def _resolve_candidate_path(raw_path: str, sample_path: Path, workspace_root: Pa
 
 def _collect_image_paths(sample_record: Dict[str, Any], sample_path: Path, workspace_root: Path, max_images: int) -> List[str]:
     candidates: List[str] = []
-    dataset_root = sample_path.parent.parent
+
+    top_level_images = sample_record.get("images")
+    if isinstance(top_level_images, str):
+        candidates.append(top_level_images)
+    else:
+        for raw in top_level_images or []:
+            if isinstance(raw, str):
+                candidates.append(raw)
+
+    top_level_image_path = sample_record.get("image_path")
+    if isinstance(top_level_image_path, str):
+        candidates.append(top_level_image_path)
 
     for raw in sample_record.get("image_paths") or []:
         if isinstance(raw, str):
@@ -139,7 +150,10 @@ def _collect_image_paths(sample_record: Dict[str, Any], sample_path: Path, works
         final_path = _resolve_candidate_path(raw_path, sample_path, workspace_root)
         if final_path is None:
             continue
-        resolved.append(str(final_path))
+        final_path_str = str(final_path)
+        if final_path_str in resolved:
+            continue
+        resolved.append(final_path_str)
         if len(resolved) >= max_images:
             break
     return resolved
