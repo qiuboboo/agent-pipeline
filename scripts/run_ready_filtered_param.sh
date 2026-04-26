@@ -30,6 +30,11 @@ set -Eeuo pipefail
 # Optional:
 #   PIPELINE2_DRY_RUN=1                    # build filtered tree and print config, then exit
 #   PIPELINE2_RUN_ID=my_run_name           # controls default output/checkpoint names
+#   PIPELINE2_BATCH_ID=my_batch             # stable pipeline batch id; defaults to PIPELINE2_RUN_ID for resumable runs
+#   PIPELINE2_RESUME=1                      # resume an existing batch via --resume-batch-id; reuses ready root unless force rebuild is set
+#   PIPELINE2_FORCE_REBUILD_READY=1         # rebuild filtered ready root even in resume mode
+#   PIPELINE2_SKIP_COMPLETED=1              # continue mode: omit samples whose problem_id already exists in output_root/problems
+#   PIPELINE2_SKIP_PROBLEM_ERRORS=1         # also omit samples already marked in output_root/problem_errors
 #   PIPELINE2_INCLUDE_DATASETS=a,b/c       # only keep matching dataset basenames or relative paths, e.g. ai2d,circuit/eee_bench
 #   PIPELINE2_EXCLUDE_DATASETS=a,b,c       # extra exact dataset directory basenames to exclude
 #   PIPELINE2_EXCLUDE_PREFIXES=foo,bar_    # extra normalized basename prefixes to exclude
@@ -40,6 +45,18 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
+
+truthy() {
+  case "${1:-}" in
+    1|true|TRUE|yes|YES|on|ON) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+PIPELINE2_BATCH_ID_WAS_SET=0
+if [[ -n "${PIPELINE2_BATCH_ID+x}" ]]; then
+  PIPELINE2_BATCH_ID_WAS_SET=1
+fi
 
 if [[ "${PIPELINE2_SOURCE_BASHRC:-0}" == "1" && -f "$HOME/.bashrc" ]]; then
   set +u
@@ -85,6 +102,15 @@ fi
 : "${PIPELINE2_EXCLUDE_PREFIXES:=}"
 : "${PIPELINE2_ROUND_ROBIN_SAMPLES:=0}"
 : "${PIPELINE2_PER_DATASET_LIMIT:=0}"
+: "${PIPELINE2_RESUME:=0}"
+: "${PIPELINE2_FORCE_REBUILD_READY:=0}"
+: "${PIPELINE2_SKIP_COMPLETED:=0}"
+: "${PIPELINE2_SKIP_PROBLEM_ERRORS:=0}"
+if truthy "$PIPELINE2_SKIP_COMPLETED" && [[ "$PIPELINE2_BATCH_ID_WAS_SET" != "1" ]]; then
+  PIPELINE2_BATCH_ID="${PIPELINE2_RUN_ID}_continue_$(date +%Y%m%d_%H%M%S)"
+else
+  : "${PIPELINE2_BATCH_ID:=$PIPELINE2_RUN_ID}"
+fi
 
 : "${ANNOTATION_API_BASE_URL:=https://www.msutools.cn}"
 : "${ANNOTATION_MODEL:=gpt-5.5}"
@@ -95,7 +121,7 @@ fi
 : "${ANNOTATION_TEMPERATURE:=0.1}"
 : "${ANNOTATION_TIMEOUT_SECONDS:=180}"
 
-export PIPELINE2_RUN_ID PIPELINE2_SOURCE_READY_ROOT PIPELINE2_FILTERED_READY_ROOT PIPELINE2_OUTPUT_ROOT PIPELINE2_CHECKPOINT_DB_PATH
+export PIPELINE2_RUN_ID PIPELINE2_BATCH_ID PIPELINE2_SOURCE_READY_ROOT PIPELINE2_FILTERED_READY_ROOT PIPELINE2_OUTPUT_ROOT PIPELINE2_CHECKPOINT_DB_PATH
 export PIPELINE2_CONFIG_TEMPLATE PIPELINE2_RENDERED_CONFIG
 export PIPELINE2_INCLUDE_MANUAL_REVIEW PIPELINE2_MAX_PROBLEMS PIPELINE2_MAX_PROBLEM_WORKERS PIPELINE2_MAX_IMAGES_PER_PROBLEM
 export PIPELINE2_SAVE_RUNTIME_SNAPSHOTS PIPELINE2_SAVE_PROBLEM_BUNDLES PIPELINE2_ENABLE_TRACE_PATCH_WRITES
@@ -103,6 +129,7 @@ export PIPELINE2_ENABLE_PROBLEM_STRUCTURE_VALIDATION PIPELINE2_FAIL_ON_PROBLEM_S
 export PIPELINE2_STAGE_RETRY_ATTEMPTS PIPELINE2_STAGE_RETRY_BACKOFF_SECONDS PIPELINE2_PROBLEM_RETRY_ATTEMPTS PIPELINE2_CONTINUE_ON_PROBLEM_ERROR
 export PIPELINE2_METHOD_SCORE_THRESHOLD_LOW PIPELINE2_METHOD_SCORE_THRESHOLD_HIGH PIPELINE2_NOVELTY_TOTAL_THRESHOLD PIPELINE2_NOVELTY_REQUIRED_THRESHOLD
 export PIPELINE2_INCLUDE_DATASETS PIPELINE2_EXCLUDE_DATASETS PIPELINE2_EXCLUDE_PREFIXES PIPELINE2_ROUND_ROBIN_SAMPLES PIPELINE2_PER_DATASET_LIMIT
+export PIPELINE2_RESUME PIPELINE2_FORCE_REBUILD_READY PIPELINE2_SKIP_COMPLETED PIPELINE2_SKIP_PROBLEM_ERRORS
 export ANNOTATION_API_BASE_URL ANNOTATION_MODEL ANNOTATION_REASONING_EFFORT ANNOTATION_API_MODE
 export ANNOTATION_REQUIRES_OPENAI_AUTH ANNOTATION_DISABLE_RESPONSE_STORAGE ANNOTATION_TEMPERATURE ANNOTATION_TIMEOUT_SECONDS
 
@@ -126,11 +153,23 @@ if [[ ! -x ".venv/bin/python" ]]; then
   exit 2
 fi
 
-rm -rf "$PIPELINE2_FILTERED_READY_ROOT"
-mkdir -p "$PIPELINE2_FILTERED_READY_ROOT" "$(dirname "$PIPELINE2_RENDERED_CONFIG")"
+should_build_ready=1
+if truthy "$PIPELINE2_RESUME" && [[ -d "$PIPELINE2_FILTERED_READY_ROOT" ]] && ! truthy "$PIPELINE2_FORCE_REBUILD_READY"; then
+  should_build_ready=0
+fi
 
+if [[ "$should_build_ready" == "1" ]]; then
+  rm -rf "$PIPELINE2_FILTERED_READY_ROOT"
+  mkdir -p "$PIPELINE2_FILTERED_READY_ROOT" "$(dirname "$PIPELINE2_RENDERED_CONFIG")"
+else
+  mkdir -p "$(dirname "$PIPELINE2_RENDERED_CONFIG")"
+  echo "[ready-filter] reuse_existing_ready_root=$PIPELINE2_FILTERED_READY_ROOT"
+fi
+
+if [[ "$should_build_ready" == "1" ]]; then
 .venv/bin/python - <<'PY'
 from pathlib import Path
+import json
 import os
 import shutil
 
@@ -156,9 +195,14 @@ extra_prefixes = tuple(
     if item.strip()
 )
 round_robin_samples = os.environ.get("PIPELINE2_ROUND_ROBIN_SAMPLES", "0").strip().lower() in {"1", "true", "yes", "on"}
+skip_completed = os.environ.get("PIPELINE2_SKIP_COMPLETED", "0").strip().lower() in {"1", "true", "yes", "on"}
+skip_problem_errors = os.environ.get("PIPELINE2_SKIP_PROBLEM_ERRORS", "0").strip().lower() in {"1", "true", "yes", "on"}
 max_problems = int(os.environ.get("PIPELINE2_MAX_PROBLEMS", "0") or 0)
 per_dataset_limit = int(os.environ.get("PIPELINE2_PER_DATASET_LIMIT", "0") or 0)
-materialize_sample_files = round_robin_samples or per_dataset_limit > 0
+materialize_sample_files = round_robin_samples or per_dataset_limit > 0 or skip_completed or skip_problem_errors
+output_root = Path(os.environ["PIPELINE2_OUTPUT_ROOT"]).resolve()
+completed_ids = {path.stem for path in (output_root / "problems").glob("*.json")} if skip_completed else set()
+problem_error_ids = {path.stem for path in (output_root / "problem_errors").glob("*.json")} if skip_problem_errors else set()
 
 excluded = []
 kept = []
@@ -192,6 +236,29 @@ def is_excluded(parts):
         return "plain_scemqa"
     return ""
 
+def first_non_empty(*values):
+    for value in values:
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+        if value not in (None, "", [], {}):
+            return str(value)
+    return ""
+
+def sample_problem_id(sample_path):
+    try:
+        data = json.loads(sample_path.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    clean = data.get("clean_problem_record") or {}
+    candidate = data.get("candidate_problem_record") or {}
+    source_record = data.get("source_intake_record") or {}
+    return first_non_empty(
+        clean.get("problem_id"),
+        candidate.get("problem_id"),
+        source_record.get("problem_id"),
+        data.get("problem_id"),
+    )
+
 sample_dirs = sorted({p.parent for p in source.rglob("samples/*.json") if p.is_file()})
 for sample_dir in sample_dirs:
     dataset_root = sample_dir.parent
@@ -203,6 +270,16 @@ for sample_dir in sample_dirs:
         continue
 
     sample_paths = sorted(p for p in sample_dir.glob("*.json") if p.is_file())
+    if skip_completed or skip_problem_errors:
+        filtered_sample_paths = []
+        for sample_path in sample_paths:
+            problem_id = sample_problem_id(sample_path)
+            if skip_completed and problem_id in completed_ids:
+                continue
+            if skip_problem_errors and problem_id in problem_error_ids:
+                continue
+            filtered_sample_paths.append(sample_path)
+        sample_paths = filtered_sample_paths
     if per_dataset_limit > 0 and not round_robin_samples:
         sample_paths = sample_paths[:per_dataset_limit]
     if not sample_paths:
@@ -276,6 +353,7 @@ print(f"[ready-filter] dest={dest}")
 if include_datasets:
     print(f"[ready-filter] include_datasets={','.join(sorted(include_datasets))}")
 print(f"[ready-filter] round_robin_samples={round_robin_samples} per_dataset_limit={per_dataset_limit} max_problems={max_problems}")
+print(f"[ready-filter] skip_completed={skip_completed} completed_id_count={len(completed_ids)} skip_problem_errors={skip_problem_errors} problem_error_id_count={len(problem_error_ids)}")
 print(f"[ready-filter] kept_dataset_count={len(kept)} excluded_dataset_count={len(excluded)}")
 if excluded:
     print("[ready-filter] excluded:")
@@ -284,6 +362,7 @@ if excluded:
 if not kept:
     raise SystemExit("[ready-filter] no datasets left after filtering")
 PY
+fi
 
 .venv/bin/python - <<'PY'
 from pathlib import Path
@@ -309,6 +388,7 @@ PY
 sample_count="$(find -L "$PIPELINE2_FILTERED_READY_ROOT" -path '*/samples/*.json' -type f | wc -l | tr -d ' ')"
 echo "[ready-filter] filtered_sample_count=$sample_count"
 echo "[run] run_id=$PIPELINE2_RUN_ID"
+echo "[run] batch_id=$PIPELINE2_BATCH_ID resume=$PIPELINE2_RESUME skip_completed=$PIPELINE2_SKIP_COMPLETED skip_problem_errors=$PIPELINE2_SKIP_PROBLEM_ERRORS"
 echo "[run] config=$PIPELINE2_RENDERED_CONFIG"
 echo "[run] ready_root=$PIPELINE2_FILTERED_READY_ROOT"
 echo "[run] output_root=$PIPELINE2_OUTPUT_ROOT"
@@ -324,4 +404,7 @@ if [[ "${PIPELINE2_DRY_RUN:-0}" == "1" ]]; then
 fi
 
 export PYTHONPATH=src
-exec .venv/bin/python run_pipeline2.py annotate --config "$PIPELINE2_RENDERED_CONFIG"
+if truthy "$PIPELINE2_RESUME"; then
+  exec .venv/bin/python run_pipeline2.py annotate --config "$PIPELINE2_RENDERED_CONFIG" --resume-batch-id "$PIPELINE2_BATCH_ID"
+fi
+exec .venv/bin/python run_pipeline2.py annotate --config "$PIPELINE2_RENDERED_CONFIG" --batch-id "$PIPELINE2_BATCH_ID"
