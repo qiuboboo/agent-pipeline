@@ -4,9 +4,10 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, TypedDict
 
 
-class BatchState(TypedDict):
+class BatchState(TypedDict, total=False):
     batch_id: str
     problems: List[Dict[str, Any]]
+    failed_problems: List[Dict[str, Any]]
 
 
 class ProblemStateBase(TypedDict):
@@ -29,7 +30,9 @@ class ProblemState(ProblemStateBase, total=False):
     evidence_bindings: List[Dict[str, Any]]
     coverage_state: Dict[str, Any]
     trace_mapping_index: Dict[str, Any]
+    verification_audit: Dict[str, Any]
     problem_bundle: Dict[str, Any]
+    problem_error: Dict[str, Any]
 
 
 class MethodStateBase(TypedDict):

@@ -5,6 +5,7 @@ import atexit
 import json
 import logging
 import sqlite3
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from copy import deepcopy
 from dataclasses import dataclass
@@ -39,6 +40,7 @@ from .annotation_modules import build_ptk_foundation, extract_claims_bundle
 from .clients import ModelRouter
 from .config import Pipeline2Config
 from .models import BatchState, LoadedReadyProblem, MethodState, ProblemState
+from .verification_modules import validate_problem_structure
 from .ready_loader import ReadyDataContractError, discover_ready_problems
 from .utils import ensure_dir, normalize_whitespace, read_json, utc_now, write_json, write_jsonl
 
@@ -663,6 +665,120 @@ def _bind_evidence_node(state: ProblemState) -> Dict[str, Any]:
     }
 
 
+def _attach_validation_annotations(problem_bundle: Dict[str, Any], verification_audit: Dict[str, Any]) -> None:
+    final_reports = {
+        str(item.get("method_id", "")): item
+        for item in verification_audit.get("final_cot_validations", [])
+        if isinstance(item, dict)
+    }
+    claim_reports = {
+        str(item.get("method_id", "")): item
+        for item in verification_audit.get("claim_set_validations", [])
+        if isinstance(item, dict)
+    }
+    node_report = verification_audit.get("node_set_validation", {})
+    node_judgments = {
+        str(item.get("r_id", "")): item
+        for item in node_report.get("node_judgments", [])
+        if isinstance(item, dict)
+    }
+
+    runtime_problem = problem_bundle.get("runtime_problem", {})
+    for method in runtime_problem.get("method", []) or []:
+        if not isinstance(method, dict):
+            continue
+        method_id = str(method.get("method_id", ""))
+        if method_id in final_reports:
+            method["final_cot_validation"] = final_reports[method_id]
+        if method_id in claim_reports:
+            method["claim_set_validation"] = claim_reports[method_id]
+
+    for sequence in problem_bundle.get("claim_sequences", []) or []:
+        if not isinstance(sequence, dict):
+            continue
+        method_id = str(sequence.get("method_id", ""))
+        claim_report = claim_reports.get(method_id)
+        if claim_report is None:
+            continue
+        sequence["claim_set_validation"] = claim_report
+        claim_judgments = {
+            str(item.get("claim_id", "")): item
+            for item in claim_report.get("claim_judgments", [])
+            if isinstance(item, dict)
+        }
+        for claim in sequence.get("claims", []) or []:
+            if not isinstance(claim, dict):
+                continue
+            claim_id = str(claim.get("claim_id", ""))
+            if claim_id in claim_judgments:
+                claim["validation"] = claim_judgments[claim_id]
+
+    for node in problem_bundle.get("r_nodes", []) or []:
+        if not isinstance(node, dict):
+            continue
+        r_id = str(node.get("r_id", ""))
+        if r_id in node_judgments:
+            node["validation"] = node_judgments[r_id]
+
+
+def _validate_problem_structure_node(state: ProblemState) -> Dict[str, Any]:
+    problem = deepcopy(state["problem"])
+    problem_bundle = deepcopy(state.get("problem_bundle", {}))
+    if not problem_bundle:
+        raise PipelineDataContractError(
+            f"[ProblemStructureValidation] Problem `{problem.get('problem_id', 'unknown_problem')}` has no problem bundle to validate."
+        )
+
+    if not get_context().config.runtime.enable_problem_structure_validation:
+        verification_audit = {
+            "component": "ProblemStructureValidation",
+            "enabled": False,
+            "passed": True,
+            "validated_method_ids": [],
+            "skipped_method_ids": [
+                str(item.get("method_id", ""))
+                for item in problem.get("method", [])
+                if isinstance(item, dict)
+            ],
+            "validated_node_count": 0,
+            "final_cot_validations": [],
+            "claim_set_validations": [],
+            "node_set_validation": {},
+            "global_failures": [],
+            "summary": "Problem structure validation disabled by runtime config.",
+        }
+        problem_bundle["verification_audit"] = verification_audit
+        return {
+            "problem": problem,
+            "problem_bundle": problem_bundle,
+            "verification_audit": verification_audit,
+        }
+
+    verification_audit = validate_problem_structure(
+        get_context().router,
+        problem,
+        state.get("claim_sequences", []),
+        state.get("r_nodes", []),
+        state.get("claim_mappings", []),
+        state.get("p_facts", []),
+        state.get("t_facts", []),
+        state.get("k_atoms", []),
+    )
+    _attach_validation_annotations(problem_bundle, verification_audit)
+    problem_bundle["verification_audit"] = verification_audit
+
+    if get_context().config.runtime.fail_on_problem_structure_validation and not verification_audit.get("passed"):
+        raise PipelineDataContractError(
+            f"[ProblemStructureValidation] Problem `{problem.get('problem_id', 'unknown_problem')}` failed structural verification."
+        )
+
+    return {
+        "problem": problem,
+        "problem_bundle": problem_bundle,
+        "verification_audit": verification_audit,
+    }
+
+
 def _write_problem_outputs(problem_bundle: Dict[str, Any]) -> None:
     ctx = get_context()
     problem_id = str(problem_bundle.get("problem_record", {}).get("problem_id", "unknown_problem"))
@@ -687,6 +803,7 @@ def build_problem_graph():
     graph.add_node("induce_nodes", _induce_nodes_node)
     graph.add_node("group_solutions", _group_solutions_node)
     graph.add_node("bind_evidence", _bind_evidence_node)
+    graph.add_node("validate_problem_structure", _validate_problem_structure_node)
     graph.add_node("finalize_problem_bundle", _finalize_problem_bundle_node)
     graph.add_edge(START, "prepare_methods")
     graph.add_edge("prepare_methods", "build_ptk")
@@ -695,7 +812,8 @@ def build_problem_graph():
     graph.add_edge("extract_claims", "induce_nodes")
     graph.add_edge("induce_nodes", "group_solutions")
     graph.add_edge("group_solutions", "bind_evidence")
-    graph.add_edge("bind_evidence", "finalize_problem_bundle")
+    graph.add_edge("bind_evidence", "validate_problem_structure")
+    graph.add_edge("validate_problem_structure", "finalize_problem_bundle")
     graph.add_edge("finalize_problem_bundle", END)
     _PROBLEM_GRAPH = graph.compile(checkpointer=get_shared_checkpointer())
     return _PROBLEM_GRAPH
@@ -724,6 +842,84 @@ def _run_single_problem(batch_id: str, problem: Dict[str, Any]) -> Dict[str, Any
     return problem_bundle
 
 
+def _build_problem_error_record(problem: Dict[str, Any], attempts_exhausted: int, exc: Exception) -> Dict[str, Any]:
+    problem_id = str(problem.get("problem_id", "unknown_problem"))
+    return {
+        "problem_id": problem_id,
+        "status": "unavailable",
+        "current_status": "problem_unavailable",
+        "attempts_exhausted": attempts_exhausted,
+        "error_type": type(exc).__name__,
+        "error_message": str(exc),
+        "dataset_name": problem.get("dataset_name", ""),
+        "source_problem_id": problem.get("source_problem_id", ""),
+        "subject": problem.get("subject", ""),
+        "sample_path": problem.get("sample_path", ""),
+        "question_text": problem.get("question_text", ""),
+        "standard_answer": problem.get("standard_answer", ""),
+        "images": list(problem.get("images") or []),
+    }
+
+
+def _write_problem_error_record(problem_error: Dict[str, Any]) -> None:
+    problem_id = str(problem_error.get("problem_id", "unknown_problem"))
+    target = get_context().output_root / "problem_errors" / f"{problem_id}.json"
+    write_json(target, problem_error)
+
+
+def _run_problem_with_retries(batch_id: str, problem: Dict[str, Any]) -> Dict[str, Any]:
+    max_attempts = max(1, int(get_context().config.runtime.problem_retry_attempts or 1))
+    problem_id = str(problem.get("problem_id", "unknown_problem"))
+    last_exc: Exception | None = None
+    attempts_used = 0
+    for attempt_index in range(1, max_attempts + 1):
+        attempts_used = attempt_index
+        LOGGER.info(
+            "[problem-attempt-start] batch_id=%s problem_id=%s attempt=%s/%s",
+            batch_id,
+            problem_id,
+            attempt_index,
+            max_attempts,
+        )
+        try:
+            result = _run_single_problem(batch_id, problem)
+            LOGGER.info(
+                "[problem-attempt-done] batch_id=%s problem_id=%s attempt=%s/%s",
+                batch_id,
+                problem_id,
+                attempt_index,
+                max_attempts,
+            )
+            return result
+        except Exception as exc:
+            last_exc = exc
+            LOGGER.exception(
+                "[problem-attempt-failed] batch_id=%s problem_id=%s attempt=%s/%s error_type=%s error=%s",
+                batch_id,
+                problem_id,
+                attempt_index,
+                max_attempts,
+                type(exc).__name__,
+                str(exc),
+            )
+            if attempt_index >= max_attempts:
+                break
+            time.sleep(min(5.0, 0.5 * attempt_index))
+    if last_exc is None:
+        last_exc = RuntimeError("Unknown problem processing failure.")
+    if not get_context().config.runtime.continue_on_problem_error:
+        raise RuntimeError(f"Failed to process problem `{problem_id}` after {attempts_used or max_attempts} attempts.") from last_exc
+    problem_error = _build_problem_error_record(problem, attempts_used or max_attempts, last_exc)
+    _write_problem_error_record(problem_error)
+    LOGGER.warning(
+        "[problem-marked-unavailable] batch_id=%s problem_id=%s attempts=%s",
+        batch_id,
+        problem_id,
+        attempts_used or max_attempts,
+    )
+    return problem_error
+
+
 def _format_problem_failure(problem: Dict[str, Any], exc: Exception) -> Dict[str, Any]:
     problem_id = str(problem.get("problem_id", "unknown_problem"))
     summary = {
@@ -748,6 +944,8 @@ def _format_problem_failure(problem: Dict[str, Any], exc: Exception) -> Dict[str
         summary["stage"] = "MethodPlanner"
     elif "PTKFoundationGate" in text:
         summary["stage"] = "PTKFoundationGate"
+    elif "ProblemStructureValidation" in text:
+        summary["stage"] = "ProblemStructureValidation"
     elif "ReadyLoader" in text:
         summary["stage"] = "ReadyLoader"
     return summary
@@ -764,7 +962,7 @@ def _process_problems_in_parallel_node(state: BatchState) -> BatchState:
     output: List[Dict[str, Any] | None] = [None] * len(problems)
     failures: List[Dict[str, Any]] = []
     with ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="pipeline2-problem") as executor:
-        future_map = {executor.submit(_run_single_problem, batch_id, problem): index for index, problem in enumerate(problems)}
+        future_map = {executor.submit(_run_problem_with_retries, batch_id, problem): index for index, problem in enumerate(problems)}
         for future in as_completed(future_map):
             index = future_map[future]
             problem_id = str(problems[index].get("problem_id", f"problem_{index}"))

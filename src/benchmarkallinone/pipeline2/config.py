@@ -42,6 +42,10 @@ class RuntimeConfig:
     save_runtime_snapshots: bool = False
     save_problem_bundles: bool = True
     enable_trace_patch_writes: bool = True
+    enable_problem_structure_validation: bool = True
+    fail_on_problem_structure_validation: bool = True
+    problem_retry_attempts: int = 3
+    continue_on_problem_error: bool = True
     log_level: str = "INFO"
     log_to_file: bool = True
 
