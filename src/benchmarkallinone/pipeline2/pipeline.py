@@ -4,6 +4,7 @@ import argparse
 import atexit
 import json
 import logging
+import re
 import sqlite3
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -43,7 +44,7 @@ from .config import Pipeline2Config
 from .models import BatchState, LoadedReadyProblem, MethodState, ProblemState
 from .verification_modules import validate_problem_structure
 from .ready_loader import ReadyDataContractError, discover_ready_problems
-from .utils import ensure_dir, normalize_whitespace, read_json, utc_now, write_json, write_jsonl
+from .utils import ensure_dir, normalize_whitespace, read_json, stable_digest, utc_now, write_json, write_jsonl
 
 
 @dataclass
@@ -213,6 +214,26 @@ def _make_method_thread_id(batch_id: str, problem_id: str, method_id: str) -> st
 
 def _make_thread_config(thread_id: str) -> Dict[str, Any]:
     return {"configurable": {"thread_id": thread_id}}
+
+
+def _stage_cache_path(batch_id: str, problem_id: str, stage_name: str, item_key: str) -> Path:
+    filename = f"{stable_digest([batch_id, problem_id, stage_name, item_key], length=16)}.json"
+    return get_context().runtime_dir / "stage_cache" / batch_id / problem_id / stage_name / filename
+
+
+def _load_stage_cache_record(batch_id: str, problem_id: str, stage_name: str, item_key: str) -> Optional[Dict[str, Any]]:
+    path = _stage_cache_path(batch_id, problem_id, stage_name, item_key)
+    if not path.exists():
+        return None
+    try:
+        payload = read_json(path)
+    except Exception:
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def _write_stage_cache_record(batch_id: str, problem_id: str, stage_name: str, item_key: str, payload: Dict[str, Any]) -> None:
+    write_json(_stage_cache_path(batch_id, problem_id, stage_name, item_key), payload)
 
 
 def _thread_has_checkpoints(graph: Any, config: Dict[str, Any]) -> bool:
@@ -590,8 +611,47 @@ def _prepare_methods_node(state: ProblemState) -> Dict[str, Any]:
 
 
 def _build_ptk_node(state: ProblemState) -> Dict[str, Any]:
+    batch_id = state["batch_id"]
     problem = deepcopy(state["problem"])
-    ptk_bundle = build_ptk_foundation(get_context().router, problem, max_repair_rounds=2)
+    problem_id = str(problem.get("problem_id", "unknown_problem"))
+    cached_bundle = _load_stage_cache_record(batch_id, problem_id, "ptk_foundation", "bundle")
+    if (
+        isinstance(cached_bundle, dict)
+        and isinstance(cached_bundle.get("problem_record"), dict)
+        and isinstance(cached_bundle.get("p_facts"), list)
+        and isinstance(cached_bundle.get("t_facts"), list)
+        and isinstance(cached_bundle.get("k_atoms"), list)
+        and isinstance(cached_bundle.get("audit"), dict)
+    ):
+        ptk_bundle = deepcopy(cached_bundle)
+        print(
+            f"[pipeline2 stage-cache] Reused PTK foundation for problem `{problem_id}`.",
+            flush=True,
+        )
+    else:
+        progress_state = _load_stage_cache_record(batch_id, problem_id, "ptk_foundation_progress", "bundle")
+        if isinstance(progress_state, dict) and progress_state:
+            print(
+                f"[pipeline2 stage-cache] Resuming PTK foundation progress for problem `{problem_id}`.",
+                flush=True,
+            )
+
+        def _save_ptk_progress(
+            payload: Dict[str, Any],
+            *,
+            _batch_id: str = batch_id,
+            _problem_id: str = problem_id,
+        ) -> None:
+            _write_stage_cache_record(_batch_id, _problem_id, "ptk_foundation_progress", "bundle", payload)
+
+        ptk_bundle = build_ptk_foundation(
+            get_context().router,
+            problem,
+            max_repair_rounds=4,
+            progress_state=progress_state,
+            save_progress=_save_ptk_progress,
+        )
+        _write_stage_cache_record(batch_id, problem_id, "ptk_foundation", "bundle", ptk_bundle)
     return {
         "problem": problem,
         "problem_record": ptk_bundle["problem_record"],
@@ -621,47 +681,167 @@ def _run_single_method(batch_id: str, problem: Dict[str, Any], method: Dict[str,
 
 
 def _run_methods_node(state: ProblemState) -> Dict[str, Any]:
+    batch_id = state["batch_id"]
     problem = deepcopy(state["problem"])
+    problem_id = str(problem.get("problem_id", "unknown_problem"))
     processed_methods: List[Dict[str, Any]] = []
     for method in problem.get("method", []):
-        processed = _run_single_method(batch_id=state["batch_id"], problem=problem, method=method)
+        method_id = str(method.get("method_id", "unknown_method"))
+        cached_record = _load_stage_cache_record(batch_id, problem_id, "method_results", method_id)
+        cached_method = cached_record.get("method") if isinstance(cached_record, dict) else None
+        if isinstance(cached_method, dict) and str(cached_method.get("method_id", "")) == method_id:
+            processed = deepcopy(cached_method)
+            print(
+                f"[pipeline2 stage-cache] Reused method result for problem `{problem_id}` method `{method_id}`.",
+                flush=True,
+            )
+        else:
+            processed = _run_single_method(batch_id=batch_id, problem=problem, method=method)
+            _write_stage_cache_record(batch_id, problem_id, "method_results", method_id, {"method": processed})
         processed_methods.append(processed)
-        _write_method_snapshot(state["batch_id"], str(problem.get("problem_id", "unknown_problem")), processed)
+        _write_method_snapshot(batch_id, problem_id, processed)
     problem["method"] = processed_methods
-    return {"batch_id": state["batch_id"], "problem": problem}
+    return {"batch_id": batch_id, "problem": problem}
+
+
+def _namespace_claims_for_method(method_id: str, claims: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    method_token = normalize_whitespace(method_id) or "unknown_method"
+    prefix = f"m{method_token}__"
+    raw_to_namespaced: Dict[str, str] = {}
+    for claim in claims:
+        if not isinstance(claim, dict):
+            continue
+        raw_claim_id = str(claim.get("claim_id", "")).strip()
+        if not raw_claim_id:
+            continue
+        namespaced_claim_id = raw_claim_id if raw_claim_id.startswith(prefix) else f"{prefix}{raw_claim_id}"
+        raw_to_namespaced[raw_claim_id] = namespaced_claim_id
+        raw_to_namespaced[namespaced_claim_id] = namespaced_claim_id
+
+    normalized_claims: List[Dict[str, Any]] = []
+    for claim in claims:
+        if not isinstance(claim, dict):
+            continue
+        raw_claim_id = str(claim.get("claim_id", "")).strip()
+        normalized_claim = deepcopy(claim)
+        normalized_claim["method_id"] = method_id
+        normalized_claim["claim_id"] = raw_to_namespaced.get(raw_claim_id, f"{prefix}{raw_claim_id}") if raw_claim_id else ""
+        normalized_claim["depends_on"] = [
+            raw_to_namespaced.get(str(dep).strip(), f"{prefix}{str(dep).strip()}")
+            for dep in (claim.get("depends_on") or [])
+            if str(dep).strip()
+        ]
+        normalized_claims.append(normalized_claim)
+    return normalized_claims
 
 
 def _extract_claims_node(state: ProblemState) -> Dict[str, Any]:
+    batch_id = state["batch_id"]
     problem = deepcopy(state["problem"])
+    problem_id = str(problem.get("problem_id", "unknown_problem"))
     qualified_methods: List[Dict[str, Any]] = []
     claim_sequences: List[Dict[str, Any]] = []
+    claim_extraction_failures: List[Dict[str, Any]] = []
     cot_variants: List[Dict[str, Any]] = []
     for method in problem.get("method", []):
-        cot_variants.append(
-            {
-                "problem_id": problem.get("problem_id"),
-                "method_id": method.get("method_id"),
-                "method_draft": method.get("method_draft"),
-                "cot_raw": method.get("CoT_raw", ""),
-                "cot_final": method.get("CoT_final", ""),
-                "answer_final": method.get("answer_answer_check_final", method.get("model_answer", "")),
-                "is_answer_match": bool(method.get("is_answer_match")),
-                "is_final_CoT_qualified": bool(method.get("is_final_CoT_qualified")),
-            }
-        )
+        method_id = str(method.get("method_id", ""))
+        variant_record = {
+            "problem_id": problem.get("problem_id"),
+            "method_id": method.get("method_id"),
+            "method_draft": method.get("method_draft"),
+            "cot_raw": method.get("CoT_raw", ""),
+            "cot_final": method.get("CoT_final", ""),
+            "answer_final": method.get("answer_answer_check_final", method.get("model_answer", "")),
+            "is_answer_match": bool(method.get("is_answer_match")),
+            "is_final_CoT_qualified": bool(method.get("is_final_CoT_qualified")),
+            "claim_extraction_status": "not_attempted",
+            "claim_extraction_error": "",
+        }
+        cot_variants.append(variant_record)
         if not (method.get("is_answer_match") and method.get("is_final_CoT_qualified")):
+            method["claim_extraction_status"] = "skipped_unqualified_cot"
+            method["claim_extraction_error"] = ""
+            variant_record["claim_extraction_status"] = "skipped_unqualified_cot"
             continue
         qualified_methods.append(method)
-        claim_bundle = extract_claims_bundle(
-            get_context().router,
-            problem,
-            method,
-            method.get("CoT_final", ""),
-            state.get("p_facts", []),
-            state.get("t_facts", []),
-            state.get("k_atoms", []),
-            max_repair_rounds=2,
-        )
+        method["claim_extraction_status"] = "pending"
+        cached_bundle = _load_stage_cache_record(batch_id, problem_id, "claim_bundles", method_id)
+        try:
+            if (
+                isinstance(cached_bundle, dict)
+                and str(cached_bundle.get("method_id", "")) == method_id
+                and isinstance(cached_bundle.get("claims"), list)
+                and isinstance(cached_bundle.get("audit"), dict)
+            ):
+                claim_bundle = deepcopy(cached_bundle)
+                print(
+                    f"[pipeline2 stage-cache] Reused claim bundle for problem `{problem_id}` method `{method_id}`.",
+                    flush=True,
+                )
+            else:
+                progress_state = _load_stage_cache_record(batch_id, problem_id, "claim_bundle_progress", method_id)
+                if isinstance(progress_state, dict) and progress_state:
+                    print(
+                        f"[pipeline2 stage-cache] Resuming claim bundle progress for problem `{problem_id}` method `{method_id}`.",
+                        flush=True,
+                    )
+
+                def _save_claim_progress(
+                    payload: Dict[str, Any],
+                    *,
+                    _batch_id: str = batch_id,
+                    _problem_id: str = problem_id,
+                    _method_id: str = method_id,
+                ) -> None:
+                    _write_stage_cache_record(_batch_id, _problem_id, "claim_bundle_progress", _method_id, payload)
+
+                claim_bundle = extract_claims_bundle(
+                    get_context().router,
+                    problem,
+                    method,
+                    method.get("CoT_final", ""),
+                    state.get("p_facts", []),
+                    state.get("t_facts", []),
+                    state.get("k_atoms", []),
+                    max_repair_rounds=4,
+                    progress_state=progress_state,
+                    save_progress=_save_claim_progress,
+                )
+                _write_stage_cache_record(batch_id, problem_id, "claim_bundles", method_id, claim_bundle)
+        except PipelineDataContractError as exc:
+            latest_progress = _load_stage_cache_record(batch_id, problem_id, "claim_bundle_progress", method_id)
+            latest_audit_rounds = latest_progress.get("audit_rounds", []) if isinstance(latest_progress, dict) else []
+            latest_claims = latest_progress.get("claims", []) if isinstance(latest_progress, dict) else []
+            failure_audit = {
+                "component": "ClaimExtractionAgent",
+                "problem_id": problem.get("problem_id"),
+                "method_id": method.get("method_id"),
+                "passed": False,
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+                "rounds": latest_audit_rounds if isinstance(latest_audit_rounds, list) else [],
+                "partial_claim_count": len(latest_claims) if isinstance(latest_claims, list) else 0,
+            }
+            claim_extraction_failures.append(
+                {
+                    "problem_id": problem.get("problem_id"),
+                    "method_id": method.get("method_id"),
+                    "method_draft": method.get("method_draft"),
+                    "cot_final": method.get("CoT_final", ""),
+                    "error_type": type(exc).__name__,
+                    "error_message": str(exc),
+                    "claim_audit": failure_audit,
+                }
+            )
+            method["claim_extraction_status"] = "failed"
+            method["claim_extraction_error"] = str(exc)
+            variant_record["claim_extraction_status"] = "failed"
+            variant_record["claim_extraction_error"] = str(exc)
+            print(
+                f"[pipeline2 annotate] Claim extraction skipped for problem `{problem_id}` method `{method_id}` after explicit contract failure: {exc}",
+                flush=True,
+            )
+            continue
         claim_sequences.append(
             {
                 "problem_id": problem.get("problem_id"),
@@ -669,20 +849,32 @@ def _extract_claims_node(state: ProblemState) -> Dict[str, Any]:
                 "method_draft": method.get("method_draft"),
                 "cot_final": method.get("CoT_final", ""),
                 "answer_final": method.get("answer_answer_check_final", ""),
-                "claims": claim_bundle["claims"],
+                "claims": _namespace_claims_for_method(method_id, claim_bundle["claims"]),
                 "claim_audit": claim_bundle["audit"],
-                "claim_gate_passed": bool(claim_bundle.get("claim_gate_passed", False)),
-                "claim_gate_status": claim_bundle.get("claim_gate_status", "unknown"),
             }
         )
+        method["claim_extraction_status"] = "passed"
+        method["claim_extraction_error"] = ""
+        variant_record["claim_extraction_status"] = "passed"
     if not qualified_methods:
         raise PipelineDataContractError(
             f"[ClaimExtractionGate] Problem `{problem.get('problem_id', 'unknown_problem')}` has no qualified methods; cannot continue to node extraction."
+        )
+    if not claim_sequences:
+        failed_method_ids = ", ".join(str(item.get("method_id", "")) for item in claim_extraction_failures if item.get("method_id"))
+        raise PipelineDataContractError(
+            f"[ClaimExtractionGate] Problem `{problem.get('problem_id', 'unknown_problem')}` had qualified methods but none produced a valid claim sequence. Failed method_ids: {failed_method_ids or 'unknown'}."
+        )
+    if claim_extraction_failures:
+        failed_method_ids = ", ".join(str(item.get("method_id", "")) for item in claim_extraction_failures if item.get("method_id"))
+        raise PipelineDataContractError(
+            f"[ClaimExtractionGate] Problem `{problem.get('problem_id', 'unknown_problem')}` had one or more qualified methods fail claim extraction. Failed method_ids: {failed_method_ids or 'unknown'}."
         )
     return {
         "problem": problem,
         "cot_variants": cot_variants,
         "claim_sequences": claim_sequences,
+        "claim_extraction_failures": claim_extraction_failures,
         "problem_record": state.get("problem_record", {}),
         "p_facts": state.get("p_facts", []),
         "t_facts": state.get("t_facts", []),
@@ -713,15 +905,20 @@ def _induce_nodes_node(state: ProblemState) -> Dict[str, Any]:
 
 def _group_solutions_node(state: ProblemState) -> Dict[str, Any]:
     problem = deepcopy(state["problem"])
-    qualified_methods = [
+    structured_method_ids = {
+        str(sequence.get("method_id", ""))
+        for sequence in state.get("claim_sequences", [])
+        if isinstance(sequence, dict) and str(sequence.get("method_id", ""))
+    }
+    structured_methods = [
         method
         for method in problem.get("method", [])
-        if method.get("is_answer_match") and method.get("is_final_CoT_qualified")
+        if str(method.get("method_id", "")) in structured_method_ids
     ]
     solution_library, solution_memberships, coverage_state = group_solutions(
         get_context().router,
         problem,
-        qualified_methods,
+        structured_methods,
         state.get("r_nodes", []),
         state.get("claim_sequences", []),
         state.get("claim_mappings", []),
@@ -757,10 +954,15 @@ def _bind_evidence_node(state: ProblemState) -> Dict[str, Any]:
         "k_atoms": state.get("k_atoms", []),
         "ptk_foundation_audit": state.get("ptk_audit", {}),
         "claim_sequences": state.get("claim_sequences", []),
+        "claim_extraction_failures": state.get("claim_extraction_failures", []),
         "claim_extraction_audits": [
             sequence.get("claim_audit", {})
             for sequence in state.get("claim_sequences", [])
             if isinstance(sequence, dict)
+        ] + [
+            failure.get("claim_audit", {})
+            for failure in state.get("claim_extraction_failures", [])
+            if isinstance(failure, dict) and isinstance(failure.get("claim_audit"), dict)
         ],
         "claim_mappings": state.get("claim_mappings", []),
         "r_nodes": state.get("r_nodes", []),

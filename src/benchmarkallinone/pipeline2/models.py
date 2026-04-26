@@ -23,6 +23,7 @@ class ProblemState(ProblemStateBase, total=False):
     ptk_audit: Dict[str, Any]
     cot_variants: List[Dict[str, Any]]
     claim_sequences: List[Dict[str, Any]]
+    claim_extraction_failures: List[Dict[str, Any]]
     r_nodes: List[Dict[str, Any]]
     claim_mappings: List[Dict[str, Any]]
     solution_library: List[Dict[str, Any]]

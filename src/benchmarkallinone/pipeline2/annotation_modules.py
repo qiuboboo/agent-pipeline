@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Sequence
+from copy import deepcopy
+from typing import Any, Callable, Dict, List, Optional, Sequence
 
 from .agents import (
     AgentContractError,
@@ -20,6 +21,9 @@ from .models import ClaimRecord
 from .prompts import (
     CLAIM_EXTRACTION_SYSTEM_PROMPT,
     CLAIM_POLISH_SYSTEM_PROMPT,
+    CLAIM_VERIFY_GLOBAL_SYSTEM_PROMPT,
+    CLAIM_VERIFY_GROUNDING_SYSTEM_PROMPT,
+    CLAIM_VERIFY_STRUCTURE_SYSTEM_PROMPT,
     CLAIM_VERIFY_SYSTEM_PROMPT,
     KNOWLEDGE_LIBRARIAN_SYSTEM_PROMPT,
     PERCEPTION_EXTRACTION_SYSTEM_PROMPT,
@@ -30,7 +34,11 @@ from .prompts import (
     PTK_T_FACTS_POLISH_SYSTEM_PROMPT,
     TEXT_CONDITION_SYSTEM_PROMPT,
     build_claim_extraction_user_prompt,
+    build_claim_global_verify_user_prompt,
+    build_claim_grounding_verify_user_prompt,
     build_claim_polish_user_prompt,
+    build_claim_structure_verify_user_prompt,
+    build_claim_set_validation_user_prompt,
     build_claim_verify_user_prompt,
     build_knowledge_user_prompt,
     build_perception_user_prompt,
@@ -410,18 +418,49 @@ def _normalize_ptk_critique(response: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _normalize_claim_critique(response: Dict[str, Any]) -> Dict[str, Any]:
-    passed = _require_bool("ClaimVerify", response.get("pass"), "pass")
+def _normalize_claim_verify_partial(response: Dict[str, Any], stage_name: str) -> Dict[str, Any]:
+    passed = _require_bool(stage_name, response.get("pass"), "pass")
     revision_instructions = str(response.get("revision_instructions", "") or "").strip()
     if not revision_instructions and passed:
         revision_instructions = "No changes needed."
+    issues = _require_string_list(stage_name, response.get("critical_issues", []), "critical_issues", allow_empty=True)
     return {
         "pass": passed,
-        "critical_issues": _require_string_list("ClaimVerify", response.get("critical_issues", []), "critical_issues", allow_empty=True),
-        "revision_instructions": _require_non_empty_text("ClaimVerify", revision_instructions, "revision_instructions"),
-        "atomicity_score": _require_probability("ClaimVerify", response.get("atomicity_score"), "atomicity_score"),
-        "dependency_score": _require_probability("ClaimVerify", response.get("dependency_score"), "dependency_score"),
-        "grounding_score": _require_probability("ClaimVerify", response.get("grounding_score"), "grounding_score"),
+        "critical_issues": issues,
+        "revision_instructions": _require_non_empty_text(stage_name, revision_instructions, "revision_instructions"),
+        "atomicity_score": _require_probability(stage_name, response.get("atomicity_score"), "atomicity_score"),
+        "dependency_score": _require_probability(stage_name, response.get("dependency_score"), "dependency_score"),
+        "grounding_score": _require_probability(stage_name, response.get("grounding_score"), "grounding_score"),
+    }
+
+
+def _normalize_claim_critique(response: Dict[str, Any]) -> Dict[str, Any]:
+    return _normalize_claim_verify_partial(response, "ClaimVerify")
+
+
+def _merge_claim_verify_partials(*partials: Dict[str, Any]) -> Dict[str, Any]:
+    reports = [partial for partial in partials if isinstance(partial, dict)]
+    if not reports:
+        raise AgentContractError("[ClaimVerify] No partial verification reports were available.")
+    pass_value = all(bool(report.get("pass")) for report in reports)
+    critical_issues: List[str] = []
+    revision_chunks: List[str] = []
+    for report in reports:
+        for issue in report.get("critical_issues", []) or []:
+            text = normalize_whitespace(issue)
+            if text and text not in critical_issues:
+                critical_issues.append(text)
+        instructions = normalize_whitespace(report.get("revision_instructions"))
+        if instructions and instructions != "No changes needed." and instructions not in revision_chunks:
+            revision_chunks.append(instructions)
+    return {
+        "pass": pass_value,
+        "critical_issues": critical_issues,
+        "revision_instructions": "No changes needed." if pass_value and not revision_chunks else " | ".join(revision_chunks) or "Review claim sequence for structural and grounding issues.",
+        "atomicity_score": min(float(report.get("atomicity_score", 0.0)) for report in reports),
+        "dependency_score": min(float(report.get("dependency_score", 0.0)) for report in reports),
+        "grounding_score": min(float(report.get("grounding_score", 0.0)) for report in reports),
+        "partial_reports": reports,
     }
 
 
@@ -482,6 +521,22 @@ def _extract_ptk_once(router: ModelRouter, problem: Dict[str, Any]) -> Dict[str,
     }
 
 
+def _select_claim_context(
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+    *,
+    p_limit: int,
+    t_limit: int,
+    k_limit: int,
+) -> Dict[str, List[Dict[str, Any]]]:
+    return {
+        "p_facts": list(p_facts)[: max(0, p_limit)],
+        "t_facts": list(t_facts)[: max(0, t_limit)],
+        "k_atoms": list(k_atoms)[: max(0, k_limit)],
+    }
+
+
 def _build_claim_extraction_prompt(
     problem: Dict[str, Any],
     method: Dict[str, Any],
@@ -491,15 +546,16 @@ def _build_claim_extraction_prompt(
     k_atoms: Sequence[Dict[str, Any]],
 ) -> str:
     base_prompt = build_claim_extraction_user_prompt(problem, method, cot_text)
+    narrowed = _select_claim_context(p_facts, t_facts, k_atoms, p_limit=8, t_limit=8, k_limit=8)
     return (
         base_prompt
-        + "\n\nGrounded PTK Foundation:\n"
+        + "\n\nGrounded PTK Foundation (compact):\n"
         + "P Facts:\n"
-        + to_plain_text(list(p_facts))
+        + to_plain_text(narrowed["p_facts"])
         + "\n\nT Facts:\n"
-        + to_plain_text(list(t_facts))
+        + to_plain_text(narrowed["t_facts"])
         + "\n\nK Atoms:\n"
-        + to_plain_text(list(k_atoms))
+        + to_plain_text(narrowed["k_atoms"])
     )
 
 
@@ -600,38 +656,96 @@ def polish_ptk_foundation(
     }
 
 
-def build_ptk_foundation(router: ModelRouter, problem: Dict[str, Any], max_repair_rounds: int = 2) -> Dict[str, Any]:
-    foundation = _extract_ptk_once(router, problem)
-    audit_rounds: List[Dict[str, Any]] = []
-    passed = False
+def build_ptk_foundation(
+    router: ModelRouter,
+    problem: Dict[str, Any],
+    max_repair_rounds: int = 2,
+    progress_state: Optional[Dict[str, Any]] = None,
+    save_progress: Optional[Callable[[Dict[str, Any]], None]] = None,
+) -> Dict[str, Any]:
+    progress = progress_state if isinstance(progress_state, dict) else {}
+    cached_foundation = progress.get("foundation")
+    if isinstance(cached_foundation, dict) and cached_foundation:
+        foundation = deepcopy(cached_foundation)
+    else:
+        foundation = _extract_ptk_once(router, problem)
 
-    for round_index in range(max_repair_rounds + 1):
-        critique = critique_ptk_foundation(
-            router,
-            problem,
-            foundation.get("p_facts", []),
-            foundation.get("t_facts", []),
-            foundation.get("k_atoms", []),
+    raw_audit_rounds = progress.get("audit_rounds")
+    audit_rounds: List[Dict[str, Any]] = [
+        dict(item) for item in raw_audit_rounds if isinstance(item, dict)
+    ] if isinstance(raw_audit_rounds, list) else []
+
+    try:
+        next_round_index = int(progress.get("next_round_index", len(audit_rounds)))
+    except (TypeError, ValueError):
+        next_round_index = len(audit_rounds)
+    pending_critique = progress.get("pending_critique") if isinstance(progress.get("pending_critique"), dict) else None
+    passed = bool(progress.get("passed")) and pending_critique is None
+
+    def _persist(progress_passed: bool, next_index: int, pending: Optional[Dict[str, Any]]) -> None:
+        if save_progress is None:
+            return
+        save_progress(
+            {
+                "foundation": deepcopy(foundation),
+                "audit_rounds": [dict(item) for item in audit_rounds if isinstance(item, dict)],
+                "next_round_index": next_index,
+                "pending_critique": dict(pending) if isinstance(pending, dict) else None,
+                "passed": bool(progress_passed),
+            }
         )
-        round_record: Dict[str, Any] = {"round_index": round_index, **critique}
-        if critique["pass"]:
+
+    exhausted_failed_progress = (
+        not passed
+        and pending_critique is None
+        and next_round_index > max_repair_rounds
+    )
+    if exhausted_failed_progress:
+        audit_rounds = []
+        next_round_index = 0
+        _persist(False, 0, None)
+    elif not (isinstance(cached_foundation, dict) and cached_foundation):
+        _persist(False, len(audit_rounds), pending_critique)
+
+    if not passed:
+        for round_index in range(max(0, next_round_index), max_repair_rounds + 1):
+            if isinstance(pending_critique, dict) and pending_critique.get("round_index") == round_index:
+                round_record: Dict[str, Any] = dict(pending_critique)
+            else:
+                critique = critique_ptk_foundation(
+                    router,
+                    problem,
+                    foundation.get("p_facts", []),
+                    foundation.get("t_facts", []),
+                    foundation.get("k_atoms", []),
+                )
+                round_record = {"round_index": round_index, **critique}
+            if round_record.get("pass"):
+                audit_rounds.append(round_record)
+                passed = True
+                pending_critique = None
+                _persist(True, round_index + 1, None)
+                break
+            if round_index >= max_repair_rounds:
+                audit_rounds.append(round_record)
+                pending_critique = None
+                _persist(False, round_index + 1, None)
+                break
+            pending_critique = dict(round_record)
+            _persist(False, round_index, pending_critique)
+            polished = polish_ptk_foundation(router, problem, foundation, round_record["revision_instructions"])
+            foundation = {
+                **foundation,
+                "p_facts": polished["p_facts"],
+                "t_facts": polished["t_facts"],
+                "k_atoms": polished["k_atoms"],
+            }
+            round_record["polish_summary"] = polished["revision_summary"]
+            round_record["patched_sections"] = polished.get("patched_sections", [])
+            round_record["section_summaries"] = polished.get("section_summaries", [])
             audit_rounds.append(round_record)
-            passed = True
-            break
-        if round_index >= max_repair_rounds:
-            audit_rounds.append(round_record)
-            break
-        polished = polish_ptk_foundation(router, problem, foundation, critique["revision_instructions"])
-        foundation = {
-            **foundation,
-            "p_facts": polished["p_facts"],
-            "t_facts": polished["t_facts"],
-            "k_atoms": polished["k_atoms"],
-        }
-        round_record["polish_summary"] = polished["revision_summary"]
-        round_record["patched_sections"] = polished.get("patched_sections", [])
-        round_record["section_summaries"] = polished.get("section_summaries", [])
-        audit_rounds.append(round_record)
+            pending_critique = None
+            _persist(False, round_index + 1, None)
 
     audit = {
         "component": "PTKFoundationBuilder",
@@ -657,19 +771,59 @@ def critique_claim_sequence(
     k_atoms: Sequence[Dict[str, Any]],
 ) -> Dict[str, Any]:
     _ensure_problem_minimum(problem, "ClaimVerify")
-    response = _call_router(
+    narrowed = _select_claim_context(p_facts, t_facts, k_atoms, p_limit=8, t_limit=8, k_limit=6)
+
+    structure_response = _call_router(
         router,
-        CLAIM_VERIFY_SYSTEM_PROMPT,
+        CLAIM_VERIFY_STRUCTURE_SYSTEM_PROMPT,
         _augment_prompt_with_ready_context(
             problem,
-            build_claim_verify_user_prompt(problem, method, cot_text, claims, p_facts, t_facts, k_atoms),
+            build_claim_structure_verify_user_prompt(problem, method, cot_text, claims),
             "ClaimVerify",
         ),
         _problem_image_paths(problem),
-        agent_name="ClaimVerify",
+        agent_name="ClaimVerifyStructure",
         require_images=bool(problem.get("requires_image")),
     )
-    return _normalize_claim_critique(response)
+    structure_report = _normalize_claim_verify_partial(structure_response, "ClaimVerifyStructure")
+
+    grounding_response = _call_router(
+        router,
+        CLAIM_VERIFY_GROUNDING_SYSTEM_PROMPT,
+        _augment_prompt_with_ready_context(
+            problem,
+            build_claim_grounding_verify_user_prompt(
+                problem,
+                method,
+                cot_text,
+                claims,
+                narrowed["p_facts"],
+                narrowed["t_facts"],
+                narrowed["k_atoms"],
+            ),
+            "ClaimVerify",
+        ),
+        _problem_image_paths(problem),
+        agent_name="ClaimVerifyGrounding",
+        require_images=bool(problem.get("requires_image")),
+    )
+    grounding_report = _normalize_claim_verify_partial(grounding_response, "ClaimVerifyGrounding")
+
+    global_response = _call_router(
+        router,
+        CLAIM_VERIFY_GLOBAL_SYSTEM_PROMPT,
+        _augment_prompt_with_ready_context(
+            problem,
+            build_claim_global_verify_user_prompt(problem, method, cot_text, claims),
+            "ClaimVerify",
+        ),
+        _problem_image_paths(problem),
+        agent_name="ClaimVerifyGlobal",
+        require_images=bool(problem.get("requires_image")),
+    )
+    global_report = _normalize_claim_verify_partial(global_response, "ClaimVerifyGlobal")
+
+    return _merge_claim_verify_partials(structure_report, grounding_report, global_report)
 
 
 def polish_claim_sequence(
@@ -684,12 +838,22 @@ def polish_claim_sequence(
     k_atoms: Sequence[Dict[str, Any]],
 ) -> Dict[str, Any]:
     _ensure_problem_minimum(problem, "ClaimPolish")
+    narrowed = _select_claim_context(p_facts, t_facts, k_atoms, p_limit=8, t_limit=8, k_limit=6)
     response = _call_router(
         router,
         CLAIM_POLISH_SYSTEM_PROMPT,
         _augment_prompt_with_ready_context(
             problem,
-            build_claim_polish_user_prompt(problem, method, cot_text, claims, revision_instructions, p_facts, t_facts, k_atoms),
+            build_claim_polish_user_prompt(
+                problem,
+                method,
+                cot_text,
+                claims,
+                revision_instructions,
+                narrowed["p_facts"],
+                narrowed["t_facts"],
+                narrowed["k_atoms"],
+            ),
             "ClaimPolish",
         ),
         _problem_image_paths(problem),
@@ -716,35 +880,90 @@ def extract_claims_bundle(
     t_facts: Sequence[Dict[str, Any]],
     k_atoms: Sequence[Dict[str, Any]],
     max_repair_rounds: int = 2,
+    progress_state: Optional[Dict[str, Any]] = None,
+    save_progress: Optional[Callable[[Dict[str, Any]], None]] = None,
 ) -> Dict[str, Any]:
-    claims = _extract_claims_once(router, problem, method, cot_text, p_facts, t_facts, k_atoms)
-    audit_rounds: List[Dict[str, Any]] = []
-    passed = False
+    progress = progress_state if isinstance(progress_state, dict) else {}
+    cached_claims = progress.get("claims")
+    claims: List[Dict[str, Any]]
+    if isinstance(cached_claims, list) and cached_claims:
+        claims = [dict(item) for item in cached_claims if isinstance(item, dict)]
+    else:
+        claims = _extract_claims_once(router, problem, method, cot_text, p_facts, t_facts, k_atoms)
 
-    for round_index in range(max_repair_rounds + 1):
-        critique = critique_claim_sequence(router, problem, method, cot_text, claims, p_facts, t_facts, k_atoms)
-        round_record: Dict[str, Any] = {"round_index": round_index, **critique}
-        if critique["pass"]:
-            audit_rounds.append(round_record)
-            passed = True
-            break
-        if round_index >= max_repair_rounds:
-            audit_rounds.append(round_record)
-            break
-        polished = polish_claim_sequence(
-            router,
-            problem,
-            method,
-            cot_text,
-            claims,
-            critique["revision_instructions"],
-            p_facts,
-            t_facts,
-            k_atoms,
+    raw_audit_rounds = progress.get("audit_rounds")
+    audit_rounds: List[Dict[str, Any]] = [
+        dict(item) for item in raw_audit_rounds if isinstance(item, dict)
+    ] if isinstance(raw_audit_rounds, list) else []
+
+    try:
+        next_round_index = int(progress.get("next_round_index", len(audit_rounds)))
+    except (TypeError, ValueError):
+        next_round_index = len(audit_rounds)
+    pending_critique = progress.get("pending_critique") if isinstance(progress.get("pending_critique"), dict) else None
+    passed = bool(progress.get("passed")) and pending_critique is None
+
+    def _persist(progress_passed: bool, next_index: int, pending: Optional[Dict[str, Any]]) -> None:
+        if save_progress is None:
+            return
+        save_progress(
+            {
+                "claims": [dict(item) for item in claims if isinstance(item, dict)],
+                "audit_rounds": [dict(item) for item in audit_rounds if isinstance(item, dict)],
+                "next_round_index": next_index,
+                "pending_critique": dict(pending) if isinstance(pending, dict) else None,
+                "passed": bool(progress_passed),
+            }
         )
-        claims = polished["claims"]
-        round_record["polish_summary"] = polished["revision_summary"]
-        audit_rounds.append(round_record)
+
+    exhausted_failed_progress = (
+        not passed
+        and pending_critique is None
+        and next_round_index > max_repair_rounds
+    )
+    if exhausted_failed_progress:
+        audit_rounds = []
+        next_round_index = 0
+        _persist(False, 0, None)
+    elif not (isinstance(cached_claims, list) and claims):
+        _persist(False, len(audit_rounds), pending_critique)
+
+    if not passed:
+        for round_index in range(max(0, next_round_index), max_repair_rounds + 1):
+            if isinstance(pending_critique, dict) and pending_critique.get("round_index") == round_index:
+                round_record: Dict[str, Any] = dict(pending_critique)
+            else:
+                critique = critique_claim_sequence(router, problem, method, cot_text, claims, p_facts, t_facts, k_atoms)
+                round_record = {"round_index": round_index, **critique}
+            if round_record.get("pass"):
+                audit_rounds.append(round_record)
+                passed = True
+                pending_critique = None
+                _persist(True, round_index + 1, None)
+                break
+            if round_index >= max_repair_rounds:
+                audit_rounds.append(round_record)
+                pending_critique = None
+                _persist(False, round_index + 1, None)
+                break
+            pending_critique = dict(round_record)
+            _persist(False, round_index, pending_critique)
+            polished = polish_claim_sequence(
+                router,
+                problem,
+                method,
+                cot_text,
+                claims,
+                round_record["revision_instructions"],
+                p_facts,
+                t_facts,
+                k_atoms,
+            )
+            claims = polished["claims"]
+            round_record["polish_summary"] = polished["revision_summary"]
+            audit_rounds.append(round_record)
+            pending_critique = None
+            _persist(False, round_index + 1, None)
 
     audit = {
         "component": "ClaimExtractionAgent",

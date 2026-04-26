@@ -2,6 +2,22 @@
 
 ## 2026-04-26
 
+- `pipeline2` now also has a minimal **stage-cache / salvage** layer for the PTK-and-claims path, instead of relying only on outer stage retry.
+- Scope of the port stayed intentionally narrow and qjb-compatible:
+  - added stage-cache helpers in `pipeline.py` (`_stage_cache_path`, `_load_stage_cache_record`, `_write_stage_cache_record`);
+  - PTK stage now persists both final bundle cache (`ptk_foundation`) and resumable progress cache (`ptk_foundation_progress`);
+  - claim extraction now persists both final per-method bundles (`claim_bundles`) and resumable progress (`claim_bundle_progress`);
+  - method execution results are also reused through `method_results` cache records.
+- `annotation_modules.py` was aligned so the cache layer is real rather than cosmetic:
+  - `build_ptk_foundation(...)` accepts `progress_state` + `save_progress` and can resume critic/polish rounds;
+  - `extract_claims_bundle(...)` accepts the same progress hooks and can resume claim critique/polish rounds.
+- Problem-state/output shape was widened to carry `claim_extraction_failures`, and final problem bundles now include both successful claim audits and failure-side claim audits.
+- Intended behavior after this port:
+  - if a run is interrupted after PTK extraction or during PTK/claim repair rounds, the next attempt can salvage from saved stage progress instead of blindly restarting those expensive inner loops;
+  - if some qualified methods fail claim extraction, those failures are preserved explicitly in the problem bundle / audit trail instead of disappearing into a generic later-stage exception.
+
+## 2026-04-26
+
 - `pipeline2` gained a minimal checkpoint-aware **stage retry** layer on top of the earlier problem-level retry port.
 - Added runtime config knobs in `default_pipeline2.yaml` / `config.py`:
   - `runtime.stage_retry_attempts`
