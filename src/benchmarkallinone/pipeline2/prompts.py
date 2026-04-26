@@ -3,7 +3,7 @@ from __future__ import annotations
 from textwrap import dedent
 from typing import Any, Dict, Sequence
 
-from .utils import normalize_whitespace, to_plain_text
+from .utils import normalize_whitespace, to_plain_text, truncate_text
 
 
 METHOD_PLANNER_SYSTEM_PROMPT = dedent(
@@ -428,35 +428,39 @@ CLAIM_EXTRACTION_SYSTEM_PROMPT = dedent(
 
 
 
-PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT = dedent(
+PTK_STRUCTURE_CRITIC_SYSTEM_PROMPT = dedent(
     """
     ## ROLE
-    You are a PTK Foundation Critic for multimodal reasoning annotation.
+    You are a PTK Structure Critic for multimodal reasoning annotation.
 
     ## TASK
-    Audit the problem-level P/T/K foundation so it is grounded, complete, minimal, and reusable for downstream claim extraction and node induction.
+    Audit the current P/T/K foundation for text-explicit completeness, non-visual grounding mistakes, and reusable knowledge quality.
 
     ## RULES
-    1. Check visual grounding against the image and the trusted ready context.
-    2. `p_facts` must contain only objective visual facts, not reasoning conclusions.
-    3. For symbols, labels, legends, axis text, circuit/component markings, geometry point names, subscripts, superscripts, Greek letters, operators, and units, `p_facts` should preserve the visible string as faithfully as possible instead of paraphrasing, normalizing, or repairing it into a guessed canonical form.
-    4. Flag `p_facts` that contain guessed symbol normalization, mojibake-like corruption, interpreted meaning that is not explicitly shown, or text-explicit givens/constraints that belong in `t_facts` rather than `p_facts`.
-    5. `t_facts` must cover explicit givens, goals, constraints, and subquestions from the text, and each `fact_text` should stay as close as possible to verbatim wording from the question text rather than a paraphrase.
-    6. `t_facts` must not include image-derived map layouts, cell values, diagram structure, circuit connectivity, geometric relations, or other visual observations unless the same content is explicitly written in the text.
-    7. `k_atoms` must be reusable knowledge atoms, not solution-specific claims.
-    8. `k_atoms` should be minimal: flag duplicate, near-duplicate, or heavily overlapping rules and ask for merge/pruning when needed.
-    9. For K-map / Karnaugh-map problems, treat cross-plane adjacency as essential coverage when the map is split across variable planes. For a 5-variable K-map shown as two 4x4 maps, the foundation is incomplete unless it states that corresponding cells across the two planes are adjacent because they differ only in the split variable.
-    10. Flag unsupported facts, missing essentials, duplicated content, over-specific knowledge, and `t_facts` that drift away from the original wording.
-    11. Prefer revision-oriented feedback over hard blocking: if the foundation is broadly usable but too verbose, duplicated, or not minimal, give concrete trim/rewrite instructions so the polish step can fix it.
-    12. When revision is needed, explicitly name which section(s) must change: `p_facts`, `t_facts`, and/or `k_atoms`.
-    13. Use `pass=false` when blocking issues remain, including unsupported visual facts, materially missing text conditions/goals, solution-specific knowledge that would corrupt downstream extraction, or visibly corrupted / guessed symbol strings inside critical `p_facts`.
-    14. If `pass=true`, set `critical_issues` to `[]` and set `revision_instructions` to `No changes needed.` exactly.
-    15. Output valid JSON only.
+    1. This is a text-only structural audit. Do not perform fresh image inspection here.
+    2. Focus on whether `t_facts` preserve explicit givens, goals, constraints, and subquestions from the text.
+    3. Flag any `t_fact` that is really diagram-derived rather than text-explicit.
+    4. Flag `k_atoms` that are solution-specific, missing crucial reusable rules, or overly duplicated/over-specific.
+    5. You may also flag `p_facts_non_objective_or_overclaimed` if a visual fact is written as a conclusion rather than an observation.
+    6. Use only these issue category labels when needed:
+       `p_facts_non_objective_or_overclaimed`
+       `t_facts_missing_explicit_givens`
+       `t_facts_missing_goals_or_constraints`
+       `t_facts_non_text_grounded`
+       `k_atoms_solution_specific`
+       `k_atoms_missing_required_rule`
+       `k_atoms_over_specific_or_duplicate`
+    7. If `pass=true`, return `critical_issues=[]`, `issue_categories=[]`, and `revision_instructions="No changes needed."`.
+    8. Return exactly one top-level JSON object.
+    9. Do not output any prose before or after the JSON object.
+    10. Do not output markdown fences.
+    11. Do not omit required fields.
 
     ## OUTPUT JSON
     {
       "pass": true,
       "critical_issues": ["..."],
+      "issue_categories": ["t_facts_missing_explicit_givens"],
       "revision_instructions": "...",
       "grounding_score": 0.0,
       "coverage_score": 0.0
@@ -465,28 +469,62 @@ PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT = dedent(
 ).strip()
 
 
+PTK_VISUAL_GROUNDING_CRITIC_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a PTK Visual Grounding Critic for multimodal reasoning annotation.
+
+    ## TASK
+    Audit only the visual grounding quality of the current `p_facts` against the attached image(s).
+
+    ## RULES
+    1. Inspect the attached image(s) directly.
+    2. Check whether each `p_fact` is objective, image-grounded, and visually relevant.
+    3. Flag missing important visual observations only when they are clearly needed and directly visible.
+    4. Use only these issue category labels when needed:
+       `p_facts_visual_grounding`
+       `p_facts_missing_relevant_visuals`
+       `p_facts_non_objective_or_overclaimed`
+    5. Do not critique `t_facts` or `k_atoms` here.
+    6. If `pass=true`, return `critical_issues=[]`, `issue_categories=[]`, and `revision_instructions="No changes needed."`.
+    7. Return exactly one top-level JSON object.
+    8. Do not output any prose before or after the JSON object.
+    9. Do not output markdown fences.
+    10. Do not omit required fields.
+
+    ## OUTPUT JSON
+    {
+      "pass": true,
+      "critical_issues": ["..."],
+      "issue_categories": ["p_facts_visual_grounding"],
+      "revision_instructions": "...",
+      "grounding_score": 0.0
+    }
+    """
+).strip()
+
+
+
+
 PTK_P_FACTS_POLISH_SYSTEM_PROMPT = dedent(
     """
     ## ROLE
-    You are a PTK P-Facts Patch Agent.
+    You are a PTK P-Facts Polish Agent.
 
     ## TASK
-    Revise only the `p_facts` section of the PTK foundation according to the critic feedback.
+    Revise only the `p_facts` so they become objective, visually grounded, minimal, and relevant.
 
     ## RULES
-    1. Revise only `p_facts`. Do not rewrite `t_facts` or `k_atoms`.
-    2. Preserve valid items when possible.
-    3. Add missing grounded visual facts and remove unsupported, duplicated, or interpretive items.
-    4. `p_facts` must stay objective and image-grounded.
-    5. Preserve visible symbol strings, labels, legends, point names, subscripts, superscripts, Greek letters, operators, and units as faithfully as possible instead of paraphrasing, normalizing, or repairing them into guessed canonical text.
-    6. If a symbol or label is visually ambiguous, explicitly mark the ambiguity in `fact_text` rather than guessing.
-    7. Do not let `p_facts` absorb text-explicit givens, targets, or constraints that belong in `t_facts`.
-    8. Before finalizing, check coverage in this order: main visible entities/components/curves, then visible labels/numbers/units/legends, then directly visible relations such as connection, adjacency, containment, intersection, arrow direction, or trend.
-    9. When fixing topology-style diagrams, prefer visible structure over interpreted identity: keep wires, nodes, bonds, point labels, arrows, and attachments, but remove claims like "therefore this is a full subtractor" unless that phrase itself appears in the image.
-    10. When fixing chart/graph-style figures, keep axes, legends, plotted series, categories, relative magnitudes, and directly visible trend segments, but remove causal or domain interpretation that is not explicitly printed in the figure.
-    11. Keep IDs stable when practical, but correctness is more important than ID continuity.
-    12. Return a non-empty `p_facts` list.
-    13. Output valid JSON only.
+    1. Inspect the attached image(s) directly.
+    2. Revise only `p_facts`; do not touch `t_facts` or `k_atoms`.
+    3. Keep each `p_fact` as an objective observation, not a reasoning conclusion.
+    4. Add missing clearly visible observations only when the revision instructions require them.
+    5. Remove unsupported or overclaimed visual facts.
+    6. Keep IDs stable when practical, but correctness is more important.
+    7. Return exactly one top-level JSON object with keys `p_facts` and `revision_summary`.
+    8. Do not output any prose before or after the JSON object.
+    9. Do not output markdown fences.
+    10. Do not omit required fields.
 
     ## OUTPUT JSON
     {
@@ -507,21 +545,21 @@ PTK_P_FACTS_POLISH_SYSTEM_PROMPT = dedent(
 PTK_T_FACTS_POLISH_SYSTEM_PROMPT = dedent(
     """
     ## ROLE
-    You are a PTK T-Facts Patch Agent.
+    You are a PTK T-Facts Polish Agent.
 
     ## TASK
-    Revise only the `t_facts` section of the PTK foundation according to the critic feedback.
+    Revise only the `t_facts` so they preserve explicit givens, goals, constraints, and subquestions from the problem text.
 
     ## RULES
-    1. Revise only `t_facts`. Do not rewrite `p_facts` or `k_atoms`.
-    2. Preserve valid items when possible.
-    3. `t_facts` must cover explicit givens, goals, constraints, and subquestions from the text.
-    4. Preserve question wording verbatim whenever possible: copy exact clauses/spans from the problem text instead of paraphrasing them.
-    5. If trimming is needed, prefer deleting extra wording or splitting clauses over inventing new prose.
-    6. `t_facts` must stay text-explicit and must not absorb visual-only content.
-    7. Keep IDs stable when practical, but correctness is more important than ID continuity.
-    8. Return a non-empty `t_facts` list.
-    9. Output valid JSON only.
+    1. This is a text-only task. Do not perform fresh image inspection.
+    2. Revise only `t_facts`; do not touch `p_facts` or `k_atoms`.
+    3. Every `t_fact` must come from the problem text explicitly.
+    4. Preserve numeric values, units, formulas, and task wording.
+    5. Remove diagram-derived statements from `t_facts`.
+    6. Return exactly one top-level JSON object with keys `t_facts` and `revision_summary`.
+    7. Do not output any prose before or after the JSON object.
+    8. Do not output markdown fences.
+    9. Do not omit required fields.
 
     ## OUTPUT JSON
     {
@@ -541,19 +579,21 @@ PTK_T_FACTS_POLISH_SYSTEM_PROMPT = dedent(
 PTK_K_ATOMS_POLISH_SYSTEM_PROMPT = dedent(
     """
     ## ROLE
-    You are a PTK K-Atoms Patch Agent.
+    You are a PTK K-Atoms Polish Agent.
 
     ## TASK
-    Revise only the `k_atoms` section of the PTK foundation according to the critic feedback.
+    Revise only the `k_atoms` so they are reusable, non-solution-specific, and sufficient for downstream claim grounding.
 
     ## RULES
-    1. Revise only `k_atoms`. Do not rewrite `p_facts` or `t_facts`.
-    2. Preserve valid items when possible.
-    3. `k_atoms` must stay reusable and non-solution-specific.
-    4. Merge, prune, or rewrite overlapping knowledge atoms when needed, but keep only the minimum reusable set.
-    5. Keep IDs stable when practical, but correctness is more important than ID continuity.
-    6. Return a non-empty `k_atoms` list.
-    7. Output valid JSON only.
+    1. This is a text-only task. Do not perform fresh image inspection.
+    2. Revise only `k_atoms`; do not touch `p_facts` or `t_facts`.
+    3. Keep each atom reusable and concise.
+    4. Remove solution-specific conclusions disguised as knowledge.
+    5. Add missing crucial reusable rules only when the revision instructions require them.
+    6. Return exactly one top-level JSON object with keys `k_atoms` and `revision_summary`.
+    7. Do not output any prose before or after the JSON object.
+    8. Do not output markdown fences.
+    9. Do not omit required fields.
 
     ## OUTPUT JSON
     {
@@ -571,54 +611,6 @@ PTK_K_ATOMS_POLISH_SYSTEM_PROMPT = dedent(
 ).strip()
 
 
-PTK_FOUNDATION_POLISH_SYSTEM_PROMPT = dedent(
-    """
-    ## ROLE
-    You are a PTK Foundation Polish Agent.
-
-    ## TASK
-    Revise the current P/T/K foundation according to the critic feedback while keeping only necessary grounded facts.
-
-    ## RULES
-    1. Preserve valid items when possible.
-    2. Add missing grounded facts and remove unsupported or duplicated items.
-    3. When revising `t_facts`, preserve question wording verbatim whenever possible: copy exact clauses/spans from the problem text instead of paraphrasing them.
-    4. If the critic asks for trimming, prefer deleting extra wording or splitting clauses over rewriting them into new prose.
-    5. `p_facts` must stay objective and image-grounded.
-    6. `t_facts` must stay text-explicit.
-    7. `k_atoms` must stay reusable and non-solution-specific.
-    8. Keep IDs stable when practical, but correctness is more important than ID continuity.
-    9. Output valid JSON only.
-
-    ## OUTPUT JSON
-    {
-      "p_facts": [
-        {
-          "p_id": "p1",
-          "fact_text": "...",
-          "confidence": 0.0,
-          "visual_anchor": "..."
-        }
-      ],
-      "t_facts": [
-        {
-          "t_id": "t1",
-          "fact_text": "...",
-          "fact_role": "given|goal|constraint|subquestion"
-        }
-      ],
-      "k_atoms": [
-        {
-          "k_id": "k1",
-          "knowledge_text": "...",
-          "knowledge_type": "formula|theorem|principle|commonsense",
-          "applicability_note": "..."
-        }
-      ],
-      "revision_summary": "..."
-    }
-    """
-).strip()
 
 
 CLAIM_VERIFY_SYSTEM_PROMPT = dedent(
@@ -1156,11 +1148,43 @@ def build_knowledge_user_prompt(problem: Dict[str, Any], p_facts: Sequence[Dict[
     ).strip()
 
 
-def build_ptk_foundation_critic_user_prompt(
+
+
+def build_ptk_structure_critic_user_prompt(
     problem: Dict[str, Any],
     p_facts: Sequence[Dict[str, Any]],
     t_facts: Sequence[Dict[str, Any]],
     k_atoms: Sequence[Dict[str, Any]],
+) -> str:
+    compact_p = [
+        {
+            "p_id": item.get("p_id"),
+            "fact_text": truncate_text(item.get("fact_text"), 160),
+        }
+        for item in p_facts
+        if isinstance(item, dict)
+    ]
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Current P Facts (for objectivity sanity-check only):
+        {to_plain_text(list(compact_p))}
+
+        Current T Facts:
+        {to_plain_text(list(t_facts))}
+
+        Current K Atoms:
+        {to_plain_text(list(k_atoms))}
+
+        Run a text-only PTK structure audit and classify the issue categories.
+        """
+    ).strip()
+
+
+def build_ptk_visual_grounding_critic_user_prompt(
+    problem: Dict[str, Any],
+    p_facts: Sequence[Dict[str, Any]],
 ) -> str:
     return dedent(
         f"""
@@ -1169,147 +1193,61 @@ def build_ptk_foundation_critic_user_prompt(
         Current P Facts:
         {to_plain_text(list(p_facts))}
 
-        Current T Facts:
-        {to_plain_text(list(t_facts))}
-
-        Current K Atoms:
-        {to_plain_text(list(k_atoms))}
-
-        Audit whether this PTK foundation is ready for downstream claim extraction and node induction.
+        Inspect the attached image(s) and audit only the visual grounding quality of these `p_facts`.
         """
     ).strip()
 
 
-def build_ptk_foundation_polish_user_prompt(
-    problem: Dict[str, Any],
-    p_facts: Sequence[Dict[str, Any]],
-    t_facts: Sequence[Dict[str, Any]],
-    k_atoms: Sequence[Dict[str, Any]],
-    revision_instructions: str,
-) -> str:
-    return dedent(
-        f"""
-        {_problem_header(problem)}
-
-        Current P Facts:
-        {to_plain_text(list(p_facts))}
-
-        Current T Facts:
-        {to_plain_text(list(t_facts))}
-
-        Current K Atoms:
-        {to_plain_text(list(k_atoms))}
-
-        Revision Instructions:
-        {normalize_whitespace(revision_instructions)}
-
-        Revise the PTK foundation accordingly.
-        """
-    ).strip()
 
 
 def build_ptk_p_facts_polish_user_prompt(
     problem: Dict[str, Any],
     p_facts: Sequence[Dict[str, Any]],
-    t_facts: Sequence[Dict[str, Any]],
-    k_atoms: Sequence[Dict[str, Any]],
     revision_instructions: str,
 ) -> str:
     return dedent(
         f"""
         {_problem_header(problem)}
 
-        Ready Hints:
-        requires_image={problem.get('requires_image', '')}
-        text_dominant={problem.get('text_dominant', '')}
-
-        Target Section:
-        p_facts
-
         Current P Facts:
         {to_plain_text(list(p_facts))}
-
-        Reference T Facts (do not rewrite):
-        {to_plain_text(list(t_facts))}
-
-        Reference K Atoms (do not rewrite):
-        {to_plain_text(list(k_atoms))}
 
         Revision Instructions:
         {normalize_whitespace(revision_instructions)}
 
-        Revise only `p_facts` and keep the rest of the PTK foundation unchanged.
-        Preserve visible labels and symbol strings as faithfully as possible.
-        Remove guessed normalizations, interpreted meanings, and text-only givens that leaked into `p_facts`.
-        If a critical symbol is visually ambiguous, say so explicitly instead of guessing.
-
-        Coverage checklist for `p_facts`:
-        - Keep the main visible entities/components/curves.
-        - Keep visible labels, numbers, units, legends, and symbol strings.
-        - Keep only directly visible relations: connection, adjacency, containment, intersection, attachment, arrow direction, relative position, and visible trend.
-        - Delete whole-diagram interpretations that are not literally shown.
-
-        Micro few-shot A (structure / topology):
-        - Bad: "The circuit is a full subtractor."
-        - Better: "Three logic-gate symbols are shown; two input lines labeled X and Y enter gates on the left; a third input line labeled Bin enters a lower gate; output wires leave to the right toward labels including D and Bout."
-
-        Micro few-shot B (chart / graph):
-        - Bad: "The reaction becomes more stable because the molecule wants lower energy."
-        - Better: "The vertical axis is labeled 'Potential Energy (kJ/mol)' and the horizontal axis is labeled 'Internuclear Distance (nm)'; a curve dips to a minimum and rises on both sides; labeled points mark positions on the curve."
+        Revise only the `p_facts` accordingly.
         """
     ).strip()
 
 
 def build_ptk_t_facts_polish_user_prompt(
     problem: Dict[str, Any],
-    p_facts: Sequence[Dict[str, Any]],
     t_facts: Sequence[Dict[str, Any]],
-    k_atoms: Sequence[Dict[str, Any]],
     revision_instructions: str,
 ) -> str:
     return dedent(
         f"""
         {_problem_header(problem)}
 
-        Target Section:
-        t_facts
-
-        Reference P Facts (do not rewrite):
-        {to_plain_text(list(p_facts))}
-
         Current T Facts:
         {to_plain_text(list(t_facts))}
-
-        Reference K Atoms (do not rewrite):
-        {to_plain_text(list(k_atoms))}
 
         Revision Instructions:
         {normalize_whitespace(revision_instructions)}
 
-        Revise only `t_facts` and keep the rest of the PTK foundation unchanged.
+        Revise only the `t_facts` accordingly.
         """
     ).strip()
 
 
 def build_ptk_k_atoms_polish_user_prompt(
     problem: Dict[str, Any],
-    p_facts: Sequence[Dict[str, Any]],
-    t_facts: Sequence[Dict[str, Any]],
     k_atoms: Sequence[Dict[str, Any]],
     revision_instructions: str,
 ) -> str:
     return dedent(
         f"""
         {_problem_header(problem)}
-
-        Target Section:
-        k_atoms
-
-        Reference P Facts (do not rewrite):
-        {to_plain_text(list(p_facts))}
-
-        Reference T Facts (do not rewrite):
-        {to_plain_text(list(t_facts))}
 
         Current K Atoms:
         {to_plain_text(list(k_atoms))}
@@ -1317,7 +1255,7 @@ def build_ptk_k_atoms_polish_user_prompt(
         Revision Instructions:
         {normalize_whitespace(revision_instructions)}
 
-        Revise only `k_atoms` and keep the rest of the PTK foundation unchanged.
+        Revise only the `k_atoms` accordingly.
         """
     ).strip()
 
