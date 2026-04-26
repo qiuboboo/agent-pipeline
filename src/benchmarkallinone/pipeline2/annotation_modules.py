@@ -464,42 +464,8 @@ def _merge_claim_verify_partials(*partials: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _extract_ptk_once(router: ModelRouter, problem: Dict[str, Any]) -> Dict[str, Any]:
-    _ensure_problem_minimum(problem, "PTKFoundationBuilder")
-    image_paths = _problem_image_paths(problem)
-    require_images = bool(problem.get("requires_image"))
-
-    p_response = _call_router(
-        router,
-        PERCEPTION_EXTRACTION_SYSTEM_PROMPT,
-        _augment_prompt_with_ready_context(problem, build_perception_user_prompt(problem), "PerceptionExtraction"),
-        image_paths,
-        agent_name="PerceptionExtraction",
-        require_images=require_images,
-    )
-    p_facts = _normalize_p_facts(p_response, "PerceptionExtraction")
-
-    t_response = _call_router(
-        router,
-        TEXT_CONDITION_SYSTEM_PROMPT,
-        _augment_prompt_with_ready_context(problem, build_text_condition_user_prompt(problem), "TextCondition"),
-        image_paths,
-        agent_name="TextCondition",
-        require_images=require_images,
-    )
-    t_facts = _normalize_t_facts(t_response, "TextCondition")
-
-    k_response = _call_router(
-        router,
-        KNOWLEDGE_LIBRARIAN_SYSTEM_PROMPT,
-        _augment_prompt_with_ready_context(problem, build_knowledge_user_prompt(problem, p_facts, t_facts), "KnowledgeLibrarian"),
-        image_paths,
-        agent_name="KnowledgeLibrarian",
-        require_images=require_images,
-    )
-    k_atoms = _normalize_k_atoms(k_response, "KnowledgeLibrarian")
-
-    problem_record = {
+def _build_ptk_problem_record(problem: Dict[str, Any]) -> Dict[str, Any]:
+    return {
         "problem_id": problem.get("problem_id", ""),
         "question_text": problem.get("question_text", ""),
         "standard_answer": problem.get("standard_answer", ""),
@@ -513,12 +479,90 @@ def _extract_ptk_once(router: ModelRouter, problem: Dict[str, Any]) -> Dict[str,
         "solvability_score": safe_float(problem.get("solvability_score"), 0.0),
         "sample_path": problem.get("sample_path", ""),
     }
-    return {
+
+
+def _cached_dict_list(value: Any) -> List[Dict[str, Any]]:
+    return [deepcopy(item) for item in value if isinstance(item, dict)] if isinstance(value, list) else []
+
+
+def _extract_ptk_once(
+    router: ModelRouter,
+    problem: Dict[str, Any],
+    progress_state: Optional[Dict[str, Any]] = None,
+    save_progress: Optional[Callable[[Dict[str, Any]], None]] = None,
+) -> Dict[str, Any]:
+    _ensure_problem_minimum(problem, "PTKFoundationBuilder")
+    progress = progress_state if isinstance(progress_state, dict) else {}
+    image_paths = _problem_image_paths(problem)
+    require_images = bool(problem.get("requires_image"))
+    cached_problem_record = progress.get("problem_record")
+    problem_record = deepcopy(cached_problem_record) if isinstance(cached_problem_record, dict) else _build_ptk_problem_record(problem)
+
+    p_facts = _cached_dict_list(progress.get("p_facts"))
+    t_facts = _cached_dict_list(progress.get("t_facts"))
+    k_atoms = _cached_dict_list(progress.get("k_atoms"))
+
+    def _persist_substage(next_substage: str, *, foundation: Optional[Dict[str, Any]] = None) -> None:
+        if save_progress is None:
+            return
+        payload = deepcopy(progress)
+        payload.update(
+            {
+                "problem_record": deepcopy(problem_record),
+                "p_facts": deepcopy(p_facts),
+                "t_facts": deepcopy(t_facts),
+                "k_atoms": deepcopy(k_atoms),
+                "next_ptk_substage": next_substage,
+                "ptk_substage_status": "complete" if foundation is not None else "in_progress",
+            }
+        )
+        if foundation is not None:
+            payload["foundation"] = deepcopy(foundation)
+        save_progress(payload)
+
+    if not p_facts:
+        p_response = _call_router(
+            router,
+            PERCEPTION_EXTRACTION_SYSTEM_PROMPT,
+            _augment_prompt_with_ready_context(problem, build_perception_user_prompt(problem), "PerceptionExtraction"),
+            image_paths,
+            agent_name="PerceptionExtraction",
+            require_images=require_images,
+        )
+        p_facts = _normalize_p_facts(p_response, "PerceptionExtraction")
+        _persist_substage("text_condition")
+
+    if not t_facts:
+        t_response = _call_router(
+            router,
+            TEXT_CONDITION_SYSTEM_PROMPT,
+            _augment_prompt_with_ready_context(problem, build_text_condition_user_prompt(problem), "TextCondition"),
+            image_paths,
+            agent_name="TextCondition",
+            require_images=require_images,
+        )
+        t_facts = _normalize_t_facts(t_response, "TextCondition")
+        _persist_substage("knowledge_librarian")
+
+    if not k_atoms:
+        k_response = _call_router(
+            router,
+            KNOWLEDGE_LIBRARIAN_SYSTEM_PROMPT,
+            _augment_prompt_with_ready_context(problem, build_knowledge_user_prompt(problem, p_facts, t_facts), "KnowledgeLibrarian"),
+            image_paths,
+            agent_name="KnowledgeLibrarian",
+            require_images=require_images,
+        )
+        k_atoms = _normalize_k_atoms(k_response, "KnowledgeLibrarian")
+
+    foundation = {
         "problem_record": problem_record,
         "p_facts": p_facts,
         "t_facts": t_facts,
         "k_atoms": k_atoms,
     }
+    _persist_substage("complete", foundation=foundation)
+    return foundation
 
 
 def _select_claim_context(
@@ -668,7 +712,12 @@ def build_ptk_foundation(
     if isinstance(cached_foundation, dict) and cached_foundation:
         foundation = deepcopy(cached_foundation)
     else:
-        foundation = _extract_ptk_once(router, problem)
+        foundation = _extract_ptk_once(
+            router,
+            problem,
+            progress_state=progress,
+            save_progress=save_progress,
+        )
 
     raw_audit_rounds = progress.get("audit_rounds")
     audit_rounds: List[Dict[str, Any]] = [

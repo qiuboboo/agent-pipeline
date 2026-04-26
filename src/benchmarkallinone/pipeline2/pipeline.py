@@ -236,6 +236,81 @@ def _write_stage_cache_record(batch_id: str, problem_id: str, stage_name: str, i
     write_json(_stage_cache_path(batch_id, problem_id, stage_name, item_key), payload)
 
 
+def _stage_cache_record_summary(batch_id: str, problem_id: str, stage_name: str, item_key: str) -> Dict[str, Any]:
+    path = _stage_cache_path(batch_id, problem_id, stage_name, item_key)
+    summary: Dict[str, Any] = {
+        "stage_name": stage_name,
+        "item_key": item_key,
+        "path": str(path),
+        "present": path.exists(),
+    }
+    if not path.exists():
+        return summary
+    try:
+        payload = read_json(path)
+    except Exception as exc:
+        summary.update({"readable": False, "error_type": type(exc).__name__, "error_message": str(exc)})
+        return summary
+    summary["readable"] = isinstance(payload, dict)
+    if isinstance(payload, dict):
+        summary["keys"] = sorted(str(key) for key in payload.keys())
+        for list_key in ("p_facts", "t_facts", "k_atoms", "audit_rounds", "claims"):
+            value = payload.get(list_key)
+            if isinstance(value, list):
+                summary[f"{list_key}_count"] = len(value)
+        nested_claims = payload.get("claims")
+        if isinstance(nested_claims, list):
+            summary["claim_count"] = len(nested_claims)
+        nested_method = payload.get("method")
+        if isinstance(nested_method, dict):
+            summary["method_id"] = nested_method.get("method_id", "")
+    return summary
+
+
+def _stage_cache_method_item_keys(batch_id: str, problem_id: str, stage_name: str) -> List[str]:
+    stage_dir = get_context().runtime_dir / "stage_cache" / batch_id / problem_id / stage_name
+    if not stage_dir.exists():
+        return []
+    item_keys: List[str] = []
+    for path in sorted(stage_dir.glob("*.json")):
+        try:
+            payload = read_json(path)
+        except Exception:
+            continue
+        if not isinstance(payload, dict):
+            continue
+        if stage_name == "method_results":
+            method = payload.get("method")
+            if isinstance(method, dict):
+                method_id = str(method.get("method_id", "")).strip()
+                if method_id:
+                    item_keys.append(method_id)
+        elif stage_name in {"claim_bundles", "claim_bundle_progress"}:
+            method_id = str(payload.get("method_id", "")).strip()
+            if method_id:
+                item_keys.append(method_id)
+    return sorted(set(item_keys))
+
+
+def _build_stage_cache_summary(batch_id: str, problem_id: str) -> Dict[str, Any]:
+    summary: Dict[str, Any] = {
+        "stage_cache_root": str(get_context().runtime_dir / "stage_cache" / batch_id / problem_id),
+        "ptk_foundation": _stage_cache_record_summary(batch_id, problem_id, "ptk_foundation", "bundle"),
+        "ptk_foundation_progress": _stage_cache_record_summary(batch_id, problem_id, "ptk_foundation_progress", "bundle"),
+        "method_results": [],
+        "claim_bundles": [],
+        "claim_bundle_progress": [],
+    }
+    method_ids = set(_stage_cache_method_item_keys(batch_id, problem_id, "method_results"))
+    method_ids.update(_stage_cache_method_item_keys(batch_id, problem_id, "claim_bundles"))
+    method_ids.update(_stage_cache_method_item_keys(batch_id, problem_id, "claim_bundle_progress"))
+    for method_id in sorted(method_ids):
+        summary["method_results"].append(_stage_cache_record_summary(batch_id, problem_id, "method_results", method_id))
+        summary["claim_bundles"].append(_stage_cache_record_summary(batch_id, problem_id, "claim_bundles", method_id))
+        summary["claim_bundle_progress"].append(_stage_cache_record_summary(batch_id, problem_id, "claim_bundle_progress", method_id))
+    return summary
+
+
 def _thread_has_checkpoints(graph: Any, config: Dict[str, Any]) -> bool:
     try:
         return next(iter(graph.get_state_history(config)), None) is not None
@@ -1161,9 +1236,9 @@ def _run_single_problem(batch_id: str, problem: Dict[str, Any]) -> Dict[str, Any
     return problem_bundle
 
 
-def _build_problem_error_record(problem: Dict[str, Any], attempts_exhausted: int, exc: Exception) -> Dict[str, Any]:
+def _build_problem_error_record(problem: Dict[str, Any], attempts_exhausted: int, exc: Exception, batch_id: str = "") -> Dict[str, Any]:
     problem_id = str(problem.get("problem_id", "unknown_problem"))
-    return {
+    record = {
         "problem_id": problem_id,
         "status": "unavailable",
         "current_status": "problem_unavailable",
@@ -1178,6 +1253,10 @@ def _build_problem_error_record(problem: Dict[str, Any], attempts_exhausted: int
         "standard_answer": problem.get("standard_answer", ""),
         "images": list(problem.get("images") or []),
     }
+    if batch_id:
+        record["batch_id"] = batch_id
+        record["stage_cache_summary"] = _build_stage_cache_summary(batch_id, problem_id)
+    return record
 
 
 def _write_problem_error_record(problem_error: Dict[str, Any]) -> None:
@@ -1237,7 +1316,7 @@ def _run_problem_with_retries(batch_id: str, problem: Dict[str, Any]) -> Dict[st
         last_exc = RuntimeError("Unknown problem processing failure.")
     if not get_context().config.runtime.continue_on_problem_error:
         raise RuntimeError(f"Failed to process problem `{problem_id}` after {attempts_used or max_attempts} attempts.") from last_exc
-    problem_error = _build_problem_error_record(problem, attempts_used or max_attempts, last_exc)
+    problem_error = _build_problem_error_record(problem, attempts_used or max_attempts, last_exc, batch_id=batch_id)
     _write_problem_error_record(problem_error)
     LOGGER.warning(
         "[problem-marked-unavailable] batch_id=%s problem_id=%s attempts=%s",

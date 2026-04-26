@@ -2,6 +2,14 @@
 
 ## 2026-04-26
 
+- `pipeline2` salvage was extended with two additional minimal, qjb-compatible durability improvements:
+  - PTK initial extraction now writes progress inside the `PerceptionExtraction` -> `TextCondition` -> `KnowledgeLibrarian` chain, so a kill after `p_facts` or `t_facts` have landed can resume from those sub-results instead of restarting all PTK extraction.
+  - `problem_errors/<problem_id>.json` now includes a `stage_cache_summary` with pointers and lightweight counts for `ptk_foundation`, `ptk_foundation_progress`, `method_results`, `claim_bundles`, and `claim_bundle_progress`.
+- The PTK progress payload includes `problem_record`, `p_facts`, `t_facts`, `k_atoms`, `next_ptk_substage`, and `ptk_substage_status`, and still preserves the existing repair-round fields such as `foundation`, `audit_rounds`, `next_round_index`, `pending_critique`, and `passed`.
+- This patch intentionally does not migrate upstream's broader PTK quality architecture (`_sanitize_ptk_foundation`, category-guided polishing, etc.); it only closes the immediate salvage gaps found during review.
+
+## 2026-04-26
+
 - `pipeline2` now also has a minimal **stage-cache / salvage** layer for the PTK-and-claims path, instead of relying only on outer stage retry.
 - Scope of the port stayed intentionally narrow and qjb-compatible:
   - added stage-cache helpers in `pipeline.py` (`_stage_cache_path`, `_load_stage_cache_record`, `_write_stage_cache_record`);
