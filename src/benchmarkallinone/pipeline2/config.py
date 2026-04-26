@@ -44,6 +44,8 @@ class RuntimeConfig:
     enable_trace_patch_writes: bool = True
     enable_problem_structure_validation: bool = True
     fail_on_problem_structure_validation: bool = True
+    stage_retry_attempts: int = 3
+    stage_retry_backoff_seconds: float = 1.0
     problem_retry_attempts: int = 3
     continue_on_problem_error: bool = True
     log_level: str = "INFO"

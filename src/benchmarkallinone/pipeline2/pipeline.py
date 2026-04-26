@@ -20,6 +20,7 @@ except ImportError:  # pragma: no cover - optional langgraph extra
 from langgraph.graph import END, START, StateGraph
 
 from .agents import (
+    AgentContractError,
     PipelineDataContractError,
     bind_evidence,
     build_patch,
@@ -72,6 +73,35 @@ _METHOD_GRAPH = None
 _PROBLEM_GRAPH = None
 _BATCH_GRAPH = None
 LOGGER = logging.getLogger("benchmarkallinone.pipeline2")
+_STAGE_NAME_PATTERN = re.compile(r"^\[([^\]]+)\]")
+_TRANSIENT_STAGE_ERROR_MARKERS = (
+    "timeout",
+    "timed out",
+    "read operation timed out",
+    "retry deadline exceeded",
+    "connection reset",
+    "connectionreseterror",
+    "brokenpipeerror",
+    "remotedisconnected",
+    "remote disconnected",
+    "sslerror",
+    "unexpected_eof_while_reading",
+    "eof occurred in violation of protocol",
+    "urlerror",
+    "temporarily unavailable",
+    "service unavailable",
+    "http 408",
+    "http 409",
+    "http 429",
+    "http 500",
+    "http 502",
+    "http 503",
+    "http 504",
+)
+
+
+class StageRetryBudgetExhaustedError(RuntimeError):
+    """Raised when a transient stage keeps failing after checkpointed retries."""
 
 
 def _resolve_log_level(level_name: str) -> int:
@@ -202,6 +232,89 @@ def _invoke_resumable_graph(graph: Any, initial_state: Dict[str, Any], config: D
     if not isinstance(values, dict):
         raise RuntimeError("Checkpointed state is not a dict and cannot be resumed.")
     return values
+
+
+def _stage_retry_attempt_budget() -> int:
+    return max(1, int(get_context().config.runtime.stage_retry_attempts or 1))
+
+
+def _stage_retry_sleep_seconds(attempt_index: int) -> float:
+    base_seconds = max(0.0, float(get_context().config.runtime.stage_retry_backoff_seconds or 0.0))
+    return min(10.0, base_seconds * max(1, attempt_index))
+
+
+def _exception_message(exc: Exception) -> str:
+    return normalize_whitespace(str(exc))
+
+
+def _extract_stage_name(exc: Exception, default: str) -> str:
+    message = _exception_message(exc)
+    if not message:
+        return default
+    match = _STAGE_NAME_PATTERN.match(message)
+    if match is None:
+        return default
+    stage_name = normalize_whitespace(match.group(1))
+    return stage_name or default
+
+
+def _is_transient_stage_error(exc: Exception) -> bool:
+    if isinstance(exc, StageRetryBudgetExhaustedError):
+        return False
+    if not isinstance(exc, (AgentContractError, RuntimeError)):
+        return False
+    message = _exception_message(exc).lower()
+    if not message:
+        return False
+    return any(marker in message for marker in _TRANSIENT_STAGE_ERROR_MARKERS)
+
+
+def _invoke_graph_with_stage_retries(
+    *,
+    graph: Any,
+    initial_state: Dict[str, Any],
+    config: Dict[str, Any],
+    scope_label: str,
+) -> Dict[str, Any]:
+    max_attempts = _stage_retry_attempt_budget()
+    last_exc: Exception | None = None
+    for attempt_index in range(1, max_attempts + 1):
+        try:
+            return _invoke_resumable_graph(graph=graph, initial_state=initial_state, config=config)
+        except Exception as exc:
+            last_exc = exc
+            stage_name = _extract_stage_name(exc, default=scope_label)
+            is_transient = _is_transient_stage_error(exc)
+            LOGGER.warning(
+                "[stage-retry-check] scope=%s stage=%s attempt=%s/%s transient=%s error_type=%s error=%s",
+                scope_label,
+                stage_name,
+                attempt_index,
+                max_attempts,
+                is_transient,
+                type(exc).__name__,
+                str(exc),
+            )
+            if not is_transient:
+                raise
+            if attempt_index >= max_attempts:
+                raise StageRetryBudgetExhaustedError(
+                    f"[{stage_name}] Same-stage retry budget exhausted after {max_attempts} attempt(s); checkpoint resume did not recover the transient failure. last_error={type(exc).__name__}: {exc}"
+                ) from exc
+            sleep_seconds = _stage_retry_sleep_seconds(attempt_index)
+            LOGGER.info(
+                "[stage-retry-resume] scope=%s stage=%s next_attempt=%s/%s sleep_seconds=%.2f",
+                scope_label,
+                stage_name,
+                attempt_index + 1,
+                max_attempts,
+                sleep_seconds,
+            )
+            if sleep_seconds > 0:
+                time.sleep(sleep_seconds)
+    if last_exc is None:
+        raise RuntimeError(f"{scope_label} failed before any retry attempt could be recorded.")
+    raise last_exc
 
 
 def _determine_method_count(initial_multi_solution_score: Any) -> int:
@@ -491,8 +604,10 @@ def _build_ptk_node(state: ProblemState) -> Dict[str, Any]:
 
 def _run_single_method(batch_id: str, problem: Dict[str, Any], method: Dict[str, Any]) -> Dict[str, Any]:
     method_graph = build_method_graph()
-    config = _make_thread_config(_make_method_thread_id(batch_id, str(problem.get("problem_id", "unknown_problem")), str(method.get("method_id", "unknown_method"))))
-    result = _invoke_resumable_graph(
+    problem_id = str(problem.get("problem_id", "unknown_problem"))
+    method_id = str(method.get("method_id", "unknown_method"))
+    config = _make_thread_config(_make_method_thread_id(batch_id, problem_id, method_id))
+    result = _invoke_graph_with_stage_retries(
         graph=method_graph,
         initial_state={
             "batch_id": batch_id,
@@ -500,6 +615,7 @@ def _run_single_method(batch_id: str, problem: Dict[str, Any], method: Dict[str,
             "method": deepcopy(method),
         },
         config=config,
+        scope_label=f"method `{method_id}` for problem `{problem_id}`",
     )
     return result["method"]
 
@@ -824,10 +940,11 @@ def _run_single_problem(batch_id: str, problem: Dict[str, Any]) -> Dict[str, Any
     problem_id = str(problem.get("problem_id", "unknown_problem"))
     LOGGER.info("[problem-start] batch_id=%s problem_id=%s sample_path=%s", batch_id, problem_id, problem.get("sample_path", ""))
     config = _make_thread_config(_make_problem_thread_id(batch_id, problem_id))
-    result = _invoke_resumable_graph(
+    result = _invoke_graph_with_stage_retries(
         graph=problem_graph,
         initial_state={"batch_id": batch_id, "problem": deepcopy(problem)},
         config=config,
+        scope_label=f"problem `{problem_id}`",
     )
     problem_bundle = result.get("problem_bundle", {})
     LOGGER.info(
@@ -902,6 +1019,15 @@ def _run_problem_with_retries(batch_id: str, problem: Dict[str, Any]) -> Dict[st
                 type(exc).__name__,
                 str(exc),
             )
+            if isinstance(exc, StageRetryBudgetExhaustedError):
+                LOGGER.warning(
+                    "[problem-attempt-stop] batch_id=%s problem_id=%s attempt=%s/%s reason=stage_retry_budget_exhausted",
+                    batch_id,
+                    problem_id,
+                    attempt_index,
+                    max_attempts,
+                )
+                break
             if attempt_index >= max_attempts:
                 break
             time.sleep(min(5.0, 0.5 * attempt_index))
@@ -1078,11 +1204,13 @@ def run_annotation_pipeline(config: Pipeline2Config, project_root: Path, batch_i
     runtime_problems = _loaded_problems_to_runtime(loaded_problems)
     actual_batch_id = batch_id or f"pipeline2_{utc_now().replace(':', '').replace('-', '')}"
     LOGGER.info(
-        "[annotate-start] batch_id=%s loaded_problem_count=%s include_manual_review=%s max_images=%s",
+        "[annotate-start] batch_id=%s loaded_problem_count=%s include_manual_review=%s max_images=%s stage_retry_attempts=%s stage_retry_backoff_seconds=%s",
         actual_batch_id,
         len(loaded_problems),
         config.runtime.include_manual_review,
         config.runtime.max_images_per_problem,
+        config.runtime.stage_retry_attempts,
+        config.runtime.stage_retry_backoff_seconds,
     )
     batch_graph = build_batch_graph()
     config_payload = _make_thread_config(_make_batch_thread_id(actual_batch_id))
@@ -1114,7 +1242,12 @@ def run_annotation_pipeline(config: Pipeline2Config, project_root: Path, batch_i
 
 def resume_annotation_pipeline(config: Pipeline2Config, project_root: Path, batch_id: str) -> Dict[str, Any]:
     ctx = initialize_runtime(config, project_root)
-    LOGGER.info("[annotate-resume] batch_id=%s", batch_id)
+    LOGGER.info(
+        "[annotate-resume] batch_id=%s stage_retry_attempts=%s stage_retry_backoff_seconds=%s",
+        batch_id,
+        config.runtime.stage_retry_attempts,
+        config.runtime.stage_retry_backoff_seconds,
+    )
     batch_graph = build_batch_graph()
     config_payload = _make_thread_config(_make_batch_thread_id(batch_id))
     result = _invoke_resumable_graph(

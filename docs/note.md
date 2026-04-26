@@ -2,7 +2,16 @@
 
 ## 2026-04-26
 
-- `pipeline2` now has a basic unified logger path instead of relying only on the final CLI `print(json.dumps(...))` output.
+- `pipeline2` gained a minimal checkpoint-aware **stage retry** layer on top of the earlier problem-level retry port.
+- Added runtime config knobs in `default_pipeline2.yaml` / `config.py`:
+  - `runtime.stage_retry_attempts`
+  - `runtime.stage_retry_backoff_seconds`
+- Current intended behavior:
+  - method-graph execution and problem-graph execution now retry only when the thrown error looks transient (for example timeout / 429 / 5xx / connection reset);
+  - retries resume from langgraph checkpoint state instead of restarting the whole stage graph from scratch;
+  - if the same stage keeps failing until budget exhaustion, the failure is surfaced as `StageRetryBudgetExhaustedError`, which is then handled by the existing problem-level retry / `problem_errors` path.
+- This was kept as a **scheme-B minimal port**: it does not try to wholesale replace `qjb` routing/client behavior, but it restores the upstream-style guardrail where transient stage failures get a bounded same-stage resume path before the whole problem is marked failed.
+
 - Added runtime config knobs in `default_pipeline2.yaml` / `config.py`:
   - `runtime.log_level`
   - `runtime.log_to_file`
