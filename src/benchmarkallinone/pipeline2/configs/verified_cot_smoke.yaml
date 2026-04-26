@@ -2,7 +2,6 @@ paths:
   ready_root: ready
   output_root: pipeline2/verified_cot_outputs_smoke
   checkpoint_db_path: pipeline2/runtime/verified_cot_langgraph_smoke.sqlite
-
 runtime:
   include_manual_review: true
   max_problems: 1
@@ -11,12 +10,12 @@ runtime:
   save_runtime_snapshots: false
   save_problem_bundles: true
   enable_trace_patch_writes: false
-
 thresholds:
-  method_score_thresholds: [0.33, 0.67]
+  method_score_thresholds:
+  - 0.33
+  - 0.67
   novelty_total_threshold: 0.55
-  novelty_required_threshold: 0.50
-
+  novelty_required_threshold: 0.5
 models:
   primary:
     name: primary
@@ -27,12 +26,4 @@ models:
     temperature: 0.1
     timeout_seconds: 180
     enabled: true
-  fallback:
-    name: fallback
-    base_url: http://9854399.xyz:8888/v1
-    api_key: ${PIPELINE2_API_KEY_FALLBACK}
-    model: gpt-5.4
-    reasoning_effort: high
-    temperature: 0.1
-    timeout_seconds: 180
-    enabled: true
+    wire_api: ${ANNOTATION_API_MODE}

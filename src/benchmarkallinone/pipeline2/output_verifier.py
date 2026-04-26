@@ -192,7 +192,7 @@ def run_output_verifier(
     report_path: Optional[Path] = None,
 ) -> Dict[str, Any]:
     bundle_paths, skipped_paths = _collect_problem_bundle_paths(input_path)
-    router = ModelRouter.from_configs(config.models.primary, config.models.fallback)
+    router = ModelRouter.from_configs(config.models.primary)
     router.ensure_available("pipeline2 output-verifier")
 
     problem_reports = [audit_problem_bundle(router, bundle_path) for bundle_path in bundle_paths]

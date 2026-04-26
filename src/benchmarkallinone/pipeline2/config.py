@@ -12,18 +12,17 @@ from .utils import env_expand
 @dataclass
 class ModelEndpointConfig:
     name: str = "primary"
-    base_url: str = "https://synai996.space/v1"
+    provider: str = "OpenAI"
+    base_url: str = "https://www.msutools.cn"
     api_key: str = ""
     model: str = "gpt-5.4"
     reasoning_effort: str = "high"
+    wire_api: str = "responses"
+    requires_openai_auth: bool = True
+    disable_response_storage: bool = True
     temperature: float = 0.1
     timeout_seconds: int = 180
     enabled: bool = True
-    api_mode: str = "chat_completions"
-    max_attempts: int = 6
-    retry_base_delay_seconds: float = 1.5
-    retry_max_delay_seconds: float = 15.0
-    respect_retry_after: bool = True
 
 
 @dataclass
@@ -46,10 +45,8 @@ class RuntimeConfig:
     fail_on_problem_structure_validation: bool = True
     stage_retry_attempts: int = 3
     stage_retry_backoff_seconds: float = 1.0
-    problem_retry_attempts: int = 3
+    problem_retry_attempts: int = 10
     continue_on_problem_error: bool = True
-    log_level: str = "INFO"
-    log_to_file: bool = True
 
 
 @dataclass
@@ -62,18 +59,7 @@ class ThresholdConfig:
 @dataclass
 class ModelRouterConfig:
     primary: ModelEndpointConfig = field(default_factory=ModelEndpointConfig)
-    fallback: Optional[ModelEndpointConfig] = field(
-        default_factory=lambda: ModelEndpointConfig(
-            name="fallback",
-            base_url="http://9854399.xyz:8888/v1",
-            api_key="",
-            model="gpt-5.4",
-            reasoning_effort="high",
-            temperature=0.1,
-            timeout_seconds=180,
-            enabled=True,
-        )
-    )
+    fallback: Optional[ModelEndpointConfig] = None
 
 
 @dataclass
@@ -101,6 +87,13 @@ class Pipeline2Config:
         models_raw = raw.get("models") or {}
         primary_raw = models_raw.get("primary") or {}
         fallback_raw = models_raw.get("fallback")
+        if isinstance(fallback_raw, dict) and fallback_raw:
+            enabled = fallback_raw.get("enabled", True)
+            if enabled:
+                raise ValueError(
+                    "[Pipeline2Config] `models.fallback` is no longer supported. "
+                    "Remove fallback endpoints and run with a single primary model."
+                )
 
         raw_thresholds = thresholds_raw.get("method_score_thresholds") or ThresholdConfig().method_score_thresholds
         threshold_values = [float(item) for item in raw_thresholds]
@@ -119,11 +112,7 @@ class Pipeline2Config:
             ),
             models=ModelRouterConfig(
                 primary=ModelEndpointConfig(**{**ModelEndpointConfig().__dict__, **primary_raw}),
-                fallback=(
-                    ModelEndpointConfig(**{**ModelEndpointConfig(name="fallback").__dict__, **fallback_raw})
-                    if isinstance(fallback_raw, dict)
-                    else None
-                ),
+                fallback=None,
             ),
         )
 

@@ -5,15 +5,14 @@ import http.client
 import io
 import json
 import logging
+import re
 import ssl
 import threading
 import time
 import urllib.error
 import urllib.request
-from email.utils import parsedate_to_datetime
-from typing import Any, Dict, List, Mapping, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
-import requests
 from PIL import Image
 
 from .config import ModelEndpointConfig
@@ -68,56 +67,179 @@ class OpenAICompatibleClient:
             "reasoning_tokens": int(reasoning_tokens),
         }
 
-    def _build_payload(self, system_prompt: str, user_content: Any) -> Dict[str, Any]:
-        return {
+    def _wire_api(self) -> str:
+        normalized = str(self.config.wire_api or "responses").strip().lower().replace("-", "_")
+        return "responses" if normalized in {"responses", "response"} else "chat_completions"
+
+    def _endpoint_url(self) -> str:
+        suffix = "/responses" if self._wire_api() == "responses" else "/chat/completions"
+        return self.config.base_url.rstrip("/") + suffix
+
+    def _build_chat_completions_payload(
+        self,
+        system_prompt: str,
+        user_content: Any,
+        response_schema: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        payload = {
             "model": self.config.model,
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_content},
             ],
             "temperature": self.config.temperature,
-            "response_format": {"type": "json_object"},
             "reasoning_effort": self.config.reasoning_effort,
-            "stream": True,
         }
+        if response_schema:
+            payload["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": response_schema.get("name", "structured_output"),
+                    "strict": bool(response_schema.get("strict", True)),
+                    "schema": response_schema.get("schema") or {},
+                },
+            }
+        else:
+            payload["response_format"] = {"type": "json_object"}
+        return payload
 
-    def _max_attempts(self) -> int:
-        return max(1, int(self.config.max_attempts))
+    def _build_responses_content(self, user_content: Any) -> List[Dict[str, Any]]:
+        if isinstance(user_content, str):
+            text_value = to_plain_text(user_content)
+            return [{"type": "input_text", "text": text_value or "{}"}]
 
-    def _retry_delay_seconds(self, attempt: int) -> float:
-        base_delay = max(0.0, float(self.config.retry_base_delay_seconds))
-        max_delay = max(base_delay, float(self.config.retry_max_delay_seconds))
-        return min(max_delay, base_delay * (2 ** max(0, attempt - 1)))
+        content_parts: List[Dict[str, Any]] = []
+        if isinstance(user_content, list):
+            for item in user_content:
+                if not isinstance(item, dict):
+                    continue
+                part_type = item.get("type")
+                if part_type == "text":
+                    text_value = to_plain_text(item.get("text"))
+                    if text_value:
+                        content_parts.append({"type": "input_text", "text": text_value})
+                elif part_type == "image_url":
+                    image_url = item.get("image_url") or {}
+                    url_value = to_plain_text(image_url.get("url"))
+                    if url_value:
+                        content_parts.append({"type": "input_image", "image_url": url_value})
+        return content_parts or [{"type": "input_text", "text": "{}"}]
 
-    def _is_retryable_status(self, status_code: Optional[int]) -> bool:
-        if status_code is None:
-            return False
-        return status_code in {403, 408, 409, 423, 425, 429} or status_code >= 500
+    def _build_responses_payload(
+        self,
+        system_prompt: str,
+        user_content: Any,
+        response_schema: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        input_items: List[Dict[str, Any]] = []
+        system_text = to_plain_text(system_prompt)
+        if system_text:
+            input_items.append(
+                {
+                    "role": "system",
+                    "content": [{"type": "input_text", "text": system_text}],
+                }
+            )
+        input_items.append(
+            {
+                "role": "user",
+                "content": self._build_responses_content(user_content),
+            }
+        )
+        payload: Dict[str, Any] = {
+            "model": self.config.model,
+            "input": input_items,
+            "reasoning": {"effort": self.config.reasoning_effort},
+            "temperature": self.config.temperature,
+        }
+        if response_schema:
+            payload["text"] = {
+                "format": {
+                    "type": "json_schema",
+                    "name": response_schema.get("name", "structured_output"),
+                    "strict": bool(response_schema.get("strict", True)),
+                    "schema": response_schema.get("schema") or {},
+                }
+            }
+        else:
+            payload["text"] = {"format": {"type": "json_object"}}
+        if self.config.disable_response_storage:
+            payload["store"] = False
+        return payload
 
-    def _retry_after_seconds(self, headers: Optional[Mapping[str, Any]]) -> Optional[float]:
-        if not self.config.respect_retry_after or not headers:
-            return None
-        raw_value = headers.get("Retry-After")
-        if raw_value is None:
-            return None
-        text = to_plain_text(raw_value).strip()
-        if not text:
-            return None
-        try:
-            return max(0.0, float(text))
-        except ValueError:
-            pass
-        try:
-            retry_at = parsedate_to_datetime(text)
-            return max(0.0, retry_at.timestamp() - time.time())
-        except Exception:
-            return None
+    def _build_payload(
+        self,
+        system_prompt: str,
+        user_content: Any,
+        response_schema: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        if self._wire_api() == "responses":
+            return self._build_responses_payload(system_prompt, user_content, response_schema=response_schema)
+        return self._build_chat_completions_payload(system_prompt, user_content, response_schema=response_schema)
 
-    def _sleep_before_retry(self, attempt: int, retry_after_seconds: Optional[float] = None) -> None:
-        delay_seconds = retry_after_seconds if retry_after_seconds is not None else self._retry_delay_seconds(attempt)
-        time.sleep(max(0.0, delay_seconds))
+    def _extract_response_text(self, body: Dict[str, Any]) -> str:
+        if self._wire_api() == "responses":
+            output_text = body.get("output_text")
+            if isinstance(output_text, str) and output_text.strip():
+                return output_text
+            fragments: List[str] = []
+            for item in body.get("output") or []:
+                if not isinstance(item, dict):
+                    continue
+                if item.get("type") in {"output_text", "text"}:
+                    text_value = item.get("text")
+                    if isinstance(text_value, dict):
+                        text_value = text_value.get("value") or text_value.get("text")
+                    if isinstance(text_value, str) and text_value:
+                        fragments.append(text_value)
+                for content_item in item.get("content") or []:
+                    if not isinstance(content_item, dict):
+                        continue
+                    if content_item.get("type") not in {"output_text", "text"}:
+                        continue
+                    text_value = content_item.get("text")
+                    if isinstance(text_value, dict):
+                        text_value = text_value.get("value") or text_value.get("text")
+                    if isinstance(text_value, str) and text_value:
+                        fragments.append(text_value)
+            return "\n".join(fragment for fragment in fragments if fragment)
 
-    def _post_json(self, payload: Dict[str, Any], has_images: bool = False) -> Optional[Dict[str, Any]]:
+        choices = body.get("choices") or []
+        if not choices:
+            return ""
+        message = choices[0].get("message") or {}
+        content = message.get("content", "")
+        if isinstance(content, list):
+            content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
+        return to_plain_text(content)
+
+    def _read_response_bytes(self, response: Any, *, request_timeout: float) -> bytes:
+        raw_chunks: List[bytes] = []
+        total_bytes = 0
+        while True:
+            try:
+                raw_socket = getattr(getattr(getattr(response, "fp", None), "raw", None), "_sock", None)
+                if raw_socket is not None:
+                    raw_socket.settimeout(max(0.1, float(request_timeout)))
+            except Exception:
+                pass
+            chunk = response.read(65536)
+            if not chunk:
+                break
+            raw_chunks.append(chunk)
+            total_bytes += len(chunk)
+            if total_bytes > 8_000_000:
+                raise ValueError("Model response body exceeded 8MB and was treated as invalid.")
+        return b"".join(raw_chunks)
+
+    def _post_json(
+        self,
+        payload: Dict[str, Any],
+        has_images: bool = False,
+        *,
+        deadline_monotonic: float | None = None,
+        max_attempts: int = 3,
+    ) -> Optional[Dict[str, Any]]:
         if not self.config.enabled or not self.config.api_key:
             return None
         with self._usage_lock:
@@ -126,18 +248,34 @@ class OpenAICompatibleClient:
                 self.usage_totals["multimodal_request_count"] += 1
             else:
                 self.usage_totals["text_request_count"] += 1
-        url = self.config.base_url.rstrip("/") + "/chat/completions"
+        url = self._endpoint_url()
         last_error_text = None
-        max_attempts = self._max_attempts()
+        effective_max_attempts = max(1, int(max_attempts))
+        deadline = deadline_monotonic
         LOGGER.info(
-            "[llm-request-start] endpoint=%s api_mode=chat_completions request_mode=%s max_attempts=%s timeout_seconds=%s url=%s",
+            "[llm-request-start] endpoint=%s wire_api=%s request_mode=%s max_attempts=%s timeout_seconds=%s deadline_seconds=%s url=%s",
             self.config.name,
+            self._wire_api(),
             "multimodal" if has_images else "text",
-            max_attempts,
+            effective_max_attempts,
             self.config.timeout_seconds,
+            round(max(0.0, deadline - time.monotonic()), 3) if deadline is not None else None,
             url,
         )
-        for attempt in range(1, max_attempts + 1):
+        for attempt in range(1, effective_max_attempts + 1):
+            remaining_seconds = (deadline - time.monotonic()) if deadline is not None else None
+            if remaining_seconds is not None and remaining_seconds <= 0:
+                last_error_text = last_error_text or "Retry deadline exceeded before a successful model response was received."
+                LOGGER.warning(
+                    "[llm-request-deadline-exhausted] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s error=%s",
+                    self.config.name,
+                    self._wire_api(),
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    effective_max_attempts,
+                    last_error_text,
+                )
+                break
             started = time.perf_counter()
             req = urllib.request.Request(
                 url,
@@ -151,39 +289,40 @@ class OpenAICompatibleClient:
                 },
                 method="POST",
             )
+            request_timeout = (
+                max(0.1, min(float(self.config.timeout_seconds), float(remaining_seconds)))
+                if remaining_seconds is not None
+                else max(0.1, float(self.config.timeout_seconds))
+            )
             try:
-                with urllib.request.urlopen(req, timeout=self.config.timeout_seconds) as response:
-                    status_code = getattr(response, "status", None) or response.getcode()
-                    content_type = response.headers.get("Content-Type", "")
-                    raw_body = response.read().decode("utf-8", errors="replace")
-                    body = None
-                    streamed_content = None
-                    if "text/event-stream" in content_type.lower():
-                        stream_chunks: List[str] = []
-                        for raw_line in raw_body.splitlines():
-                            line = raw_line.strip()
-                            if not line.startswith("data:"):
-                                continue
-                            data = line[5:].strip()
-                            if not data or data == "[DONE]":
-                                continue
-                            try:
-                                event = json.loads(data)
-                            except json.JSONDecodeError:
-                                continue
-                            choices = event.get("choices") or []
-                            if not choices:
-                                continue
-                            delta = choices[0].get("delta") or {}
-                            piece = delta.get("content", "")
-                            if isinstance(piece, list):
-                                piece = "".join(item.get("text", "") for item in piece if isinstance(item, dict))
-                            piece_text = to_plain_text(piece)
-                            if piece_text:
-                                stream_chunks.append(piece_text)
-                        streamed_content = "".join(stream_chunks)
-                    else:
-                        body = json.loads(raw_body)
+                with urllib.request.urlopen(req, timeout=request_timeout) as response:
+                    response_bytes = self._read_response_bytes(
+                        response,
+                        request_timeout=request_timeout,
+                    )
+                    response_text = response_bytes.decode("utf-8", errors="replace")
+                    stripped_response_text = response_text.lstrip()
+                    if stripped_response_text[:1] not in {"{", "["}:
+                        elapsed = time.perf_counter() - started
+                        with self._usage_lock:
+                            self.usage_totals["failed_request_count"] += 1
+                            self.usage_totals["total_request_seconds"] += elapsed
+                        preview = " ".join(stripped_response_text[:240].split())
+                        last_error_text = f"Non-JSON HTTP response. body_preview={preview}"
+                        with self._usage_lock:
+                            self.usage_totals["last_error"] = last_error_text
+                        LOGGER.warning(
+                            "[llm-request-non-json] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                            self.config.name,
+                            self._wire_api(),
+                            "multimodal" if has_images else "text",
+                            attempt,
+                            effective_max_attempts,
+                            elapsed,
+                            last_error_text,
+                        )
+                        return None
+                    body = json.loads(response_text)
             except urllib.error.HTTPError as exc:
                 elapsed = time.perf_counter() - started
                 with self._usage_lock:
@@ -193,169 +332,134 @@ class OpenAICompatibleClient:
                     error_body = exc.read().decode("utf-8", errors="ignore")
                 except Exception:
                     error_body = ""
-                retry_after_seconds = self._retry_after_seconds(getattr(exc, "headers", None))
                 last_error_text = f"HTTP {exc.code}: {error_body[:240] or exc.reason}"
-                retryable = self._is_retryable_status(exc.code)
+                retryable = exc.code in {408, 409, 429} or exc.code >= 500
+                can_retry = attempt < effective_max_attempts and (deadline is None or (deadline - time.monotonic()) > 0)
                 LOGGER.warning(
-                    "[llm-request-http-error] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s retryable=%s retry_after_seconds=%s elapsed_seconds=%.3f error=%s",
+                    "[llm-request-http-error] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s retryable=%s elapsed_seconds=%.3f error=%s",
                     self.config.name,
+                    self._wire_api(),
                     "multimodal" if has_images else "text",
                     attempt,
-                    max_attempts,
+                    effective_max_attempts,
                     retryable,
-                    retry_after_seconds,
                     elapsed,
                     last_error_text,
                 )
-                if retryable and attempt < max_attempts:
+                if retryable and can_retry:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    self._sleep_before_retry(attempt, retry_after_seconds=retry_after_seconds)
+                    if deadline is None:
+                        time.sleep(min(2.0, 0.5 * attempt))
+                    else:
+                        time.sleep(min(2.0, 0.5 * attempt, max(0.0, deadline - time.monotonic())))
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
                 return None
-            except (urllib.error.URLError, http.client.RemoteDisconnected, ConnectionResetError, BrokenPipeError, ssl.SSLError, TimeoutError) as exc:
+            except (urllib.error.URLError, http.client.RemoteDisconnected, ConnectionResetError, BrokenPipeError, ssl.SSLError, TimeoutError, json.JSONDecodeError) as exc:
                 elapsed = time.perf_counter() - started
                 with self._usage_lock:
                     self.usage_totals["failed_request_count"] += 1
                     self.usage_totals["total_request_seconds"] += elapsed
                 last_error_text = f"{type(exc).__name__}: {exc}"
+                can_retry = attempt < effective_max_attempts and (deadline is None or (deadline - time.monotonic()) > 0)
                 LOGGER.warning(
-                    "[llm-request-transport-error] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                    "[llm-request-transport-error] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
                     self.config.name,
+                    self._wire_api(),
                     "multimodal" if has_images else "text",
                     attempt,
-                    max_attempts,
+                    effective_max_attempts,
                     elapsed,
                     last_error_text,
                 )
-                if attempt < max_attempts:
+                if can_retry:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    self._sleep_before_retry(attempt)
-                    continue
-                with self._usage_lock:
-                    self.usage_totals["last_error"] = last_error_text
-                return None
-            except json.JSONDecodeError as exc:
-                elapsed = time.perf_counter() - started
-                body_preview = (raw_body[:500] if isinstance(raw_body, str) else "").replace("\n", "\\n")
-                with self._usage_lock:
-                    self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["total_request_seconds"] += elapsed
-                last_error_text = (
-                    f"JSONDecodeError: {exc}; status={status_code}; content_type={content_type!r}; body_preview={body_preview!r}"
-                )
-                LOGGER.warning(
-                    "[llm-request-json-error] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
-                    self.config.name,
-                    "multimodal" if has_images else "text",
-                    attempt,
-                    max_attempts,
-                    elapsed,
-                    last_error_text,
-                )
-                if attempt < max_attempts:
-                    with self._usage_lock:
-                        self.usage_totals["retry_count"] += 1
-                    self._sleep_before_retry(attempt)
+                    if deadline is None:
+                        time.sleep(min(2.0, 0.5 * attempt))
+                    else:
+                        time.sleep(min(2.0, 0.5 * attempt, max(0.0, deadline - time.monotonic())))
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
                 return None
             elapsed = time.perf_counter() - started
-            usage = self._extract_usage(body or {})
+            usage = self._extract_usage(body)
             with self._usage_lock:
                 self.usage_totals["total_request_seconds"] += elapsed
                 if usage["total_tokens"] > 0:
                     self.usage_totals["requests_with_usage"] += 1
                 for key, value in usage.items():
                     self.usage_totals[key] += value
-            if streamed_content is not None:
-                parsed = extract_json_object(to_plain_text(streamed_content))
-                if not parsed:
+            response_text = self._extract_response_text(body)
+            if not response_text:
+                last_error_text = "Response missing text content."
+                with self._usage_lock:
+                    self.usage_totals["failed_request_count"] += 1
+                can_retry = attempt < effective_max_attempts and (deadline is None or (deadline - time.monotonic()) > 0)
+                LOGGER.warning(
+                    "[llm-request-parse-miss] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                    self.config.name,
+                    self._wire_api(),
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    effective_max_attempts,
+                    elapsed,
+                    last_error_text,
+                )
+                if can_retry:
                     with self._usage_lock:
-                        self.usage_totals["failed_request_count"] += 1
-                    last_error_text = "Response missing JSON object in streamed content."
-                    LOGGER.warning(
-                        "[llm-request-parse-miss] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
-                        self.config.name,
-                        "multimodal" if has_images else "text",
-                        attempt,
-                        max_attempts,
-                        elapsed,
-                        last_error_text,
-                    )
-                    if attempt < max_attempts:
-                        with self._usage_lock:
-                            self.usage_totals["retry_count"] += 1
-                            self.usage_totals["last_error"] = last_error_text
-                        self._sleep_before_retry(attempt)
-                        continue
-                    with self._usage_lock:
+                        self.usage_totals["retry_count"] += 1
                         self.usage_totals["last_error"] = last_error_text
-                    return None
-            else:
-                choices = body.get("choices") or []
-                if not choices:
+                    if deadline is None:
+                        time.sleep(min(2.0, 0.5 * attempt))
+                    else:
+                        time.sleep(min(2.0, 0.5 * attempt, max(0.0, deadline - time.monotonic())))
+                    continue
+                with self._usage_lock:
+                    self.usage_totals["last_error"] = last_error_text
+                return None
+            parsed = extract_json_object(response_text)
+            if not parsed:
+                raw_preview = json.dumps(body, ensure_ascii=False)[:400]
+                last_error_text = f"Response missing JSON object. body_preview={raw_preview}"
+                with self._usage_lock:
+                    self.usage_totals["failed_request_count"] += 1
+                can_retry = attempt < effective_max_attempts and (deadline is None or (deadline - time.monotonic()) > 0)
+                LOGGER.warning(
+                    "[llm-request-parse-miss] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                    self.config.name,
+                    self._wire_api(),
+                    "multimodal" if has_images else "text",
+                    attempt,
+                    effective_max_attempts,
+                    elapsed,
+                    last_error_text,
+                )
+                if can_retry:
                     with self._usage_lock:
-                        self.usage_totals["failed_request_count"] += 1
-                    last_error_text = "Response missing choices."
-                    LOGGER.warning(
-                        "[llm-request-parse-miss] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
-                        self.config.name,
-                        "multimodal" if has_images else "text",
-                        attempt,
-                        max_attempts,
-                        elapsed,
-                        last_error_text,
-                    )
-                    if attempt < max_attempts:
-                        with self._usage_lock:
-                            self.usage_totals["retry_count"] += 1
-                            self.usage_totals["last_error"] = last_error_text
-                        self._sleep_before_retry(attempt)
-                        continue
-                    with self._usage_lock:
+                        self.usage_totals["retry_count"] += 1
                         self.usage_totals["last_error"] = last_error_text
-                    return None
-                message = choices[0].get("message") or {}
-                content = message.get("content", "")
-                if isinstance(content, list):
-                    content = "\n".join(item.get("text", "") for item in content if isinstance(item, dict))
-                parsed = extract_json_object(to_plain_text(content))
-                if not parsed:
-                    with self._usage_lock:
-                        self.usage_totals["failed_request_count"] += 1
-                    last_error_text = "Response missing JSON object."
-                    LOGGER.warning(
-                        "[llm-request-parse-miss] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
-                        self.config.name,
-                        "multimodal" if has_images else "text",
-                        attempt,
-                        max_attempts,
-                        elapsed,
-                        last_error_text,
-                    )
-                    if attempt < max_attempts:
-                        with self._usage_lock:
-                            self.usage_totals["retry_count"] += 1
-                            self.usage_totals["last_error"] = last_error_text
-                        self._sleep_before_retry(attempt)
-                        continue
-                    with self._usage_lock:
-                        self.usage_totals["last_error"] = last_error_text
-                    return None
+                    if deadline is None:
+                        time.sleep(min(2.0, 0.5 * attempt))
+                    else:
+                        time.sleep(min(2.0, 0.5 * attempt, max(0.0, deadline - time.monotonic())))
+                    continue
+                with self._usage_lock:
+                    self.usage_totals["last_error"] = last_error_text
+                return None
             with self._usage_lock:
                 self.usage_totals["successful_request_count"] += 1
                 self.usage_totals["last_error"] = None
             LOGGER.info(
-                "[llm-request-success] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s elapsed_seconds=%.3f total_tokens=%s",
+                "[llm-request-success] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s elapsed_seconds=%.3f total_tokens=%s",
                 self.config.name,
+                self._wire_api(),
                 "multimodal" if has_images else "text",
                 attempt,
-                max_attempts,
+                effective_max_attempts,
                 elapsed,
                 usage.get("total_tokens", 0),
             )
@@ -365,225 +469,11 @@ class OpenAICompatibleClient:
             parsed["_llm_endpoint_name"] = self.config.name
             return parsed
         with self._usage_lock:
-            self.usage_totals["last_error"] = last_error_text
-        return None
-
-    def _build_responses_payload(self, system_prompt: str, user_content: Any) -> Dict[str, Any]:
-        def to_responses_parts(content: Any) -> List[Dict[str, Any]]:
-            parts: List[Dict[str, Any]] = []
-            if isinstance(content, list):
-                for item in content:
-                    if not isinstance(item, dict):
-                        continue
-                    item_type = item.get("type")
-                    if item_type == "text":
-                        text_value = to_plain_text(item.get("text"))
-                        if text_value:
-                            parts.append({"type": "input_text", "text": text_value})
-                    elif item_type == "image_url":
-                        image_url = item.get("image_url") or {}
-                        url_value = to_plain_text(image_url.get("url"))
-                        if url_value:
-                            parts.append({"type": "input_image", "image_url": url_value})
-            else:
-                text_value = to_plain_text(content)
-                if text_value:
-                    parts.append({"type": "input_text", "text": text_value})
-            return parts or [{"type": "input_text", "text": "{}"}]
-
-        return {
-            "model": self.config.model,
-            "input": [
-                {
-                    "role": "system",
-                    "content": [{"type": "input_text", "text": system_prompt or ""}],
-                },
-                {
-                    "role": "user",
-                    "content": to_responses_parts(user_content),
-                },
-            ],
-            "reasoning": {"effort": self.config.reasoning_effort},
-            "stream": True,
-        }
-
-    def _read_sse_text(self, response: Any) -> str:
-        chunks: List[str] = []
-        for raw_line in response:
-            try:
-                if isinstance(raw_line, bytes):
-                    line = raw_line.decode("utf-8", errors="ignore").strip()
-                else:
-                    line = str(raw_line).strip()
-            except Exception:
-                continue
-            if not line.startswith("data:"):
-                continue
-            data = line[5:].strip()
-            if not data or data == "[DONE]":
-                continue
-            try:
-                event = json.loads(data)
-            except json.JSONDecodeError:
-                continue
-            event_type = event.get("type")
-            if event_type == "response.output_text.delta":
-                delta = to_plain_text(event.get("delta"))
-                if delta:
-                    chunks.append(delta)
-            elif event_type in {"response.completed", "response.output_text.done"}:
-                continue
-        return "".join(chunks)
-
-    def _post_responses(self, payload: Dict[str, Any], has_images: bool = False) -> Optional[Dict[str, Any]]:
-        if not self.config.enabled or not self.config.api_key:
-            return None
-        with self._usage_lock:
-            self.usage_totals["request_count"] += 1
-            if has_images:
-                self.usage_totals["multimodal_request_count"] += 1
-            else:
-                self.usage_totals["text_request_count"] += 1
-        url = self.config.base_url.rstrip("/") + "/responses"
-        last_error_text = None
-        max_attempts = self._max_attempts()
-        LOGGER.info(
-            "[llm-request-start] endpoint=%s api_mode=responses request_mode=%s max_attempts=%s timeout_seconds=%s url=%s",
-            self.config.name,
-            "multimodal" if has_images else "text",
-            max_attempts,
-            self.config.timeout_seconds,
-            url,
-        )
-        for attempt in range(1, max_attempts + 1):
-            started = time.perf_counter()
-            try:
-                session = requests.Session()
-                session.trust_env = False
-                with session.post(
-                    url,
-                    headers={
-                        "Content-Type": "application/json",
-                        "Accept": "text/event-stream",
-                        "Connection": "close",
-                        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-                        "Authorization": f"Bearer {self.config.api_key}",
-                    },
-                    data=json.dumps(payload),
-                    stream=True,
-                    timeout=self.config.timeout_seconds,
-                ) as response:
-                    response.raise_for_status()
-                    content = self._read_sse_text(response.iter_lines(decode_unicode=True))
-            except requests.HTTPError as exc:
-                elapsed = time.perf_counter() - started
-                with self._usage_lock:
-                    self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["total_request_seconds"] += elapsed
-                try:
-                    error_body = exc.response.text[:240] if exc.response is not None else ""
-                    status_code = exc.response.status_code if exc.response is not None else None
-                    response_headers = exc.response.headers if exc.response is not None else None
-                except Exception:
-                    error_body = ""
-                    status_code = None
-                    response_headers = None
-                retry_after_seconds = self._retry_after_seconds(response_headers)
-                last_error_text = f"HTTP {status_code}: {error_body or exc}"
-                retryable = self._is_retryable_status(status_code)
-                LOGGER.warning(
-                    "[llm-request-http-error] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s retryable=%s retry_after_seconds=%s elapsed_seconds=%.3f error=%s",
-                    self.config.name,
-                    "multimodal" if has_images else "text",
-                    attempt,
-                    max_attempts,
-                    retryable,
-                    retry_after_seconds,
-                    elapsed,
-                    last_error_text,
-                )
-                if retryable and attempt < max_attempts:
-                    with self._usage_lock:
-                        self.usage_totals["retry_count"] += 1
-                    self._sleep_before_retry(attempt, retry_after_seconds=retry_after_seconds)
-                    continue
-                with self._usage_lock:
-                    self.usage_totals["last_error"] = last_error_text
-                return None
-            except (requests.RequestException, json.JSONDecodeError, ssl.SSLError, TimeoutError) as exc:
-                elapsed = time.perf_counter() - started
-                with self._usage_lock:
-                    self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["total_request_seconds"] += elapsed
-                last_error_text = f"{type(exc).__name__}: {exc}"
-                LOGGER.warning(
-                    "[llm-request-transport-error] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
-                    self.config.name,
-                    "multimodal" if has_images else "text",
-                    attempt,
-                    max_attempts,
-                    elapsed,
-                    last_error_text,
-                )
-                if attempt < max_attempts:
-                    with self._usage_lock:
-                        self.usage_totals["retry_count"] += 1
-                    self._sleep_before_retry(attempt)
-                    continue
-                with self._usage_lock:
-                    self.usage_totals["last_error"] = last_error_text
-                return None
-            elapsed = time.perf_counter() - started
-            parsed = extract_json_object(to_plain_text(content))
-            if not parsed:
-                with self._usage_lock:
-                    self.usage_totals["failed_request_count"] += 1
-                    self.usage_totals["total_request_seconds"] += elapsed
-                last_error_text = "Response missing JSON object."
-                LOGGER.warning(
-                    "[llm-request-parse-miss] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
-                    self.config.name,
-                    "multimodal" if has_images else "text",
-                    attempt,
-                    max_attempts,
-                    elapsed,
-                    last_error_text,
-                )
-                if attempt < max_attempts:
-                    with self._usage_lock:
-                        self.usage_totals["retry_count"] += 1
-                        self.usage_totals["last_error"] = last_error_text
-                    self._sleep_before_retry(attempt)
-                    continue
-                with self._usage_lock:
-                    self.usage_totals["last_error"] = last_error_text
-                return None
-            with self._usage_lock:
-                self.usage_totals["successful_request_count"] += 1
-                self.usage_totals["total_request_seconds"] += elapsed
-                self.usage_totals["last_error"] = None
-            LOGGER.info(
-                "[llm-request-success] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s elapsed_seconds=%.3f total_tokens=%s",
-                self.config.name,
-                "multimodal" if has_images else "text",
-                attempt,
-                max_attempts,
-                elapsed,
-                0,
+            self.usage_totals["last_error"] = last_error_text or (
+                "Retry deadline exceeded before a successful model response was received."
+                if deadline is not None
+                else "Exhausted retry attempts without a successful model response."
             )
-            parsed["_llm_usage"] = {
-                "prompt_tokens": 0,
-                "completion_tokens": 0,
-                "total_tokens": 0,
-                "cached_tokens": 0,
-                "reasoning_tokens": 0,
-            }
-            parsed["_llm_elapsed_seconds"] = round(elapsed, 3)
-            parsed["_llm_request_mode"] = "multimodal" if has_images else "text"
-            parsed["_llm_endpoint_name"] = self.config.name
-            return parsed
-        with self._usage_lock:
-            self.usage_totals["last_error"] = last_error_text
         return None
 
     def image_to_data_url(self, image: Image.Image) -> str:
@@ -592,7 +482,15 @@ class OpenAICompatibleClient:
         encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
         return f"data:image/png;base64,{encoded}"
 
-    def chat_json_parts(self, system_prompt: str, user_parts: Sequence[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    def chat_json_parts(
+        self,
+        system_prompt: str,
+        user_parts: Sequence[Dict[str, Any]],
+        response_schema: Optional[Dict[str, Any]] = None,
+        *,
+        deadline_monotonic: float | None = None,
+        max_attempts: int = 3,
+    ) -> Optional[Dict[str, Any]]:
         content_parts: List[Dict[str, Any]] = []
         for item in user_parts:
             if not isinstance(item, dict):
@@ -616,103 +514,203 @@ class OpenAICompatibleClient:
         if not content_parts:
             content_parts = [{"type": "text", "text": "{}"}]
         has_images = any(part.get("type") == "image_url" for part in content_parts)
-        if self.config.api_mode == "responses":
-            return self._post_responses(self._build_responses_payload(system_prompt, content_parts), has_images=has_images)
-        return self._post_json(self._build_payload(system_prompt, content_parts), has_images=has_images)
+        return self._post_json(
+            self._build_payload(system_prompt, content_parts, response_schema=response_schema),
+            has_images=has_images,
+            deadline_monotonic=deadline_monotonic,
+            max_attempts=max_attempts,
+        )
 
-    def chat_json(self, system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:
-        return self.chat_json_parts(system_prompt, [{"type": "text", "text": user_prompt}])
+    def chat_json(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        response_schema: Optional[Dict[str, Any]] = None,
+        *,
+        deadline_monotonic: float | None = None,
+        max_attempts: int = 3,
+    ) -> Optional[Dict[str, Any]]:
+        return self.chat_json_parts(
+            system_prompt,
+            [{"type": "text", "text": user_prompt}],
+            response_schema=response_schema,
+            deadline_monotonic=deadline_monotonic,
+            max_attempts=max_attempts,
+        )
 
-    def chat_json_with_images(self, system_prompt: str, user_prompt: str, images: Sequence[Image.Image]) -> Optional[Dict[str, Any]]:
+    def chat_json_with_images(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        images: Sequence[Image.Image],
+        response_schema: Optional[Dict[str, Any]] = None,
+        *,
+        deadline_monotonic: float | None = None,
+        max_attempts: int = 3,
+    ) -> Optional[Dict[str, Any]]:
         user_parts: List[Dict[str, Any]] = [{"type": "text", "text": user_prompt}]
         for image in list(images)[:3]:
             if isinstance(image, Image.Image):
                 user_parts.append({"type": "image", "image": image})
-        return self.chat_json_parts(system_prompt, user_parts)
+        return self.chat_json_parts(
+            system_prompt,
+            user_parts,
+            response_schema=response_schema,
+            deadline_monotonic=deadline_monotonic,
+            max_attempts=max_attempts,
+        )
 
 
 class ModelRouter:
     def __init__(self, primary: OpenAICompatibleClient, fallback: Optional[OpenAICompatibleClient] = None):
         self.primary = primary
-        self.fallback = fallback
-
-    @staticmethod
-    def _shares_resource_pool(primary: ModelEndpointConfig, fallback: Optional[ModelEndpointConfig]) -> bool:
-        if fallback is None:
-            return False
-        if not (primary.enabled and fallback.enabled and primary.api_key and fallback.api_key):
-            return False
-        return (
-            primary.base_url.rstrip("/") == fallback.base_url.rstrip("/")
-            and primary.api_key == fallback.api_key
-            and primary.api_mode == fallback.api_mode
-        )
+        self.fallback = None
 
     @classmethod
-    def from_configs(cls, primary: ModelEndpointConfig, fallback: Optional[ModelEndpointConfig] = None) -> "ModelRouter":
-        fallback_client: Optional[OpenAICompatibleClient] = None
-        if fallback is not None:
-            if cls._shares_resource_pool(primary, fallback):
-                LOGGER.warning(
-                    "[llm-fallback-disabled] primary and fallback share the same base_url/api_key/api_mode; disabling duplicate fallback endpoint=%s",
-                    fallback.name,
-                )
-            else:
-                fallback_client = OpenAICompatibleClient(fallback)
+    def from_configs(cls, primary: ModelEndpointConfig) -> "ModelRouter":
         return cls(
             primary=OpenAICompatibleClient(primary),
-            fallback=fallback_client,
+            fallback=None,
         )
 
-    def chat_json(self, system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:
-        result = self.primary.chat_json(system_prompt, user_prompt)
-        if result is not None:
-            return result
-        if self.fallback is not None:
-            LOGGER.warning(
-                "[llm-fallback] request_mode=text primary_endpoint=%s fallback_endpoint=%s primary_last_error=%s",
-                self.primary.config.name,
-                self.fallback.config.name,
-                self.primary.snapshot_usage().get("last_error"),
-            )
-            return self.fallback.chat_json(system_prompt, user_prompt)
-        return None
+    def _enabled_clients(self) -> List[OpenAICompatibleClient]:
+        clients: List[OpenAICompatibleClient] = []
+        if self.primary.config.enabled and self.primary.config.api_key:
+            clients.append(self.primary)
+        return clients
 
-    def chat_json_with_images(self, system_prompt: str, user_prompt: str, images: Sequence[Image.Image]) -> Optional[Dict[str, Any]]:
-        result = self.primary.chat_json_with_images(system_prompt, user_prompt, images)
-        if result is not None:
-            return result
-        if self.fallback is not None:
-            LOGGER.warning(
-                "[llm-fallback] request_mode=multimodal primary_endpoint=%s fallback_endpoint=%s primary_last_error=%s",
-                self.primary.config.name,
-                self.fallback.config.name,
-                self.primary.snapshot_usage().get("last_error"),
+    def _router_retry_deadline(self) -> float:
+        clients = self._enabled_clients()
+        timeout_budget = sum(max(1.0, float(client.config.timeout_seconds)) for client in clients) or 60.0
+        return time.monotonic() + max(30.0, timeout_budget * 3.0)
+
+    def _client_call_timeout(self, client: OpenAICompatibleClient) -> float:
+        return max(10.0, float(client.config.timeout_seconds) + 90.0)
+
+    def _last_error_is_permanent(self, client: OpenAICompatibleClient) -> bool:
+        last_error = client.snapshot_usage().get("last_error")
+        if not isinstance(last_error, str):
+            return False
+        permanent_markers = (
+            "Non-JSON HTTP response.",
+            "browser_signature_banned",
+            "Access denied",
+            "无效的令牌",
+            "invalid token",
+        )
+        if any(marker in last_error for marker in permanent_markers):
+            return True
+        match = re.search(r"\bHTTP\s+(\d{3})\b", last_error)
+        if match is None:
+            return False
+        status_code = int(match.group(1))
+        return 400 <= status_code < 500 and status_code not in {408, 409, 429}
+
+    def _mark_client_timeout(self, client: OpenAICompatibleClient, operation_name: str, timeout_seconds: float) -> None:
+        with client._usage_lock:
+            client.usage_totals["failed_request_count"] += 1
+            client.usage_totals["last_error"] = (
+                f"{operation_name} timed out after {round(timeout_seconds, 1)}s before the client returned a response."
             )
-            return self.fallback.chat_json_with_images(system_prompt, user_prompt, images)
-        return None
+        LOGGER.warning(
+            "[llm-client-timeout] endpoint=%s operation=%s timeout_seconds=%.1f",
+            client.config.name,
+            operation_name,
+            timeout_seconds,
+        )
+
+    def _invoke_client_method_with_timeout(
+        self,
+        client: OpenAICompatibleClient,
+        method_name: str,
+        *args: Any,
+    ) -> Optional[Dict[str, Any]]:
+        timeout_seconds = self._client_call_timeout(client)
+        result_holder: Dict[str, Optional[Dict[str, Any]]] = {"value": None}
+        error_holder: Dict[str, BaseException] = {}
+        LOGGER.info(
+            "[llm-client-call-start] endpoint=%s operation=%s timeout_seconds=%.1f",
+            client.config.name,
+            method_name,
+            timeout_seconds,
+        )
+
+        def _target() -> None:
+            try:
+                method = getattr(client, method_name)
+                deadline = time.monotonic() + max(30.0, float(client.config.timeout_seconds) + 60.0)
+                result_holder["value"] = method(*args, deadline_monotonic=deadline, max_attempts=2)
+            except BaseException as exc:  # pragma: no cover - defensive bridge for unexpected client failures
+                error_holder["error"] = exc
+
+        worker = threading.Thread(target=_target, daemon=True)
+        started = time.perf_counter()
+        worker.start()
+        worker.join(timeout_seconds)
+        elapsed = time.perf_counter() - started
+        if worker.is_alive():
+            self._mark_client_timeout(client, method_name, timeout_seconds)
+            return None
+        if "error" in error_holder:
+            LOGGER.exception(
+                "[llm-client-call-error] endpoint=%s operation=%s elapsed_seconds=%.3f",
+                client.config.name,
+                method_name,
+                elapsed,
+                exc_info=error_holder["error"],
+            )
+            raise error_holder["error"]
+        LOGGER.info(
+            "[llm-client-call-done] endpoint=%s operation=%s elapsed_seconds=%.3f success=%s last_error=%s",
+            client.config.name,
+            method_name,
+            elapsed,
+            result_holder["value"] is not None,
+            client.snapshot_usage().get("last_error"),
+        )
+        return result_holder["value"]
+
+    def chat_json(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        response_schema: Optional[Dict[str, Any]] = None,
+    ) -> Optional[Dict[str, Any]]:
+        return self._invoke_client_method_with_timeout(self.primary, "chat_json", system_prompt, user_prompt, response_schema)
+
+    def chat_json_with_images(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        images: Sequence[Image.Image],
+        response_schema: Optional[Dict[str, Any]] = None,
+    ) -> Optional[Dict[str, Any]]:
+        return self._invoke_client_method_with_timeout(
+            self.primary,
+            "chat_json_with_images",
+            system_prompt,
+            user_prompt,
+            images,
+            response_schema,
+        )
 
     def has_available_endpoint(self) -> bool:
-        primary_ready = bool(self.primary.config.enabled and self.primary.config.api_key)
-        fallback_ready = bool(self.fallback and self.fallback.config.enabled and self.fallback.config.api_key)
-        return primary_ready or fallback_ready
+        return bool(self.primary.config.enabled and self.primary.config.api_key)
 
     def ensure_available(self, operation_name: str) -> None:
         if self.has_available_endpoint():
             return
         raise RuntimeError(
             f"[{operation_name}] No enabled model endpoint has an API key. "
-            "Set `PIPELINE2_API_KEY_PRIMARY` and/or `PIPELINE2_API_KEY_FALLBACK` before running the live pipeline."
+            "Set `OPENAI_API_KEY` or provide endpoint-specific `models.*.api_key` values before running the live pipeline."
         )
 
     def last_error_summary(self) -> Dict[str, Any]:
         return {
             "primary_last_error": self.primary.snapshot_usage().get("last_error"),
-            "fallback_last_error": self.fallback.snapshot_usage().get("last_error") if self.fallback else None,
         }
 
     def usage_summary(self) -> Dict[str, Any]:
         return {
             "primary": self.primary.snapshot_usage(),
-            "fallback": self.fallback.snapshot_usage() if self.fallback else None,
         }

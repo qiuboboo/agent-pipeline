@@ -2,7 +2,6 @@ paths:
   ready_root: /root/.openclaw/workspace/tmp_pipeline2_new_ready_single/ready
   output_root: /root/.openclaw/workspace/agent-pipeline/pipeline2/outputs_new_ready_single
   checkpoint_db_path: /root/.openclaw/workspace/agent-pipeline/pipeline2/runtime/pipeline_langgraph_new_ready_single.sqlite
-
 runtime:
   include_manual_review: false
   max_problems: 1
@@ -11,12 +10,12 @@ runtime:
   save_runtime_snapshots: true
   save_problem_bundles: true
   enable_trace_patch_writes: false
-
 thresholds:
-  method_score_thresholds: [0.33, 0.67]
+  method_score_thresholds:
+  - 0.33
+  - 0.67
   novelty_total_threshold: 0.55
-  novelty_required_threshold: 0.50
-
+  novelty_required_threshold: 0.5
 models:
   primary:
     name: primary
@@ -27,14 +26,4 @@ models:
     temperature: 0.1
     timeout_seconds: 180
     enabled: true
-    api_mode: ${ANNOTATION_API_MODE}
-  fallback:
-    name: fallback
-    base_url: ${ANNOTATION_FALLBACK_BASE_URL}
-    api_key: ${ANNOTATION_FALLBACK_API_KEY}
-    model: ${ANNOTATION_MODEL}
-    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
-    temperature: 0.1
-    timeout_seconds: 180
-    enabled: true
-    api_mode: ${ANNOTATION_FALLBACK_API_MODE}
+    wire_api: ${ANNOTATION_API_MODE}

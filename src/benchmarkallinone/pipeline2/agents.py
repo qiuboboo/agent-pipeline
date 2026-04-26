@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import math
 import re
 from typing import Any, Dict, List, Optional, Sequence, Tuple
@@ -147,6 +148,7 @@ _NOVELTY_LABEL_ALIASES = {
     "uncertain_manual_queue": "uncertain_manual_queue",
     "uncertain": "uncertain_manual_queue",
 }
+LOGGER = logging.getLogger("benchmarkallinone.pipeline2.agents")
 
 
 class AgentContractError(RuntimeError):
@@ -252,8 +254,17 @@ def _load_images(image_paths: Sequence[str]):
     for path in image_paths:
         try:
             with Image.open(path) as img:
-                images.append(img.convert("RGB"))
+                converted = img.convert("RGB")
+                images.append(converted)
+                LOGGER.info(
+                    "[image-load] status=success path=%s size=%sx%s mode=%s",
+                    path,
+                    converted.size[0],
+                    converted.size[1],
+                    converted.mode,
+                )
         except Exception as exc:  # pragma: no cover
+            LOGGER.warning("[image-load] status=failure path=%s error=%s", path, exc)
             raise PipelineDataContractError(f"[ImageLoader] Failed to open image `{path}`: {exc}") from exc
     return images
 
@@ -465,7 +476,21 @@ def _call_router(
     agent_name: str,
     require_images: bool = False,
 ) -> Dict[str, Any]:
+    LOGGER.info(
+        "[agent-image-input] agent=%s require_images=%s provided_image_paths=%s image_paths=%s",
+        agent_name,
+        require_images,
+        len(image_paths),
+        list(image_paths),
+    )
     images = _load_images(image_paths)
+    LOGGER.info(
+        "[agent-image-ready] agent=%s require_images=%s loaded_images=%s request_mode=%s",
+        agent_name,
+        require_images,
+        len(images),
+        "multimodal" if images else "text",
+    )
     if require_images and not images:
         raise _contract_error(agent_name, "This agent requires image input, but no loadable images were found.")
     response = (
@@ -477,7 +502,7 @@ def _call_router(
         error_summary = router.last_error_summary()
         raise _contract_error(
             agent_name,
-            f"LLM returned no JSON object. primary_last_error={error_summary.get('primary_last_error')!r}; fallback_last_error={error_summary.get('fallback_last_error')!r}",
+            f"LLM returned no JSON object. primary_last_error={error_summary.get('primary_last_error')!r}.",
         )
     if require_images and response.get("_llm_request_mode") != "multimodal":
         raise _contract_error(

@@ -604,7 +604,7 @@ def initialize_runtime(config: Pipeline2Config, project_root: Path) -> VerifiedC
     ctx = VerifiedCotRuntimeContext(
         project_root=project_root,
         config=config,
-        router=ModelRouter.from_configs(config.models.primary, config.models.fallback),
+        router=ModelRouter.from_configs(config.models.primary),
         ready_root=ready_root,
         output_root=output_root,
         checkpoint_db_path=checkpoint_db_path,

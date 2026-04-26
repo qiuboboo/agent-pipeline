@@ -1,8 +1,22 @@
+model_provider: OpenAI
+model: gpt-5.4
+review_model: gpt-5.4
+model_reasoning_effort: high
+disable_response_storage: true
+network_access: enabled
+windows_wsl_setup_acknowledged: true
+model_context_window: 1000000
+model_auto_compact_token_limit: 900000
+model_providers:
+  OpenAI:
+    name: OpenAI
+    base_url: https://www.msutools.cn
+    wire_api: responses
+    requires_openai_auth: true
 paths:
   ready_root: ready
   output_root: pipeline2/outputs
   checkpoint_db_path: pipeline2/runtime/pipeline_langgraph.sqlite
-
 runtime:
   include_manual_review: false
   max_problems: 0
@@ -15,40 +29,25 @@ runtime:
   fail_on_problem_structure_validation: true
   stage_retry_attempts: 3
   stage_retry_backoff_seconds: 1.0
-  problem_retry_attempts: 3
+  problem_retry_attempts: 10
   continue_on_problem_error: true
-  log_level: INFO
-  log_to_file: true
-
 thresholds:
-  method_score_thresholds: [0.33, 0.67]
+  method_score_thresholds:
+  - 0.33
+  - 0.67
   novelty_total_threshold: 0.55
-  novelty_required_threshold: 0.50
-
+  novelty_required_threshold: 0.5
 models:
   primary:
     name: primary
-    base_url: ${ANNOTATION_API_BASE_URL}
-    api_key: ${ANNOTATION_API_KEY}
-    model: ${ANNOTATION_MODEL}
-    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
+    provider: OpenAI
+    base_url: https://www.msutools.cn
+    api_key: ${OPENAI_API_KEY}
+    model: gpt-5.4
+    reasoning_effort: high
+    wire_api: responses
+    requires_openai_auth: true
+    disable_response_storage: true
     temperature: 0.1
     timeout_seconds: 180
     enabled: true
-    max_attempts: 6
-    retry_base_delay_seconds: 1.5
-    retry_max_delay_seconds: 15
-    respect_retry_after: true
-  fallback:
-    name: fallback
-    base_url: ${ANNOTATION_FALLBACK_BASE_URL}
-    api_key: ${ANNOTATION_FALLBACK_API_KEY}
-    model: ${ANNOTATION_MODEL}
-    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
-    temperature: 0.1
-    timeout_seconds: 180
-    enabled: true
-    max_attempts: 6
-    retry_base_delay_seconds: 1.5
-    retry_max_delay_seconds: 15
-    respect_retry_after: true

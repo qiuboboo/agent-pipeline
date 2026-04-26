@@ -16,31 +16,21 @@ class ModelRouterAvailabilityTests(unittest.TestCase):
     def test_ensure_available_raises_when_no_endpoint_has_key(self) -> None:
         router = ModelRouter(
             primary=OpenAICompatibleClient(ModelEndpointConfig(name="primary", api_key="", enabled=True)),
-            fallback=OpenAICompatibleClient(ModelEndpointConfig(name="fallback", api_key="", enabled=True)),
         )
 
         with self.assertRaises(RuntimeError) as context:
             router.ensure_available("pipeline2 annotate")
 
         self.assertIn("pipeline2 annotate", str(context.exception))
-        self.assertIn("PIPELINE2_API_KEY_PRIMARY", str(context.exception))
+        self.assertIn("OPENAI_API_KEY", str(context.exception))
 
-    def test_has_available_endpoint_accepts_fallback_key(self) -> None:
+    def test_has_available_endpoint_requires_primary_key(self) -> None:
         router = ModelRouter(
-            primary=OpenAICompatibleClient(ModelEndpointConfig(name="primary", api_key="", enabled=True)),
-            fallback=OpenAICompatibleClient(ModelEndpointConfig(name="fallback", api_key="dummy-key", enabled=True)),
+            primary=OpenAICompatibleClient(ModelEndpointConfig(name="primary", api_key="dummy-key", enabled=True)),
         )
 
         self.assertTrue(router.has_available_endpoint())
         router.ensure_available("pipeline2 annotate")
-
-    def test_from_configs_disables_duplicate_fallback_pool(self) -> None:
-        router = ModelRouter.from_configs(
-            ModelEndpointConfig(name="primary", base_url="https://example.com/v1", api_key="same-key", api_mode="responses"),
-            ModelEndpointConfig(name="fallback", base_url="https://example.com/v1/", api_key="same-key", api_mode="responses"),
-        )
-
-        self.assertIsNone(router.fallback)
 
 
 if __name__ == "__main__":

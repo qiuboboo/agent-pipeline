@@ -110,8 +110,16 @@ def _resolve_log_level(level_name: str) -> int:
     return candidate if isinstance(candidate, int) else logging.INFO
 
 
+def _runtime_log_level(config: Pipeline2Config) -> str:
+    return str(getattr(config.runtime, "log_level", "INFO") or "INFO")
+
+
+def _runtime_log_to_file(config: Pipeline2Config) -> bool:
+    return bool(getattr(config.runtime, "log_to_file", True))
+
+
 def _setup_logging(ctx: RuntimeContext) -> None:
-    level = _resolve_log_level(ctx.config.runtime.log_level)
+    level = _resolve_log_level(_runtime_log_level(ctx.config))
     formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(threadName)s | %(name)s | %(message)s")
     root_logger = logging.getLogger("benchmarkallinone.pipeline2")
     root_logger.setLevel(level)
@@ -137,11 +145,11 @@ def _setup_logging(ctx: RuntimeContext) -> None:
     for handler in list(root_logger.handlers):
         if getattr(handler, "_pipeline2_file_handler", False):
             handler_path = Path(getattr(handler, "baseFilename", "")) if getattr(handler, "baseFilename", None) else None
-            if not ctx.config.runtime.log_to_file or handler_path != file_handler_path:
+            if not _runtime_log_to_file(ctx.config) or handler_path != file_handler_path:
                 root_logger.removeHandler(handler)
                 handler.close()
 
-    if ctx.config.runtime.log_to_file:
+    if _runtime_log_to_file(ctx.config):
         file_handler_exists = any(
             getattr(handler, "_pipeline2_file_handler", False)
             and Path(getattr(handler, "baseFilename", "")) == file_handler_path
@@ -1420,7 +1428,7 @@ def initialize_runtime(config: Pipeline2Config, project_root: Path) -> RuntimeCo
     ctx = RuntimeContext(
         project_root=project_root,
         config=config,
-        router=ModelRouter.from_configs(config.models.primary, config.models.fallback),
+        router=ModelRouter.from_configs(config.models.primary),
         ready_root=ready_root,
         output_root=output_root,
         checkpoint_db_path=checkpoint_db_path,
@@ -1460,8 +1468,8 @@ def initialize_runtime(config: Pipeline2Config, project_root: Path) -> RuntimeCo
         ctx.ready_root,
         ctx.output_root,
         ctx.checkpoint_db_path,
-        ctx.config.runtime.log_level,
-        ctx.config.runtime.log_to_file,
+        _runtime_log_level(ctx.config),
+        _runtime_log_to_file(ctx.config),
     )
     return ctx
 
@@ -1511,12 +1519,11 @@ def run_annotation_pipeline(config: Pipeline2Config, project_root: Path, batch_i
     usage_summary = ctx.router.usage_summary()
     write_json(ctx.output_root / "usage_summary.json", usage_summary)
     LOGGER.info(
-        "[annotate-done] batch_id=%s success_count=%s failed_count=%s primary_requests=%s fallback_requests=%s",
+        "[annotate-done] batch_id=%s success_count=%s failed_count=%s primary_requests=%s",
         actual_batch_id,
         len(runtime_state["problems"]),
         len(runtime_state["failed_problems"]),
         (usage_summary.get("primary") or {}).get("request_count", 0),
-        ((usage_summary.get("fallback") or {}) if isinstance(usage_summary.get("fallback"), dict) else {}).get("request_count", 0),
     )
     return runtime_state
 
@@ -1547,12 +1554,11 @@ def resume_annotation_pipeline(config: Pipeline2Config, project_root: Path, batc
     usage_summary = ctx.router.usage_summary()
     write_json(ctx.output_root / "usage_summary.json", usage_summary)
     LOGGER.info(
-        "[annotate-resume-done] batch_id=%s success_count=%s failed_count=%s primary_requests=%s fallback_requests=%s",
+        "[annotate-resume-done] batch_id=%s success_count=%s failed_count=%s primary_requests=%s",
         batch_id,
         len(runtime_state["problems"]),
         len(runtime_state["failed_problems"]),
         (usage_summary.get("primary") or {}).get("request_count", 0),
-        ((usage_summary.get("fallback") or {}) if isinstance(usage_summary.get("fallback"), dict) else {}).get("request_count", 0),
     )
     return runtime_state
 
