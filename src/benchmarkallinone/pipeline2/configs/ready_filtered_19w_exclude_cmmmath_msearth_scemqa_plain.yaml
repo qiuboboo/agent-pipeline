@@ -1,0 +1,45 @@
+paths:
+  # The run script sets this to a symlink-filtered ready root built from PIPELINE2_SOURCE_READY_ROOT.
+  # Excludes:
+  #   - cmmmath / cmm_math
+  #   - msearth* / msearth_open_ended
+  #   - plain scemqa dataset whose directory basename is exactly "scemqa"
+  ready_root: ${PIPELINE2_FILTERED_READY_ROOT}
+  output_root: ${PIPELINE2_OUTPUT_ROOT}
+  checkpoint_db_path: ${PIPELINE2_CHECKPOINT_DB_PATH}
+
+runtime:
+  include_manual_review: true
+  max_problems: 0
+  max_problem_workers: 19
+  max_images_per_problem: 3
+  save_runtime_snapshots: true
+  save_problem_bundles: true
+  enable_trace_patch_writes: true
+  enable_problem_structure_validation: true
+  fail_on_problem_structure_validation: true
+  stage_retry_attempts: 3
+  stage_retry_backoff_seconds: 1.0
+  problem_retry_attempts: 10
+  continue_on_problem_error: true
+
+thresholds:
+  method_score_thresholds: [0.33, 0.67]
+  novelty_total_threshold: 0.55
+  novelty_required_threshold: 0.50
+
+models:
+  primary:
+    name: primary
+    provider: OpenAI
+    base_url: ${ANNOTATION_API_BASE_URL}
+    api_key: ${ANNOTATION_API_KEY}
+    model: ${ANNOTATION_MODEL}
+    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
+    wire_api: ${ANNOTATION_API_MODE}
+    requires_openai_auth: true
+    disable_response_storage: true
+    temperature: 0.1
+    timeout_seconds: 180
+    enabled: true
+  fallback: null
