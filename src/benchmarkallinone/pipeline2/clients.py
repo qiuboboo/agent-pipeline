@@ -10,7 +10,8 @@ import threading
 import time
 import urllib.error
 import urllib.request
-from typing import Any, Dict, List, Optional, Sequence
+from email.utils import parsedate_to_datetime
+from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 import requests
 from PIL import Image
@@ -81,18 +82,40 @@ class OpenAICompatibleClient:
         }
 
     def _max_attempts(self) -> int:
-        return 6
+        return max(1, int(self.config.max_attempts))
 
     def _retry_delay_seconds(self, attempt: int) -> float:
-        return min(15.0, 1.5 * (2 ** max(0, attempt - 1)))
+        base_delay = max(0.0, float(self.config.retry_base_delay_seconds))
+        max_delay = max(base_delay, float(self.config.retry_max_delay_seconds))
+        return min(max_delay, base_delay * (2 ** max(0, attempt - 1)))
 
     def _is_retryable_status(self, status_code: Optional[int]) -> bool:
         if status_code is None:
             return False
         return status_code in {403, 408, 409, 423, 425, 429} or status_code >= 500
 
-    def _sleep_before_retry(self, attempt: int) -> None:
-        time.sleep(self._retry_delay_seconds(attempt))
+    def _retry_after_seconds(self, headers: Optional[Mapping[str, Any]]) -> Optional[float]:
+        if not self.config.respect_retry_after or not headers:
+            return None
+        raw_value = headers.get("Retry-After")
+        if raw_value is None:
+            return None
+        text = to_plain_text(raw_value).strip()
+        if not text:
+            return None
+        try:
+            return max(0.0, float(text))
+        except ValueError:
+            pass
+        try:
+            retry_at = parsedate_to_datetime(text)
+            return max(0.0, retry_at.timestamp() - time.time())
+        except Exception:
+            return None
+
+    def _sleep_before_retry(self, attempt: int, retry_after_seconds: Optional[float] = None) -> None:
+        delay_seconds = retry_after_seconds if retry_after_seconds is not None else self._retry_delay_seconds(attempt)
+        time.sleep(max(0.0, delay_seconds))
 
     def _post_json(self, payload: Dict[str, Any], has_images: bool = False) -> Optional[Dict[str, Any]]:
         if not self.config.enabled or not self.config.api_key:
@@ -170,22 +193,24 @@ class OpenAICompatibleClient:
                     error_body = exc.read().decode("utf-8", errors="ignore")
                 except Exception:
                     error_body = ""
+                retry_after_seconds = self._retry_after_seconds(getattr(exc, "headers", None))
                 last_error_text = f"HTTP {exc.code}: {error_body[:240] or exc.reason}"
                 retryable = self._is_retryable_status(exc.code)
                 LOGGER.warning(
-                    "[llm-request-http-error] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s retryable=%s elapsed_seconds=%.3f error=%s",
+                    "[llm-request-http-error] endpoint=%s api_mode=chat_completions request_mode=%s attempt=%s/%s retryable=%s retry_after_seconds=%s elapsed_seconds=%.3f error=%s",
                     self.config.name,
                     "multimodal" if has_images else "text",
                     attempt,
                     max_attempts,
                     retryable,
+                    retry_after_seconds,
                     elapsed,
                     last_error_text,
                 )
                 if retryable and attempt < max_attempts:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    self._sleep_before_retry(attempt)
+                    self._sleep_before_retry(attempt, retry_after_seconds=retry_after_seconds)
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
@@ -458,25 +483,29 @@ class OpenAICompatibleClient:
                 try:
                     error_body = exc.response.text[:240] if exc.response is not None else ""
                     status_code = exc.response.status_code if exc.response is not None else None
+                    response_headers = exc.response.headers if exc.response is not None else None
                 except Exception:
                     error_body = ""
                     status_code = None
+                    response_headers = None
+                retry_after_seconds = self._retry_after_seconds(response_headers)
                 last_error_text = f"HTTP {status_code}: {error_body or exc}"
                 retryable = self._is_retryable_status(status_code)
                 LOGGER.warning(
-                    "[llm-request-http-error] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s retryable=%s elapsed_seconds=%.3f error=%s",
+                    "[llm-request-http-error] endpoint=%s api_mode=responses request_mode=%s attempt=%s/%s retryable=%s retry_after_seconds=%s elapsed_seconds=%.3f error=%s",
                     self.config.name,
                     "multimodal" if has_images else "text",
                     attempt,
                     max_attempts,
                     retryable,
+                    retry_after_seconds,
                     elapsed,
                     last_error_text,
                 )
                 if retryable and attempt < max_attempts:
                     with self._usage_lock:
                         self.usage_totals["retry_count"] += 1
-                    self._sleep_before_retry(attempt)
+                    self._sleep_before_retry(attempt, retry_after_seconds=retry_after_seconds)
                     continue
                 with self._usage_lock:
                     self.usage_totals["last_error"] = last_error_text
@@ -607,11 +636,32 @@ class ModelRouter:
         self.primary = primary
         self.fallback = fallback
 
+    @staticmethod
+    def _shares_resource_pool(primary: ModelEndpointConfig, fallback: Optional[ModelEndpointConfig]) -> bool:
+        if fallback is None:
+            return False
+        if not (primary.enabled and fallback.enabled and primary.api_key and fallback.api_key):
+            return False
+        return (
+            primary.base_url.rstrip("/") == fallback.base_url.rstrip("/")
+            and primary.api_key == fallback.api_key
+            and primary.api_mode == fallback.api_mode
+        )
+
     @classmethod
     def from_configs(cls, primary: ModelEndpointConfig, fallback: Optional[ModelEndpointConfig] = None) -> "ModelRouter":
+        fallback_client: Optional[OpenAICompatibleClient] = None
+        if fallback is not None:
+            if cls._shares_resource_pool(primary, fallback):
+                LOGGER.warning(
+                    "[llm-fallback-disabled] primary and fallback share the same base_url/api_key/api_mode; disabling duplicate fallback endpoint=%s",
+                    fallback.name,
+                )
+            else:
+                fallback_client = OpenAICompatibleClient(fallback)
         return cls(
             primary=OpenAICompatibleClient(primary),
-            fallback=OpenAICompatibleClient(fallback) if fallback else None,
+            fallback=fallback_client,
         )
 
     def chat_json(self, system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:

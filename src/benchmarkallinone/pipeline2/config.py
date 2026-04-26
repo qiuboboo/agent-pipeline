@@ -20,6 +20,10 @@ class ModelEndpointConfig:
     timeout_seconds: int = 180
     enabled: bool = True
     api_mode: str = "chat_completions"
+    max_attempts: int = 6
+    retry_base_delay_seconds: float = 1.5
+    retry_max_delay_seconds: float = 15.0
+    respect_retry_after: bool = True
 
 
 @dataclass

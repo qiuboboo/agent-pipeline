@@ -1143,6 +1143,7 @@ PTK foundation 现在不是再让 `PTKFoundationPolish` 每轮“整份重写整
 ### 当前唯一保留的 fallback
 当前只保留一种 fallback：
 - **模型端点级主备切换**。也就是 `primary` 失败时，允许尝试 `fallback` 端点。
+- 如果 `primary` 和 `fallback` 实际上指向同一个 `base_url + api_key + api_mode` 资源池，router 会自动禁用这个重复 fallback，避免在同一路限流池上重复放大 429。
 
 这不属于内容 fallback，而属于基础设施层的高可用策略。
 
@@ -1171,6 +1172,7 @@ PTK foundation 现在不是再让 `PTKFoundationPolish` 每轮“整份重写整
 ### 当前仍然存在的现实问题
 虽然内容级 fallback 已移除，但实际运行结果仍然受外部模型端点约束：
 - 主端点可能返回 Cloudflare 403；
+- 主端点或备端点可能返回 429，此时客户端会按端点配置做指数退避，并在有 `Retry-After` 时优先遵守服务端节流提示；
 - 备端点可能返回 `choices[0].message.role` 但没有 `content`；
 - 某些 agent 虽然得到 JSON，但字段可能为空，例如 `p_facts=[]`；
 

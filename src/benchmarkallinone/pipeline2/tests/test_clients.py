@@ -34,6 +34,14 @@ class ModelRouterAvailabilityTests(unittest.TestCase):
         self.assertTrue(router.has_available_endpoint())
         router.ensure_available("pipeline2 annotate")
 
+    def test_from_configs_disables_duplicate_fallback_pool(self) -> None:
+        router = ModelRouter.from_configs(
+            ModelEndpointConfig(name="primary", base_url="https://example.com/v1", api_key="same-key", api_mode="responses"),
+            ModelEndpointConfig(name="fallback", base_url="https://example.com/v1/", api_key="same-key", api_mode="responses"),
+        )
+
+        self.assertIsNone(router.fallback)
+
 
 if __name__ == "__main__":
     unittest.main()

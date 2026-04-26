@@ -28,6 +28,21 @@ class ClientRetryTests(unittest.TestCase):
             )
         )
 
+    def test_retry_delay_uses_endpoint_config(self) -> None:
+        client = OpenAICompatibleClient(
+            ModelEndpointConfig(
+                name="retry-test",
+                base_url="https://example.com/v1",
+                api_key="dummy",
+                retry_base_delay_seconds=5,
+                retry_max_delay_seconds=60,
+            )
+        )
+
+        self.assertEqual(client._retry_delay_seconds(1), 5)
+        self.assertEqual(client._retry_delay_seconds(2), 10)
+        self.assertEqual(client._retry_delay_seconds(5), 60)
+
     def test_missing_json_retries_until_success(self) -> None:
         client = self._client()
         responses = [
@@ -44,6 +59,10 @@ class ClientRetryTests(unittest.TestCase):
         class DummyResponse:
             def __init__(self, body):
                 self.body = body
+                self.status = 200
+                self.headers = {"Content-Type": "application/json"}
+            def getcode(self):
+                return self.status
             def read(self):
                 import json
                 return json.dumps(self.body).encode("utf-8")

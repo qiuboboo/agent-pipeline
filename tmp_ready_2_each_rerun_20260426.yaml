@@ -1,14 +1,14 @@
 paths:
-  ready_root: ready
-  output_root: pipeline2/outputs
-  checkpoint_db_path: pipeline2/runtime/pipeline_langgraph.sqlite
+  ready_root: /root/.openclaw/workspace/ready_2_each/ready
+  output_root: /root/.openclaw/workspace/agent-pipeline/pipeline2/outputs_ready_2_each_rerun_20260426
+  checkpoint_db_path: /root/.openclaw/workspace/agent-pipeline/pipeline2/runtime/pipeline_langgraph_ready_2_each_rerun_20260426.sqlite
 
 runtime:
-  include_manual_review: false
+  include_manual_review: true
   max_problems: 0
-  max_problem_workers: 4
+  max_problem_workers: 1
   max_images_per_problem: 3
-  save_runtime_snapshots: false
+  save_runtime_snapshots: true
   save_problem_bundles: true
   enable_trace_patch_writes: true
   log_level: INFO
@@ -29,9 +29,10 @@ models:
     temperature: 0.1
     timeout_seconds: 180
     enabled: true
-    max_attempts: 6
-    retry_base_delay_seconds: 1.5
-    retry_max_delay_seconds: 15
+    api_mode: ${ANNOTATION_API_MODE}
+    max_attempts: 5
+    retry_base_delay_seconds: 5
+    retry_max_delay_seconds: 60
     respect_retry_after: true
   fallback:
     name: fallback
@@ -41,8 +42,9 @@ models:
     reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
     temperature: 0.1
     timeout_seconds: 180
-    enabled: true
-    max_attempts: 6
-    retry_base_delay_seconds: 1.5
-    retry_max_delay_seconds: 15
+    enabled: false
+    api_mode: ${ANNOTATION_FALLBACK_API_MODE}
+    max_attempts: 5
+    retry_base_delay_seconds: 5
+    retry_max_delay_seconds: 60
     respect_retry_after: true
