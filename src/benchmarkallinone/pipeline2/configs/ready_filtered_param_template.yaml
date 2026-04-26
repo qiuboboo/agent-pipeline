@@ -1,0 +1,41 @@
+paths:
+  # Usually set by scripts/run_ready_filtered_param.sh after it builds a symlink-filtered ready root.
+  ready_root: ${PIPELINE2_FILTERED_READY_ROOT}
+  output_root: ${PIPELINE2_OUTPUT_ROOT}
+  checkpoint_db_path: ${PIPELINE2_CHECKPOINT_DB_PATH}
+
+runtime:
+  include_manual_review: ${PIPELINE2_INCLUDE_MANUAL_REVIEW}
+  max_problems: ${PIPELINE2_MAX_PROBLEMS}
+  max_problem_workers: ${PIPELINE2_MAX_PROBLEM_WORKERS}
+  max_images_per_problem: ${PIPELINE2_MAX_IMAGES_PER_PROBLEM}
+  save_runtime_snapshots: ${PIPELINE2_SAVE_RUNTIME_SNAPSHOTS}
+  save_problem_bundles: ${PIPELINE2_SAVE_PROBLEM_BUNDLES}
+  enable_trace_patch_writes: ${PIPELINE2_ENABLE_TRACE_PATCH_WRITES}
+  enable_problem_structure_validation: ${PIPELINE2_ENABLE_PROBLEM_STRUCTURE_VALIDATION}
+  fail_on_problem_structure_validation: ${PIPELINE2_FAIL_ON_PROBLEM_STRUCTURE_VALIDATION}
+  stage_retry_attempts: ${PIPELINE2_STAGE_RETRY_ATTEMPTS}
+  stage_retry_backoff_seconds: ${PIPELINE2_STAGE_RETRY_BACKOFF_SECONDS}
+  problem_retry_attempts: ${PIPELINE2_PROBLEM_RETRY_ATTEMPTS}
+  continue_on_problem_error: ${PIPELINE2_CONTINUE_ON_PROBLEM_ERROR}
+
+thresholds:
+  method_score_thresholds: [${PIPELINE2_METHOD_SCORE_THRESHOLD_LOW}, ${PIPELINE2_METHOD_SCORE_THRESHOLD_HIGH}]
+  novelty_total_threshold: ${PIPELINE2_NOVELTY_TOTAL_THRESHOLD}
+  novelty_required_threshold: ${PIPELINE2_NOVELTY_REQUIRED_THRESHOLD}
+
+models:
+  primary:
+    name: primary
+    provider: OpenAI
+    base_url: ${ANNOTATION_API_BASE_URL}
+    api_key: ${ANNOTATION_API_KEY}
+    model: ${ANNOTATION_MODEL}
+    reasoning_effort: ${ANNOTATION_REASONING_EFFORT}
+    wire_api: ${ANNOTATION_API_MODE}
+    requires_openai_auth: ${ANNOTATION_REQUIRES_OPENAI_AUTH}
+    disable_response_storage: ${ANNOTATION_DISABLE_RESPONSE_STORAGE}
+    temperature: ${ANNOTATION_TEMPERATURE}
+    timeout_seconds: ${ANNOTATION_TIMEOUT_SECONDS}
+    enabled: true
+  fallback: null
