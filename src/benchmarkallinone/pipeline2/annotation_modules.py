@@ -915,9 +915,9 @@ def _extract_ptk_once(
             router,
             TEXT_CONDITION_SYSTEM_PROMPT,
             _augment_prompt_with_ready_context(problem, build_text_condition_user_prompt(problem), "TextCondition"),
-            image_paths,
+            [],
             agent_name="TextCondition",
-            require_images=require_images,
+            require_images=False,
         )
         t_facts = _normalize_t_facts(t_response, "TextCondition")
         _persist_substage("knowledge_librarian")
@@ -927,9 +927,9 @@ def _extract_ptk_once(
             router,
             KNOWLEDGE_LIBRARIAN_SYSTEM_PROMPT,
             _augment_prompt_with_ready_context(problem, build_knowledge_user_prompt(problem, p_facts, t_facts), "KnowledgeLibrarian"),
-            image_paths,
+            [],
             agent_name="KnowledgeLibrarian",
-            require_images=require_images,
+            require_images=False,
         )
         k_atoms = _normalize_k_atoms(k_response, "KnowledgeLibrarian")
 
@@ -991,7 +991,6 @@ def _extract_claims_once(
     k_atoms: Sequence[Dict[str, Any]],
 ) -> List[Dict[str, Any]]:
     _ensure_problem_minimum(problem, "ClaimExtraction")
-    image_paths = _problem_image_paths(problem)
     response = _call_router(
         router,
         CLAIM_EXTRACTION_SYSTEM_PROMPT,
@@ -1000,9 +999,9 @@ def _extract_claims_once(
             _build_claim_extraction_prompt(problem, method, cot_text, p_facts, t_facts, k_atoms),
             "ClaimExtraction",
         ),
-        image_paths,
+        [],
         agent_name="ClaimExtraction",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     return _normalize_claims_response(
         response,
@@ -1264,9 +1263,9 @@ def critique_claim_sequence(
             build_claim_structure_verify_user_prompt(problem, method, cot_text, claims),
             "ClaimVerify",
         ),
-        _problem_image_paths(problem),
+        [],
         agent_name="ClaimVerifyStructure",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     structure_report = _normalize_claim_verify_partial(structure_response, "ClaimVerifyStructure")
 
@@ -1300,9 +1299,9 @@ def critique_claim_sequence(
             build_claim_global_verify_user_prompt(problem, method, cot_text, claims),
             "ClaimVerify",
         ),
-        _problem_image_paths(problem),
+        [],
         agent_name="ClaimVerifyGlobal",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     global_report = _normalize_claim_verify_partial(global_response, "ClaimVerifyGlobal")
 
@@ -1339,9 +1338,9 @@ def polish_claim_sequence(
             ),
             "ClaimPolish",
         ),
-        _problem_image_paths(problem),
+        [],
         agent_name="ClaimPolish",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     return {
         "claims": _normalize_claims_response(

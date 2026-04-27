@@ -593,7 +593,8 @@
 - `meta`：本次生成的原始元信息
 
 ##### 当前实现特征
-- 有图时仍会优先使用多模态调用。
+- 有图且题目声明 `requires_image=true` 时，求解阶段仍会使用多模态调用，并要求实际请求模式为 multimodal。
+- 多模态预算集中在真正需要视觉 grounding 的阶段：`MethodPlanner`、`Solver`、`CoTVerify`、`FinalCoTValidation`、`PerceptionExtraction`、`PTKVisualGroundingCritic`，以及 `ClaimVerifyGrounding`。
 - 如果模型不可用、被拦截、或返回的 JSON 不含必需字段，系统会直接失败，不再生成兜底 CoT。
 
 ### 10.1.3 答案判等
@@ -623,6 +624,7 @@
 ##### 工作方式
 - 先走 [`deterministic_answer_match()`](benchmarkallinone/pipeline2/agents.py)
 - 如果失败，再调用 `ANSWER_EQUIVALENCE_SYSTEM_PROMPT` 对模糊情况做 LLM judge
+- 该 LLM judge 默认是 text-only：它只比较标准答案、预测答案和已生成 CoT，不重新发送图片；视觉一致性由前面的 `Solver` / `CoTVerify` / `FinalCoTValidation` 负责。
 
 ### 10.1.9 结构校验的分批调用
 在 [`benchmarkallinone/pipeline2/verification_modules.py`](benchmarkallinone/pipeline2/verification_modules.py) 里，`ClaimSetValidation` 和 `NodeSetValidation` 已经支持按 batch 拆分：
@@ -630,6 +632,8 @@
 - node set 也按较小批次拆开；
 - 每批仍然要求返回原有 JSON schema；
 - 代码侧会把多批结果重新合并回一个总报告，并保持原有字段结构（`pass`、`*_judgments`、`global_failures`、`summary` 等）。
+
+这些结构校验批次默认使用 text-only 调用，不重新附图。原因是该阶段主要检查 claim/node 的 schema、依赖拓扑、source 引用、节点归并质量和 evidence binding 引用是否自洽；视觉真实性已经由 `PerceptionExtraction`、`PTKVisualGroundingCritic`、`CoTVerify` 和 `FinalCoTValidation` 兜底。这样可以减少后段大批量多模态请求带来的 token 成本、接口失败面和 claim drift 风险。
 
 这样做的主要目的，是避免把整份 claims / nodes / mappings 一口气塞进单次请求，降低 prompt 臃肿和超长上下文失稳风险，同时尽量不改上游下游的数据契约。
 
@@ -645,6 +649,9 @@
 - `cot`：修复后的 CoT
 - `answer`：修复后的答案
 - `notes`：修复说明
+
+##### 当前实现特征
+`repair_answer()` 默认 text-only，不重新附图。它只根据已有 CoT、预测答案、标准答案和 ready context 做局部修正；如果视觉 grounding 有问题，应由 `CoTVerify` / `FinalCoTValidation` 拦截，而不是让 answer repair 每轮重新解释图片。
 
 ### 10.1.5 CoT 验证与修复
 
@@ -662,6 +669,9 @@
 - `polished_cot`：修复后的 CoT。
 - `polish_summary`：本次修复摘要。
 - `preserved_method_identity`：是否保持住原方法身份。
+
+##### 当前实现特征
+`polish_cot()` 默认 text-only，只执行 verifier 指令下的最小文本修补，避免每个 polish round 都重新发送图片。图像依赖问题仍由下一轮 `CoTVerify` 和最终 `FinalCoTValidation` 进行多模态复核。
 
 ### 10.1.6 PTK 底座
 

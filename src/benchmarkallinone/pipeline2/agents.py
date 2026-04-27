@@ -843,13 +843,15 @@ def judge_answer_equivalence(router: ModelRouter, problem: Dict[str, Any], predi
     deterministic = deterministic_answer_match(problem, predicted_answer)
     if deterministic["is_equivalent"]:
         return deterministic
+    # Answer equivalence is a text/semantic check. The solved CoT and standard answer
+    # are already available; do not re-send images for this late-stage judge.
     response = _call_router(
         router,
         ANSWER_EQUIVALENCE_SYSTEM_PROMPT,
         build_answer_equivalence_user_prompt(problem, predicted_answer, cot_text),
-        _problem_image_paths(problem),
+        [],
         agent_name="AnswerEquivalenceJudge",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     return {
         "is_equivalent": _require_bool("AnswerEquivalenceJudge", response.get("is_equivalent"), "is_equivalent"),
@@ -860,13 +862,15 @@ def judge_answer_equivalence(router: ModelRouter, problem: Dict[str, Any], predi
 
 def repair_answer(router: ModelRouter, problem: Dict[str, Any], method: Dict[str, Any], cot_text: str, predicted_answer: str) -> Dict[str, str]:
     _ensure_problem_minimum(problem, "AnswerRepair")
+    # Repair works from the prior CoT plus verifier/answer context. Keep it text-only;
+    # visual consistency is guarded by Solver/CoTVerify/FinalCoTValidation.
     response = _call_router(
         router,
         ANSWER_REPAIR_SYSTEM_PROMPT,
         _augment_prompt_with_ready_context(problem, build_answer_repair_user_prompt(problem, method, cot_text, predicted_answer), "AnswerRepair"),
-        problem.get("images", []),
+        [],
         agent_name="AnswerRepair",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     return {
         "cot": _require_non_empty_text("AnswerRepair", response.get("repaired_cot"), "repaired_cot"),
@@ -898,13 +902,15 @@ def verify_cot(router: ModelRouter, problem: Dict[str, Any], method: Dict[str, A
 
 def polish_cot(router: ModelRouter, problem: Dict[str, Any], method: Dict[str, Any], cot_text: str, suggestion: str) -> Dict[str, Any]:
     _ensure_problem_minimum(problem, "CoTPolish")
+    # CoT polish should follow verifier feedback without re-reading images every round.
+    # CoTVerify and FinalCoTValidation remain multimodal for image-dependent problems.
     response = _call_router(
         router,
         COT_POLISH_SYSTEM_PROMPT,
         _augment_prompt_with_ready_context(problem, build_cot_polish_user_prompt(problem, method, cot_text, suggestion), "CoTPolish"),
-        problem.get("images", []),
+        [],
         agent_name="CoTPolish",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     return {
         "polished_cot": _require_non_empty_text("CoTPolish", response.get("polished_cot"), "polished_cot"),
@@ -942,9 +948,9 @@ def extract_ptk(router: ModelRouter, problem: Dict[str, Any]) -> Dict[str, Any]:
         router,
         TEXT_CONDITION_SYSTEM_PROMPT,
         _augment_prompt_with_ready_context(problem, build_text_condition_user_prompt(problem), "TextCondition"),
-        _problem_image_paths(problem),
+        [],
         agent_name="TextCondition",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     t_items = _require_list("TextCondition", t_response.get("t_facts"), "t_facts")
     t_facts: List[Dict[str, Any]] = []
@@ -964,9 +970,9 @@ def extract_ptk(router: ModelRouter, problem: Dict[str, Any]) -> Dict[str, Any]:
         router,
         KNOWLEDGE_LIBRARIAN_SYSTEM_PROMPT,
         _augment_prompt_with_ready_context(problem, build_knowledge_user_prompt(problem, p_facts, t_facts), "KnowledgeLibrarian"),
-        _problem_image_paths(problem),
+        [],
         agent_name="KnowledgeLibrarian",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     k_items = _require_list("KnowledgeLibrarian", k_response.get("k_atoms"), "k_atoms")
     k_atoms: List[Dict[str, Any]] = []
@@ -1010,9 +1016,9 @@ def extract_claims(router: ModelRouter, problem: Dict[str, Any], method: Dict[st
         router,
         CLAIM_EXTRACTION_SYSTEM_PROMPT,
         _augment_prompt_with_ready_context(problem, build_claim_extraction_user_prompt(problem, method, cot_text), "ClaimExtraction"),
-        _problem_image_paths(problem),
+        [],
         agent_name="ClaimExtraction",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     claims = _require_list("ClaimExtraction", response.get("claims"), "claims")
     output: List[Dict[str, Any]] = []
@@ -1053,9 +1059,9 @@ def induce_nodes(router: ModelRouter, problem: Dict[str, Any], claims: Sequence[
         router,
         NODE_INDUCTION_SYSTEM_PROMPT,
         build_node_induction_user_prompt(problem, claims, p_facts, t_facts, k_atoms),
-        _problem_image_paths(problem),
+        [],
         agent_name="NodeInduction",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     canonical_nodes = _require_list("NodeInduction", response.get("canonical_nodes"), "canonical_nodes")
     grouped: Dict[str, NodeRecord] = {}
@@ -1115,9 +1121,9 @@ def group_solutions(router: ModelRouter, problem: Dict[str, Any], methods: Seque
         router,
         SOLUTION_GROUPER_SYSTEM_PROMPT,
         build_solution_grouping_user_prompt(problem, methods, r_nodes, claim_mappings),
-        _problem_image_paths(problem),
+        [],
         agent_name="SolutionGrouper",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     raw_solutions = _require_list("SolutionGrouper", response.get("solutions"), "solutions")
     solutions: List[Dict[str, Any]] = []
@@ -1193,9 +1199,9 @@ def bind_evidence(router: ModelRouter, problem: Dict[str, Any], r_nodes: Sequenc
         router,
         EVIDENCE_BINDER_SYSTEM_PROMPT,
         build_evidence_binding_user_prompt(problem, r_nodes, p_facts, t_facts, k_atoms),
-        _problem_image_paths(problem),
+        [],
         agent_name="EvidenceBinder",
-        require_images=bool(problem.get("requires_image")),
+        require_images=False,
     )
     bindings = _require_list("EvidenceBinder", response.get("bindings"), "bindings")
     normalized: List[Dict[str, Any]] = []
@@ -1280,9 +1286,9 @@ def map_trace(router: ModelRouter, problem_bundle: Dict[str, Any], trace_record:
         router,
         TRACE_MAPPER_SYSTEM_PROMPT,
         build_trace_mapper_user_prompt(problem_bundle, trace_record, pred_claims),
-        _problem_image_paths(trace_problem),
+        [],
         agent_name="TraceMapper",
-        require_images=bool(trace_problem.get("requires_image")),
+        require_images=False,
     )
     best_solution_id = _require_non_empty_text("TraceMapper", response.get("best_solution_id"), "best_solution_id")
     matched_r_ids = _require_string_list("TraceMapper", response.get("matched_r_ids"), "matched_r_ids", allow_empty=True)
@@ -1381,9 +1387,9 @@ def detect_novelty(router: ModelRouter, problem_bundle: Dict[str, Any], trace_re
         router,
         NOVELTY_DETECTOR_SYSTEM_PROMPT,
         build_novelty_detector_user_prompt(problem_bundle, trace_record, mapping_report),
-        _problem_image_paths(novelty_problem),
+        [],
         agent_name="NoveltyDetector",
-        require_images=bool(novelty_problem.get("requires_image")),
+        require_images=False,
     )
     novelty_label = _normalize_novelty_label(response.get("novelty_label"), "NoveltyDetector")
     return {

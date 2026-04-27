@@ -460,9 +460,9 @@ def validate_claim_set(
                 batch_prompt,
                 "ClaimSetValidation",
             ),
-            _problem_image_paths(problem),
+            [],
             agent_name="ClaimSetValidation",
-            require_images=bool(problem.get("requires_image")),
+            require_images=False,
         )
         reports.append(_with_llm_meta(_normalize_claim_set_validation(response, claims=claim_batch), response))
 
@@ -576,9 +576,9 @@ def validate_node_set(
                 batch_prompt,
                 "NodeSetValidation",
             ),
-            _problem_image_paths(problem),
+            [],
             agent_name="NodeSetValidation",
-            require_images=bool(problem.get("requires_image")),
+            require_images=False,
         )
         reports.append(_with_llm_meta(_normalize_node_set_validation(response, r_nodes=node_batch), response))
 

@@ -63,13 +63,13 @@ class MultimodalCoTRequirementTests(unittest.TestCase):
         self.assertTrue(mocked.call_args.kwargs["require_images"])
         self.assertEqual(mocked.call_args.kwargs["agent_name"], "Solver")
 
-    def test_answer_repair_requires_images_for_image_grounded_problem(self) -> None:
+    def test_answer_repair_is_text_only_for_image_grounded_problem(self) -> None:
         with patch(
             "pipeline2.agents._call_router",
             return_value={
-                "repaired_cot": "根据图中数字形状，修正后的答案仍为 7。",
+                "repaired_cot": "根据已生成推理和标准答案，修正后的答案为 7。",
                 "repaired_answer": "7",
-                "repair_notes": "已依据图片校正。",
+                "repair_notes": "已依据文本推理上下文校正。",
             },
         ) as mocked:
             result = repair_answer(
@@ -81,8 +81,8 @@ class MultimodalCoTRequirementTests(unittest.TestCase):
             )
 
         self.assertEqual(result["answer"], "7")
-        self.assertEqual(mocked.call_args.args[3], self.image_paths)
-        self.assertTrue(mocked.call_args.kwargs["require_images"])
+        self.assertEqual(mocked.call_args.args[3], [])
+        self.assertFalse(mocked.call_args.kwargs["require_images"])
         self.assertEqual(mocked.call_args.kwargs["agent_name"], "AnswerRepair")
 
     def test_verify_cot_requires_images_for_image_grounded_problem(self) -> None:
@@ -109,12 +109,12 @@ class MultimodalCoTRequirementTests(unittest.TestCase):
         self.assertTrue(mocked.call_args.kwargs["require_images"])
         self.assertEqual(mocked.call_args.kwargs["agent_name"], "CoTVerify")
 
-    def test_polish_cot_requires_images_for_image_grounded_problem(self) -> None:
+    def test_polish_cot_is_text_only_for_image_grounded_problem(self) -> None:
         with patch(
             "pipeline2.agents._call_router",
             return_value={
-                "polished_cot": "我直接观察图片中的数字形状，它是 7。",
-                "polish_summary": "已补强图片 grounding。",
+                "polished_cot": "根据 verifier 建议补充已有推理中的 grounding 描述，答案是 7。",
+                "polish_summary": "已按反馈补强 grounding 描述。",
                 "preserved_method_identity": True,
             },
         ) as mocked:
@@ -126,9 +126,9 @@ class MultimodalCoTRequirementTests(unittest.TestCase):
                 suggestion="补充直接的图片依据。",
             )
 
-        self.assertEqual(result["polished_cot"], "我直接观察图片中的数字形状，它是 7。")
-        self.assertEqual(mocked.call_args.args[3], self.image_paths)
-        self.assertTrue(mocked.call_args.kwargs["require_images"])
+        self.assertEqual(result["polished_cot"], "根据 verifier 建议补充已有推理中的 grounding 描述，答案是 7。")
+        self.assertEqual(mocked.call_args.args[3], [])
+        self.assertFalse(mocked.call_args.kwargs["require_images"])
         self.assertEqual(mocked.call_args.kwargs["agent_name"], "CoTPolish")
 
     def test_call_router_rejects_text_mode_for_required_image_request(self) -> None:
@@ -167,12 +167,12 @@ class MultimodalCoTRequirementTests(unittest.TestCase):
         self.assertTrue(mocked.call_args.kwargs["require_images"])
         self.assertEqual(mocked.call_args.kwargs["agent_name"], "MethodPlanner")
 
-    def test_answer_equivalence_requires_images_for_image_grounded_problem(self) -> None:
+    def test_answer_equivalence_is_text_only_for_image_grounded_problem(self) -> None:
         with patch(
             "pipeline2.agents._call_router",
             return_value={
                 "is_equivalent": True,
-                "reason": "image-grounded match",
+                "reason": "semantic match",
                 "part_results": [],
             },
         ) as mocked:
@@ -184,8 +184,8 @@ class MultimodalCoTRequirementTests(unittest.TestCase):
             )
 
         self.assertTrue(result["is_equivalent"])
-        self.assertEqual(mocked.call_args.args[3], self.image_paths)
-        self.assertTrue(mocked.call_args.kwargs["require_images"])
+        self.assertEqual(mocked.call_args.args[3], [])
+        self.assertFalse(mocked.call_args.kwargs["require_images"])
         self.assertEqual(mocked.call_args.kwargs["agent_name"], "AnswerEquivalenceJudge")
 
     def test_verify_round_records_multimodal_meta(self) -> None:
