@@ -236,6 +236,139 @@ class ClientRetryTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertTrue(result["ok"])
 
+    def test_msutools_responses_api_uses_sse_mode(self) -> None:
+        client = OpenAICompatibleClient(
+            ModelEndpointConfig(
+                name="msutools-sse-test",
+                base_url="https://www.msutools.cn",
+                api_key="dummy",
+                model="gpt-5.4",
+                reasoning_effort="high",
+                wire_api="responses",
+                disable_response_storage=True,
+                timeout_seconds=1,
+                enabled=True,
+            )
+        )
+
+        captured = {}
+        sse_lines = [
+            b'event: response.output_text.delta\n',
+            b'data: {"text":"{\\"ok\\": "}\n',
+            b'\n',
+            b'event: response.output_text.delta\n',
+            b'data: {"text":"true}"}\n',
+            b'\n',
+            b'event: response.completed\n',
+            b'data: {"usage":{"input_tokens":1,"output_tokens":1,"total_tokens":2}}\n',
+            b'\n',
+        ]
+
+        class DummyHeaders:
+            def get_content_type(self):
+                return "text/event-stream"
+
+            def get(self, key, default=""):
+                if key.lower() == "content-type":
+                    return "text/event-stream"
+                return default
+
+        class DummyResponse:
+            def __init__(self, lines):
+                self._lines = list(lines)
+                self.headers = DummyHeaders()
+
+            def readline(self, size: int = -1):
+                del size
+                if self._lines:
+                    return self._lines.pop(0)
+                return b""
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+        def fake_urlopen(req, timeout):
+            del timeout
+            captured["payload"] = json.loads(req.data.decode("utf-8"))
+            captured["accept"] = req.headers.get("Accept")
+            return DummyResponse(sse_lines)
+
+        with patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            result = client.chat_json("sys", "user")
+
+        self.assertTrue(captured["payload"]["stream"])
+        self.assertEqual(captured["accept"], "text/event-stream")
+        self.assertIsNotNone(result)
+        self.assertTrue(result["ok"])
+
+    def test_event_stream_content_type_uses_sse_parser_without_known_host(self) -> None:
+        client = OpenAICompatibleClient(
+            ModelEndpointConfig(
+                name="generic-sse-test",
+                base_url="https://example.com",
+                api_key="dummy",
+                model="gpt-5.4",
+                reasoning_effort="high",
+                wire_api="responses",
+                disable_response_storage=True,
+                timeout_seconds=1,
+                enabled=True,
+            )
+        )
+
+        captured = {}
+        sse_lines = [
+            b'event: response.output_text.delta\n',
+            b'data: {"text":"{\\"ok\\":true}"}\n',
+            b'\n',
+            b'event: response.completed\n',
+            b'data: {"usage":{"input_tokens":1,"output_tokens":1,"total_tokens":2}}\n',
+            b'\n',
+        ]
+
+        class DummyHeaders:
+            def get_content_type(self):
+                return "text/event-stream"
+
+            def get(self, key, default=""):
+                if key.lower() == "content-type":
+                    return "text/event-stream"
+                return default
+
+        class DummyResponse:
+            def __init__(self, lines):
+                self._lines = list(lines)
+                self.headers = DummyHeaders()
+
+            def readline(self, size: int = -1):
+                del size
+                if self._lines:
+                    return self._lines.pop(0)
+                return b""
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+        def fake_urlopen(req, timeout):
+            del timeout
+            captured["payload"] = json.loads(req.data.decode("utf-8"))
+            captured["accept"] = req.headers.get("Accept")
+            return DummyResponse(sse_lines)
+
+        with patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            result = client.chat_json("sys", "user")
+
+        self.assertNotIn("stream", captured["payload"])
+        self.assertEqual(captured["accept"], "application/json")
+        self.assertIsNotNone(result)
+        self.assertTrue(result["ok"])
+
 
 class _StubClient:
     def __init__(self, responses, *, timeout_seconds: int = 1):

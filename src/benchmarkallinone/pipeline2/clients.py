@@ -326,7 +326,31 @@ class OpenAICompatibleClient:
         if self._wire_api() != "responses":
             return False
         base_url = str(self.config.base_url or "").lower()
-        return "cf.cuylerchen.uk" in base_url
+        return any(host in base_url for host in {"cf.cuylerchen.uk", "msutools.cn"})
+
+    def _response_is_event_stream(self, response: Any) -> bool:
+        content_type = ""
+        headers = getattr(response, "headers", None)
+        if headers is not None:
+            get_content_type = getattr(headers, "get_content_type", None)
+            if callable(get_content_type):
+                try:
+                    content_type = get_content_type() or ""
+                except Exception:
+                    content_type = ""
+            if not content_type:
+                try:
+                    content_type = headers.get("Content-Type", "") or headers.get("content-type", "")
+                except Exception:
+                    content_type = ""
+        if not content_type:
+            getheader = getattr(response, "getheader", None)
+            if callable(getheader):
+                try:
+                    content_type = getheader("Content-Type") or ""
+                except Exception:
+                    content_type = ""
+        return "text/event-stream" in str(content_type).lower()
 
     def _post_json(
         self,
@@ -396,7 +420,8 @@ class OpenAICompatibleClient:
             )
             try:
                 with urllib.request.urlopen(req, timeout=request_timeout) as response:
-                    if use_streaming_responses:
+                    response_is_event_stream = use_streaming_responses or self._response_is_event_stream(response)
+                    if response_is_event_stream:
                         body = self._read_sse_response_body(
                             response,
                             request_timeout=request_timeout,
