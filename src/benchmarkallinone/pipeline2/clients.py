@@ -232,6 +232,102 @@ class OpenAICompatibleClient:
                 raise ValueError("Model response body exceeded 8MB and was treated as invalid.")
         return b"".join(raw_chunks)
 
+    def _read_sse_response_body(self, response: Any, *, request_timeout: float) -> Dict[str, Any]:
+        """Read a streaming Responses API SSE body and return a JSON-like body.
+
+        Some OpenAI-compatible gateways (including the CF endpoint used for this
+        run) require `stream=true` for `/responses` and emit
+        `response.output_text.delta` events instead of a final JSON body.  The
+        rest of this client expects a normal response body, so this method
+        collapses the SSE stream into `{output_text, usage}` while preserving a
+        compact raw-event preview for diagnostics.
+        """
+        delta_fragments: List[str] = []
+        final_text_fragments: List[str] = []
+        raw_events: List[Dict[str, Any]] = []
+        usage: Dict[str, Any] = {}
+        total_bytes = 0
+        current_event = "message"
+        data_lines: List[str] = []
+
+        def _consume_event(event_name: str, lines: List[str]) -> None:
+            nonlocal usage
+            if not lines:
+                return
+            data = "\n".join(lines).strip()
+            if not data or data == "[DONE]":
+                return
+            parsed: Any = None
+            try:
+                parsed = json.loads(data)
+            except json.JSONDecodeError:
+                raw_events.append({"event": event_name, "data": data[:500]})
+                return
+            if isinstance(parsed, dict):
+                raw_events.append({"event": event_name, "data": parsed})
+                parsed_usage = parsed.get("usage")
+                if isinstance(parsed_usage, dict) and parsed_usage:
+                    usage = parsed_usage
+                delta = parsed.get("delta")
+                if isinstance(delta, str) and delta:
+                    delta_fragments.append(delta)
+                text_value = parsed.get("text")
+                if isinstance(text_value, str) and text_value:
+                    if event_name == "response.output_text.delta":
+                        delta_fragments.append(text_value)
+                    elif event_name in {"response.output_text.done", "response.output_text.completed"}:
+                        final_text_fragments.append(text_value)
+                if event_name in {"response.completed", "response.done"}:
+                    completed_text = self._extract_response_text(parsed)
+                    if completed_text:
+                        final_text_fragments.append(completed_text)
+            else:
+                raw_events.append({"event": event_name, "data": parsed})
+
+        while True:
+            try:
+                raw_socket = getattr(getattr(getattr(response, "fp", None), "raw", None), "_sock", None)
+                if raw_socket is not None:
+                    raw_socket.settimeout(max(0.1, float(request_timeout)))
+            except Exception:
+                pass
+            line_bytes = response.readline(65536)
+            if not line_bytes:
+                _consume_event(current_event, data_lines)
+                break
+            total_bytes += len(line_bytes)
+            if total_bytes > 8_000_000:
+                raise ValueError("Model SSE response body exceeded 8MB and was treated as invalid.")
+            line = line_bytes.decode("utf-8", errors="replace").rstrip("\r\n")
+            if line == "":
+                _consume_event(current_event, data_lines)
+                current_event = "message"
+                data_lines = []
+                continue
+            if line.startswith(":"):
+                continue
+            if line.startswith("event:"):
+                current_event = line[len("event:") :].strip() or "message"
+                continue
+            if line.startswith("data:"):
+                data_lines.append(line[len("data:") :].lstrip())
+
+        # Prefer the concatenated deltas because they preserve the exact streamed
+        # model text. Use final/done text only when no deltas were emitted.
+        output_text = "".join(delta_fragments) if delta_fragments else "".join(final_text_fragments)
+        return {
+            "output_text": output_text,
+            "usage": usage,
+            "_sse_event_count": len(raw_events),
+            "_sse_events_preview": raw_events[:20],
+        }
+
+    def _should_stream_responses(self) -> bool:
+        if self._wire_api() != "responses":
+            return False
+        base_url = str(self.config.base_url or "").lower()
+        return "cf.cuylerchen.uk" in base_url
+
     def _post_json(
         self,
         payload: Dict[str, Any],
@@ -249,6 +345,10 @@ class OpenAICompatibleClient:
             else:
                 self.usage_totals["text_request_count"] += 1
         url = self._endpoint_url()
+        use_streaming_responses = self._should_stream_responses()
+        request_payload = dict(payload)
+        if use_streaming_responses:
+            request_payload["stream"] = True
         last_error_text = None
         effective_max_attempts = max(1, int(max_attempts))
         deadline = deadline_monotonic
@@ -279,10 +379,10 @@ class OpenAICompatibleClient:
             started = time.perf_counter()
             req = urllib.request.Request(
                 url,
-                data=json.dumps(payload).encode("utf-8"),
+                data=json.dumps(request_payload).encode("utf-8"),
                 headers={
                     "Content-Type": "application/json",
-                    "Accept": "application/json",
+                    "Accept": "text/event-stream" if use_streaming_responses else "application/json",
                     "Connection": "close",
                     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
                     "Authorization": f"Bearer {self.config.api_key}",
@@ -296,33 +396,39 @@ class OpenAICompatibleClient:
             )
             try:
                 with urllib.request.urlopen(req, timeout=request_timeout) as response:
-                    response_bytes = self._read_response_bytes(
-                        response,
-                        request_timeout=request_timeout,
-                    )
-                    response_text = response_bytes.decode("utf-8", errors="replace")
-                    stripped_response_text = response_text.lstrip()
-                    if stripped_response_text[:1] not in {"{", "["}:
-                        elapsed = time.perf_counter() - started
-                        with self._usage_lock:
-                            self.usage_totals["failed_request_count"] += 1
-                            self.usage_totals["total_request_seconds"] += elapsed
-                        preview = " ".join(stripped_response_text[:240].split())
-                        last_error_text = f"Non-JSON HTTP response. body_preview={preview}"
-                        with self._usage_lock:
-                            self.usage_totals["last_error"] = last_error_text
-                        LOGGER.warning(
-                            "[llm-request-non-json] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
-                            self.config.name,
-                            self._wire_api(),
-                            "multimodal" if has_images else "text",
-                            attempt,
-                            effective_max_attempts,
-                            elapsed,
-                            last_error_text,
+                    if use_streaming_responses:
+                        body = self._read_sse_response_body(
+                            response,
+                            request_timeout=request_timeout,
                         )
-                        return None
-                    body = json.loads(response_text)
+                    else:
+                        response_bytes = self._read_response_bytes(
+                            response,
+                            request_timeout=request_timeout,
+                        )
+                        response_text = response_bytes.decode("utf-8", errors="replace")
+                        stripped_response_text = response_text.lstrip()
+                        if stripped_response_text[:1] not in {"{", "["}:
+                            elapsed = time.perf_counter() - started
+                            with self._usage_lock:
+                                self.usage_totals["failed_request_count"] += 1
+                                self.usage_totals["total_request_seconds"] += elapsed
+                            preview = " ".join(stripped_response_text[:240].split())
+                            last_error_text = f"Non-JSON HTTP response. body_preview={preview}"
+                            with self._usage_lock:
+                                self.usage_totals["last_error"] = last_error_text
+                            LOGGER.warning(
+                                "[llm-request-non-json] endpoint=%s wire_api=%s request_mode=%s attempt=%s/%s elapsed_seconds=%.3f error=%s",
+                                self.config.name,
+                                self._wire_api(),
+                                "multimodal" if has_images else "text",
+                                attempt,
+                                effective_max_attempts,
+                                elapsed,
+                                last_error_text,
+                            )
+                            return None
+                        body = json.loads(response_text)
             except urllib.error.HTTPError as exc:
                 elapsed = time.perf_counter() - started
                 with self._usage_lock:
