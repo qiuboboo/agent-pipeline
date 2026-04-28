@@ -3,25 +3,23 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import shutil
 import subprocess
+import sys
 from collections import defaultdict, deque
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence
 
 import yaml
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = PROJECT_ROOT / "src"
-import sys
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
 from benchmarkallinone.pipeline2.ready_loader import discover_ready_problems
-from benchmarkallinone.pipeline2.utils import ensure_dir, read_json, write_json, utc_now
-
+from benchmarkallinone.pipeline2.utils import ensure_dir, read_json, utc_now, write_json
 
 DEFAULT_STATE_FILE = PROJECT_ROOT / "pipeline2" / "campaign_controller" / "state.json"
 DEFAULT_RUNS_ROOT = PROJECT_ROOT / "pipeline2" / "campaign_controller" / "runs"
@@ -47,13 +45,6 @@ class ProblemRecord:
         return self.__dict__.copy()
 
 
-def _rel(path: Path, root: Path) -> str:
-    try:
-        return str(path.resolve().relative_to(root.resolve()))
-    except Exception:
-        return str(path.resolve())
-
-
 def _load_state(path: Path) -> Dict[str, Any]:
     if path.exists():
         return read_json(path)
@@ -73,6 +64,31 @@ def _load_state(path: Path) -> Dict[str, Any]:
 def _save_state(path: Path, state: Dict[str, Any]) -> None:
     state["updated_at"] = utc_now()
     write_json(path, state)
+
+
+def _default_problem_state(problem: ProblemRecord) -> Dict[str, Any]:
+    return {
+        "problem_id": problem.problem_id,
+        "dataset_name": problem.dataset_name,
+        "sample_path": problem.sample_path,
+        "source_problem_id": problem.source_problem_id,
+        "subject": problem.subject,
+        "question_text": problem.question_text,
+        "standard_answer": problem.standard_answer,
+        "status": "pending",  # pending|running|passed|failed|repair_exhausted
+        "attempts_total": 0,
+        "repair_attempts": 0,
+        "max_repairs": 1,
+        "last_batch_id": None,
+        "last_run_dir": None,
+        "last_output_root": None,
+        "last_error_type": None,
+        "last_error_message": None,
+        "last_stage_cache_root": None,
+        "last_result_source": None,
+        "pass_output_path": None,
+        "history": [],
+    }
 
 
 def _discover_problem_records(ready_root: Path, project_root: Path) -> List[ProblemRecord]:
@@ -100,28 +116,63 @@ def _discover_problem_records(ready_root: Path, project_root: Path) -> List[Prob
     return out
 
 
-def _default_problem_state(problem: ProblemRecord) -> Dict[str, Any]:
-    return {
-        "problem_id": problem.problem_id,
-        "dataset_name": problem.dataset_name,
-        "sample_path": problem.sample_path,
-        "source_problem_id": problem.source_problem_id,
-        "subject": problem.subject,
-        "question_text": problem.question_text,
-        "standard_answer": problem.standard_answer,
-        "status": "pending",  # pending|passed|failed|repair_exhausted|running
-        "attempts_total": 0,
-        "repair_attempts": 0,
-        "last_batch_id": None,
-        "last_run_dir": None,
-        "last_output_root": None,
-        "last_error_type": None,
-        "last_error_message": None,
-        "last_stage_cache_root": None,
-        "last_result_source": None,
-        "pass_output_path": None,
-        "history": [],
-    }
+def _iter_history_output_roots(project_root: Path, patterns: Sequence[str]) -> Iterable[Path]:
+    seen = set()
+    for pattern in patterns:
+        for path in project_root.glob(pattern):
+            resolved = str(path.resolve())
+            if resolved in seen or not path.exists() or not path.is_dir():
+                continue
+            seen.add(resolved)
+            yield path.resolve()
+
+
+def _record_history_item(problem_state: Dict[str, Any], item: Dict[str, Any]) -> None:
+    history = problem_state.setdefault("history", [])
+    marker = json.dumps(item, ensure_ascii=False, sort_keys=True)
+    if marker not in {json.dumps(row, ensure_ascii=False, sort_keys=True) for row in history}:
+        history.append(item)
+
+
+def _ingest_pass(problem_state: Dict[str, Any], bundle_path: Path) -> None:
+    problem_state["status"] = "passed"
+    problem_state["pass_output_path"] = str(bundle_path)
+    problem_state["last_result_source"] = "problem_bundle"
+    problem_state["last_output_root"] = str(bundle_path.parents[1])
+    problem_state["last_run_dir"] = str(bundle_path.parents[1])
+    _record_history_item(
+        problem_state,
+        {
+            "kind": "pass",
+            "path": str(bundle_path),
+            "updated_at": utc_now(),
+        },
+    )
+
+
+def _ingest_failure(problem_state: Dict[str, Any], failure_path: Path, payload: Dict[str, Any]) -> None:
+    if problem_state.get("status") != "passed":
+        repair_attempts = int(problem_state.get("repair_attempts") or 0)
+        max_repairs = int(problem_state.get("max_repairs") or 1)
+        problem_state["status"] = "repair_exhausted" if repair_attempts >= max_repairs else "failed"
+    problem_state["last_batch_id"] = payload.get("batch_id") or problem_state.get("last_batch_id")
+    problem_state["last_run_dir"] = str(failure_path.parents[1])
+    problem_state["last_output_root"] = str(failure_path.parents[1])
+    problem_state["last_error_type"] = payload.get("error_type")
+    problem_state["last_error_message"] = payload.get("error_message")
+    stage_root = ((payload.get("stage_cache_summary") or {}).get("stage_cache_root"))
+    if stage_root:
+        problem_state["last_stage_cache_root"] = str(stage_root)
+    _record_history_item(
+        problem_state,
+        {
+            "kind": "failure",
+            "path": str(failure_path),
+            "error_type": payload.get("error_type"),
+            "batch_id": payload.get("batch_id"),
+            "updated_at": utc_now(),
+        },
+    )
 
 
 def cmd_plan(args: argparse.Namespace) -> int:
@@ -157,78 +208,26 @@ def cmd_plan(args: argparse.Namespace) -> int:
         merged = _default_problem_state(rec)
         if isinstance(existing, dict):
             merged.update(existing)
-            # Always refresh source-of-truth fields from ready.
             merged.update(rec.as_dict())
         state["problems"][rec.problem_id] = merged
-
     state["dataset_order"] = seen_datasets
     if args.history_root:
         state["history_roots"] = [str(Path(item).resolve()) for item in args.history_root]
     _save_state(state_file, state)
-    print(json.dumps({
-        "state_file": str(state_file),
-        "campaign_id": state["campaign_id"],
-        "problem_count": len(state["problems"]),
-        "dataset_count": len(state["dataset_order"]),
-        "ready_root": str(ready_root),
-    }, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "state_file": str(state_file),
+                "campaign_id": state["campaign_id"],
+                "problem_count": len(state["problems"]),
+                "dataset_count": len(state["dataset_order"]),
+                "ready_root": str(ready_root),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 0
-
-
-def _iter_history_output_roots(project_root: Path, patterns: List[str]) -> Iterable[Path]:
-    seen = set()
-    for pattern in patterns:
-        for path in project_root.glob(pattern):
-            resolved = str(path.resolve())
-            if resolved in seen or not path.exists() or not path.is_dir():
-                continue
-            seen.add(resolved)
-            yield path.resolve()
-
-
-def _record_history_item(problem_state: Dict[str, Any], item: Dict[str, Any]) -> None:
-    history = problem_state.setdefault("history", [])
-    marker = json.dumps(item, ensure_ascii=False, sort_keys=True)
-    if marker not in {json.dumps(row, ensure_ascii=False, sort_keys=True) for row in history}:
-        history.append(item)
-
-
-def _ingest_pass(problem_state: Dict[str, Any], bundle_path: Path, payload: Dict[str, Any]) -> None:
-    problem_state["status"] = "passed"
-    problem_state["pass_output_path"] = str(bundle_path)
-    problem_state["last_result_source"] = "problem_bundle"
-    problem_state["last_output_root"] = str(bundle_path.parents[1])
-    problem_state["last_run_dir"] = str(bundle_path.parents[1])
-    record = {
-        "kind": "pass",
-        "path": str(bundle_path),
-        "updated_at": utc_now(),
-    }
-    _record_history_item(problem_state, record)
-    problem_state["history"] = problem_state.get("history", [])
-
-
-def _ingest_failure(problem_state: Dict[str, Any], failure_path: Path, payload: Dict[str, Any]) -> None:
-    if problem_state.get("status") != "passed":
-        repair_attempts = int(problem_state.get("repair_attempts") or 0)
-        max_repairs = int(problem_state.get("max_repairs") or 1)
-        problem_state["status"] = "repair_exhausted" if repair_attempts >= max_repairs else "failed"
-    problem_state["last_batch_id"] = payload.get("batch_id") or problem_state.get("last_batch_id")
-    problem_state["last_run_dir"] = str(failure_path.parents[1])
-    problem_state["last_output_root"] = str(failure_path.parents[1])
-    problem_state["last_error_type"] = payload.get("error_type")
-    problem_state["last_error_message"] = payload.get("error_message")
-    stage_root = ((payload.get("stage_cache_summary") or {}).get("stage_cache_root"))
-    if stage_root:
-        problem_state["last_stage_cache_root"] = str(stage_root)
-    record = {
-        "kind": "failure",
-        "path": str(failure_path),
-        "error_type": payload.get("error_type"),
-        "batch_id": payload.get("batch_id"),
-        "updated_at": utc_now(),
-    }
-    _record_history_item(problem_state, record)
 
 
 def cmd_sync_history(args: argparse.Namespace) -> int:
@@ -256,7 +255,7 @@ def cmd_sync_history(args: argparse.Namespace) -> int:
                 if not problem_id:
                     continue
                 problem_state = state.setdefault("problems", {}).setdefault(problem_id, {"history": []})
-                _ingest_pass(problem_state, bundle_path, payload)
+                _ingest_pass(problem_state, bundle_path)
         error_dir = output_root / "problem_errors"
         if error_dir.exists():
             for failure_path in sorted(error_dir.glob("*.json")):
@@ -269,61 +268,120 @@ def cmd_sync_history(args: argparse.Namespace) -> int:
                     continue
                 problem_state = state.setdefault("problems", {}).setdefault(problem_id, {"history": []})
                 problem_state.setdefault("repair_attempts", 0)
+                problem_state["max_repairs"] = int(args.max_repairs)
                 _ingest_failure(problem_state, failure_path, payload)
 
     _save_state(state_file, state)
     counts = defaultdict(int)
     for item in state.get("problems", {}).values():
         counts[str(item.get("status") or "unknown")] += 1
-    print(json.dumps({
-        "state_file": str(state_file),
-        "scanned_roots": scanned_roots,
-        "counts": dict(counts),
-    }, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "state_file": str(state_file),
+                "scanned_roots": scanned_roots,
+                "counts": dict(counts),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 0
 
 
-def _eligible_problem_ids(state: Dict[str, Any]) -> List[str]:
-    out: List[str] = []
-    for problem_id, item in state.get("problems", {}).items():
-        status = str(item.get("status") or "pending")
-        if status == "passed":
-            continue
-        if status == "repair_exhausted":
-            continue
-        if status == "running":
-            continue
-        out.append(problem_id)
-    return out
+def _matches_filters(problem: Dict[str, Any], problem_ids: Sequence[str], datasets: Sequence[str]) -> bool:
+    if problem_ids and str(problem.get("problem_id") or "") not in set(problem_ids):
+        return False
+    if datasets and str(problem.get("dataset_name") or "") not in set(datasets):
+        return False
+    return True
 
 
-def _choose_next_problem(state: Dict[str, Any], strategy: str) -> Optional[str]:
-    eligible = _eligible_problem_ids(state)
-    if not eligible:
-        return None
+def _sort_problem_ids(problem_ids: Sequence[str], problems: Dict[str, Dict[str, Any]]) -> List[str]:
+    return sorted(
+        problem_ids,
+        key=lambda pid: (
+            str(problems[pid].get("dataset_name") or ""),
+            str(problems[pid].get("sample_path") or ""),
+            pid,
+        ),
+    )
+
+
+def _round_robin_order(problem_ids: Sequence[str], state: Dict[str, Any]) -> List[str]:
     problems = state.get("problems", {})
-    if strategy == "sequential":
-        rows = sorted(eligible, key=lambda pid: (str(problems[pid].get("dataset_name") or ""), str(problems[pid].get("sample_path") or ""), pid))
-        return rows[0] if rows else None
-
     dataset_order = list(state.get("dataset_order") or [])
     if not dataset_order:
-        dataset_order = sorted({str(problems[pid].get("dataset_name") or "") for pid in eligible})
+        dataset_order = sorted({str(problems[pid].get("dataset_name") or "") for pid in problem_ids})
         state["dataset_order"] = dataset_order
     buckets: Dict[str, deque[str]] = defaultdict(deque)
-    for pid in sorted(eligible, key=lambda x: (str(problems[x].get("sample_path") or ""), x)):
+    for pid in _sort_problem_ids(problem_ids, problems):
         buckets[str(problems[pid].get("dataset_name") or "")].append(pid)
-
     if not dataset_order:
-        return None
+        return []
     cursor = int(state.get("dataset_cursor") or 0)
-    for step in range(len(dataset_order)):
-        index = (cursor + step) % len(dataset_order)
-        dataset_name = dataset_order[index]
-        if buckets.get(dataset_name):
-            state["dataset_cursor"] = (index + 1) % len(dataset_order)
-            return buckets[dataset_name][0]
-    return None
+    ordered: List[str] = []
+    total = len(problem_ids)
+    while len(ordered) < total:
+        progressed = False
+        for step in range(len(dataset_order)):
+            index = (cursor + step) % len(dataset_order)
+            dataset_name = dataset_order[index]
+            if buckets.get(dataset_name):
+                ordered.append(buckets[dataset_name].popleft())
+                cursor = (index + 1) % len(dataset_order)
+                progressed = True
+                break
+        if not progressed:
+            break
+    state["dataset_cursor"] = cursor
+    return ordered
+
+
+def _choose_problem_ids(
+    *,
+    state: Dict[str, Any],
+    source: str,
+    strategy: str,
+    count: int,
+    problem_ids: Sequence[str],
+    datasets: Sequence[str],
+    max_repairs: int,
+) -> List[str]:
+    problems = state.get("problems", {})
+    candidates: List[str] = []
+    for pid, item in problems.items():
+        if not _matches_filters(item, problem_ids, datasets):
+            continue
+        status = str(item.get("status") or "pending")
+        attempts_total = int(item.get("attempts_total") or 0)
+        repair_attempts = int(item.get("repair_attempts") or 0)
+        has_cache = bool(item.get("last_stage_cache_root"))
+        if source == "unseen":
+            if status != "pending":
+                continue
+            if attempts_total != 0:
+                continue
+            candidates.append(pid)
+        elif source == "repair":
+            if status in {"passed", "running", "repair_exhausted"}:
+                continue
+            if attempts_total <= 0:
+                continue
+            if repair_attempts >= int(max_repairs):
+                continue
+            if not has_cache:
+                continue
+            candidates.append(pid)
+        else:
+            raise ValueError(f"Unknown source: {source}")
+    if strategy == "round_robin":
+        ordered = _round_robin_order(candidates, state)
+    else:
+        ordered = _sort_problem_ids(candidates, problems)
+    if count > 0:
+        return ordered[:count]
+    return ordered
 
 
 def _symlink_or_copy(src: Path, dst: Path) -> None:
@@ -342,13 +400,17 @@ def _symlink_or_copy(src: Path, dst: Path) -> None:
             shutil.copy2(src, dst)
 
 
-def _prepare_single_problem_ready(problem: Dict[str, Any], run_root: Path, ready_root_name: str = "ready") -> Path:
+def _prepare_single_problem_ready(problem: Dict[str, Any], run_root: Path, source_ready_root: Path, ready_root_name: str = "ready") -> Path:
     sample_path = Path(problem["sample_path"]).resolve()
     if not sample_path.exists():
         raise FileNotFoundError(f"Sample path does not exist: {sample_path}")
     dataset_root = sample_path.parent.parent
+    try:
+        relative_dataset_root = dataset_root.relative_to(source_ready_root.resolve())
+    except Exception:
+        relative_dataset_root = dataset_root.name
     target_ready_root = run_root / ready_root_name
-    target_dataset_root = target_ready_root / dataset_root.relative_to(dataset_root.parents[1])
+    target_dataset_root = target_ready_root / relative_dataset_root
     ensure_dir(target_dataset_root)
     _symlink_or_copy(dataset_root / "samples", target_dataset_root / "samples")
     if (dataset_root / "artifacts").exists():
@@ -438,64 +500,65 @@ def _run_command(command: List[str], cwd: Path) -> int:
     return int(process.returncode)
 
 
-def cmd_launch_next(args: argparse.Namespace) -> int:
-    state_file = Path(args.state_file).resolve()
-    state = _load_state(state_file)
-    project_root = Path(state.get("project_root") or args.project_root or PROJECT_ROOT).resolve()
-    problem_id = _choose_next_problem(state, args.strategy)
-    if not problem_id:
-        print(json.dumps({"status": "no_eligible_problem"}, ensure_ascii=False, indent=2))
-        return 0
+def _assert_no_current_run(state: Dict[str, Any]) -> None:
+    current = state.get("current_run")
+    if isinstance(current, dict):
+        raise RuntimeError(
+            "There is already a current_run in state. Resume or finalize it first before launching a new batch of tasks."
+        )
 
-    problem = state["problems"][problem_id]
-    attempts_total = int(problem.get("attempts_total") or 0)
-    repair_attempts = int(problem.get("repair_attempts") or 0)
-    can_salvage = bool(problem.get("last_stage_cache_root")) and repair_attempts < int(args.max_repairs)
-    run_kind = "repair_once" if attempts_total > 0 and can_salvage else "fresh"
-    if attempts_total > 0 and run_kind == "fresh":
-        problem["status"] = "repair_exhausted"
-        _save_state(state_file, state)
-        print(json.dumps({
-            "status": "repair_exhausted",
-            "problem_id": problem_id,
-            "reason": "problem already failed before and repair quota is exhausted; skipping duplicate rerun",
-        }, ensure_ascii=False, indent=2))
-        return 0
 
+def _prepare_run(
+    *,
+    state: Dict[str, Any],
+    state_file: Path,
+    project_root: Path,
+    runs_root: Path,
+    ready_root: Path,
+    problem: Dict[str, Any],
+    run_kind: str,
+    model: str,
+    base_url: str,
+    api_key_env: str,
+    wire_api: str,
+    reasoning_effort: str,
+    max_images_per_problem: int,
+    stage_retry_attempts: int,
+    stage_retry_backoff_seconds: float,
+    problem_retry_attempts: int,
+) -> Dict[str, Any]:
     timestamp = utc_now().replace(":", "").replace("-", "")
-    batch_id = f"p2ctl__{problem['dataset_name']}__{problem_id}__{run_kind}__{timestamp}".replace(" ", "_")
-    runs_root = Path(args.runs_root).resolve()
+    batch_id = f"p2ctl__{problem['dataset_name']}__{problem['problem_id']}__{run_kind}__{timestamp}".replace(" ", "_")
     run_root = runs_root / batch_id
     ensure_dir(run_root)
 
-    ready_root = _prepare_single_problem_ready(problem, run_root)
+    single_ready_root = _prepare_single_problem_ready(problem, run_root, ready_root)
     output_root = run_root / "output"
     checkpoint_db_path = run_root / "runtime" / "pipeline_langgraph.sqlite"
     config_path = run_root / "config.yaml"
     config_payload = _build_yaml_config(
-        ready_root=ready_root,
+        ready_root=single_ready_root,
         output_root=output_root,
         checkpoint_db_path=checkpoint_db_path,
-        base_url=args.base_url,
-        api_key_env=args.api_key_env,
-        model=args.model,
-        reasoning_effort=args.reasoning_effort,
-        wire_api=args.wire_api,
+        base_url=base_url,
+        api_key_env=api_key_env,
+        model=model,
+        reasoning_effort=reasoning_effort,
+        wire_api=wire_api,
         include_manual_review=False,
-        max_images_per_problem=args.max_images_per_problem,
-        stage_retry_attempts=args.stage_retry_attempts,
-        stage_retry_backoff_seconds=args.stage_retry_backoff_seconds,
-        problem_retry_attempts=args.problem_retry_attempts,
+        max_images_per_problem=max_images_per_problem,
+        stage_retry_attempts=stage_retry_attempts,
+        stage_retry_backoff_seconds=stage_retry_backoff_seconds,
+        problem_retry_attempts=problem_retry_attempts,
     )
-    ensure_dir(config_path.parent)
     config_path.write_text(yaml.safe_dump(config_payload, sort_keys=False, allow_unicode=True), encoding="utf-8")
 
     salvaged_cache_root = None
     if run_kind == "repair_once":
         salvaged_cache_root = _maybe_salvage_stage_cache(problem, output_root, batch_id)
-        problem["repair_attempts"] = repair_attempts + 1
+        problem["repair_attempts"] = int(problem.get("repair_attempts") or 0) + 1
 
-    problem["attempts_total"] = attempts_total + 1
+    problem["attempts_total"] = int(problem.get("attempts_total") or 0) + 1
     problem["status"] = "running"
     problem["last_batch_id"] = batch_id
     problem["last_run_dir"] = str(run_root)
@@ -503,7 +566,7 @@ def cmd_launch_next(args: argparse.Namespace) -> int:
     problem["last_result_source"] = run_kind
 
     state["current_run"] = {
-        "problem_id": problem_id,
+        "problem_id": problem["problem_id"],
         "dataset_name": problem.get("dataset_name"),
         "batch_id": batch_id,
         "run_kind": run_kind,
@@ -515,26 +578,166 @@ def cmd_launch_next(args: argparse.Namespace) -> int:
     }
     _save_state(state_file, state)
 
-    cmd = [str(project_root / ".venv" / "bin" / "python"), "run_pipeline2.py", "annotate", "--config", str(config_path), "--batch-id", batch_id]
-    result = {
-        "problem_id": problem_id,
+    command = [
+        str(project_root / ".venv" / "bin" / "python"),
+        "run_pipeline2.py",
+        "annotate",
+        "--config",
+        str(config_path),
+        "--batch-id",
+        batch_id,
+    ]
+    return {
+        "problem_id": problem["problem_id"],
         "dataset_name": problem.get("dataset_name"),
         "batch_id": batch_id,
         "run_kind": run_kind,
         "run_root": str(run_root),
         "config_path": str(config_path),
-        "command": cmd,
+        "output_root": str(output_root),
+        "command": command,
         "salvaged_cache_root": salvaged_cache_root,
     }
-    if args.execute:
-        env = os.environ.copy()
-        rc = _run_command(cmd, cwd=project_root)
-        result["exit_code"] = rc
+
+
+def _finalize_current_run(state_file: Path) -> Dict[str, Any]:
+    state = _load_state(state_file)
+    current = state.get("current_run")
+    if not isinstance(current, dict):
+        return {"status": "no_current_run"}
+    problem_id = str(current.get("problem_id") or "")
+    output_root = Path(current.get("output_root") or "")
+    if not problem_id or not output_root.exists():
+        raise RuntimeError("Current run output root is missing or does not exist.")
+    bundle_path = output_root / "problems" / f"{problem_id}.json"
+    error_path = output_root / "problem_errors" / f"{problem_id}.json"
+    problem_state = state.get("problems", {}).get(problem_id)
+    if not isinstance(problem_state, dict):
+        raise RuntimeError(f"Problem `{problem_id}` is missing in state.")
+    if bundle_path.exists():
+        _ingest_pass(problem_state, bundle_path)
+    elif error_path.exists():
+        payload = read_json(error_path)
+        _ingest_failure(problem_state, error_path, payload)
+    else:
+        problem_state["status"] = "failed"
+        problem_state["last_error_type"] = "MissingResultArtifacts"
+        problem_state["last_error_message"] = f"Neither `{bundle_path}` nor `{error_path}` exists."
+    state["current_run"] = None
+    _save_state(state_file, state)
+    return {
+        "problem_id": problem_id,
+        "status": problem_state.get("status"),
+        "pass_output_path": problem_state.get("pass_output_path"),
+        "last_error_type": problem_state.get("last_error_type"),
+    }
+
+
+def _preview_rows(state: Dict[str, Any], selected_problem_ids: Sequence[str], run_kind: str) -> List[Dict[str, Any]]:
+    problems = state.get("problems", {})
+    rows: List[Dict[str, Any]] = []
+    for pid in selected_problem_ids:
+        item = problems[pid]
+        rows.append(
+            {
+                "problem_id": pid,
+                "dataset_name": item.get("dataset_name"),
+                "sample_path": item.get("sample_path"),
+                "attempts_total": item.get("attempts_total"),
+                "repair_attempts": item.get("repair_attempts"),
+                "status": item.get("status"),
+                "planned_run_kind": run_kind,
+            }
+        )
+    return rows
+
+
+def _execute_problem_batch(
+    *,
+    args: argparse.Namespace,
+    state: Dict[str, Any],
+    state_file: Path,
+    selected_problem_ids: Sequence[str],
+    run_kind: str,
+) -> Dict[str, Any]:
+    _assert_no_current_run(state)
+    project_root = Path(state.get("project_root") or args.project_root or PROJECT_ROOT).resolve()
+    ready_root = Path(state.get("ready_root") or args.ready_root or "").resolve()
+    runs_root = Path(args.runs_root).resolve()
+    results: List[Dict[str, Any]] = []
+    for pid in selected_problem_ids:
+        state = _load_state(state_file)
+        problem = state["problems"][pid]
+        prepared = _prepare_run(
+            state=state,
+            state_file=state_file,
+            project_root=project_root,
+            runs_root=runs_root,
+            ready_root=ready_root,
+            problem=problem,
+            run_kind=run_kind,
+            model=args.model,
+            base_url=args.base_url,
+            api_key_env=args.api_key_env,
+            wire_api=args.wire_api,
+            reasoning_effort=args.reasoning_effort,
+            max_images_per_problem=args.max_images_per_problem,
+            stage_retry_attempts=args.stage_retry_attempts,
+            stage_retry_backoff_seconds=args.stage_retry_backoff_seconds,
+            problem_retry_attempts=args.problem_retry_attempts,
+        )
+        if args.execute:
+            prepared["exit_code"] = _run_command(prepared["command"], cwd=project_root)
+            prepared["finalize"] = _finalize_current_run(state_file)
+        results.append(prepared)
+    return {
+        "mode": run_kind,
+        "count": len(selected_problem_ids),
+        "items": results,
+    }
+
+
+def cmd_run_unseen(args: argparse.Namespace) -> int:
+    state_file = Path(args.state_file).resolve()
+    state = _load_state(state_file)
+    selected = _choose_problem_ids(
+        state=state,
+        source="unseen",
+        strategy=args.strategy,
+        count=max(0, int(args.count)),
+        problem_ids=args.problem_id,
+        datasets=args.dataset,
+        max_repairs=args.max_repairs,
+    )
+    if not args.execute:
+        print(json.dumps({"mode": "run-unseen", "count": len(selected), "items": _preview_rows(state, selected, "fresh")}, ensure_ascii=False, indent=2))
+        return 0
+    result = _execute_problem_batch(args=args, state=state, state_file=state_file, selected_problem_ids=selected, run_kind="fresh")
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 
 
-def cmd_resume_current(args: argparse.Namespace) -> int:
+def cmd_repair_errors(args: argparse.Namespace) -> int:
+    state_file = Path(args.state_file).resolve()
+    state = _load_state(state_file)
+    selected = _choose_problem_ids(
+        state=state,
+        source="repair",
+        strategy=args.strategy,
+        count=max(0, int(args.limit)),
+        problem_ids=args.problem_id,
+        datasets=args.dataset,
+        max_repairs=args.max_repairs,
+    )
+    if not args.execute:
+        print(json.dumps({"mode": "repair-errors", "count": len(selected), "items": _preview_rows(state, selected, "repair_once")}, ensure_ascii=False, indent=2))
+        return 0
+    result = _execute_problem_batch(args=args, state=state, state_file=state_file, selected_problem_ids=selected, run_kind="repair_once")
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_resume_interrupted(args: argparse.Namespace) -> int:
     state_file = Path(args.state_file).resolve()
     state = _load_state(state_file)
     current = state.get("current_run")
@@ -546,53 +749,31 @@ def cmd_resume_current(args: argparse.Namespace) -> int:
     config_path = str(current.get("config_path") or "")
     if not batch_id or not config_path:
         raise RuntimeError("Current run metadata is incomplete.")
-    cmd = [str(project_root / ".venv" / "bin" / "python"), "run_pipeline2.py", "annotate", "--config", config_path, "--resume-batch-id", batch_id]
+    command = [
+        str(project_root / ".venv" / "bin" / "python"),
+        "run_pipeline2.py",
+        "annotate",
+        "--config",
+        config_path,
+        "--resume-batch-id",
+        batch_id,
+    ]
     result = {
+        "mode": "resume-interrupted",
         "batch_id": batch_id,
+        "problem_id": current.get("problem_id"),
         "config_path": config_path,
-        "command": cmd,
+        "command": command,
     }
     if args.execute:
-        rc = _run_command(cmd, cwd=project_root)
-        result["exit_code"] = rc
+        result["exit_code"] = _run_command(command, cwd=project_root)
+        result["finalize"] = _finalize_current_run(state_file)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 
 
 def cmd_finalize_current(args: argparse.Namespace) -> int:
-    state_file = Path(args.state_file).resolve()
-    state = _load_state(state_file)
-    current = state.get("current_run")
-    if not isinstance(current, dict):
-        print(json.dumps({"status": "no_current_run"}, ensure_ascii=False, indent=2))
-        return 0
-    problem_id = str(current.get("problem_id") or "")
-    output_root = Path(current.get("output_root") or "")
-    if not problem_id or not output_root.exists():
-        raise RuntimeError("Current run output root is missing or does not exist.")
-    bundle_path = output_root / "problems" / f"{problem_id}.json"
-    error_path = output_root / "problem_errors" / f"{problem_id}.json"
-    problem_state = state["problems"].get(problem_id)
-    if not isinstance(problem_state, dict):
-        raise RuntimeError(f"Problem `{problem_id}` is missing in state.")
-    if bundle_path.exists():
-        payload = read_json(bundle_path)
-        _ingest_pass(problem_state, bundle_path, payload)
-    elif error_path.exists():
-        payload = read_json(error_path)
-        _ingest_failure(problem_state, error_path, payload)
-    else:
-        problem_state["status"] = "failed"
-        problem_state["last_error_type"] = "MissingResultArtifacts"
-        problem_state["last_error_message"] = f"Neither `{bundle_path}` nor `{error_path}` exists."
-    state["current_run"] = None
-    _save_state(state_file, state)
-    print(json.dumps({
-        "problem_id": problem_id,
-        "status": problem_state.get("status"),
-        "pass_output_path": problem_state.get("pass_output_path"),
-        "last_error_type": problem_state.get("last_error_type"),
-    }, ensure_ascii=False, indent=2))
+    print(json.dumps(_finalize_current_run(Path(args.state_file).resolve()), ensure_ascii=False, indent=2))
     return 0
 
 
@@ -605,16 +786,42 @@ def cmd_status(args: argparse.Namespace) -> int:
         dataset = str(item.get("dataset_name") or "")
         counts[status] += 1
         by_dataset[dataset][status] += 1
-    print(json.dumps({
-        "campaign_id": state.get("campaign_id"),
-        "ready_root": state.get("ready_root"),
-        "current_run": state.get("current_run"),
-        "counts": dict(counts),
-        "dataset_cursor": state.get("dataset_cursor"),
-        "dataset_order": state.get("dataset_order"),
-        "by_dataset": {k: dict(v) for k, v in by_dataset.items()},
-    }, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "campaign_id": state.get("campaign_id"),
+                "ready_root": state.get("ready_root"),
+                "current_run": state.get("current_run"),
+                "counts": dict(counts),
+                "dataset_cursor": state.get("dataset_cursor"),
+                "dataset_order": state.get("dataset_order"),
+                "by_dataset": {k: dict(v) for k, v in by_dataset.items()},
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 0
+
+
+def _add_common_run_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--project-root", default=str(PROJECT_ROOT))
+    parser.add_argument("--state-file", default=str(DEFAULT_STATE_FILE))
+    parser.add_argument("--runs-root", default=str(DEFAULT_RUNS_ROOT))
+    parser.add_argument("--strategy", choices=["round_robin", "sequential"], default="round_robin")
+    parser.add_argument("--problem-id", action="append", default=[])
+    parser.add_argument("--dataset", action="append", default=[])
+    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
+    parser.add_argument("--api-key-env", default=DEFAULT_API_KEY_ENV)
+    parser.add_argument("--wire-api", default=DEFAULT_WIRE_API)
+    parser.add_argument("--reasoning-effort", default=DEFAULT_REASONING_EFFORT)
+    parser.add_argument("--max-images-per-problem", type=int, default=3)
+    parser.add_argument("--stage-retry-attempts", type=int, default=3)
+    parser.add_argument("--stage-retry-backoff-seconds", type=float, default=1.0)
+    parser.add_argument("--problem-retry-attempts", type=int, default=1)
+    parser.add_argument("--max-repairs", type=int, default=1)
+    parser.add_argument("--execute", action="store_true")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -637,31 +844,23 @@ def build_parser() -> argparse.ArgumentParser:
     sync.add_argument("--max-repairs", type=int, default=1)
     sync.set_defaults(func=cmd_sync_history)
 
-    launch = sub.add_parser("launch-next", help="Pick the next problem and generate a single-problem run directory/config.")
-    launch.add_argument("--project-root", default=str(PROJECT_ROOT))
-    launch.add_argument("--state-file", default=str(DEFAULT_STATE_FILE))
-    launch.add_argument("--runs-root", default=str(DEFAULT_RUNS_ROOT))
-    launch.add_argument("--strategy", choices=["round_robin", "sequential"], default="round_robin")
-    launch.add_argument("--model", default=DEFAULT_MODEL)
-    launch.add_argument("--base-url", default=DEFAULT_BASE_URL)
-    launch.add_argument("--api-key-env", default=DEFAULT_API_KEY_ENV)
-    launch.add_argument("--wire-api", default=DEFAULT_WIRE_API)
-    launch.add_argument("--reasoning-effort", default=DEFAULT_REASONING_EFFORT)
-    launch.add_argument("--max-images-per-problem", type=int, default=3)
-    launch.add_argument("--stage-retry-attempts", type=int, default=3)
-    launch.add_argument("--stage-retry-backoff-seconds", type=float, default=1.0)
-    launch.add_argument("--problem-retry-attempts", type=int, default=1)
-    launch.add_argument("--max-repairs", type=int, default=1)
-    launch.add_argument("--execute", action="store_true")
-    launch.set_defaults(func=cmd_launch_next)
-
-    resume = sub.add_parser("resume-current", help="Resume the current in-progress run with the same batch id.")
+    resume = sub.add_parser("resume-interrupted", help="Resume the last interrupted single-problem run.")
     resume.add_argument("--project-root", default=str(PROJECT_ROOT))
     resume.add_argument("--state-file", default=str(DEFAULT_STATE_FILE))
     resume.add_argument("--execute", action="store_true")
-    resume.set_defaults(func=cmd_resume_current)
+    resume.set_defaults(func=cmd_resume_interrupted)
 
-    finalize = sub.add_parser("finalize-current", help="Ingest the current run's result artifacts into the controller state.")
+    repair = sub.add_parser("repair-errors", help="Repair failed problems from cached stage state. Default: all eligible failures.")
+    _add_common_run_args(repair)
+    repair.add_argument("--limit", type=int, default=0, help="How many failed problems to repair. 0 = all eligible.")
+    repair.set_defaults(func=cmd_repair_errors)
+
+    unseen = sub.add_parser("run-unseen", help="Run problems that have never been processed before.")
+    _add_common_run_args(unseen)
+    unseen.add_argument("--count", type=int, default=1, help="How many unseen problems to run.")
+    unseen.set_defaults(func=cmd_run_unseen)
+
+    finalize = sub.add_parser("finalize-current", help="Ingest the current run's result artifacts into controller state.")
     finalize.add_argument("--state-file", default=str(DEFAULT_STATE_FILE))
     finalize.set_defaults(func=cmd_finalize_current)
 
