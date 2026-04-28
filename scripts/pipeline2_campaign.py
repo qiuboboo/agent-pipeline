@@ -153,6 +153,8 @@ def _ingest_pass(problem_state: Dict[str, Any], bundle_path: Path) -> None:
 
 
 def _ingest_failure(problem_state: Dict[str, Any], failure_path: Path, payload: Dict[str, Any]) -> None:
+    historical_attempts = int(payload.get("attempts_exhausted") or 1)
+    problem_state["attempts_total"] = max(int(problem_state.get("attempts_total") or 0), historical_attempts)
     if problem_state.get("status") != "passed":
         repair_attempts = int(problem_state.get("repair_attempts") or 0)
         max_repairs = int(problem_state.get("max_repairs") or 1)
