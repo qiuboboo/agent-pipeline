@@ -246,16 +246,106 @@ _GOAL_PATTERNS = [
 
 _GIVEN_SPLIT_PATTERN = re.compile(r",\s*|\s+and\s+", re.IGNORECASE)
 
+_NUMBERED_ITEM_PATTERN = re.compile(r"(?:^|\s)(\d+)\s*[\.\):]\s*")
+
+_QUESTION_TARGET_ROLES = {"goal", "subquestion", "constraint"}
+
 def _normalize_text_fact_text(text: Any) -> str:
     value = normalize_whitespace(text)
     value = re.sub(r"^(?:and)\s+", "", value, flags=re.IGNORECASE)
     value = re.sub(r"[。．\.,，；;:：!?！？]+$", "", value)
     return value.strip()
 
+def _looks_like_truncated_classification_stem(text: str) -> bool:
+    value = _normalize_text_fact_text(text)
+    if not value:
+        return False
+    return re.search(
+        r"\b(shown in the figure|shown below|shown above|following)\b.*\b(is|are)\s+(?:a|an|the)$",
+        value,
+        re.IGNORECASE,
+    ) is not None
+
+def _derive_classification_facts_from_stem(question_text: str) -> List[Dict[str, str]]:
+    value = normalize_whitespace(question_text)
+    if not value:
+        return []
+    match = re.match(
+        r"^In the\s+(?P<noun>[A-Za-z][A-Za-z0-9\-\s]*)\s+shown in the figure,\s+the\s+(?P=noun)\s+is\s+(?:a|an)$",
+        value,
+        re.IGNORECASE,
+    )
+    if match is None:
+        return []
+    noun = normalize_whitespace(match.group("noun")).lower()
+    noun = re.sub(r"\s+", " ", noun).strip()
+    if not noun:
+        return []
+    article = "an" if noun[:1] in {"a", "e", "i", "o", "u"} else "a"
+    return [
+        {"fact_text": f"{article.capitalize()} {noun} is shown in the figure", "fact_role": "given"},
+        {"fact_text": f"Determine what type of {noun} is shown in the figure", "fact_role": "goal"},
+    ]
+
+def _is_trivial_number_fragment(text: str) -> bool:
+    value = _normalize_text_fact_text(text)
+    return bool(value) and re.fullmatch(r"\d+", value) is not None
+
+def _is_malformed_goal_fragment(text: str) -> bool:
+    value = _normalize_text_fact_text(text)
+    if not value:
+        return True
+    if _is_trivial_number_fragment(value):
+        return True
+    if re.fullmatch(r"(?i)find(?:\s+the\s+following(?:\s+\w+)?)?", value):
+        return False
+    if re.fullmatch(r"(?i)(find|determine|compute|solve)\s*:?\s*\d+", value):
+        return True
+    if _looks_like_truncated_classification_stem(value):
+        return True
+    return False
+
+def _extract_goal_and_subquestions(suffix: str) -> List[Dict[str, str]]:
+    value = normalize_whitespace(suffix)
+    if not value:
+        return []
+    matches = list(_NUMBERED_ITEM_PATTERN.finditer(value))
+    if matches:
+        output: List[Dict[str, str]] = []
+        goal_prefix = _normalize_text_fact_text(value[: matches[0].start()])
+        if goal_prefix:
+            if re.fullmatch(r"(?i)(find|determine|compute|solve)", goal_prefix):
+                goal_prefix = "Find the following items"
+            output.append({"fact_text": goal_prefix, "fact_role": "goal"})
+        for index, match in enumerate(matches):
+            item_start = match.end()
+            item_end = matches[index + 1].start() if index + 1 < len(matches) else len(value)
+            item_text = _normalize_text_fact_text(value[item_start:item_end])
+            if not item_text or _is_malformed_goal_fragment(item_text):
+                continue
+            output.append({"fact_text": item_text, "fact_role": "subquestion"})
+        if output:
+            return output
+    suffix_parts = [part.strip() for part in re.split(r"(?<=[.!?])\s+", value) if part.strip()]
+    if suffix_parts:
+        output = [{"fact_text": _normalize_text_fact_text(suffix_parts[0]), "fact_role": "goal"}]
+        for extra in suffix_parts[1:]:
+            cleaned_extra = _normalize_text_fact_text(extra)
+            if cleaned_extra and not _is_malformed_goal_fragment(cleaned_extra):
+                output.append({"fact_text": cleaned_extra, "fact_role": "constraint"})
+        return output
+    cleaned_value = _normalize_text_fact_text(value)
+    if cleaned_value and not _is_malformed_goal_fragment(cleaned_value):
+        return [{"fact_text": cleaned_value, "fact_role": "goal"}]
+    return []
+
 def _derive_text_facts_from_question(question_text: str) -> List[Dict[str, str]]:
     value = normalize_whitespace(question_text)
     if not value:
         return []
+    classification_facts = _derive_classification_facts_from_stem(value)
+    if classification_facts:
+        return classification_facts
 
     sentence_parts = [part.strip() for part in re.split(r"(?<=[.!?])\s+", value) if part.strip()]
 
@@ -321,15 +411,7 @@ def _derive_text_facts_from_question(question_text: str) -> List[Dict[str, str]]
                 facts.append({"fact_text": cleaned_part, "fact_role": "given"})
 
     if suffix:
-        suffix_parts = [part.strip() for part in re.split(r"(?<=[.!?])\s+", suffix) if part.strip()]
-        if suffix_parts:
-            facts.append({"fact_text": _normalize_text_fact_text(suffix_parts[0]), "fact_role": "goal"})
-            for extra in suffix_parts[1:]:
-                cleaned_extra = _normalize_text_fact_text(extra)
-                if cleaned_extra:
-                    facts.append({"fact_text": cleaned_extra, "fact_role": "constraint"})
-        else:
-            facts.append({"fact_text": _normalize_text_fact_text(suffix), "fact_role": "goal"})
+        facts.extend(_extract_goal_and_subquestions(suffix))
 
     return facts
 
@@ -349,6 +431,10 @@ def _sanitize_t_facts(problem: Dict[str, Any], t_facts: Sequence[Dict[str, Any]]
             or re.search(r"(求|判断|计算|写出)", fact_text)
         ):
             fact_role = "goal"
+        if _is_trivial_number_fragment(fact_text):
+            continue
+        if fact_role in _QUESTION_TARGET_ROLES and _is_malformed_goal_fragment(fact_text):
+            continue
         if not fact_text or fact_role not in _ALLOWED_TEXT_FACT_ROLES:
             continue
         keep = False
@@ -363,6 +449,11 @@ def _sanitize_t_facts(problem: Dict[str, Any], t_facts: Sequence[Dict[str, Any]]
             sanitized_existing.append({"fact_text": fact_text, "fact_role": fact_role})
 
     derived_facts = _derive_text_facts_from_question(question_text)
+    derived_goallike = [
+        canonicalize_free_text(item.get("fact_text", "")).replace(" ", "")
+        for item in derived_facts
+        if item.get("fact_role") in {"goal", "subquestion"}
+    ]
     merged: List[Dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
     source_items = (
@@ -376,12 +467,16 @@ def _sanitize_t_facts(problem: Dict[str, Any], t_facts: Sequence[Dict[str, Any]]
         fact_role = normalize_whitespace(item.get("fact_role", "")).lower()
         if not fact_text or fact_role not in _ALLOWED_TEXT_FACT_ROLES:
             continue
-        duplicate_found = False
         normalized_fact_text = canonicalize_free_text(fact_text).replace(" ", "")
+        if fact_role == "constraint" and normalized_fact_text in derived_goallike:
+            continue
+        duplicate_found = False
         for existing in merged:
-            if existing.get("fact_role") != fact_role:
-                continue
+            existing_role = existing.get("fact_role")
             existing_normalized = canonicalize_free_text(existing.get("fact_text", "")).replace(" ", "")
+            same_target_family = existing_role in _QUESTION_TARGET_ROLES and fact_role in _QUESTION_TARGET_ROLES
+            if not (existing_role == fact_role or same_target_family):
+                continue
             if existing_normalized == normalized_fact_text or lexical_overlap_score(existing.get("fact_text", ""), fact_text) >= 0.85:
                 duplicate_found = True
                 break

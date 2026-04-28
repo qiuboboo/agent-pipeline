@@ -263,6 +263,53 @@ class AnnotationModulesTests(unittest.TestCase):
         self.assertEqual(result["audit"]["status"], "soft_failed")
         self.assertEqual(len(result["claims"]), 1)
 
+    def test_sanitize_t_facts_rebuilds_numbered_subquestions(self) -> None:
+        problem = {
+            "question_text": (
+                "Find:\n\n"
+                "1. What is the elastic potential energy when the spring is compressed to point A?\n"
+                "2. What is the work done by friction?\n"
+                "3. What is the distance between the landing point and point B?"
+            )
+        }
+        t_facts = [
+            {"t_id": "t1", "fact_text": "What is the elastic potential energy when the spring is compressed to point A", "fact_role": "constraint"},
+            {"t_id": "t2", "fact_text": "2", "fact_role": "constraint"},
+            {"t_id": "t3", "fact_text": "What is the work done by friction", "fact_role": "constraint"},
+            {"t_id": "t4", "fact_text": "3", "fact_role": "constraint"},
+            {"t_id": "t5", "fact_text": "What is the distance between the landing point and point B", "fact_role": "constraint"},
+            {"t_id": "t6", "fact_text": "Find: 1", "fact_role": "goal"},
+        ]
+
+        result = annotation_modules._sanitize_t_facts(problem, t_facts)
+
+        self.assertEqual(
+            [(item["fact_role"], item["fact_text"]) for item in result],
+            [
+                ("subquestion", "What is the elastic potential energy when the spring is compressed to point A"),
+                ("subquestion", "What is the work done by friction"),
+                ("subquestion", "What is the distance between the landing point and point B"),
+                ("goal", "Find the following items"),
+            ],
+        )
+
+    def test_sanitize_t_facts_repairs_truncated_classification_stem(self) -> None:
+        problem = {"question_text": "In the circuit shown in the figure, the circuit is a"}
+        t_facts = [
+            {"t_id": "t1", "fact_text": "In the circuit shown in the figure, the circuit is a", "fact_role": "given"},
+            {"t_id": "t2", "fact_text": "In the circuit shown in the figure, the circuit is a", "fact_role": "goal"},
+        ]
+
+        result = annotation_modules._sanitize_t_facts(problem, t_facts)
+
+        self.assertEqual(
+            result,
+            [
+                {"t_id": "t1", "fact_text": "A circuit is shown in the figure", "fact_role": "given"},
+                {"t_id": "t2", "fact_text": "Determine what type of circuit is shown in the figure", "fact_role": "goal"},
+            ],
+        )
+
 
 class GroupSolutionsTests(unittest.TestCase):
     def test_group_solutions_uses_planned_method_count_for_coverage(self) -> None:

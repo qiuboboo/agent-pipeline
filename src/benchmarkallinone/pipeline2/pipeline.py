@@ -707,16 +707,16 @@ def _build_ptk_node(state: ProblemState) -> Dict[str, Any]:
         and isinstance(cached_bundle.get("audit"), dict)
     ):
         ptk_bundle = deepcopy(cached_bundle)
-        print(
-            f"[pipeline2 stage-cache] Reused PTK foundation for problem `{problem_id}`.",
-            flush=True,
+        LOGGER.info(
+            "[pipeline2 stage-cache] Reused PTK foundation for problem `%s`.",
+            problem_id,
         )
     else:
         progress_state = _load_stage_cache_record(batch_id, problem_id, "ptk_foundation_progress", "bundle")
         if isinstance(progress_state, dict) and progress_state:
-            print(
-                f"[pipeline2 stage-cache] Resuming PTK foundation progress for problem `{problem_id}`.",
-                flush=True,
+            LOGGER.info(
+                "[pipeline2 stage-cache] Resuming PTK foundation progress for problem `%s`.",
+                problem_id,
             )
 
         def _save_ptk_progress(
@@ -774,9 +774,10 @@ def _run_methods_node(state: ProblemState) -> Dict[str, Any]:
         cached_method = cached_record.get("method") if isinstance(cached_record, dict) else None
         if isinstance(cached_method, dict) and str(cached_method.get("method_id", "")) == method_id:
             processed = deepcopy(cached_method)
-            print(
-                f"[pipeline2 stage-cache] Reused method result for problem `{problem_id}` method `{method_id}`.",
-                flush=True,
+            LOGGER.info(
+                "[pipeline2 stage-cache] Reused method result for problem `%s` method `%s`.",
+                problem_id,
+                method_id,
             )
         else:
             processed = _run_single_method(batch_id=batch_id, problem=problem, method=method)
@@ -857,16 +858,18 @@ def _extract_claims_node(state: ProblemState) -> Dict[str, Any]:
                 and isinstance(cached_bundle.get("audit"), dict)
             ):
                 claim_bundle = deepcopy(cached_bundle)
-                print(
-                    f"[pipeline2 stage-cache] Reused claim bundle for problem `{problem_id}` method `{method_id}`.",
-                    flush=True,
+                LOGGER.info(
+                    "[pipeline2 stage-cache] Reused claim bundle for problem `%s` method `%s`.",
+                    problem_id,
+                    method_id,
                 )
             else:
                 progress_state = _load_stage_cache_record(batch_id, problem_id, "claim_bundle_progress", method_id)
                 if isinstance(progress_state, dict) and progress_state:
-                    print(
-                        f"[pipeline2 stage-cache] Resuming claim bundle progress for problem `{problem_id}` method `{method_id}`.",
-                        flush=True,
+                    LOGGER.info(
+                        "[pipeline2 stage-cache] Resuming claim bundle progress for problem `%s` method `%s`.",
+                        problem_id,
+                        method_id,
                     )
 
                 def _save_claim_progress(
@@ -920,9 +923,11 @@ def _extract_claims_node(state: ProblemState) -> Dict[str, Any]:
             method["claim_extraction_error"] = str(exc)
             variant_record["claim_extraction_status"] = "failed"
             variant_record["claim_extraction_error"] = str(exc)
-            print(
-                f"[pipeline2 annotate] Claim extraction skipped for problem `{problem_id}` method `{method_id}` after explicit contract failure: {exc}",
-                flush=True,
+            LOGGER.warning(
+                "[pipeline2 annotate] Claim extraction skipped for problem `%s` method `%s` after explicit contract failure: %s",
+                problem_id,
+                method_id,
+                exc,
             )
             continue
         claim_sequences.append(
