@@ -524,6 +524,10 @@ def _load_env_file(path: Path) -> Dict[str, str]:
                 env_map[key] = expanded
                 if "$" in expanded:
                     unresolved = True
+    if env_map.get("ANNOTATION_API_KEY") and not env_map.get("OPENAI_API_KEY"):
+        env_map["OPENAI_API_KEY"] = env_map["ANNOTATION_API_KEY"]
+    if env_map.get("ANNOTATION_FALLBACK_API_KEY") and not env_map.get("OPENAI_FALLBACK_API_KEY"):
+        env_map["OPENAI_FALLBACK_API_KEY"] = env_map["ANNOTATION_FALLBACK_API_KEY"]
     return env_map
 
 
