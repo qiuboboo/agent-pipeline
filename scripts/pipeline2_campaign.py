@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -29,6 +30,7 @@ DEFAULT_BASE_URL = "https://www.msutools.cn"
 DEFAULT_API_KEY_ENV = "OPENAI_API_KEY"
 DEFAULT_WIRE_API = "responses"
 DEFAULT_REASONING_EFFORT = "high"
+DEFAULT_LOCAL_ENV_FILE = PROJECT_ROOT / "src" / "benchmarkallinone" / "pipeline2" / "configs" / "pipeline2.local.env"
 
 
 @dataclass
@@ -495,8 +497,41 @@ def _maybe_salvage_stage_cache(problem: Dict[str, Any], new_output_root: Path, b
     return str(dst_root)
 
 
-def _run_command(command: List[str], cwd: Path) -> int:
-    process = subprocess.run(command, cwd=str(cwd), check=False)
+def _load_env_file(path: Path) -> Dict[str, str]:
+    if not path.exists():
+        return {}
+    env_map: Dict[str, str] = {}
+    for raw_line in path.read_text(encoding="utf-8", errors="ignore").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
+            value = value[1:-1]
+        env_map[key] = value
+    unresolved = True
+    max_passes = 5
+    while unresolved and max_passes > 0:
+        unresolved = False
+        max_passes -= 1
+        for key, value in list(env_map.items()):
+            expanded = os.path.expandvars(value)
+            for ref_key, ref_val in env_map.items():
+                expanded = expanded.replace(f"${{{ref_key}}}", ref_val).replace(f"${ref_key}", ref_val)
+            if expanded != value:
+                env_map[key] = expanded
+                if "$" in expanded:
+                    unresolved = True
+    return env_map
+
+
+def _run_command(command: List[str], cwd: Path, env_file: Optional[Path] = None) -> int:
+    env = os.environ.copy()
+    if env_file is not None:
+        env.update(_load_env_file(env_file))
+    process = subprocess.run(command, cwd=str(cwd), env=env, check=False)
     return int(process.returncode)
 
 
@@ -687,7 +722,11 @@ def _execute_problem_batch(
             problem_retry_attempts=args.problem_retry_attempts,
         )
         if args.execute:
-            prepared["exit_code"] = _run_command(prepared["command"], cwd=project_root)
+            prepared["exit_code"] = _run_command(
+                prepared["command"],
+                cwd=project_root,
+                env_file=Path(getattr(args, "env_file", DEFAULT_LOCAL_ENV_FILE)).resolve(),
+            )
             prepared["finalize"] = _finalize_current_run(state_file)
         results.append(prepared)
     return {
@@ -766,7 +805,11 @@ def cmd_resume_interrupted(args: argparse.Namespace) -> int:
         "command": command,
     }
     if args.execute:
-        result["exit_code"] = _run_command(command, cwd=project_root)
+        result["exit_code"] = _run_command(
+            command,
+            cwd=project_root,
+            env_file=Path(getattr(args, "env_file", DEFAULT_LOCAL_ENV_FILE)).resolve(),
+        )
         result["finalize"] = _finalize_current_run(state_file)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
@@ -814,6 +857,7 @@ def _add_common_run_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--api-key-env", default=DEFAULT_API_KEY_ENV)
+    parser.add_argument("--env-file", default=str(DEFAULT_LOCAL_ENV_FILE))
     parser.add_argument("--wire-api", default=DEFAULT_WIRE_API)
     parser.add_argument("--reasoning-effort", default=DEFAULT_REASONING_EFFORT)
     parser.add_argument("--max-images-per-problem", type=int, default=3)
