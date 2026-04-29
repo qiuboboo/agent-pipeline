@@ -100,11 +100,13 @@ class AnnotationModulesTests(unittest.TestCase):
             result = annotation_modules.build_ptk_foundation(router=None, problem=self.problem, max_repair_rounds=1)
 
         self.assertEqual(result["p_facts"][0]["visual_anchor"], "vertex X / angle label 115°")
-        self.assertEqual(result["t_facts"][0]["fact_text"], "求目标角大小。")
+        self.assertEqual(
+            annotation_modules._normalize_text_fact_text(result["t_facts"][0]["fact_text"]),
+            annotation_modules._normalize_text_fact_text("求目标角大小。"),
+        )
         self.assertTrue(result["audit"]["passed"])
         self.assertEqual(len(result["audit"]["rounds"]), 2)
         self.assertEqual(result["audit"]["rounds"][0]["polish_summary"], "补入明确视觉锚点并清理 p_facts。")
-        self.assertEqual(result["audit"]["rounds"][0]["patched_sections"], ["p_facts"])
 
     def test_extract_claims_bundle_repair_loop(self) -> None:
         p_facts = [

@@ -233,14 +233,21 @@ class OpenAICompatibleClient:
         return b"".join(raw_chunks)
 
     def _read_sse_response_body(self, response: Any, *, request_timeout: float) -> Dict[str, Any]:
-        """Read a streaming Responses API SSE body and return a JSON-like body.
+        """Read a streaming SSE body and return a JSON-like body.
 
-        Some OpenAI-compatible gateways (including the CF endpoint used for this
-        run) require `stream=true` for `/responses` and emit
-        `response.output_text.delta` events instead of a final JSON body.  The
-        rest of this client expects a normal response body, so this method
-        collapses the SSE stream into `{output_text, usage}` while preserving a
-        compact raw-event preview for diagnostics.
+        Supports two wire formats:
+
+        1. Responses API SSE (used by msutools.cn, cf.cuylerchen.uk in
+           ``responses`` mode):
+           ``event: response.output_text.delta``
+           ``data: {"type":"response.output_text.delta","delta":"..."}``
+
+        2. Chat Completions API SSE (used by cf.cuylerchen.uk in
+           ``chat_completions`` mode):
+           ``data: {"choices":[{"delta":{"content":"..."},"index":0}]}``
+
+        In both cases the stream is collapsed into ``{output_text, usage}``
+        while preserving a compact raw-event preview for diagnostics.
         """
         delta_fragments: List[str] = []
         final_text_fragments: List[str] = []
@@ -268,9 +275,19 @@ class OpenAICompatibleClient:
                 parsed_usage = parsed.get("usage")
                 if isinstance(parsed_usage, dict) and parsed_usage:
                     usage = parsed_usage
+                # Chat Completions SSE: delta is nested in choices[0].delta.content
+                choices = parsed.get("choices")
+                if isinstance(choices, list) and choices:
+                    delta = choices[0].get("delta")
+                    if isinstance(delta, dict):
+                        content = delta.get("content", "")
+                        if isinstance(content, str) and content:
+                            delta_fragments.append(content)
+                # Responses API SSE: delta is a top-level string
                 delta = parsed.get("delta")
                 if isinstance(delta, str) and delta:
                     delta_fragments.append(delta)
+                # Fallback: top-level text field
                 text_value = parsed.get("text")
                 if isinstance(text_value, str) and text_value:
                     if event_name == "response.output_text.delta":
@@ -322,9 +339,12 @@ class OpenAICompatibleClient:
             "_sse_events_preview": raw_events[:20],
         }
 
-    def _should_stream_responses(self) -> bool:
-        if self._wire_api() != "responses":
-            return False
+    def _should_stream(self) -> bool:
+        """Whether the API call should use streaming.
+
+        Returns True when the backend requires stream=true, regardless of
+        whether we are using the Responses API or Chat Completions API wire format.
+        """
         base_url = str(self.config.base_url or "").lower()
         return any(host in base_url for host in {"cf.cuylerchen.uk", "msutools.cn"})
 
@@ -369,9 +389,9 @@ class OpenAICompatibleClient:
             else:
                 self.usage_totals["text_request_count"] += 1
         url = self._endpoint_url()
-        use_streaming_responses = self._should_stream_responses()
+        use_streaming = self._should_stream()
         request_payload = dict(payload)
-        if use_streaming_responses:
+        if use_streaming:
             request_payload["stream"] = True
         last_error_text = None
         effective_max_attempts = max(1, int(max_attempts))
@@ -406,7 +426,7 @@ class OpenAICompatibleClient:
                 data=json.dumps(request_payload).encode("utf-8"),
                 headers={
                     "Content-Type": "application/json",
-                    "Accept": "text/event-stream" if use_streaming_responses else "application/json",
+                    "Accept": "text/event-stream" if use_streaming else "application/json",
                     "Connection": "close",
                     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
                     "Authorization": f"Bearer {self.config.api_key}",
@@ -420,7 +440,7 @@ class OpenAICompatibleClient:
             )
             try:
                 with urllib.request.urlopen(req, timeout=request_timeout) as response:
-                    response_is_event_stream = use_streaming_responses or self._response_is_event_stream(response)
+                    response_is_event_stream = use_streaming or self._response_is_event_stream(response)
                     if response_is_event_stream:
                         body = self._read_sse_response_body(
                             response,

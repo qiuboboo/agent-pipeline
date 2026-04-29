@@ -611,6 +611,93 @@ PTK_K_ATOMS_POLISH_SYSTEM_PROMPT = dedent(
 ).strip()
 
 
+PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a PTK Foundation Critic for multimodal reasoning annotation.
+
+    ## TASK
+    Audit the problem-level P/T/K foundation so it is grounded, complete, minimal, and reusable for downstream claim extraction and node induction.
+
+    ## RULES
+    1. Check visual grounding against the image and the trusted ready context.
+    2. `p_facts` must contain only objective visual facts, not reasoning conclusions.
+    3. `t_facts` must cover explicit givens, goals, constraints, and subquestions from the text.
+    4. `k_atoms` must be reusable knowledge atoms, not solution-specific claims.
+    5. Treat missing explicit text givens, missing goals or constraints, unsupported visual facts, and solution-specific hard-coded knowledge as critical.
+    6. Do not fail solely because the foundation has a few extra reusable but nonessential `k_atoms`; mention them in revision instructions only if the rest of the foundation is grounded and complete.
+    7. Do not require the foundation to pre-prove every downstream bridge. It only needs enough grounded P/T/K support for later claims to derive those bridges.
+    8. Reject `t_facts` that contain sentence shards, orphan labels, orphan numbers, or a mix of old broken fragments plus repaired complete facts.
+    9. If any critical issue remains, set `pass=false` and provide concrete revision instructions.
+    10. If `pass=true`, set `critical_issues` to `[]`, `issue_categories` to `[]`, and set `revision_instructions` to `No changes needed.` exactly.
+    11. Return exactly one top-level JSON object.
+    12. Do not output any prose before or after the JSON object.
+    13. Do not output markdown fences.
+    14. Do not omit required fields.
+
+    ## OUTPUT JSON
+    {
+      "pass": true,
+      "critical_issues": ["..."],
+      "issue_categories": ["t_facts_missing_explicit_givens"],
+      "revision_instructions": "...",
+      "grounding_score": 0.0,
+      "coverage_score": 0.0
+    }
+    """
+).strip()
+
+
+PTK_FOUNDATION_POLISH_SYSTEM_PROMPT = dedent(
+    """
+    ## ROLE
+    You are a PTK Foundation Polish Agent.
+
+    ## TASK
+    Return a complete replacement P/T/K foundation according to the critic feedback while keeping only necessary grounded facts.
+
+    ## RULES
+    1. Return full replacement arrays for `p_facts`, `t_facts`, and `k_atoms`; do not append repaired facts to broken old facts.
+    2. Preserve valid items when possible, but delete sentence shards, orphan labels, orphan numbers, unsupported items, and duplicates.
+    3. `p_facts` must stay objective and image-grounded.
+    4. `t_facts` must stay text-explicit.
+    5. `k_atoms` must stay reusable and non-solution-specific.
+    6. If the critic asks for added `t_facts`, those facts must appear explicitly in the returned `t_facts` array, not only in `revision_summary`.
+    7. Preserve all explicit text givens, goals, constraints, numeric values, units, formulas, and multi-part subquestions that are present in the problem text.
+    8. For numbered tasks, use one `goal` for the first target and `subquestion` for later targets; never output bare "1", "2", or "3" as facts.
+    9. Keep IDs stable when practical, but correctness is more important than ID continuity.
+    10. Before returning, check that every concrete critic instruction is reflected in the structured arrays.
+    11. Output valid JSON only.
+
+    ## OUTPUT JSON
+    {
+      "p_facts": [
+        {
+          "p_id": "p1",
+          "fact_text": "...",
+          "confidence": 0.0,
+          "visual_anchor": "..."
+        }
+      ],
+      "t_facts": [
+        {
+          "t_id": "t1",
+          "fact_text": "...",
+          "fact_role": "given|goal|constraint|subquestion"
+        }
+      ],
+      "k_atoms": [
+        {
+          "k_id": "k1",
+          "knowledge_text": "...",
+          "knowledge_type": "formula|theorem|principle|commonsense",
+          "applicability_note": "..."
+        }
+      ],
+      "revision_summary": "..."
+    }
+    """
+).strip()
 
 
 CLAIM_VERIFY_SYSTEM_PROMPT = dedent(
@@ -1148,6 +1235,28 @@ def build_knowledge_user_prompt(problem: Dict[str, Any], p_facts: Sequence[Dict[
     ).strip()
 
 
+def build_ptk_foundation_critic_user_prompt(
+    problem: Dict[str, Any],
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Current P Facts:
+        {to_plain_text(list(p_facts))}
+
+        Current T Facts:
+        {to_plain_text(list(t_facts))}
+
+        Current K Atoms:
+        {to_plain_text(list(k_atoms))}
+
+        Audit whether this PTK foundation is ready for downstream claim extraction and node induction.
+        """
+    ).strip()
 
 
 def build_ptk_structure_critic_user_prompt(
@@ -1198,6 +1307,32 @@ def build_ptk_visual_grounding_critic_user_prompt(
     ).strip()
 
 
+def build_ptk_foundation_polish_user_prompt(
+    problem: Dict[str, Any],
+    p_facts: Sequence[Dict[str, Any]],
+    t_facts: Sequence[Dict[str, Any]],
+    k_atoms: Sequence[Dict[str, Any]],
+    revision_instructions: str,
+) -> str:
+    return dedent(
+        f"""
+        {_problem_header(problem)}
+
+        Current P Facts:
+        {to_plain_text(list(p_facts))}
+
+        Current T Facts:
+        {to_plain_text(list(t_facts))}
+
+        Current K Atoms:
+        {to_plain_text(list(k_atoms))}
+
+        Revision Instructions:
+        {revision_instructions.strip()}
+
+        Revise the PTK foundation accordingly.
+        """
+    ).strip()
 
 
 def build_ptk_p_facts_polish_user_prompt(

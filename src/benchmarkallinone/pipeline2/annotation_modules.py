@@ -22,6 +22,8 @@ from .models import ClaimRecord
 from .prompts import (
     CLAIM_EXTRACTION_SYSTEM_PROMPT,
     CLAIM_POLISH_SYSTEM_PROMPT,
+    PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT,
+    PTK_FOUNDATION_POLISH_SYSTEM_PROMPT,
     CLAIM_VERIFY_GLOBAL_SYSTEM_PROMPT,
     CLAIM_VERIFY_GROUNDING_SYSTEM_PROMPT,
     CLAIM_VERIFY_STRUCTURE_SYSTEM_PROMPT,
@@ -43,6 +45,8 @@ from .prompts import (
     build_claim_verify_user_prompt,
     build_knowledge_user_prompt,
     build_perception_user_prompt,
+    build_ptk_foundation_critic_user_prompt,
+    build_ptk_foundation_polish_user_prompt,
     build_ptk_k_atoms_polish_user_prompt,
     build_ptk_p_facts_polish_user_prompt,
     build_ptk_structure_critic_user_prompt,
@@ -50,7 +54,7 @@ from .prompts import (
     build_ptk_visual_grounding_critic_user_prompt,
     build_text_condition_user_prompt,
 )
-from .utils import canonicalize_free_text, lexical_overlap_score, normalize_whitespace, safe_float, to_plain_text
+from .utils import canonicalize_free_text, lexical_overlap_score, normalize_whitespace, safe_float, to_plain_text, truncate_text
 
 
 def _problem_image_paths(problem: Dict[str, Any]) -> List[str]:
@@ -247,6 +251,13 @@ _GOAL_PATTERNS = [
 _GIVEN_SPLIT_PATTERN = re.compile(r",\s*|\s+and\s+", re.IGNORECASE)
 
 _NUMBERED_ITEM_PATTERN = re.compile(r"(?:^|\s)(\d+)\s*[\.\):]\s*")
+_ORPHAN_TEXT_FACT_PATTERN = re.compile(r"^(?:\d+|[A-Z]{1,3}|\$?[A-Z]\$?)$")
+_TEXT_FACT_CONTINUATION_START_PATTERN = re.compile(
+    r"^(?:and|or|is|are|was|were|with|when|where|while|pipe|rotating|pulled|given only|only)\b",
+    re.IGNORECASE,
+)
+_TEXT_FACT_INTERNAL_SENTENCE_PATTERN = re.compile(r"(?<=[A-Za-z0-9\]\)])\.\s+(?=[A-Z$])")
+_TEXT_FACT_EMBEDDED_NUMBERED_PROMPT_PATTERN = re.compile(r"(?:^|\s)\d+[\.\)]\s+(?=\S)")
 
 _QUESTION_TARGET_ROLES = {"goal", "subquestion", "constraint"}
 
@@ -550,7 +561,17 @@ def _heuristic_ptk_foundation_report(problem: Dict[str, Any], foundation: Dict[s
         fact_text = _normalize_text_fact_text(item.get("fact_text", ""))
         fact_role = normalize_whitespace(item.get("fact_role", "")).lower()
         marker = (canonicalize_free_text(fact_text), fact_role)
-        if fact_text and fact_role in _ALLOWED_TEXT_FACT_ROLES and marker not in actual_markers:
+        matched_by_overlap = any(
+            isinstance(actual_item, dict)
+            and normalize_whitespace(actual_item.get("fact_role", "")).lower() == fact_role
+            and (
+                lexical_overlap_score(actual_item.get("fact_text", ""), fact_text) >= 0.75
+                or canonicalize_free_text(actual_item.get("fact_text", "")) in canonicalize_free_text(fact_text)
+                or canonicalize_free_text(fact_text) in canonicalize_free_text(actual_item.get("fact_text", ""))
+            )
+            for actual_item in actual_t_facts
+        )
+        if fact_text and fact_role in _ALLOWED_TEXT_FACT_ROLES and marker not in actual_markers and not matched_by_overlap:
             missing_expected_t_facts.append({"fact_text": fact_text, "fact_role": fact_role})
 
     valid_p_fact_count = sum(
@@ -605,6 +626,88 @@ def _heuristic_ptk_foundation_report(problem: Dict[str, Any], foundation: Dict[s
         "grounding_score": max(0.0, min(1.0, grounding_score)),
         "p_fact_count": valid_p_fact_count,
         "k_atom_count": valid_k_atom_count,
+    }
+
+
+def _is_fragmentary_t_fact(fact_text: str) -> bool:
+    text = _normalize_text_fact_text(fact_text)
+    if not text:
+        return True
+    if _ORPHAN_TEXT_FACT_PATTERN.fullmatch(text):
+        return True
+    if _TEXT_FACT_CONTINUATION_START_PATTERN.search(text):
+        return True
+    if _TEXT_FACT_INTERNAL_SENTENCE_PATTERN.search(text):
+        return True
+    if _TEXT_FACT_EMBEDDED_NUMBERED_PROMPT_PATTERN.search(text):
+        return True
+    return False
+
+
+def _ptk_foundation_contract_issues(problem: Dict[str, Any], foundation: Dict[str, Any]) -> List[str]:
+    p_facts = foundation.get("p_facts", [])
+    t_facts = foundation.get("t_facts", [])
+    k_atoms = foundation.get("k_atoms", [])
+    issues: List[str] = []
+
+    if bool(problem.get("requires_image")) and not p_facts:
+        issues.append("`p_facts` is empty for an image-grounded problem.")
+    if not t_facts:
+        issues.append("`t_facts` is empty.")
+    if not k_atoms:
+        issues.append("`k_atoms` is empty.")
+
+    has_goal = False
+    for item in t_facts if isinstance(t_facts, list) else []:
+        if not isinstance(item, dict):
+            issues.append("Each `t_fact` must be an object.")
+            continue
+        t_id = normalize_whitespace(item.get("t_id", "")) or "<missing id>"
+        fact_text = _normalize_text_fact_text(item.get("fact_text", ""))
+        fact_role = normalize_whitespace(item.get("fact_role", "")).lower()
+        if fact_role not in _ALLOWED_TEXT_FACT_ROLES:
+            issues.append(f"`t_fact` {t_id} has invalid role `{fact_role}`.")
+        if fact_role in {"goal", "subquestion"}:
+            has_goal = True
+        if fact_role == "given" and (
+            any(pattern.search(fact_text) for pattern in _GOAL_PATTERNS)
+            or "____" in fact_text
+            or "___" in fact_text
+            or "()" in fact_text
+        ):
+            issues.append(f"`t_fact` {t_id} is goal-like but labeled as `given`: {fact_text}")
+        if _is_fragmentary_t_fact(fact_text):
+            issues.append(f"`t_fact` {t_id} is a sentence fragment or orphan marker: {fact_text}")
+
+    if t_facts and not has_goal:
+        issues.append("`t_facts` must include at least one `goal` or `subquestion` item.")
+    return issues
+
+
+def _contract_critique(round_index: int, issues: Sequence[str]) -> Dict[str, Any]:
+    issue_lines = [
+        f"{index}. {truncate_text(normalize_whitespace(issue), 260)}"
+        for index, issue in enumerate(issues[:20], start=1)
+    ]
+    if len(issues) > 20:
+        issue_lines.append(f"... plus {len(issues) - 20} more contract issue(s).")
+    issue_block = "\n".join(issue_lines)
+    revision_instructions = (
+        "Return a full replacement PTK foundation. In `t_facts`, keep only complete text-explicit facts; "
+        "remove sentence shards, orphan numbers, orphan labels, and mixed old/new duplicate fragments. "
+        "Represent numbered tasks as one `goal` for the first target and `subquestion` for later targets.\n"
+        "Fix these exact contract issues before returning:\n"
+        f"{issue_block}"
+    )
+    return {
+        "round_index": round_index,
+        "pass": False,
+        "critical_issues": list(issues),
+        "issue_categories": ["t_facts_missing_explicit_givens"],
+        "revision_instructions": revision_instructions,
+        "grounding_score": 0.0,
+        "coverage_score": 0.0,
+        "component": "PTKFoundationContract",
     }
 
 
@@ -1114,39 +1217,19 @@ def critique_ptk_foundation(
     k_atoms: Sequence[Dict[str, Any]],
 ) -> Dict[str, Any]:
     _ensure_problem_minimum(problem, "PTKFoundationCritic")
-    # Use the newer upstream split structure/visual critics while retaining qjb's
-    # router/client interfaces; add deterministic sanity checks before polish.
     response = _call_router(
         router,
-        PTK_STRUCTURE_CRITIC_SYSTEM_PROMPT,
+        PTK_FOUNDATION_CRITIC_SYSTEM_PROMPT,
         _augment_prompt_with_ready_context(
             problem,
-            build_ptk_structure_critic_user_prompt(problem, p_facts, t_facts, k_atoms),
+            build_ptk_foundation_critic_user_prompt(problem, p_facts, t_facts, k_atoms),
             "PTKFoundationCritic",
         ),
-        [],
+        _problem_image_paths(problem),
         agent_name="PTKFoundationCritic",
-        require_images=False,
+        require_images=bool(problem.get("requires_image")),
     )
-    critique = _normalize_ptk_critique(response)
-
-    visual_report: Optional[Dict[str, Any]] = None
-    if bool(problem.get("requires_image")):
-        visual_response = _call_router(
-            router,
-            PTK_VISUAL_GROUNDING_CRITIC_SYSTEM_PROMPT,
-            _augment_prompt_with_ready_context(
-                problem,
-                build_ptk_visual_grounding_critic_user_prompt(problem, p_facts),
-                "PTKVisualGroundingCritic",
-            ),
-            _problem_image_paths(problem),
-            agent_name="PTKVisualGroundingCritic",
-            require_images=True,
-        )
-        visual_report = _normalize_ptk_critique({**visual_response, "coverage_score": 1.0})
-
-    merged = _merge_ptk_critiques(critique, visual_report)
+    merged = _normalize_ptk_critique(response)
     heuristic_report = _heuristic_ptk_foundation_report(
         problem,
         {"p_facts": list(p_facts), "t_facts": list(t_facts), "k_atoms": list(k_atoms)},
@@ -1181,39 +1264,41 @@ def polish_ptk_foundation(
     revision_instructions: str,
 ) -> Dict[str, Any]:
     _ensure_problem_minimum(problem, "PTKFoundationPolish")
-    section_targets = _normalize_ptk_section_targets(revision_instructions, current_foundation)
-    patched_foundation = {
-        **current_foundation,
-        "p_facts": list(current_foundation.get("p_facts", [])),
-        "t_facts": list(current_foundation.get("t_facts", [])),
-        "k_atoms": list(current_foundation.get("k_atoms", [])),
-    }
-    section_summaries: List[Dict[str, Any]] = []
-
-    for section_name in section_targets:
-        patch_result = _polish_ptk_section(
-            router,
+    response = _call_router(
+        router,
+        PTK_FOUNDATION_POLISH_SYSTEM_PROMPT,
+        _augment_prompt_with_ready_context(
             problem,
-            patched_foundation,
-            revision_instructions,
-            section_name,
-        )
-        patched_foundation[section_name] = patch_result[section_name]
-        section_summaries.append(
-            {
-                "section": patch_result["patched_section"],
-                "revision_summary": patch_result["revision_summary"],
-            }
-        )
-
+            build_ptk_foundation_polish_user_prompt(
+                problem,
+                current_foundation.get("p_facts", []),
+                current_foundation.get("t_facts", []),
+                current_foundation.get("k_atoms", []),
+                revision_instructions,
+            ),
+            "PTKFoundationPolish",
+        ),
+        _problem_image_paths(problem),
+        agent_name="PTKFoundationPolish",
+        require_images=bool(problem.get("requires_image")),
+    )
+    try:
+        p_facts = _normalize_p_facts(response, "PTKFoundationPolish")
+    except AgentContractError:
+        p_facts = _normalize_p_facts({"p_facts": current_foundation.get("p_facts", [])}, "PTKFoundationPolish")
+    try:
+        t_facts = _normalize_t_facts(response, "PTKFoundationPolish")
+    except AgentContractError:
+        t_facts = _normalize_t_facts({"t_facts": current_foundation.get("t_facts", [])}, "PTKFoundationPolish")
+    try:
+        k_atoms = _normalize_k_atoms(response, "PTKFoundationPolish")
+    except AgentContractError:
+        k_atoms = _normalize_k_atoms({"k_atoms": current_foundation.get("k_atoms", [])}, "PTKFoundationPolish")
     return {
-        "p_facts": _normalize_p_facts({"p_facts": patched_foundation.get("p_facts", [])}, "PTKFoundationPolish"),
-        "t_facts": _normalize_t_facts({"t_facts": patched_foundation.get("t_facts", [])}, "PTKFoundationPolish"),
-        "k_atoms": _normalize_k_atoms({"k_atoms": patched_foundation.get("k_atoms", [])}, "PTKFoundationPolish"),
-        "revision_summary": " | ".join(item["revision_summary"] for item in section_summaries if item.get("revision_summary"))
-        or _require_non_empty_text("PTKFoundationPolish", normalize_whitespace(revision_instructions), "revision_summary"),
-        "patched_sections": [item["section"] for item in section_summaries],
-        "section_summaries": section_summaries,
+        "p_facts": p_facts,
+        "t_facts": t_facts,
+        "k_atoms": k_atoms,
+        "revision_summary": _require_non_empty_text("PTKFoundationPolish", response.get("revision_summary"), "revision_summary"),
     }
 
 
@@ -1279,14 +1364,18 @@ def build_ptk_foundation(
             if isinstance(pending_critique, dict) and pending_critique.get("round_index") == round_index:
                 round_record: Dict[str, Any] = dict(pending_critique)
             else:
-                critique = critique_ptk_foundation(
-                    router,
-                    problem,
-                    foundation.get("p_facts", []),
-                    foundation.get("t_facts", []),
-                    foundation.get("k_atoms", []),
-                )
-                round_record = {"round_index": round_index, **critique}
+                contract_issues = _ptk_foundation_contract_issues(problem, foundation)
+                if contract_issues:
+                    round_record = _contract_critique(round_index, contract_issues)
+                else:
+                    critique = critique_ptk_foundation(
+                        router,
+                        problem,
+                        foundation.get("p_facts", []),
+                        foundation.get("t_facts", []),
+                        foundation.get("k_atoms", []),
+                    )
+                    round_record = {"round_index": round_index, **critique}
             if round_record.get("pass"):
                 audit_rounds.append(round_record)
                 passed = True
@@ -1318,8 +1407,6 @@ def build_ptk_foundation(
                 },
             )
             round_record["polish_summary"] = polished["revision_summary"]
-            round_record["patched_sections"] = polished.get("patched_sections", [])
-            round_record["section_summaries"] = polished.get("section_summaries", [])
             audit_rounds.append(round_record)
             pending_critique = None
             _persist(False, round_index + 1, None)
@@ -1331,8 +1418,15 @@ def build_ptk_foundation(
         "rounds": audit_rounds,
     }
     if not passed:
+        final_issues = audit_rounds[-1].get("critical_issues", []) if audit_rounds else []
+        issue_preview = "; ".join(
+            truncate_text(normalize_whitespace(issue), 240)
+            for issue in final_issues[:3]
+            if isinstance(issue, str)
+        )
+        detail = f" Last contract issues: {issue_preview}" if issue_preview else ""
         raise PipelineDataContractError(
-            f"[PTKFoundationGate] Problem `{problem.get('problem_id', 'unknown_problem')}` failed PTK foundation validation after {max_repair_rounds + 1} rounds."
+            f"[PTKFoundationGate] Problem `{problem.get('problem_id', 'unknown_problem')}` failed PTK foundation validation after {max_repair_rounds + 1} rounds.{detail}"
         )
     return {**foundation, "audit": audit}
 
