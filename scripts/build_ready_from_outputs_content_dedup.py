@@ -20,6 +20,13 @@ IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif"}
 RANGE_SUFFIX_RE = re.compile(r"^(?P<dataset>.+?)_(?P<start>\d+)_(?P<end>\d+)$")
 PROGRESS_SAMPLE_INTERVAL = 200
 PROGRESS_WRITE_INTERVAL = 200
+DEFAULT_GLOBAL_SOURCE_ID_DEDUP_DATASETS = {
+    "ai2d",
+    "geoqa_plus",
+    "mathvision",
+    "mm_math",
+    "multi_physics",
+}
 
 
 @dataclass(frozen=True)
@@ -64,6 +71,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--disable-review-release", action="store_true", help="Disable review-release gating and keep only clean_decision=pass samples in ready.")
     parser.add_argument("--ready-root", default=str(READY_ROOT), help="Root directory for ready output. Default: project ready/.")
     parser.add_argument("--dataset-root", default="", help="Optional explicit output directory for a single selected dataset.")
+    parser.add_argument(
+        "--global-source-id-dedup-dataset",
+        action="append",
+        default=[],
+        help=(
+            "Dataset key to dedup globally by source_problem_id across all matched output dirs. "
+            "Use this only when source_problem_id is stable and globally unique within the dataset."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -391,7 +407,11 @@ def sample_sort_key(entry: CandidateSample) -> Tuple[str, str, str]:
     return (entry.created_at or "", entry.sample_path.name, entry.sample_path.as_posix())
 
 
-def build_policy_for_dataset(dataset_key: str, ranges: Dict[str, List[CandidateSample]]) -> Dict[str, Any]:
+def build_policy_for_dataset(
+    dataset_key: str,
+    ranges: Dict[str, List[CandidateSample]],
+    global_source_id_dedup_datasets: set[str],
+) -> Dict[str, Any]:
     available_output_kinds = sorted({entry.source_kind for entries in ranges.values() for entry in entries})
     policy = {
         "available_output_kinds": available_output_kinds,
@@ -416,6 +436,15 @@ def build_policy_for_dataset(dataset_key: str, ranges: Dict[str, List[CandidateS
                 package_dataset_label="physreason_merged",
                 selection_rule="Use only documented adopted physreason_merged_* outputs. Do not mix them with physreason_batched_eval_rerun_* provenance roots.",
             )
+    elif dataset_key in global_source_id_dedup_datasets:
+        policy.update(
+            dedup_rule="global_newest_to_oldest_by_source_problem_id",
+            selection_rule=(
+                "Use all matched output roots for the dataset and traverse runs newest to oldest globally. "
+                "Keep the first sample for each source_problem_id across the full dataset instead of relying on range folder names. "
+                "This mode is only enabled for datasets whose source_problem_id is treated as globally unique."
+            ),
+        )
     elif dataset_key == "phyx":
         preferred = ["phyx_029_528_rerun", "phyx_029_528", "phyx_000_500"]
         available_names = {entry.output_dir.name for entries in ranges.values() for entry in entries}
@@ -500,13 +529,87 @@ def filter_ranges_by_policy(
     return filtered
 
 
-def build_selected_samples(dataset_filter: set[str], output_globs: List[str]) -> Tuple[Dict[str, List[CandidateSample]], Dict[str, Dict[str, Any]]]:
+def select_entries_global_by_source_problem_id(
+    dataset_key: str,
+    ranges: Dict[str, List[CandidateSample]],
+    *,
+    mode_label: str,
+) -> Tuple[List[CandidateSample], int, int, List[Dict[str, Any]]]:
+    accepted_all: List[CandidateSample] = []
+    dataset_scanned = 0
+    dataset_skipped = 0
+    range_summaries: List[Dict[str, Any]] = []
+    seen_source_problem_ids: set[str] = set()
+    range_summary_map: Dict[str, Dict[str, Any]] = {}
+    by_run: Dict[str, List[CandidateSample]] = {}
+    run_lookup: Dict[str, Path] = {}
+
+    def range_order(item: Tuple[str, List[CandidateSample]]) -> Tuple[int, int, str]:
+        range_key, entries = item
+        probe = entries[0]
+        return (probe.range_start, probe.range_end, range_key)
+
+    for range_key, range_entries in ranges.items():
+        probe = range_entries[0]
+        range_runs: Dict[str, Path] = {}
+        for entry in range_entries:
+            run_key = entry.run_dir.as_posix()
+            by_run.setdefault(run_key, []).append(entry)
+            run_lookup[run_key] = entry.run_dir
+            range_runs[run_key] = entry.run_dir
+        range_summary_map[range_key] = {
+            "range_key": range_key,
+            "range_start": probe.range_start,
+            "range_end": probe.range_end,
+            "scanned_files": 0,
+            "kept_unique_source_problem_ids": 0,
+            "skipped_existing_source_problem_id": 0,
+            "runs_newest_to_oldest": sorted(range_runs.keys(), key=lambda k: run_sort_key(range_runs[k]), reverse=True),
+        }
+        log_progress(
+            f"select-range dataset={dataset_key} range={range_key} runs={len(range_runs)} "
+            f"candidate_samples={len(range_entries)} mode={mode_label}"
+        )
+
+    run_keys = sorted(by_run.keys(), key=lambda k: run_sort_key(run_lookup[k]), reverse=True)
+    for run_index, run_key in enumerate(run_keys, start=1):
+        log_progress(
+            f"select-run dataset={dataset_key} run={Path(run_key).name} "
+            f"run_index={run_index}/{len(run_keys)} candidate_samples={len(by_run[run_key])}"
+        )
+        for entry in sorted(by_run[run_key], key=sample_sort_key, reverse=True):
+            range_summary = range_summary_map[entry.range_key]
+            range_summary["scanned_files"] += 1
+            dataset_scanned += 1
+            if dataset_scanned == 1 or dataset_scanned % PROGRESS_SAMPLE_INTERVAL == 0:
+                log_progress(
+                    f"select-progress dataset={dataset_key} scanned={dataset_scanned} "
+                    f"kept={len(accepted_all)} skipped={dataset_skipped} current_run={Path(run_key).name}"
+                )
+            if entry.source_problem_id in seen_source_problem_ids:
+                range_summary["skipped_existing_source_problem_id"] += 1
+                dataset_skipped += 1
+                continue
+            seen_source_problem_ids.add(entry.source_problem_id)
+            range_summary["kept_unique_source_problem_ids"] += 1
+            accepted_all.append(entry)
+
+    for range_key, _range_entries in sorted(ranges.items(), key=range_order):
+        range_summaries.append(range_summary_map[range_key])
+    return accepted_all, dataset_scanned, dataset_skipped, range_summaries
+
+
+def build_selected_samples(
+    dataset_filter: set[str],
+    output_globs: List[str],
+    global_source_id_dedup_datasets: set[str],
+) -> Tuple[Dict[str, List[CandidateSample]], Dict[str, Dict[str, Any]]]:
     grouped = group_by_dataset_and_range(dataset_filter, output_globs)
     selected: Dict[str, List[CandidateSample]] = {}
     stats: Dict[str, Dict[str, Any]] = {}
 
     for dataset_key, original_ranges in grouped.items():
-        policy = build_policy_for_dataset(dataset_key, original_ranges)
+        policy = build_policy_for_dataset(dataset_key, original_ranges, global_source_id_dedup_datasets)
         ranges = filter_ranges_by_policy(
             original_ranges,
             policy["selected_output_kind"],
@@ -535,58 +638,17 @@ def build_selected_samples(dataset_filter: set[str], output_globs: List[str]) ->
             return (probe.range_start, probe.range_end, range_key)
 
         if policy["dedup_rule"] == "physreason_full_global_newest_to_oldest_by_source_problem_id":
-            seen_source_problem_ids: set[str] = set()
-            range_summary_map: Dict[str, Dict[str, Any]] = {}
-            by_run: Dict[str, List[CandidateSample]] = {}
-            run_lookup: Dict[str, Path] = {}
-
-            for range_key, range_entries in ranges.items():
-                probe = range_entries[0]
-                range_runs: Dict[str, Path] = {}
-                for entry in range_entries:
-                    run_key = entry.run_dir.as_posix()
-                    by_run.setdefault(run_key, []).append(entry)
-                    run_lookup[run_key] = entry.run_dir
-                    range_runs[run_key] = entry.run_dir
-                range_summary_map[range_key] = {
-                    "range_key": range_key,
-                    "range_start": probe.range_start,
-                    "range_end": probe.range_end,
-                    "scanned_files": 0,
-                    "kept_unique_source_problem_ids": 0,
-                    "skipped_existing_source_problem_id": 0,
-                    "runs_newest_to_oldest": sorted(range_runs.keys(), key=lambda k: run_sort_key(range_runs[k]), reverse=True),
-                }
-                log_progress(
-                    f"select-range dataset={dataset_key} range={range_key} runs={len(range_runs)} "
-                    f"candidate_samples={len(range_entries)} mode=global_physreason"
-                )
-
-            run_keys = sorted(by_run.keys(), key=lambda k: run_sort_key(run_lookup[k]), reverse=True)
-            for run_index, run_key in enumerate(run_keys, start=1):
-                log_progress(
-                    f"select-run dataset={dataset_key} run={Path(run_key).name} "
-                    f"run_index={run_index}/{len(run_keys)} candidate_samples={len(by_run[run_key])}"
-                )
-                for entry in sorted(by_run[run_key], key=sample_sort_key, reverse=True):
-                    range_summary = range_summary_map[entry.range_key]
-                    range_summary["scanned_files"] += 1
-                    dataset_scanned += 1
-                    if dataset_scanned == 1 or dataset_scanned % PROGRESS_SAMPLE_INTERVAL == 0:
-                        log_progress(
-                            f"select-progress dataset={dataset_key} scanned={dataset_scanned} "
-                            f"kept={len(accepted_all)} skipped={dataset_skipped} current_run={Path(run_key).name}"
-                        )
-                    if entry.source_problem_id in seen_source_problem_ids:
-                        range_summary["skipped_existing_source_problem_id"] += 1
-                        dataset_skipped += 1
-                        continue
-                    seen_source_problem_ids.add(entry.source_problem_id)
-                    range_summary["kept_unique_source_problem_ids"] += 1
-                    accepted_all.append(entry)
-
-            for range_key, _range_entries in sorted(ranges.items(), key=range_order):
-                range_summaries.append(range_summary_map[range_key])
+            accepted_all, dataset_scanned, dataset_skipped, range_summaries = select_entries_global_by_source_problem_id(
+                dataset_key,
+                ranges,
+                mode_label="global_physreason",
+            )
+        elif policy["dedup_rule"] == "global_newest_to_oldest_by_source_problem_id":
+            accepted_all, dataset_scanned, dataset_skipped, range_summaries = select_entries_global_by_source_problem_id(
+                dataset_key,
+                ranges,
+                mode_label="global_source_problem_id",
+            )
         else:
             for range_key, range_entries in sorted(ranges.items(), key=range_order):
                 seen_source_problem_ids: set[str] = set()
@@ -1293,11 +1355,17 @@ def resolve_dataset_root(dataset_key: str, args: argparse.Namespace) -> Path:
 def main() -> None:
     args = parse_args()
     dataset_filter = set(args.dataset)
+    global_source_id_dedup_datasets = set(DEFAULT_GLOBAL_SOURCE_ID_DEDUP_DATASETS)
+    global_source_id_dedup_datasets.update(args.global_source_id_dedup_dataset)
     log_progress(
         f"start dry_run={args.dry_run} datasets={','.join(sorted(dataset_filter)) or 'ALL'} "
         f"output_globs={','.join(args.output_glob) or '*'} package_prefix={args.package_prefix}"
     )
-    selected, stats = build_selected_samples(dataset_filter=dataset_filter, output_globs=args.output_glob)
+    selected, stats = build_selected_samples(
+        dataset_filter=dataset_filter,
+        output_globs=args.output_glob,
+        global_source_id_dedup_datasets=global_source_id_dedup_datasets,
+    )
     log_progress(f"selection-finished datasets={len(selected)}")
 
     manifest = {

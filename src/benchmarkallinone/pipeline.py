@@ -88,6 +88,32 @@ def write_jsonl(path: Path, rows: Iterable[Dict[str, Any]]) -> None:
             file.write("\n")
 
 
+def read_jsonl(path: Path) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as file:
+        for line in file:
+            line = line.strip()
+            if not line:
+                continue
+            rows.append(json.loads(line))
+    return rows
+
+
+def resolve_resume_run_dir_from_log(log_path: Path) -> Optional[Path]:
+    if not log_path.exists() or not log_path.is_file():
+        return None
+    pattern = re.compile(r"^\[Pipeline\]\s+run_id=(?P<run_id>run_[0-9a-f]+)\s+start\s+datasets=\d+\s+output_dir=(?P<output_dir>.+?)\s*$")
+    resolved: Optional[Path] = None
+    with log_path.open("r", encoding="utf-8", errors="ignore") as file:
+        for line in file:
+            match = pattern.match(line.strip())
+            if not match:
+                continue
+            output_dir = Path(match.group("output_dir").strip())
+            resolved = output_dir
+    return resolved
+
+
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -244,6 +270,7 @@ class DatasetSpec:
 @dataclass
 class PipelineConfig:
     sample_per_dataset: int = 30
+    sample_offset: int = 0
     sample_strategy: str = "head"
     shuffle_seed: int = 42
     sample_concurrency: int = 1
@@ -253,6 +280,7 @@ class PipelineConfig:
     save_sample_bundle: bool = True
     git_cache_root: str = "outputs/repo_cache"
     resume: bool = False
+    resume_from_run_dir: str = ""
     model: ModelConfig = field(default_factory=ModelConfig)
     datasets: List[DatasetSpec] = field(default_factory=list)
 
@@ -391,6 +419,7 @@ class PipelineConfig:
         datasets = [DatasetSpec(**item) for item in datasets_raw] if datasets_raw else cls.default_dataset_specs()
         return cls(
             sample_per_dataset=runtime.get("sample_per_dataset", 30),
+            sample_offset=max(0, int(runtime.get("sample_offset", 0) or 0)),
             sample_strategy=runtime.get("sample_strategy", "head"),
             shuffle_seed=runtime.get("shuffle_seed", 42),
             sample_concurrency=max(1, int(runtime.get("sample_concurrency", 1) or 1)),
@@ -400,6 +429,7 @@ class PipelineConfig:
             save_sample_bundle=runtime.get("save_sample_bundle", True),
             git_cache_root=runtime.get("git_cache_root", "outputs/repo_cache"),
             resume=runtime.get("resume", False),
+            resume_from_run_dir=to_plain_text(runtime.get("resume_from_run_dir", "")),
             model=ModelConfig(**{**asdict(ModelConfig()), **model_raw}),
             datasets=datasets,
         )
@@ -429,6 +459,39 @@ class UnifiedSample:
     @property
     def image_source(self) -> Optional[str]:
         return self.image_sources[0] if self.image_sources else None
+
+
+def sample_window_bounds(config: PipelineConfig) -> Tuple[int, int]:
+    offset = max(0, int(config.sample_offset or 0))
+    limit = max(0, int(config.sample_per_dataset or 0))
+    return offset, limit
+
+
+def sample_window_target_count(config: PipelineConfig) -> int:
+    offset, limit = sample_window_bounds(config)
+    if limit <= 0:
+        return 0
+    return offset + limit
+
+
+def apply_sample_window(
+    samples: List[UnifiedSample],
+    config: PipelineConfig,
+    *,
+    shuffle: bool = True,
+) -> List[UnifiedSample]:
+    offset, limit = sample_window_bounds(config)
+    if shuffle and config.sample_strategy == "random" and samples:
+        rng = np.random.default_rng(config.shuffle_seed)
+        indices = rng.permutation(len(samples)).tolist()
+        samples = [samples[i] for i in indices]
+    if offset:
+        samples = samples[offset:]
+    if limit:
+        samples = samples[:limit]
+    else:
+        samples = []
+    return samples
 
 
 class OpenAICompatibleClient:
@@ -1464,6 +1527,9 @@ class LocalFileConnector(BaseConnector):
         path = Path(self.spec.source_locator)
         if not path.exists():
             return "source_unavailable", [], f"Input not found: {path}"
+        target_count = sample_window_target_count(self.config)
+        if target_count <= 0:
+            return "available", [], None
         samples: List[UnifiedSample] = []
         for index, row in enumerate(self.iter_records(path)):
             extracted = self.extract_record_content(row)
@@ -1528,19 +1594,47 @@ class LocalFileConnector(BaseConnector):
                     force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
                 )
             )
-        if self.config.sample_strategy == "random" and samples:
-            rng = np.random.default_rng(self.config.shuffle_seed)
-            indices = rng.permutation(len(samples)).tolist()[: self.config.sample_per_dataset]
-            samples = [samples[i] for i in indices]
-        else:
-            samples = samples[: self.config.sample_per_dataset]
+            if self.config.sample_strategy != "random" and len(samples) >= target_count:
+                break
+        samples = apply_sample_window(samples, self.config)
         return "available", samples, None
 
 
 class HuggingFaceConnector(BaseConnector):
+    HF_SLICE_PATTERN = re.compile(r"^[^\[]+\[(?P<start>\d*)\s*:\s*(?P<end>\d*)\]$")
+
     def candidate_splits(self) -> List[str]:
-        raw = [self.spec.split, "test", "validation", "val", "train"]
+        if self.spec.split:
+            raw = [self.spec.split]
+        else:
+            raw = ["test", "validation", "val", "train"]
         return [item for item in raw if item]
+
+    def slice_start_offset(self, split_name: Optional[str]) -> int:
+        if not split_name:
+            return 0
+        match = self.HF_SLICE_PATTERN.match(split_name.strip())
+        if not match:
+            return 0
+        start_text = (match.group("start") or "").strip()
+        if not start_text:
+            return 0
+        try:
+            return max(0, int(start_text))
+        except ValueError:
+            return 0
+
+    def resolve_source_problem_id(self, row: Dict[str, Any], index: int, split_name: Optional[str]) -> str:
+        for field_name in ("id", "problem_id"):
+            if field_name not in row:
+                continue
+            field_value = row.get(field_name)
+            if is_missing_value(field_value):
+                continue
+            normalized = to_plain_text(field_value).strip()
+            if normalized:
+                return normalized
+        return str(self.slice_start_offset(split_name) + index)
 
     def load_dataset_any(self) -> Tuple[Optional[Dataset], Optional[str]]:
         last_error = None
@@ -1551,6 +1645,8 @@ class HuggingFaceConnector(BaseConnector):
                     return dataset, split
             except Exception as exc:
                 last_error = str(exc)
+        if self.spec.split:
+            return None, last_error or f"load_dataset failed for configured split {self.spec.split!r}"
         try:
             dataset_obj = load_dataset(self.spec.source_locator, self.spec.hf_config_name)
             if isinstance(dataset_obj, DatasetDict):
@@ -1558,7 +1654,7 @@ class HuggingFaceConnector(BaseConnector):
                     return dataset_obj[split_name], split_name
             if isinstance(dataset_obj, IterableDatasetDict):
                 for split_name in dataset_obj.keys():
-                    iterable = list(dataset_obj[split_name].take(self.config.sample_per_dataset))
+                    iterable = list(dataset_obj[split_name].take(sample_window_target_count(self.config)))
                     return Dataset.from_list(iterable), split_name
         except Exception as exc:
             last_error = str(exc)
@@ -1608,9 +1704,111 @@ class HuggingFaceConnector(BaseConnector):
             return "\n".join(joined)
         return to_plain_text(raw_answer)
 
+    def mm_math_cache_dir(self) -> Path:
+        return Path(self.config.git_cache_root) / "hf_raw" / "mm_math"
+
+    def mm_math_preparsed_cache_path(self) -> Path:
+        return self.mm_math_cache_dir() / "preparsed_samples_v1.jsonl"
+
+    def build_mm_math_preparsed_entry(self, row: Dict[str, Any], index: int) -> Optional[Dict[str, Any]]:
+        extracted = self.extract_record_content(row)
+        raw_question = extracted["raw_question_text"]
+        raw_answer = resolve_multiple_choice_answer_text(
+            self.resolve_answer_text(row.get("solution") or resolve_answer_source_text(row, extracted)),
+            extracted["choice_map"],
+            self.spec.answer_index_base,
+            self.spec.answer_resolution_mode,
+        )
+        file_name = to_plain_text(row.get("file_name"))
+        image_paths = [file_name] if file_name else []
+        if not raw_question and not image_paths:
+            return None
+        return {
+            "dataset_key": self.spec.key,
+            "dataset_display_name": self.spec.display_name,
+            "subject": self.spec.subject,
+            "source_dataset": self.spec.display_name,
+            "source_split": self.spec.split or "hf_raw_files",
+            "source_problem_id": str(row.get("id", row.get("problem_id", file_name or index))),
+            "raw_question_text": raw_question,
+            "raw_answer_text": raw_answer,
+            "image_paths": image_paths,
+            "metadata": {
+                "row_index": index,
+                "image_paths": image_paths,
+                "extraction_notes": extracted.get("extraction_notes", []) + ["hf_raw_mm_math_fallback", "preparsed_cache_v1"],
+                "image_field": extracted.get("image_field"),
+                "question_field": extracted.get("question_field"),
+                "answer_field": extracted.get("answer_field"),
+                "choice_field": extracted.get("choice_field"),
+                "reasoning_chain_field": extracted.get("reasoning_chain_field"),
+                "reasoning_chain": extracted.get("reasoning_chain", ""),
+                "has_reasoning_chain": bool(extracted.get("has_reasoning_chain", False)),
+            },
+            "choice_map": extracted["choice_map"],
+            "force_requires_image": bool(extracted["force_requires_image"] or self.spec.force_requires_image),
+        }
+
+    def ensure_mm_math_preparsed_cache(self, jsonl_path: Path) -> Tuple[Path, int, bool]:
+        cache_dir = self.mm_math_cache_dir()
+        cache_path = self.mm_math_preparsed_cache_path()
+        ensure_dir(cache_dir)
+        if cache_path.exists():
+            return cache_path, sum(1 for _ in cache_path.open("r", encoding="utf-8")), True
+
+        rows: List[Dict[str, Any]] = []
+        with jsonl_path.open("r", encoding="utf-8") as file:
+            for index, line in enumerate(file):
+                line = line.strip()
+                if not line:
+                    continue
+                row = json.loads(line)
+                if not isinstance(row, dict):
+                    continue
+                parsed = self.build_mm_math_preparsed_entry(row, index)
+                if parsed is not None:
+                    rows.append(parsed)
+        write_jsonl(cache_path, rows)
+        return cache_path, len(rows), False
+
+    def load_mm_math_sample_from_preparsed(self, entry: Dict[str, Any], image_root: Path) -> UnifiedSample:
+        images: List[Image.Image] = []
+        image_sources: List[str] = []
+        for rel_path in entry.get("image_paths") or []:
+            candidate = image_root / to_plain_text(rel_path)
+            if not candidate.exists():
+                continue
+            try:
+                images.append(Image.open(candidate).convert("RGB"))
+                image_sources.append(str(candidate))
+            except Exception:
+                images = []
+                image_sources = []
+                break
+        return UnifiedSample(
+            dataset_key=to_plain_text(entry.get("dataset_key") or self.spec.key),
+            dataset_display_name=to_plain_text(entry.get("dataset_display_name") or self.spec.display_name),
+            subject=to_plain_text(entry.get("subject") or self.spec.subject),
+            source_dataset=to_plain_text(entry.get("source_dataset") or self.spec.display_name),
+            source_split=to_plain_text(entry.get("source_split") or self.spec.split or "hf_raw_files"),
+            source_problem_id=to_plain_text(entry.get("source_problem_id")),
+            raw_question_text=to_plain_text(entry.get("raw_question_text")),
+            raw_answer_text=to_plain_text(entry.get("raw_answer_text")),
+            images=images,
+            image_sources=image_sources,
+            raw_record={},
+            metadata=dict(entry.get("metadata") or {}),
+            choice_map=parse_choice_map(entry.get("choice_map")),
+            force_requires_image=bool(entry.get("force_requires_image", self.spec.force_requires_image)),
+        )
+
     def sample_from_mm_math_raw_files(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         from huggingface_hub import hf_hub_download
         import zipfile
+
+        target_count = sample_window_target_count(self.config)
+        if target_count <= 0:
+            return "available", [], None
 
         try:
             jsonl_path = Path(hf_hub_download(repo_id=self.spec.source_locator, repo_type="dataset", filename="MM_Math/MM_Math.jsonl"))
@@ -1625,67 +1823,27 @@ class HuggingFaceConnector(BaseConnector):
             with zipfile.ZipFile(zip_path) as zf:
                 zf.extractall(extract_root)
 
+        cache_path, cached_count, cache_hit = self.ensure_mm_math_preparsed_cache(jsonl_path)
+        print(
+            f"[MM-Math] preparsed cache {'hit' if cache_hit else 'built'} path={cache_path} entries={cached_count}",
+            flush=True,
+        )
+
         samples: List[UnifiedSample] = []
-        with jsonl_path.open("r", encoding="utf-8") as file:
-            for index, line in enumerate(file):
-                line = line.strip()
-                if not line:
-                    continue
-                row = json.loads(line)
-                if not isinstance(row, dict):
-                    continue
-                extracted = self.extract_record_content(row)
-                raw_question = extracted["raw_question_text"]
-                raw_answer = resolve_multiple_choice_answer_text(
-                    self.resolve_answer_text(row.get("solution") or resolve_answer_source_text(row, extracted)),
-                    extracted["choice_map"],
-                    self.spec.answer_index_base,
-                    self.spec.answer_resolution_mode,
-                )
-                images: List[Image.Image] = []
-                image_sources: List[str] = []
-                file_name = to_plain_text(row.get("file_name"))
-                if file_name:
-                    candidate = image_root / file_name
-                    if candidate.exists():
-                        try:
-                            images.append(Image.open(candidate).convert("RGB"))
-                            image_sources.append(str(candidate))
-                        except Exception:
-                            images = []
-                            image_sources = []
-                if not raw_question and not images:
-                    continue
-                samples.append(
-                    UnifiedSample(
-                        dataset_key=self.spec.key,
-                        dataset_display_name=self.spec.display_name,
-                        subject=self.spec.subject,
-                        source_dataset=self.spec.display_name,
-                        source_split=self.spec.split or "hf_raw_files",
-                        source_problem_id=str(row.get("id", row.get("problem_id", file_name or index))),
-                        raw_question_text=raw_question,
-                        raw_answer_text=raw_answer,
-                        images=images,
-                        image_sources=image_sources,
-                        raw_record=row,
-                        metadata={
-                            "row_index": index,
-                            "image_paths": [file_name] if file_name else [],
-                            "extraction_notes": extracted.get("extraction_notes", []) + ["hf_raw_mm_math_fallback"],
-                            "image_field": extracted.get("image_field"),
-                        },
-                        choice_map=extracted["choice_map"],
-                        force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
-                    )
-                )
-                if len(samples) >= self.config.sample_per_dataset:
-                    break
+        for entry in read_jsonl(cache_path):
+            samples.append(self.load_mm_math_sample_from_preparsed(entry, image_root))
+            if self.config.sample_strategy != "random" and len(samples) >= target_count:
+                break
+        samples = apply_sample_window(samples, self.config)
         return "available", samples, None
 
     def sample_from_physreason_zip(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         from huggingface_hub import hf_hub_download
         import zipfile
+
+        target_count = sample_window_target_count(self.config)
+        if target_count <= 0:
+            return "available", [], None
 
         zip_name = "PhysReason-mini.zip"
         if self.spec.split and self.spec.split.lower() in {"train", "full"}:
@@ -1763,8 +1921,9 @@ class HuggingFaceConnector(BaseConnector):
                     force_requires_image=bool(image_sources),
                 )
             )
-            if len(samples) >= self.config.sample_per_dataset:
+            if self.config.sample_strategy != "random" and len(samples) >= target_count:
                 break
+        samples = apply_sample_window(samples, self.config)
         if not samples:
             return "source_unavailable", [], "No usable samples extracted from PhysReason zip"
         return "available", samples, None
@@ -1782,11 +1941,15 @@ class HuggingFaceConnector(BaseConnector):
             if self.spec.key == "physreason":
                 return self.sample_from_physreason_zip()
             return "source_unavailable", [], detail or "load_dataset failed"
+        target_count = sample_window_target_count(self.config)
+        if target_count <= 0:
+            return "available", [], detail
+        dataset_pre_shuffled = False
         if self.config.sample_strategy == "random":
             dataset = dataset.shuffle(seed=self.config.shuffle_seed)
-        rows = dataset.select(range(min(self.config.sample_per_dataset, len(dataset))))
+            dataset_pre_shuffled = True
         samples: List[UnifiedSample] = []
-        for index, row in enumerate(rows):
+        for index, row in enumerate(dataset):
             row = dict(row)
             extracted = self.extract_record_content(row)
             raw_question = extracted["raw_question_text"]
@@ -1831,7 +1994,7 @@ class HuggingFaceConnector(BaseConnector):
                     subject=self.spec.subject,
                     source_dataset=self.spec.display_name,
                     source_split=detail or self.spec.split or "unknown",
-                    source_problem_id=str(row.get("id", row.get("problem_id", index))),
+                    source_problem_id=self.resolve_source_problem_id(row, index, detail or self.spec.split),
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
@@ -1853,6 +2016,9 @@ class HuggingFaceConnector(BaseConnector):
                     force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
                 )
             )
+            if len(samples) >= target_count:
+                break
+        samples = apply_sample_window(samples, self.config, shuffle=not dataset_pre_shuffled)
         return "available", samples, None
 
 
@@ -2010,6 +2176,10 @@ class GitHubConnector(BaseConnector):
     def sample_from_geometry3k_zip(self, repo_dir: Path) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         import zipfile
 
+        target_count = sample_window_target_count(self.config)
+        if target_count <= 0:
+            return "available", [], None
+
         preferred_split = (self.spec.split or "test").strip().lower()
         preferred_split = {"valid": "val", "validation": "val"}.get(preferred_split, preferred_split)
         candidate_specs: List[Tuple[str, Path]] = []
@@ -2104,16 +2274,11 @@ class GitHubConnector(BaseConnector):
                         force_requires_image=True,
                     )
                 )
-                if self.config.sample_strategy != "random" and len(samples) >= self.config.sample_per_dataset:
+                if self.config.sample_strategy != "random" and len(samples) >= target_count:
                     break
         if not samples:
             return "source_unavailable", [], f"No usable Geometry3K samples extracted from {zip_path.name}"
-        if self.config.sample_strategy == "random":
-            rng = np.random.default_rng(self.config.shuffle_seed)
-            indices = rng.permutation(len(samples)).tolist()[: self.config.sample_per_dataset]
-            samples = [samples[i] for i in indices]
-        else:
-            samples = samples[: self.config.sample_per_dataset]
+        samples = apply_sample_window(samples, self.config)
         return "available", samples, chosen_split
 
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
@@ -2129,7 +2294,9 @@ class GitHubConnector(BaseConnector):
             return "source_unavailable", [], "No structured data files discovered in repository"
         samples: List[UnifiedSample] = []
         detail_errors: List[str] = []
-        limit = self.config.sample_per_dataset
+        target_count = sample_window_target_count(self.config)
+        if target_count <= 0:
+            return "available", [], None
         for file_path in files[:40]:
             try:
                 records = self.load_records(file_path)
@@ -2212,19 +2379,14 @@ class GitHubConnector(BaseConnector):
                         force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
                     )
                 )
-                if self.config.sample_strategy != "random" and len(samples) >= limit:
+                if self.config.sample_strategy != "random" and len(samples) >= target_count:
                     break
-            if self.config.sample_strategy != "random" and len(samples) >= limit:
+            if self.config.sample_strategy != "random" and len(samples) >= target_count:
                 break
         if not samples:
             reason = "; ".join(detail_errors[:3]) if detail_errors else "No usable records extracted"
             return "source_unavailable", [], reason
-        if self.config.sample_strategy == "random":
-            rng = np.random.default_rng(self.config.shuffle_seed)
-            indices = rng.permutation(len(samples)).tolist()[:limit]
-            samples = [samples[i] for i in indices]
-        else:
-            samples = samples[:limit]
+        samples = apply_sample_window(samples, self.config)
         return "available", samples, None
 
 class BaseStructuredAgent:
@@ -3364,6 +3526,9 @@ class MultiDatasetCleaningPipeline:
         self.progress(
             f"[Pipeline] run_id={self.pipeline_run_id} start datasets={total_datasets} output_dir={self.run_dir}"
         )
+        if self.config.resume:
+            resume_source = self.config.resume_from_run_dir or "<all prior runs under output_root>"
+            self.progress(f"[Pipeline] resume enabled source={resume_source}")
         for dataset_index, spec in enumerate(self.config.datasets, start=1):
             self.progress(
                 f"[Pipeline] dataset {dataset_index}/{total_datasets} START key={spec.key} name={spec.display_name}"
@@ -3375,6 +3540,8 @@ class MultiDatasetCleaningPipeline:
             )
         self.aggregate_summary["datasets"] = dataset_summaries
         self.aggregate_summary["sample_concurrency"] = self.config.sample_concurrency
+        self.aggregate_summary["resume"] = bool(self.config.resume)
+        self.aggregate_summary["resume_from_run_dir"] = self.config.resume_from_run_dir or None
         self.aggregate_summary["started_at"] = started_at
         self.aggregate_summary["finished_at"] = utc_now()
         self.aggregate_summary["elapsed_seconds"] = round(time.perf_counter() - started_perf, 3)
@@ -3389,9 +3556,14 @@ class MultiDatasetCleaningPipeline:
         completed: Set[str] = set()
         if not self.config.resume:
             return completed
-        if not self.output_root.exists():
-            return completed
-        for prior_run_dir in sorted(self.output_root.glob("run_*")):
+        resume_run_dir = Path(self.config.resume_from_run_dir).resolve() if self.config.resume_from_run_dir else None
+        if resume_run_dir is not None:
+            candidate_run_dirs = [resume_run_dir] if resume_run_dir.exists() else []
+        else:
+            if not self.output_root.exists():
+                return completed
+            candidate_run_dirs = sorted(self.output_root.glob("run_*"))
+        for prior_run_dir in candidate_run_dirs:
             if prior_run_dir == self.run_dir or not prior_run_dir.is_dir():
                 continue
             dataset_dir = prior_run_dir / "datasets" / spec.key
@@ -3440,6 +3612,7 @@ class MultiDatasetCleaningPipeline:
                 "source_status": "source_unavailable",
                 "detail": detail,
                 "requested_samples": self.config.sample_per_dataset,
+                "sample_offset": self.config.sample_offset,
                 "processed_samples": 0,
                 "decision_counts": {"pass": 0, "review": 0, "reject": 0},
                 "rewrite_strategy_counts": {},
@@ -3455,10 +3628,14 @@ class MultiDatasetCleaningPipeline:
             )
             return summary
         self.progress(
-            f"[Dataset {spec.key}] source ready sampled={len(samples)}/{self.config.sample_per_dataset} concurrency={max(1, int(self.config.sample_concurrency or 1))}"
+            f"[Dataset {spec.key}] source ready sampled={len(samples)}/{self.config.sample_per_dataset} offset={self.config.sample_offset} concurrency={max(1, int(self.config.sample_concurrency or 1))}"
         )
         completed_source_problem_ids = self.load_completed_source_problem_ids(spec)
         if completed_source_problem_ids:
+            if self.config.resume_from_run_dir:
+                self.progress(
+                    f"[Dataset {spec.key}] resume source run={self.config.resume_from_run_dir}"
+                )
             original_count = len(samples)
             samples = [sample for sample in samples if sample.source_problem_id not in completed_source_problem_ids]
             skipped_count = original_count - len(samples)
@@ -3577,6 +3754,7 @@ class MultiDatasetCleaningPipeline:
             "source_status": "available",
             "detail": detail,
             "requested_samples": self.config.sample_per_dataset,
+            "sample_offset": self.config.sample_offset,
             "processed_samples": len(bundle["problem_main_records"]),
             "decision_counts": decision_counts,
             "rewrite_strategy_counts": rewrite_strategy_counts,
@@ -4986,6 +5164,63 @@ def merge_cli_overrides(config: PipelineConfig, args: argparse.Namespace) -> Pip
         config.model.reasoning_effort = args.reasoning_effort
     if args.resume:
         config.resume = True
+    return config
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Multi-dataset cleaning pipeline")
+    parser.add_argument("--config", type=str, default=None, help="Path to YAML config")
+    parser.add_argument("--output-dir", type=str, default=None, help="Output directory override")
+    parser.add_argument("--sample-per-dataset", type=int, default=None, help="Sample count per dataset")
+    parser.add_argument("--sample-offset", type=int, default=None, help="Start offset for the sample window")
+    parser.add_argument("--sample-strategy", type=str, choices=["head", "random"], default=None, help="Sampling strategy")
+    parser.add_argument("--sample-concurrency", type=int, default=None, help="Per-dataset sample concurrency")
+    parser.add_argument("--seed", type=int, default=None, help="Random seed")
+    parser.add_argument("--disable-llm", action="store_true", help="Disable LLM agents and use rule fallback only")
+    parser.add_argument("--base-url", type=str, default=None, help="OpenAI-compatible base URL")
+    parser.add_argument("--api-key", type=str, default=None, help="OpenAI-compatible API key")
+    parser.add_argument("--model", type=str, default=None, help="Model name override")
+    parser.add_argument("--reasoning-effort", type=str, default=None, help="Reasoning effort override")
+    parser.add_argument("--resume", action="store_true", help="Resume from existing records and skip completed samples")
+    parser.add_argument("--resume-from-run-dir", type=str, default=None, help="Resume only from a specific previous run_* directory")
+    parser.add_argument("--resume-from-log", type=str, default=None, help="Resume from the run directory recorded in a previous log file")
+    return parser.parse_args()
+
+
+def merge_cli_overrides(config: PipelineConfig, args: argparse.Namespace) -> PipelineConfig:
+    if args.output_dir:
+        config.output_root = args.output_dir
+    if args.sample_per_dataset is not None:
+        config.sample_per_dataset = args.sample_per_dataset
+    if args.sample_offset is not None:
+        config.sample_offset = max(0, args.sample_offset)
+    if args.sample_strategy:
+        config.sample_strategy = args.sample_strategy
+    if args.sample_concurrency is not None:
+        config.sample_concurrency = max(1, args.sample_concurrency)
+    if args.seed is not None:
+        config.shuffle_seed = args.seed
+    if args.disable_llm:
+        config.model.enabled = False
+    if args.base_url:
+        config.model.base_url = args.base_url
+    if args.api_key:
+        config.model.api_key = args.api_key
+    if args.model:
+        config.model.model = args.model
+    if args.reasoning_effort:
+        config.model.reasoning_effort = args.reasoning_effort
+    if args.resume:
+        config.resume = True
+    if args.resume_from_run_dir:
+        config.resume = True
+        config.resume_from_run_dir = str(Path(args.resume_from_run_dir).resolve())
+    if args.resume_from_log:
+        resolved = resolve_resume_run_dir_from_log(Path(args.resume_from_log).resolve())
+        if resolved is None:
+            raise FileNotFoundError(f"Could not resolve resume run directory from log: {args.resume_from_log}")
+        config.resume = True
+        config.resume_from_run_dir = str(resolved.resolve())
     return config
 
 

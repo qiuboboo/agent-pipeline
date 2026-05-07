@@ -1,0 +1,29 @@
+runtime:
+  sample_per_dataset: 3700
+  sample_offset: 300
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 5
+  output_root: outputs/mm_math_0300_4000
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-mm-math-0300-4000
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://www.msutools.cn/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: responses
+
+datasets:
+  - key: mm_math
+    display_name: MM-Math
+    subject: mathematics
+    note: "rerun train window 300:4000 via sample_offset raw fallback path"
+    source_kind: huggingface
+    source_locator: THU-KEG/MM_Math
+    split: train

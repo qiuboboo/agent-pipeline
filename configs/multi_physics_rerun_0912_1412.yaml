@@ -1,0 +1,31 @@
+runtime:
+  sample_per_dataset: 500
+  sample_offset: 912
+  sample_strategy: head
+  shuffle_seed: 42
+  sample_concurrency: 5
+  output_root: outputs/multi_physics_0912_1412
+  cleaning_version: v3.2.0
+  batch_id_prefix: benchmarkallinone-multi-physics-0912-1412
+  save_sample_bundle: true
+  git_cache_root: outputs/repo_cache
+
+model:
+  base_url: https://www.msutools.cn/v1
+  model: gpt-5.4
+  reasoning_effort: high
+  temperature: 0.1
+  timeout_seconds: 180
+  enabled: true
+  api_mode: responses
+
+datasets:
+  - key: multi_physics
+    display_name: Multi-Physics
+    subject: physics
+    note: "rerun unique-id-safe window 912:1412 via sample_offset"
+    source_kind: github
+    source_locator: https://github.com/luozhongze/Multi-Physics
+    question_fields: [question, problem, query, text]
+    answer_fields: [answer, solution, label]
+    image_fields: [picture, image, image_path, img_path, figure]
