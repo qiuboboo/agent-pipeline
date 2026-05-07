@@ -332,6 +332,9 @@ class PipelineConfig:
     git_cache_root: str = "outputs/repo_cache"
     resume: bool = False
     resume_from_run_dir: str = ""
+    rerun_missing_only: bool = False
+    rerun_reference_output_dirs: List[str] = field(default_factory=list)
+    rerun_reference_output_globs: List[str] = field(default_factory=list)
     model: ModelConfig = field(default_factory=ModelConfig)
     datasets: List[DatasetSpec] = field(default_factory=list)
 
@@ -481,6 +484,9 @@ class PipelineConfig:
             git_cache_root=runtime.get("git_cache_root", "outputs/repo_cache"),
             resume=runtime.get("resume", False),
             resume_from_run_dir=to_plain_text(runtime.get("resume_from_run_dir", "")),
+            rerun_missing_only=bool(runtime.get("rerun_missing_only", False)),
+            rerun_reference_output_dirs=[to_plain_text(item) for item in (runtime.get("rerun_reference_output_dirs", []) or []) if to_plain_text(item)],
+            rerun_reference_output_globs=[to_plain_text(item) for item in (runtime.get("rerun_reference_output_globs", []) or []) if to_plain_text(item)],
             model=ModelConfig(**{**asdict(ModelConfig()), **model_raw}),
             datasets=datasets,
         )
@@ -1203,6 +1209,7 @@ class BaseConnector:
         self.llm_client = llm_client or OpenAICompatibleClient(config.model)
         self._source_intake_agent: Optional[SourceIntakeAgent] = None
         self._source_intake_cache: Optional[Dict[str, Dict[str, Any]]] = None
+        self._skip_existing_source_problem_ids: Optional[Set[str]] = None
 
     def source_intake_cache_dir(self) -> Path:
         return Path(self.config.git_cache_root) / "source_intake" / self.spec.key
@@ -1311,6 +1318,18 @@ class BaseConnector:
 
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
         raise NotImplementedError
+
+    def set_skip_existing_source_problem_ids(self, values: Optional[Set[str]]) -> None:
+        self._skip_existing_source_problem_ids = set(values or set())
+
+    def skip_existing_source_problem_ids(self) -> Set[str]:
+        return self._skip_existing_source_problem_ids or set()
+
+    def should_skip_source_problem_id(self, source_problem_id: str) -> bool:
+        normalized = to_plain_text(source_problem_id).strip()
+        if not normalized:
+            return False
+        return normalized in self.skip_existing_source_problem_ids()
 
 
 class SourceUnavailableConnector(BaseConnector):
@@ -1716,6 +1735,9 @@ class LocalFileConnector(BaseConnector):
                         break
             if not raw_question and not images:
                 continue
+            source_problem_id = str(row.get("id", row.get("problem_id", index)))
+            if self.should_skip_source_problem_id(source_problem_id):
+                continue
             samples.append(
                 UnifiedSample(
                     dataset_key=self.spec.key,
@@ -1723,7 +1745,7 @@ class LocalFileConnector(BaseConnector):
                     subject=self.spec.subject,
                     source_dataset=self.spec.display_name,
                     source_split=self.spec.split or "local_file",
-                    source_problem_id=str(row.get("id", row.get("problem_id", index))),
+                    source_problem_id=source_problem_id,
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
@@ -1983,6 +2005,9 @@ class HuggingFaceConnector(BaseConnector):
 
         samples: List[UnifiedSample] = []
         for entry in read_jsonl(cache_path):
+            source_problem_id = to_plain_text(entry.get("source_problem_id"))
+            if self.should_skip_source_problem_id(source_problem_id):
+                continue
             samples.append(self.load_mm_math_sample_from_preparsed(entry, image_root))
             if self.config.sample_strategy != "random" and len(samples) >= target_count:
                 break
@@ -2050,6 +2075,9 @@ class HuggingFaceConnector(BaseConnector):
                         continue
             if not question_text and not images:
                 continue
+            source_problem_id = problem_path.parent.name
+            if self.should_skip_source_problem_id(source_problem_id):
+                continue
             samples.append(
                 UnifiedSample(
                     dataset_key=self.spec.key,
@@ -2057,7 +2085,7 @@ class HuggingFaceConnector(BaseConnector):
                     subject=self.spec.subject,
                     source_dataset=self.spec.display_name,
                     source_split=self.spec.split or Path(zip_name).stem,
-                    source_problem_id=problem_path.parent.name,
+                    source_problem_id=source_problem_id,
                     raw_question_text=question_text,
                     raw_answer_text=raw_answer,
                     images=images,
@@ -2139,6 +2167,9 @@ class HuggingFaceConnector(BaseConnector):
                         break
             if not raw_question and not images:
                 continue
+            source_problem_id = self.resolve_source_problem_id(row, index, detail or self.spec.split)
+            if self.should_skip_source_problem_id(source_problem_id):
+                continue
             samples.append(
                 UnifiedSample(
                     dataset_key=self.spec.key,
@@ -2146,7 +2177,7 @@ class HuggingFaceConnector(BaseConnector):
                     subject=self.spec.subject,
                     source_dataset=self.spec.display_name,
                     source_split=detail or self.spec.split or "unknown",
-                    source_problem_id=self.resolve_source_problem_id(row, index, detail or self.spec.split),
+                    source_problem_id=source_problem_id,
                     raw_question_text=raw_question,
                     raw_answer_text=raw_answer,
                     images=images,
@@ -2399,6 +2430,9 @@ class GitHubConnector(BaseConnector):
                 question_field = "annotat_text" if data.get("annotat_text") else "compact_text" if data.get("compact_text") else "problem_text" if data.get("problem_text") else "question"
                 answer_field = "answer" if data.get("answer") is not None else "label" if data.get("label") is not None else "solution"
                 choice_field = "choices" if data.get("choices") is not None else "compact_choices" if data.get("compact_choices") is not None else None
+                source_problem_id = str(data.get("id", Path(problem_dir).name))
+                if self.should_skip_source_problem_id(source_problem_id):
+                    continue
                 samples.append(
                     UnifiedSample(
                         dataset_key=self.spec.key,
@@ -2406,7 +2440,7 @@ class GitHubConnector(BaseConnector):
                         subject=self.spec.subject,
                         source_dataset=self.spec.display_name,
                         source_split=chosen_split,
-                        source_problem_id=str(data.get("id", Path(problem_dir).name)),
+                        source_problem_id=source_problem_id,
                         raw_question_text=question_text,
                         raw_answer_text=raw_answer,
                         images=images,
@@ -2505,6 +2539,9 @@ class GitHubConnector(BaseConnector):
                             continue
                 if not raw_question and not images:
                     continue
+                source_problem_id = str(row.get("id", row.get("problem_id", len(samples))))
+                if self.should_skip_source_problem_id(source_problem_id):
+                    continue
                 samples.append(
                     UnifiedSample(
                         dataset_key=self.spec.key,
@@ -2512,7 +2549,7 @@ class GitHubConnector(BaseConnector):
                         subject=self.spec.subject,
                         source_dataset=self.spec.display_name,
                         source_split="repo_discovered",
-                        source_problem_id=str(row.get("id", row.get("problem_id", len(samples)))),
+                        source_problem_id=source_problem_id,
                         raw_question_text=raw_question,
                         raw_answer_text=raw_answer,
                         images=images,
@@ -3644,6 +3681,7 @@ class MultiDatasetCleaningPipeline:
         ensure_dir(self.records_dir)
         ensure_dir(self.dataset_root)
         self.aggregate_summary: Dict[str, Any] = {"pipeline_run_id": self.pipeline_run_id, "created_at": utc_now(), "datasets": []}
+        self._rerun_reference_run_dirs_cache: Optional[List[Path]] = None
 
     def progress(self, message: str) -> None:
         print(message, flush=True)
@@ -3694,6 +3732,9 @@ class MultiDatasetCleaningPipeline:
         self.aggregate_summary["sample_concurrency"] = self.config.sample_concurrency
         self.aggregate_summary["resume"] = bool(self.config.resume)
         self.aggregate_summary["resume_from_run_dir"] = self.config.resume_from_run_dir or None
+        self.aggregate_summary["rerun_missing_only"] = bool(self.config.rerun_missing_only)
+        self.aggregate_summary["rerun_reference_output_dirs"] = list(self.config.rerun_reference_output_dirs or [])
+        self.aggregate_summary["rerun_reference_output_globs"] = list(self.config.rerun_reference_output_globs or [])
         self.aggregate_summary["started_at"] = started_at
         self.aggregate_summary["finished_at"] = utc_now()
         self.aggregate_summary["elapsed_seconds"] = round(time.perf_counter() - started_perf, 3)
@@ -3704,17 +3745,66 @@ class MultiDatasetCleaningPipeline:
         )
         return self.aggregate_summary
 
+    def discover_rerun_reference_run_dirs(self) -> List[Path]:
+        if self._rerun_reference_run_dirs_cache is not None:
+            return list(self._rerun_reference_run_dirs_cache)
+
+        run_dirs: List[Path] = []
+        seen: Set[str] = set()
+
+        def add_run_dir(candidate: Path) -> None:
+            if not candidate.exists() or not candidate.is_dir():
+                return
+            key = str(candidate.resolve())
+            if key in seen or candidate == self.run_dir:
+                return
+            seen.add(key)
+            run_dirs.append(candidate)
+
+        explicit_dirs = [Path(item) for item in self.config.rerun_reference_output_dirs if to_plain_text(item)]
+        for output_dir in explicit_dirs:
+            resolved_output_dir = output_dir.resolve()
+            if resolved_output_dir.name.startswith("run_"):
+                add_run_dir(resolved_output_dir)
+                continue
+            if not resolved_output_dir.exists() or not resolved_output_dir.is_dir():
+                continue
+            for run_dir in sorted(resolved_output_dir.glob("run_*")):
+                add_run_dir(run_dir.resolve())
+
+        project_root = PROJECT_ROOT
+        outputs_root = project_root / "outputs"
+        for pattern in self.config.rerun_reference_output_globs:
+            if not to_plain_text(pattern):
+                continue
+            for output_dir in sorted(outputs_root.glob(pattern)):
+                if not output_dir.exists() or not output_dir.is_dir():
+                    continue
+                if output_dir.name.startswith("run_"):
+                    add_run_dir(output_dir.resolve())
+                    continue
+                for run_dir in sorted(output_dir.glob("run_*")):
+                    add_run_dir(run_dir.resolve())
+
+        self._rerun_reference_run_dirs_cache = run_dirs
+        return list(run_dirs)
+
     def load_completed_source_problem_ids(self, spec: DatasetSpec) -> Set[str]:
         completed: Set[str] = set()
-        if not self.config.resume:
+        if not self.config.resume and not self.config.rerun_missing_only:
             return completed
-        resume_run_dir = Path(self.config.resume_from_run_dir).resolve() if self.config.resume_from_run_dir else None
-        if resume_run_dir is not None:
-            candidate_run_dirs = [resume_run_dir] if resume_run_dir.exists() else []
+        if self.config.rerun_missing_only:
+            candidate_run_dirs = self.discover_rerun_reference_run_dirs()
+            if not candidate_run_dirs and self.output_root.exists():
+                candidate_run_dirs = sorted(self.output_root.glob("run_*"))
         else:
-            if not self.output_root.exists():
-                return completed
-            candidate_run_dirs = sorted(self.output_root.glob("run_*"))
+            resume_run_dir = Path(self.config.resume_from_run_dir).resolve() if self.config.resume_from_run_dir else None
+            if resume_run_dir is not None:
+                candidate_run_dirs = [resume_run_dir] if resume_run_dir.exists() else []
+            else:
+                if not self.output_root.exists():
+                    return completed
+                candidate_run_dirs = sorted(self.output_root.glob("run_*"))
         for prior_run_dir in candidate_run_dirs:
             if prior_run_dir == self.run_dir or not prior_run_dir.is_dir():
                 continue
@@ -3753,6 +3843,22 @@ class MultiDatasetCleaningPipeline:
         started_perf = time.perf_counter()
         usage_before = self.client.snapshot_usage()
         connector = self.connector_for(spec)
+        completed_source_problem_ids = self.load_completed_source_problem_ids(spec)
+        connector.set_skip_existing_source_problem_ids(completed_source_problem_ids)
+        if completed_source_problem_ids:
+            if self.config.rerun_missing_only:
+                if self.config.rerun_reference_output_dirs or self.config.rerun_reference_output_globs:
+                    self.progress(
+                        f"[Dataset {spec.key}] rerun-missing reference scan existing_source_problem_ids={len(completed_source_problem_ids)}"
+                    )
+                else:
+                    self.progress(
+                        f"[Dataset {spec.key}] rerun-missing fallback-scan output_root existing_source_problem_ids={len(completed_source_problem_ids)}"
+                    )
+            elif self.config.resume_from_run_dir:
+                self.progress(
+                    f"[Dataset {spec.key}] resume source run={self.config.resume_from_run_dir}"
+                )
         source_status, samples, detail = connector.sample()
         dataset_dir = self.dataset_root / spec.key
         ensure_dir(dataset_dir)
@@ -3765,6 +3871,7 @@ class MultiDatasetCleaningPipeline:
                 "detail": detail,
                 "requested_samples": self.config.sample_per_dataset,
                 "sample_offset": self.config.sample_offset,
+                "rerun_missing_only": bool(self.config.rerun_missing_only),
                 "processed_samples": 0,
                 "decision_counts": {"pass": 0, "review": 0, "reject": 0},
                 "rewrite_strategy_counts": {},
@@ -3782,12 +3889,7 @@ class MultiDatasetCleaningPipeline:
         self.progress(
             f"[Dataset {spec.key}] source ready sampled={len(samples)}/{self.config.sample_per_dataset} offset={self.config.sample_offset} concurrency={max(1, int(self.config.sample_concurrency or 1))}"
         )
-        completed_source_problem_ids = self.load_completed_source_problem_ids(spec)
-        if completed_source_problem_ids:
-            if self.config.resume_from_run_dir:
-                self.progress(
-                    f"[Dataset {spec.key}] resume source run={self.config.resume_from_run_dir}"
-                )
+        if completed_source_problem_ids and not self.config.rerun_missing_only:
             original_count = len(samples)
             samples = [sample for sample in samples if sample.source_problem_id not in completed_source_problem_ids]
             skipped_count = original_count - len(samples)
@@ -3907,6 +4009,7 @@ class MultiDatasetCleaningPipeline:
             "detail": detail,
             "requested_samples": self.config.sample_per_dataset,
             "sample_offset": self.config.sample_offset,
+            "rerun_missing_only": bool(self.config.rerun_missing_only),
             "processed_samples": len(bundle["problem_main_records"]),
             "decision_counts": decision_counts,
             "rewrite_strategy_counts": rewrite_strategy_counts,
@@ -5336,6 +5439,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--resume", action="store_true", help="Resume from existing records and skip completed samples")
     parser.add_argument("--resume-from-run-dir", type=str, default=None, help="Resume only from a specific previous run_* directory")
     parser.add_argument("--resume-from-log", type=str, default=None, help="Resume from the run directory recorded in a previous log file")
+    parser.add_argument("--rerun-missing-only", action="store_true", help="Rerun only missing source_problem_id samples after scanning prior outputs")
+    parser.add_argument("--rerun-reference-output-dir", action="append", default=None, help="Reference output directory or run_* directory used to collect existing source_problem_id values")
+    parser.add_argument("--rerun-reference-output-glob", action="append", default=None, help="Glob under outputs/ used to collect existing source_problem_id values, e.g. physreason_full_*")
     return parser.parse_args()
 
 
@@ -5373,6 +5479,12 @@ def merge_cli_overrides(config: PipelineConfig, args: argparse.Namespace) -> Pip
             raise FileNotFoundError(f"Could not resolve resume run directory from log: {args.resume_from_log}")
         config.resume = True
         config.resume_from_run_dir = str(resolved.resolve())
+    if args.rerun_missing_only:
+        config.rerun_missing_only = True
+    if args.rerun_reference_output_dir:
+        config.rerun_reference_output_dirs = [str(Path(item).resolve()) for item in args.rerun_reference_output_dir if to_plain_text(item)]
+    if args.rerun_reference_output_glob:
+        config.rerun_reference_output_globs = [to_plain_text(item) for item in args.rerun_reference_output_glob if to_plain_text(item)]
     return config
 
 
