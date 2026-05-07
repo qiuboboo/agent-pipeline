@@ -119,8 +119,59 @@ def sha256_bytes(data: bytes) -> str:
 
 
 def stable_digest(parts: Sequence[str], length: int = 24) -> str:
-    payload = "||".join(parts).encode("utf-8")
+    payload = "||".join(to_plain_text(part) for part in parts).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()[:length]
+
+
+def normalize_for_cache(value: Any, depth: int = 0) -> Any:
+    if depth >= 5:
+        return "<max_depth>"
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    if isinstance(value, Path):
+        return str(value)
+    if isinstance(value, np.generic):
+        return value.item()
+    if isinstance(value, np.ndarray):
+        return {
+            "__ndarray__": True,
+            "shape": list(value.shape),
+            "dtype": str(value.dtype),
+        }
+    if isinstance(value, (bytes, bytearray)):
+        return f"<bytes:{len(value)}>"
+    if isinstance(value, Image.Image):
+        return f"<PIL.Image mode={value.mode} size={value.size}>"
+    if isinstance(value, dict):
+        normalized: Dict[str, Any] = {}
+        for key in sorted(value.keys(), key=lambda item: to_plain_text(item)):
+            key_text = to_plain_text(key)
+            child = value.get(key)
+            if key_text.lower() in {"bytes", "pixel_values", "image_bytes"}:
+                if isinstance(child, (bytes, bytearray)):
+                    normalized[key_text] = f"<bytes:{len(child)}>"
+                elif isinstance(child, list):
+                    normalized[key_text] = f"<list:{len(child)}>"
+                else:
+                    normalized[key_text] = normalize_for_cache(child, depth + 1)
+                continue
+            normalized[key_text] = normalize_for_cache(child, depth + 1)
+        return normalized
+    if isinstance(value, (list, tuple)):
+        if len(value) > 32:
+            return {
+                "__list_len__": len(value),
+                "head": [normalize_for_cache(item, depth + 1) for item in value[:8]],
+                "tail": [normalize_for_cache(item, depth + 1) for item in value[-2:]],
+            }
+        return [normalize_for_cache(item, depth + 1) for item in value]
+    return repr(value)
+
+
+def stable_row_fingerprint(row: Dict[str, Any]) -> str:
+    normalized = normalize_for_cache(row)
+    payload = json.dumps(normalized, ensure_ascii=False, sort_keys=True, default=json_default)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
 def to_plain_text(value: Any) -> str:
@@ -1151,6 +1202,107 @@ class BaseConnector:
         self.config = config
         self.llm_client = llm_client or OpenAICompatibleClient(config.model)
         self._source_intake_agent: Optional[SourceIntakeAgent] = None
+        self._source_intake_cache: Optional[Dict[str, Dict[str, Any]]] = None
+
+    def source_intake_cache_dir(self) -> Path:
+        return Path(self.config.git_cache_root) / "source_intake" / self.spec.key
+
+    def source_intake_cache_path(self) -> Path:
+        split_name = to_plain_text(self.spec.split or "default") or "default"
+        safe_split = re.sub(r"[^A-Za-z0-9._-]+", "_", split_name)
+        locator_digest = stable_digest(
+            [
+                self.spec.source_kind,
+                self.spec.source_locator,
+                self.spec.hf_config_name,
+                ",".join(self.spec.question_fields or []),
+                ",".join(self.spec.answer_fields or []),
+                ",".join(self.spec.image_fields or []),
+                ",".join(self.spec.choice_fields or []),
+                ",".join(self.spec.metadata_fields or []),
+                str(self.spec.force_requires_image),
+                str(self.spec.answer_index_base),
+                self.spec.answer_resolution_mode,
+            ],
+            16,
+        )
+        return self.source_intake_cache_dir() / f"{safe_split}_{locator_digest}.jsonl"
+
+    def source_intake_cache_fingerprint(self, row: Dict[str, Any]) -> str:
+        normalized = normalize_for_cache(
+            {
+                "dataset_key": self.spec.key,
+                "source_kind": self.spec.source_kind,
+                "source_locator": self.spec.source_locator,
+                "hf_config_name": self.spec.hf_config_name,
+                "split": self.spec.split,
+                "question_fields": list(self.spec.question_fields or []),
+                "answer_fields": list(self.spec.answer_fields or []),
+                "image_fields": list(self.spec.image_fields or []),
+                "choice_fields": list(self.spec.choice_fields or []),
+                "metadata_fields": list(self.spec.metadata_fields or []),
+                "force_requires_image": self.spec.force_requires_image,
+                "answer_index_base": self.spec.answer_index_base,
+                "answer_resolution_mode": self.spec.answer_resolution_mode,
+                "row": row,
+            }
+        )
+        payload = json.dumps(normalized, ensure_ascii=False, sort_keys=True, default=json_default)
+        return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+    def load_source_intake_cache(self) -> Dict[str, Dict[str, Any]]:
+        if self._source_intake_cache is not None:
+            return self._source_intake_cache
+        cache_path = self.source_intake_cache_path()
+        cache: Dict[str, Dict[str, Any]] = {}
+        if cache_path.exists():
+            try:
+                for row in read_jsonl(cache_path):
+                    if not isinstance(row, dict):
+                        continue
+                    fingerprint = to_plain_text(row.get("row_fingerprint"))
+                    extracted = row.get("extracted")
+                    if fingerprint and isinstance(extracted, dict):
+                        cache[fingerprint] = extracted
+            except Exception:
+                cache = {}
+        self._source_intake_cache = cache
+        return cache
+
+    def append_source_intake_cache_entry(self, fingerprint: str, extracted: Dict[str, Any]) -> None:
+        cache = self.load_source_intake_cache()
+        cache[fingerprint] = extracted
+        cache_path = self.source_intake_cache_path()
+        ensure_dir(cache_path.parent)
+        with cache_path.open("a", encoding="utf-8") as file:
+            file.write(
+                json.dumps(
+                    {
+                        "row_fingerprint": fingerprint,
+                        "extracted": extracted,
+                        "cached_at": utc_now(),
+                    },
+                    ensure_ascii=False,
+                    default=json_default,
+                )
+            )
+            file.write("\n")
+
+    def extract_record_content_cached(self, row: Dict[str, Any]) -> Dict[str, Any]:
+        fingerprint = self.source_intake_cache_fingerprint(row)
+        cache = self.load_source_intake_cache()
+        cached = cache.get(fingerprint)
+        if isinstance(cached, dict):
+            reused = dict(cached)
+            extraction_notes = reused.get("extraction_notes")
+            if isinstance(extraction_notes, list):
+                reused["extraction_notes"] = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)] + ["source_intake_cache_hit"]
+            else:
+                reused["extraction_notes"] = ["source_intake_cache_hit"]
+            return reused
+        extracted = self.extract_record_content(row)
+        self.append_source_intake_cache_entry(fingerprint, extracted)
+        return extracted
 
     def extract_record_content(self, row: Dict[str, Any]) -> Dict[str, Any]:
         if self._source_intake_agent is None:
@@ -1532,7 +1684,7 @@ class LocalFileConnector(BaseConnector):
             return "available", [], None
         samples: List[UnifiedSample] = []
         for index, row in enumerate(self.iter_records(path)):
-            extracted = self.extract_record_content(row)
+            extracted = self.extract_record_content_cached(row)
             raw_question = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(
                 resolve_answer_source_text(row, extracted),
@@ -1711,7 +1863,7 @@ class HuggingFaceConnector(BaseConnector):
         return self.mm_math_cache_dir() / "preparsed_samples_v1.jsonl"
 
     def build_mm_math_preparsed_entry(self, row: Dict[str, Any], index: int) -> Optional[Dict[str, Any]]:
-        extracted = self.extract_record_content(row)
+        extracted = self.extract_record_content_cached(row)
         raw_question = extracted["raw_question_text"]
         raw_answer = resolve_multiple_choice_answer_text(
             self.resolve_answer_text(row.get("solution") or resolve_answer_source_text(row, extracted)),
@@ -1951,7 +2103,7 @@ class HuggingFaceConnector(BaseConnector):
         samples: List[UnifiedSample] = []
         for index, row in enumerate(dataset):
             row = dict(row)
-            extracted = self.extract_record_content(row)
+            extracted = self.extract_record_content_cached(row)
             raw_question = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(
                 self.resolve_answer_text(resolve_answer_source_text(row, extracted)),
@@ -2307,7 +2459,7 @@ class GitHubConnector(BaseConnector):
                 continue
             for index, row in enumerate(records):
                 row = dict(row)
-                extracted = self.extract_record_content(row)
+                extracted = self.extract_record_content_cached(row)
                 raw_question = extracted["raw_question_text"]
                 raw_answer = resolve_multiple_choice_answer_text(
                     resolve_answer_source_text(row, extracted),
