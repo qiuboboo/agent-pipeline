@@ -29,7 +29,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set,
 
 import numpy as np
 import yaml
-from datasets import Dataset, DatasetDict, IterableDatasetDict, load_dataset
+from datasets import Dataset, DatasetDict, IterableDatasetDict, concatenate_datasets, load_dataset
 from PIL import Image
 
 try:
@@ -1852,6 +1852,7 @@ class LocalFileConnector(BaseConnector):
 
 class HuggingFaceConnector(BaseConnector):
     HF_SLICE_PATTERN = re.compile(r"^[^\[]+\[(?P<start>\d*)\s*:\s*(?P<end>\d*)\]$")
+    HF_SPLIT_EXPR_PATTERN = re.compile(r"^(?P<name>[^\[]+?)(?:\[(?P<start>\d*)\s*:\s*(?P<end>\d*)\])?$")
 
     def candidate_splits(self) -> List[str]:
         if self.spec.split:
@@ -1874,6 +1875,103 @@ class HuggingFaceConnector(BaseConnector):
         except ValueError:
             return 0
 
+    def parse_split_expression(self, split_expression: str) -> Tuple[str, int, Optional[int], bool]:
+        text = to_plain_text(split_expression).strip()
+        if not text:
+            return "", 0, None, False
+        match = self.HF_SPLIT_EXPR_PATTERN.match(text)
+        if not match:
+            return text, 0, None, False
+        split_name = to_plain_text(match.group("name")).strip()
+        start_text = to_plain_text(match.group("start")).strip()
+        end_text = to_plain_text(match.group("end")).strip()
+        has_slice = "[" in text and "]" in text
+        start = int(start_text) if re.fullmatch(r"\d+", start_text) else 0
+        end = int(end_text) if re.fullmatch(r"\d+", end_text) else None
+        return split_name, max(0, start), end, has_slice
+
+    def hf_local_cache_root(self) -> Path:
+        configured = to_plain_text(os.getenv("HF_DATASETS_CACHE")).strip()
+        if configured:
+            return Path(configured)
+        return Path.home() / ".cache" / "huggingface" / "datasets"
+
+    def hf_dataset_cache_hash_dirs(self) -> List[Path]:
+        dataset_key = to_plain_text(self.spec.source_locator).strip().replace("/", "___")
+        if not dataset_key:
+            return []
+        root = self.hf_local_cache_root() / dataset_key
+        if not root.exists() or not root.is_dir():
+            return []
+        config_dirs: List[Path] = []
+        if self.spec.hf_config_name:
+            config_dirs = [root / self.spec.hf_config_name]
+        else:
+            default_dir = root / "default"
+            if default_dir.exists():
+                config_dirs.append(default_dir)
+            for child in root.iterdir():
+                if not child.is_dir():
+                    continue
+                if child in config_dirs:
+                    continue
+                config_dirs.append(child)
+        hash_dirs: List[Path] = []
+        for config_dir in config_dirs:
+            if not config_dir.exists() or not config_dir.is_dir():
+                continue
+            for version_dir in config_dir.iterdir():
+                if not version_dir.is_dir():
+                    continue
+                for candidate in version_dir.iterdir():
+                    if not candidate.is_dir():
+                        continue
+                    if (candidate / "dataset_info.json").exists():
+                        hash_dirs.append(candidate)
+        return sorted(hash_dirs, key=lambda path: path.stat().st_mtime, reverse=True)
+
+    def hf_cached_arrow_files_for_split(self, cache_dir: Path, split_name: str) -> List[Path]:
+        split_name = to_plain_text(split_name).strip()
+        if not split_name:
+            return []
+        matched: Dict[str, Path] = {}
+        for arrow_path in cache_dir.glob("*.arrow"):
+            name = arrow_path.name
+            if name.endswith(f"-{split_name}.arrow") or f"-{split_name}-" in name:
+                matched[name] = arrow_path
+        return [matched[name] for name in sorted(matched.keys())]
+
+    def load_dataset_from_local_arrow(self, split_expression: str) -> Tuple[Optional[Dataset], Optional[str]]:
+        split_name, start, end, has_slice = self.parse_split_expression(split_expression)
+        if not split_name:
+            return None, "empty split expression"
+        last_error = None
+        for cache_dir in self.hf_dataset_cache_hash_dirs():
+            try:
+                arrow_files = self.hf_cached_arrow_files_for_split(cache_dir, split_name)
+                if not arrow_files:
+                    continue
+                parts = [Dataset.from_file(str(path)) for path in arrow_files]
+                if not parts:
+                    continue
+                dataset = parts[0] if len(parts) == 1 else concatenate_datasets(parts)
+                total_rows = len(dataset)
+                if has_slice:
+                    slice_start = max(0, start)
+                    slice_end = total_rows if end is None else max(0, min(total_rows, end))
+                    if slice_end < slice_start:
+                        slice_end = slice_start
+                    if slice_start == 0 and slice_end == total_rows:
+                        return dataset, split_expression
+                    if slice_start >= total_rows or slice_start == slice_end:
+                        return dataset.select([]), split_expression
+                    dataset = dataset.select(range(slice_start, slice_end))
+                return dataset, split_expression
+            except Exception as exc:
+                last_error = str(exc)
+                continue
+        return None, last_error
+
     def resolve_source_problem_id(self, row: Dict[str, Any], index: int, split_name: Optional[str]) -> str:
         for field_name in ("id", "problem_id"):
             if field_name not in row:
@@ -1889,6 +1987,11 @@ class HuggingFaceConnector(BaseConnector):
     def load_dataset_any(self) -> Tuple[Optional[Dataset], Optional[str]]:
         last_error = None
         for split in self.candidate_splits():
+            local_dataset, local_error = self.load_dataset_from_local_arrow(split)
+            if isinstance(local_dataset, Dataset):
+                return local_dataset, split
+            if local_error:
+                last_error = local_error
             try:
                 dataset = load_dataset(self.spec.source_locator, self.spec.hf_config_name, split=split)
                 if isinstance(dataset, Dataset):
@@ -1960,6 +2063,25 @@ class HuggingFaceConnector(BaseConnector):
     def mm_math_preparsed_cache_path(self) -> Path:
         return self.mm_math_cache_dir() / "preparsed_samples_v1.jsonl"
 
+    def mm_math_target_row_indices(self) -> List[int]:
+        offset, limit = sample_window_bounds(self.config)
+        if limit <= 0:
+            return []
+        if self.config.sample_strategy == "random":
+            # Keep the historical random candidate-pool behavior.
+            return list(range(offset + limit))
+        return list(range(offset, offset + limit))
+
+    def mm_math_preparsed_entry_index(self, entry: Dict[str, Any]) -> Optional[int]:
+        for value in [
+            entry.get("row_index"),
+            (entry.get("metadata") or {}).get("row_index") if isinstance(entry.get("metadata"), dict) else None,
+        ]:
+            text = to_plain_text(value).strip()
+            if re.fullmatch(r"\d+", text):
+                return int(text)
+        return None
+
     def build_mm_math_preparsed_entry(self, row: Dict[str, Any], index: int) -> Optional[Dict[str, Any]]:
         extracted = self.extract_record_content_cached(row)
         raw_question = extracted["raw_question_text"]
@@ -1979,6 +2101,7 @@ class HuggingFaceConnector(BaseConnector):
             "subject": self.spec.subject,
             "source_dataset": self.spec.display_name,
             "source_split": self.spec.split or "hf_raw_files",
+            "row_index": index,
             "source_problem_id": str(row.get("id", row.get("problem_id", file_name or index))),
             "raw_question_text": raw_question,
             "raw_answer_text": raw_answer,
@@ -1999,35 +2122,79 @@ class HuggingFaceConnector(BaseConnector):
             "force_requires_image": bool(extracted["force_requires_image"] or self.spec.force_requires_image),
         }
 
-    def ensure_mm_math_preparsed_cache(self, jsonl_path: Path) -> Tuple[Path, int, bool]:
-        cache_dir = self.mm_math_cache_dir()
-        cache_path = self.mm_math_preparsed_cache_path()
-        ensure_dir(cache_dir)
-        if cache_path.exists():
-            return cache_path, sum(1 for _ in cache_path.open("r", encoding="utf-8")), True
+    def load_mm_math_preparsed_entries(self, cache_path: Path) -> Dict[int, Dict[str, Any]]:
+        entries: Dict[int, Dict[str, Any]] = {}
+        if not cache_path.exists():
+            return entries
+        try:
+            for entry in read_jsonl(cache_path):
+                if not isinstance(entry, dict):
+                    continue
+                row_index = self.mm_math_preparsed_entry_index(entry)
+                if row_index is None:
+                    continue
+                entries[row_index] = entry
+        except Exception:
+            return {}
+        return entries
 
-        indexed_rows: List[Tuple[int, Dict[str, Any]]] = []
+    def load_mm_math_raw_rows_by_index(self, jsonl_path: Path, row_indices: Sequence[int]) -> List[Tuple[int, Dict[str, Any]]]:
+        wanted = {int(index) for index in row_indices if int(index) >= 0}
+        if not wanted:
+            return []
+        max_index = max(wanted)
+        rows: List[Tuple[int, Dict[str, Any]]] = []
         with jsonl_path.open("r", encoding="utf-8") as file:
             for index, line in enumerate(file):
+                if index > max_index:
+                    break
+                if index not in wanted:
+                    continue
                 line = line.strip()
                 if not line:
                     continue
                 row = json.loads(line)
-                if not isinstance(row, dict):
-                    continue
-                indexed_rows.append((index, row))
+                if isinstance(row, dict):
+                    rows.append((index, row))
+        return rows
+
+    def append_mm_math_preparsed_entries(self, cache_path: Path, entries: Iterable[Dict[str, Any]]) -> None:
+        ensure_dir(cache_path.parent)
+        with cache_path.open("a", encoding="utf-8") as file:
+            for entry in entries:
+                file.write(json.dumps(entry, ensure_ascii=False, default=json_default))
+                file.write("\n")
+
+    def ensure_mm_math_preparsed_cache(self, jsonl_path: Path, target_indices: Sequence[int]) -> Tuple[Path, Dict[int, Dict[str, Any]], int, int]:
+        cache_dir = self.mm_math_cache_dir()
+        cache_path = self.mm_math_preparsed_cache_path()
+        ensure_dir(cache_dir)
+        entries_by_index = self.load_mm_math_preparsed_entries(cache_path)
+        unique_target_indices = sorted({int(index) for index in target_indices if int(index) >= 0})
+        missing_indices = [index for index in unique_target_indices if index not in entries_by_index]
+        if not missing_indices:
+            return cache_path, entries_by_index, 0, 0
+
+        indexed_rows = self.load_mm_math_raw_rows_by_index(jsonl_path, missing_indices)
         print(
-            f"[MM-Math] building preparsed cache entries={len(indexed_rows)} concurrency={max(1, int(self.config.sample_concurrency or 1))}",
+            f"[MM-Math] building preparsed cache missing={len(indexed_rows)}/{len(missing_indices)} "
+            f"range={missing_indices[0]}:{missing_indices[-1] + 1} "
+            f"concurrency={max(1, int(self.config.sample_concurrency or 1))}",
             flush=True,
         )
-        rows = self.collect_concurrently(
-            indexed_rows,
-            lambda index, row: self.build_mm_math_preparsed_entry(row, index),
+        built_rows = self.collect_concurrently(
+            enumerate(indexed_rows),
+            lambda _task_index, indexed_row: self.build_mm_math_preparsed_entry(indexed_row[1], indexed_row[0]),
             target_count=len(indexed_rows),
             stop_when_target_reached=False,
         )
-        write_jsonl(cache_path, rows)
-        return cache_path, len(rows), False
+        if built_rows:
+            self.append_mm_math_preparsed_entries(cache_path, built_rows)
+            for entry in built_rows:
+                row_index = self.mm_math_preparsed_entry_index(entry)
+                if row_index is not None:
+                    entries_by_index[row_index] = entry
+        return cache_path, entries_by_index, len(built_rows), len(missing_indices)
 
     def load_mm_math_sample_from_preparsed(self, entry: Dict[str, Any], image_root: Path) -> UnifiedSample:
         images: List[Image.Image] = []
@@ -2081,11 +2248,16 @@ class HuggingFaceConnector(BaseConnector):
             with zipfile.ZipFile(zip_path) as zf:
                 zf.extractall(extract_root)
 
-        cache_path, cached_count, cache_hit = self.ensure_mm_math_preparsed_cache(jsonl_path)
+        target_indices = self.mm_math_target_row_indices()
+        cache_path, entries_by_index, built_count, missing_count = self.ensure_mm_math_preparsed_cache(jsonl_path, target_indices)
         print(
-            f"[MM-Math] preparsed cache {'hit' if cache_hit else 'built'} path={cache_path} entries={cached_count}",
+            f"[MM-Math] preparsed cache path={cache_path} target={len(target_indices)} "
+            f"available={sum(1 for index in target_indices if index in entries_by_index)} "
+            f"built={built_count} missing_before={missing_count}",
             flush=True,
         )
+
+        selected_entries = [entries_by_index[index] for index in target_indices if index in entries_by_index]
 
         def build_sample(index: int, entry: Dict[str, Any]) -> Optional[UnifiedSample]:
             source_problem_id = to_plain_text(entry.get("source_problem_id"))
@@ -2094,12 +2266,13 @@ class HuggingFaceConnector(BaseConnector):
             return self.load_mm_math_sample_from_preparsed(entry, image_root)
 
         samples = self.collect_concurrently(
-            enumerate(read_jsonl(cache_path)),
+            enumerate(selected_entries),
             build_sample,
             target_count=target_count,
             stop_when_target_reached=self.config.sample_strategy != "random",
         )
-        samples = apply_sample_window(samples, self.config)
+        if self.config.sample_strategy == "random":
+            samples = apply_sample_window(samples, self.config)
         return "available", samples, None
 
     def sample_from_physreason_zip(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:

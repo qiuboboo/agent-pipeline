@@ -52,7 +52,22 @@ Important distinction:
 
 If the row has an `index` field, that value is used. Otherwise the file-local row index is used. This keeps ids stable when the full dataset is rerun.
 
-`mm_math` raw JSONL preparsing now builds a preparsed cache with the same concurrency setting. Once built, later runs load the preparsed cache directly.
+`mm_math` raw JSONL preparsing now supports range-targeted incremental cache build:
+
+- For `sample_strategy=head`, target row indices are exactly `[sample_offset, sample_offset + sample_per_dataset)`.
+- Existing row indices in preparsed cache are reused.
+- Only missing row indices are parsed and appended.
+- Window gaps are allowed (for example, running `300:320`, then `400:420` does not require building `320:400`).
+
+This is tracked by per-entry `row_index`, and cache selection is by row index, not by contiguous blocks.
+
+`HuggingFaceConnector` now includes a local Arrow fast path:
+
+- It first checks local HuggingFace dataset cache directories and matching split Arrow shards.
+- If local Arrow files exist, it loads from local Arrow (`Dataset.from_file` + concat) and applies split slicing locally.
+- It falls back to `load_dataset()` only if local Arrow cache is not found/usable.
+
+This avoids long stalls in builder/metadata/network phases when local cache is already complete.
 
 `physreason_rerun_0000_1200.yaml` replaces the earlier smaller rerun config and is set to:
 
@@ -99,3 +114,20 @@ Observed:
 
 This confirms source-intake can resume from its cache even without `--resume`.
 
+MM-Math overlap/gap cache validation (`--disable-llm`, isolated temporary cache root):
+
+- Run A: offset `300`, count `20` -> `built=20`.
+- Run B: offset `310`, count `20` -> `built=10` (overlap reused, only `320:329` built).
+- Run C: offset `400`, count `20` -> `built=20` (gap `330:399` not required and not built).
+
+AI2D / GeoQA+ local Arrow integrity check:
+
+- AI2D local arrow rows: `2844 + 244 = 3088`, matching `dataset_info.splits.test.num_examples=3088`.
+- GeoQA+ local arrow rows: `train=18081`, `test=3040`, matching `dataset_info`.
+
+AI2D / GeoQA+ 1-sample full run validation with local fast path (`--disable-llm`):
+
+- AI2D (`test[1000:3000]`, 1 sample) completed in `~0.27s`.
+- GeoQA+ (`test[2000:3000]`, 1 sample) completed in `~0.15s`.
+
+Both runs passed source intake + sample processing end-to-end and did not stall in `load_dataset()`.
