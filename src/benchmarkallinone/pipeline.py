@@ -25,7 +25,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 import numpy as np
 import yaml
@@ -1209,6 +1209,8 @@ class BaseConnector:
         self.llm_client = llm_client or OpenAICompatibleClient(config.model)
         self._source_intake_agent: Optional[SourceIntakeAgent] = None
         self._source_intake_cache: Optional[Dict[str, Dict[str, Any]]] = None
+        self._source_intake_agent_lock = threading.Lock()
+        self._source_intake_cache_lock = threading.RLock()
         self._skip_existing_source_problem_ids: Optional[Set[str]] = None
 
     def source_intake_cache_dir(self) -> Path:
@@ -1258,62 +1260,73 @@ class BaseConnector:
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
     def load_source_intake_cache(self) -> Dict[str, Dict[str, Any]]:
-        if self._source_intake_cache is not None:
-            return self._source_intake_cache
-        cache_path = self.source_intake_cache_path()
-        cache: Dict[str, Dict[str, Any]] = {}
-        if cache_path.exists():
-            try:
-                for row in read_jsonl(cache_path):
-                    if not isinstance(row, dict):
-                        continue
-                    fingerprint = to_plain_text(row.get("row_fingerprint"))
-                    extracted = row.get("extracted")
-                    if fingerprint and isinstance(extracted, dict):
-                        cache[fingerprint] = extracted
-            except Exception:
-                cache = {}
-        self._source_intake_cache = cache
-        return cache
+        with self._source_intake_cache_lock:
+            if self._source_intake_cache is not None:
+                return self._source_intake_cache
+            cache_path = self.source_intake_cache_path()
+            cache: Dict[str, Dict[str, Any]] = {}
+            if cache_path.exists():
+                try:
+                    for row in read_jsonl(cache_path):
+                        if not isinstance(row, dict):
+                            continue
+                        fingerprint = to_plain_text(row.get("row_fingerprint"))
+                        extracted = row.get("extracted")
+                        if fingerprint and isinstance(extracted, dict):
+                            cache[fingerprint] = extracted
+                except Exception:
+                    cache = {}
+            self._source_intake_cache = cache
+            return cache
 
     def append_source_intake_cache_entry(self, fingerprint: str, extracted: Dict[str, Any]) -> None:
-        cache = self.load_source_intake_cache()
-        cache[fingerprint] = extracted
-        cache_path = self.source_intake_cache_path()
-        ensure_dir(cache_path.parent)
-        with cache_path.open("a", encoding="utf-8") as file:
-            file.write(
-                json.dumps(
-                    {
-                        "row_fingerprint": fingerprint,
-                        "extracted": extracted,
-                        "cached_at": utc_now(),
-                    },
-                    ensure_ascii=False,
-                    default=json_default,
+        with self._source_intake_cache_lock:
+            cache = self.load_source_intake_cache()
+            cache[fingerprint] = extracted
+            cache_path = self.source_intake_cache_path()
+            ensure_dir(cache_path.parent)
+            with cache_path.open("a", encoding="utf-8") as file:
+                file.write(
+                    json.dumps(
+                        {
+                            "row_fingerprint": fingerprint,
+                            "extracted": extracted,
+                            "cached_at": utc_now(),
+                        },
+                        ensure_ascii=False,
+                        default=json_default,
+                    )
                 )
-            )
-            file.write("\n")
+                file.write("\n")
+
+    def clone_cached_extraction(self, cached: Dict[str, Any]) -> Dict[str, Any]:
+        reused = dict(cached)
+        extraction_notes = reused.get("extraction_notes")
+        if isinstance(extraction_notes, list):
+            reused["extraction_notes"] = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)] + ["source_intake_cache_hit"]
+        else:
+            reused["extraction_notes"] = ["source_intake_cache_hit"]
+        return reused
 
     def extract_record_content_cached(self, row: Dict[str, Any]) -> Dict[str, Any]:
         fingerprint = self.source_intake_cache_fingerprint(row)
-        cache = self.load_source_intake_cache()
-        cached = cache.get(fingerprint)
-        if isinstance(cached, dict):
-            reused = dict(cached)
-            extraction_notes = reused.get("extraction_notes")
-            if isinstance(extraction_notes, list):
-                reused["extraction_notes"] = [to_plain_text(item) for item in extraction_notes if to_plain_text(item)] + ["source_intake_cache_hit"]
-            else:
-                reused["extraction_notes"] = ["source_intake_cache_hit"]
-            return reused
+        with self._source_intake_cache_lock:
+            cached = self.load_source_intake_cache().get(fingerprint)
+            if isinstance(cached, dict):
+                return self.clone_cached_extraction(cached)
         extracted = self.extract_record_content(row)
+        with self._source_intake_cache_lock:
+            cached = self.load_source_intake_cache().get(fingerprint)
+            if isinstance(cached, dict):
+                return self.clone_cached_extraction(cached)
         self.append_source_intake_cache_entry(fingerprint, extracted)
         return extracted
 
     def extract_record_content(self, row: Dict[str, Any]) -> Dict[str, Any]:
         if self._source_intake_agent is None:
-            self._source_intake_agent = SourceIntakeAgent(self.llm_client)
+            with self._source_intake_agent_lock:
+                if self._source_intake_agent is None:
+                    self._source_intake_agent = SourceIntakeAgent(self.llm_client)
         return self._source_intake_agent.extract(row, self.spec)
 
     def sample(self) -> Tuple[str, List[UnifiedSample], Optional[str]]:
@@ -1330,6 +1343,68 @@ class BaseConnector:
         if not normalized:
             return False
         return normalized in self.skip_existing_source_problem_ids()
+
+    def collect_concurrently(
+        self,
+        indexed_items: Iterable[Tuple[int, Any]],
+        worker: Callable[[int, Any], Optional[Any]],
+        *,
+        target_count: int,
+        stop_when_target_reached: bool,
+    ) -> List[Any]:
+        max_workers = max(1, int(self.config.sample_concurrency or 1))
+        if max_workers <= 1:
+            results: List[Any] = []
+            for index, item in indexed_items:
+                value = worker(index, item)
+                if value is None:
+                    continue
+                results.append(value)
+                if stop_when_target_reached and len(results) >= target_count:
+                    break
+            return results
+
+        iterator = iter(indexed_items)
+        pending: Dict[Any, int] = {}
+        completed: Dict[int, Optional[Any]] = {}
+        results: List[Any] = []
+        next_index_to_emit = 0
+        exhausted = False
+        max_pending = max_workers if stop_when_target_reached else max_workers * 4
+
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            def submit_one() -> bool:
+                nonlocal exhausted
+                try:
+                    index, item = next(iterator)
+                except StopIteration:
+                    exhausted = True
+                    return False
+                pending[executor.submit(worker, index, item)] = index
+                return True
+
+            for _ in range(max_pending):
+                if not submit_one():
+                    break
+
+            while pending:
+                for future in as_completed(pending):
+                    index = pending.pop(future)
+                    completed[index] = future.result()
+                    break
+                while next_index_to_emit in completed:
+                    value = completed.pop(next_index_to_emit)
+                    if value is not None:
+                        results.append(value)
+                        if stop_when_target_reached and len(results) >= target_count:
+                            for future in pending:
+                                future.cancel()
+                            return results
+                    next_index_to_emit += 1
+                while not exhausted and len(pending) < max_pending:
+                    if not submit_one():
+                        break
+        return results
 
 
 class SourceUnavailableConnector(BaseConnector):
@@ -1701,8 +1776,7 @@ class LocalFileConnector(BaseConnector):
         target_count = sample_window_target_count(self.config)
         if target_count <= 0:
             return "available", [], None
-        samples: List[UnifiedSample] = []
-        for index, row in enumerate(self.iter_records(path)):
+        def build_sample(index: int, row: Dict[str, Any]) -> Optional[UnifiedSample]:
             extracted = self.extract_record_content_cached(row)
             raw_question = extracted["raw_question_text"]
             raw_answer = resolve_multiple_choice_answer_text(
@@ -1734,42 +1808,44 @@ class LocalFileConnector(BaseConnector):
                         image_sources.extend(child_sources)
                         break
             if not raw_question and not images:
-                continue
+                return None
             source_problem_id = str(row.get("id", row.get("problem_id", index)))
             if self.should_skip_source_problem_id(source_problem_id):
-                continue
-            samples.append(
-                UnifiedSample(
-                    dataset_key=self.spec.key,
-                    dataset_display_name=self.spec.display_name,
-                    subject=self.spec.subject,
-                    source_dataset=self.spec.display_name,
-                    source_split=self.spec.split or "local_file",
-                    source_problem_id=source_problem_id,
-                    raw_question_text=raw_question,
-                    raw_answer_text=raw_answer,
-                    images=images,
-                    image_sources=image_sources or extracted["image_paths"],
-                    raw_record=row,
-                    metadata={
-                        "row_index": index,
-                        "source_file": str(path),
-                        "image_paths": extracted.get("image_paths", []),
-                        "extraction_notes": extracted.get("extraction_notes", []),
-                        "question_field": extracted.get("question_field"),
-                        "answer_field": extracted.get("answer_field"),
-                        "image_field": extracted.get("image_field"),
-                        "choice_field": extracted.get("choice_field"),
-                        "reasoning_chain_field": extracted.get("reasoning_chain_field"),
-                        "reasoning_chain": extracted.get("reasoning_chain", ""),
-                        "has_reasoning_chain": bool(extracted.get("has_reasoning_chain", False)),
-                    },
-                    choice_map=extracted["choice_map"],
-                    force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
-                )
+                return None
+            return UnifiedSample(
+                dataset_key=self.spec.key,
+                dataset_display_name=self.spec.display_name,
+                subject=self.spec.subject,
+                source_dataset=self.spec.display_name,
+                source_split=self.spec.split or "local_file",
+                source_problem_id=source_problem_id,
+                raw_question_text=raw_question,
+                raw_answer_text=raw_answer,
+                images=images,
+                image_sources=image_sources or extracted["image_paths"],
+                raw_record=row,
+                metadata={
+                    "row_index": index,
+                    "source_file": str(path),
+                    "image_paths": extracted.get("image_paths", []),
+                    "extraction_notes": extracted.get("extraction_notes", []),
+                    "question_field": extracted.get("question_field"),
+                    "answer_field": extracted.get("answer_field"),
+                    "image_field": extracted.get("image_field"),
+                    "choice_field": extracted.get("choice_field"),
+                    "reasoning_chain_field": extracted.get("reasoning_chain_field"),
+                    "reasoning_chain": extracted.get("reasoning_chain", ""),
+                    "has_reasoning_chain": bool(extracted.get("has_reasoning_chain", False)),
+                },
+                choice_map=extracted["choice_map"],
+                force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
             )
-            if self.config.sample_strategy != "random" and len(samples) >= target_count:
-                break
+        samples = self.collect_concurrently(
+            enumerate(self.iter_records(path)),
+            build_sample,
+            target_count=target_count,
+            stop_when_target_reached=self.config.sample_strategy != "random",
+        )
         samples = apply_sample_window(samples, self.config)
         return "available", samples, None
 
@@ -1930,7 +2006,7 @@ class HuggingFaceConnector(BaseConnector):
         if cache_path.exists():
             return cache_path, sum(1 for _ in cache_path.open("r", encoding="utf-8")), True
 
-        rows: List[Dict[str, Any]] = []
+        indexed_rows: List[Tuple[int, Dict[str, Any]]] = []
         with jsonl_path.open("r", encoding="utf-8") as file:
             for index, line in enumerate(file):
                 line = line.strip()
@@ -1939,9 +2015,17 @@ class HuggingFaceConnector(BaseConnector):
                 row = json.loads(line)
                 if not isinstance(row, dict):
                     continue
-                parsed = self.build_mm_math_preparsed_entry(row, index)
-                if parsed is not None:
-                    rows.append(parsed)
+                indexed_rows.append((index, row))
+        print(
+            f"[MM-Math] building preparsed cache entries={len(indexed_rows)} concurrency={max(1, int(self.config.sample_concurrency or 1))}",
+            flush=True,
+        )
+        rows = self.collect_concurrently(
+            indexed_rows,
+            lambda index, row: self.build_mm_math_preparsed_entry(row, index),
+            target_count=len(indexed_rows),
+            stop_when_target_reached=False,
+        )
         write_jsonl(cache_path, rows)
         return cache_path, len(rows), False
 
@@ -2003,14 +2087,18 @@ class HuggingFaceConnector(BaseConnector):
             flush=True,
         )
 
-        samples: List[UnifiedSample] = []
-        for entry in read_jsonl(cache_path):
+        def build_sample(index: int, entry: Dict[str, Any]) -> Optional[UnifiedSample]:
             source_problem_id = to_plain_text(entry.get("source_problem_id"))
             if self.should_skip_source_problem_id(source_problem_id):
-                continue
-            samples.append(self.load_mm_math_sample_from_preparsed(entry, image_root))
-            if self.config.sample_strategy != "random" and len(samples) >= target_count:
-                break
+                return None
+            return self.load_mm_math_sample_from_preparsed(entry, image_root)
+
+        samples = self.collect_concurrently(
+            enumerate(read_jsonl(cache_path)),
+            build_sample,
+            target_count=target_count,
+            stop_when_target_reached=self.config.sample_strategy != "random",
+        )
         samples = apply_sample_window(samples, self.config)
         return "available", samples, None
 
@@ -2043,14 +2131,13 @@ class HuggingFaceConnector(BaseConnector):
         if not problem_files:
             return "source_unavailable", [], "No problem.json extracted from PhysReason zip"
 
-        samples: List[UnifiedSample] = []
-        for index, problem_path in enumerate(problem_files):
+        def build_sample(index: int, problem_path: Path) -> Optional[UnifiedSample]:
             try:
                 data = json.loads(problem_path.read_text(encoding="utf-8"))
             except Exception:
-                continue
+                return None
             if not isinstance(data, dict):
-                continue
+                return None
             qs = data.get("question_structure") if isinstance(data.get("question_structure"), dict) else {}
             context = to_plain_text(qs.get("context"))
             sub_questions = [to_plain_text(qs.get(key)) for key in sorted(qs.keys()) if key.startswith("sub_question")]
@@ -2074,35 +2161,38 @@ class HuggingFaceConnector(BaseConnector):
                     except Exception:
                         continue
             if not question_text and not images:
-                continue
+                return None
             source_problem_id = problem_path.parent.name
             if self.should_skip_source_problem_id(source_problem_id):
-                continue
-            samples.append(
-                UnifiedSample(
-                    dataset_key=self.spec.key,
-                    dataset_display_name=self.spec.display_name,
-                    subject=self.spec.subject,
-                    source_dataset=self.spec.display_name,
-                    source_split=self.spec.split or Path(zip_name).stem,
-                    source_problem_id=source_problem_id,
-                    raw_question_text=question_text,
-                    raw_answer_text=raw_answer,
-                    images=images,
-                    image_sources=image_sources,
-                    raw_record=data,
-                    metadata={
-                        "row_index": index,
-                        "image_paths": image_list,
-                        "extraction_notes": ["hf_raw_physreason_fallback"],
-                        "difficulty": data.get("difficulty"),
-                    },
-                    choice_map={},
-                    force_requires_image=bool(image_sources),
-                )
+                return None
+            return UnifiedSample(
+                dataset_key=self.spec.key,
+                dataset_display_name=self.spec.display_name,
+                subject=self.spec.subject,
+                source_dataset=self.spec.display_name,
+                source_split=self.spec.split or Path(zip_name).stem,
+                source_problem_id=source_problem_id,
+                raw_question_text=question_text,
+                raw_answer_text=raw_answer,
+                images=images,
+                image_sources=image_sources,
+                raw_record=data,
+                metadata={
+                    "row_index": index,
+                    "image_paths": image_list,
+                    "extraction_notes": ["hf_raw_physreason_fallback"],
+                    "difficulty": data.get("difficulty"),
+                },
+                choice_map={},
+                force_requires_image=bool(image_sources),
             )
-            if self.config.sample_strategy != "random" and len(samples) >= target_count:
-                break
+
+        samples = self.collect_concurrently(
+            enumerate(problem_files),
+            build_sample,
+            target_count=target_count,
+            stop_when_target_reached=self.config.sample_strategy != "random",
+        )
         samples = apply_sample_window(samples, self.config)
         if not samples:
             return "source_unavailable", [], "No usable samples extracted from PhysReason zip"
@@ -2128,8 +2218,7 @@ class HuggingFaceConnector(BaseConnector):
         if self.config.sample_strategy == "random":
             dataset = dataset.shuffle(seed=self.config.shuffle_seed)
             dataset_pre_shuffled = True
-        samples: List[UnifiedSample] = []
-        for index, row in enumerate(dataset):
+        def build_sample(index: int, row: Any) -> Optional[UnifiedSample]:
             row = dict(row)
             extracted = self.extract_record_content_cached(row)
             raw_question = extracted["raw_question_text"]
@@ -2166,41 +2255,44 @@ class HuggingFaceConnector(BaseConnector):
                         image_sources.extend(child_sources)
                         break
             if not raw_question and not images:
-                continue
+                return None
             source_problem_id = self.resolve_source_problem_id(row, index, detail or self.spec.split)
             if self.should_skip_source_problem_id(source_problem_id):
-                continue
-            samples.append(
-                UnifiedSample(
-                    dataset_key=self.spec.key,
-                    dataset_display_name=self.spec.display_name,
-                    subject=self.spec.subject,
-                    source_dataset=self.spec.display_name,
-                    source_split=detail or self.spec.split or "unknown",
-                    source_problem_id=source_problem_id,
-                    raw_question_text=raw_question,
-                    raw_answer_text=raw_answer,
-                    images=images,
-                    image_sources=image_sources or extracted["image_paths"],
-                    raw_record=row,
-                    metadata={
-                        "row_index": index,
-                        "image_paths": extracted.get("image_paths", []),
-                        "extraction_notes": extracted.get("extraction_notes", []),
-                        "question_field": extracted.get("question_field"),
-                        "answer_field": extracted.get("answer_field"),
-                        "image_field": extracted.get("image_field"),
-                        "choice_field": extracted.get("choice_field"),
-                        "reasoning_chain_field": extracted.get("reasoning_chain_field"),
-                        "reasoning_chain": extracted.get("reasoning_chain", ""),
-                        "has_reasoning_chain": bool(extracted.get("has_reasoning_chain", False)),
-                    },
-                    choice_map=extracted["choice_map"],
-                    force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
-                )
+                return None
+            return UnifiedSample(
+                dataset_key=self.spec.key,
+                dataset_display_name=self.spec.display_name,
+                subject=self.spec.subject,
+                source_dataset=self.spec.display_name,
+                source_split=detail or self.spec.split or "unknown",
+                source_problem_id=source_problem_id,
+                raw_question_text=raw_question,
+                raw_answer_text=raw_answer,
+                images=images,
+                image_sources=image_sources or extracted["image_paths"],
+                raw_record=row,
+                metadata={
+                    "row_index": index,
+                    "image_paths": extracted.get("image_paths", []),
+                    "extraction_notes": extracted.get("extraction_notes", []),
+                    "question_field": extracted.get("question_field"),
+                    "answer_field": extracted.get("answer_field"),
+                    "image_field": extracted.get("image_field"),
+                    "choice_field": extracted.get("choice_field"),
+                    "reasoning_chain_field": extracted.get("reasoning_chain_field"),
+                    "reasoning_chain": extracted.get("reasoning_chain", ""),
+                    "has_reasoning_chain": bool(extracted.get("has_reasoning_chain", False)),
+                },
+                choice_map=extracted["choice_map"],
+                force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
             )
-            if len(samples) >= target_count:
-                break
+
+        samples = self.collect_concurrently(
+            enumerate(dataset),
+            build_sample,
+            target_count=target_count,
+            stop_when_target_reached=True,
+        )
         samples = apply_sample_window(samples, self.config, shuffle=not dataset_pre_shuffled)
         return "available", samples, None
 
@@ -2314,6 +2406,22 @@ class GitHubConnector(BaseConnector):
             return self.parse_records_from_csv(path, "\t")
         return []
 
+    def resolve_repo_source_problem_id(self, row: Dict[str, Any], index: int, file_path: Path, repo_dir: Path) -> str:
+        if self.spec.key == "multi_physics":
+            raw_index = row.get("index")
+            row_index = to_plain_text(raw_index).strip()
+            if not row_index:
+                row_index = str(index)
+            if re.fullmatch(r"\d+", row_index):
+                row_index = f"{int(row_index):05d}"
+            try:
+                file_key = str(file_path.relative_to(repo_dir).with_suffix(""))
+            except ValueError:
+                file_key = file_path.stem
+            file_key = re.sub(r"[^A-Za-z0-9]+", "_", file_key).strip("_").lower()
+            return f"{file_key}_{row_index}"
+        return str(row.get("id", row.get("problem_id", index)))
+
     def resolve_images(self, value: Any, base_dir: Path) -> Tuple[List[Image.Image], List[str]]:
         images: List[Image.Image] = []
         sources: List[str] = []
@@ -2383,20 +2491,23 @@ class GitHubConnector(BaseConnector):
         if zip_path is None or chosen_split is None:
             return "source_unavailable", [], "No Geometry3K split zip found under data/geometry3k"
 
-        samples: List[UnifiedSample] = []
         with zipfile.ZipFile(zip_path) as zf:
+            zip_read_lock = threading.Lock()
+            zip_members = set(zf.namelist())
             problem_members = sorted(
-                name for name in zf.namelist() if name.startswith(f"{chosen_split}/") and name.endswith("/data.json")
+                name for name in zip_members if name.startswith(f"{chosen_split}/") and name.endswith("/data.json")
             )
             if not problem_members:
                 return "source_unavailable", [], f"No data.json entries found in {zip_path.name}"
-            for index, member in enumerate(problem_members):
+
+            def build_sample(index: int, member: str) -> Optional[UnifiedSample]:
                 try:
-                    data = json.loads(zf.read(member).decode("utf-8"))
+                    with zip_read_lock:
+                        data = json.loads(zf.read(member).decode("utf-8"))
                 except Exception:
-                    continue
+                    return None
                 if not isinstance(data, dict):
-                    continue
+                    return None
                 problem_dir = str(Path(member).parent).replace("\\", "/")
                 question_text = normalize_whitespace(
                     to_plain_text(
@@ -2418,50 +2529,55 @@ class GitHubConnector(BaseConnector):
                 image_sources: List[str] = []
                 for candidate_name in ["img_diagram.png", "img_problem.png"]:
                     image_member = f"{problem_dir}/{candidate_name}"
-                    if image_member not in zf.namelist():
+                    if image_member not in zip_members:
                         continue
                     try:
-                        images.append(Image.open(io.BytesIO(zf.read(image_member))).convert("RGB"))
+                        with zip_read_lock:
+                            image_bytes = zf.read(image_member)
+                        images.append(Image.open(io.BytesIO(image_bytes)).convert("RGB"))
                         image_sources.append(image_member)
                     except Exception:
                         continue
                 if not question_text and not images:
-                    continue
+                    return None
                 question_field = "annotat_text" if data.get("annotat_text") else "compact_text" if data.get("compact_text") else "problem_text" if data.get("problem_text") else "question"
                 answer_field = "answer" if data.get("answer") is not None else "label" if data.get("label") is not None else "solution"
                 choice_field = "choices" if data.get("choices") is not None else "compact_choices" if data.get("compact_choices") is not None else None
                 source_problem_id = str(data.get("id", Path(problem_dir).name))
                 if self.should_skip_source_problem_id(source_problem_id):
-                    continue
-                samples.append(
-                    UnifiedSample(
-                        dataset_key=self.spec.key,
-                        dataset_display_name=self.spec.display_name,
-                        subject=self.spec.subject,
-                        source_dataset=self.spec.display_name,
-                        source_split=chosen_split,
-                        source_problem_id=source_problem_id,
-                        raw_question_text=question_text,
-                        raw_answer_text=raw_answer,
-                        images=images,
-                        image_sources=image_sources,
-                        raw_record=data,
-                        metadata={
-                            "row_index": index,
-                            "data_file": f"{zip_path.relative_to(repo_dir)}::{member}",
-                            "image_paths": image_sources,
-                            "extraction_notes": ["geometry3k_zip_extraction"],
-                            "question_field": question_field,
-                            "answer_field": answer_field,
-                            "image_field": "zip_members",
-                            "choice_field": choice_field,
-                        },
-                        choice_map=choice_map,
-                        force_requires_image=True,
-                    )
+                    return None
+                return UnifiedSample(
+                    dataset_key=self.spec.key,
+                    dataset_display_name=self.spec.display_name,
+                    subject=self.spec.subject,
+                    source_dataset=self.spec.display_name,
+                    source_split=chosen_split,
+                    source_problem_id=source_problem_id,
+                    raw_question_text=question_text,
+                    raw_answer_text=raw_answer,
+                    images=images,
+                    image_sources=image_sources,
+                    raw_record=data,
+                    metadata={
+                        "row_index": index,
+                        "data_file": f"{zip_path.relative_to(repo_dir)}::{member}",
+                        "image_paths": image_sources,
+                        "extraction_notes": ["geometry3k_zip_extraction"],
+                        "question_field": question_field,
+                        "answer_field": answer_field,
+                        "image_field": "zip_members",
+                        "choice_field": choice_field,
+                    },
+                    choice_map=choice_map,
+                    force_requires_image=True,
                 )
-                if self.config.sample_strategy != "random" and len(samples) >= target_count:
-                    break
+
+            samples = self.collect_concurrently(
+                enumerate(problem_members),
+                build_sample,
+                target_count=target_count,
+                stop_when_target_reached=self.config.sample_strategy != "random",
+            )
         if not samples:
             return "source_unavailable", [], f"No usable Geometry3K samples extracted from {zip_path.name}"
         samples = apply_sample_window(samples, self.config)
@@ -2491,7 +2607,8 @@ class GitHubConnector(BaseConnector):
                 continue
             if not records:
                 continue
-            for index, row in enumerate(records):
+
+            def build_sample(index: int, row: Dict[str, Any]) -> Optional[UnifiedSample]:
                 row = dict(row)
                 extracted = self.extract_record_content_cached(row)
                 raw_question = extracted["raw_question_text"]
@@ -2538,38 +2655,42 @@ class GitHubConnector(BaseConnector):
                         except Exception:
                             continue
                 if not raw_question and not images:
-                    continue
-                source_problem_id = str(row.get("id", row.get("problem_id", len(samples))))
+                    return None
+                source_problem_id = self.resolve_repo_source_problem_id(row, index, file_path, repo_dir)
                 if self.should_skip_source_problem_id(source_problem_id):
-                    continue
-                samples.append(
-                    UnifiedSample(
-                        dataset_key=self.spec.key,
-                        dataset_display_name=self.spec.display_name,
-                        subject=self.spec.subject,
-                        source_dataset=self.spec.display_name,
-                        source_split="repo_discovered",
-                        source_problem_id=source_problem_id,
-                        raw_question_text=raw_question,
-                        raw_answer_text=raw_answer,
-                        images=images,
-                        image_sources=image_sources or extracted["image_paths"],
-                        raw_record=row,
-                        metadata={
-                            "data_file": str(file_path),
-                            "image_paths": extracted.get("image_paths", []),
-                            "extraction_notes": extracted.get("extraction_notes", []),
-                            "question_field": extracted.get("question_field"),
-                            "answer_field": extracted.get("answer_field"),
-                            "image_field": extracted.get("image_field"),
-                            "choice_field": extracted.get("choice_field"),
-                        },
-                        choice_map=extracted["choice_map"],
-                        force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
-                    )
+                    return None
+                return UnifiedSample(
+                    dataset_key=self.spec.key,
+                    dataset_display_name=self.spec.display_name,
+                    subject=self.spec.subject,
+                    source_dataset=self.spec.display_name,
+                    source_split="repo_discovered",
+                    source_problem_id=source_problem_id,
+                    raw_question_text=raw_question,
+                    raw_answer_text=raw_answer,
+                    images=images,
+                    image_sources=image_sources or extracted["image_paths"],
+                    raw_record=row,
+                    metadata={
+                        "data_file": str(file_path),
+                        "image_paths": extracted.get("image_paths", []),
+                        "extraction_notes": extracted.get("extraction_notes", []),
+                        "question_field": extracted.get("question_field"),
+                        "answer_field": extracted.get("answer_field"),
+                        "image_field": extracted.get("image_field"),
+                        "choice_field": extracted.get("choice_field"),
+                    },
+                    choice_map=extracted["choice_map"],
+                    force_requires_image=bool(extracted["force_requires_image"] or self.spec.force_requires_image),
                 )
-                if self.config.sample_strategy != "random" and len(samples) >= target_count:
-                    break
+
+            file_samples = self.collect_concurrently(
+                enumerate(records),
+                build_sample,
+                target_count=target_count - len(samples) if self.config.sample_strategy != "random" else target_count,
+                stop_when_target_reached=self.config.sample_strategy != "random",
+            )
+            samples.extend(file_samples)
             if self.config.sample_strategy != "random" and len(samples) >= target_count:
                 break
         if not samples:
