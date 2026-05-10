@@ -47,6 +47,15 @@ review_release:
             label: adjacent pure-image-choice or metadata-risk bucket
             candidate_key: adjacent_choice_or_metadata_risk_candidates
             selection_notes: "samples near A but with extra pure_image_choice or metadata-related risks"
+        rewrite_release:
+          enabled: true
+          candidate_key: rewrite_usable_no_key_condition_gap_candidates
+          policy_doc: docs/review/geoqa_plus_rewrite_release_decision_2026-05-10.md
+          release_basis: explicit GeoQA-Plus rewrite-usable candidate subset; rewritten open variants are complete/verifiable/understandable, while key-condition-missing or image-recovery-dependent samples are excluded
+          pass_decision_reason_codes:
+            - manual_release_pass
+            - rewrite_usable_no_key_condition_gap
+          selection_notes: "explicit candidate-json subset from geoqa_plus_3040_4040; ignore original multiple-choice gold/option mismatch and extra unrelated diagrams only when rewritten open variants are complete, answer-verifiable, target-clear, and agent-understandable"
 
     mm_math:
       dataset_root: ready/mm_math/run_outputs_merged_by_source_problem_id__mm_math/datasets/mm_math
@@ -71,6 +80,15 @@ review_release:
               decision_reason_codes:
                 - alignment_requires_review
                 - text_sufficient
+        strict_rewrite_release:
+          enabled: true
+          candidate_key: strict_rewrite_usable_review_candidates
+          policy_doc: docs/review/mm_math_strict_rewrite_release_decision_2026-05-10.md
+          release_basis: explicit MM-Math strict rewrite-usable review candidate subset; rewritten/open variants are complete, verifiable, understandable, and exclude key-condition gaps, semantic conflicts, unusable images, answer inconsistencies, and minor ambiguity/format-risk buckets
+          pass_decision_reason_codes:
+            - manual_release_pass
+            - strict_rewrite_usable_review
+          selection_notes: "explicit candidate-json subset from MM-Math selected outputs; release only complete/verifiable/understandable rewritten open problems; keep boundary risks such as similarity-order ambiguity, nonminimal answer format, solution inconsistency, key-condition gap, semantic conflict, unusable image, or answer inconsistency unreleased"
 
     mathvision:
       dataset_root: ready/mathvision/run_merged_mathvision_300_3040_dedup/datasets/mathvision
@@ -167,6 +185,15 @@ review_release:
             label: adjacent other-risk split_variant bucket
             candidate_key: adjacent_other_risk_split_variant_candidates
             selection_notes: "explicit candidate-json subset: same reason-code set but quality_risk_flags != [\"low_resolution\"]"
+        visual_grounding_rewrite_release:
+          enabled: true
+          candidate_key: multi_physics_visual_grounding_rewrite_candidates
+          policy_doc: docs/review/multi_physics_visual_grounding_rewrite_release_decision_2026-05-10.md
+          release_basis: explicit Multi-Physics visual-grounding rewrite-usable candidate subset; non-split open rewrites are complete/verifiable/understandable, and only alignment, visual-grounding, or low-resolution style risks are allowed
+          pass_decision_reason_codes:
+            - manual_release_pass
+            - multi_physics_visual_grounding_rewrite_usable
+          selection_notes: "explicit candidate-json subset from formal multi_physics_* outputs only; excludes smoke outputs, split variants, choice/option loss, answer conflicts, rewrite target mismatch, text extraction gaps, notation/unit ambiguity, and image-text semantic conflicts"
 
     msearth_open_ended:
       dataset_root: ready/msearth_open_ended/run_merged_msearth_open_ended_0000_0120_ler_reasoning_chain/datasets/msearth_open_ended
