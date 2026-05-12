@@ -1,0 +1,37 @@
+# physics\physreason final taxonomy package
+
+- 样本数：905
+- 最终类别数：6
+
+## Taxonomy
+
+| 类别 | 中文名 | 数量 | 占比 | 定义 |
+| --- | --- | --- | --- | --- |
+| mechanics_kinematics_dynamics | 力学、运动学与动力学 | 788 | 87.07% | 需要运用“力学、运动学与动力学”相关知识或解法的题目。 |
+| electromagnetism_circuits | 电磁学与物理电路 | 40 | 4.42% | 需要运用“电磁学与物理电路”相关知识或解法的题目。 |
+| waves_optics_sound | 波动、光学与声学 | 36 | 3.98% | 需要运用“波动、光学与声学”相关知识或解法的题目。 |
+| physics_other | 物理综合题 | 27 | 2.98% | 需要运用“物理综合题”相关知识或解法的题目。 |
+| thermo_fluids_gases | 热学、流体与气体 | 13 | 1.44% | 需要运用“热学、流体与气体”相关知识或解法的题目。 |
+| graph_data_interpretation | 物理图像与数据解读 | 1 | 0.11% | 需要运用“物理图像与数据解读”相关知识或解法的题目。 |
+
+## 代表例题
+
+| 中文类别 | 样本ID | 题目 | 中文题意 | 答案 |
+| --- | --- | --- | --- | --- |
+| 力学、运动学与动力学 | physreason00378 | The frequency of the car horn decreases from $1200\mathrm{Hz}$ to $1000\mathrm{Hz}$, and the speed of sound in air is known to be $330\mathrm{m/s}$. 1. Find the magnitude of the car's velocity. | 汽车喇叭频率从 $1200\mathrm{Hz}$ 降至 $1000\mathrm{Hz}$，已知空气中声速为 $330\mathrm{m/s}$。1. 求汽车速度的大小。 | 30 |
+| 电磁学与物理电路 | physreason00648 | In a lightning process, the amount of charge flowing is approximately 300 C, and the duration is about 0.005 s. 1. What is the magnitude of the average current formed? | 一次闪电过程中，流过的电荷量约为 300 C，持续时间约为 0.005 s。1. 求形成的平均电流大小。 | 60000 A |
+| 波动、光学与声学 | physreason00298 | A simple harmonic transverse wave, as shown in the figure, where the solid line represents the waveform at a certain moment, and the dashed line represents the waveform after 0.2 seconds. 1. Assuming the wave propagates to the left, find the possible distance it travels. 2. If this wave propagates to the right, find its maximum period. 3. Assuming the wave speed is $35\mathrm{m/s}$, determine the direction of wave propagation. | 如图所示，一列简谐横波中，实线表示某一时刻的波形，虚线表示 0.2 s 后的波形。1. 若波向左传播，求可能传播的距离。2. 若波向右传播，求其最大周期。3. 若波速为 $35\mathrm{m/s}$，判断波的传播方向。 | 4n+3(m) (n=0,1,2...) 0.8 s Propagating to the left |
+| 物理综合题 | physreason00169 | A streetlight is at a height $h$ above the ground. A person of height $L$ is walking at a constant speed $v$, as shown in the figure. Find the rate of change of the length of the person's shadow with respect to time. | 一盏路灯距地面高度为 $h$。身高为 $L$ 的人以恒定速度 $v$ 行走，如图所示。求人的影长随时间的变化率。 | $\frac{Lv}{h-L}$ |
+| 热学、流体与气体 | physreason00652 | A certain medicine bottle has a volume of $0.9\mathsf{m L}$, containing $0.5\mathsf{m L}$ of liquid medication, and the gas pressure inside the bottle is $1.0 \times 10^{5}\mathrm{Pa}$. A nurse injects gas from a syringe with a cross-sectional area of $0.3\mathrm{cm}^{2}$, a length of $0.4\mathsf{c m}$, and a pressure of $1.0 \times 10^{5}\mathrm{Pa}$ into the medicine bottle. The temperature inside and outside the bottle is the same and remains constant, and the gas is considered to be an ideal gas. 1. Determine the pressure of the gas inside the medicine bottle at this time. | 某药瓶体积为 $0.9\mathsf{m L}$，内含 $0.5\mathsf{m L}$ 药液，瓶内气体压强为 $1.0 \times 10^{5}\mathrm{Pa}$。护士用横截面积 $0.3\mathrm{cm}^{2}$、长度 $0.4\mathsf{c m}$、压强 $1.0 \times 10^{5}\mathrm{Pa}$ 的注射器向药瓶内注入气体。瓶内外温度相同且保持不变，气体视为理想气体。1. 求此时药瓶内气体压强。 | 1.3 \times 10^{5}\mathrm{Pa} |
+| 物理图像与数据解读 | physreason00196 | In the experiment "Estimating the Size of Oleic Acid Molecules Using the Oil Film Method," an oleic acid-alcohol solution is prepared with a volume ratio of oleic acid to alcohol as $m{\cdot}n$. A syringe is used to draw droplets of this solution, and the total volume of $k$ droplets is measured to be $V$. A single droplet is then placed into a shallow dish, and after stabilization, the outline of the oleic acid film is traced onto graph paper, as shown in the figure. It is known that each small square on the graph paper has a side length of $a$. 1. What is the area of the oil film? 2. How to estimate the diameter of an oleic acid molecule? | 在“用油膜法估测油酸分子大小”的实验中，配制油酸酒精溶液，油酸与酒精体积比为 $m{\cdot}n$。用注射器吸取该溶液，测得 $k$ 滴总体积为 $V$。将一滴滴入浅盘，稳定后在方格纸上描出油酸膜轮廓，如图所示。已知每个小方格边长为 $a$。1. 油膜面积是多少？2. 如何估算油酸分子的直径？ | $31a^2$ $\frac{m V}{31a^2 k (m + n)} |
+
+## 特征统计
+
+| 中文类别 | N | 题长中位数 | 复杂度中位数 | multi-step中位数 | 需图像% |
+| --- | --- | --- | --- | --- | --- |
+| 力学、运动学与动力学 | 788 | 147.0 | 11.989 | 0.658 | 80.46 |
+| 电磁学与物理电路 | 40 | 95.5 | 10.66 | 0.622 | 70.0 |
+| 波动、光学与声学 | 36 | 99.0 | 10.944 | 0.615 | 88.89 |
+| 物理综合题 | 27 | 84.0 | 9.394 | 0.518 | 74.07 |
+| 热学、流体与气体 | 13 | 154.0 | 10.71 | 0.622 | 76.92 |
+| 物理图像与数据解读 | 1 | 124.0 | 10.912 | 0.541 | 100.0 |
