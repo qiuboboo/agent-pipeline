@@ -1,0 +1,11 @@
+# Review Reason Category Distribution
+
+- Counts are reason occurrences, not unique samples.
+
+| reason_category | occurrence_count |
+|---|---|
+| alignment_metadata_consistency | 22643 |
+| answer_target_solvability | 11594 |
+| other | 20285 |
+| rewrite_structure_options | 6699 |
+| visual_grounding_image_quality | 9359 |
