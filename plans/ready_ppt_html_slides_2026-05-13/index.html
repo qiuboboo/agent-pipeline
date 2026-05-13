@@ -3,1004 +3,201 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pipeline1 到 Ready Pass：数据生产、门控与分析</title>
+  <title>多学科多模态 Ready 数据资产构建与质量放行分析</title>
   <style>
-    :root {
-      --green: #005825;
-      --green-2: #0f6b37;
-      --green-soft: #e8f2ed;
-      --ink: #1f2329;
-      --muted: #667085;
-      --line: #dfe7e2;
-      --panel: #f7f9f8;
-      --warn: #b66b00;
-      --warn-bg: #fff7e6;
-      --shadow: 0 16px 36px rgba(16, 24, 40, 0.08);
-      font-family: "Microsoft YaHei", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #dfe3e1;
-      color: var(--ink);
-    }
-
-    .deck {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
-
-    .slide {
-      width: min(1280px, calc(100vw - 48px));
-      aspect-ratio: 16 / 9;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-      padding: 72px 80px 54px;
-      display: none;
-    }
-    .slide.active { display: block; }
-    .slide::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 8px;
-      background: var(--green);
-    }
-
-    .title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 26px;
-    }
-    .title {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      min-width: 0;
-    }
-    .title::before {
-      content: "";
-      width: 8px;
-      height: 48px;
-      background: var(--green);
-      display: block;
-      flex: 0 0 auto;
-    }
-    h1 {
-      margin: 0;
-      font-size: 34px;
-      line-height: 1.15;
-      letter-spacing: 0;
-      font-weight: 800;
-    }
-    .page-code {
-      color: #7ba78f;
-      font-size: 20px;
-      letter-spacing: 0;
-      white-space: nowrap;
-    }
-    .takeaway {
-      margin: 0 0 26px 28px;
-      padding: 12px 18px;
-      border-left: 4px solid var(--green);
-      background: var(--green-soft);
-      color: #123a25;
-      font-size: 17px;
-      line-height: 1.45;
-      font-weight: 600;
-    }
-
-    .grid { display: grid; gap: 20px; }
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 18px 20px;
-    }
-    .card.white { background: #fff; }
-    .card.green {
-      background: var(--green);
-      color: #fff;
-      border-color: var(--green);
-    }
-    .card h2, .card h3 {
-      margin: 0 0 12px;
-      color: var(--green);
-      font-size: 19px;
-      line-height: 1.25;
-    }
-    .card.green h2, .card.green h3 { color: #fff; }
-    .metric {
-      display: grid;
-      gap: 2px;
-      padding: 9px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.22);
-    }
-    .card:not(.green) .metric { border-bottom-color: var(--line); }
-    .metric:last-child { border-bottom: 0; }
-    .metric .num {
-      color: var(--green);
-      font-size: 30px;
-      line-height: 1.05;
-      font-weight: 800;
-    }
-    .card.green .num { color: #fff; }
-    .metric .label {
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .card.green .label { color: rgba(255,255,255,0.84); }
-
-    .small-note {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .footer {
-      position: absolute;
-      left: 80px;
-      right: 80px;
-      bottom: 22px;
-      color: #8a98a0;
-      font-size: 12px;
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-    }
-    .bottom-bar {
-      margin-top: 18px;
-      padding: 12px 18px;
-      background: var(--green-soft);
-      border-radius: 8px;
-      color: var(--green);
-      font-weight: 700;
-      font-size: 15px;
-    }
-
-    .split-two {
-      grid-template-columns: 1fr 1fr;
-      align-items: stretch;
-      height: 430px;
-    }
-    .scope-card {
-      padding: 26px 30px;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-    }
-    .scope-card h2 {
-      font-size: 24px;
-      border-bottom: 2px solid var(--green);
-      padding-bottom: 12px;
-    }
-    .scope-card .metric .num { font-size: 36px; }
-    .scope-divider {
-      position: absolute;
-      left: 50%;
-      top: 236px;
-      transform: translateX(-50%);
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 16px;
-      color: var(--green);
-      font-size: 13px;
-      font-weight: 700;
-      box-shadow: 0 4px 12px rgba(16,24,40,0.08);
-    }
-
-    .asset-layout {
-      grid-template-columns: 220px 1fr 350px;
-      height: 466px;
-      gap: 18px;
-      align-items: stretch;
-    }
-    .dataset-matrix {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      font-size: 10.5px;
-      line-height: 1.18;
-    }
-    .domain-box {
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      overflow: hidden;
-      background: #fff;
-    }
-    .domain-head {
-      background: var(--green);
-      color: #fff;
-      padding: 5px 8px;
-      display: flex;
-      justify-content: space-between;
-      font-weight: 700;
-    }
-    .dataset-row {
-      display: grid;
-      grid-template-columns: 1fr 44px 26px;
-      gap: 6px;
-      padding: 4px 8px;
-      border-top: 1px solid #eef2ef;
-      align-items: center;
-    }
-    .dataset-row span:nth-child(2), .dataset-row span:nth-child(3) {
-      text-align: right;
-      color: var(--muted);
-    }
-    .fig-stack {
-      display: grid;
-      grid-template-rows: 1fr 1fr;
-      gap: 12px;
-      min-height: 0;
-    }
-    .figure-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 8px;
-      background: #fff;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      min-height: 0;
-    }
-    .figure-title {
-      color: var(--green);
-      font-size: 13px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .figure-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      min-height: 0;
-    }
-
-    .mindmap {
-      grid-template-columns: 285px 1fr 250px;
-      gap: 18px;
-      height: 402px;
-      align-items: stretch;
-    }
-    .compact-groups {
-      display: grid;
-      gap: 6px;
-      font-size: 10.5px;
-      line-height: 1.15;
-    }
-    .compact-group {
-      display: grid;
-      grid-template-columns: 46px 1fr;
-      gap: 6px;
-      align-items: start;
-      border-bottom: 1px solid #eef2ef;
-      padding-bottom: 4px;
-    }
-    .compact-group b {
-      color: var(--green);
-      font-size: 12px;
-    }
-    .flow-box {
-      background: linear-gradient(180deg, #f2faf5 0%, #fff 100%);
-      border: 1.5px solid var(--green);
-      border-radius: 8px;
-      padding: 18px;
-      position: relative;
-    }
-    .flow-steps {
-      display: grid;
-      gap: 12px;
-      margin-top: 6px;
-    }
-    .flow-step {
-      display: grid;
-      grid-template-columns: 34px 1fr auto;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 7px;
-    }
-    .step-dot {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--green);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-      font-size: 13px;
-    }
-    .step-metric {
-      color: var(--green);
-      font-weight: 800;
-      font-size: 12px;
-    }
-    .feature-list {
-      display: grid;
-      gap: 10px;
-    }
-    .feature-item {
-      border: 1px solid var(--green);
-      color: var(--green);
-      background: #fff;
-      border-radius: 7px;
-      padding: 12px 14px;
-      font-weight: 800;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .feature-item::before {
-      content: "";
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--green);
-      margin-right: 8px;
-      flex: 0 0 auto;
-    }
-    .evidence-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .evidence {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      padding: 11px 12px;
-      color: var(--green);
-      font-weight: 800;
-      font-size: 13px;
-    }
-
-    .pipeline-wrap {
-      position: relative;
-      height: 420px;
-      margin-top: 4px;
-    }
-    .pipe-line {
-      position: absolute;
-      left: 52px;
-      right: 52px;
-      top: 206px;
-      height: 4px;
-      background: var(--green);
-      border-radius: 999px;
-    }
-    .pipe-node {
-      position: absolute;
-      top: 190px;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: #fff;
-      border: 5px solid var(--green);
-      transform: translateX(-50%);
-      z-index: 2;
-    }
-    .pipe-label {
-      position: absolute;
-      top: 232px;
-      transform: translateX(-50%);
-      font-weight: 800;
-      color: var(--green);
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    .bubble {
-      position: absolute;
-      width: 150px;
-      transform: translateX(-50%);
-      background: #fff;
-      border: 1px solid var(--green);
-      border-radius: 8px;
-      padding: 10px 12px;
-      box-shadow: 0 8px 20px rgba(16,24,40,0.08);
-      font-size: 12px;
-      line-height: 1.25;
-    }
-    .bubble.top { top: 62px; }
-    .bubble.bottom { top: 284px; }
-    .bubble b {
-      display: block;
-      color: var(--green);
-      font-size: 16px;
-      margin-bottom: 4px;
-    }
-    .bubble::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      width: 1px;
-      height: 38px;
-      background: var(--line);
-      transform: translateX(-50%);
-    }
-    .bubble.top::after { top: 100%; }
-    .bubble.bottom::after { bottom: 100%; }
-
-    .funnel-layout {
-      grid-template-columns: 1fr 250px;
-      gap: 28px;
-      height: 420px;
-      align-items: center;
-    }
-    .funnel {
-      display: grid;
-      gap: 9px;
-      justify-items: center;
-    }
-    .funnel-step {
-      height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      background: var(--green);
-      border-radius: 6px;
-      font-weight: 800;
-      font-size: 16px;
-    }
-    .funnel-step:nth-child(1) { width: 92%; }
-    .funnel-step:nth-child(2) { width: 78%; background: #126a38; }
-    .funnel-step:nth-child(3) { width: 66%; background: #2c7c4a; }
-    .funnel-step:nth-child(4) { width: 52%; background: #4b9165; }
-    .funnel-step:nth-child(5) { width: 50%; background: #8c7b51; }
-    .funnel-step:nth-child(6) { width: 42%; background: #8fa199; color: #fff; }
-    .funnel-step:nth-child(7) { width: 70%; background: var(--green); height: 54px; font-size: 20px; }
-    .ratio-cards {
-      display: grid;
-      gap: 14px;
-    }
-    .ratio-card {
-      border-left: 5px solid var(--green);
-      background: var(--panel);
-      padding: 15px 16px;
-      border-radius: 8px;
-    }
-    .ratio-card b {
-      display: block;
-      color: var(--green);
-      font-size: 27px;
-      line-height: 1.05;
-    }
-    .rule-line {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--green);
-    }
-    .rule-line div {
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      padding: 9px;
-      background: #fff;
-      text-align: center;
-    }
-
-    .release-layout {
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      height: 420px;
-    }
-    .decision-flow {
-      display: grid;
-      gap: 10px;
-      margin: 12px 0;
-    }
-    .decision-row {
-      display: grid;
-      grid-template-columns: 78px 1fr 86px;
-      gap: 10px;
-      align-items: center;
-      font-size: 13px;
-    }
-    .pill {
-      border-radius: 999px;
-      background: var(--green);
-      color: #fff;
-      padding: 8px 12px;
-      text-align: center;
-      font-weight: 800;
-    }
-    .pill.soft { background: var(--green-soft); color: var(--green); border: 1px solid var(--green); }
-    .pill.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid #f2c77a; }
-    .bar-list {
-      display: grid;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    .bar-row {
-      display: grid;
-      grid-template-columns: 120px 1fr 48px;
-      gap: 10px;
-      align-items: center;
-      font-size: 13px;
-    }
-    .bar-track {
-      height: 18px;
-      background: #edf2ef;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%;
-      background: var(--green);
-      border-radius: inherit;
-    }
-    .risk-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-top: 10px;
-      font-size: 12px;
-    }
-    .risk-list span {
-      background: var(--warn-bg);
-      color: #7a4b00;
-      border-radius: 6px;
-      padding: 7px 8px;
-      border: 1px solid #f2d492;
-    }
-
-    .taxonomy-layout {
-      grid-template-columns: 1.1fr 0.9fr;
-      height: 430px;
-      gap: 24px;
-    }
-    .taxonomy-bars {
-      display: grid;
-      gap: 9px;
-      margin-top: 6px;
-    }
-    .tax-row {
-      display: grid;
-      grid-template-columns: 190px 1fr 52px;
-      gap: 10px;
-      align-items: center;
-      font-size: 12.5px;
-    }
-    .tax-track {
-      height: 18px;
-      border-radius: 999px;
-      background: #edf2ef;
-      overflow: hidden;
-    }
-    .tax-fill { height: 100%; background: var(--green); }
-    .callout-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .callout {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-left: 5px solid var(--green);
-      border-radius: 8px;
-      padding: 13px 14px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .diagnosis-layout {
-      grid-template-columns: 1fr 1fr;
-      height: 430px;
-      gap: 24px;
-    }
-    .reason-bars {
-      display: grid;
-      gap: 14px;
-      margin-top: 16px;
-    }
-    .reason-row {
-      display: grid;
-      grid-template-columns: 180px 1fr 70px;
-      gap: 10px;
-      align-items: center;
-      font-size: 12.5px;
-    }
-    .strategy-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin-top: 14px;
-    }
-    .strategy-table th {
-      background: var(--green);
-      color: #fff;
-      padding: 10px;
-      text-align: left;
-    }
-    .strategy-table td {
-      border: 1px solid var(--line);
-      padding: 9px 10px;
-      vertical-align: top;
-    }
-
-    .nav {
-      position: fixed;
-      left: 50%;
-      bottom: 14px;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,0.92);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 14px;
-      color: var(--muted);
-      font-size: 13px;
-      box-shadow: 0 8px 20px rgba(16,24,40,0.10);
-    }
-
-    @media print {
-      body { background: #fff; }
-      .deck { padding: 0; display: block; }
-      .slide {
-        width: 100vw;
-        height: 100vh;
-        box-shadow: none;
-        border-radius: 0;
-        display: block !important;
-        page-break-after: always;
-      }
-      .nav { display: none; }
-    }
+    :root{
+      --green:#005825; --green2:#0f6b37; --soft:#e8f2ed; --ink:#18212b; --muted:#65717c;
+      --line:#dfe7e2; --panel:#f7f9f8; --amber:#b66b00; --amberbg:#fff7e6; --red:#b42318;
+      --blue:#2f80ed; --purple:#7c3aed; --shadow:0 18px 42px rgba(16,24,40,.10);
+      font-family:"Microsoft YaHei","Noto Sans CJK SC","PingFang SC",Arial,sans-serif;
+    }
+    *{box-sizing:border-box} body{margin:0;background:#dfe3e1;color:var(--ink)}
+    .deck{min-height:100vh;display:grid;place-items:center;padding:22px}.slide{width:min(1280px,calc(100vw - 44px));aspect-ratio:16/9;background:#fff;border-radius:8px;box-shadow:var(--shadow);position:relative;overflow:hidden;padding:58px 70px 42px;display:none}.slide.active{display:block}.slide:before{content:"";position:absolute;left:0;top:0;right:0;height:8px;background:var(--green)}
+    .title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:24px}.title{display:flex;align-items:center;gap:16px}.title:before{content:"";width:7px;height:42px;background:var(--green);display:block}h1{margin:0;font-size:32px;line-height:1.15;font-weight:850}.page{color:#7ba78f;font-size:18px;white-space:nowrap}.takeaway{margin:0 0 18px 23px;padding:10px 15px;border-left:4px solid var(--green);background:var(--soft);color:#123a25;font-size:16px;line-height:1.42;font-weight:700}.grid{display:grid;gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:15px 17px}.card.white{background:#fff}.card.green{background:var(--green);border-color:var(--green);color:#fff}.card h2,.card h3{margin:0 0 10px;color:var(--green);font-size:18px}.card.green h2,.card.green h3{color:#fff}.num{font-weight:850;color:var(--green)}.muted{color:var(--muted)}.small{font-size:12px;line-height:1.35}.footer{position:absolute;left:70px;right:70px;bottom:16px;color:#8a98a0;font-size:11px;display:flex;justify-content:space-between}.pill{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 10px;font-size:12px;color:var(--green);font-weight:700}.metric{padding:7px 0;border-bottom:1px solid var(--line)}.metric:last-child{border-bottom:0}.metric .num{display:block;font-size:28px;line-height:1.05}.metric .label{display:block;color:var(--muted);font-size:12px;margin-top:2px}.big-num{font-size:72px;line-height:.96}.section-label{font-size:14px;color:var(--green);font-weight:800;margin-bottom:8px}.bar{height:22px;background:#e9f0ec;border-radius:999px;overflow:hidden}.bar>span{height:100%;display:block;background:var(--green);border-radius:999px}.bar-row{display:grid;grid-template-columns:168px 1fr 58px;gap:10px;align-items:center;font-size:13px;margin:8px 0}.donut-wrap{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:center}.donut{width:320px;height:320px;border-radius:50%;background:conic-gradient(#005825 0 46.8%,#2f80ed 46.8% 68.0%,#7c3aed 68.0% 77.5%,#0f9f6e 77.5% 86.9%,#f59e0b 86.9% 94.3%,#94a3b8 94.3% 100%);position:relative;margin:auto}.donut:after{content:"";position:absolute;inset:72px;background:#fff;border-radius:50%;box-shadow:inset 0 0 0 1px var(--line)}.donut-center{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:2}.legend{display:grid;gap:9px}.legend-item{display:grid;grid-template-columns:13px 1fr auto;gap:8px;align-items:center;font-size:13px}.sw{width:13px;height:13px;border-radius:3px}.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.node{border:1px solid var(--line);background:#fff;border-radius:9px;padding:12px 13px;min-width:124px;text-align:center;font-size:13px;font-weight:700}.arrow{color:var(--green);font-weight:900}.funnel{display:grid;gap:8px;justify-items:center}.funnel .stage{height:42px;border-radius:8px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800}.stage.s1{width:520px}.stage.s2{width:430px;background:#0f6b37}.stage.s3{width:350px;background:#b66b00}.stage.s4{width:290px;background:#637568}.stage.s5{width:390px;background:#005825}.table{width:100%;border-collapse:collapse;font-size:12px}.table th{background:var(--soft);color:var(--green);font-weight:800}.table th,.table td{border:1px solid var(--line);padding:6px 8px;text-align:left}.table td.numtd{text-align:right;font-weight:800;color:var(--green)}.three{grid-template-columns:1fr 1fr 1fr}.two{grid-template-columns:1fr 1fr}.two-uneven{grid-template-columns:1.08fr .92fr}.callout{border-left:5px solid var(--green);background:#fff;padding:12px 14px;border-radius:8px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.warn{background:var(--amberbg);border-color:#f3d29b}.warn h3{color:var(--amber)}.bad{background:#fff5f5;border-color:#fed7d7}.bad h3{color:var(--red)}.controls{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.92);border:1px solid #cbd5d1;border-radius:999px;padding:8px 12px;box-shadow:0 8px 22px rgba(16,24,40,.14)}button{border:0;background:var(--green);color:#fff;border-radius:999px;padding:8px 13px;font-weight:800;cursor:pointer}#counter{font-size:13px;color:var(--muted);min-width:54px;text-align:center}.kw{font-size:12px;color:#334155;line-height:1.5}.mini-title{font-weight:850;color:var(--green);font-size:15px;margin-bottom:5px}.example-card{background:#fff;border:1px solid var(--line);border-radius:9px;padding:11px 12px}.example-card .tag{font-size:12px;color:var(--green);font-weight:850}.example-card .q{font-size:12px;line-height:1.34;margin-top:5px}.compact-list{margin:0;padding-left:18px;font-size:13px;line-height:1.55}.compact-list li{margin:2px 0}.badge{font-size:11px;border-radius:999px;padding:3px 7px;background:var(--soft);color:var(--green);font-weight:800}.slide-content{height:548px;overflow:hidden}
   </style>
 </head>
 <body>
-  <main class="deck">
-    <section class="slide active">
-      <div class="title-row">
-        <div class="title"><h1>Pipeline1 到 Ready Pass：数据生产、门控与分析</h1></div>
-        <div class="page-code">01 / SCOPE</div>
-      </div>
-      <p class="takeaway">本次汇报分开说明“全局 ready 资产”和“5 月 7 日以来生产子集”：前者回答最终数据规模与结构，后者回答数据如何被生产、筛选和放行。</p>
-      <div class="grid split-two">
-        <div class="card scope-card">
-          <h2>全局 ready 资产</h2>
-          <div>
-            <div class="metric"><span class="num">29,966</span><span class="label">去重候选样本</span></div>
-            <div class="metric"><span class="num">21,555</span><span class="label">最终 ready pass</span></div>
-            <div class="metric"><span class="num">21</span><span class="label">核心数据集</span></div>
-            <div class="metric"><span class="num">14</span><span class="label">粗粒度 taxonomy classes</span></div>
-          </div>
-          <p class="small-note">用于最终数据结构、领域覆盖和题型特征分析。</p>
-        </div>
-        <div class="card scope-card">
-          <h2>5 月 7 日以来生产子集</h2>
-          <div>
-            <div class="metric"><span class="num">47</span><span class="label">production runs</span></div>
-            <div class="metric"><span class="num">12,114</span><span class="label">processed samples</span></div>
-            <div class="metric"><span class="num">88,169</span><span class="label">model requests</span></div>
-            <div class="metric"><span class="num">19,113</span><span class="label">final ready</span></div>
-          </div>
-          <p class="small-note">用于解释 Pipeline1 成本、outputs-to-ready 转化和 review release。</p>
-        </div>
-      </div>
-      <div class="scope-divider">两个口径分开汇报，不混合求和</div>
-      <div class="bottom-bar">本 PPT 的重点不是展示文件目录，而是解释数据资产如何形成、如何过滤、最终具有什么结构。</div>
-      <div class="footer"><span>数据生产与分析 · 组会汇报</span><span>统计口径：全局 ready 资产 / 生产子集</span></div>
-    </section>
+<div class="deck">
 
-    <section class="slide">
-      <div class="title-row">
-        <div class="title"><h1>Ready Pass 数据资产结构图</h1></div>
-        <div class="page-code">02 / ASSETS</div>
-      </div>
-      <p class="takeaway">最终 ready pass 资产覆盖 6 个主领域、21 个核心数据集，不是单一数学或单一物理集合；它已经具备领域覆盖、题型 taxonomy 和特征统计三层分析结构。</p>
-      <div class="grid asset-layout">
-        <div class="card green">
-          <h2>Ready Pass</h2>
-          <div class="metric"><span class="num">21,555</span><span class="label">samples</span></div>
-          <div class="metric"><span class="num">6</span><span class="label">domains</span></div>
-          <div class="metric"><span class="num">21</span><span class="label">datasets</span></div>
-          <div class="metric"><span class="num">14</span><span class="label">taxonomy classes</span></div>
-          <p class="small-note" style="color:rgba(255,255,255,.82)">全局 ready pass 口径</p>
-        </div>
-        <div class="dataset-matrix">
-          <div class="domain-box">
-            <div class="domain-head"><span>数学</span><span>10,084</span></div>
-            <div class="dataset-row"><span>mm_math</span><span>4,229</span><span>8</span></div>
-            <div class="dataset-row"><span>geoqa_plus</span><span>2,766</span><span>14</span></div>
-            <div class="dataset-row"><span>mathvision</span><span>1,879</span><span>11</span></div>
-            <div class="dataset-row"><span>geometry3k</span><span>879</span><span>11</span></div>
-            <div class="dataset-row"><span>scemqa_math</span><span>189</span><span>10</span></div>
-            <div class="dataset-row"><span>cmm_math</span><span>142</span><span>5</span></div>
-          </div>
-          <div class="domain-box">
-            <div class="domain-head"><span>物理</span><span>4,573</span></div>
-            <div class="dataset-row"><span>seephys</span><span>1,499</span><span>9</span></div>
-            <div class="dataset-row"><span>phyx</span><span>1,139</span><span>11</span></div>
-            <div class="dataset-row"><span>physreason</span><span>905</span><span>6</span></div>
-            <div class="dataset-row"><span>multi_physics</span><span>525</span><span>9</span></div>
-            <div class="dataset-row"><span>emma_physics</span><span>266</span><span>7</span></div>
-            <div class="dataset-row"><span>sciverse_physics</span><span>239</span><span>8</span></div>
-          </div>
-          <div class="domain-box">
-            <div class="domain-head"><span>化学</span><span>1,222</span></div>
-            <div class="dataset-row"><span>emma_chemistry</span><span>864</span><span>3</span></div>
-            <div class="dataset-row"><span>sciverse_chemistry</span><span>247</span><span>11</span></div>
-            <div class="dataset-row"><span>scemqa_chemistry</span><span>111</span><span>10</span></div>
-          </div>
-          <div class="domain-box">
-            <div class="domain-head"><span>生物</span><span>1,598</span></div>
-            <div class="dataset-row"><span>ai2d_biology</span><span>1,315</span><span>8</span></div>
-            <div class="dataset-row"><span>sciverse_biology</span><span>219</span><span>9</span></div>
-            <div class="dataset-row"><span>scemqa_biology</span><span>64</span><span>8</span></div>
-          </div>
-          <div class="domain-box">
-            <div class="domain-head"><span>地理</span><span>2,055</span></div>
-            <div class="dataset-row"><span>geosqa</span><span>1,757</span><span>9</span></div>
-            <div class="dataset-row"><span>ai2d_geography</span><span>298</span><span>8</span></div>
-          </div>
-          <div class="domain-box">
-            <div class="domain-head"><span>电子电路</span><span>2,023</span></div>
-            <div class="dataset-row"><span>eee_bench</span><span>2,023</span><span>12</span></div>
-          </div>
-        </div>
-        <div class="fig-stack">
-          <div class="figure-card"><div class="figure-title">领域分布</div><img src="assets/figures/subject_pie.png" alt="领域分布" /></div>
-          <div class="figure-card"><div class="figure-title">题型结构</div><img src="assets/figures/category_bar.png" alt="题型结构" /></div>
+<section class="slide active">
+  <div class="title-row"><div class="title"><h1>全局 Ready 数据资产总览</h1></div><div class="page">01 / OVERVIEW</div></div>
+  <p class="takeaway">最终 ready 资产覆盖数学、物理、化学、生物、地理、电子电路六大领域，是一个多学科多模态题目资产。</p>
+  <div class="slide-content grid" style="grid-template-columns:330px 1fr;gap:26px;align-items:stretch">
+    <div class="card green" style="display:flex;flex-direction:column;justify-content:center;padding:28px">
+      <div style="font-size:20px;font-weight:800;margin-bottom:12px">Ready Pass</div>
+      <div class="big-num num" style="color:#fff">21,555</div>
+      <div style="font-size:19px;margin:8px 0 22px;color:#e8fff2">samples</div>
+      <div class="metric"><span class="num" style="color:#fff;font-size:30px">29,966</span><span class="label" style="color:#d9f5e5">candidates</span></div>
+      <div class="metric"><span class="num" style="color:#fff;font-size:30px">71.93%</span><span class="label" style="color:#d9f5e5">pass rate</span></div>
+      <div class="metric"><span class="num" style="color:#fff;font-size:30px">21 / 6 / 14</span><span class="label" style="color:#d9f5e5">datasets / domains / taxonomy classes</span></div>
+    </div>
+    <div class="card white">
+      <div class="section-label">领域分布（Ready Pass）</div>
+      <div class="donut-wrap">
+        <div style="position:relative"><div class="donut"></div><div class="donut-center"><div><div class="num" style="font-size:30px">21,555</div><div class="small muted">ready pass</div></div></div></div>
+        <div class="legend">
+          <div class="legend-item"><span class="sw" style="background:#005825"></span><span>数学 Math</span><b>10,084 · 46.8%</b></div>
+          <div class="legend-item"><span class="sw" style="background:#2f80ed"></span><span>物理 Physics</span><b>4,573 · 21.2%</b></div>
+          <div class="legend-item"><span class="sw" style="background:#7c3aed"></span><span>地理 Geography</span><b>2,055 · 9.5%</b></div>
+          <div class="legend-item"><span class="sw" style="background:#0f9f6e"></span><span>电子电路 Circuit</span><b>2,023 · 9.4%</b></div>
+          <div class="legend-item"><span class="sw" style="background:#f59e0b"></span><span>生物 Biology</span><b>1,598 · 7.4%</b></div>
+          <div class="legend-item"><span class="sw" style="background:#94a3b8"></span><span>化学 Chemistry</span><b>1,222 · 5.7%</b></div>
         </div>
       </div>
-      <div class="bottom-bar">数据资产已经从“样本集合”整理为“领域覆盖 + 题型 taxonomy + 特征统计”的分析对象。</div>
-      <div class="footer"><span>数据集矩阵：样本数 / 类别数</span><span>全部为真实数据集名称</span></div>
-    </section>
+      <div class="bottom-bar" style="margin-top:16px">主轴：视觉数学 + 物理力学 + 电磁电路；同时保留化学、生物、地理覆盖。</div>
+    </div>
+  </div>
+  <div class="footer"><span>统计口径：全局 ready pass 资产</span><span>MATLAB-style draft preview</span></div>
+</section>
 
-    <section class="slide">
-      <div class="title-row">
-        <div class="title"><h1>Taxonomy 与数据特征分析框架</h1></div>
-        <div class="page-code">03 / FRAMEWORK</div>
+<section class="slide">
+  <div class="title-row"><div class="title"><h1>AI2D 等新跑数据集的 Pipeline1 生产成本</h1></div><div class="page">02 / PIPELINE</div></div>
+  <p class="takeaway">该页统计 5 月 7 日以来 canonical production runs，重点解释 AI2D 等新增/补跑数据集的平均处理成本，不与全局 21,555 ready 混合求和。</p>
+  <div class="slide-content grid two-uneven">
+    <div class="card white">
+      <div class="section-label">成功路径：主要 LLM agent 约 1 request / node</div>
+      <div class="flow" style="margin:26px 0 24px">
+        <div class="node">Raw / New<br>Dataset</div><div class="arrow">→</div>
+        <div class="node">Normalize</div><div class="arrow">→</div>
+        <div class="node">Asset<br>Check</div><div class="arrow">→</div>
+        <div class="node">Potential<br>Scoring</div><div class="arrow">→</div>
+        <div class="node">Rewrite</div><div class="arrow">→</div>
+        <div class="node">Understand</div><div class="arrow">→</div>
+        <div class="node">Decision</div>
       </div>
-      <p class="takeaway">这一步不是简单“打标签”，而是把 21 个数据集统一到可比较的题型结构和特征矩阵中，使后续能够回答：题型是否多样、哪些领域占主导、哪些数据集偏科、哪些样本复杂。</p>
-      <div class="grid mindmap">
-        <div class="card">
-          <h3>21 个 Ready 数据集</h3>
-          <div class="compact-groups">
-            <div class="compact-group"><b>数学</b><span>mm_math, geoqa_plus, mathvision, geometry3k, scemqa_math, cmm_math</span></div>
-            <div class="compact-group"><b>物理</b><span>seephys, phyx, physreason, multi_physics, emma_physics, sciverse_physics</span></div>
-            <div class="compact-group"><b>电路</b><span>eee_bench</span></div>
-            <div class="compact-group"><b>化学</b><span>emma_chemistry, sciverse_chemistry, scemqa_chemistry</span></div>
-            <div class="compact-group"><b>生物</b><span>ai2d_biology, sciverse_biology, scemqa_biology</span></div>
-            <div class="compact-group"><b>地理</b><span>geosqa, ai2d_geography</span></div>
-          </div>
-          <p class="small-note">规模范围：64 - 4,229 samples；覆盖 6 个主领域</p>
-        </div>
-        <div class="flow-box">
-          <h3>Taxonomy 分类流程</h3>
-          <div class="flow-steps">
-            <div class="flow-step"><span class="step-dot">1</span><b>规则初稿</b><span class="step-metric">自动规则标签</span></div>
-            <div class="flow-step"><span class="step-dot">2</span><b>高 Other 数据集细分</b><span class="step-metric">7 个重点数据集</span></div>
-            <div class="flow-step"><span class="step-dot">3</span><b>抽样校准</b><span class="step-metric">每类 20-50 条</span></div>
-            <div class="flow-step"><span class="step-dot">4</span><b>最终 Taxonomy</b><span class="step-metric">3-14 类/数据集</span></div>
-          </div>
-          <p class="small-note">重点细分：eee_bench、geometry3k、geoqa_plus、scemqa_math、multi_physics、phyx、seephys</p>
-        </div>
-        <div class="card white">
-          <h3>数据特征统计</h3>
-          <div class="feature-list">
-            <div class="feature-item">题长</div>
-            <div class="feature-item">答案长度</div>
-            <div class="feature-item">复杂度</div>
-            <div class="feature-item">Multi-step</div>
-            <div class="feature-item">视觉类型</div>
-            <div class="feature-item">需图像比例</div>
-          </div>
-        </div>
+      <div class="grid three">
+        <div class="callout"><div class="mini-title">理论成功路径</div><div class="num" style="font-size:30px">≈ 7</div><div class="small muted">requests / sample</div></div>
+        <div class="callout"><div class="mini-title">实测均值</div><div class="num" style="font-size:30px">7.28</div><div class="small muted">requests / sample</div></div>
+        <div class="callout"><div class="mini-title">多模态请求</div><div class="num" style="font-size:30px">22,580</div><div class="small muted">multimodal requests</div></div>
       </div>
-      <div class="evidence-strip">
-        <div class="evidence">187 类代表题<br />均有中文题意</div>
-        <div class="evidence">6 张论文风格<br />统计图</div>
-        <div class="evidence">21 个数据集级<br />摘要</div>
-        <div class="evidence">支持 dataset-level<br />偏向分析</div>
-      </div>
-      <div class="bottom-bar">该框架把 pass 样本转化为可比较的数据结构：能看整体分布，也能定位单个数据集的题型偏向。</div>
-      <div class="footer"><span>Taxonomy + feature analysis</span><span>统一分类后再做横向比较</span></div>
-    </section>
+      <div class="bottom-bar">多出的请求主要来自 retry、解析失败重试和少量路径差异。</div>
+    </div>
+    <div class="card green">
+      <h2>生产子集指标</h2>
+      <div class="metric"><span class="num" style="color:#fff">47</span><span class="label" style="color:#daf5e4">production runs</span></div>
+      <div class="metric"><span class="num" style="color:#fff">12,114</span><span class="label" style="color:#daf5e4">processed samples</span></div>
+      <div class="metric"><span class="num" style="color:#fff">88,169</span><span class="label" style="color:#daf5e4">model requests</span></div>
+      <div class="metric"><span class="num" style="color:#fff">65,589 / 22,580</span><span class="label" style="color:#daf5e4">text / multimodal requests</span></div>
+      <div class="metric"><span class="num" style="color:#fff">91.95s</span><span class="label" style="color:#daf5e4">request time / sample</span></div>
+      <div class="metric"><span class="num" style="color:#fff">12.63s</span><span class="label" style="color:#daf5e4">seconds / request</span></div>
+    </div>
+  </div>
+  <div class="footer"><span>统计口径：5 月 7 日以来新跑/补跑生产子集</span><span>AI2D 等新增数据集的生产成本页</span></div>
+</section>
 
-    <section class="slide">
-      <div class="title-row">
-        <div class="title"><h1>Pipeline1：从原始样本到结构化 outputs</h1></div>
-        <div class="page-code">04 / PIPELINE</div>
+<section class="slide">
+  <div class="title-row"><div class="title"><h1>Outputs → Ready：筛选、放行与去重</h1></div><div class="page">03 / FUNNEL</div></div>
+  <p class="takeaway">生产子集里的 ready 不是简单复制 outputs，而是经过 pass/review/reject、release policy 和去重后的结果。</p>
+  <div class="slide-content grid" style="grid-template-columns:620px 1fr;gap:24px">
+    <div class="card white">
+      <div class="funnel">
+        <div class="stage s1">32,292 processed</div>
+        <div class="small muted">↓ auto quality decision</div>
+        <div class="stage s2">16,495 pass</div>
+        <div class="stage s3">12,744 review · 386 reject</div>
+        <div class="small muted">↓ review release policy</div>
+        <div class="stage s4">2,618 released review · 10,126 dropped review</div>
+        <div class="small muted">↓ deduplication</div>
+        <div class="stage s5">19,113 final ready</div>
       </div>
-      <p class="takeaway">生产子集显示 Pipeline1 是多节点加工流程：每个样本平均触发约 7.28 次请求，累计请求耗时约 91.95 秒。</p>
-      <div class="pipeline-wrap">
-        <div class="pipe-line"></div>
-        <div class="pipe-node" style="left:7%"></div><div class="pipe-label" style="left:7%">原始样本</div>
-        <div class="pipe-node" style="left:21%"></div><div class="pipe-label" style="left:21%">规范化</div>
-        <div class="pipe-node" style="left:35%"></div><div class="pipe-label" style="left:35%">Prompt 构造</div>
-        <div class="pipe-node" style="left:49%"></div><div class="pipe-label" style="left:49%">模型改写</div>
-        <div class="pipe-node" style="left:63%"></div><div class="pipe-label" style="left:63%">图像资产</div>
-        <div class="pipe-node" style="left:77%"></div><div class="pipe-label" style="left:77%">清洗验证</div>
-        <div class="pipe-node" style="left:91%"></div><div class="pipe-label" style="left:91%">outputs</div>
-        <div class="bubble top" style="left:7%"><b>12,114</b>生产窗口子集</div>
-        <div class="bubble bottom" style="left:21%"><b>47</b>统一字段和元数据</div>
-        <div class="bubble top" style="left:35%"><b>7.28</b>requests / sample</div>
-        <div class="bubble bottom" style="left:49%"><b>88,169</b>文本与多模态处理</div>
-        <div class="bubble top" style="left:63%"><b>22,580</b>multimodal requests</div>
-        <div class="bubble bottom" style="left:77%"><b>77,290</b>successful requests</div>
-        <div class="bubble top" style="left:91%"><b>91.95s</b>sec / sample</div>
-      </div>
-      <div class="bottom-bar">统计口径：5 月 7 日以来生产子集；它解释生产成本，不等同于全局 ready 总量。</div>
-      <div class="footer"><span>Pipeline1 production subset</span><span>平均 12.63 sec / request</span></div>
-    </section>
+    </div>
+    <div class="grid" style="gap:13px">
+      <div class="callout"><div class="mini-title">Review rate</div><div class="num" style="font-size:38px">39.5%</div><div class="small muted">review / processed</div></div>
+      <div class="callout"><div class="mini-title">Review release ratio</div><div class="num" style="font-size:38px">20.5%</div><div class="small muted">released review / review</div></div>
+      <div class="callout"><div class="mini-title">Final ready ratio</div><div class="num" style="font-size:38px">59.2%</div><div class="small muted">final ready / processed</div></div>
+      <div class="card warn"><h3>汇报口径</h3><ul class="compact-list"><li>pass 是 ready 主体。</li><li>review 默认不放行。</li><li>release policy 只释放可解释的非致命风险。</li></ul></div>
+    </div>
+  </div>
+  <div class="footer"><span>统计口径：生产子集 outputs-to-ready conversion</span><span>候选数和实际 release 数不混用</span></div>
+</section>
 
-    <section class="slide">
-      <div class="title-row">
-        <div class="title"><h1>Outputs → Ready：选择、去重与质量门控</h1></div>
-        <div class="page-code">05 / FUNNEL</div>
+<section class="slide">
+  <div class="title-row"><div class="title"><h1>Ready 题型主轴：几何、电路、力学占主体</h1></div><div class="page">04 / TAXONOMY</div></div>
+  <p class="takeaway">14 个粗粒度一级题型用于汇报主轴；其下还有 70 个全局细题型、176 个“数据集-题型”组合，并已为每个细题型选出代表例题。</p>
+  <div class="slide-content grid" style="grid-template-columns:1.08fr .92fr;gap:20px">
+    <div class="card white">
+      <div class="section-label">Top coarse taxonomy categories（正文展示前 6 + Others）</div>
+      <div class="bar-row"><b>几何与空间推理</b><div class="bar"><span style="width:100%"></span></div><b>40.9%</b></div>
+      <div class="bar-row"><b>电磁/电路/电子</b><div class="bar"><span style="width:31%"></span></div><b>12.7%</b></div>
+      <div class="bar-row"><b>力学与运动</b><div class="bar"><span style="width:30%"></span></div><b>12.3%</b></div>
+      <div class="bar-row"><b>自然地理/气候</b><div class="bar"><span style="width:14%"></span></div><b>5.9%</b></div>
+      <div class="bar-row"><b>代数/离散/应用数学</b><div class="bar"><span style="width:13%"></span></div><b>5.5%</b></div>
+      <div class="bar-row"><b>化学结构/分子表示</b><div class="bar"><span style="width:11%"></span></div><b>4.4%</b></div>
+      <div class="bar-row"><b>Others</b><div class="bar"><span style="width:45%;background:#94a3b8"></span></div><b>18.3%</b></div>
+      <div class="grid three" style="margin-top:12px;gap:8px">
+        <div class="callout"><div class="mini-title">粗粒度一级</div><div class="num" style="font-size:28px">14</div><div class="small muted">汇报主轴</div></div>
+        <div class="callout"><div class="mini-title">全局细题型</div><div class="num" style="font-size:28px">70</div><div class="small muted">每类有代表例题</div></div>
+        <div class="callout"><div class="mini-title">数据集-题型组合</div><div class="num" style="font-size:28px">176</div><div class="small muted">体现数据集差异</div></div>
       </div>
-      <p class="takeaway">生产子集里的 ready 不是简单复制 outputs，而是经过 pass/review/reject 判断、review release、去重和风险过滤后形成。</p>
-      <div class="grid funnel-layout">
-        <div>
-          <div class="funnel">
-            <div class="funnel-step">processed 32,292</div>
-            <div class="funnel-step">pass 16,495</div>
-            <div class="funnel-step">review 12,744</div>
-            <div class="funnel-step">released review 2,618</div>
-            <div class="funnel-step">dropped review 10,126</div>
-            <div class="funnel-step">dedup removed 2,667</div>
-            <div class="funnel-step">final ready 19,113</div>
-          </div>
-          <div class="rule-line">
-            <div>pass → ready</div>
-            <div>review → policy matched</div>
-            <div>reject → dropped</div>
-          </div>
-        </div>
-        <div class="ratio-cards">
-          <div class="ratio-card"><b>39.5%</b><span>review rate</span></div>
-          <div class="ratio-card"><b>20.5%</b><span>review release rate</span></div>
-          <div class="ratio-card"><b>59.2%</b><span>final ready / processed</span></div>
-        </div>
-      </div>
-      <div class="footer"><span>outputs-to-ready conversion</span><span>release policy + dedup + quality gate</span></div>
-    </section>
+      <div class="bottom-bar">结论：ready 资产的主轴是“视觉几何 + 物理力学 + 电磁电路”，细题型层面仍保留 70 类问题覆盖。</div>
+    </div>
+    <div class="grid" style="gap:8px">
+      <div class="example-card"><span class="tag">几何与空间推理</span><div class="q">典型：角追、面积/体积、空间拼图、图形计数</div></div>
+      <div class="example-card"><span class="tag">电磁、电路与电子系统</span><div class="q">典型：网络分析、模拟电子、数字逻辑、控制系统</div></div>
+      <div class="example-card"><span class="tag">力学与运动</span><div class="q">典型：运动学、动力学、受力分析、机械系统</div></div>
+      <div class="example-card"><span class="tag">自然地理</span><div class="q">典型：地图、气候、地貌、水文、资源环境</div></div>
+      <div class="example-card"><span class="tag">代数/应用数学</span><div class="q">典型：方程、不等式、组合计数、约束最值</div></div>
+      <div class="example-card"><span class="tag">化学结构</span><div class="q">典型：SMILES、分子结构、立体化学、反应位点</div></div>
+      <div class="card" style="padding:10px 12px"><div class="small"><b>代表例题口径：</b>已为 70 个全局细题型各选 1 道短例题；完整例题适合放附录或备用页，正文只保留关键词。</div></div>
+    </div>
+  </div>
+  <div class="footer"><span>统计口径：14 个一级题型；70 个全局细题型；176 个数据集-题型组合</span><span>典型题目建议放附录/备用页</span></div>
+</section>
 
-    <section class="slide">
-      <div class="title-row">
-        <div class="title"><h1>Review release：释放非致命工程风险，保留语义风险</h1></div>
-        <div class="page-code">06 / RELEASE</div>
-      </div>
-      <p class="takeaway">review 不是默认放行；只有命中结构化 release policy 或显式候选子集的样本才进入 ready。</p>
-      <div class="grid release-layout">
-        <div class="card">
-          <h3>质量门控规则</h3>
-          <div class="decision-flow">
-            <div class="decision-row"><span class="pill">pass</span><span>直接进入</span><span class="pill soft">ready</span></div>
-            <div class="decision-row"><span class="pill">review</span><span>命中 release policy</span><span class="pill soft">ready</span></div>
-            <div class="decision-row"><span class="pill">review</span><span>未命中策略</span><span class="pill warn">hold/drop</span></div>
-            <div class="decision-row"><span class="pill">reject</span><span>不放行</span><span class="pill warn">dropped</span></div>
-          </div>
-          <h3 style="margin-top:18px">不放行边界</h3>
-          <div class="risk-list">
-            <span>关键条件缺失</span>
-            <span>答案冲突</span>
-            <span>图文冲突</span>
-            <span>split variant 未确认</span>
-            <span>rewrite 不完整</span>
-            <span>不可理解题干</span>
-          </div>
-        </div>
-        <div class="card white">
-          <h3>实际放行分布</h3>
-          <div class="bar-list">
-            <div class="bar-row"><span>mm_math A</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><b>1,114</b></div>
-            <div class="bar-row"><span>ai2d A</span><div class="bar-track"><div class="bar-fill" style="width:67%"></div></div><b>751</b></div>
-            <div class="bar-row"><span>geoqa_plus A</span><div class="bar-track"><div class="bar-fill" style="width:27%"></div></div><b>305</b></div>
-            <div class="bar-row"><span>multi_physics A/B</span><div class="bar-track"><div class="bar-fill" style="width:35%"></div></div><b>389</b></div>
-            <div class="bar-row"><span>physreason A</span><div class="bar-track"><div class="bar-fill" style="width:5%"></div></div><b>52</b></div>
-            <div class="bar-row"><span>seephys A1</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><b>7</b></div>
-          </div>
-          <div class="bottom-bar" style="margin-top:24px">release policy 释放 alignment / grounding path 等非致命工程风险，不降低语义质量标准。</div>
-        </div>
-      </div>
-      <div class="footer"><span>Review release actual execution</span><span>结构化放行，不是默认放水</span></div>
-    </section>
+<section class="slide">
+  <div class="title-row"><div class="title"><h1>Ready 样本特征：多样性、专门性与复杂度</h1></div><div class="page">05 / FEATURES</div></div>
+  <p class="takeaway">这里不讲 taxonomy 流程，直接总结 ready_sample_analysis 的发现：哪些数据集均衡，哪些是专项能力集，哪些题长/复杂度最高。</p>
+  <div class="slide-content grid three" style="gap:14px">
+    <div class="card white"><h3>最多样的数据集</h3><table class="table"><tr><th>数据集</th><th>等效类数</th><th>Top1</th></tr><tr><td>geosqa</td><td class="numtd">7.84</td><td>21.17%</td></tr><tr><td>sciverse_chemistry</td><td class="numtd">7.51</td><td>24.70%</td></tr><tr><td>scemqa_math</td><td class="numtd">6.72</td><td>23.28%</td></tr><tr><td>scemqa_chemistry</td><td class="numtd">6.54</td><td>28.83%</td></tr><tr><td>eee_bench</td><td class="numtd">6.42</td><td>34.50%</td></tr></table><div class="small muted" style="margin-top:8px">适合代表“覆盖面广”的数据集。</div></div>
+    <div class="card white"><h3>高度专门的数据集</h3><table class="table"><tr><th>数据集</th><th>主导方向</th><th>Top1</th></tr><tr><td>emma_chemistry</td><td>SMILES/transition state</td><td class="numtd">97.92%</td></tr><tr><td>physreason</td><td>mechanics</td><td class="numtd">87.07%</td></tr><tr><td>mm_math</td><td>geometry angle</td><td class="numtd">83.00%</td></tr><tr><td>emma_physics</td><td>mechanics</td><td class="numtd">62.03%</td></tr><tr><td>sciverse_physics</td><td>mechanics</td><td class="numtd">61.09%</td></tr></table><div class="small muted" style="margin-top:8px">不是坏数据，而是专项能力集。</div></div>
+    <div class="card white"><h3>长题和高复杂度</h3><table class="table"><tr><th>数据集</th><th>题长</th><th>复杂度</th><th>节点</th></tr><tr><td>physreason</td><td class="numtd">140</td><td>11.863</td><td>16</td></tr><tr><td>multi_physics</td><td class="numtd">90</td><td>8.272</td><td>12</td></tr><tr><td>sciverse_biology</td><td class="numtd">78</td><td>8.459</td><td>11</td></tr><tr><td>seephys</td><td class="numtd">75</td><td>8.676</td><td>13</td></tr><tr><td>geosqa</td><td class="numtd">58</td><td>8.910</td><td>14</td></tr></table><div class="small" style="margin-top:8px"><b>相关性：</b>题长-复杂度 r=0.8247；multi-step-复杂度 r=0.7606；视觉实体-多模态强度 r=0.7562。</div></div>
+  </div>
+  <div class="footer"><span>数据来源：ready_sample_analysis 的深度特征分析</span><span>题长/复杂度/节点均为中位数</span></div>
+</section>
 
-    <section class="slide">
-      <div class="title-row">
-        <div class="title"><h1>Ready taxonomy：14 类粗粒度题型</h1></div>
-        <div class="page-code">07 / TAXONOMY</div>
-      </div>
-      <p class="takeaway">最终 ready 集以视觉数学、物理力学、电磁电路为主体，同时覆盖化学结构、生命科学和地理类题目。</p>
-      <div class="grid taxonomy-layout">
-        <div class="card white">
-          <h3>Top taxonomy 分布</h3>
-          <div class="taxonomy-bars">
-            <div class="tax-row"><span>几何与空间推理</span><div class="tax-track"><div class="tax-fill" style="width:100%"></div></div><b>40.9%</b></div>
-            <div class="tax-row"><span>电磁、电路与电子系统</span><div class="tax-track"><div class="tax-fill" style="width:31%"></div></div><b>12.7%</b></div>
-            <div class="tax-row"><span>力学与运动</span><div class="tax-track"><div class="tax-fill" style="width:30%"></div></div><b>12.3%</b></div>
-            <div class="tax-row"><span>地球空间与自然地理</span><div class="tax-track"><div class="tax-fill" style="width:14%"></div></div><b>5.9%</b></div>
-            <div class="tax-row"><span>代数与应用数学</span><div class="tax-track"><div class="tax-fill" style="width:13%"></div></div><b>5.5%</b></div>
-            <div class="tax-row"><span>化学结构与分子表示</span><div class="tax-track"><div class="tax-fill" style="width:11%"></div></div><b>4.4%</b></div>
-            <div class="tax-row"><span>生态、生理与生命系统</span><div class="tax-track"><div class="tax-fill" style="width:10%"></div></div><b>3.9%</b></div>
-            <div class="tax-row"><span>生命分子、细胞与遗传</span><div class="tax-track"><div class="tax-fill" style="width:8%"></div></div><b>3.4%</b></div>
-          </div>
-        </div>
-        <div>
-          <div class="figure-card" style="height:210px"><div class="figure-title">题型结构图</div><img src="assets/figures/category_bar.png" alt="题型结构图" /></div>
-          <div class="callout-list">
-            <div class="callout">几何与空间推理是最大主轴，主要来自视觉数学数据集。</div>
-            <div class="callout">电路与力学构成物理侧的两条主线。</div>
-            <div class="callout">化学、生物、地理保留跨学科覆盖，适合后续做能力分层分析。</div>
-          </div>
-        </div>
-      </div>
-      <div class="bottom-bar">taxonomy 支撑采样平衡、能力覆盖分析和低覆盖领域补齐。</div>
-      <div class="footer"><span>14-class coarse taxonomy</span><span>全局 ready pass 口径</span></div>
-    </section>
+<section class="slide">
+  <div class="title-row"><div class="title"><h1>Review Release：只释放非致命风险</h1></div><div class="page">06 / RELEASE</div></div>
+  <p class="takeaway">Review release 不是“放水”：review 默认不进 ready，只有命中 release policy 且没有真实语义风险时才放行。</p>
+  <div class="slide-content grid" style="grid-template-columns:.9fr 1.1fr;gap:18px">
+    <div class="grid" style="gap:12px">
+      <div class="card white"><h3>原则 1：Review 默认不放行</h3><div class="flow"><div class="node">pass → ready</div><div class="node">review → policy?</div><div class="node">reject → drop</div></div></div>
+      <div class="card warn"><h3>原则 2：只释放非致命工程/记录风险</h3><ul class="compact-list"><li>轻度文本-图片 alignment review</li><li>图片引用链路记录不完整，但图片存在且题意可验证</li><li>metadata/path 指向不稳定</li><li>rewrite 后题干完整、答案可验证</li></ul></div>
+      <div class="card bad"><h3>原则 3：真实语义风险不放行</h3><ul class="compact-list"><li>关键条件缺失 / 图片缺失</li><li>答案冲突 / 图文冲突</li><li>split variant 未确认</li><li>选项缺失且答案只剩字母</li></ul></div>
+    </div>
+    <div class="card white"><h3>实际放行分布</h3><table class="table"><tr><th>bucket</th><th>released</th><th>放行原因</th></tr><tr><td>mm_math A</td><td class="numtd">1,114</td><td>alignment-only</td></tr><tr><td>ai2d A</td><td class="numtd">751</td><td>alignment + 图片引用链路记录不完整</td></tr><tr><td>geoqa_plus A</td><td class="numtd">305</td><td>alignment + 图片引用链路记录不完整</td></tr><tr><td>multi_physics A</td><td class="numtd">257</td><td>alignment + 图片引用链路记录不完整</td></tr><tr><td>multi_physics B1</td><td class="numtd">123</td><td>alignment + split，但无额外质量风险</td></tr><tr><td>physreason A</td><td class="numtd">52</td><td>alignment-only</td></tr><tr><td>seephys A1</td><td class="numtd">7</td><td>metadata/image-reference misfire</td></tr></table><div class="bottom-bar">核心：释放可解释、可验证、非致命的 review 风险；保留真实语义风险。</div></div>
+  </div>
+  <div class="footer"><span>missing visual path 的人话：图片引用链路/视觉证据路径记录不完整</span><span>actual released count，不等于候选数</span></div>
+</section>
 
-    <section class="slide">
-      <div class="title-row">
-        <div class="title"><h1>Review 原因：不只是视觉问题</h1></div>
-        <div class="page-code">08 / DIAGNOSIS</div>
-      </div>
-      <p class="takeaway">review 原因是混合信号，既包含 alignment/metadata，也包含答案可解性、视觉 grounding 和改写结构问题，因此必须用细分 release policy 处理。</p>
-      <div class="grid diagnosis-layout">
-        <div class="card white">
-          <h3>原因分布</h3>
-          <div class="reason-bars">
-            <div class="reason-row"><span>alignment / metadata</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><b>32.1%</b></div>
-            <div class="reason-row"><span>other</span><div class="bar-track"><div class="bar-fill" style="width:89%"></div></div><b>28.7%</b></div>
-            <div class="reason-row"><span>answer / solvability</span><div class="bar-track"><div class="bar-fill" style="width:51%"></div></div><b>16.4%</b></div>
-            <div class="reason-row"><span>visual grounding</span><div class="bar-track"><div class="bar-fill" style="width:41%"></div></div><b>13.3%</b></div>
-            <div class="reason-row"><span>rewrite / structure</span><div class="bar-track"><div class="bar-fill" style="width:30%"></div></div><b>9.5%</b></div>
-          </div>
-          <p class="small-note">reason occurrence 口径：22,643 / 20,285 / 11,594 / 9,359 / 6,699</p>
-        </div>
-        <div class="card">
-          <h3>原因解释与处理策略</h3>
-          <table class="strategy-table">
-            <thead><tr><th>原因</th><th>处理策略</th></tr></thead>
-            <tbody>
-              <tr><td>alignment / metadata</td><td>可通过结构化规则部分释放</td></tr>
-              <tr><td>answer / solvability</td><td>保守 hold，防止语义错误</td></tr>
-              <tr><td>visual grounding</td><td>只释放低风险 grounding path 问题</td></tr>
-              <tr><td>rewrite / structure</td><td>需验证题干完整和答案可验</td></tr>
-            </tbody>
-          </table>
-          <div class="bottom-bar">当前数据链路已经形成“生产统计 + ready 转化 + release policy + taxonomy 分析”的闭环。</div>
-        </div>
-      </div>
-      <div class="footer"><span>Review diagnosis</span><span>下一步：低覆盖领域、复杂样本、review 高发原因补齐</span></div>
-    </section>
-  </main>
+<section class="slide">
+  <div class="title-row"><div class="title"><h1>放行原因：从混合 Review 信号中拆出可释放风险</h1></div><div class="page">07 / DIAGNOSIS</div></div>
+  <p class="takeaway">这一页重点不是泛泛列 review reason，而是解释哪些 review 可以放、哪些必须继续 hold/drop。</p>
+  <div class="slide-content grid two-uneven">
+    <div class="card white"><h3>Review 来源是混合信号</h3><div class="bar-row"><b>metadata / alignment</b><div class="bar"><span style="width:100%"></span></div><b>22,643</b></div><div class="bar-row"><b>other</b><div class="bar"><span style="width:90%;background:#94a3b8"></span></div><b>20,285</b></div><div class="bar-row"><b>answer / solvability</b><div class="bar"><span style="width:51%;background:#b66b00"></span></div><b>11,594</b></div><div class="bar-row"><b>visual grounding</b><div class="bar"><span style="width:41%;background:#2f80ed"></span></div><b>9,359</b></div><div class="bar-row"><b>rewrite / structure</b><div class="bar"><span style="width:30%;background:#7c3aed"></span></div><b>6,699</b></div><div class="small muted" style="margin-top:10px">统计口径：reason occurrence，不是 unique sample；一个样本可能有多个原因。</div></div>
+    <div class="grid" style="gap:10px">
+      <div class="card white"><h3>第一层：结构化放行</h3><ul class="compact-list"><li>exact alignment-only</li><li>alignment + 图片引用链路记录不完整</li><li>metadata/image-reference misfire</li></ul><span class="badge">mm_math A / physreason A / ai2d A</span></div>
+      <div class="card warn"><h3>第二层：人工候选放行</h3><ul class="compact-list"><li>rewrite complete</li><li>answer verifiable</li><li>agent understandable</li><li>无关键条件缺失、无答案冲突、无图文冲突</li></ul><span class="badge">multi_physics B1/B2 / seephys A1</span></div>
+      <div class="card bad"><h3>第三层：继续 hold/drop</h3><ul class="compact-list"><li>answer conflict</li><li>key condition missing</li><li>text-image conflict</li><li>split unconfirmed / image recovery required</li></ul></div>
+    </div>
+  </div>
+  <div class="footer"><span>结论：review 不是单一模型识别问题，而是 alignment、metadata、视觉证据、答案标注和改写结构的混合信号。</span><span></span></div>
+</section>
 
-  <div class="nav"><span id="counter">1 / 8</span>　← / → 切换，P 打印导出 PDF</div>
+<section class="slide">
+  <div class="title-row"><div class="title"><h1>结论：可追溯的数据资产，而不是简单拼接数据</h1></div><div class="page">08 / TAKEAWAYS</div></div>
+  <p class="takeaway">最终结果是一套可用于训练/评测、可解释质量门控、可做 taxonomy 和能力分析的 ready 数据资产。</p>
+  <div class="slide-content grid three">
+    <div class="card white"><h3>数据资产成型</h3><div class="num" style="font-size:42px">21,555</div><p class="kw">覆盖 21 个数据集、6 个主领域、14 个粗粒度题型。主轴是几何视觉推理、物理力学、电磁电路。</p></div>
+    <div class="card white"><h3>生产成本可解释</h3><div class="num" style="font-size:42px">7.28</div><p class="kw">新跑/补跑生产子集中，平均每样本约 7.28 次请求、约 92 秒累计请求耗时。</p></div>
+    <div class="card white"><h3>质量放行有边界</h3><div class="num" style="font-size:42px">2,618</div><p class="kw">released review 来自可解释的非致命风险；关键条件缺失、答案冲突、图文冲突继续 hold/drop。</p></div>
+  </div>
+  <div class="footer"><span>下一步：把 MATLAB-style 草图替换为 Gemini / PPT 原生高质量图表</span><span>Draft v2</span></div>
+</section>
 
-  <script>
-    const slides = Array.from(document.querySelectorAll('.slide'));
-    let current = 0;
-    const counter = document.getElementById('counter');
-
-    function show(index) {
-      current = (index + slides.length) % slides.length;
-      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
-      counter.textContent = `${current + 1} / ${slides.length}`;
-    }
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') show(current + 1);
-      if (event.key === 'ArrowLeft' || event.key === 'PageUp') show(current - 1);
-      if (event.key.toLowerCase() === 'p') window.print();
-    });
-  </script>
+</div>
+<div class="controls"><button id="prev">上一页</button><span id="counter">1 / 8</span><button id="next">下一页</button></div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];let i=0;function show(n){i=(n+slides.length)%slides.length;slides.forEach((s,k)=>s.classList.toggle('active',k===i));document.getElementById('counter').textContent=(i+1)+' / '+slides.length}document.getElementById('prev').onclick=()=>show(i-1);document.getElementById('next').onclick=()=>show(i+1);document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1)});show(0);
+</script>
 </body>
 </html>
